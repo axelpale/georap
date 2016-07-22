@@ -1,7 +1,7 @@
 {
   "name": "tresdb",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Esoteric Location CMS built on Sails.js",
   "keywords": ["GIS", "CMS"],
   "dependencies": {
