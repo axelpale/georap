@@ -3,9 +3,13 @@
   "private": true,
   "version": "0.0.1",
   "description": "Esoteric Location CMS built on Sails.js",
-  "keywords": ["GIS", "CMS"],
+  "keywords": [
+    "GIS",
+    "CMS"
+  ],
   "dependencies": {
     "ejs": "2.3.4",
+    "grunt": "^1.0.1",
     "include-all": "~0.1.6",
     "rc": "1.0.1",
     "sails": "~0.12.3",

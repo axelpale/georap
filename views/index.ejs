@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%=typeof title == 'undefined' ? 'New Sails App' : title%></title>
+    <title>TreStalkers Database</title>
 
     <!-- Viewport mobile tag for sensible mobile support -->
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-
 
     <!--
         Stylesheets and Preprocessors
@@ -35,9 +34,12 @@
   </head>
 
   <body>
-    <%- body %>
-
-
+    <div id="map"></div>
+    <div class="card-container">
+      <div class="card">
+        Hell-o
+      </div>
+    </div>
 
     <!--
         Client-side Templates
@@ -64,7 +66,6 @@
     
     <!--TEMPLATES END-->
 
-
     <!--
 
       Client-side Javascript
@@ -90,6 +91,12 @@
 
     <!--SCRIPTS-->
     <script src="/js/dependencies/sails.io.js"></script>
+    <script src="/js/index.js"></script>
     <!--SCRIPTS END-->
+
+    <!-- Scripts to be included directly -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBMWEnkv66jJ4p-hUGlLPpzDNW808LDDlE&callback=initMap" async defer></script>
+    <!-- end -->
+
   </body>
 </html>

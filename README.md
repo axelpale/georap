@@ -1,6 +1,6 @@
 # tresdb
 
-Esoteric Location CMS built on Django.
+Esoteric Location CMS built on Sails.js.
 
 ## Install
 
@@ -12,7 +12,7 @@ Install dependencies:
 
 Start the server:
 
-    $ npm start
+    $ sails lift
 
 Then browse to [localhost:1337](http://localhost:1337).
 
