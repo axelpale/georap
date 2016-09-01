@@ -12,15 +12,9 @@ Install dependencies:
 
 Start the server:
 
-    $ sails lift
+    $ npm start
 
 Then browse to [localhost:1337](http://localhost:1337).
-
-## Docs
-
-- [Data models](docs/models.md)
-- [Design approaches](docs/approaches.md)
-
 
 ## License
 
