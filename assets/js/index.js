@@ -68,19 +68,30 @@ function initMap() {
       searchText.innerHTML = 'Search';
       searchUI.appendChild(searchText);
 
-      searchUI.addEventListener('click', function () {
+      searchUI.addEventListener('click', function openCard() {
         // Open a card over the map.
+
+        var cardLayer = document.getElementById('card-layer');
+        var cardBackground = document.getElementById('card-background');
         var cardContainer = document.getElementById('card-container');
-        cardContainer.style.display = 'block';  // from 'none'
 
         // Render with a precompiled template provided by Sails.
-        var cardInner = window.JST['assets/templates/card.ejs']({
-          message: 'Hello'
+        var card = document.createElement('div');
+        card.innerHTML = window.JST['assets/templates/card.ejs']({
+          message: 'Kalkkipetteri'
+        });
+        cardContainer.appendChild(card);
+
+        // A press on the background closes the card.
+        // TODO clear using DOM (faster).
+        // See http://stackoverflow.com/a/3450726/638546
+        cardBackground.addEventListener('click', function closeCard() {
+          cardContainer.innerHTML = '';
+          cardLayer.style.display = 'none';
         });
 
-        var card = document.createElement('div');
-        card.innerHTML = cardInner;
-        cardContainer.appendChild(card);
+        // Display
+        cardLayer.style.display = 'block';  // from 'none'
       });
 
       menuDiv.appendChild(searchUI);
