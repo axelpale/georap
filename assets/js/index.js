@@ -12,6 +12,7 @@ function initMap() {
     mapTypeId: 'hybrid'  // Darker and more practial than 'roadmap'.
   });
 
+  var cm = new CardManager();
 
   (function initMapMenu() {
     // Main menu
@@ -71,31 +72,17 @@ function initMap() {
 
       searchUI.addEventListener('click', function openCard() {
         // Open a card over the map.
-
-        var cardLayer = document.getElementById('card-layer');
-        var cardBackground = document.getElementById('card-background');
-        var cardContainer = document.getElementById('card-container');
-
-        // Render with a precompiled template provided by Sails.
-        var card = document.createElement('div');
-        card.innerHTML = window.JST['assets/templates/card.ejs']({
+        var cardStr = window.JST['assets/templates/card.ejs']({
           message: 'Kalkkipetteri'
         });
-        cardContainer.appendChild(card);
-
-        // A press on the background closes the card.
-        // TODO clear using DOM (faster).
-        // See http://stackoverflow.com/a/3450726/638546
-        cardBackground.addEventListener('click', function closeCard() {
-          cardContainer.innerHTML = '';
-          cardLayer.style.display = 'none';
-        });
-
-        // Display
-        cardLayer.style.display = 'block';  // from 'none'
+        cm.openCard(cardStr);
       });
 
       menuDiv.appendChild(searchUI);
+
+    }());
+
+    (function defineLoginButton() {
 
     }());
 
