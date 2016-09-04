@@ -44,7 +44,7 @@ module.exports.waterlock = {
           vars:{}
         }
       },
-      createOnNotFound: true
+      createOnNotFound: false
     }
   ],
 
@@ -56,13 +56,13 @@ module.exports.waterlock = {
   jsonWebTokens:{
 
     // CHANGE THIS SECRET
-    secret: 'this is my secret',
+    secret: 'a secret stored to local.js',
     expiry:{
       unit: 'days',
       length: '7'
     },
-    audience: 'app name',
-    subject: 'subject',
+    audience: 'tresdb',
+    subject: 'locations',
 
     // tracks jwt usage if set to true
     trackUsage: true,
