@@ -8,7 +8,8 @@ var openCard = function () {
 function initMap() {
   map = new google.maps.Map(document.getElementById('map'), {
     center: {lat: 61.498151, lng: 23.761025},
-    zoom: 8
+    zoom: 8,
+    mapTypeId: 'hybrid'  // Darker and more practial than 'roadmap'.
   });
 
 
