@@ -1,12 +1,12 @@
-var map;
+var _ = require('./dependencies/lodash.core.min');
+//var sailsIOClient = require('./dependencies/sails.io');
+require('../styles/style.css');
 
-/*
-var openCard = function () {
-  // Open new hovering window
-};*/
+var cardTemplate = require('../templates/card.ejs');
+var CardManager = require('./CardManager');
 
-function initMap() {
-  map = new google.maps.Map(document.getElementById('map'), {
+window.initMap = function () {
+  var map = new google.maps.Map(document.getElementById('map'), {
     center: {lat: 61.498151, lng: 23.761025},
     zoom: 8,
     mapTypeId: 'hybrid'  // Darker and more practial than 'roadmap'.
@@ -72,7 +72,7 @@ function initMap() {
 
       searchUI.addEventListener('click', function openCard() {
         // Open a card over the map.
-        var cardStr = window.JST['assets/templates/card.ejs']({
+        var cardStr = cardTemplate({
           message: 'Kalkkipetteri'
         });
         cm.openCard(cardStr);
@@ -89,4 +89,4 @@ function initMap() {
     map.controls[google.maps.ControlPosition.TOP_CENTER].push(menuDiv);
 
   }());
-}
+};

@@ -1,6 +1,8 @@
 // Usage:
+//   var CardManager = require('./CardManager');
 //   var cm = new CardManager();
-window.CardManager = function () {
+
+module.exports = function CardManager() {
 
   // Constants
   var cardLayer = document.getElementById('card-layer');
