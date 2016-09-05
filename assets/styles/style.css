@@ -9,32 +9,6 @@ html, body {
 }
 
 
-/* Map Menu */
-
-.tresdb-map-menu-button-ui {
-  background: #fff;
-  border: 2px solid #fff;
-  border-radius: 3px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-  cursor: pointer;
-  margin-left: 0.38em;
-  margin-right: 0.38em;
-  text-align: center;
-  display: inline-block;
-}
-
-.tresdb-map-menu-button-text {
-  color: rgb(25,25,25);
-  font-family: Roboto, Arial, sans-serif;
-  font-size: 16px;
-  line-height: 38px;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-/* Map Menu END */
-
-
 /* Card */
 
 #card-layer {
@@ -67,10 +41,6 @@ html, body {
   background: white;
   box-shadow: 0px 0px 2.62em black;
   padding: 1em;
-}
-
-.card {
-  width: 100%;
 }
 
 /* Card END */

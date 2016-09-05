@@ -9,7 +9,9 @@ require('../styles/style.css');
 // Favicon
 require('file?name=images/favicon.png!../images/favicon.png');
 
-var cardTemplate = require('../templates/card.ejs');
+// Templates
+var loginTemplate = require('../templates/login.ejs');
+
 var CardManager = require('./CardManager');
 
 window.initMap = function () {
@@ -51,11 +53,8 @@ window.initMap = function () {
       menuDiv.appendChild(b);
 
       b.addEventListener('click', function openCard() {
-        // Open a card over the map.
-        var cardStr = cardTemplate({
-          message: 'Kalkkipetteri'
-        });
-        cm.openCard(cardStr);
+        // Open a login card over the map.
+        cm.openCard(loginTemplate());
       });
     }());
 

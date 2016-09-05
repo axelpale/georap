@@ -11,7 +11,7 @@ module.exports = function CardManager() {
   var self = this;
 
   // State
-  // - none yet
+  // - stored in DOM
 
   // Initialization
   cardBackground.addEventListener('click', function () {
