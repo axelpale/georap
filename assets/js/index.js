@@ -1,6 +1,11 @@
 var _ = require('./dependencies/lodash.core.min');
 //var sailsIOClient = require('./dependencies/sails.io');
+
+// Styles
 require('../styles/style.css');
+
+// Favicon
+require('file?name=images/favicon.png!../images/favicon.png');
 
 var cardTemplate = require('../templates/card.ejs');
 var CardManager = require('./CardManager');

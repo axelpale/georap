@@ -11,8 +11,8 @@ module.exports.webpack = {
       './assets/js',
     ],
     output: {
-      path: path.resolve(__dirname, '../.tmp/public/js'),
-      filename: 'app.bundle.js'
+      path: path.resolve(__dirname, '../.tmp/public'),
+      filename: 'js/app.bundle.js'
     },
     module: {
       loaders: [
