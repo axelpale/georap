@@ -1,4 +1,4 @@
-var _ = require('lodash');
+window._ = require('lodash');
 
 // Precompiled Sails + Socket.io
 require('file?name=js/sails.io.js!./dependencies/sails.io.js');
@@ -26,34 +26,13 @@ window.initMap = function () {
     var menuDiv = document.createElement('div');
     menuDiv.className = 'tresdb-map-menu';
 
-    /*var newsUI = document.createElement('img');
-    newsUI.src = 'images/icons/Messaging-Appointment-Reminders-icon.png';
-    menuDiv.appendChild(newsUI);
+    /*(function defineAddButton() {
+      var b = document.createElement('button');
+      b.className = 'btn btn-default';
+      b.innerHTML = 'Add';
+      menuDiv.appendChild(b);
 
-    var listUI = document.createElement('img');
-    listUI.src = 'images/icons/Data-List-icon.png';
-    menuDiv.appendChild(listUI);
-
-    var addUI = document.createElement('img');
-    addUI.src = 'images/icons/City-Hospital-icon.png';
-    menuDiv.appendChild(addUI);
-
-    var userUI = document.createElement('img');
-    userUI.src = 'images/icons/Users-Name-icon.png';
-    menuDiv.appendChild(userUI);*/
-
-    (function defineAddButton() {
-
-      var addUI = document.createElement('div');
-      addUI.className = 'tresdb-map-menu-button-ui';
-
-      var addText = document.createElement('div');
-      addText.className = 'tresdb-map-menu-button-text';
-
-      addText.innerHTML = 'Add';
-      addUI.appendChild(addText);
-
-      addUI.addEventListener('click', function () {
+      b.addEventListener('click', function () {
         var m = new google.maps.Marker({
           position: map.getCenter(),
           title: 'New location',
@@ -62,38 +41,25 @@ window.initMap = function () {
         });
         m.setMap(map);
       });
+    }());*/
 
-      menuDiv.appendChild(addUI);
-    }());
+    (function defineLoginButton() {
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'btn btn-primary';
+      b.innerHTML = 'Login';
+      menuDiv.appendChild(b);
 
-    (function defineSearchButton() {
-
-      var searchUI = document.createElement('div');
-      searchUI.className = 'tresdb-map-menu-button-ui';
-
-      var searchText = document.createElement('div');
-      searchText.className = 'tresdb-map-menu-button-text';
-
-      searchText.innerHTML = 'Search';
-      searchUI.appendChild(searchText);
-
-      searchUI.addEventListener('click', function openCard() {
+      b.addEventListener('click', function openCard() {
         // Open a card over the map.
         var cardStr = cardTemplate({
           message: 'Kalkkipetteri'
         });
         cm.openCard(cardStr);
       });
-
-      menuDiv.appendChild(searchUI);
-
     }());
 
-    (function defineLoginButton() {
-
-    }());
-
-    map.controls[google.maps.ControlPosition.TOP_CENTER].push(menuDiv);
+    map.controls[google.maps.ControlPosition.LEFT_TOP].push(menuDiv);
 
   }());
 };
