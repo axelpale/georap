@@ -1,5 +1,7 @@
-var _ = require('./dependencies/lodash.core.min');
-//var sailsIOClient = require('./dependencies/sails.io');
+var _ = require('lodash');
+
+// Precompiled Sails + Socket.io
+require('file?name=js/sails.io.js!./dependencies/sails.io.js');
 
 // Styles
 require('../styles/style.css');
