@@ -1,13 +1,4 @@
-window._ = require('lodash');
-
-// Precompiled Sails + Socket.io
-require('file?name=js/sails.io.js!./dependencies/sails.io.js');
-
-// Styles
-require('../styles/style.css');
-
-// Favicon
-require('file?name=images/favicon.png!../images/favicon.png');
+var _ = require('lodash');
 
 // Templates
 var loginTemplate = require('../templates/login.ejs');
@@ -59,14 +50,6 @@ window.initMap = function () {
 
         $('#tresdb-login-form').submit(function (ev) {
           console.log('Login form submitted');
-          io.socket.get('/hello', function (data, res) {
-            console.log('GET hello response');
-            console.log(data);
-          });
-          io.socket.post('/hello', { msg: 'Hello world' }, function (data, res) {
-            console.log('POST hello response');
-            console.log(data);
-          });
           ev.preventDefault();
         });
       });

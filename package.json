@@ -2,35 +2,30 @@
   "name": "tresdb",
   "private": true,
   "version": "0.0.1",
-  "description": "Esoteric Location CMS built on Sails.js",
+  "description": "Esoteric location CMS built on Express",
   "keywords": [
     "GIS",
     "CMS"
   ],
-  "dependencies": {
-    "ejs": "2.3.4",
-    "include-all": "~0.1.6",
-    "machinepack-passwords": "^2.3.0",
-    "rc": "1.0.1",
-    "sails": "~0.12.3",
-    "sails-disk": "~0.10.9"
-  },
-  "main": "app.js",
+  "main": "server.js",
   "repository": {
     "type": "git",
     "url": "git://github.com/axelpale/tresdb.git"
   },
+  "scripts": {
+    "start": "webpack --config ./config/webpack.js && node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
   "author": "Akseli Palén <akseli.palen@gmail.com>",
   "license": "MIT",
-  "scripts": {
-    "debug": "node debug app.js",
-    "start": "node app.js"
+  "dependencies": {
+    "express": "^4.14.0",
+    "lodash": "^4.15.0"
   },
   "devDependencies": {
     "css-loader": "^0.25.0",
     "ejs-loader": "^0.3.0",
     "file-loader": "^0.9.0",
-    "sails-webpack": "^1.0.13",
     "style-loader": "^0.13.1",
     "webpack": "^1.13.2",
     "webpack-dev-server": "^1.15.1"

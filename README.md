@@ -1,6 +1,6 @@
 # tresdb
 
-Esoteric Location CMS built on Sails.js.
+Esoteric Location CMS built on Express.
 
 ## Install
 
@@ -14,7 +14,7 @@ Start the server:
 
     $ npm start
 
-Then browse to [localhost:1337](http://localhost:1337).
+Then browse to [localhost:3000](http://localhost:3000).
 
 ## License
 
