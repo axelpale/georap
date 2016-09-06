@@ -11,6 +11,7 @@ require('file?name=images/favicon.png!../images/favicon.png');
 
 // Templates
 var loginTemplate = require('../templates/login.ejs');
+var signupTemplate = require('../templates/signup.ejs');
 
 var CardManager = require('./CardManager');
 
@@ -66,6 +67,24 @@ window.initMap = function () {
             console.log('POST hello response');
             console.log(data);
           });
+          ev.preventDefault();
+        });
+      });
+    }());
+
+    (function defineSignupButton() {
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'btn btn-primary';
+      b.innerHTML = 'Sign Up';
+      menuDiv.appendChild(b);
+
+      b.addEventListener('click', function openCard() {
+        // Open a login card over the map.
+        cm.openCard(signupTemplate());
+
+        $('#tresdb-signup-form').submit(function (ev) {
+          console.log('Sign up form submitted');
           ev.preventDefault();
         });
       });
