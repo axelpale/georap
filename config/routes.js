@@ -46,6 +46,9 @@ module.exports.routes = {
   *                                                                          *
   ***************************************************************************/
 
+  'get /hello': 'HelloController.getHello',
+  'post /hello': 'HelloController.postHello',
+
   'get /api': {
     view: 'api'
   }

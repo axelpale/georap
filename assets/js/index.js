@@ -55,6 +55,19 @@ window.initMap = function () {
       b.addEventListener('click', function openCard() {
         // Open a login card over the map.
         cm.openCard(loginTemplate());
+
+        $('#tresdb-login-form').submit(function (ev) {
+          console.log('Login form submitted');
+          io.socket.get('/hello', function (data, res) {
+            console.log('GET hello response');
+            console.log(data);
+          });
+          io.socket.post('/hello', { msg: 'Hello world' }, function (data, res) {
+            console.log('POST hello response');
+            console.log(data);
+          });
+          ev.preventDefault();
+        });
       });
     }());
 
