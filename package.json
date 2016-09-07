@@ -13,7 +13,8 @@
     "url": "git://github.com/axelpale/tresdb.git"
   },
   "scripts": {
-    "start": "webpack --config ./config/webpack.js && node server.js",
+    "start": "node server.js",
+    "webpack": "webpack --config ./config/webpack.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Akseli Palén <akseli.palen@gmail.com>",
@@ -29,6 +30,7 @@
     "file-loader": "^0.9.0",
     "style-loader": "^0.13.1",
     "webpack": "^1.13.2",
+    "webpack-dev-middleware": "^1.6.1",
     "webpack-dev-server": "^1.15.1"
   }
 }

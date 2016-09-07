@@ -26,6 +26,8 @@ module.exports = {
     new webpack.NoErrorsPlugin()
   ],
 
+  watch: true,
+  
   // docs: https://webpack.github.io/docs/node.js-api.html#compiler
   watchOptions: {
     aggregateTimeout: 300
