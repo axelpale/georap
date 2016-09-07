@@ -1,23 +1,12 @@
 
-module.exports = function () {
-  this.map = new google.maps.Map(document.getElementById('map'), {
-    center: {lat: 61.498151, lng: 23.761025},
-    zoom: 8,
-    mapTypeId: 'hybrid',  // Darker and more practial than 'roadmap'.
+var MapModel = require('./MapModel');
+var MapView = require('./MapView');
 
-    // Controls
-    mapTypeControl: true,
-    mapTypeControlOptions: {
-        style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
-        position: google.maps.ControlPosition.TOP_RIGHT
-    },
-    streetViewControl: true,
-    streetViewControlOptions: {
-      position: google.maps.ControlPosition.RIGHT_BOTTOM
-    },
-    zoomControl: true,
-    zoomControlOptions: {
-        position: google.maps.ControlPosition.RIGHT_BOTTOM
-    }
-  });
+module.exports = function () {
+  var model = new MapModel(null);
+  var view = new MapView(model);
+
+  this.addControl = function (htmlElement) {
+    view.addControl(htmlElement);
+  };
 };

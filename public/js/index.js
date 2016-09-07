@@ -10,6 +10,6 @@ window.initMap = function () {
   var map = new MapController();
   var card = new CardController();
   var auth = new AuthController(null, window.localStorage);
-  var menu = new MenuController(map.map, card, auth);
+  var menu = new MenuController(map, card, auth);
 
 };

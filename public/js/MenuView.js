@@ -6,7 +6,7 @@ var glyphiconTemplate = require('../templates/glyphicon.ejs');
 module.exports = function (map, model) {
   // Parameters:
   //   map
-  //     instance of google.maps.Map
+  //     instance of MapController. To insert menu.
   //   model
   //     Instance of MenuModel. Is listened for update events.
   //
@@ -18,7 +18,8 @@ module.exports = function (map, model) {
   var menuDiv = document.createElement('div');
   menuDiv.className = 'tresdb-map-menu btn-group';
   menuDiv.role = 'group';
-  map.controls[google.maps.ControlPosition.LEFT_TOP].push(menuDiv);
+
+  map.addControl(menuDiv);
 
   model.on('update', function (menuitems) {
 

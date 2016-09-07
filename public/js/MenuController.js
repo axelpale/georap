@@ -7,7 +7,7 @@ var SearchController = require('./SearchController');
 module.exports = function (map, card, auth) {
   // Parameters:
   //   map
-  //     instance of google.maps.Map
+  //     instance of MapController. To insert menu.
   //   card
   //     Instance of CardController. To open cards.
   //   auth
@@ -41,24 +41,7 @@ module.exports = function (map, card, auth) {
       {
         label: 'Add',
         glyphicon: 'map-marker',
-        action: function () {
-          /*(function defineAddButton() {
-            var b = document.createElement('button');
-            b.className = 'btn btn-default';
-            b.innerHTML = 'Add';
-            menuDiv.appendChild(b);
-
-            b.addEventListener('click', function () {
-              var m = new google.maps.Marker({
-                position: map.getCenter(),
-                title: 'New location',
-                draggable: true,
-                animation: google.maps.Animation.DROP
-              });
-              m.setMap(map);
-            });
-          }());*/
-        }
+        action: function () {}
       },
       {
         label: 'Account',
