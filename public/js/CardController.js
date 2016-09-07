@@ -1,8 +1,6 @@
-// Usage:
-//   var CardManager = require('./CardManager');
-//   var cm = new CardManager();
 
-module.exports = function CardManager() {
+
+module.exports = function () {
 
   // Constants
   var cardLayer = document.getElementById('card-layer');
@@ -29,7 +27,7 @@ module.exports = function CardManager() {
 
   // Public methods
 
-  this.openCard = function (htmlContent) {
+  this.open = function (htmlContent) {
     // Open a card over the map and close any other open cards.
 
     // Create card
