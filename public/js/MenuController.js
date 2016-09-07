@@ -24,6 +24,7 @@ module.exports = function (map, card, auth) {
     'public': [
       {
         label: 'Login',
+        glyphicon: 'log-in',
         action: function () {
           new LoginFormController(card, auth);
         }
@@ -32,12 +33,14 @@ module.exports = function (map, card, auth) {
     'private': [
       {
         label: 'Search',
+        glyphicon: 'search',
         action: function () {
           new SearchController(card);
         }
       },
       {
         label: 'Add',
+        glyphicon: 'map-marker',
         action: function () {
           /*(function defineAddButton() {
             var b = document.createElement('button');
@@ -59,12 +62,14 @@ module.exports = function (map, card, auth) {
       },
       {
         label: 'Account',
+        glyphicon: 'user',
         action: function () {
           card.open('/account');
         }
       },
       {
         label: 'Logout',
+        glyphicon: 'off',
         action: function () {
           auth.logout();
         }
