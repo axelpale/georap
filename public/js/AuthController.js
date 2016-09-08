@@ -27,14 +27,19 @@ module.exports = function AuthController(socket, storage) {
 
     payload = { email: email, password: password };
     socket.emit('loginRequest', payload, function (response) {
+      console.log('loginRequest response');
       if (response.hasOwnProperty('token')) {
         // Success
+        console.log('login successful');
         storage.setItem(TOKEN_KEY, response.token);
         self.emit('login');
         callback(null);
       } else if (response.hasOwnProperty('error')) {
         // Failure
-        callback(new Error(response.error));
+        console.log('login failed, possibly invalid email or password');
+        callback({
+          name: response.error
+        });
       } else {
         // Error
         console.error('Invalid response to loginRequest');

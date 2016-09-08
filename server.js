@@ -53,24 +53,42 @@ io.on('connection', function (socket) {
     // if no email or password provided...
 
     // Dummy Database
-    var email = 'foo@bar.com';
-    var hash = bcrypt.hashSync('baz', 10);
+    //var email = 'foo@bar.com';
+    //var hash = bcrypt.hashSync('baz', 10);
     // Dummy Database END
 
-    var emailCandidate = data.email;
-    var hashCandidateOk = bcrypt.compareSync(data.password, hash);
+    console.log('loginRequest: about to find ' + data.email);
 
-    if (emailCandidate === email && hashCandidateOk) {
-      // Success
-      response({
-        token: jwt.sign({ isAdmin: false }, local.secret)
-      });
-    } else {
-      // Authentication failure
-      response({
-        error: 'Invalid email or password'
-      });
-    }
+    var users = db.get('users');
+    users.findOne({email: data.email}).then(function (user) {
+
+      if (user === null) {
+        console.log('loginRequest: user null, not found');
+        response({
+          error: 'login-invalid-email'
+        });
+        return;
+      }
+
+      var match = bcrypt.compareSync(data.password, user.hash);
+
+      if (match) {
+        // Success
+        console.log('loginRequest: password hash match');
+        response({
+          token: jwt.sign({ isAdmin: false }, local.secret)
+        });
+      } else {
+        // Authentication failure
+        console.log('loginRequest: password hash dismatch');
+        response({
+          error: 'login-invalid-password'
+        });
+      }
+    }).catch(function (err) {
+      console.error('loginRequest: findOne: something went wrong.');
+    });
+
   });
 
   // Locations
