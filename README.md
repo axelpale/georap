@@ -8,6 +8,10 @@ Clone the repository:
 
     $ git clone https://github.com/axelpale/tresdb.git
 
+Install MongoDB by following [the instructions](https://www.mongodb.org/downloads). For example, on OS X:
+
+    $ brew install mongodb
+
 Install dependencies:
 
     $ npm install
@@ -18,17 +22,22 @@ Create `config/local.js` similar to:
 
 ## Quick start
 
-Start the server:
+First, start MongoDB:
+
+    $ mongod --dbpath=.data
+
+Second, start the Node server:
 
     $ npm start
 
-Then browse to [localhost:3000](http://localhost:3000).
+Finally, browse to [localhost:3000](http://localhost:3000).
 
 ## Technologies
 
 - [Node.js](https://nodejs.org/en/)
 - [Express](https://expressjs.com/)
 - [Socket.io](http://socket.io/)
+- [MongoDB](https://docs.mongodb.com/manual/)
 - [Webpack](https://webpack.github.io/)
 - [Bootstrap](http://getbootstrap.com/)
 - [bcrypt](https://www.npmjs.com/package/bcryptjs)
