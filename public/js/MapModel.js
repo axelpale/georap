@@ -1,18 +1,31 @@
+var Emitter = require('component-emitter');
 
-module.exports = function (socket) {
+module.exports = function (socket, auth) {
+  Emitter(this);
+  var self = this;
 
-  this.getAll = function (cb) {
-    cb(null, [
-      {
-        id: 23,
-        name: 'Kalkkipetteri',
-        lat: 60.189287,
-        lng: 23.983326
+  // Public methods
+
+  this.fetchAll = function () {
+    // Get all locations from server.
+    var payload = { token: auth.getToken() };
+    socket.emit('locationsRequest', payload, function (response) {
+      if (response.hasOwnProperty('locations')) {
+        // Successful fetch.
+        // Inform about new data.
+        self.emit('update', response.locations);
+      } else if (response.hasOwnProperty('error')) {
+        self.emit('error', new Error(response.error));
       }
-    ]);
+    });
   };
 
-  this.getNearest = function (point, limit) {
+  this.fetchNearest = function (point, limit) {
     // TODO
+  };
+
+  this.removeAll = function () {
+    // Clear all data. Handy when user logs out.
+    self.emit('update', []);
   };
 };

@@ -3,6 +3,12 @@ var Emitter = require('component-emitter');
 var TOKEN_KEY = 'tresdb-session-token';
 
 module.exports = function AuthController(socket, storage) {
+  // Parameters:
+  //   socket
+  //   storage
+  // Emits:
+  //   login
+  //   logout
   Emitter(this);
   var self = this;
 
