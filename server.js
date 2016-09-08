@@ -7,17 +7,8 @@ var bcrypt = require('bcryptjs');
 var jwt = require('jsonwebtoken');
 
 // Database
-var mongodb = require('mongodb');
-var MongoClient = mongodb.MongoClient;
 var mongoUrl = 'mongodb://localhost:27017/tresdb';
-MongoClient.connect(mongoUrl, function (err, db) {
-  if (err) {
-    console.error('Failed to connect MongoDB.');
-  } else {
-    console.log('Connected to MongoDB.');
-  }
-  db.close();
-});
+var db = require('monk')(mongoUrl);
 
 // Start the server.
 server.listen(3000, function () {

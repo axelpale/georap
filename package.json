@@ -26,6 +26,7 @@
     "jsonwebtoken": "^7.1.9",
     "lodash": "^4.15.0",
     "mongodb": "^2.2.9",
+    "monk": "^3.1.2",
     "socket.io": "^1.4.8",
     "socket.io-client": "^1.4.8"
   },
