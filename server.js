@@ -9,6 +9,9 @@ var jwt = require('jsonwebtoken');
 // Database
 var mongoUrl = 'mongodb://localhost:27017/tresdb';
 var db = require('monk')(mongoUrl);
+db.then(function () {
+  console.log('Connected to MongoDB...');
+});
 
 // Start the server.
 server.listen(3000, function () {
@@ -95,3 +98,9 @@ io.on('connection', function (socket) {
     });
   });
 });
+
+
+// Populate database
+
+var bootstrap = require('./config/bootstrap');
+bootstrap(db);
