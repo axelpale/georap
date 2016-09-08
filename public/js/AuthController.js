@@ -8,22 +8,32 @@ module.exports = function AuthController(socket, storage) {
 
   this.login = function (email, password, callback) {
     // Parameters:
-    //   TODO
+    //   email
+    //   password
+    //   callback
+    //     function (err)
     // Emits:
     //   login
     //     On successful login.
+    var payload;
 
     if (typeof callback === 'undefined') { callback = function () {}; }
 
-    // TODO replace dummy query
-    if (email === 'foo@bar.com' && password === 'baz') {
-      var token = '123456789';
-      storage.setItem(TOKEN_KEY, token);
-      self.emit('login');
-      callback(null);
-    } else {
-      callback(new Error('Invalid username or password'));
-    }
+    payload = { email: email, password: password };
+    socket.emit('loginRequest', payload, function (response) {
+      if (response.hasOwnProperty('token')) {
+        // Success
+        storage.setItem(TOKEN_KEY, response.token);
+        self.emit('login');
+        callback(null);
+      } else if (response.hasOwnProperty('error')) {
+        // Failure
+        callback(new Error(response.error));
+      } else {
+        // Error
+        console.error('Invalid response to loginRequest');
+      }
+    });
   };
 
   this.logout = function (callback) {
@@ -38,7 +48,7 @@ module.exports = function AuthController(socket, storage) {
 
     storage.removeItem(TOKEN_KEY);
     self.emit('logout');
-    
+
     if (typeof callback !== 'undefined') {
       callback(null);
     }

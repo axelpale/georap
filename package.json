@@ -22,7 +22,9 @@
   "dependencies": {
     "component-emitter": "^1.2.1",
     "express": "^4.14.0",
-    "lodash": "^4.15.0"
+    "lodash": "^4.15.0",
+    "socket.io": "^1.4.8",
+    "socket.io-client": "^1.4.8"
   },
   "devDependencies": {
     "css-loader": "^0.25.0",

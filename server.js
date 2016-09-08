@@ -1,5 +1,11 @@
 var express = require('express');
 var app = express();
+var server = require('http').Server(app);
+var io = require('socket.io')(server);
+
+server.listen(3000, function () {
+  console.log('Listening on port 3000...');
+});
 
 // Webpack development middleware
 // ------------------------------
@@ -23,11 +29,22 @@ app.use(webpackMiddleware(webpack(webpackConfig), {
 // ------------------------------
 // Webpack development middleware END
 
-
 //app.get('/', function (req, res) {
 //  res.send('Hello World!');
 //});
 
-app.listen(3000, function () {
-  console.log('Example app listening on port 3000!');
+io.on('connection', function (socket) {
+
+  // Authentication
+  socket.on('loginRequest', function (data, response) {
+    if (data.email === 'foo@bar.com' && data.password === 'baz') {
+      response({
+        token: '123456789'
+      });
+    } else {
+      response({
+        error: 'Invalid email or password'
+      });
+    }
+  });
 });
