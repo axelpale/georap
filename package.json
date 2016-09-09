@@ -13,9 +13,10 @@
     "url": "git://github.com/axelpale/tresdb.git"
   },
   "scripts": {
-    "start": "node server.js",
+    "start": "npm run lint && node server.js",
     "webpack": "webpack --config ./config/webpack.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint --config ./config/eslint.js ."
   },
   "author": "Akseli Palén <akseli.palen@gmail.com>",
   "license": "MIT",
@@ -33,6 +34,7 @@
   "devDependencies": {
     "css-loader": "^0.25.0",
     "ejs-loader": "^0.3.0",
+    "eslint": "^3.4.0",
     "file-loader": "^0.9.0",
     "style-loader": "^0.13.1",
     "webpack": "^1.13.2",
