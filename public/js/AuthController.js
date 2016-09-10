@@ -26,8 +26,8 @@ module.exports = function AuthController(socket, storage) {
     if (typeof callback === 'undefined') { callback = function () {}; }
 
     payload = { email: email, password: password };
-    socket.emit('loginRequest', payload, function (response) {
-      console.log('loginRequest response');
+    socket.emit('auth/login', payload, function (response) {
+      console.log('auth/login response');
       if (response.hasOwnProperty('token')) {
         // Success
         console.log('login successful');

@@ -9,7 +9,7 @@ module.exports = function (socket, auth) {
   this.fetchAll = function () {
     // Get all locations from server.
     var payload = { token: auth.getToken() };
-    socket.emit('locationsRequest', payload, function (response) {
+    socket.emit('locations/get', payload, function (response) {
       if (response.hasOwnProperty('locations')) {
         // Successful fetch.
         // Inform about new data.
