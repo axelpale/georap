@@ -19,16 +19,19 @@ exports.get = function (db, data, response) {
         error: 'invalid-token'
       });
     } else {
-      // Give all locations. TODO take payload into account
-      response({
-        locations: [
-          {
-            id: 23,
-            name: 'Kalkkipetteri',
-            lat: 60.189287,
-            lng: 23.983326
-          }
-        ]
+      // Give all locations. TODO take data and payload into account which
+      // locations to fetch.
+      var locations = db.get('locations');
+      locations.find({}).then(function (locs) {
+        response({
+          locations: locs
+        });
+      }).catch(function (err) {
+        console.error('api/controllers/locations.js');
+        console.error(err);
+        response({
+          error: 'db-query-error'
+        });
       });
     }
   });
