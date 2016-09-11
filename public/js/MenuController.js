@@ -4,6 +4,23 @@ var MenuView = require('./MenuView');
 var LoginFormController = require('./LoginFormController');
 var SearchController = require('./SearchController');
 
+var templates = {
+  public: require('../templates/menus/public.ejs'),
+  // login
+
+  private: require('../templates/menus/private.ejs'),
+  // search, list, add
+  // account, logout
+
+  admin: require('../templates/menus/admin.ejs')
+  // search, list, add
+  // account, logout
+  // invite
+};
+
+// on event set menu. Choose template and define actions
+
+
 module.exports = function (map, card, auth) {
   // Parameters:
   //   map
@@ -21,43 +38,33 @@ module.exports = function (map, card, auth) {
 
   // Predefined menus. A mapping from label to action.
   var menus = {
-    'public': [
-      {
-        label: 'Login',
-        glyphicon: 'log-in',
-        action: function () {
+    'public': {
+      template: templates.public,
+      onclicks: {
+        login: function () {
           new LoginFormController(card, auth);
         }
       }
-    ],
-    'private': [
-      {
-        label: 'Search',
-        glyphicon: 'search',
-        action: function () {
-          new SearchController(card);
-        }
-      },
-      {
-        label: 'Add',
-        glyphicon: 'map-marker',
-        action: function () {}
-      },
-      {
-        label: 'Account',
-        glyphicon: 'user',
-        action: function () {
-          card.open('/account');
-        }
-      },
-      {
-        label: 'Logout',
-        glyphicon: 'off',
-        action: function () {
+    },
+    'private': {
+      template: templates.private,
+      onclicks: {
+        search: function () {},
+        list: function () {},
+        add: function () {},
+        account: function () {},
+        logout: function () {
           auth.logout();
         }
       }
-    ]
+    },
+    'admin': {
+      extends: 'private',
+      template: templates.admin,
+      onclicks: {
+        invite: function () {}
+      }
+    }
   };
 
   // Initial menu

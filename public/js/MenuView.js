@@ -16,32 +16,32 @@ module.exports = function (map, model) {
 
   // Initialization
   var menuDiv = document.createElement('div');
-  menuDiv.className = 'tresdb-map-menu btn-group';
-  menuDiv.role = 'group';
+  menuDiv.className = 'tresdb-map-menu';
 
   map.addControl(menuDiv);
 
-  model.on('update', function (menuitems) {
+  model.on('update', function (menu) {
+
+    // Turn to jQuery for easier handling.
+    // Without it, we would need to wait a bit for menu to render before
+    // attaching handlers with document.getElementById(...).
+    var $menuDiv = $(menuDiv);
 
     // Clear menu
-    $(menuDiv).empty();
+    $menuDiv.empty();
 
-    _.each(menuitems, function (item) {
-      var b, g;
-      b = document.createElement('button');
-      b.type = 'button';
-      b.className = 'btn btn-primary';
-      b.innerHTML = item.label;
+    // Render menu
+    $menuDiv.html(menu.template({ glyphicon: glyphiconTemplate }));
 
-      // Bootstrap Glyphicon if specified.
-      if (item.hasOwnProperty('glyphicon')) {
-        g = glyphiconTemplate({name: item.glyphicon});
-        b.innerHTML = g + ' ' + b.innerHTML;
+    // Add onclick handlers.
+    _.each(menu.onclicks, function (handler, id) {
+      var elid = '#tresdb-menu-' + id;
+      var b = $menuDiv.find(elid);
+      if (b === null) {
+        console.error('No element with id ' + elid);
+      } else {
+        b.click(handler);
       }
-
-      menuDiv.appendChild(b);
-
-      b.addEventListener('click', item.action);
     });
   });
 };
