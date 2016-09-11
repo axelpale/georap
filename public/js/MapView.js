@@ -1,4 +1,5 @@
 var _ = require('lodash');
+var infoTemplate = require('../templates/infowindow.ejs');
 
 module.exports = function (model) {
   // Parameters
@@ -51,6 +52,13 @@ module.exports = function (model) {
         title: loc.name
       });
       m.setMap(map);
+      m.addListener('click', function () {
+        // Open info window
+        var infowindow = new google.maps.InfoWindow({
+          content: infoTemplate({ location: loc })
+        });
+        infowindow.open(map, m);
+      });
       markers.push(m);
     });
   });
