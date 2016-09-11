@@ -17,6 +17,11 @@ module.exports = function (socket, auth) {
     model.removeAll();
   });
 
+  // If logged in already
+  if (auth.hasToken()) {
+    model.fetchAll();
+  }
+
   // Public methods
 
   this.addControl = function (htmlElement) {
