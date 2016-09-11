@@ -1,5 +1,6 @@
 // Code to be run on server start.
 
+var local = require('./local');
 var bcrypt = require('bcryptjs');
 
 module.exports = function (db) {
@@ -7,9 +8,9 @@ module.exports = function (db) {
   (function insertDefaultUser() {
 
     var user = {
-      name: 'Foo Bar',
-      email: 'foo@bar.com',
-      hash: bcrypt.hashSync('baz', 10)
+      name: local.admin.username,
+      email: local.admin.email,
+      hash: bcrypt.hashSync(local.admin.password, 10)
     };
 
     // Ensure collection
