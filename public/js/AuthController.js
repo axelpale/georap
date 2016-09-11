@@ -1,4 +1,5 @@
 var Emitter = require('component-emitter');
+var jwtDecode = require('jwt-decode');
 
 var TOKEN_KEY = 'tresdb-session-token';
 
@@ -15,6 +16,7 @@ module.exports = function AuthController(socket, storage) {
   this.login = function (email, password, callback) {
     // Parameters:
     //   email
+    //     email address
     //   password
     //   callback
     //     function (err)
@@ -76,5 +78,9 @@ module.exports = function AuthController(socket, storage) {
 
   this.getToken = function () {
     return storage.getItem(TOKEN_KEY);
+  };
+
+  this.getPayload = function () {
+    return jwtDecode(this.getToken());
   };
 }

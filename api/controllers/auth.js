@@ -17,7 +17,9 @@ exports.login = function (db, data, response) {
   console.log('auth/login: about to find ' + data.email);
 
   var users = db.get('users');
-  users.findOne({email: data.email}).then(function (user) {
+  var query = { email: data.email };
+  users.findOne(query).then(function (user) {
+    var match, tokenPayload;
 
     if (user === null) {
       console.log('auth/login: user null, not found');
@@ -27,13 +29,18 @@ exports.login = function (db, data, response) {
       return;
     }
 
-    var match = bcrypt.compareSync(data.password, user.hash);
+    match = bcrypt.compareSync(data.password, user.hash);
 
     if (match) {
       // Success
       console.log('auth/login: password hash match');
+      tokenPayload = {
+        name: user.name,
+        email: user.email,
+        isAdmin: false
+      };
       response({
-        token: jwt.sign({ isAdmin: false }, local.secret)
+        token: jwt.sign(tokenPayload, local.secret)
       });
     } else {
       // Authentication failure

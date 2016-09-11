@@ -20,7 +20,7 @@ module.exports = function (map, model) {
 
   map.addControl(menuDiv);
 
-  model.on('update', function (menu) {
+  model.on('update', function (menu, username) {
 
     // Turn to jQuery for easier handling.
     // Without it, we would need to wait a bit for menu to render before
@@ -31,7 +31,10 @@ module.exports = function (map, model) {
     $menuDiv.empty();
 
     // Render menu
-    $menuDiv.html(menu.template({ glyphicon: glyphiconTemplate }));
+    $menuDiv.html(menu.template({
+      glyphicon: glyphiconTemplate,
+      username: username  // might be undefined
+    }));
 
     // Add onclick handlers.
     _.each(menu.onclicks, function (handler, id) {

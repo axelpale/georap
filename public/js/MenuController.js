@@ -69,7 +69,7 @@ module.exports = function (map, card, auth) {
 
   // Initial menu
   if (auth.hasToken()) {
-    model.setMenu(menus.private);
+    model.setMenu(menus.private, auth.getPayload().name);
   } else {
     model.setMenu(menus.public);
   }
@@ -77,7 +77,7 @@ module.exports = function (map, card, auth) {
   // Listen if the menu needs to be changed.
 
   auth.on('login', function () {
-    model.setMenu(menus.private);
+    model.setMenu(menus.private, auth.getPayload().name);
   });
   auth.on('logout', function () {
     // Replace menu with a public one.

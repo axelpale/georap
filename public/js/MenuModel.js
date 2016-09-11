@@ -11,7 +11,7 @@ module.exports = function () {
   Emitter(this);
   var self = this;
 
-  this.setMenu = function (menu) {
-    self.emit('update', menu);
+  this.setMenu = function (menu, username) {
+    self.emit('update', menu, username);
   };
 };
