@@ -10,7 +10,8 @@ module.exports = function (db) {
     var user = {
       name: local.admin.username,
       email: local.admin.email,
-      hash: bcrypt.hashSync(local.admin.password, 10)
+      hash: bcrypt.hashSync(local.admin.password, 10),
+      admin: true
     };
 
     // Ensure collection
