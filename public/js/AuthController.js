@@ -67,8 +67,41 @@ module.exports = function AuthController(socket, storage) {
     }
   };
 
-  this.changePassword = function (oldPassword, newPassword, callback) {
-    callback(new Error('Not implemented.'));
+  this.changePassword = function (currentPassword, newPassword, callback) {
+    // Change user password. Requires token to be set.
+    //
+    // Parameters:
+    //   currentPassword
+    //     Server ensures that user knows the current password before
+    //     changing.
+    //   newPassword
+    //   callback
+    //     function (err). If success, err is null.
+
+    // Data to send to server.
+    var payload = {
+      token: this.getToken(),
+      currentPassword: currentPassword,
+      newPassword: newPassword
+    };
+
+    console.log('Emitting auth/changePassword');
+
+    // Ask server to change the password.
+    socket.emit('auth/changePassword', payload, function (response) {
+      console.log('auth/changePassword socket responsed:');
+      console.log(response);
+      if (response.hasOwnProperty('error')) {
+        callback({
+          name: response.error
+        });
+        return;
+      }  // else
+      if (response.hasOwnProperty('success')) {
+        callback(null);
+        return;
+      }
+    });
   }
 
   this.hasToken = function () {

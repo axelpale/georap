@@ -1,6 +1,7 @@
 
 // Template
 var accountTemplate = require('../templates/account.ejs');
+var alertTemplate = require('../templates/alert.ejs');
 
 module.exports = function (card, auth) {
   // Parameters:
@@ -26,6 +27,10 @@ module.exports = function (card, auth) {
   (function defineHowToSubmitPasswordForm() {
     $passwordForm.submit(function (ev) {
       ev.preventDefault();
+      console.log('Change password form submitted.');
+
+      var alertContainer = card.findElementById('tresdb-change-password-alert');
+      var infoContainer = card.findElementById('tresdb-change-password-info');
 
       var curPassGroup = card.findElementById('tresdb-current-password-group');
       var newPassGroup = card.findElementById('tresdb-new-password-group');
@@ -51,11 +56,26 @@ module.exports = function (card, auth) {
       $(newPassGroup).removeClass('has-error');
       $(agaPassGroup).removeClass('has-error');
 
-      auth.changePassword(oldPassword, newPassword, function cb(err) {
+      console.log('About to ask auth to change password.');
+      auth.changePassword(curPass, newPass, function cb(err) {
+        var msg;
+
         if (err) {
           console.error(err);
+          msg = 'There was a problem in changing the password. '
+            + 'Please ensure the values are correct and try again.';
+          alertContainer.innerHTML = alertTemplate({
+            msg: msg,
+            context: 'danger'
+          })
+          return;
         }
-        console.log('Password changed.');
+        console.log('Password changed successfully.');
+        infoContainer.innerHTML = alertTemplate({
+          msg: 'Password changed successfully.',
+          context: 'success'  // Bootstrap alert context class
+        });
+        $passwordForm.addClass('hidden');
       });
     });
   }());

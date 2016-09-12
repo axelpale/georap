@@ -63,6 +63,11 @@ io.on('connection', function (socket) {
     controllers.auth.login(db, data, res);
   });
 
+  // Change password
+  socket.on('auth/changePassword', function (data, res) {
+    controllers.auth.changePassword(db, data, res);
+  });
+
   // Locations
   socket.on('locations/get', function (data, res) {
     controllers.locations.get(db, data, res);

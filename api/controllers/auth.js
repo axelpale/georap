@@ -53,3 +53,83 @@ exports.login = function (db, data, response) {
     console.error('loginRequest: findOne: something went wrong.');
   });
 };
+
+exports.changePassword = function (db, data, response) {
+  // Parameters:
+  //   db
+  //     Monk db instance
+  //   data
+  //     Socket.io event payload
+  //   response
+  //     Socket.io response.
+
+  // Verify user has logged in. We also get the email from the token.
+  jwt.verify(data.token, local.secret, function (err, payload) {
+    if (err) {
+      // Problems with token
+      response({
+        error: 'invalid-token'
+      });
+      return;
+    }  // else
+
+    // User is logged in. Good. Find if user with this email still exists.
+    var users = db.get('users');
+    var query = { email: payload.email };
+    users.findOne(query).then(function (user) {
+      var match, newHash;
+
+      // If no user found.
+      if (user === null) {
+        console.error('auth/changePassword: user null, not found');
+        response({
+          error: 'change-password-invalid-email'
+        });
+        return;
+      }
+
+      // Test if the given current password is correct
+      match = bcrypt.compareSync(data.currentPassword, user.hash);
+      if (match) {
+        // Success, current passwords match
+        console.log('auth/changePassword: password hash match');
+        // Hash the new password before storing it to database.
+        newHash = bcrypt.hashSync(data.newPassword, 10);
+        // Ready to change password. Update hash in database.
+        users.findOneAndUpdate(query, { $set: {
+          hash: newHash
+        }}).then(function (updatedUser) {
+          // Check if user still exists
+          if (updatedUser === null) {
+            console.error('auth/changePassword: ' +
+                          'user removed during operation, not found');
+            response({
+              error: 'change-password-user-removed'
+            })
+            return;
+          }
+          // Password changed successfully
+          response({
+            success: 'change-password-success'
+          });
+          return;
+        }).catch(function (err) {
+          // Update query failed. Connection to database was lost or something.
+          console.error(err);
+          response({
+            error: 'change-password-update-query-failure'
+          });
+          return;
+        });
+      }
+    }).catch(function (err) {
+      // User fetch for email and password check failed.
+      // Connection to database was lost or something.
+      console.error(err);
+      response({
+        error: 'change-password-find-query-failure'
+      });
+      return;
+    });
+  });
+};
