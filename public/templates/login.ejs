@@ -5,17 +5,30 @@
       <form id="tresdb-login-form">
         <div class="form-group">
           <label for="tresdb-login-email">Email address:</label>
-          <input type="email" class="form-control" id="tresdb-login-email" placeholder="">
+          <input type="email" class="form-control" id="tresdb-login-email">
         </div>
         <div class="form-group">
           <label for="tresdb-login-password">Password:</label>
-          <input type="password" class="form-control" id="tresdb-login-password" placeholder="">
+          <input type="password" class="form-control" id="tresdb-login-password">
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>
         <p id="tresdb-login-errors" class="form-group text-danger">
         </p>
       </form>
-      <!-- TODO reset password -->
+
+      <!-- Password reset -->
+      <a id="tresdb-password-reset" href="#">I forgot my password...</a>
+      <!-- For success message -->
+      <div id="tresdb-password-reset-info"></div>
+      <!-- Reset form -->
+      <form id="tresdb-password-reset-form" class="hidden">
+        <p>Insert your account's email address and we send you a link to reset your password.</p>
+        <div class="form-group">
+          <label for="tresdb-password-reset-email">Email address:</label>
+          <input type="email" class="form-control" id="tresdb-password-reset-email">
+        </div>
+        <button type="submit" class="btn btn-primary">Send email</button>
+      </form>
     </div>
   </div><!-- .row -->
 </div><!-- .container-fluid -->

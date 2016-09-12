@@ -1,6 +1,7 @@
 
 // Templates
 var loginTemplate = require('../templates/login.ejs');
+var alertTemplate = require('../templates/alert.ejs');
 
 module.exports = function (card, auth) {
   // Parameters:
@@ -37,6 +38,45 @@ module.exports = function (card, auth) {
           errors.text('Unknown error: ' + err.name);
         }
       }
+    });
+  });
+
+  $resetForm = $('#tresdb-password-reset-form');
+  $resetFormInfo = $('#tresdb-password-reset-info');
+
+  $('#tresdb-password-reset').click(function (ev) {
+    ev.preventDefault();
+    $resetForm.toggleClass('hidden');
+
+    // Autofill reset email field if email already given.
+    var loginEmail = $('#tresdb-login-email').val();
+    if (loginEmail !== '') {
+      $('#tresdb-password-reset-email').val(loginEmail);
+    }
+  });
+
+  $resetForm.submit(function (ev) {
+    ev.preventDefault();
+
+    var resetEmail = $('#tresdb-password-reset-email').val();
+
+    auth.resetPassword(resetEmail, function (err) {
+      if (err) {
+        // Display error message. Possible cause: invalid email
+        $resetFormInfo.html(alertTemplate({
+          msg: 'Please ensure your email address is correct.',
+          context: 'danger'
+        }));
+        return;
+      }  // else
+      // Success. Hide form.
+      $resetForm.addClass('hidden');
+      // Display success message.
+      $resetFormInfo.html(alertTemplate({
+        msg: 'Password reset message sent successfully. '
+          + 'Please check your email.',
+        context: 'success'
+      }));
     });
   });
 };

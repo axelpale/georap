@@ -102,7 +102,11 @@ module.exports = function AuthController(socket, storage) {
         return;
       }
     });
-  }
+  };
+
+  this.resetPassword = function (email, callback) {
+    callback();
+  };
 
   this.hasToken = function () {
     // True if user is authenticated.
