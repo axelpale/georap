@@ -67,6 +67,10 @@ module.exports = function AuthController(socket, storage) {
     }
   };
 
+  this.changePassword = function (oldPassword, newPassword, callback) {
+    callback(new Error('Not implemented.'));
+  }
+
   this.hasToken = function () {
     // True if user is authenticated.
 

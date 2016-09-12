@@ -47,4 +47,10 @@ module.exports = function () {
     // Remove possible cards
     clearCardContainer();
   };
+
+  this.findElementById = function (id) {
+    // Return
+    //   HTMLElement
+    return $(cardContainer).find('#' + id).get(0);
+  };
 };

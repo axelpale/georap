@@ -3,6 +3,7 @@ var MenuModel = require('./MenuModel');
 var MenuView = require('./MenuView');
 var LoginFormController = require('./LoginFormController');
 var SearchController = require('./SearchController');
+var AccountController = require('./AccountController');
 
 var templates = {
   public: require('../templates/menus/public.ejs'),
@@ -52,7 +53,9 @@ module.exports = function (map, card, auth) {
         search: function () {},
         list: function () {},
         add: function () {},
-        account: function () {},
+        account: function () {
+          new AccountController(card, auth);
+        },
         logout: function () {
           auth.logout();
         }
