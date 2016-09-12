@@ -2,8 +2,9 @@ var express = require('express');
 var app = express();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
-var local = require('./config/local');
 var jwt = require('jsonwebtoken');
+var nodemailer = require('nodemailer');
+var local = require('./config/local');
 
 
 // Controllers setup
@@ -18,6 +19,18 @@ var mongoUrl = 'mongodb://localhost:27017/tresdb';
 var db = require('monk')(mongoUrl);
 db.then(function () {
   console.log('Connected to MongoDB...');
+});
+
+
+// Email transporter setup and verification.
+var mailer = nodemailer.createTransport(local.smtp);
+mailer.verify(function (err, success) {
+  if (err) {
+    console.log('Connection to mail server failed:');
+    console.log(err);
+  } else {
+    console.log('Connected to mail server...');
+  }
 });
 
 
@@ -66,6 +79,11 @@ io.on('connection', function (socket) {
   // Change password
   socket.on('auth/changePassword', function (data, res) {
     controllers.auth.changePassword(db, data, res);
+  });
+
+  // Reset password
+  socket.on('auth/resetPassword', function (data, res) {
+    controllers.auth.resetPassword(db, mailer, data, res);
   });
 
   // Locations

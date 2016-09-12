@@ -16,19 +16,21 @@
     "start": "npm run lint && node server.js",
     "webpack": "webpack --config ./config/webpack.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "eslint --config ./config/eslint.js ."
+    "lint": "eslint --config ./config/eslint.js . && echo 'Lint successful.'"
   },
   "author": "Akseli Palén <akseli.palen@gmail.com>",
   "license": "MIT",
   "dependencies": {
     "bcryptjs": "^2.3.0",
     "component-emitter": "^1.2.1",
+    "ejs": "^2.5.2",
     "express": "^4.14.0",
     "jsonwebtoken": "^7.1.9",
     "jwt-decode": "^2.1.0",
     "lodash": "^4.15.0",
     "mongodb": "^2.2.9",
     "monk": "^3.1.2",
+    "nodemailer": "^2.6.0",
     "socket.io": "^1.4.8",
     "socket.io-client": "^1.4.8"
   },

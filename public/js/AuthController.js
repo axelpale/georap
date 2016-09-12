@@ -100,12 +100,33 @@ module.exports = function AuthController(socket, storage) {
       if (response.hasOwnProperty('success')) {
         callback(null);
         return;
-      }
+      }  // else
+      console.error('Invalid response from auth/changePassword');
     });
   };
 
   this.resetPassword = function (email, callback) {
-    callback();
+
+    // Data to send to server.
+    var payload = {
+      email: email
+    };
+
+    socket.emit('auth/resetPassword', payload, function (response) {
+      console.log('auth/resetPassword socket responsed:');
+      console.log(response);
+      if (response.hasOwnProperty('error')) {
+        callback({
+          name: response.error
+        });
+        return;
+      }  // else
+      if (response.hasOwnProperty('success')) {
+        callback(null);
+        return;
+      }  // else
+      console.error('Invalid response from auth/resetPassword');
+    });
   };
 
   this.hasToken = function () {

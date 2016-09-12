@@ -2,6 +2,16 @@ var bcrypt = require('bcryptjs');
 var jwt = require('jsonwebtoken');
 var local = require('../../config/local');
 
+var fs = require('fs');
+var path = require('path');
+var ejs = require('ejs');
+
+var resetMailTemplate = (function () {
+  var p = path.resolve(__dirname, '../templates/reset.ejs');
+  var f = fs.readFileSync(p, 'utf8');
+  return ejs.compile(f);
+}());
+
 exports.login = function (db, data, response) {
   // Parameters:
   //   db
@@ -131,5 +141,76 @@ exports.changePassword = function (db, data, response) {
       });
       return;
     });
+  });
+};
+
+
+exports.resetPassword = function (db, mailer, data, response) {
+  // Parameters:
+  //   db
+  //     Monk db instance
+  //   mailer
+  //     Nodemailer transporter instance
+  //   data
+  //     Socket.io event payload
+  //   response
+  //     Socket.io response.
+
+  // Fetch user from database to ensure the email exists.
+  // First get collection.
+  var users = db.get('users');
+  users.findOne({ email: data.email }).then(function (user) {
+
+    if (user === null) {
+      // User not found with that email address.
+      response({
+        error: 'reset-password-invalid-email'
+      });
+      return;
+    }
+
+    // Okay, user exists. We do not clear user password now, because
+    // otherwise anyone could clear anyother's passwords, forcing them
+    // to set their passwords again and again.
+
+    // We will send an email. The email contains a link that allows user
+    // to reset his or her password during the next 30 minutes.
+
+    var tokenPayload = {
+      name: user.name,
+      email: user.email,
+      isAdmin: false,
+      passwordReset: true
+    };
+    var token = jwt.sign(tokenPayload, local.secret);
+    var url = 'http://localhost:3000/#' + token;
+
+    var mailOptions = {
+      from: local.mail.sender,
+      to: user.email,
+      subject: 'Subterranea.fi Password Reset',
+      text: resetMailTemplate({ resetUrl: url, email: user.email })
+    };
+
+    // Send the mail.
+    mailer.sendMail(mailOptions, function (err, info) {
+      if (err) {
+        response({
+          error: 'reset-password-mail-server-failure'
+        });
+        return;
+      }  // else
+      console.log('Mail sent: ' + info.response);
+      response({
+        success: true
+      });
+      return;
+    });
+  }).catch(function (err) {
+    // A query error.
+    response({
+      error: 'reset-password-find-query-failure'
+    });
+    return;
   });
 };

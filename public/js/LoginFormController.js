@@ -63,6 +63,7 @@ module.exports = function (card, auth) {
     auth.resetPassword(resetEmail, function (err) {
       if (err) {
         // Display error message. Possible cause: invalid email
+        console.log('LoginFormController: ' + err.name);
         $resetFormInfo.html(alertTemplate({
           msg: 'Please ensure your email address is correct.',
           context: 'danger'
