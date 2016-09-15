@@ -32,6 +32,12 @@ Second, start the Node server:
 
 Finally, browse to [localhost:3000](http://localhost:3000).
 
+## Testing
+
+Run casperjs tests:
+
+    $ npm test
+
 ## Technology stack
 
 - [Google Maps JavaScript API](https://developers.google.com/maps/documentation/javascript/)
