@@ -55,6 +55,7 @@ Run casperjs tests:
 Development tools:
 
 - [ESLint](http://eslint.org/)
+- [CasperJS](http://casperjs.org/)
 - [Webpack](https://webpack.github.io/)
 
 ## License
