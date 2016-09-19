@@ -11,7 +11,7 @@ module.exports = function (card, auth) {
   //   auth
   //     Instance of AuthController.
 
-  card.open(loginTemplate());
+  card.open(loginTemplate(), 'full');
 
   $('#tresdb-login-form').submit(function (ev) {
     ev.preventDefault();

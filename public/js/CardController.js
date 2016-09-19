@@ -1,56 +1,84 @@
 
+var cardTemplate = require('../templates/card.ejs');
 
 module.exports = function () {
 
   // Constants
   var cardLayer = document.getElementById('card-layer');
-  var cardBackground = document.getElementById('card-background');
-  var cardContainer = document.getElementById('card-container');
   var self = this;
 
   // State
   // - stored in DOM
 
-  // Initialization
-  cardBackground.addEventListener('click', function () {
-    self.closeAll();
-  });
-
   // Private methods
-  var clearCardContainer = function () {
+
+  var fillCardLayer = function (content) {
+    // Parameters:
+    //   content
+    //     string
+    //       html content.
+    cardLayer.innerHTML = content;
+  };
+
+  var clearCardLayer = function () {
     // Note: innerHTML = '' is a slow method to do the same.
     // See http://stackoverflow.com/a/3450726/638546
-    while (cardContainer.firstChild) {
-      cardContainer.removeChild(cardContainer.firstChild);
+    while (cardLayer.firstChild) {
+      cardLayer.removeChild(cardLayer.firstChild);
     }
   };
 
   // Public methods
 
-  this.open = function (htmlContent) {
+  this.open = function (htmlContent, cardClass) {
     // Open a card over the map and close any other open cards.
+    //
+    // Parameters:
+    //   htmlContent
+    //     to be rendered inside the card
+    //   cardClass
+    //     string, card type. Available types:
+    //       page (default)
+    //         A fraction of the map is visible.
+    //       full
+    //         Fills the map area completely.
+    var card, bg;
+
+    // Handle default parameters
+    if (typeof cardClass === 'undefined') {
+      cardClass = 'page';
+    }
 
     // Create card
-    var card = document.createElement('div');
-    card.innerHTML = htmlContent;
+    card = cardTemplate({
+      content: htmlContent,
+      cardClass: cardClass
+    });
 
     // Remove possible other cards
-    clearCardContainer();
+    fillCardLayer(card);
 
     // Display if hidden
-    cardContainer.appendChild(card);
     cardLayer.style.display = 'block';  // from 'none' if hidden
+
+    // Initialize close mechanism
+    if (cardClass === 'page') {
+      bg = this.findElementById('card-background');
+      bg.addEventListener('click', function () {
+        self.closeAll();
+      });
+    }
   };
 
   this.closeAll = function () {
     cardLayer.style.display = 'none';
     // Remove possible cards
-    clearCardContainer();
+    clearCardLayer();
   };
 
   this.findElementById = function (id) {
     // Return
     //   HTMLElement
-    return $(cardContainer).find('#' + id).get(0);
+    return $(cardLayer).find('#' + id).get(0);
   };
 };
