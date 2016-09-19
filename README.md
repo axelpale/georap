@@ -12,6 +12,10 @@ Install MongoDB by following [the instructions](https://www.mongodb.org/download
 
     $ brew install mongodb
 
+Create directory for database:
+
+    $ mkdir -p .data/db
+
 Install dependencies:
 
     $ npm install
@@ -24,7 +28,7 @@ Create `config/local.js` similar to:
 
 First, start MongoDB:
 
-    $ mongod --dbpath=.data
+    $ mongod --dbpath=.data/db
 
 Second, start the Node server:
 
@@ -34,7 +38,7 @@ Finally, browse to [localhost:3000](http://localhost:3000).
 
 ## Testing
 
-Run casperjs tests:
+First, fire up mongo and node, then, run casperjs tests:
 
     $ npm test
 
