@@ -1,7 +1,7 @@
 
 module.exports = {
 
-  // Site secret. DO NOT EXPOSE TO CLIENT.
+  // Site secret. CHANGE! DO NOT EXPOSE TO CLIENT!
   // Used to encrypt and decrypt passwords and tokens.
   secret: '123456789',
 
