@@ -20,9 +20,7 @@ Install dependencies:
 
     $ npm install
 
-Create `config/local.js` similar to:
-
-    exports.secret = 'my-secret-for-authentication';
+Rename `config/local-sample.js` to `config/local.js` and rewrite it with your settings.
 
 ## Quick start
 
