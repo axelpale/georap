@@ -12,6 +12,80 @@ var resetMailTemplate = (function () {
   return ejs.compile(f);
 }());
 
+
+// Private methods
+
+var setPassword = function (db, email, password, callback) {
+  // Just change the password for the account.
+  //
+  // Parameters:
+  //   db
+  //     Monk db instance
+  //   email
+  //     string, Account email
+  //   password
+  //     string, The new password
+  //   callback
+  //     function (err)
+  //
+  // Error names:
+  //   hashingError
+  //   userNotFoundError
+  //   mongoQueryError
+
+  // Ensure types to avoid Mongo injection.
+  if (typeof email !== 'string') {
+    throw new Error('dangerous non-string email address');
+  }
+  if (typeof password !== 'string') {
+    throw new Error('dangerous non-string password');
+  }
+
+  // Hash the new password before storing it to database.
+  bcrypt.hash(password, 10, function (err, newHash) {
+
+    // Handle hashing error
+    var err2;
+    if (err) {
+      err2 = new Error('hashing error');
+      err2.name = 'hashingError';
+      err2.origError = err;
+      callback(err2);
+      return;
+    }
+
+    // Construct the query.
+    var findQuery = { email: email };
+    var updateQuery = { $set: { hash: newHash } };
+
+    // Collection
+    var users = db.get('users');
+
+    users.findOneAndUpdate(findQuery, updateQuery).then(function (user) {
+      // If no user found.
+      if (user === null) {
+        err2 = new Error('User not found');
+        err2.name = 'userNotFoundError';
+        callback(err2);
+        return;
+      }  // else
+
+      // Password changed successfully
+      callback();
+    }).catch(function (err) {
+      // Update query failed. Connection to database was lost or something.
+      err2 = new Error('Update query failed');
+      err2.name = 'mongoQueryError';
+      err2.origError = err;
+      callback(err2);
+    });
+  });
+};
+
+
+// Public methods
+
+
 exports.login = function (db, data, response) {
   // Parameters:
   //   db
@@ -145,7 +219,7 @@ exports.changePassword = function (db, data, response) {
 };
 
 
-exports.resetPassword = function (db, mailer, data, response) {
+exports.sendResetPasswordEmail = function (db, mailer, data, response) {
   // Parameters:
   //   db
   //     Monk db instance
@@ -182,13 +256,15 @@ exports.resetPassword = function (db, mailer, data, response) {
       isAdmin: false,
       passwordReset: true
     };
-    var token = jwt.sign(tokenPayload, local.secret);
-    var url = 'http://localhost:3000/#' + token;
+    var token = jwt.sign(tokenPayload, local.secret, {
+      expiresIn: '30m'
+    });
+    var url = 'http://localhost:3000/#reset=' + token;
 
     var mailOptions = {
       from: local.mail.sender,
       to: user.email,
-      subject: 'Subterranea.fi Password Reset',
+      subject: 'Subterranea.fi password reset requested for your account',
       text: resetMailTemplate({ resetUrl: url, email: user.email })
     };
 
@@ -212,5 +288,53 @@ exports.resetPassword = function (db, mailer, data, response) {
       error: 'reset-password-find-query-failure'
     });
     return;
+  });
+};
+
+
+exports.resetPassword = function (db, data, response) {
+  // Parameters:
+  //   db
+  //     Monk db instance
+  //   data
+  //     plain object, Socket.io event payload:
+  //       token
+  //       password
+  //   response
+  //     Socket.io response.
+  //
+  // Errors (response.error):
+  //   InvalidPasswordError
+  //   InvalidTokenError
+
+  if (typeof data.password !== 'string') {
+    response({
+      error: 'InvalidPasswordError'
+    });
+    return;
+  }
+
+  jwt.verify(data.token, local.secret, function (err, payload) {
+    if (err || typeof payload.email !== 'string') {
+      // E.g. expired token
+      response({
+        error: 'InvalidTokenError'
+      });
+      return;
+    }  // else
+
+    var email = payload.email;
+    var newPassword = data.password;
+    setPassword(db, payload.email, data.password, function (err) {
+      if (err) {
+        response({
+          error: err.name
+        });
+        return;
+      }  // else
+      response({
+        success: true
+      });
+    });
   });
 };

@@ -81,9 +81,12 @@ io.on('connection', function (socket) {
     controllers.auth.changePassword(db, data, res);
   });
 
-  // Reset password
+  // Password reset
+  socket.on('auth/sendResetPasswordEmail', function (data, res) {
+    controllers.auth.sendResetPasswordEmail(db, mailer, data, res);
+  });
   socket.on('auth/resetPassword', function (data, res) {
-    controllers.auth.resetPassword(db, mailer, data, res);
+    controllers.auth.resetPassword(db, data, res);
   });
 
   // Locations

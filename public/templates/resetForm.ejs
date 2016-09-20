@@ -1,0 +1,26 @@
+<h1>Password reset</h1>
+<p>For account <strong><%= email %></strong></p>
+
+<div id="tresdb-reset-password-info"></div>
+
+<form id="tresdb-reset-password-form">
+  <div id="tresdb-new-password-group" class="form-group">
+    <label for="tresdb-input-new-password" class="control-label">New password:</label>
+    <input type="password" class="form-control" id="tresdb-input-new-password">
+  </div>
+  <div id="tresdb-again-password-group" class="form-group">
+    <label for="tresdb-input-again-password" class="control-label">New password again:</label>
+    <input type="password" class="form-control" id="tresdb-input-again-password">
+  </div>
+  <div id="tresdb-reset-password-alert"></div>
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+<div id="tresdb-reset-password-after-submit" class="hidden">
+  <div class="progress">
+    <div class="progress-bar progress-bar-striped active" role="progressbar" style="width: 100%">
+      <span class="sr-only">Waiting</span>
+    </div>
+  </div>
+  <button type="button" class="btn btn-default" disable="disable">Continue to log in</button>
+</div>

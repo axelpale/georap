@@ -31,6 +31,7 @@
     "mongodb": "^2.2.9",
     "monk": "^3.1.2",
     "nodemailer": "^2.6.0",
+    "query-string": "^4.2.3",
     "socket.io": "^1.4.8",
     "socket.io-client": "^1.4.8"
   },

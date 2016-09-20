@@ -60,7 +60,7 @@ module.exports = function (card, auth) {
 
     var resetEmail = $('#tresdb-password-reset-email').val();
 
-    auth.resetPassword(resetEmail, function (err) {
+    auth.sendResetPasswordEmail(resetEmail, function (err) {
       if (err) {
         // Display error message. Possible cause: invalid email
         console.log('LoginFormController: ' + err.name);
