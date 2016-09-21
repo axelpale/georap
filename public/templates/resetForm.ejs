@@ -1,26 +1,49 @@
-<h1>Password reset</h1>
-<p>For account <strong><%= email %></strong></p>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-12">
+      <h1>Password reset</h1>
+      <p>For account <strong><%= email %></strong></p>
 
-<div id="tresdb-reset-password-info"></div>
+      <div id="tresdb-reset-password-no-match" class="hidden">
+        <div class="alert alert-danger" role="alert">Passwords do not match.</div>
+      </div>
 
-<form id="tresdb-reset-password-form">
-  <div id="tresdb-new-password-group" class="form-group">
-    <label for="tresdb-input-new-password" class="control-label">New password:</label>
-    <input type="password" class="form-control" id="tresdb-input-new-password">
-  </div>
-  <div id="tresdb-again-password-group" class="form-group">
-    <label for="tresdb-input-again-password" class="control-label">New password again:</label>
-    <input type="password" class="form-control" id="tresdb-input-again-password">
-  </div>
-  <div id="tresdb-reset-password-alert"></div>
-  <button type="submit" class="btn btn-primary">Submit</button>
-</form>
+      <div id="tresdb-reset-password-server-error" class="hidden">
+        <div class="alert alert-danger" role="alert">Failed to reset the password. Try again later.</div>
+      </div>
 
-<div id="tresdb-reset-password-after-submit" class="hidden">
-  <div class="progress">
-    <div class="progress-bar progress-bar-striped active" role="progressbar" style="width: 100%">
-      <span class="sr-only">Waiting</span>
+      <div id="tresdb-reset-password-token-error" class="hidden">
+        <div class="alert alert-warning" role="alert">The time window for your password reset has ended. You need to request password reset again from the log in page.</div>
+      </div>
+
+      <div id="tresdb-reset-password-success" class="hidden">
+        <div class="alert alert-success" role="alert">Password changed successfully.</div>
+      </div>
+
+      <form id="tresdb-reset-password-form">
+        <div id="tresdb-new-password-group" class="form-group">
+          <label for="tresdb-input-new-password" class="control-label">New password:</label>
+          <input type="password" class="form-control" id="tresdb-input-new-password">
+        </div>
+        <div id="tresdb-again-password-group" class="form-group">
+          <label for="tresdb-input-again-password" class="control-label">New password again:</label>
+          <input type="password" class="form-control" id="tresdb-input-again-password">
+        </div>
+        <div id="tresdb-reset-password-alert"></div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+
+      <div id="tresdb-reset-in-progress" class="hidden">
+        <div class="progress">
+          <div class="progress-bar progress-bar-striped active" role="progressbar" style="width: 100%">
+            <span class="sr-only">Waiting</span>
+          </div>
+        </div>
+      </div>
+
+      <div id="tresdb-reset-password-login" class="hidden">
+        <button id="tresdb-continue-to-login-button" type="button" class="btn btn-primary">Continue to log in</button>
+      </div>
     </div>
-  </div>
-  <button type="button" class="btn btn-default" disable="disable">Continue to log in</button>
-</div>
+  </div><!-- .row -->
+</div><!-- .container-fluid -->
