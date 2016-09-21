@@ -338,3 +338,46 @@ exports.resetPassword = function (db, data, response) {
     });
   });
 };
+
+
+exports.sendInviteEmail = function (db, data, response) {
+  // Invite a user by sending an email with a link that includes a token.
+  // With that token the user is allowed to create a single account within
+  // a time limit.
+  //
+  // Parameters:
+  //   db
+  //     Monk db instance
+  //   data
+  //     plain object, Socket.io event payload:
+  //       token
+  //         Inveter's token.
+  //         Used to check does inviter have privileges to invite.
+  //       email
+  //         The email address where to send the invite.
+  //   response
+  //     Socket.io response.
+
+  throw new Error('not implemented');
+};
+
+exports.signUp = function (db, data, response) {
+  // After invite, a user signs up. The client must send the token that was
+  // associated with the invite email.
+  //
+  // Parameters:
+  //   db
+  //     Monk db instance
+  //   data
+  //     plain object, Socket.io event payload:
+  //       token
+  //         Token in the invite. Contains user email and expiration.
+  //       username
+  //         New username
+  //       password
+  //         New password
+  //   response
+  //     Socket.io response.
+
+  throw new Error('not implemented');
+};
