@@ -177,19 +177,17 @@ module.exports = function AuthController(socket, storage) {
     });
   };
 
-  this.signup = function (token, username, email, password, callback) {
+  this.signup = function (token, username, password, callback) {
     // Parameters
     //   token
-    //     The token user received in email
+    //     The token user received in email. Contains email address
     //   username
-    //   email
     //   password
     //   callback
 
     var payload = {
       token: token,
       username: username,
-      email: email,
       password: password
     };
 

@@ -33,12 +33,12 @@ module.exports = function (card, auth, token) {
 
     // Hide previous errors
     $('#tresdb-signup-invalid-username').addClass('hidden');
-    $('#tresdb-signup-invalid-email').addClass('hidden');
     $('#tresdb-signup-password-no-match').addClass('hidden');
+    $('#tresdb-signup-username-taken').addClass('hidden');
+    $('#tresdb-signup-email-taken').addClass('hidden');
 
     // Collect values to send
     var username = $('#tresdb-signup-username').val().trim();
-    var email = $('#tresdb-signup-email').val();
     var password = $('#tresdb-signup-password').val();
     var password2 = $('#tresdb-signup-password2').val();
 
@@ -46,14 +46,6 @@ module.exports = function (card, auth, token) {
     if (username === '') {
       // Invalid username, show error
       $('#tresdb-signup-invalid-username').removeClass('hidden');
-      return;
-    }  // else
-
-    // Validate email.
-    if (!validator.validate(email)) {
-      console.error('invalid email', email);
-      // Invalid email, show error.
-      $('#tresdb-signup-invalid-email').removeClass('hidden');
       return;
     }  // else
 
@@ -69,7 +61,7 @@ module.exports = function (card, auth, token) {
     // Hide form
     $('#tresdb-signup-form').addClass('hidden');
 
-    auth.signup(token, username, email, password, function (err) {
+    auth.signup(token, username, password, function (err) {
       // Hide loading animation
       $('#tresdb-signup-in-progress').addClass('hidden');
 
@@ -85,8 +77,8 @@ module.exports = function (card, auth, token) {
         if (err.name === 'EmailTakenError') {
           // Duplicate username, show error.
           $('#tresdb-signup-email-taken').removeClass('hidden');
-          // Show form
-          $('#tresdb-signup-form').removeClass('hidden');
+          // Show log in button
+          $('#tresdb-signup-to-login').removeClass('hidden');
           return;
         }  // else
 

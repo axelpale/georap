@@ -451,7 +451,99 @@ exports.signup = function (db, data, response) {
   //   response
   //     Socket.io response.
 
-  response({
-    error: 'NotImplemented'
-  });
+  jwt.verify(data.token, local.secret, function (err, payload) {
+    if (err) {
+      response({
+        error: 'InvalidTokenError'
+      });
+      return;
+    }  // else
+
+    if (!payload.hasOwnProperty('email')) {
+      response({
+        error: 'InvalidTokenError'
+      });
+      return;
+    }  // else
+
+    if (!validator.validate(payload.email)) {
+      response({
+        error: 'InvalidTokenError'
+      });
+      return;
+    }  // else
+
+    if (!data.hasOwnProperty('username') || !data.hasOwnProperty('password')) {
+      response({
+        error: 'InvalidRequestError'
+      });
+      return;
+    }  // else
+
+    // Ensure username and password are strings.
+    // This prevents Mongo injection.
+    var usernameType = typeof data.username;  // to shorten linelength
+    var passwordType = typeof data.password;
+    if (usernameType !== 'string' || passwordType !== 'string') {
+      response({
+        error: 'InvalidRequestError'
+      });
+      return;
+    }  // else
+
+    // Ensure username does not yet exist.
+    // We could check this from an insert error but this way we can separate
+    // username index violation and email index violation.
+    // We also avoid computing password hash.
+
+    var users = db.get('users');
+    users.findOne({
+      $or: [ { name: data.username }, { email: payload.email } ]
+    }).then(function (user) {
+      if (user !== null) {
+        // Duplicate username or email.
+        if (user.name === data.username) {
+          response({
+            error: 'UsernameTakenError'
+          });
+          return;
+        }  // else
+        if (user.email === payload.email) {
+          response({
+            error: 'EmailTakenError'
+          });
+          return;
+        }  // else
+        throw new Error('Should not get here');
+      }  // else
+
+      // No matching user found. We are clear to add one.
+      // Note: there is a tiny risk that such user is created after
+      // the check but before insert.
+
+      users.insert({
+        name: data.username,
+        email: payload.email,
+        hash: bcrypt.hashSync(data.password, 10),
+        admin: false
+      }).then(function (user) {
+        // User inserted successfully
+        response({
+          success: true
+        });
+      }).catch(function (err) {
+        // Some mongo error.
+        console.error(err);
+        response({
+          error: err.name
+        });
+      });  // insert catch
+    }).catch(function (err) {
+      // Some mongo error.
+      console.error(err);
+      response({
+        error: err.name
+      });
+    });  // findOne catch
+  });  // jwt
 };

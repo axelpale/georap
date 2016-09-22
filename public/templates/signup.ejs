@@ -2,14 +2,11 @@
   <div class="row">
     <div class="col-md-12">
       <h1>Sign up</h1>
-      <p>Welcome to Subterranea Fennica. Choose your username, email, and password. In case you might lose your password, we can send you instructions how to reset it to your email address.</p>
+      <p>For <strong><%= email %></strong></p>
+      <p>Welcome to Subterranea Fennica. Choose your username and password. We use your email address to send you instructions how to reset your password in case you forget it.</p>
 
       <div id="tresdb-signup-invalid-username" class="hidden">
         <div class="alert alert-danger" role="alert">Invalid username. Check and try again.</div>
-      </div>
-
-      <div id="tresdb-signup-invalid-email" class="hidden">
-        <div class="alert alert-danger" role="alert">Invalid email address. Check and try again.</div>
       </div>
 
       <div id="tresdb-signup-password-no-match" class="hidden">
@@ -21,7 +18,7 @@
       </div>
 
       <div id="tresdb-signup-email-taken" class="hidden">
-        <div class="alert alert-danger" role="alert">An account already exists with this email. Log in with the existing account or choose another email and try again.</div>
+        <div class="alert alert-warning" role="alert">An account already exists with this email. Log in with the existing account.</div>
       </div>
 
       <div id="tresdb-signup-server-error" class="hidden">
@@ -40,10 +37,6 @@
         <div id="tresdb-signup-username-group" class="form-group">
           <label for="tresdb-signup-username" class="control-label">Username (choose well, you cannot change this later):</label>
           <input type="text" class="form-control" id="tresdb-signup-username">
-        </div>
-        <div id="tresdb-signup-email-group" class="form-group">
-          <label for="tresdb-signup-email" class="control-label">Email address:</label>
-          <input type="email" class="form-control" id="tresdb-signup-email">
         </div>
         <div id="tresdb-new-password-group" class="form-group">
           <label for="tresdb-signup-password" class="control-label">New password:</label>
