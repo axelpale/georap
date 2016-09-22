@@ -26,7 +26,7 @@ Rename `config/local-sample.js` to `config/local.js` and rewrite it with your se
 
 First, start MongoDB:
 
-    $ mongod --dbpath=.data/db
+    $ npm run mongo
 
 Second, start the Node server:
 
