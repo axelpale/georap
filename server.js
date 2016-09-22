@@ -93,8 +93,8 @@ io.on('connection', function (socket) {
   socket.on('auth/sendInviteEmail', function (data, res) {
     controllers.auth.sendInviteEmail(db, mailer, data, res);
   });
-  socket.on('auth/signUp', function (data, res) {
-    controllers.auth.signUp(db, data, res);
+  socket.on('auth/signup', function (data, res) {
+    controllers.auth.signup(db, data, res);
   });
 
   // Locations

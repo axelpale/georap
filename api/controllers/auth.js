@@ -433,7 +433,7 @@ exports.sendInviteEmail = function (db, mailer, data, response) {
   });  // jwt
 };
 
-exports.signUp = function (db, data, response) {
+exports.signup = function (db, data, response) {
   // After invite, a user signs up. The client must send the token that was
   // associated with the invite email.
   //
@@ -451,5 +451,7 @@ exports.signUp = function (db, data, response) {
   //   response
   //     Socket.io response.
 
-  throw new Error('not implemented');
+  response({
+    error: 'NotImplemented'
+  });
 };

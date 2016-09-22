@@ -14,6 +14,7 @@ var AuthController = require('./AuthController');
 var MenuController = require('./MenuController');
 var LoginFormController = require('./LoginFormController');
 var ResetFormController = require('./ResetFormController');
+var SignUpFormController = require('./SignUpFormController');
 
 var auth = new AuthController(socket, window.localStorage);
 var card = new CardController();
@@ -34,6 +35,7 @@ if (has.call(parsedHash, 'reset')) {
   new ResetFormController(card, auth, parsedHash['reset']);
 } else if (has.call(parsedHash, 'invite')) {
   console.log('Invite detected');
+  new SignUpFormController(card, auth, parsedHash['invite']);
 } else if (!auth.hasToken()) {
   // Display login form and hide the map under it.
   new LoginFormController(card, auth);

@@ -177,6 +177,39 @@ module.exports = function AuthController(socket, storage) {
     });
   };
 
+  this.signup = function (token, username, email, password, callback) {
+    // Parameters
+    //   token
+    //     The token user received in email
+    //   username
+    //   email
+    //   password
+    //   callback
+
+    var payload = {
+      token: token,
+      username: username,
+      email: email,
+      password: password
+    };
+
+    socket.emit('auth/signup', payload, function (response) {
+      console.log('auth/signup socket responsed.');
+      if (response.hasOwnProperty('error')) {
+        console.log(response.error);
+        callback({
+          name: response.error
+        });
+        return;
+      }  // else
+      if (response.hasOwnProperty('success')) {
+        callback(null);
+        return;
+      }  // else
+      console.error('Invalid response from auth/sendInviteEmail');
+    });
+  };
+
   this.hasToken = function () {
     // True if user is authenticated.
 
