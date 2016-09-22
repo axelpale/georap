@@ -163,10 +163,18 @@ module.exports = function AuthController(socket, storage) {
   };
 
   this.getToken = function () {
+    // Can be called only if hasToken.
+    if (!this.hasToken()) {
+      throw new Error('The token is missing.');
+    }
     return storage.getItem(TOKEN_KEY);
   };
 
   this.getPayload = function () {
+    // Can be called only if hasToken.
+    if (!this.hasToken()) {
+      throw new Error('Cannot get payload because missing token.');
+    }
     return jwtDecode(this.getToken());
   };
 }

@@ -23,9 +23,12 @@ module.exports = function (map, model) {
   model.on('update', function (menu, user) {
 
     // Programmer error check. Crash immediately.
-    if (!user.hasOwnProperty('name') || !user.hasOwnProperty('admin')) {
-      throw new Error('Invalid user object');
+    if (typeof user !== 'undefined') {
+      if (!user.hasOwnProperty('name') || !user.hasOwnProperty('admin')) {
+        throw new Error('Invalid user object');
+      }
     }
+
 
     // Turn to jQuery for easier handling.
     // Without it, we would need to wait a bit for menu to render before
