@@ -17,7 +17,8 @@
     "webpack": "webpack --config ./config/webpack.js",
     "test": "casperjs test test/test-login.js",
     "lint": "eslint --config ./config/eslint.js . && echo 'Lint successful.'",
-    "mongo": "mkdir -p .data/db && mongod --dbpath=.data/db"
+    "mongo": "mkdir -p .data/db && mongod --dbpath=.data/db",
+    "reset": "rm -rf .data"
   },
   "author": "Akseli Palén <akseli.palen@gmail.com>",
   "license": "MIT",
