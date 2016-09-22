@@ -8,7 +8,10 @@ require('file?name=index.html!./index.html');
 require('./styles/style.css');
 
 // Favicon
-require('file?name=images/favicon.png!./images/favicon.png');
+require('file?name=images/logo/16.png!./images/logo/16.png');
+
+// Logo
+require('file?name=images/logo/32.png!./images/logo/32.png');
 
 // JavaScript
 require('./js/index.js');
