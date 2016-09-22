@@ -11,7 +11,12 @@ module.exports = function () {
   Emitter(this);
   var self = this;
 
-  this.setMenu = function (menu, username) {
-    self.emit('update', menu, username);
+  this.setMenu = function (menu, user) {
+    // Parameters:
+    //   menu
+    //     menu object
+    //   user
+    //     Auth token payload
+    self.emit('update', menu, user);
   };
 };

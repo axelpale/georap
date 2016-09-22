@@ -34,6 +34,7 @@ module.exports = function AuthController(socket, storage) {
         // Success
         console.log('login successful');
         storage.setItem(TOKEN_KEY, response.token);
+        // Publish within client
         self.emit('login');
         callback(null);
       } else if (response.hasOwnProperty('error')) {

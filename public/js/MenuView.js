@@ -20,7 +20,12 @@ module.exports = function (map, model) {
 
   map.addControl(menuDiv);
 
-  model.on('update', function (menu, username) {
+  model.on('update', function (menu, user) {
+
+    // Programmer error check. Crash immediately.
+    if (!user.hasOwnProperty('name') || !user.hasOwnProperty('admin')) {
+      throw new Error('Invalid user object');
+    }
 
     // Turn to jQuery for easier handling.
     // Without it, we would need to wait a bit for menu to render before
@@ -33,7 +38,7 @@ module.exports = function (map, model) {
     // Render menu
     $menuDiv.html(menu.template({
       glyphicon: glyphiconTemplate,
-      username: username  // might be undefined
+      user: user  // might be undefined
     }));
 
     // Add onclick handlers.

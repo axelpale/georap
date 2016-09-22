@@ -1,11 +1,37 @@
 <div class="btn-toolbar" role="toolbar">
+  <!--
   <div class="btn-group" role="group" aria-label="map management">
     <button id="tresdb-menu-search" type="button" class="btn btn-primary"><%= glyphicon({ name: 'search' }) %> Search</button>
     <button id="tresdb-menu-list" type="button" class="btn btn-primary"><%= glyphicon({ name: 'th-list' }) %> List</button>
     <button id="tresdb-menu-add" type="button" class="btn btn-primary"><%= glyphicon({ name: 'map-marker' }) %> Add</button>
   </div>
+  --->
+  <!--
   <div class="btn-group" role="group" aria-label="user management">
-    <button id="tresdb-menu-account" type="button" class="btn btn-default"><%= glyphicon({ name: 'user' }) %> <%= username %></button>
+    <button id="tresdb-menu-account" type="button" class="btn btn-default"><%= glyphicon({ name: 'user' }) %> <%= user.name %></button>
     <button id="tresdb-menu-logout" type="button" class="btn btn-default"><%= glyphicon({ name: 'off' }) %><span class="sr-only">Log out</span></button>
   </div>
-</div>
+  --->
+
+  <div class="dropdown btn-group" role="group" aria-label="user management">
+    <button id="tresdb-menu-account" type="button" data-toggle="dropdown" class="dropdown-toggle btn btn-default" aria-haspopup="true" aria-expanded="false">
+      <%= glyphicon({ name: 'user' }) %> <%= user.name %>
+      <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu" aria-labelledby="tresdb-menu-account">
+      <li>
+        <a id="tresdb-menu-password" href="#"><%= glyphicon({ name: 'asterisk' }) %> Change password...</a>
+      </li>
+      <li role="separator" class="divider"></li>
+      <% if (user.admin) { %>
+        <li>
+          <a id="tresdb-menu-invite" href="#"><%= glyphicon({ name: 'envelope' }) %> Invite...</a>
+        </li>
+        <li role="separator" class="divider"></li>
+      <% } %>
+      <li>
+        <a id="tresdb-menu-logout" href="#"><%= glyphicon({ name: 'off' }) %> Log out</a>
+      </li>
+    </ul>
+  </div>
+</div><!-- .dropdown -->

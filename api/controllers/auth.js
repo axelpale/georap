@@ -121,7 +121,7 @@ exports.login = function (db, data, response) {
       tokenPayload = {
         name: user.name,
         email: user.email,
-        isAdmin: false
+        admin: user.admin
       };
       response({
         token: jwt.sign(tokenPayload, local.secret)
@@ -253,7 +253,7 @@ exports.sendResetPasswordEmail = function (db, mailer, data, response) {
     var tokenPayload = {
       name: user.name,
       email: user.email,
-      isAdmin: false,
+      admin: user.admin,
       passwordReset: true
     };
     var token = jwt.sign(tokenPayload, local.secret, {
