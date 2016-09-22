@@ -77,12 +77,23 @@ module.exports = function (card, auth, token) {
         if (err.name === 'UsernameTakenError') {
           // Duplicate username, show error.
           $('#tresdb-signup-username-taken').removeClass('hidden');
+          // Show form
+          $('#tresdb-signup-form').removeClass('hidden');
+          return;
+        }  // else
+
+        if (err.name === 'EmailTakenError') {
+          // Duplicate username, show error.
+          $('#tresdb-signup-email-taken').removeClass('hidden');
+          // Show form
+          $('#tresdb-signup-form').removeClass('hidden');
           return;
         }  // else
 
         if (err.name === 'InvalidTokenError') {
           // Expired token
           $('#tresdb-signup-token-error').removeClass('hidden');
+          // Do not show form because filling it again would still fail.
           return;
         }
 
