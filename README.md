@@ -12,10 +12,6 @@ Install MongoDB by following [the instructions](https://www.mongodb.org/download
 
     $ brew install mongodb
 
-Create directory for database:
-
-    $ mkdir -p .data/db
-
 Install dependencies:
 
     $ npm install
