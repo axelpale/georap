@@ -2,6 +2,7 @@ var Emitter = require('component-emitter');
 var MenuModel = require('./MenuModel');
 var MenuView = require('./MenuView');
 var LoginFormController = require('./LoginFormController');
+var InviteFormController = require('./InviteFormController');
 var SearchController = require('./SearchController');
 var AccountController = require('./AccountController');
 
@@ -52,6 +53,7 @@ module.exports = function (map, card, auth) {
         },
         invite: function (ev) {
           ev.preventDefault();
+          new InviteFormController(card, auth);
         },
         logout: function (ev) {
           ev.preventDefault();
