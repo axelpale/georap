@@ -89,6 +89,14 @@ io.on('connection', function (socket) {
     controllers.auth.resetPassword(db, data, res);
   });
 
+  // Invitation & post-invite sign up
+  socket.on('auth/sendInviteEmail', function (data, res) {
+    controllers.auth.sendInviteEmail(db, mailer, data, res);
+  });
+  socket.on('auth/signUp', function (data, res) {
+    controllers.auth.signUp(db, data, res);
+  });
+
   // Locations
   socket.on('locations/get', function (data, res) {
     controllers.locations.get(db, data, res);

@@ -138,7 +138,7 @@ module.exports = function AuthController(socket, storage) {
     };
 
     socket.emit('auth/resetPassword', payload, function (response) {
-      console.log('auth/resetPassword socket responsed:');
+      console.log('auth/resetPassword socket responsed.');
       if (response.hasOwnProperty('error')) {
         callback({
           name: response.error
@@ -150,6 +150,30 @@ module.exports = function AuthController(socket, storage) {
         return;
       }  // else
       console.error('Invalid response from auth/resetPassword');
+    });
+  };
+
+  this.sendInviteEmail = function (email, callback) {
+
+    var payload = {
+      token: this.getToken(),
+      email: email
+    };
+
+    socket.emit('auth/sendInviteEmail', payload, function (response) {
+      console.log('auth/sendInviteEmail socket responsed.');
+      if (response.hasOwnProperty('error')) {
+        console.log(response.error);
+        callback({
+          name: response.error
+        });
+        return;
+      }  // else
+      if (response.hasOwnProperty('success')) {
+        callback(null);
+        return;
+      }  // else
+      console.error('Invalid response from auth/sendInviteEmail');
     });
   };
 

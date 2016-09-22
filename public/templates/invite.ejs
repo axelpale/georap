@@ -3,6 +3,18 @@
     <div class="col-md-12">
       <h1>Invite a new user</h1>
 
+      <div id="tresdb-invite-email-error" class="hidden">
+        <div class="alert alert-danger" role="alert">Invalid email address. Try again.</div>
+      </div>
+
+      <div id="tresdb-invite-server-error" class="hidden">
+        <div class="alert alert-danger" role="alert">Failed to send invitation. Try again later.</div>
+      </div>
+
+      <div id="tresdb-invite-success" class="hidden">
+        <div class="alert alert-success" role="alert">Invite sent successfully.</div>
+      </div>
+
       <form id="tresdb-invite-form">
         <div class="form-group">
           <label for="tresdb-invite-email">Email address to send the invite to:</label>
@@ -10,6 +22,18 @@
         </div>
         <button type="submit" class="btn btn-primary">Send invite</button>
       </form>
+
+      <div id="tresdb-invite-in-progress" class="hidden">
+        <div class="progress">
+          <div class="progress-bar progress-bar-striped active" role="progressbar" style="width: 100%">
+            <span class="sr-only">Waiting</span>
+          </div>
+        </div>
+      </div>
+
+      <div id="tresdb-invite-another" class="hidden">
+        <button id="tresdb-invite-another-button" type="button" class="btn btn-primary">Invite another...</button>
+      </div>
 
     </div>
   </div><!-- .row -->

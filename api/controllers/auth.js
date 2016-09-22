@@ -1,5 +1,6 @@
 var bcrypt = require('bcryptjs');
 var jwt = require('jsonwebtoken');
+var validator = require("email-validator");
 var local = require('../../config/local');
 
 var fs = require('fs');
@@ -7,7 +8,13 @@ var path = require('path');
 var ejs = require('ejs');
 
 var resetMailTemplate = (function () {
-  var p = path.resolve(__dirname, '../templates/reset.ejs');
+  var p = path.resolve(__dirname, '../templates/resetEmail.ejs');
+  var f = fs.readFileSync(p, 'utf8');
+  return ejs.compile(f);
+}());
+
+var inviteMailTemplate = (function () {
+  var p = path.resolve(__dirname, '../templates/inviteEmail.ejs');
   var f = fs.readFileSync(p, 'utf8');
   return ejs.compile(f);
 }());
@@ -340,7 +347,7 @@ exports.resetPassword = function (db, data, response) {
 };
 
 
-exports.sendInviteEmail = function (db, data, response) {
+exports.sendInviteEmail = function (db, mailer, data, response) {
   // Invite a user by sending an email with a link that includes a token.
   // With that token the user is allowed to create a single account within
   // a time limit.
@@ -348,17 +355,82 @@ exports.sendInviteEmail = function (db, data, response) {
   // Parameters:
   //   db
   //     Monk db instance
+  //   mailer
+  //     Nodemailer transporter instance
   //   data
   //     plain object, Socket.io event payload:
   //       token
-  //         Inveter's token.
+  //         Inviter's token.
   //         Used to check does inviter have privileges to invite.
   //       email
   //         The email address where to send the invite.
   //   response
   //     Socket.io response.
 
-  throw new Error('not implemented');
+  jwt.verify(data.token, local.secret, function (err, payload) {
+    if (err) {
+      response({
+        error: 'InvalidTokenError'
+      });
+      return;
+    }  // else
+
+    if (payload.admin !== true) {
+      response({
+        error: 'PrivilegeError'
+      });
+      return;
+    }  // else
+
+    if (!data.hasOwnProperty('email')) {
+      response({
+        error: 'InvalidRequestError'
+      });
+      return;
+    }  // else
+
+    if (!validator.validate(data.email)) {
+      response({
+        error: 'InvalidEmailError'
+      });
+      return;
+    }  // else
+
+    // Okay, everything good. Create email with a secure sign up link.
+
+    var tokenPayload = {
+      email: data.email,
+      invite: true
+    };
+    var token = jwt.sign(tokenPayload, local.secret, {
+      expiresIn: '7d'
+    });
+    var url = 'http://localhost:3000/#invite=' + token;
+
+    var mailOptions = {
+      from: local.mail.sender,
+      to: data.email,
+      subject: 'Invite to Subterranea.fi',
+      text: inviteMailTemplate({ url: url, email: data.email })
+    };
+
+    // Send the mail.
+    mailer.sendMail(mailOptions, function (err, info) {
+      if (err) {
+        response({
+          error: 'MailServerError'
+        });
+        return;
+      }  // else
+
+      // Mail sent successfully
+      console.log('Mail sent: ' + info.response);
+      response({
+        success: true
+      });
+      return;
+    });  // mailer
+  });  // jwt
 };
 
 exports.signUp = function (db, data, response) {
