@@ -83,6 +83,11 @@ Modify `mongo.url` property in `config/local.js` to include the new credentials:
     $ npm install nsp -g
     $ nsp check
 
+### Run in production environment
+
+    $ npm run production
+
+
 ## Technology stack
 
 - [Google Maps JavaScript API](https://developers.google.com/maps/documentation/javascript/)
