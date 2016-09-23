@@ -20,9 +20,6 @@ module.exports = function (card, auth, token) {
   var parsedToken = jwtDecode(token);
   card.open(signupTemplate({ email: parsedToken.email }), 'full');
 
-  // Autofill email. Still, allow user to use another email address.
-  $('#tresdb-signup-email').val(parsedToken.email);
-
   $('#tresdb-signup-to-login-button').click(function () {
     // Open log in form
     new LoginFormController(card, auth);

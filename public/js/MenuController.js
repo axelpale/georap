@@ -3,7 +3,6 @@ var MenuModel = require('./MenuModel');
 var MenuView = require('./MenuView');
 var LoginFormController = require('./LoginFormController');
 var InviteFormController = require('./InviteFormController');
-var SearchController = require('./SearchController');
 var AccountController = require('./AccountController');
 
 var templates = {
@@ -29,7 +28,7 @@ module.exports = function (map, card, auth) {
   Emitter(this);
 
   var model = new MenuModel();
-  var view = new MenuView(map, model);
+  new MenuView(map, model);
 
   // Predefined menus. A mapping from label to action.
   var menus = {

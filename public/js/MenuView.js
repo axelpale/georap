@@ -12,7 +12,6 @@ module.exports = function (map, model) {
   //
 
   Emitter(this);
-  var self = this;
 
   // Initialization
   var menuDiv = document.createElement('div');

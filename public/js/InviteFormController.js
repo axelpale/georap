@@ -4,7 +4,6 @@ var validator = require("email-validator");
 
 // Templates
 var inviteTemplate = require('../templates/invite.ejs');
-var alertTemplate = require('../templates/alert.ejs');
 
 module.exports = function (card, auth) {
   // Parameters:

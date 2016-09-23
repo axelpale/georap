@@ -1,4 +1,4 @@
-var _ = require('lodash');
+// var _ = require('lodash');
 var queryString = require('query-string');
 var io = require('socket.io-client');
 var socket = io('/');
@@ -50,5 +50,5 @@ auth.on('logout', function () {
 // loaded.
 window.initMap = function () {
   var map = new MapController(socket, auth);
-  var menu = new MenuController(map, card, auth);
+  new MenuController(map, card, auth);
 };

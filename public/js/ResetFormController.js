@@ -3,7 +3,6 @@ var LoginFormController = require('./LoginFormController');
 
 // Templates
 var resetFormTemplate = require('../templates/resetForm.ejs');
-var alertTemplate = require('../templates/alert.ejs');
 
 module.exports = function (card, auth, token) {
 
