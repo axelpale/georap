@@ -15,10 +15,12 @@ var controllers = {
 
 
 // Database
-var mongoUrl = 'mongodb://localhost:27017/tresdb';
-var db = require('monk')(mongoUrl);
+var db = require('monk')(local.mongo.url);
 db.then(function () {
   console.log('Connected to MongoDB...');
+}).catch(function (err) {
+  console.log('Connection to MongoDB failed.');
+  console.error(err);
 });
 
 

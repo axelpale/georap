@@ -12,6 +12,11 @@ module.exports = {
     password: '1234'
   },
 
+  // Mongo database settings
+  mongo: {
+    url: 'mongodb://foouser:barword@localhost:27017/tresdb'
+  },
+
   // Email server connection
   // For details, see https://nodemailer.com/2-0-0-beta/setup-smtp/.
   smtp: {

@@ -36,6 +36,48 @@ First, fire up mongo and node, then, run casperjs tests:
 
     $ npm test
 
+## Production
+
+### Secure MongoDB
+
+Start mongod without authentication:
+
+    $ mongod --dbpath=.data/db
+
+Create an administrator that can add other users. For example, create a database user into `admin` database with `userAdminAnyDatabase` permission:
+
+    $ mongo
+    > use admin
+    > db.createUser({
+      user: 'foodmin',
+      pwd: 'barword'
+      roles: ['userAdminAnyDatabase']
+    })
+
+Restart mongod with authentication:
+
+    $ mongod --auth --dbpath=.data/db
+
+Next, create a user with permission to access only `tresdb`. Note that this user needs to be created into `tresdb` database instead of `admin`. Thus, change first to `admin` to authenticate, and then to `tresdb` to create.
+
+    $ mongo
+    > use admin
+    > db.auth('foodmin', 'barword')
+    > use tresdb
+    > db.createUser({
+      user: 'foo',
+      pwd: 'bar',
+      roles: [{ role: 'readWrite', db: 'tresdb' }]
+    })
+
+Modify `mongo.url` property in `config/local.js` to include the new credentials:
+
+    ...
+    mongo: {
+      url: 'mongodb://foo:bar@localhost:27017/tresdb'
+    }
+    ...
+
 ## Technology stack
 
 - [Google Maps JavaScript API](https://developers.google.com/maps/documentation/javascript/)
