@@ -2,6 +2,7 @@
 
 var webpack = require('webpack');
 var path = require('path');
+var local = require('./local');
 
 // compile js assets into a single bundle file
 module.exports = {
@@ -10,7 +11,7 @@ module.exports = {
     path.resolve(__dirname, '../public/index.js'),
   ],
   output: {
-    path: path.resolve(__dirname, '../.tmp/public'),
+    path: local.staticDir,
     filename: 'js/app.bundle.js'
   },
 
@@ -27,7 +28,7 @@ module.exports = {
   ],
 
   watch: true,
-  
+
   // docs: https://webpack.github.io/docs/node.js-api.html#compiler
   watchOptions: {
     aggregateTimeout: 300

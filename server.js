@@ -5,7 +5,10 @@ var io = require('socket.io')(server);
 var jwt = require('jsonwebtoken');
 var nodemailer = require('nodemailer');
 var local = require('./config/local');
+var monk = require('monk');
 
+var webpack = require('webpack');
+var webpackConfig = require('./config/webpack');
 
 // Controllers setup
 var controllers = {
@@ -14,8 +17,12 @@ var controllers = {
 };
 
 
+// Log environment
+console.log('Starting TresDB in environment:', app.get('env'));
+
+
 // Database
-var db = require('monk')(local.mongo.url);
+var db = monk(local.mongo.url);
 db.then(function () {
   console.log('Connected to MongoDB...');
 }).catch(function (err) {
@@ -38,31 +45,59 @@ mailer.verify(function (err, success) {
 
 // Start the server.
 server.listen(3000, function () {
-  console.log('Listening on port 3000...');
+  console.log('Express listening on port 3000...');
 });
 
 
-// Webpack development middleware
-// ------------------------------
-// The following middleware is only for development.
-// It serves the static file assets on publicPath in a manner similar
-// to express.static(publicPath). It also watches the assets for changes and
-// compiles them on change on background.
-//
-// To serve static files in production, use:
-//     app.use(express.static('./.tmp/public'));
-// To compile assets for production, run webpack from the command line:
-//     $ webpack --config ./config/webpack.js
-var webpack = require('webpack');
-var webpackMiddleware = require('webpack-dev-middleware');
-var webpackConfig = require('./config/webpack');
-app.use(webpackMiddleware(webpack(webpackConfig), {
-  noInfo: true,
-  publicPath: '/',
-  stats: { colors: true }
-}));
-// ------------------------------
-// Webpack development middleware END
+// Security best practices
+// -----------------------
+// https://expressjs.com/en/advanced/best-practice-security.html
+
+// Do not tell we are using Express.
+app.disable('x-powered-by');
+
+// -----------------------
+// Security best practices END
+
+
+// Static assets
+// -------------
+if (app.get('env') === 'development') {
+  // Webpack development middleware
+  //
+  // The following middleware is only for development.
+  // It serves the static file assets on publicPath in a manner similar
+  // to express.static(publicPath). It also watches the assets for changes and
+  // compiles them on change on background.
+  //
+  // To serve static files in production, use:
+  //     app.use(express.static('./.tmp/public'));
+  // To compile assets for production, run webpack from the command line:
+  //     $ webpack --config ./config/webpack.js
+  var webpackMiddleware = require('webpack-dev-middleware');
+  app.use(webpackMiddleware(webpack(webpackConfig), {
+    noInfo: true,
+    publicPath: '/',
+    stats: { colors: true }
+  }));
+  console.log('Webpack listening for file changes...');
+} else {
+  // In production, we run webpack once and serve the files.
+  // The first run builds the initial set of files. The subsequent
+  // runs append to that. Thus, serving static files before the build
+  // finishes is not a problem.
+  console.log('Building static assets...');
+  webpack(webpackConfig, function (err, stats) {
+    if (err) {
+      throw err;
+    }  // else
+    console.log('Built static assets successfully.');
+  });
+  app.use(express.static(local.staticDir));
+  console.log('Serving static files in', local.staticDir);
+}
+// -------------
+// Static assets END
 
 
 //app.get('/', function (req, res) {
