@@ -4,6 +4,10 @@ var webpack = require('webpack');
 var path = require('path');
 var local = require('./local');
 
+// Depend on environment.
+// See http://stackoverflow.com/a/31228568/638546
+var PROD = (process.env.NODE_ENV === 'production');
+
 // compile js assets into a single bundle file
 module.exports = {
   devtool: 'source-map',
@@ -23,7 +27,9 @@ module.exports = {
     ]
   },
 
-  plugins: [
+  plugins: PROD ? [
+    new webpack.optimize.UglifyJsPlugin()
+  ] : [
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoErrorsPlugin()
   ],

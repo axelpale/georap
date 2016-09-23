@@ -88,11 +88,18 @@ if (app.get('env') === 'development') {
   // finishes is not a problem.
   console.log('Building static assets...');
   webpack(webpackConfig, function (err, stats) {
-    if (err || stats.hasErrors() || stats.hasWarnings()) {
-      console.error('Error when building static assets.');
-      throw err;
+    if (err || stats.hasErrors()) {
+      if (err) {
+        throw err;
+      }  // else
+      console.log(stats.toString({ chunks: true, colors: true }));
+      throw new Error('Error when building static assets.');
     }  // else
-    console.log('Built static assets successfully.');
+    if (stats.hasWarnings()) {
+      console.log('Built static assets with warnings.');
+    } else {
+      console.log('Built static assets successfully.');
+    }
     console.log(stats.toString({ chunks: false, colors: true }));
     // See https://webpack.github.io/docs/node.js-api.html#error-handling
   });
