@@ -20,7 +20,7 @@ Rename `config/local-sample.js` to `config/local.js` and rewrite it with your se
 
 ## Quick start
 
-First, start MongoDB:
+First, start MongoDB (if it ever refuses to stop, try `killall mongod`):
 
     $ npm run mongo
 
