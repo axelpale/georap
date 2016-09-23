@@ -1,9 +1,14 @@
+var path = require('path');
 
 module.exports = {
 
   // Site secret. CHANGE! DO NOT EXPOSE TO CLIENT!
   // Used to encrypt and decrypt passwords and tokens.
   secret: '123456789',
+
+  // Static file directory.
+  // Express will serve static files in this directory.
+  staticDir: path.resolve(__dirname, '../.tmp/public'),
 
   // Default admin user
   admin: {
