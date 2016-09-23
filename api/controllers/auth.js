@@ -226,12 +226,14 @@ exports.changePassword = function (db, data, response) {
 };
 
 
-exports.sendResetPasswordEmail = function (db, mailer, data, response) {
+exports.sendResetPasswordEmail = function (db, mailer, host, data, response) {
   // Parameters:
   //   db
   //     Monk db instance
   //   mailer
   //     Nodemailer transporter instance
+  //   host
+  //     Server hostname e.g. 'mydomain.com' or 'localhost:3000'
   //   data
   //     Socket.io event payload
   //   response
@@ -266,7 +268,7 @@ exports.sendResetPasswordEmail = function (db, mailer, data, response) {
     var token = jwt.sign(tokenPayload, local.secret, {
       expiresIn: '30m'
     });
-    var url = 'http://localhost:3000/#reset=' + token;
+    var url = 'http://' + host + '/#reset=' + token;
 
     var mailOptions = {
       from: local.mail.sender,
@@ -347,7 +349,7 @@ exports.resetPassword = function (db, data, response) {
 };
 
 
-exports.sendInviteEmail = function (db, mailer, data, response) {
+exports.sendInviteEmail = function (db, mailer, host, data, response) {
   // Invite a user by sending an email with a link that includes a token.
   // With that token the user is allowed to create a single account within
   // a time limit.
@@ -357,6 +359,8 @@ exports.sendInviteEmail = function (db, mailer, data, response) {
   //     Monk db instance
   //   mailer
   //     Nodemailer transporter instance
+  //   host
+  //     Hostname e.g. 'localhost:3000' or 'mydomain.com'
   //   data
   //     plain object, Socket.io event payload:
   //       token
@@ -405,7 +409,7 @@ exports.sendInviteEmail = function (db, mailer, data, response) {
     var token = jwt.sign(tokenPayload, local.secret, {
       expiresIn: '7d'
     });
-    var url = 'http://localhost:3000/#invite=' + token;
+    var url = 'http://' + host + '/#invite=' + token;
 
     var mailOptions = {
       from: local.mail.sender,

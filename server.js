@@ -71,6 +71,14 @@ app.use(webpackMiddleware(webpack(webpackConfig), {
 // Socket.io routing
 
 io.on('connection', function (socket) {
+
+  // Domain name is required by some handlers, for example
+  // when a link is sent via email. It does not matter if
+  // the connection is transported via polling or websockets,
+  // the host stays the same.
+  var host = socket.request.headers.host;
+  console.log('New connection from app hosted at', host);
+
   // Authentication
   socket.on('auth/login', function (data, res) {
     controllers.auth.login(db, data, res);
@@ -83,7 +91,7 @@ io.on('connection', function (socket) {
 
   // Password reset
   socket.on('auth/sendResetPasswordEmail', function (data, res) {
-    controllers.auth.sendResetPasswordEmail(db, mailer, data, res);
+    controllers.auth.sendResetPasswordEmail(db, mailer, host, data, res);
   });
   socket.on('auth/resetPassword', function (data, res) {
     controllers.auth.resetPassword(db, data, res);
@@ -91,7 +99,7 @@ io.on('connection', function (socket) {
 
   // Invitation & post-invite sign up
   socket.on('auth/sendInviteEmail', function (data, res) {
-    controllers.auth.sendInviteEmail(db, mailer, data, res);
+    controllers.auth.sendInviteEmail(db, mailer, host, data, res);
   });
   socket.on('auth/signup', function (data, res) {
     controllers.auth.signup(db, data, res);
