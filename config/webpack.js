@@ -6,13 +6,14 @@ var local = require('./local');
 
 // compile js assets into a single bundle file
 module.exports = {
-  devtool: 'eval',
+  devtool: 'source-map',
   entry: [
     path.resolve(__dirname, '../public/index.js'),
   ],
   output: {
     path: local.staticDir,
-    filename: 'js/app.bundle.js'
+    filename: 'js/app.bundle.js',
+    sourceMapFilename: '[file].map'
   },
 
   module: {

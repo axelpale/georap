@@ -88,10 +88,13 @@ if (app.get('env') === 'development') {
   // finishes is not a problem.
   console.log('Building static assets...');
   webpack(webpackConfig, function (err, stats) {
-    if (err) {
+    if (err || stats.hasErrors() || stats.hasWarnings()) {
+      console.error('Error when building static assets.');
       throw err;
     }  // else
     console.log('Built static assets successfully.');
+    console.log(stats.toString({ chunks: false, colors: true }));
+    // See https://webpack.github.io/docs/node.js-api.html#error-handling
   });
   app.use(express.static(local.staticDir));
   console.log('Serving static files in', local.staticDir);
