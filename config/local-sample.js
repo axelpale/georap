@@ -10,6 +10,9 @@ module.exports = {
   // Express will serve static files in this directory.
   staticDir: path.resolve(__dirname, '../.tmp/public'),
 
+  // Port for server to listen
+  port: 3000,
+
   // Default admin user
   admin: {
     username: 'admin',

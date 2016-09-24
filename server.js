@@ -44,8 +44,8 @@ mailer.verify(function (err, success) {
 
 
 // Start the server.
-server.listen(3000, function () {
-  console.log('Express listening on port 3000...');
+server.listen(local.port, function () {
+  console.log('Express listening on port ' + local.port + '...');
 });
 
 
