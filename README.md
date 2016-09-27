@@ -94,6 +94,7 @@ Now you can run mongod with authentication:
 - [Bootstrap](http://getbootstrap.com/)
 - [jQuery](https://jquery.com/)
 - [Lodash](https://lodash.com/)
+- [Webpack](https://webpack.github.io/)
 - [Socket.io](http://socket.io/)
 - [bcrypt](https://www.npmjs.com/package/bcryptjs)
 - [JSON Web Tokens](https://github.com/auth0/node-jsonwebtoken)
@@ -106,7 +107,6 @@ Development tools:
 
 - [ESLint](http://eslint.org/)
 - [CasperJS](http://casperjs.org/)
-- [Webpack](https://webpack.github.io/)
 
 ## License
 
