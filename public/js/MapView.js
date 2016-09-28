@@ -1,10 +1,14 @@
 var _ = require('lodash');
+var Emitter = require('component-emitter');
 var infoTemplate = require('../templates/infowindow.ejs');
 
 module.exports = function (model) {
   // Parameters
   //   model
   //     MapModel instance
+
+  Emitter(this);
+  var self = this;
 
   // Store markers so they can be removed.
   var markers = [];
@@ -67,9 +71,32 @@ module.exports = function (model) {
     console.error(err);
   });
 
+  var handleStateChange = function () {
+    var latlng = map.getCenter();
+    var state = {
+      lat: latlng.lat(),
+      lng: latlng.lng(),
+      zoom: map.getZoom(),
+      mapTypeId: map.getMapTypeId()
+    };
+    self.emit('state_changed', state);
+  };
+
+  map.addListener('idle', handleStateChange);
+  map.addListener('maptypeid_changed', handleStateChange);
+
   // Public methods
 
   this.addControl = function (htmlElement) {
     map.controls[google.maps.ControlPosition.LEFT_TOP].push(htmlElement);
-  }
+  };
+
+  this.setState = function (state) {
+    map.setCenter({
+      lat: state.lat,
+      lng: state.lng
+    });
+    map.setZoom(state.zoom);
+    map.setMapTypeId(state.mapTypeId);
+  };
 };

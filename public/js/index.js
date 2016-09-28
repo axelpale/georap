@@ -15,6 +15,8 @@ var MenuController = require('./MenuController');
 var LoginFormController = require('./LoginFormController');
 var ResetFormController = require('./ResetFormController');
 var SignUpFormController = require('./SignUpFormController');
+var MapStateStore = require('./mapstate/Store');
+var MapStateManager = require('./mapstate/Manager');
 
 var auth = new AuthController(socket, window.localStorage);
 var card = new CardController();
@@ -51,4 +53,14 @@ auth.on('logout', function () {
 window.initMap = function () {
   var map = new MapController(socket, auth);
   new MenuController(map, card, auth);
+
+  // Remember map view state (center, zoom, type...)
+  // Default to southern Finland.
+  var stateStore = new MapStateStore(window.localStorage);
+  var stateManager = new MapStateManager(map, stateStore, {
+    lat: 61.0,
+    lng: 24.0,
+    zoom: 6,
+    mapTypeId: 'hybrid'
+  });
 };
