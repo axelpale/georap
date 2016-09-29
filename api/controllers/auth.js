@@ -196,7 +196,6 @@ exports.changePassword = function (db, data, response) {
     var users = db.get('users');
     var query = { email: payload.email };
     users.findOne(query).then(function (user) {
-      var match, newHash;
 
       // If no user found.
       if (user === null) {
@@ -204,39 +203,58 @@ exports.changePassword = function (db, data, response) {
           error: 'change-password-invalid-email'
         });
         return;
-      }
+      }  // else
 
       // Test if the given current password is correct
-      match = bcrypt.compareSync(data.currentPassword, user.hash);
-      if (match) {
+      bcrypt.compare(data.currentPassword, user.hash, function (err, match) {
+        if (err) {
+          response({
+            error: 'HashingError'
+          });
+          return;
+        }  // else
+
+        if (!match) {
+          response({
+            error: 'IncorrectPasswordError'
+          });
+          return;
+        }  // else
+
         // Success, current passwords match
         // Hash the new password before storing it to database.
-        newHash = bcrypt.hashSync(data.newPassword, 10);
-        // Ready to change password. Update hash in database.
-        users.findOneAndUpdate(query, { $set: {
-          hash: newHash
-        }}).then(function (updatedUser) {
-          // Check if user still exists
-          if (updatedUser === null) {
+        bcrypt.hash(data.newPassword, 10, function (err, newHash) {
+          if (err) {
             response({
-              error: 'change-password-user-removed'
-            })
+              error: 'HashingError'
+            });
             return;
-          }
-          // Password changed successfully
-          response({
-            success: 'change-password-success'
+          }  // else
+
+          // Ready to change password. Update hash in database.
+          users.findOneAndUpdate(query, { $set: {
+            hash: newHash
+          }}).then(function (updatedUser) {
+            // Check if user still exists
+            if (updatedUser === null) {
+              response({
+                error: 'change-password-user-removed'
+              })
+              return;
+            }  // else
+            // Password changed successfully
+            response({
+              success: 'change-password-success'
+            });
+          }).catch(function (err) {
+            // Update query failed. Connection to database was lost or something.
+            console.error(err);
+            response({
+              error: 'change-password-update-query-failure'
+            });
           });
-          return;
-        }).catch(function (err) {
-          // Update query failed. Connection to database was lost or something.
-          console.error(err);
-          response({
-            error: 'change-password-update-query-failure'
-          });
-          return;
         });
-      }
+      });
     }).catch(function (err) {
       // User fetch for email and password check failed.
       // Connection to database was lost or something.
@@ -549,23 +567,33 @@ exports.signup = function (db, data, response) {
       // Note: there is a tiny risk that such user is created after
       // the check but before insert.
 
-      users.insert({
-        name: data.username,
-        email: payload.email,
-        hash: bcrypt.hashSync(data.password, 10),
-        admin: false
-      }).then(function (user) {
-        // User inserted successfully
-        response({
-          success: true
-        });
-      }).catch(function (err) {
-        // Some mongo error.
-        console.error(err);
-        response({
-          error: err.name
-        });
-      });  // insert catch
+      bcrypt.hash(data.password, 10, function (err, pwdHash) {
+        if (err) {
+          response({
+            error: 'HashingError'
+          });
+          return;
+        }  // else
+
+        users.insert({
+          name: data.username,
+          email: payload.email,
+          hash: pwdHash,
+          admin: false
+        }).then(function (user) {
+          // User inserted successfully
+          response({
+            success: true
+          });
+        }).catch(function (err) {
+          // Some mongo error.
+          console.error(err);
+          response({
+            error: err.name
+          });
+        });  // users.insert catch
+      });
+
     }).catch(function (err) {
       // Some mongo error.
       console.error(err);
