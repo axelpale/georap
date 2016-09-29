@@ -38,8 +38,8 @@ First, fire up mongo and node. Then, run full test suite:
 
 The test suite includes:
 
-- Client-side UI tests powered by **casperjs**. Run separately by `$ npm run test:ui`.
 - Server API tests powered by **mocha**. Run separately by `$ npm run test:api`.
+- Client-side UI tests powered by **casperjs**. Run separately by `$ npm run test:client`.
 
 ## Production
 
