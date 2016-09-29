@@ -98,12 +98,20 @@ exports.login = function (db, data, response) {
   //   db
   //     Monk db instance
   //   data
-  //     Socket.io event payload
+  //     Socket.io event payload.
+  //     Required keys:
+  //       email: <string>
+  //       password: <string>
   //   response
   //     Socket.io response.
 
-  // TODO
-  // if no email or password provided...
+  // If no email or password provided...
+  if (!data.hasOwnProperty('email') || !data.hasOwnProperty('password')) {
+    response({
+      error: 'InvalidRequestError'
+    });
+    return;
+  }
 
   console.log('auth/login: about to find ' + data.email);
 
