@@ -113,15 +113,12 @@ exports.login = function (db, data, response) {
     return;
   }
 
-  console.log('auth/login: about to find ' + data.email);
-
   var users = db.get('users');
   var query = { email: data.email };
   users.findOne(query).then(function (user) {
     var match, tokenPayload;
 
     if (user === null) {
-      console.log('auth/login: user null, not found');
       response({
         error: 'login-invalid-email'
       });
@@ -132,7 +129,6 @@ exports.login = function (db, data, response) {
 
     if (match) {
       // Success
-      console.log('auth/login: password hash match');
       tokenPayload = {
         name: user.name,
         email: user.email,
@@ -143,7 +139,6 @@ exports.login = function (db, data, response) {
       });
     } else {
       // Authentication failure
-      console.log('auth/login: password hash dismatch');
       response({
         error: 'login-invalid-password'
       });
@@ -180,7 +175,6 @@ exports.changePassword = function (db, data, response) {
 
       // If no user found.
       if (user === null) {
-        console.error('auth/changePassword: user null, not found');
         response({
           error: 'change-password-invalid-email'
         });
@@ -191,7 +185,6 @@ exports.changePassword = function (db, data, response) {
       match = bcrypt.compareSync(data.currentPassword, user.hash);
       if (match) {
         // Success, current passwords match
-        console.log('auth/changePassword: password hash match');
         // Hash the new password before storing it to database.
         newHash = bcrypt.hashSync(data.newPassword, 10);
         // Ready to change password. Update hash in database.
@@ -200,8 +193,6 @@ exports.changePassword = function (db, data, response) {
         }}).then(function (updatedUser) {
           // Check if user still exists
           if (updatedUser === null) {
-            console.error('auth/changePassword: ' +
-                          'user removed during operation, not found');
             response({
               error: 'change-password-user-removed'
             })
