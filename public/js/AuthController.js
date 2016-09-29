@@ -1,3 +1,12 @@
+//
+// Responsible:
+// - communication with the server
+// - handling tokens in browser memory
+//
+// Not responsible:
+// - validation of input values
+//
+
 var Emitter = require('component-emitter');
 var jwtDecode = require('jwt-decode');
 
@@ -29,17 +38,14 @@ module.exports = function AuthController(socket, storage) {
 
     payload = { email: email, password: password };
     socket.emit('auth/login', payload, function (response) {
-      console.log('auth/login response');
       if (response.hasOwnProperty('token')) {
         // Success
-        console.log('login successful');
         storage.setItem(TOKEN_KEY, response.token);
         // Publish within client
         self.emit('login');
         callback(null);
       } else if (response.hasOwnProperty('error')) {
         // Failure
-        console.log('login failed, possibly invalid email or password');
         callback({
           name: response.error
         });
@@ -114,8 +120,6 @@ module.exports = function AuthController(socket, storage) {
     };
 
     socket.emit('auth/sendResetPasswordEmail', payload, function (response) {
-      console.log('auth/sendResetPasswordEmail socket responsed:');
-      console.log(response);
       if (response.hasOwnProperty('error')) {
         callback({
           name: response.error
@@ -138,7 +142,6 @@ module.exports = function AuthController(socket, storage) {
     };
 
     socket.emit('auth/resetPassword', payload, function (response) {
-      console.log('auth/resetPassword socket responsed.');
       if (response.hasOwnProperty('error')) {
         callback({
           name: response.error
@@ -161,7 +164,6 @@ module.exports = function AuthController(socket, storage) {
     };
 
     socket.emit('auth/sendInviteEmail', payload, function (response) {
-      console.log('auth/sendInviteEmail socket responsed.');
       if (response.hasOwnProperty('error')) {
         console.log(response.error);
         callback({

@@ -104,9 +104,20 @@ exports.login = function (db, data, response) {
   //       password: <string>
   //   response
   //     Socket.io response.
+  //
+  // Possible responses:
+  //   { token: <string> }, on successful login
+  //   { error: 'InvalidRequestError' }, on invalid socket.io payload
+  //   { error: 'login-invalid-email' },
+  //   { error: 'HashingError' }
+  //   { error: 'login-invalid-password' }
+  //   { error: 'DatabaseError' }
 
-  // If no email or password provided...
-  if (!data.hasOwnProperty('email') || !data.hasOwnProperty('password')) {
+  // If no email or password provided or injection attempted.
+  // Also, ensure nice email.
+  if (!data.hasOwnProperty('email') || !data.hasOwnProperty('password') ||
+      typeof data.email !== 'string' || typeof data.password !== 'string' ||
+      !validator.validate(data.email) || data.password.length < 1) {
     response({
       error: 'InvalidRequestError'
     });
@@ -116,35 +127,46 @@ exports.login = function (db, data, response) {
   var users = db.get('users');
   var query = { email: data.email };
   users.findOne(query).then(function (user) {
-    var match, tokenPayload;
 
     if (user === null) {
       response({
-        error: 'login-invalid-email'
+        error: 'UnknownEmailError'
       });
       return;
     }
 
-    match = bcrypt.compareSync(data.password, user.hash);
+    bcrypt.compare(data.password, user.hash, function (err, match) {
+      var tokenPayload;
+      if (err) {
+        // Hash comparison failed. Password might still be correct, though.
+        response({
+          error: 'HashingError'
+        });
+        return;
+      }
+      if (match) {
+        // Success
+        tokenPayload = {
+          name: user.name,
+          email: user.email,
+          admin: user.admin
+        };
+        response({
+          token: jwt.sign(tokenPayload, local.secret)
+        });
+      } else {
+        // Authentication failure
+        response({
+          error: 'IncorrectPasswordError'
+        });
+      }
+    });
 
-    if (match) {
-      // Success
-      tokenPayload = {
-        name: user.name,
-        email: user.email,
-        admin: user.admin
-      };
-      response({
-        token: jwt.sign(tokenPayload, local.secret)
-      });
-    } else {
-      // Authentication failure
-      response({
-        error: 'login-invalid-password'
-      });
-    }
   }).catch(function (err) {
-    console.error('loginRequest: findOne: something went wrong.');
+    console.error(err);
+    response({
+      error: 'DatabaseError'
+    });
   });
 };
 
@@ -153,7 +175,10 @@ exports.changePassword = function (db, data, response) {
   //   db
   //     Monk db instance
   //   data
-  //     Socket.io event payload
+  //     Socket.io event payload. Required keys:
+  //       token
+  //       currentPassword
+  //       newPassword
   //   response
   //     Socket.io response.
 
