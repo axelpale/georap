@@ -32,11 +32,18 @@ Finally, browse to [localhost:3000](http://localhost:3000).
 
 ## Testing
 
-First, fire up mongo and node, then, run casperjs tests:
+First, fire up mongo and node. Then, run full test suite:
 
     $ npm test
 
+The test suite includes:
+
+- Client-side UI tests powered by **casperjs**. Run separately by `$ npm run test:ui`.
+- Server API tests powered by **mocha**. Run separately by `$ npm run test:api`.
+
 ## Production
+
+Here are some notes and tips for putting a TresDB instance into production.
 
 ### Secure MongoDB
 
@@ -72,7 +79,7 @@ Modify `mongo.url` property in `config/local.js` to include the new credentials 
     }
     ...
 
-Now you can run mongod with authentication:
+Now you can and should run mongod with authentication:
 
     $ mongod --auth --dbpath=.data/db
 
@@ -107,6 +114,8 @@ Development tools:
 
 - [ESLint](http://eslint.org/)
 - [CasperJS](http://casperjs.org/)
+- [Mocha](https://mochajs.org/)
+- [Should](http://shouldjs.github.io/)
 
 ## License
 
