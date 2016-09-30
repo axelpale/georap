@@ -117,6 +117,16 @@ Development tools:
 - [Mocha](https://mochajs.org/)
 - [Should](http://shouldjs.github.io/)
 
+
+## Versioning
+
+On the master branch, we use the [semantic versioning](http://semver.org/) scheme. The semantic version increments are bound to the operations you need to do when upgrading your TresDB instance:
+
+- MAJOR (+1.0.0) denotes a new incompatible feature. A database migration is required after upgrade.
+- MINOR (+0.1.0) denotes a new backwards-compatible feature. Upgrading directly from the Git should not break anything.
+- PATCH (+0.0.1) denotes a backwards-compatible bug fix. Upgrading or downgrading directly from the Git should not break anything.
+
+
 ## License
 
 MIT
