@@ -1,3 +1,4 @@
+/*eslint no-magic-numbers: "off"*/
 
 casper.test.begin('Title test', 2, function suite(test) {
   casper.start('http://localhost:3000/', function () {

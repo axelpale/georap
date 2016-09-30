@@ -39,5 +39,10 @@ module.exports = {
   // Email messages
   mail: {
     sender: 'admin@example.com'
+  },
+
+  // Bcrypt hashing
+  bcrypt: {
+    rounds: 10
   }
 }

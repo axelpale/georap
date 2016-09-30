@@ -49,7 +49,7 @@ var setPassword = function (db, email, password, callback) {
   }
 
   // Hash the new password before storing it to database.
-  bcrypt.hash(password, 10, function (err, newHash) {
+  bcrypt.hash(password, local.bcrypt.rounds, function (err, newHash) {
 
     // Handle hashing error
     var err2;
@@ -223,7 +223,8 @@ exports.changePassword = function (db, data, response) {
 
         // Success, current passwords match
         // Hash the new password before storing it to database.
-        bcrypt.hash(data.newPassword, 10, function (err, newHash) {
+        var r = local.bcrypt.rounds;
+        bcrypt.hash(data.newPassword, r, function (err, newHash) {
           if (err) {
             response({
               error: 'HashingError'
@@ -586,7 +587,7 @@ exports.signup = function (db, data, response) {
       // Note: there is a tiny risk that such user is created after
       // the check but before insert.
 
-      bcrypt.hash(data.password, 10, function (err, pwdHash) {
+      bcrypt.hash(data.password, local.bcrypt.rounds, function (err, pwdHash) {
         if (err) {
           response({
             error: 'HashingError'
