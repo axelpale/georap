@@ -34,8 +34,6 @@ module.exports = function AuthController(socket, storage) {
     //     On successful login.
     var payload;
 
-    if (typeof callback === 'undefined') { callback = function () {}; }
-
     payload = { email: email, password: password };
     socket.emit('auth/login', payload, function (response) {
       if (response.hasOwnProperty('token')) {
@@ -43,12 +41,16 @@ module.exports = function AuthController(socket, storage) {
         storage.setItem(TOKEN_KEY, response.token);
         // Publish within client
         self.emit('login');
-        callback(null);
+        if (typeof callback === 'function') {
+          callback(null);
+        }
       } else if (response.hasOwnProperty('error')) {
         // Failure
-        callback({
-          name: response.error
-        });
+        if (typeof callback === 'function') {
+          callback({
+            name: response.error
+          });
+        }
       } else {
         // Error
         console.error('Invalid response to loginRequest');

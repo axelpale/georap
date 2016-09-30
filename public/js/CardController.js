@@ -37,22 +37,24 @@ module.exports = function () {
     //   htmlContent
     //     to be rendered inside the card
     //   cardClass
-    //     string, card type. Available types:
+    //     string, optional. Card type. Available types:
     //       page (default)
     //         A fraction of the map is visible.
     //       full
     //         Fills the map area completely.
-    var card, bg;
+    var card, bg, cardType;
 
     // Handle default parameters
     if (typeof cardClass === 'undefined') {
-      cardClass = 'page';
+      cardType = 'page';
+    } else {
+      cardType = cardClass;
     }
 
     // Create card
     card = cardTemplate({
       content: htmlContent,
-      cardClass: cardClass
+      cardClass: cardType
     });
 
     // Remove possible other cards
@@ -62,7 +64,7 @@ module.exports = function () {
     cardLayer.style.display = 'block';  // from 'none' if hidden
 
     // Initialize close mechanism
-    if (cardClass === 'page') {
+    if (cardType === 'page') {
       bg = this.findElementById('card-background');
       bg.addEventListener('click', function () {
         self.closeAll();
