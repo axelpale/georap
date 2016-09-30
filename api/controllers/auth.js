@@ -115,9 +115,9 @@ exports.login = function (db, data, response) {
 
   // If no email or password provided or injection attempted.
   // Also, ensure nice email.
-  if (!data.hasOwnProperty('email') || !data.hasOwnProperty('password') ||
-      typeof data.email !== 'string' || typeof data.password !== 'string' ||
-      !validator.validate(data.email) || data.password.length < 1) {
+  if (!data.hasOwnProperty('email') || !data.hasOwnProperty('password') ||
+      typeof data.email !== 'string' || typeof data.password !== 'string' ||
+      !validator.validate(data.email) || data.password.length < 1) {
     response({
       error: 'InvalidRequestError'
     });
@@ -428,7 +428,7 @@ exports.sendInviteEmail = function (db, mailer, host, data, response) {
       return;
     }  // else
 
-    if (!data.hasOwnProperty('email') || typeof data.email !== 'string') {
+    if (!data.hasOwnProperty('email') || typeof data.email !== 'string') {
       response({
         error: 'InvalidRequestError'
       });
@@ -538,7 +538,7 @@ exports.signup = function (db, data, response) {
       return;
     }  // else
 
-    if (!data.hasOwnProperty('username') || !data.hasOwnProperty('password')) {
+    if (!data.hasOwnProperty('username') || !data.hasOwnProperty('password')) {
       response({
         error: 'InvalidRequestError'
       });

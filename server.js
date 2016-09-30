@@ -88,7 +88,7 @@ if (app.get('env') === 'development') {
   // finishes is not a problem.
   console.log('Building static assets...');
   webpack(webpackConfig, function (err, stats) {
-    if (err || stats.hasErrors()) {
+    if (err || stats.hasErrors()) {
       if (err) {
         throw err;
       }  // else
