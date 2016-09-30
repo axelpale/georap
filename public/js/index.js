@@ -34,10 +34,10 @@ var has = Object.prototype.hasOwnProperty;
 if (has.call(parsedHash, 'reset')) {
   // Display password reset form
   console.log('Password reset detected');
-  new ResetFormController(card, auth, parsedHash['reset']);
+  new ResetFormController(card, auth, parsedHash.reset);
 } else if (has.call(parsedHash, 'invite')) {
   console.log('Invite detected');
-  new SignUpFormController(card, auth, parsedHash['invite']);
+  new SignUpFormController(card, auth, parsedHash.invite);
 } else if (!auth.hasToken()) {
   // Display login form and hide the map under it.
   new LoginFormController(card, auth);
