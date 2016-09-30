@@ -428,7 +428,7 @@ exports.sendInviteEmail = function (db, mailer, host, data, response) {
       return;
     }  // else
 
-    if (!data.hasOwnProperty('email')) {
+    if (!data.hasOwnProperty('email') || typeof data.email !== 'string') {
       response({
         error: 'InvalidRequestError'
       });
@@ -442,40 +442,59 @@ exports.sendInviteEmail = function (db, mailer, host, data, response) {
       return;
     }  // else
 
-    // Okay, everything good. Create email with a secure sign up link.
+    // Check if an account with this email already exists
+    db.get('users').findOne({ email: data.email }).then(function (user) {
 
-    var tokenPayload = {
-      email: data.email,
-      invite: true
-    };
-    var token = jwt.sign(tokenPayload, local.secret, {
-      expiresIn: '7d'
-    });
-    var url = 'http://' + host + '/#invite=' + token;
-
-    var mailOptions = {
-      from: local.mail.sender,
-      to: data.email,
-      subject: 'Invite to Subterranea.fi',
-      text: inviteMailTemplate({ url: url, email: data.email })
-    };
-
-    // Send the mail.
-    mailer.sendMail(mailOptions, function (err, info) {
-      if (err) {
+      if (user) {
+        // Already exists
         response({
-          error: 'MailServerError'
+          error: 'AccountExistsError'
         });
         return;
       }  // else
 
-      // Mail sent successfully
-      console.log('Mail sent: ' + info.response);
-      response({
-        success: true
+      // Okay, everything good. Create email with a secure sign up link.
+
+      var tokenPayload = {
+        email: data.email,
+        invite: true
+      };
+      var token = jwt.sign(tokenPayload, local.secret, {
+        expiresIn: '7d'
       });
-      return;
-    });  // mailer
+      var url = 'http://' + host + '/#invite=' + token;
+
+      var mailOptions = {
+        from: local.mail.sender,
+        to: data.email,
+        subject: 'Invite to Subterranea.fi',
+        text: inviteMailTemplate({ url: url, email: data.email })
+      };
+
+      // Send the mail.
+      mailer.sendMail(mailOptions, function (err, info) {
+        if (err) {
+          response({
+            error: 'MailServerError'
+          });
+          return;
+        }  // else
+
+        // Mail sent successfully
+        console.log('Mail sent: ' + info.response);
+        response({
+          success: true
+        });
+      });  // mailer
+
+    }).catch(function (err) {
+      // Mongo problem.
+      console.error(err);
+      response({
+        error: 'DatabaseError'
+      });
+    });
+
   });  // jwt
 };
 

@@ -30,6 +30,10 @@ module.exports = function (card, auth) {
   $('#tresdb-invite-form').submit(function (ev) {
     ev.preventDefault();
 
+    // Hide possible earlier error message
+    $('#tresdb-invite-email-error').addClass('hidden');
+    $('#tresdb-invite-exist-error').addClass('hidden');
+
     // Collect values to send
     var email = $('#tresdb-invite-email').val();
 
@@ -40,8 +44,6 @@ module.exports = function (card, auth) {
       return;
     }  // else
 
-    // Remove possible error message
-    $('#tresdb-invite-email-error').addClass('hidden');
     // Hide form
     $('#tresdb-invite-form').addClass('hidden');
     // Display loading animation
@@ -52,7 +54,15 @@ module.exports = function (card, auth) {
       $('#tresdb-invite-in-progress').addClass('hidden');
 
       if (err) {
-        // Show error message
+        if (err.name === 'AccountExistsError') {
+          // Show error message.
+          $('#tresdb-invite-exist-error').removeClass('hidden');
+          // Show form
+          $('#tresdb-invite-form').removeClass('hidden');
+          return;
+        }  // else
+        // Show error message. Do not show form because the issue
+        // probably does not solve by instant retry (leading to frustration).
         $('#tresdb-invite-server-error').removeClass('hidden');
         return;
       }  // else

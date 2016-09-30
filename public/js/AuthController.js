@@ -165,7 +165,6 @@ module.exports = function AuthController(socket, storage) {
 
     socket.emit('auth/sendInviteEmail', payload, function (response) {
       if (response.hasOwnProperty('error')) {
-        console.log(response.error);
         callback({
           name: response.error
         });
