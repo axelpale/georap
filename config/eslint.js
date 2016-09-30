@@ -168,7 +168,83 @@ module.exports = {
     // require parentheses around immediate function invocations
     'wrap-iife': 2,
     // require or disallow “Yoda” conditions
-    'yoda': 2
+    'yoda': 2,
+
+    //// VARIABLES
+
+    // disallow variable declarations from shadowing variables declared
+    // in the outer scope
+    'no-shadow': 2,
+    // disallow initializing variables to undefined
+    'no-undef-init': 2,
+    // disallow the use of undefined as an identifier
+    'no-undefined': 2,
+    // disallow the use of variables before they are defined
+    'no-use-before-define': 2,
+
+    //// Node.js and Common.js
+
+    // require return statements after callbacks
+    'callback-return': 2,
+    // require require() calls to be placed at top-level module scope
+    'global-require': 2,
+    // require error handling in callbacks
+    'handle-callback-err': 2,
+    // disallow new operators with calls to require
+    'no-new-require': 2,
+    // disallow string concatenation with __dirname and __filename
+    'no-path-concat': 2,
+    // disallow the use of process.env
+    'no-process-env': 2,
+    // disallow synchronous methods
+    'no-sync': 2,
+
+    //// STYLISTIC ISSUES
+
+    // enforce consistent spacing inside single-line blocks
+    'block-spacing': 2,
+    // enforce consistent brace style for blocks
+    'brace-style': 2,
+    // enforce camelcase naming convention
+    'camelcase': 2,
+    // require or disallow trailing commas
+    'comma-dangle': [ 2, 'always' ],
+    // enforce consistent spacing before and after commas
+    'comma-spacing': 2,
+    // enforce consistent comma style
+    'comma-style': 2,
+    // enforce consistent naming when capturing the current execution context
+    'consistent-this': [ 2, 'self' ],
+    // require or disallow newline at the end of files
+    'eol-last': 2,
+    // require or disallow spacing between function identifiers and
+    // their invocations
+    'func-call-spacing': 2,
+    // require or disallow named function expressions
+    'func-names': 0,
+    // enforce the consistent use of either function declarations or
+    // expressions
+    'func-style': 2,
+    // enforce consistent indentation
+    'indent': ['error', 2, {
+      'VariableDeclarator': { 'var': 2, 'let': 2, 'const': 3 },
+      'FunctionExpression': { 'parameters': 'first' },
+    }],
+    // enforce consistent spacing between keys and values in object
+    // literal properties
+    'key-spacing': 2,
+    // enforce consistent spacing before and after keywords
+    'keyword-spacing': 2,
+    // enforce consistent linebreak style
+    'linebreak-style': 2,
+    // enforce a maximum depth that blocks can be nested
+    'max-depth': 2,
+    // enforce a maximum line length
+    'max-len': [2, { code: 80 }],
+    // enforce a maximum number of lines per file
+    'max-lines': [2, { max: 300 }],
+    // TODO continue
+
   },
   'plugins': [
     // you can put plugins here
