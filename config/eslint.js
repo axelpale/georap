@@ -9,12 +9,12 @@ module.exports = {
     'browser': true,
 
     // CommonJS global variables and CommonJS scoping.
-    'commonjs': true
+    'commonjs': true,
   },
   'globals': {
     // place settings for globals here, such as
     'google': true,
-    '$': true
+    '$': true,
   },
 
   // For available rules, see http://eslint.org/docs/rules/
@@ -33,11 +33,11 @@ module.exports = {
     // enforce the use of variables within the scope they are defined
     'block-scoped-var': 'error',
     // enforce consistent brace style for all control statements
-    'curly': ['error', 'all'],
+    'curly': ['error', 'all' ],
     // require default cases in switch statements
     'default-case': 'error',
     // enforce consistent newlines before and after dots
-    'dot-location': ['error', 'property'],
+    'dot-location': ['error', 'property' ],
     // enforce dot notation whenever possible
     'dot-notation': 'error',
     // require the use of === and !==
@@ -74,7 +74,7 @@ module.exports = {
     // disallow function declarations and expressions inside loop statements
     'no-loop-func': 'error',
     // disallow magic numbers
-    'no-magic-numbers': ['error', { ignore: [0, 1, 2] }],
+    'no-magic-numbers': ['error', { ignore: [0, 1, 2 ] } ],
     // disallow multiple spaces
     'no-multi-spaces': 'error',
     // disallow multiline strings
@@ -160,7 +160,7 @@ module.exports = {
     // enforce camelcase naming convention
     'camelcase': 'error',
     // require or disallow trailing commas
-    'comma-dangle': [ 'error', 'always' ],
+    'comma-dangle': [ 'error', 'always-multiline' ],
     // enforce consistent spacing before and after commas
     'comma-spacing': 'error',
     // enforce consistent comma style
@@ -179,9 +179,15 @@ module.exports = {
     'func-style': 'error',
     // enforce consistent indentation
     'indent': ['error', 2, {
-      'VariableDeclarator': { 'var': 2, 'let': 2, 'const': 3 },
-      'FunctionExpression': { 'parameters': 'first' },
-    }],
+      'VariableDeclarator': {
+        'var': 2,
+        'let': 2,
+        'const': 3,
+      },
+      'FunctionExpression': {
+        'parameters': 'first',
+      },
+    } ],
     // enforce consistent spacing between keys and values in object
     // literal properties
     'key-spacing': 'error',
@@ -192,19 +198,19 @@ module.exports = {
     // enforce a maximum depth that blocks can be nested
     'max-depth': 'error',
     // enforce a maximum line length
-    'max-len': ['error', { code: 80 }],
+    'max-len': ['error', { code: 80 } ],
     // enforce a maximum number of lines per file
-    'max-lines': ['error', { max: 300 }],
+    'max-lines': ['error', { max: 300 } ],
     // enforce a maximum depth that callbacks can be nested
     'max-nested-callbacks': 'error',
     // enforce a maximum number of parameters in function definitions
-    'max-params': ['error', { max: 4 }],
+    'max-params': ['error', { max: 4 } ],
     // enforce a maximum number of statements allowed per line
     'max-statements-per-line': 'error',
     // enforce a maximum number of statements allowed in function blocks
-    'max-statements': 'error',
+    'max-statements': ['error', 20 ],
     // require constructor names to begin with a capital letter
-    'new-cap': 'error',
+    'new-cap': ['error', { capIsNewExceptions: ['Emitter' ] } ],
     // require parentheses when invoking a constructor with no arguments
     'new-parens': 'error',
     // require or disallow an empty line after variable declarations
@@ -212,7 +218,7 @@ module.exports = {
     // require an empty line before return statements
     'newline-before-return': 'error',
     // require a newline after each call in a method chain
-    'newline-per-chained-call': 'error',
+    'newline-per-chained-call': ['error', { 'ignoreChainWithDepth': 3 } ],
     // disallow Array constructors
     'no-array-constructor': 'error',
     // disallow bitwise operators
@@ -235,6 +241,8 @@ module.exports = {
     'no-trailing-spaces': 'error',
     // disallow whitespace before properties
     'no-whitespace-before-property': 'error',
+    // enforce consistent spacing inside braces
+    'object-curly-spacing': ['error', 'always' ],
     // enforce placing object properties on separate lines
     'object-property-newline': 'error',
     // require or disallow newlines around variable declarations
@@ -242,7 +250,7 @@ module.exports = {
     // enforce consistent linebreak style for operators
     'operator-linebreak': 'error',
     // enforce the consistent use of either backticks, double, or single quotes
-    'quotes': ['error', 'single'],
+    'quotes': ['error', 'single' ],
     // enforce consistent spacing before and after semicolons
     'semi-spacing': 'error',
     // require or disallow semicolons instead of ASI
@@ -252,10 +260,10 @@ module.exports = {
     // enforce consistent spacing before function definition opening
     // parenthesis
     'space-before-function-paren': [
-      "error", {
-        "anonymous": "always",
-        "named": "never"
-      }
+      'error', {
+        'anonymous': 'always',
+        'named': 'never',
+      },
     ],
     // require spacing around infix operators
     'space-infix-ops': 'error',
@@ -267,5 +275,5 @@ module.exports = {
   },
   'plugins': [
     // you can put plugins here
-  ]
-}
+  ],
+};

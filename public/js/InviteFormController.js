@@ -1,6 +1,6 @@
 // Form to invite new users.
 
-var validator = require("email-validator");
+var validator = require('email-validator');
 
 // Templates
 var inviteTemplate = require('../templates/invite.ejs');
@@ -41,6 +41,7 @@ module.exports = function (card, auth) {
     if (!validator.validate(email)) {
       // Invalid email, show error.
       $('#tresdb-invite-email-error').removeClass('hidden');
+
       return;
     }  // else
 
@@ -59,11 +60,13 @@ module.exports = function (card, auth) {
           $('#tresdb-invite-exist-error').removeClass('hidden');
           // Show form
           $('#tresdb-invite-form').removeClass('hidden');
+
           return;
         }  // else
         // Show error message. Do not show form because the issue
         // probably does not solve by instant retry (leading to frustration).
         $('#tresdb-invite-server-error').removeClass('hidden');
+
         return;
       }  // else
 

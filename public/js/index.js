@@ -29,22 +29,30 @@ var card = new CardController();
 //   If not logged in
 //     Show login form
 var parsedHash = queryString.parse(location.hash);
+
 // parsedHash does not have prototype, thus complicated call.
 var has = Object.prototype.hasOwnProperty;
+
 if (has.call(parsedHash, 'reset')) {
-  // Display password reset form
-  console.log('Password reset detected');
+  // User has reseted a password. Display password reset form.
+
+  // eslint-disable-next-line no-new
   new ResetFormController(card, auth, parsedHash.reset);
 } else if (has.call(parsedHash, 'invite')) {
-  console.log('Invite detected');
+  // User has been invited. Display sign up form.
+
+  // eslint-disable-next-line no-new
   new SignUpFormController(card, auth, parsedHash.invite);
 } else if (!auth.hasToken()) {
   // Display login form and hide the map under it.
+
+  // eslint-disable-next-line no-new
   new LoginFormController(card, auth);
 }
 
 // Display login form if user logs out.
 auth.on('logout', function () {
+  // eslint-disable-next-line no-new
   new LoginFormController(card, auth);
 });
 
@@ -52,15 +60,18 @@ auth.on('logout', function () {
 // loaded.
 window.initMap = function () {
   var map = new MapController(socket, auth);
+
+  // eslint-disable-next-line no-new
   new MenuController(map, card, auth);
 
   // Remember map view state (center, zoom, type...)
   // Default to southern Finland.
   var stateStore = new MapStateStore(window.localStorage);
+  // eslint-disable-next-line no-unused-vars
   var stateManager = new MapStateManager(map, stateStore, {
     lat: 61.0,
     lng: 24.0,
     zoom: 6,
-    mapTypeId: 'hybrid'
+    mapTypeId: 'hybrid',
   });
 };

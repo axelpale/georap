@@ -54,7 +54,7 @@ module.exports = function () {
     // Create card
     card = cardTemplate({
       content: htmlContent,
-      cardClass: cardType
+      cardClass: cardType,
     });
 
     // Remove possible other cards

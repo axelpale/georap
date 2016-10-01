@@ -1,4 +1,4 @@
-var validator = require("email-validator");
+var validator = require('email-validator');
 
 // Templates
 var loginTemplate = require('../templates/login.ejs');
@@ -31,11 +31,13 @@ module.exports = function (card, auth) {
     if (!validator.validate(email)) {
       // Display error message
       $('#tresdb-login-invalid-email').removeClass('hidden');
+
       return;
     }
     if (password.length < 1) {
       // Display password error message
       $('#tresdb-login-invalid-password').removeClass('hidden');
+
       return;
     }
 
@@ -52,6 +54,7 @@ module.exports = function (card, auth) {
       if (err === null) {
         // Successful login
         card.closeAll();
+
         return;
       }  // else
 
@@ -64,6 +67,7 @@ module.exports = function (card, auth) {
         // Show forms
         $('#tresdb-login-form').removeClass('hidden');
         $('#tresdb-password-reset').removeClass('hidden');
+
         return;
       }  // else
 
@@ -73,6 +77,7 @@ module.exports = function (card, auth) {
         // Show forms
         $('#tresdb-login-form').removeClass('hidden');
         $('#tresdb-password-reset').removeClass('hidden');
+
         return;
       }  // else
 
@@ -84,11 +89,14 @@ module.exports = function (card, auth) {
 
 
   $('#tresdb-password-reset-button').click(function (ev) {
+    // Open the reset form.
+    // Autofill reset email field if email already given.
     ev.preventDefault();
+
     $('#tresdb-password-reset-form').toggleClass('hidden');
 
-    // Autofill reset email field if email already given.
     var loginEmail = $('#tresdb-login-email').val();
+
     if (loginEmail !== '') {
       $('#tresdb-password-reset-email').val(loginEmail);
     }
@@ -110,6 +118,7 @@ module.exports = function (card, auth) {
     if (!validator.validate(resetEmail)) {
       // Display error message
       $('#tresdb-password-reset-invalid-email').removeClass('hidden');
+
       return;
     }
 
@@ -127,6 +136,7 @@ module.exports = function (card, auth) {
       if (err) {
         // Display error message
         $('#tresdb-password-reset-server-error').removeClass('hidden');
+
         return;
       }  // else
 

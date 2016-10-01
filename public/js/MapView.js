@@ -16,24 +16,27 @@ module.exports = function (model) {
   // Initialize map and controls.
 
   var map = new google.maps.Map(document.getElementById('map'), {
-    center: {lat: 61.498151, lng: 23.761025},
+    center: {
+      lat: 61.498151,
+      lng: 23.761025,
+    },
     zoom: 8,
     mapTypeId: 'hybrid',  // Darker and more practial than 'roadmap'.
 
     // Controls
     mapTypeControl: true,
     mapTypeControlOptions: {
-        style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
-        position: google.maps.ControlPosition.TOP_RIGHT
+      style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+      position: google.maps.ControlPosition.TOP_RIGHT,
     },
     streetViewControl: true,
     streetViewControlOptions: {
-      position: google.maps.ControlPosition.RIGHT_BOTTOM
+      position: google.maps.ControlPosition.RIGHT_BOTTOM,
     },
     zoomControl: true,
     zoomControlOptions: {
-        position: google.maps.ControlPosition.RIGHT_BOTTOM
-    }
+      position: google.maps.ControlPosition.RIGHT_BOTTOM,
+    },
   });
 
   // Initialize model handling
@@ -53,14 +56,16 @@ module.exports = function (model) {
     _.each(locations, function (loc) {
       var m = new google.maps.Marker({
         position: new google.maps.LatLng(loc.lat, loc.lng),
-        title: loc.name
+        title: loc.name,
       });
+
       m.setMap(map);
       m.addListener('click', function () {
         // Open info window
         var infowindow = new google.maps.InfoWindow({
-          content: infoTemplate({ location: loc })
+          content: infoTemplate({ location: loc }),
         });
+
         infowindow.open(map, m);
       });
       markers.push(m);
@@ -77,8 +82,9 @@ module.exports = function (model) {
       lat: latlng.lat(),
       lng: latlng.lng(),
       zoom: map.getZoom(),
-      mapTypeId: map.getMapTypeId()
+      mapTypeId: map.getMapTypeId(),
     };
+
     self.emit('state_changed', state);
   };
 
@@ -94,7 +100,7 @@ module.exports = function (model) {
   this.setState = function (state) {
     map.setCenter({
       lat: state.lat,
-      lng: state.lng
+      lng: state.lng,
     });
     map.setZoom(state.zoom);
     map.setMapTypeId(state.mapTypeId);
