@@ -32,23 +32,28 @@ module.exports = function AuthController(socket, storage) {
     // Emits:
     //   login
     //     On successful login.
-    var payload;
 
-    if (typeof callback === 'undefined') { callback = function () {}; }
+    var payload = {
+      email: email,
+      password: password,
+    };
 
-    payload = { email: email, password: password };
     socket.emit('auth/login', payload, function (response) {
       if (response.hasOwnProperty('token')) {
         // Success
         storage.setItem(TOKEN_KEY, response.token);
         // Publish within client
         self.emit('login');
-        callback(null);
+        if (typeof callback === 'function') {
+          return callback(null);
+        }
       } else if (response.hasOwnProperty('error')) {
         // Failure
-        callback({
-          name: response.error
-        });
+        if (typeof callback === 'function') {
+          return callback({
+            name: response.error,
+          });
+        }
       } else {
         // Error
         console.error('Invalid response to loginRequest');
@@ -70,7 +75,7 @@ module.exports = function AuthController(socket, storage) {
     self.emit('logout');
 
     if (typeof callback !== 'undefined') {
-      callback(null);
+      return callback(null);
     }
   };
 
@@ -89,24 +94,18 @@ module.exports = function AuthController(socket, storage) {
     var payload = {
       token: this.getToken(),
       currentPassword: currentPassword,
-      newPassword: newPassword
+      newPassword: newPassword,
     };
-
-    console.log('Emitting auth/changePassword');
 
     // Ask server to change the password.
     socket.emit('auth/changePassword', payload, function (response) {
-      console.log('auth/changePassword socket responsed:');
-      console.log(response);
       if (response.hasOwnProperty('error')) {
-        callback({
-          name: response.error
+        return callback({
+          name: response.error,
         });
-        return;
       }  // else
       if (response.hasOwnProperty('success')) {
-        callback(null);
-        return;
+        return callback(null);
       }  // else
       console.error('Invalid response from auth/changePassword');
     });
@@ -116,19 +115,17 @@ module.exports = function AuthController(socket, storage) {
 
     // Data to send to server.
     var payload = {
-      email: email
+      email: email,
     };
 
     socket.emit('auth/sendResetPasswordEmail', payload, function (response) {
       if (response.hasOwnProperty('error')) {
-        callback({
-          name: response.error
+        return callback({
+          name: response.error,
         });
-        return;
       }  // else
       if (response.hasOwnProperty('success')) {
-        callback(null);
-        return;
+        return callback(null);
       }  // else
       console.error('Invalid response from auth/sendResetPasswordEmail');
     });
@@ -138,19 +135,17 @@ module.exports = function AuthController(socket, storage) {
 
     var payload = {
       token: token,
-      password: newPassword
+      password: newPassword,
     };
 
     socket.emit('auth/resetPassword', payload, function (response) {
       if (response.hasOwnProperty('error')) {
-        callback({
-          name: response.error
+        return callback({
+          name: response.error,
         });
-        return;
       }  // else
       if (response.hasOwnProperty('success')) {
-        callback(null);
-        return;
+        return callback(null);
       }  // else
       console.error('Invalid response from auth/resetPassword');
     });
@@ -160,19 +155,17 @@ module.exports = function AuthController(socket, storage) {
 
     var payload = {
       token: this.getToken(),
-      email: email
+      email: email,
     };
 
     socket.emit('auth/sendInviteEmail', payload, function (response) {
       if (response.hasOwnProperty('error')) {
-        callback({
-          name: response.error
+        return callback({
+          name: response.error,
         });
-        return;
       }  // else
       if (response.hasOwnProperty('success')) {
-        callback(null);
-        return;
+        return callback(null);
       }  // else
       console.error('Invalid response from auth/sendInviteEmail');
     });
@@ -189,21 +182,20 @@ module.exports = function AuthController(socket, storage) {
     var payload = {
       token: token,
       username: username,
-      password: password
+      password: password,
     };
 
     socket.emit('auth/signup', payload, function (response) {
       console.log('auth/signup socket responsed.');
       if (response.hasOwnProperty('error')) {
         console.log(response.error);
-        callback({
-          name: response.error
+
+        return callback({
+          name: response.error,
         });
-        return;
       }  // else
       if (response.hasOwnProperty('success')) {
-        callback(null);
-        return;
+        return callback(null);
       }  // else
       console.error('Invalid response from auth/sendInviteEmail');
     });
@@ -215,6 +207,7 @@ module.exports = function AuthController(socket, storage) {
     if (storage.getItem(TOKEN_KEY) !== null) {
       return true;
     }
+
     return false;
   };
 
@@ -223,6 +216,7 @@ module.exports = function AuthController(socket, storage) {
     if (!this.hasToken()) {
       throw new Error('The token is missing.');
     }
+
     return storage.getItem(TOKEN_KEY);
   };
 
@@ -231,6 +225,7 @@ module.exports = function AuthController(socket, storage) {
     if (!this.hasToken()) {
       throw new Error('Cannot get payload because missing token.');
     }
+
     return jwtDecode(this.getToken());
   };
-}
+};

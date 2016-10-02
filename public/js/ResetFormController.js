@@ -7,6 +7,7 @@ var resetFormTemplate = require('../templates/resetForm.ejs');
 module.exports = function (card, auth, token) {
 
   var parsedToken = jwtDecode(token);
+
   card.open(resetFormTemplate({ email: parsedToken.email }), 'full');
   // Note: server will check if token still fresh. No need to check it here
   // and duplicate the information about duration.
@@ -14,7 +15,7 @@ module.exports = function (card, auth, token) {
   // Initialize log in button that will be shown after successful reset.
   $('#tresdb-continue-to-login-button').click(function (ev) {
     ev.preventDefault();
-    new LoginFormController(card, auth);
+    new LoginFormController(card, auth);  // eslint-disable-line no-new
   });
 
   $('#tresdb-reset-password-form').submit(function (ev) {
@@ -23,9 +24,12 @@ module.exports = function (card, auth, token) {
 
     var password = $('#tresdb-input-new-password').val();
     var passwordAgain = $('#tresdb-input-again-password').val();
+
+    // Validate
     if (password !== passwordAgain || password === '') {
       // Display error message
       $('#tresdb-reset-password-no-match').removeClass('hidden');
+
       return;
     }  // else
 
@@ -45,6 +49,7 @@ module.exports = function (card, auth, token) {
         $('#tresdb-reset-password-login').removeClass('hidden');
         // Hide the loading animation
         $('#tresdb-reset-in-progress').addClass('hidden');
+
         return;
       }  // else
 
@@ -56,6 +61,7 @@ module.exports = function (card, auth, token) {
         $('#tresdb-reset-password-login').removeClass('hidden');
         // Hide the loading animation
         $('#tresdb-reset-in-progress').addClass('hidden');
+
         return;
       }  // else
 

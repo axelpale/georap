@@ -17,12 +17,12 @@ module.exports = {
   admin: {
     username: 'admin',
     email: 'admin@example.com',
-    password: '1234'
+    password: '1234',
   },
 
   // Mongo database settings
   mongo: {
-    url: 'mongodb://foouser:barword@localhost:27017/tresdb'
+    url: 'mongodb://foouser:barword@localhost:27017/tresdb',
   },
 
   // Email server connection
@@ -33,11 +33,16 @@ module.exports = {
     secure: true,
     auth: {
       user: 'exampleuser',
-      pass: 'examplepass'
-    }
+      pass: 'examplepass',
+    },
   },
   // Email messages
   mail: {
-    sender: 'admin@example.com'
-  }
-}
+    sender: 'admin@example.com',
+  },
+
+  // Bcrypt hashing
+  bcrypt: {
+    rounds: 10,
+  },
+};

@@ -3,17 +3,10 @@ var MenuModel = require('./MenuModel');
 var MenuView = require('./MenuView');
 var LoginFormController = require('./LoginFormController');
 var InviteFormController = require('./InviteFormController');
-var AccountController = require('./AccountController');
+var ChangePasswordController = require('./ChangePasswordController');
 
-var templates = {
-  public: require('../templates/menus/public.ejs'),
-  // login
-
-  private: require('../templates/menus/private.ejs'),
-};
-
-// on event set menu. Choose template and define actions
-
+var publicTemplate = require('../templates/menus/public.ejs');
+var privateTemplate = require('../templates/menus/private.ejs');
 
 module.exports = function (map, card, auth) {
   // Parameters:
@@ -26,40 +19,42 @@ module.exports = function (map, card, auth) {
   //
 
   Emitter(this);
+  var model, view, menus;  // eslint-disable-line no-unused-vars
 
-  var model = new MenuModel();
-  new MenuView(map, model);
+  model = new MenuModel();
+  view = new MenuView(map, model);
 
   // Predefined menus. A mapping from label to action.
-  var menus = {
+  menus = {
     'public': {
-      template: templates.public,
+      template: publicTemplate,
       onclicks: {
         login: function () {
-          new LoginFormController(card, auth);
-        }
-      }
+          new LoginFormController(card, auth);  // eslint-disable-line no-new
+        },
+      },
     },
     'private': {
-      template: templates.private,
+      template: privateTemplate,
       onclicks: {
         //search: function () {},
         //list: function () {},
         //add: function () {},
         password: function (ev) {
           ev.preventDefault();
-          new AccountController(card, auth);
+          // eslint-disable-next-line no-new
+          new ChangePasswordController(card, auth);
         },
         invite: function (ev) {
           ev.preventDefault();
-          new InviteFormController(card, auth);
+          new InviteFormController(card, auth);  // eslint-disable-line no-new
         },
         logout: function (ev) {
           ev.preventDefault();
           auth.logout();
-        }
-      }
-    }
+        },
+      },
+    },
   };
 
   // Initial menu

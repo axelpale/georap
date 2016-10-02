@@ -1,8 +1,7 @@
 var express = require('express');
 var app = express();
-var server = require('http').Server(app);
+var server = require('http').Server(app);  // eslint-disable-line new-cap
 var io = require('socket.io')(server);
-var jwt = require('jsonwebtoken');
 var nodemailer = require('nodemailer');
 var local = require('./config/local');
 var monk = require('monk');
@@ -10,10 +9,16 @@ var monk = require('monk');
 var webpack = require('webpack');
 var webpackConfig = require('./config/webpack');
 
+// Run immediately after server is up.
+var bootstrap = require('./config/bootstrap');
+
+var AuthController = require('./api/controllers/auth');
+var LocationsController = require('./api/controllers/locations');
+
 // Controllers setup
 var controllers = {
-  auth: require('./api/controllers/auth'),
-  locations: require('./api/controllers/locations')
+  auth: AuthController,
+  locations: LocationsController,
 };
 
 
@@ -22,7 +27,9 @@ console.log('Starting TresDB in environment:', app.get('env'));
 
 
 // Database
+
 var db = monk(local.mongo.url);
+
 db.then(function () {
   console.log('Connected to MongoDB...');
 }).catch(function (err) {
@@ -32,8 +39,10 @@ db.then(function () {
 
 
 // Email transporter setup and verification.
+
 var mailer = nodemailer.createTransport(local.smtp);
-mailer.verify(function (err, success) {
+
+mailer.verify(function (err) {
   if (err) {
     console.log('Connection to mail server failed:');
     console.log(err);
@@ -44,6 +53,7 @@ mailer.verify(function (err, success) {
 
 
 // Start the server.
+
 server.listen(local.port, function () {
   console.log('Express listening on port ' + local.port + '...');
 });
@@ -62,7 +72,7 @@ app.disable('x-powered-by');
 
 // Static assets
 // -------------
-if (app.get('env') === 'development') {
+if (local.env === 'development') {
   // Webpack development middleware
   //
   // The following middleware is only for development.
@@ -74,13 +84,17 @@ if (app.get('env') === 'development') {
   //     app.use(express.static('./.tmp/public'));
   // To compile assets for production, run webpack from the command line:
   //     $ webpack --config ./config/webpack.js
+
+  // eslint-disable-next-line global-require
   var webpackMiddleware = require('webpack-dev-middleware');
+
   app.use(webpackMiddleware(webpack(webpackConfig), {
     noInfo: true,
     publicPath: '/',
-    stats: { colors: true }
+    stats: { colors: true },
   }));
   console.log('Webpack listening for file changes...');
+
 } else {
   // In production, we run webpack once and serve the files.
   // The first run builds the initial set of files. The subsequent
@@ -88,11 +102,14 @@ if (app.get('env') === 'development') {
   // finishes is not a problem.
   console.log('Building static assets...');
   webpack(webpackConfig, function (err, stats) {
-    if (err || stats.hasErrors()) {
+    if (err || stats.hasErrors()) {
       if (err) {
         throw err;
       }  // else
-      console.log(stats.toString({ chunks: true, colors: true }));
+      console.log(stats.toString({
+        chunks: true,
+        colors: true,
+      }));
       throw new Error('Error when building static assets.');
     }  // else
     if (stats.hasWarnings()) {
@@ -100,7 +117,10 @@ if (app.get('env') === 'development') {
     } else {
       console.log('Built static assets successfully.');
     }
-    console.log(stats.toString({ chunks: false, colors: true }));
+    console.log(stats.toString({
+      chunks: false,
+      colors: true,
+    }));
     // See https://webpack.github.io/docs/node.js-api.html#error-handling
   });
   app.use(express.static(local.staticDir));
@@ -124,6 +144,7 @@ io.on('connection', function (socket) {
   // the connection is transported via polling or websockets,
   // the host stays the same.
   var host = socket.request.headers.host;
+
   console.log('New connection from app hosted at', host);
 
   // Authentication
@@ -161,5 +182,4 @@ io.on('connection', function (socket) {
 
 // Populate database
 
-var bootstrap = require('./config/bootstrap');
 bootstrap(db);

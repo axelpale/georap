@@ -24,8 +24,11 @@ module.exports = function (storage) {
         typeof state.mapTypeId !== 'string') {
       throw new Error('Invalid parameters');
     }  // else
+
     // Build the string to store
     var s = JSON.stringify(state);
+
+    // Store the string
     storage.setItem(GEO_KEY, s);
   };
 
@@ -36,6 +39,7 @@ module.exports = function (storage) {
     if (storage.getItem(GEO_KEY)) {
       return false;
     }  // else
+
     return true;
   };
 
@@ -51,9 +55,11 @@ module.exports = function (storage) {
     //   mapTypeId: <string>
     // }
     var s = storage.getItem(GEO_KEY);
+
     if (s) {
       return JSON.parse(s);
     }  // else
+
     return null;
   };
 };

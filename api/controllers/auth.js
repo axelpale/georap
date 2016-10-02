@@ -1,6 +1,8 @@
+/* eslint max-lines: 'off' */
+
 var bcrypt = require('bcryptjs');
 var jwt = require('jsonwebtoken');
-var validator = require("email-validator");
+var validator = require('email-validator');
 var local = require('../../config/local');
 
 var fs = require('fs');
@@ -9,13 +11,15 @@ var ejs = require('ejs');
 
 var resetMailTemplate = (function () {
   var p = path.resolve(__dirname, '../templates/resetEmail.ejs');
-  var f = fs.readFileSync(p, 'utf8');
+  var f = fs.readFileSync(p, 'utf8');  // eslint-disable-line no-sync
+
   return ejs.compile(f);
 }());
 
 var inviteMailTemplate = (function () {
   var p = path.resolve(__dirname, '../templates/inviteEmail.ejs');
-  var f = fs.readFileSync(p, 'utf8');
+  var f = fs.readFileSync(p, 'utf8');  // eslint-disable-line no-sync
+
   return ejs.compile(f);
 }());
 
@@ -49,16 +53,16 @@ var setPassword = function (db, email, password, callback) {
   }
 
   // Hash the new password before storing it to database.
-  bcrypt.hash(password, 10, function (err, newHash) {
+  bcrypt.hash(password, local.bcrypt.rounds, function (err, newHash) {
+    var err2;
 
     // Handle hashing error
-    var err2;
     if (err) {
       err2 = new Error('hashing error');
       err2.name = 'hashingError';
       err2.origError = err;
-      callback(err2);
-      return;
+
+      return callback(err2);
     }
 
     // Construct the query.
@@ -69,22 +73,27 @@ var setPassword = function (db, email, password, callback) {
     var users = db.get('users');
 
     users.findOneAndUpdate(findQuery, updateQuery).then(function (user) {
+      var err3;
+
       // If no user found.
       if (user === null) {
-        err2 = new Error('User not found');
-        err2.name = 'userNotFoundError';
-        callback(err2);
-        return;
+        err3 = new Error('User not found');
+        err3.name = 'userNotFoundError';
+
+        return callback(err3);
       }  // else
 
       // Password changed successfully
-      callback();
-    }).catch(function (err) {
+      return callback();
+    }).catch(function (err4) {
+      var err5;
+
       // Update query failed. Connection to database was lost or something.
-      err2 = new Error('Update query failed');
-      err2.name = 'mongoQueryError';
-      err2.origError = err;
-      callback(err2);
+      err5 = new Error('Update query failed');
+      err5.name = 'mongoQueryError';
+      err5.origError = err4;
+
+      return callback(err5);
     });
   });
 };
@@ -115,57 +124,58 @@ exports.login = function (db, data, response) {
 
   // If no email or password provided or injection attempted.
   // Also, ensure nice email.
-  if (!data.hasOwnProperty('email') || !data.hasOwnProperty('password') ||
-      typeof data.email !== 'string' || typeof data.password !== 'string' ||
-      !validator.validate(data.email) || data.password.length < 1) {
-    response({
-      error: 'InvalidRequestError'
+  if (!data.hasOwnProperty('email') || !data.hasOwnProperty('password') ||
+      typeof data.email !== 'string' || typeof data.password !== 'string' ||
+      !validator.validate(data.email) || data.password.length < 1) {
+    return response({
+      error: 'InvalidRequestError',
     });
-    return;
   }
 
   var users = db.get('users');
   var query = { email: data.email };
+
   users.findOne(query).then(function (user) {
 
     if (user === null) {
-      response({
-        error: 'UnknownEmailError'
+      return response({
+        error: 'UnknownEmailError',
       });
-      return;
     }
 
     bcrypt.compare(data.password, user.hash, function (err, match) {
       var tokenPayload;
+
       if (err) {
         // Hash comparison failed. Password might still be correct, though.
-        response({
-          error: 'HashingError'
+        return response({
+          error: 'HashingError',
         });
-        return;
       }
+
       if (match) {
         // Success
         tokenPayload = {
           name: user.name,
           email: user.email,
-          admin: user.admin
+          admin: user.admin,
         };
-        response({
-          token: jwt.sign(tokenPayload, local.secret)
+
+        return response({
+          token: jwt.sign(tokenPayload, local.secret),
         });
-      } else {
-        // Authentication failure
-        response({
-          error: 'IncorrectPasswordError'
-        });
-      }
+      }  // else
+
+      // Authentication failure
+      return response({
+        error: 'IncorrectPasswordError',
+      });
     });
 
   }).catch(function (err) {
     console.error(err);
     response({
-      error: 'DatabaseError'
+      error: 'DatabaseError',
     });
   });
 };
@@ -182,92 +192,83 @@ exports.changePassword = function (db, data, response) {
   //   response
   //     Socket.io response.
 
+  // Validate data
+  if (!data.hasOwnProperty('token') ||
+      !data.hasOwnProperty('currentPassword') ||
+      !data.hasOwnProperty('newPassword') ||
+      typeof data.token !== 'string' ||
+      typeof data.currentPassword !== 'string' ||
+      typeof data.newPassword !== 'string') {
+    return response({ error: 'InvalidRequestError' });
+  }
+
   // Verify user has logged in. We also get the email from the token.
   jwt.verify(data.token, local.secret, function (err, payload) {
     if (err) {
       // Problems with token
-      response({
-        error: 'invalid-token'
-      });
-      return;
+      return response({ error: 'InvalidRequestError' });
     }  // else
 
     // User is logged in. Good. Find if user with this email still exists.
     var users = db.get('users');
     var query = { email: payload.email };
+
     users.findOne(query).then(function (user) {
 
       // If no user found.
       if (user === null) {
-        response({
-          error: 'change-password-invalid-email'
-        });
-        return;
+        return response({ error: 'UnknownEmailError' });
       }  // else
 
       // Test if the given current password is correct
-      bcrypt.compare(data.currentPassword, user.hash, function (err, match) {
-        if (err) {
-          response({
-            error: 'HashingError'
-          });
-          return;
+      bcrypt.compare(data.currentPassword, user.hash, function (err2, match) {
+        if (err2) {
+          return response({ error: 'HashingError' });
         }  // else
 
         if (!match) {
-          response({
-            error: 'IncorrectPasswordError'
-          });
-          return;
+          return response({ error: 'IncorrectPasswordError' });
         }  // else
 
         // Success, current passwords match
         // Hash the new password before storing it to database.
-        bcrypt.hash(data.newPassword, 10, function (err, newHash) {
-          if (err) {
-            response({
-              error: 'HashingError'
-            });
-            return;
+        var r = local.bcrypt.rounds;
+
+        bcrypt.hash(data.newPassword, r, function (err3, newHash) {
+          if (err3) {
+            return response({ error: 'HashingError' });
           }  // else
 
           // Ready to change password. Update hash in database.
           users.findOneAndUpdate(query, { $set: {
-            hash: newHash
-          }}).then(function (updatedUser) {
+            hash: newHash,
+          } }).then(function (updatedUser) {
             // Check if user still exists
             if (updatedUser === null) {
-              response({
-                error: 'change-password-user-removed'
-              })
-              return;
+              return response({ error: 'UnknownEmailError' });
             }  // else
             // Password changed successfully
-            response({
-              success: 'change-password-success'
-            });
-          }).catch(function (err) {
-            // Update query failed. Connection to database was lost or something.
-            console.error(err);
-            response({
-              error: 'change-password-update-query-failure'
-            });
+
+            return response({ success: true });
+          }).catch(function (err4) {
+            // Update query failed. Maybe connection to database was lost.
+            console.error(err4);
+
+            return response({ error: 'DatabaseError' });
           });
         });
       });
-    }).catch(function (err) {
+    }).catch(function (err5) {
       // User fetch for email and password check failed.
       // Connection to database was lost or something.
-      console.error(err);
-      response({
-        error: 'change-password-find-query-failure'
-      });
-      return;
+      console.error(err5);
+
+      return response({ error: 'DatabaseError' });
     });
   });
 };
 
-
+// eslint-disable-next-line max-params
 exports.sendResetPasswordEmail = function (db, mailer, host, data, response) {
   // Parameters:
   //   db
@@ -284,14 +285,14 @@ exports.sendResetPasswordEmail = function (db, mailer, host, data, response) {
   // Fetch user from database to ensure the email exists.
   // First get collection.
   var users = db.get('users');
+
   users.findOne({ email: data.email }).then(function (user) {
 
     if (user === null) {
       // User not found with that email address.
-      response({
-        error: 'reset-password-invalid-email'
+      return response({
+        error: 'reset-password-invalid-email',
       });
-      return;
     }
 
     // Okay, user exists. We do not clear user password now, because
@@ -305,10 +306,10 @@ exports.sendResetPasswordEmail = function (db, mailer, host, data, response) {
       name: user.name,
       email: user.email,
       admin: user.admin,
-      passwordReset: true
+      passwordReset: true,
     };
     var token = jwt.sign(tokenPayload, local.secret, {
-      expiresIn: '30m'
+      expiresIn: '30m',
     });
     var url = 'http://' + host + '/#reset=' + token;
 
@@ -316,29 +317,30 @@ exports.sendResetPasswordEmail = function (db, mailer, host, data, response) {
       from: local.mail.sender,
       to: user.email,
       subject: 'Subterranea.fi password reset requested for your account',
-      text: resetMailTemplate({ resetUrl: url, email: user.email })
+      text: resetMailTemplate({
+        resetUrl: url,
+        email: user.email,
+      }),
     };
 
     // Send the mail.
     mailer.sendMail(mailOptions, function (err, info) {
       if (err) {
-        response({
-          error: 'reset-password-mail-server-failure'
+        return response({
+          error: 'reset-password-mail-server-failure',
         });
-        return;
       }  // else
       console.log('Mail sent: ' + info.response);
-      response({
-        success: true
+
+      return response({
+        success: true,
       });
-      return;
     });
-  }).catch(function (err) {
+  }).catch(function () {
     // A query error.
-    response({
-      error: 'reset-password-find-query-failure'
+    return response({
+      error: 'reset-password-find-query-failure',
     });
-    return;
   });
 };
 
@@ -359,38 +361,34 @@ exports.resetPassword = function (db, data, response) {
   //   InvalidTokenError
 
   if (typeof data.password !== 'string') {
-    response({
-      error: 'InvalidPasswordError'
+    return response({
+      error: 'InvalidPasswordError',
     });
-    return;
   }
 
   jwt.verify(data.token, local.secret, function (err, payload) {
     if (err || typeof payload.email !== 'string') {
       // E.g. expired token
-      response({
-        error: 'InvalidTokenError'
+      return response({
+        error: 'InvalidTokenError',
       });
-      return;
     }  // else
 
-    var email = payload.email;
-    var newPassword = data.password;
-    setPassword(db, payload.email, data.password, function (err) {
-      if (err) {
-        response({
-          error: err.name
+    setPassword(db, payload.email, data.password, function (err2) {
+      if (err2) {
+        return response({
+          error: err2.name,
         });
-        return;
       }  // else
-      response({
-        success: true
+
+      return response({
+        success: true,
       });
     });
   });
 };
 
-
+// eslint-disable-next-line max-params
 exports.sendInviteEmail = function (db, mailer, host, data, response) {
   // Invite a user by sending an email with a link that includes a token.
   // With that token the user is allowed to create a single account within
@@ -416,40 +414,47 @@ exports.sendInviteEmail = function (db, mailer, host, data, response) {
   jwt.verify(data.token, local.secret, function (err, payload) {
     if (err) {
       response({
-        error: 'InvalidTokenError'
+        error: 'InvalidTokenError',
       });
+
       return;
     }  // else
 
     if (payload.admin !== true) {
       response({
-        error: 'PrivilegeError'
+        error: 'PrivilegeError',
       });
+
       return;
     }  // else
 
-    if (!data.hasOwnProperty('email') || typeof data.email !== 'string') {
+    if (!data.hasOwnProperty('email') || typeof data.email !== 'string') {
       response({
-        error: 'InvalidRequestError'
+        error: 'InvalidRequestError',
       });
+
       return;
     }  // else
 
     if (!validator.validate(data.email)) {
       response({
-        error: 'InvalidEmailError'
+        error: 'InvalidEmailError',
       });
+
       return;
     }  // else
 
     // Check if an account with this email already exists
-    db.get('users').findOne({ email: data.email }).then(function (user) {
+    var users = db.get('users');
+
+    users.findOne({ email: data.email }).then(function (user) {
 
       if (user) {
         // Already exists
         response({
-          error: 'AccountExistsError'
+          error: 'AccountExistsError',
         });
+
         return;
       }  // else
 
@@ -457,10 +462,10 @@ exports.sendInviteEmail = function (db, mailer, host, data, response) {
 
       var tokenPayload = {
         email: data.email,
-        invite: true
+        invite: true,
       };
       var token = jwt.sign(tokenPayload, local.secret, {
-        expiresIn: '7d'
+        expiresIn: '7d',
       });
       var url = 'http://' + host + '/#invite=' + token;
 
@@ -468,30 +473,34 @@ exports.sendInviteEmail = function (db, mailer, host, data, response) {
         from: local.mail.sender,
         to: data.email,
         subject: 'Invite to Subterranea.fi',
-        text: inviteMailTemplate({ url: url, email: data.email })
+        text: inviteMailTemplate({
+          url: url,
+          email: data.email,
+        }),
       };
 
       // Send the mail.
-      mailer.sendMail(mailOptions, function (err, info) {
-        if (err) {
-          response({
-            error: 'MailServerError'
+      mailer.sendMail(mailOptions, function (err2, info) {
+        if (err2) {
+          return response({
+            error: 'MailServerError',
           });
-          return;
         }  // else
 
         // Mail sent successfully
         console.log('Mail sent: ' + info.response);
-        response({
-          success: true
+
+        return response({
+          success: true,
         });
       });  // mailer
 
-    }).catch(function (err) {
+    }).catch(function (err3) {
       // Mongo problem.
-      console.error(err);
-      response({
-        error: 'DatabaseError'
+      console.error(err3);
+
+      return response({
+        error: 'DatabaseError',
       });
     });
 
@@ -518,42 +527,38 @@ exports.signup = function (db, data, response) {
 
   jwt.verify(data.token, local.secret, function (err, payload) {
     if (err) {
-      response({
-        error: 'InvalidTokenError'
+      return response({
+        error: 'InvalidTokenError',
       });
-      return;
     }  // else
 
     if (!payload.hasOwnProperty('email')) {
-      response({
-        error: 'InvalidTokenError'
+      return response({
+        error: 'InvalidTokenError',
       });
-      return;
     }  // else
 
     if (!validator.validate(payload.email)) {
-      response({
-        error: 'InvalidTokenError'
+      return response({
+        error: 'InvalidTokenError',
       });
-      return;
     }  // else
 
-    if (!data.hasOwnProperty('username') || !data.hasOwnProperty('password')) {
-      response({
-        error: 'InvalidRequestError'
+    if (!data.hasOwnProperty('username') || !data.hasOwnProperty('password')) {
+      return response({
+        error: 'InvalidRequestError',
       });
-      return;
     }  // else
 
     // Ensure username and password are strings.
     // This prevents Mongo injection.
     var usernameType = typeof data.username;  // to shorten linelength
     var passwordType = typeof data.password;
+
     if (usernameType !== 'string' || passwordType !== 'string') {
-      response({
-        error: 'InvalidRequestError'
+      return response({
+        error: 'InvalidRequestError',
       });
-      return;
     }  // else
 
     // Ensure username does not yet exist.
@@ -562,23 +567,25 @@ exports.signup = function (db, data, response) {
     // We also avoid computing password hash.
 
     var users = db.get('users');
+
     users.findOne({
-      $or: [ { name: data.username }, { email: payload.email } ]
+      $or: [ { name: data.username }, { email: payload.email } ],
     }).then(function (user) {
       if (user !== null) {
+
         // Duplicate username or email.
         if (user.name === data.username) {
-          response({
-            error: 'UsernameTakenError'
+          return response({
+            error: 'UsernameTakenError',
           });
-          return;
         }  // else
+
         if (user.email === payload.email) {
-          response({
-            error: 'EmailTakenError'
+          return response({
+            error: 'EmailTakenError',
           });
-          return;
         }  // else
+
         throw new Error('Should not get here');
       }  // else
 
@@ -586,38 +593,41 @@ exports.signup = function (db, data, response) {
       // Note: there is a tiny risk that such user is created after
       // the check but before insert.
 
-      bcrypt.hash(data.password, 10, function (err, pwdHash) {
-        if (err) {
-          response({
-            error: 'HashingError'
+      var r = local.bcrypt.rounds;
+
+      bcrypt.hash(data.password, r, function (err2, pwdHash) {
+        if (err2) {
+          return response({
+            error: 'HashingError',
           });
-          return;
         }  // else
 
         users.insert({
           name: data.username,
           email: payload.email,
           hash: pwdHash,
-          admin: false
-        }).then(function (user) {
+          admin: false,
+        }).then(function () {
           // User inserted successfully
-          response({
-            success: true
+          return response({
+            success: true,
           });
-        }).catch(function (err) {
+        }).catch(function (err3) {
           // Some mongo error.
-          console.error(err);
-          response({
-            error: err.name
+          console.error(err3);
+
+          return response({
+            error: err3.name,
           });
         });  // users.insert catch
       });
 
-    }).catch(function (err) {
+    }).catch(function (err4) {
       // Some mongo error.
-      console.error(err);
-      response({
-        error: err.name
+      console.error(err4);
+
+      return response({
+        error: err4.name,
       });
     });  // findOne catch
   });  // jwt
