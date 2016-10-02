@@ -3,7 +3,7 @@ var MenuModel = require('./MenuModel');
 var MenuView = require('./MenuView');
 var LoginFormController = require('./LoginFormController');
 var InviteFormController = require('./InviteFormController');
-var AccountController = require('./AccountController');
+var ChangePasswordController = require('./ChangePasswordController');
 
 var publicTemplate = require('../templates/menus/public.ejs');
 var privateTemplate = require('../templates/menus/private.ejs');
@@ -42,7 +42,8 @@ module.exports = function (map, card, auth) {
         //add: function () {},
         password: function (ev) {
           ev.preventDefault();
-          new AccountController(card, auth);  // eslint-disable-line no-new
+          // eslint-disable-next-line no-new
+          new ChangePasswordController(card, auth);
         },
         invite: function (ev) {
           ev.preventDefault();

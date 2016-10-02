@@ -2,6 +2,7 @@
 
 // eslint-disable-next-line no-unused-vars
 var should = require('should');
+var jwt = require('jsonwebtoken');
 var local = require('../../config/local');
 var io = require('socket.io-client');
 
@@ -18,30 +19,51 @@ describe('TresDB Socket.io API', function () {
     socket.disconnect();
   });
 
+  var createResponseAssert = function (ev, key, val) {
+    // Return an assertion function that emits the given event and tests
+    // that the response has correct key and value string.
+    // Value is optional parameter.
+    //
+    // The returned function takes payload, and done-callback as its params.
+    //
+    // Usage:
+    //   var he = createResponseAssert('auth/login', 'error', 'HashingError');
+    //   ...
+    //   it('should response with HashingError', function (done) {
+    //     he({ pay: load, that: causes, hashing: error }, done);
+    //   });
+    //
+    return function assertion(payload, done) {
+      socket.emit(ev, payload, function (res) {
+        if (typeof val === 'undefined') {
+          res.should.have.property(key);
+        } else {
+          res.should.have.property(key, val);
+        }
+        done();
+      });
+    };
+  };
+
   describe('auth/login should response with', function () {
 
+
     context('JWT token when', function () {
+
+      var assertToken = createResponseAssert('auth/login', 'token');
+
       it('known email and password are provided', function (done) {
-        var payload = {
+        assertToken({
           email: local.admin.email,
           password: local.admin.password,
-        };
-
-        socket.emit('auth/login', payload, function (res) {
-          res.should.have.property('token');
-          done();
-        });
+        }, done);
       });
     });
 
     context('InvalidRequestError when', function () {
 
-      var assertIRE = function (payload, done) {
-        socket.emit('auth/login', payload, function (res) {
-          res.should.have.property('error', 'InvalidRequestError');
-          done();
-        });
-      };
+      var assertIRE = createResponseAssert('auth/login', 'error',
+                                           'InvalidRequestError');
 
       it('an empty payload is provided', function (done) {
         assertIRE({}, done);
@@ -106,6 +128,62 @@ describe('TresDB Socket.io API', function () {
           res.should.have.property('error', 'IncorrectPasswordError');
           done();
         });
+      });
+    });
+  });
+
+  describe('auth/changePassword should response with', function () {
+
+    var goodToken = jwt.sign({ email: local.admin.email }, local.secret);
+    var badEmailToken = jwt.sign({ email: 'foo123@bar.com' }, local.secret);
+    var badToken1 = jwt.sign({ foo: 'bar' }, local.secret);
+    var badToken2 = jwt.sign({ email: local.admin.email }, 'foo');
+
+    context('InvalidRequestError when', function () {
+      var assertIRE = createResponseAssert('auth/changePassword', 'error',
+                                           'InvalidRequestError');
+
+      it('no token is provided', function (done) {
+        assertIRE({}, done);
+      });
+
+      it('the token has signed but unexpected content', function (done) {
+        assertIRE({ token: badToken1 }, done);
+      });
+
+      it('the token is signed with unknown key', function (done) {
+        assertIRE({ token: badToken2 }, done);
+      });
+
+      it('no current password is provided', function (done) {
+        assertIRE({ token: goodToken }, done);
+      });
+    });
+
+    context('UnknownEmailError when', function () {
+      var assertUEE = createResponseAssert('auth/changePassword', 'error',
+                                           'UnknownEmailError');
+
+      it('unknown email is provided', function (done) {
+        assertUEE({
+          token: badEmailToken,
+          currentPassword: local.admin.password,
+          newPassword: local.admin.password,
+        }, done);
+      });
+
+    });
+
+    context('IncorrectPasswordError when', function () {
+      var assertIPE = createResponseAssert('auth/changePassword', 'error',
+                                           'IncorrectPasswordError');
+
+      it('the current password is incorrect', function (done) {
+        assertIPE({
+          token: goodToken,
+          currentPassword: 'foo',
+          newPassword: 'bar',
+        }, done);
       });
     });
   });

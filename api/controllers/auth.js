@@ -192,13 +192,21 @@ exports.changePassword = function (db, data, response) {
   //   response
   //     Socket.io response.
 
+  // Validate data
+  if (!data.hasOwnProperty('token') ||
+      !data.hasOwnProperty('currentPassword') ||
+      !data.hasOwnProperty('newPassword') ||
+      typeof data.token !== 'string' ||
+      typeof data.currentPassword !== 'string' ||
+      typeof data.newPassword !== 'string') {
+    return response({ error: 'InvalidRequestError' });
+  }
+
   // Verify user has logged in. We also get the email from the token.
   jwt.verify(data.token, local.secret, function (err, payload) {
     if (err) {
       // Problems with token
-      return response({
-        error: 'invalid-token',
-      });
+      return response({ error: 'InvalidRequestError' });
     }  // else
 
     // User is logged in. Good. Find if user with this email still exists.
@@ -209,23 +217,17 @@ exports.changePassword = function (db, data, response) {
 
       // If no user found.
       if (user === null) {
-        return response({
-          error: 'change-password-invalid-email',
-        });
+        return response({ error: 'UnknownEmailError' });
       }  // else
 
       // Test if the given current password is correct
       bcrypt.compare(data.currentPassword, user.hash, function (err2, match) {
         if (err2) {
-          return response({
-            error: 'HashingError',
-          });
+          return response({ error: 'HashingError' });
         }  // else
 
         if (!match) {
-          return response({
-            error: 'IncorrectPasswordError',
-          });
+          return response({ error: 'IncorrectPasswordError' });
         }  // else
 
         // Success, current passwords match
@@ -234,9 +236,7 @@ exports.changePassword = function (db, data, response) {
 
         bcrypt.hash(data.newPassword, r, function (err3, newHash) {
           if (err3) {
-            return response({
-              error: 'HashingError',
-            });
+            return response({ error: 'HashingError' });
           }  // else
 
           // Ready to change password. Update hash in database.
@@ -245,22 +245,16 @@ exports.changePassword = function (db, data, response) {
           } }).then(function (updatedUser) {
             // Check if user still exists
             if (updatedUser === null) {
-              return response({
-                error: 'change-password-user-removed',
-              });
+              return response({ error: 'UnknownEmailError' });
             }  // else
             // Password changed successfully
 
-            return response({
-              success: 'change-password-success',
-            });
+            return response({ success: true });
           }).catch(function (err4) {
             // Update query failed. Maybe connection to database was lost.
             console.error(err4);
 
-            return response({
-              error: 'change-password-update-query-failure',
-            });
+            return response({ error: 'DatabaseError' });
           });
         });
       });
@@ -269,9 +263,7 @@ exports.changePassword = function (db, data, response) {
       // Connection to database was lost or something.
       console.error(err5);
 
-      return response({
-        error: 'change-password-find-query-failure',
-      });
+      return response({ error: 'DatabaseError' });
     });
   });
 };

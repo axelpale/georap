@@ -97,12 +97,8 @@ module.exports = function AuthController(socket, storage) {
       newPassword: newPassword,
     };
 
-    console.log('Emitting auth/changePassword');
-
     // Ask server to change the password.
     socket.emit('auth/changePassword', payload, function (response) {
-      console.log('auth/changePassword socket responsed:');
-      console.log(response);
       if (response.hasOwnProperty('error')) {
         return callback({
           name: response.error,
