@@ -12,13 +12,14 @@ var webpackConfig = require('./config/webpack');
 // Run immediately after server is up.
 var bootstrap = require('./config/bootstrap');
 
-var AuthController = require('./api/controllers/auth');
-var LocationsController = require('./api/controllers/locations');
+var authController = require('./api/controllers/auth');
+var locationsController = require('./api/controllers/locations');
+
 
 // Controllers setup
 var controllers = {
-  auth: AuthController,
-  locations: LocationsController,
+  auth: authController,
+  locations: locationsController,
 };
 
 
