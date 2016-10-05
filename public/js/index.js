@@ -1,25 +1,157 @@
-// var _ = require('lodash');
-var queryString = require('query-string');
+
 var io = require('socket.io-client');
+var auth = require('./auth');
+var locations = require('./locations');
+var mapstate = require('./mapstate');
+var navigation = require('./navigation');
+var maps = require('./maps');
+var menus = require('./menus');
+var cards = require('./cards');
+var forms = require('./forms');
+var routers = require('./routers');
+
+
+// Websocket connection and connection error handling
 var socket = io('/');
 
-// Connection error handling
 socket.on('connect-error', function () {
   console.error('TresDB: io connect-error');
 });
 
-var MapController = require('./MapController');
-var CardController = require('./CardController');
-var AuthController = require('./AuthController');
-var MenuController = require('./MenuController');
-var LoginFormController = require('./LoginFormController');
-var ResetFormController = require('./ResetFormController');
-var SignUpFormController = require('./SignUpFormController');
-var MapStateStore = require('./mapstate/Store');
-var MapStateManager = require('./mapstate/Manager');
 
-var auth = new AuthController(socket, window.localStorage);
-var card = new CardController();
+// Authentication API
+var authService = new auth.Service(socket, window.localStorage);
+
+
+// Locations API
+var locationsService = new locations.Service(socket, authService);
+
+
+// A card can be used to display content.
+var card = new cards.Controller();
+
+
+// Set up routes
+var navService = new navigation.Service();
+var router = new routers.Router(navService);
+
+router.route('login', function () {
+  authService.logout(function () {
+    // Should be immediate; no reason to show progress bar.
+    var loginForm = new forms.Login(router, authService);
+
+    card.open(loginForm.render(), 'full');
+    loginForm.bind();
+  });
+});
+
+router.route('map', function () {
+  // Map is always open on the background.
+  card.close();
+});
+
+router.route('changePassword', function () {
+  var changePasswordForm = new forms.ChangePassword(authService);
+
+  card.open(changePasswordForm.render(), 'page');
+  changePasswordForm.bind();
+});
+
+router.route('invite', function () {
+  var inviteForm = new forms.Invite(authService);
+
+  card.open(inviteForm.render(), 'page');
+  inviteForm.bind();
+});
+
+router.route('resetPassword', function () {
+  var token = navService.hash.get('reset');
+  var resetPasswordForm = new forms.ResetPassword(router, authService, token);
+
+  card.open(resetPasswordForm.render(), 'full');
+  resetPasswordForm.bind();
+});
+
+router.route('signup', function () {
+  var token = navService.hash.get('invite');
+  var signupForm = new forms.Signup(router, authService, token);
+
+  card.open(signupForm.render(), 'full');
+  signupForm.bind();
+});
+
+
+// Function initMap is called as jsonp call after Google Maps JS script is
+// loaded. Lay the main menu immediately on the map.
+window.initMap = function () {
+  var mapElement = document.getElementById('map');
+
+  // Remember map view state (center, zoom, type...)
+  // Default to southern Finland.
+  //
+  // Rules:
+  // - Whenever user's location on the map changes, the new location
+  //   should be stored device-wise.
+  // - On a fresh session, try to retrieve geolocation from the browser.
+  // - If no location is stored and none can be retrieved from the browser,
+  //   fallback to southern finland.
+  //
+  var mapstateStore = new mapstate.Store(window.localStorage);
+  var mapstateService = new mapstate.Service(mapstateStore, {
+    // Default map state
+    lat: 61.0,
+    lng: 24.0,
+    zoom: 6,
+    // 'hybrid' is darker and more practical than 'roadmap'
+    mapTypeId: 'hybrid',
+  });
+
+  var defaultMapstate = mapstateService.getState();
+  var mapController = new maps.Controller(mapElement, defaultMapstate);
+
+  mapstateService.listen(mapController.getMap());
+
+  var addMainMenu = function () {
+    var mainMenu = new menus.MainMenu(router, authService);
+
+    mapController.addControl(mainMenu.render(), function (root) {
+      // Special bind handling: addControl cannot add content to dom instantly.
+      mainMenu.bind(root);
+    });
+  };
+
+  var addLocations = function () {
+    locationsService.fetchAll(function (err, locs) {
+      if (err) {
+        console.error(err);
+
+        return;
+      }  // else
+
+      mapController.locations.add(locs);
+    });
+  };
+
+  // Bind menu to auth events.
+  authService.on('login', addMainMenu);
+  authService.on('logout', function () {
+    mapController.removeControls();
+  });
+
+  // Bind map locations to auth events.
+  authService.on('login', addLocations);
+  authService.on('logout', function () {
+    mapController.locations.removeAll();
+  });
+
+  // Init mainmenu and locations if user logged in
+  if (authService.isLoggedIn()) {
+    addLocations();
+    addMainMenu();
+  }
+
+};
+
 
 // What to show first:
 //   If about to reset password
@@ -28,50 +160,16 @@ var card = new CardController();
 //     Show set account form.
 //   If not logged in
 //     Show login form
-var parsedHash = queryString.parse(location.hash);
-
-// parsedHash does not have prototype, thus complicated call.
-var has = Object.prototype.hasOwnProperty;
-
-if (has.call(parsedHash, 'reset')) {
+if (navService.hash.has('reset')) {
   // User has reseted a password. Display password reset form.
-
-  // eslint-disable-next-line no-new
-  new ResetFormController(card, auth, parsedHash.reset);
-} else if (has.call(parsedHash, 'invite')) {
+  router.go('resetPassword');
+} else if (navService.hash.has('invite')) {
   // User has been invited. Display sign up form.
-
-  // eslint-disable-next-line no-new
-  new SignUpFormController(card, auth, parsedHash.invite);
-} else if (!auth.hasToken()) {
+  router.go('signup');
+} else if (authService.isLoggedIn()) {
+  // Logged in user goes straight to map.
+  router.go('map');
+} else {
   // Display login form and hide the map under it.
-
-  // eslint-disable-next-line no-new
-  new LoginFormController(card, auth);
+  router.go('login');
 }
-
-// Display login form if user logs out.
-auth.on('logout', function () {
-  // eslint-disable-next-line no-new
-  new LoginFormController(card, auth);
-});
-
-// Function initMap is called as jsonp call after Google Maps JS script is
-// loaded.
-window.initMap = function () {
-  var map = new MapController(socket, auth);
-
-  // eslint-disable-next-line no-new
-  new MenuController(map, card, auth);
-
-  // Remember map view state (center, zoom, type...)
-  // Default to southern Finland.
-  var stateStore = new MapStateStore(window.localStorage);
-  // eslint-disable-next-line no-unused-vars
-  var stateManager = new MapStateManager(map, stateStore, {
-    lat: 61.0,
-    lng: 24.0,
-    zoom: 6,
-    mapTypeId: 'hybrid',
-  });
-};

@@ -12,7 +12,7 @@ var jwtDecode = require('jwt-decode');
 
 var TOKEN_KEY = 'tresdb-session-token';
 
-module.exports = function AuthController(socket, storage) {
+module.exports = function (socket, storage) {
   // Parameters:
   //   socket
   //   storage
@@ -201,7 +201,7 @@ module.exports = function AuthController(socket, storage) {
     });
   };
 
-  this.hasToken = function () {
+  this.isLoggedIn = function () {
     // True if user is authenticated.
 
     if (storage.getItem(TOKEN_KEY) !== null) {
@@ -212,20 +212,27 @@ module.exports = function AuthController(socket, storage) {
   };
 
   this.getToken = function () {
-    // Can be called only if hasToken.
-    if (!this.hasToken()) {
+    // Can be called only if isLoggedIn.
+    if (!this.isLoggedIn()) {
       throw new Error('The token is missing.');
     }
 
     return storage.getItem(TOKEN_KEY);
   };
 
-  this.getPayload = function () {
-    // Can be called only if hasToken.
-    if (!this.hasToken()) {
+  this.getUser = function () {
+    // Get user object:
+    // {
+    //   name: <string>
+    //   email: <string>
+    //   admin: <bool>
+    // }
+    //
+    // Can be called only if isLoggedIn.
+    if (!this.isLoggedIn()) {
       throw new Error('Cannot get payload because missing token.');
     }
 
-    return jwtDecode(this.getToken());
+    return jwtDecode(storage.getItem(TOKEN_KEY));
   };
 };

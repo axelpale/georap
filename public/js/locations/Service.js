@@ -1,12 +1,11 @@
-var Emitter = require('component-emitter');
+
 
 module.exports = function (socket, auth) {
-  Emitter(this);
-  var self = this;
+
 
   // Public methods
 
-  this.fetchAll = function () {
+  this.fetchAll = function (callback) {
     // Get all locations from server.
 
     var payload = { token: auth.getToken() };
@@ -15,10 +14,14 @@ module.exports = function (socket, auth) {
       if (response.hasOwnProperty('locations')) {
         // Successful fetch.
         // Inform about new data.
-        self.emit('update', response.locations);
-      } else if (response.hasOwnProperty('error')) {
-        self.emit('error', new Error(response.error));
-      }
+        return callback(null, response.locations);
+      }  // else
+
+      if (response.hasOwnProperty('error')) {
+        return callback(new Error(response.error));
+      } // else
+
+      throw new Error('invalid server response');
     });
   };
 
@@ -26,8 +29,4 @@ module.exports = function (socket, auth) {
     // TODO
   };
 
-  this.removeAll = function () {
-    // Clear all data. Handy when user logs out.
-    self.emit('update', []);
-  };
 };
