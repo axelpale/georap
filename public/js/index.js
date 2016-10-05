@@ -1,5 +1,7 @@
 
 var io = require('socket.io-client');
+var page = require('page');
+
 var auth = require('./auth');
 var locations = require('./locations');
 var mapstate = require('./mapstate');
