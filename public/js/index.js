@@ -1,6 +1,7 @@
 
 var io = require('socket.io-client');
 var page = require('page');
+var queryString = require('query-string');
 
 var auth = require('./auth');
 var locations = require('./locations');
@@ -37,6 +38,15 @@ var card = new cards.Controller(function onUserClose() {
 
 // Public routes first.
 
+page('*', function parseQueryString(context, next) {
+  // Note: context.query does not have prototype. Bastard.
+  var q = queryString.parse(context.querystring);
+
+  // If querystring is empty, parse returns object without properties. Tested.
+  context.query = q;
+  next();
+});
+
 page('/login', function () {
   // Logout should be immediate; no reason to show progress bar.
   authService.logout(function () {
@@ -70,6 +80,21 @@ page('/signup/:token', function (context) {
   signupForm.bind();
 });
 
+// Backwards compatiblity: invite URLs
+page('*', function (context, next) {
+  var q = context.query;
+
+  if ('invite' in q) {
+    return page.show('/signup/' + q.invite);
+  }  // else
+
+  if ('reset' in q) {
+    return page.show('/reset/' + q.reset);
+  }  // else
+
+  return next();
+});
+
 // Routes that require login
 
 page('*', function (context, next) {
@@ -100,6 +125,10 @@ page('/invite', function () {
   card.open(inviteForm.render(), 'page');
   inviteForm.bind();
 });
+
+//page('*', function () {
+//  page('/');
+//});
 
 page.start();
 
