@@ -5,6 +5,7 @@ var io = require('socket.io')(server);
 var nodemailer = require('nodemailer');
 var local = require('./config/local');
 var monk = require('monk');
+var path = require('path');
 
 var webpack = require('webpack');
 var webpackConfig = require('./config/webpack');
@@ -12,13 +13,14 @@ var webpackConfig = require('./config/webpack');
 // Run immediately after server is up.
 var bootstrap = require('./config/bootstrap');
 
-var AuthController = require('./api/controllers/auth');
-var LocationsController = require('./api/controllers/locations');
+var authController = require('./api/controllers/auth');
+var locationsController = require('./api/controllers/locations');
+
 
 // Controllers setup
 var controllers = {
-  auth: AuthController,
-  locations: LocationsController,
+  auth: authController,
+  locations: locationsController,
 };
 
 
@@ -130,9 +132,12 @@ if (local.env === 'development') {
 // Static assets END
 
 
-//app.get('/', function (req, res) {
-//  res.send('Hello World!');
-//});
+// Catch all to single page app.
+// Must be the final step in the app middleware chain.
+// Note: the url /index.html is served via webpack in dev.
+app.get('/*', function (req, res) {
+  res.sendFile(path.resolve(__dirname, 'public', 'index.html'));
+});
 
 
 // Socket.io routing

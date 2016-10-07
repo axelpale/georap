@@ -1,7 +1,7 @@
 {
   "name": "tresdb",
   "private": true,
-  "version": "0.1.1",
+  "version": "1.0.0",
   "description": "Esoteric location CMS built on Express",
   "keywords": [
     "GIS",
@@ -19,7 +19,8 @@
     "test:api": "mocha specs/api/auth.spec.js",
     "test:client": "casperjs test specs/client/test-login.js",
     "lint": "eslint --config ./config/eslint.js . && echo 'Lint successful.'",
-    "mongo": "mkdir -p .data/db && mongod --dbpath=.data/db",
+    "mongo": "mongo tresdb",
+    "mongod": "mkdir -p .data/db && mongod --auth --dbpath=.data/db",
     "reset": "rm -rf .data"
   },
   "author": "Akseli Palén <akseli.palen@gmail.com>",
@@ -39,6 +40,7 @@
     "mongodb": "^2.2.9",
     "monk": "^3.1.2",
     "nodemailer": "^2.6.0",
+    "page": "^1.7.1",
     "query-string": "^4.2.3",
     "socket.io": "^1.4.8",
     "socket.io-client": "^1.4.8",

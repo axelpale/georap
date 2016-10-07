@@ -1,0 +1,1 @@
+exports.MainMenu = require('./MainMenu');

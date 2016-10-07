@@ -12,8 +12,7 @@ module.exports = {
     'commonjs': true,
   },
   'globals': {
-    // place settings for globals here, such as
-    'google': true,
+    // place settings for globals here
     '$': true,
   },
 

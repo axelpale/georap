@@ -1,6 +1,6 @@
 
 // Templates
-var searchTemplate = require('../templates/search.ejs');
+var searchTemplate = require('../../templates/search.ejs');
 
 module.exports = function (card) {
   // Parameters:

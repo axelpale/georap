@@ -1,7 +1,7 @@
 
-var cardTemplate = require('../templates/card.ejs');
+var cardTemplate = require('../../templates/card.ejs');
 
-module.exports = function () {
+module.exports = function (onUserClose) {
 
   // Constants
   var cardLayer = document.getElementById('card-layer');
@@ -42,7 +42,7 @@ module.exports = function () {
     //         A fraction of the map is visible.
     //       full
     //         Fills the map area completely.
-    var card, bg, cardType;
+    var card, cardType;
 
     // Handle default parameters
     if (typeof cardClass === 'undefined') {
@@ -65,22 +65,18 @@ module.exports = function () {
 
     // Initialize close mechanism
     if (cardType === 'page') {
-      bg = this.findElementById('card-background');
-      bg.addEventListener('click', function () {
-        self.closeAll();
+      $('#card-background').click(function () {
+        self.close();
+
+        return onUserClose();
       });
     }
   };
 
-  this.closeAll = function () {
+  this.close = function () {
     cardLayer.style.display = 'none';
     // Remove possible cards
     clearCardLayer();
   };
 
-  this.findElementById = function (id) {
-    // Return
-    //   HTMLElement
-    return $(cardLayer).find('#' + id).get(0);
-  };
 };

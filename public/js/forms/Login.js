@@ -1,19 +1,52 @@
 var validator = require('email-validator');
 
 // Templates
-var loginTemplate = require('../templates/login.ejs');
+var loginTemplate = require('../../templates/forms/login.ejs');
 
-module.exports = function (card, auth) {
+module.exports = function (auth, onSuccess) {
   // Parameters:
-  //   card
-  //     Instance of CardController.
-  //     To close login form card on successful login.
   //   auth
-  //     Instance of AuthController.
+  //     Instance of auth.Service.
+  //   onSuccess
+  //
 
-  card.open(loginTemplate(), 'full');
+  // Private methods.
 
-  $('#tresdb-login-form').submit(function (ev) {
+  var loginResponseHandler = function (err) {
+    if (err === null) {
+      // Successful login
+      return onSuccess();
+    }  // else
+
+    // Hide the progress bar
+    $('#tresdb-login-in-progress').addClass('hidden');
+
+    if (err.name === 'UnknownEmailError') {
+      // Show error
+      $('#tresdb-login-unknown-email').removeClass('hidden');
+      // Show forms
+      $('#tresdb-login-form').removeClass('hidden');
+      $('#tresdb-password-reset').removeClass('hidden');
+
+      return;
+    }  // else
+
+    if (err.name === 'IncorrectPasswordError') {
+      // Show error
+      $('#tresdb-login-incorrect-password').removeClass('hidden');
+      // Show forms
+      $('#tresdb-login-form').removeClass('hidden');
+      $('#tresdb-password-reset').removeClass('hidden');
+
+      return;
+    }  // else
+
+    // Show mystery error message. Do not show login form because
+    // the issue is probably long-lasting.
+    $('#tresdb-login-server-error').removeClass('hidden');
+  };
+
+  var loginFormSubmitHandler = function (ev) {
     ev.preventDefault();
 
     // Get the input values
@@ -50,45 +83,10 @@ module.exports = function (card, auth) {
     // Hide the password reset form
     $('#tresdb-password-reset').addClass('hidden');
 
-    auth.login(email, password, function (err) {
-      if (err === null) {
-        // Successful login
-        card.closeAll();
+    auth.login(email, password, loginResponseHandler);
+  };
 
-        return;
-      }  // else
-
-      // Hide the progress bar
-      $('#tresdb-login-in-progress').addClass('hidden');
-
-      if (err.name === 'UnknownEmailError') {
-        // Show error
-        $('#tresdb-login-unknown-email').removeClass('hidden');
-        // Show forms
-        $('#tresdb-login-form').removeClass('hidden');
-        $('#tresdb-password-reset').removeClass('hidden');
-
-        return;
-      }  // else
-
-      if (err.name === 'IncorrectPasswordError') {
-        // Show error
-        $('#tresdb-login-incorrect-password').removeClass('hidden');
-        // Show forms
-        $('#tresdb-login-form').removeClass('hidden');
-        $('#tresdb-password-reset').removeClass('hidden');
-
-        return;
-      }  // else
-
-      // Show mystery error message. Do not show login form because
-      // the issue is probably long-lasting.
-      $('#tresdb-login-server-error').removeClass('hidden');
-    });
-  });
-
-
-  $('#tresdb-password-reset-button').click(function (ev) {
+  var resetButtonHandler = function (ev) {
     // Open the reset form.
     // Autofill reset email field if email already given.
     ev.preventDefault();
@@ -100,9 +98,24 @@ module.exports = function (card, auth) {
     if (loginEmail !== '') {
       $('#tresdb-password-reset-email').val(loginEmail);
     }
-  });
+  };
 
-  $('#tresdb-password-reset-form').submit(function (ev) {
+  var resetResponseHandler = function (err) {
+    // Hide the progress bar
+    $('#tresdb-password-reset-in-progress').addClass('hidden');
+
+    if (err) {
+      // Display error message
+      $('#tresdb-password-reset-server-error').removeClass('hidden');
+
+      return;
+    }  // else
+
+    // Success. Display success message. Keep the form hidden.
+    $('#tresdb-password-reset-success').removeClass('hidden');
+  };
+
+  var resetFormSubmitHandler = function (ev) {
     ev.preventDefault();
 
     // Get input values
@@ -129,19 +142,19 @@ module.exports = function (card, auth) {
     // Hide the form
     $('#tresdb-password-reset-form').addClass('hidden');
 
-    auth.sendResetPasswordEmail(resetEmail, function (err) {
-      // Hide the progress bar
-      $('#tresdb-password-reset-in-progress').addClass('hidden');
+    auth.sendResetPasswordEmail(resetEmail, resetResponseHandler);
+  };
 
-      if (err) {
-        // Display error message
-        $('#tresdb-password-reset-server-error').removeClass('hidden');
+  // Public methods
 
-        return;
-      }  // else
+  this.render = function () {
+    return loginTemplate();
+  };
 
-      // Success. Display success message. Keep the form hidden.
-      $('#tresdb-password-reset-success').removeClass('hidden');
-    });
-  });
+  this.bind = function () {
+    $('#tresdb-login-form').submit(loginFormSubmitHandler);
+    $('#tresdb-password-reset-button').click(resetButtonHandler);
+    $('#tresdb-password-reset-form').submit(resetFormSubmitHandler);
+  };
+
 };
