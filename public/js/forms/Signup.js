@@ -5,14 +5,14 @@ var jwtDecode = require('jwt-decode');
 // Templates
 var signupTemplate = require('../../templates/forms/signup.ejs');
 
-module.exports = function (router, auth, token) {
+module.exports = function (auth, token, goLogin) {
   // Parameters:
-  //   router
-  //     routers.Router instance
   //   auth
   //     Instance of auth.Service.
   //   token
   //     The invitation token the user received by email.
+  //   goLogin
+  //     function (): will ask router to go to login
 
   // Init
 
@@ -35,7 +35,7 @@ module.exports = function (router, auth, token) {
     $('#tresdb-signup-to-login-button').click(function (ev) {
       ev.preventDefault();
       // Open login form
-      router.go('login');
+      goLogin();
     });
     $('#tresdb-signup-form').submit(submitHandler);
   };

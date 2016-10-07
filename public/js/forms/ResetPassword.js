@@ -5,7 +5,14 @@ var jwtDecode = require('jwt-decode');
 // Templates
 var resetFormTemplate = require('../../templates/forms/resetPassword.ejs');
 
-module.exports = function (router, auth, token) {
+module.exports = function (auth, token, showLogin) {
+  // Parameters
+  //   auth
+  //     instance of auth.Service
+  //   token
+  //     string
+  //   showLogin
+  //     function ()
 
   var parsedToken = jwtDecode(token);
   // Note: server will check if token still fresh. No need to check it here
@@ -29,7 +36,8 @@ module.exports = function (router, auth, token) {
     // Initialize log in button that will be shown after successful reset.
     $('#tresdb-continue-to-login-button').click(function (ev) {
       ev.preventDefault();
-      router.go('login');
+
+      return showLogin();
     });
 
     $('#tresdb-reset-password-form').submit(submitHandler);

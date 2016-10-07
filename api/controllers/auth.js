@@ -311,7 +311,7 @@ exports.sendResetPasswordEmail = function (db, mailer, host, data, response) {
     var token = jwt.sign(tokenPayload, local.secret, {
       expiresIn: '30m',
     });
-    var url = 'http://' + host + '/#reset=' + token;
+    var url = 'http://' + host + '/reset/' + token;
 
     var mailOptions = {
       from: local.mail.sender,
@@ -467,7 +467,7 @@ exports.sendInviteEmail = function (db, mailer, host, data, response) {
       var token = jwt.sign(tokenPayload, local.secret, {
         expiresIn: '7d',
       });
-      var url = 'http://' + host + '/#invite=' + token;
+      var url = 'http://' + host + '/signup/' + token;
 
       var mailOptions = {
         from: local.mail.sender,

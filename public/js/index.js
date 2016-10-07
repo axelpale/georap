@@ -5,12 +5,10 @@ var page = require('page');
 var auth = require('./auth');
 var locations = require('./locations');
 var mapstate = require('./mapstate');
-var navigation = require('./navigation');
 var maps = require('./maps');
 var menus = require('./menus');
 var cards = require('./cards');
 var forms = require('./forms');
-var routers = require('./routers');
 
 
 // Websocket connection and connection error handling
@@ -30,57 +28,80 @@ var locationsService = new locations.Service(socket, authService);
 
 
 // A card can be used to display content.
-var card = new cards.Controller();
+var card = new cards.Controller(function onUserClose() {
+  page.show('/');
+});
 
 
-// Set up routes
-var navService = new navigation.Service();
-var router = new routers.Router(navService);
+//// Routes ////
 
-router.route('login', function () {
+// Public routes first.
+
+page('/login', function () {
+  // Logout should be immediate; no reason to show progress bar.
   authService.logout(function () {
-    // Should be immediate; no reason to show progress bar.
-    var loginForm = new forms.Login(router, authService);
+    var loginForm = new forms.Login(authService, function onSuccess() {
+      // After successful login, go to map
+      page.show('/');
+    });
 
     card.open(loginForm.render(), 'full');
     loginForm.bind();
   });
 });
 
-router.route('map', function () {
+page('/reset/:token', function (context) {
+  var token = context.params.token;
+  var form = new forms.ResetPassword(authService, token, function success() {
+    page.show('/login');
+  });
+
+  card.open(form.render(), 'full');
+  form.bind();
+});
+
+page('/signup/:token', function (context) {
+  var token = context.params.token;
+  var signupForm = new forms.Signup(authService, token, function success() {
+    page.show('/login');
+  });
+
+  card.open(signupForm.render(), 'full');
+  signupForm.bind();
+});
+
+// Routes that require login
+
+page('*', function (context, next) {
+  //   If not logged in
+  //     Show login form
+  if (authService.isLoggedIn()) {
+    return next();
+  }  // else
+
+  page.show('/login');
+});
+
+page('/', function () {
   // Map is always open on the background.
   card.close();
 });
 
-router.route('changePassword', function () {
+page('/password', function () {
   var changePasswordForm = new forms.ChangePassword(authService);
 
   card.open(changePasswordForm.render(), 'page');
   changePasswordForm.bind();
 });
 
-router.route('invite', function () {
+page('/invite', function () {
   var inviteForm = new forms.Invite(authService);
 
   card.open(inviteForm.render(), 'page');
   inviteForm.bind();
 });
 
-router.route('resetPassword', function () {
-  var token = navService.hash.get('reset');
-  var resetPasswordForm = new forms.ResetPassword(router, authService, token);
-
-  card.open(resetPasswordForm.render(), 'full');
-  resetPasswordForm.bind();
-});
-
-router.route('signup', function () {
-  var token = navService.hash.get('invite');
-  var signupForm = new forms.Signup(router, authService, token);
-
-  card.open(signupForm.render(), 'full');
-  signupForm.bind();
-});
+page.start();
 
 
 // Function initMap is called as jsonp call after Google Maps JS script is
@@ -114,7 +135,9 @@ window.initMap = function () {
   mapstateService.listen(mapController.getMap());
 
   var addMainMenu = function () {
-    var mainMenu = new menus.MainMenu(router, authService);
+    var mainMenu = new menus.MainMenu(authService, function go(path) {
+      return page.show(path);
+    });
 
     mapController.addControl(mainMenu.render(), function (root) {
       // Special bind handling: addControl cannot add content to dom instantly.
@@ -153,25 +176,3 @@ window.initMap = function () {
   }
 
 };
-
-
-// What to show first:
-//   If about to reset password
-//     Show reset form.
-//   If arrived through invite link
-//     Show set account form.
-//   If not logged in
-//     Show login form
-if (navService.hash.has('reset')) {
-  // User has reseted a password. Display password reset form.
-  router.go('resetPassword');
-} else if (navService.hash.has('invite')) {
-  // User has been invited. Display sign up form.
-  router.go('signup');
-} else if (authService.isLoggedIn()) {
-  // Logged in user goes straight to map.
-  router.go('map');
-} else {
-  // Display login form and hide the map under it.
-  router.go('login');
-}

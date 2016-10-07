@@ -1,12 +1,13 @@
 var mainmenuTemplate = require('../../templates/menus/mainmenu.ejs');
 var glyphiconTemplate = require('../../templates/glyphicon.ejs');
 
-module.exports = function (router, auth) {
+module.exports = function (auth, go) {
   // Parameters:
-  //   router
-  //     instance of router.Router
   //   auth
   //     instance of auth.Service
+  //   go
+  //     function go(path): ask router to go to path. Is a way to expose the
+  //     router for the menu.
 
 
   // Public methods
@@ -36,17 +37,20 @@ module.exports = function (router, auth) {
 
     r.on('click', '#tresdb-mainmenu-change-password', function (ev) {
       ev.preventDefault();
-      router.go('changePassword');
+
+      return go('/password');
     });
 
     r.on('click', '#tresdb-mainmenu-invite', function (ev) {
       ev.preventDefault();
-      router.go('invite');
+
+      return go('/invite');
     });
 
     r.on('click', '#tresdb-mainmenu-logout', function (ev) {
       ev.preventDefault();
-      router.go('login');
+
+      return go('/login');
     });
   };
 };

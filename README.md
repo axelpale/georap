@@ -123,7 +123,7 @@ Development tools:
 
 On the master branch, we use the [semantic versioning](http://semver.org/) scheme. The semantic version increments are bound to the operations you need to do when upgrading your TresDB instance:
 
-- MAJOR (+1.0.0) denotes a new incompatible feature. A database migration is required after upgrade.
+- MAJOR (+1.0.0) denotes a new incompatible feature. A database migration might be required after upgrade. Hyperlinks of earlier versions might not work.
 - MINOR (+0.1.0) denotes a new backwards-compatible feature. Upgrading directly from the Git should not break anything.
 - PATCH (+0.0.1) denotes a backwards-compatible bug fix. Upgrading or downgrading directly from the Git should not break anything.
 
@@ -132,7 +132,7 @@ On the master branch, we use the [semantic versioning](http://semver.org/) schem
 
 Report bugs and features to [GitHub issues](https://github.com/axelpale/tresdb/issues).
 
-The issue labels follow [Drupal's issue priority levels](https://www.drupal.org/core/issue-priority): critical, major, normal, and minor. 
+The issue labels follow [Drupal's issue priority levels](https://www.drupal.org/core/issue-priority): critical, major, normal, and minor.
 
 
 ## License

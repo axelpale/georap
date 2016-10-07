@@ -3,21 +3,19 @@ var validator = require('email-validator');
 // Templates
 var loginTemplate = require('../../templates/forms/login.ejs');
 
-module.exports = function (router, auth) {
+module.exports = function (auth, onSuccess) {
   // Parameters:
-  //   router
-  //     Instance of routers.Router
   //   auth
   //     Instance of auth.Service.
+  //   onSuccess
+  //
 
   // Private methods.
 
   var loginResponseHandler = function (err) {
     if (err === null) {
       // Successful login
-      router.go('map');
-
-      return;
+      return onSuccess();
     }  // else
 
     // Hide the progress bar

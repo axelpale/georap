@@ -1,7 +1,7 @@
 
 var cardTemplate = require('../../templates/card.ejs');
 
-module.exports = function () {
+module.exports = function (onUserClose) {
 
   // Constants
   var cardLayer = document.getElementById('card-layer');
@@ -67,6 +67,8 @@ module.exports = function () {
     if (cardType === 'page') {
       $('#card-background').click(function () {
         self.close();
+
+        return onUserClose();
       });
     }
   };

@@ -5,6 +5,7 @@ var io = require('socket.io')(server);
 var nodemailer = require('nodemailer');
 var local = require('./config/local');
 var monk = require('monk');
+var path = require('path');
 
 var webpack = require('webpack');
 var webpackConfig = require('./config/webpack');
@@ -131,9 +132,12 @@ if (local.env === 'development') {
 // Static assets END
 
 
-//app.get('/', function (req, res) {
-//  res.send('Hello World!');
-//});
+// Catch all to single page app.
+// Must be the final step in the app middleware chain.
+// Note: the url /index.html is served via webpack in dev.
+app.get('/*', function (req, res) {
+  res.sendFile(path.resolve(__dirname, 'public', 'index.html'));
+});
 
 
 // Socket.io routing
