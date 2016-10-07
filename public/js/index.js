@@ -36,6 +36,26 @@ var card = new cards.Controller(function onUserClose() {
 
 //// Routes ////
 
+// State
+
+var afterLogin = (function () {
+  var DEFAULT_PATH = '/';
+  var path = DEFAULT_PATH;
+
+  return {
+    get: function () {
+      return path;
+    },
+    set: function (ctx) {
+      path = ctx.canonicalPath;
+    },
+    reset: function () {
+      path = DEFAULT_PATH;
+    },
+  };
+}());
+
+
 // Public routes first.
 
 page('*', function parseQueryString(context, next) {
@@ -51,8 +71,10 @@ page('/login', function () {
   // Logout should be immediate; no reason to show progress bar.
   authService.logout(function () {
     var loginForm = new forms.Login(authService, function onSuccess() {
-      // After successful login, go to map
-      page.show('/');
+      // After successful login, go to original path.
+      page.show(afterLogin.get());
+      // Reset for another login during the same session.
+      afterLogin.reset();
     });
 
     card.open(loginForm.render(), 'full');
@@ -103,6 +125,9 @@ page('*', function (context, next) {
   if (authService.isLoggedIn()) {
     return next();
   }  // else
+
+  // Remember original path
+  afterLogin.set(context);
 
   page.show('/login');
 });
