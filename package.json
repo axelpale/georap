@@ -19,7 +19,8 @@
     "test:api": "mocha specs/api/auth.spec.js",
     "test:client": "casperjs test specs/client/test-login.js",
     "lint": "eslint --config ./config/eslint.js . && echo 'Lint successful.'",
-    "mongo": "mkdir -p .data/db && mongod --auth --dbpath=.data/db",
+    "mongo": "mongo tresdb",
+    "mongod": "mkdir -p .data/db && mongod --auth --dbpath=.data/db",
     "reset": "rm -rf .data"
   },
   "author": "Akseli Palén <akseli.palen@gmail.com>",
