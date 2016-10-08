@@ -191,6 +191,7 @@ window.initMap = function () {
   var defaultMapstate = mapstateService.getState();
   var mapController = new maps.Controller(mapElement, defaultMapstate);
 
+  // Start tracking for the last known state.
   mapstateService.listen(mapController.getMap());
 
   var addMainMenu = function () {
