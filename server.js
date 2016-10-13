@@ -96,8 +96,10 @@ if (local.env === 'development') {
   var webpackMiddleware = require('webpack-dev-middleware');
 
   app.use(webpackMiddleware(webpack(webpackConfig), {
+    // publicPath is required. Use same as in webpackConfig.
+    // See https://github.com/webpack/webpack-dev-middleware
+    publicPath: local.staticUrl,
     noInfo: true,
-    publicPath: '/',
     stats: { colors: true },
   }));
   console.log('Webpack listening for file changes...');
@@ -130,7 +132,7 @@ if (local.env === 'development') {
     }));
     // See https://webpack.github.io/docs/node.js-api.html#error-handling
   });
-  app.use(express.static(local.staticDir));
+  app.use(local.staticUrl, express.static(local.staticDir));
   console.log('Serving static files in', local.staticDir);
 }
 // -------------

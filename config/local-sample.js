@@ -6,9 +6,11 @@ module.exports = {
   // Used to encrypt and decrypt passwords and tokens.
   secret: '123456789',
 
-  // Static file directory.
-  // Express will serve static files in this directory.
+  // Static files
+  // Express/Webpack will copy the static files to be served to this directory:
   staticDir: path.resolve(__dirname, '../.tmp/public'),
+  // URLs of the the static files are prefixed with this static URL root path:
+  staticUrl: '/assets',
 
   // HTTPS
   // TresDB itself uses only HTTP. However if TresDB is running behind

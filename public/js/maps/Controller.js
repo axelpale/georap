@@ -38,6 +38,52 @@ module.exports = function (htmlElement, defaultMapstate) {
     },
   });
 
+  // Show current location on the map
+  if ('geolocation' in navigator) {
+    console.log('Navigator has geolocation');
+    (function () {
+      var m, update, icon, geoSuccess, geoError;
+      var SIZE = 32;
+
+      icon = {
+        url: '/assets/images/mapicons/mylocation.png',
+        size: new google.maps.Size(SIZE, SIZE),
+        origin: new google.maps.Point(0, 0),
+        anchor: new google.maps.Point(SIZE / 2, SIZE / 2),
+      };
+
+      m = new google.maps.Marker({
+        position: new google.maps.LatLng(0.0, 0.0),
+        map: map,
+        icon: icon,
+      });
+
+      update = function (lat, lng) {
+        console.log(lat, lng);
+        m.setPosition({
+          lat: lat,
+          lng: lng,
+        });
+      };
+
+      geoSuccess = function (position) {
+        console.log('geoSuccess');
+        update(position.coords.latitude, position.coords.longitude);
+      };
+
+      geoError = function (err) {
+        console.log('ERROR(' + err.code + '): ' + err.message);
+      };
+
+      //console.log('getCurrentPosition');
+      //navigator.geolocation.getCurrentPosition(geoSuccess, geoError);
+      console.log('watchPosition');
+      navigator.geolocation.watchPosition(geoSuccess, geoError);
+    }());
+  } else {
+    console.log('No navigator.geolocation available');
+  }
+
 
   // Private methods declaration
 
