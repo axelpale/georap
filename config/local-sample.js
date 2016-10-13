@@ -6,9 +6,20 @@ module.exports = {
   // Used to encrypt and decrypt passwords and tokens.
   secret: '123456789',
 
-  // Static file directory.
-  // Express will serve static files in this directory.
+  // Static files
+  // Express/Webpack will copy the static files to be served to this directory:
   staticDir: path.resolve(__dirname, '../.tmp/public'),
+  // URLs of the the static files are prefixed with this static URL root path:
+  staticUrl: '/assets',
+
+  // HTTPS
+  // TresDB itself uses only HTTP. However if TresDB is running behind
+  // a TLS-endpoint reverse-proxy like Nginx, the protocol appears to be
+  // HTTPS for the users. Hyperlinks in emails such as invites and password
+  // resets should then use HTTPS instead HTTP.
+  // By setting publicProtocol property to 'https' instead 'http', HTTPS
+  // is used in the links instead HTTP.
+  publicProtocol: 'https',
 
   // Port for server to listen
   port: 3000,

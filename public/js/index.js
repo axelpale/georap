@@ -10,6 +10,7 @@ var maps = require('./maps');
 var menus = require('./menus');
 var cards = require('./cards');
 var forms = require('./forms');
+var errors = require('./errors');
 
 
 // Websocket connection and connection error handling
@@ -151,9 +152,13 @@ page('/invite', function () {
   inviteForm.bind();
 });
 
-//page('*', function () {
-//  page('/');
-//});
+page('*', function () {
+  // Page not found.
+  var error404 = new errors.Error404();
+
+  card.open(error404.render(), 'page');
+  error404.bind();
+});
 
 page.start();
 
@@ -186,6 +191,7 @@ window.initMap = function () {
   var defaultMapstate = mapstateService.getState();
   var mapController = new maps.Controller(mapElement, defaultMapstate);
 
+  // Start tracking for the last known state.
   mapstateService.listen(mapController.getMap());
 
   var addMainMenu = function () {

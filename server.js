@@ -1,10 +1,15 @@
+
+var local = require('./config/local');
+var http = require('http');
 var express = require('express');
 var app = express();
-var server = require('http').Server(app);  // eslint-disable-line new-cap
+
+var server = http.createServer(app);
 var io = require('socket.io')(server);
+
 var nodemailer = require('nodemailer');
-var local = require('./config/local');
 var monk = require('monk');
+
 var path = require('path');
 
 var webpack = require('webpack');
@@ -91,8 +96,10 @@ if (local.env === 'development') {
   var webpackMiddleware = require('webpack-dev-middleware');
 
   app.use(webpackMiddleware(webpack(webpackConfig), {
+    // publicPath is required. Use same as in webpackConfig.
+    // See https://github.com/webpack/webpack-dev-middleware
+    publicPath: local.staticUrl,
     noInfo: true,
-    publicPath: '/',
     stats: { colors: true },
   }));
   console.log('Webpack listening for file changes...');
@@ -125,7 +132,7 @@ if (local.env === 'development') {
     }));
     // See https://webpack.github.io/docs/node.js-api.html#error-handling
   });
-  app.use(express.static(local.staticDir));
+  app.use(local.staticUrl, express.static(local.staticDir));
   console.log('Serving static files in', local.staticDir);
 }
 // -------------
