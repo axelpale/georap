@@ -10,13 +10,21 @@ var PROD = (local.env === 'production');
 
 // compile js assets into a single bundle file
 module.exports = {
-  devtool: 'source-map',
-  entry: [
-    path.resolve(__dirname, '../public/index.js'),
-  ],
+
+  // Context: the directory for Webpack to look for assets.
+  context: path.resolve(__dirname, '../public'),
+
+  // Entry: the main file that requires all others. Relative to the context.
+  entry: './index.js',
+
+  // Output: where to store the generated files.
   output: {
+    // Directory to which the compiled static files will be stored.
     path: local.staticDir,
-    filename: 'js/app.bundle.js',
+    // Root url from which the static files are served.
+    publicPath: local.staticUrl,
+    // The name of the bundle and its source maps.
+    filename: './app.bundle.js',
     sourceMapFilename: '[file].map',
   },
 
@@ -30,8 +38,14 @@ module.exports = {
         test: /\.ejs$/,
         loader: 'ejs-loader',
       },
+      {
+        test: /\.jpe?g$|\.gif$|\.png$/i,
+        loader: 'file-loader?name=[path][name].[ext]',
+      },
     ],
   },
+
+  devtool: 'source-map',
 
   plugins: PROD ? [
     new webpack.optimize.UglifyJsPlugin(),

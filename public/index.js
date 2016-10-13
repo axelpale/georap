@@ -11,10 +11,14 @@
 require('./styles/style.css');
 
 // Favicon
-require('file?name=images/logo/16.png!./images/logo/16.png');
+require('./images/logo/16.png');
 
-// Logo
-require('file?name=images/logo/32.png!./images/logo/32.png');
+// Main menu logo
+require('./images/logo/32.png');
+
+// Custom markers
+// eslint-disable-next-line max-len
+require('./images/mapicons/mylocation.png');
 
 // JavaScript
 require('./js/index.js');
