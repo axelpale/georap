@@ -119,6 +119,11 @@ Development tools:
 - [Mocha](https://mochajs.org/)
 - [Should](http://shouldjs.github.io/)
 
+For production, we recommend:
+
+- [DigitalOcean](https://m.do.co/c/3e63e3de8e31)
+- [Nginx](https://www.nginx.com/)
+- [Let's Encrypt](https://letsencrypt.org/)
 
 
 ## Versioning
