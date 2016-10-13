@@ -1,5 +1,11 @@
 var path = require('path');
 
+// First, we ensure that local.js is not accidentally included in
+// client code, even in the weird case that the path module is available.
+if (typeof window !== 'undefined') {
+  throw new Error('Local.js leaked into client-side code.');
+}
+
 module.exports = {
 
   // Site secret. CHANGE! DO NOT EXPOSE TO CLIENT!
