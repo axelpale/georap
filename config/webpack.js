@@ -54,10 +54,7 @@ module.exports = {
     new webpack.NoErrorsPlugin(),
   ],
 
-  watch: true,
-
-  // docs: https://webpack.github.io/docs/node.js-api.html#compiler
-  watchOptions: {
-    aggregateTimeout: 300,
-  },
+  // Watch is not used because in 'development' env, webpack-dev-middleware
+  // does the watching. In 'production' we want webpack to run only once.
+  // watch: true,
 };
