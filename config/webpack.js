@@ -39,7 +39,7 @@ module.exports = {
         loader: 'ejs-loader',
       },
       {
-        test: /\.jpe?g$|\.gif$|\.png$/i,
+        test: /\.(jpe?g|gif|png)$/i,
         loader: 'file-loader?name=[path][name].[ext]',
       },
     ],
