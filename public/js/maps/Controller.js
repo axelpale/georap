@@ -46,7 +46,7 @@ module.exports = function (htmlElement, defaultMapstate) {
       var SIZE = 32;
 
       icon = {
-        url: '/images/mapicons/mylocation.png',
+        url: '/assets/images/mapicons/mylocation.png',
         size: new google.maps.Size(SIZE, SIZE),
         origin: new google.maps.Point(0, 0),
         anchor: new google.maps.Point(SIZE / 2, SIZE / 2),
@@ -75,7 +75,9 @@ module.exports = function (htmlElement, defaultMapstate) {
         console.log('ERROR(' + err.code + '): ' + err.message);
       };
 
-      navigator.geolocation.getCurrentPosition(geoSuccess, geoError);
+      //console.log('getCurrentPosition');
+      //navigator.geolocation.getCurrentPosition(geoSuccess, geoError);
+      console.log('watchPosition');
       navigator.geolocation.watchPosition(geoSuccess, geoError);
     }());
   } else {
