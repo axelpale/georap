@@ -1,10 +1,15 @@
+
+var local = require('./config/local');
+var http = require('http');
 var express = require('express');
 var app = express();
-var server = require('http').Server(app);  // eslint-disable-line new-cap
+
+var server = http.createServer(app);
 var io = require('socket.io')(server);
+
 var nodemailer = require('nodemailer');
-var local = require('./config/local');
 var monk = require('monk');
+
 var path = require('path');
 
 var webpack = require('webpack');

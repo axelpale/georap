@@ -10,6 +10,15 @@ module.exports = {
   // Express will serve static files in this directory.
   staticDir: path.resolve(__dirname, '../.tmp/public'),
 
+  // HTTPS
+  // TresDB itself uses only HTTP. However if TresDB is running behind
+  // a TLS-endpoint reverse-proxy like Nginx, the protocol appears to be
+  // HTTPS for the users. Hyperlinks in emails such as invites and password
+  // resets should then use HTTPS instead HTTP.
+  // By setting publicProtocol property to 'https' instead 'http', HTTPS
+  // is used in the links instead HTTP.
+  publicProtocol: 'https',
+
   // Port for server to listen
   port: 3000,
 
