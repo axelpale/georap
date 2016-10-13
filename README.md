@@ -18,7 +18,7 @@ Install dependencies:
 
 Rename `config/local-sample.js` to `config/local.js` and rewrite it with your settings.
 
-Create certificate files `tresdb.crt` and `tresdb.pem` to support HTTPS. For know, this is required. See [this StackOverflow answer](http://stackoverflow.com/a/31165649/638546) to generate the files.
+
 
 ## Quick start
 
