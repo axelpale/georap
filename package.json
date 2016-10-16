@@ -18,6 +18,7 @@
     "migrate": "node migration/migrate.js",
     "test": "npm run test:api && npm run test:client",
     "test:api": "mocha specs/api/auth.spec.js",
+    "test:migration": "mocha specs/migration/*.spec.js",
     "test:client": "casperjs test specs/client/test-login.js",
     "lint": "eslint --config ./config/eslint.js . && echo 'Lint successful.'",
     "mongo": "mongo tresdb",
@@ -27,6 +28,7 @@
   "author": "Akseli Palén <akseli.palen@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "async": "^2.1.1",
     "bcryptjs": "^2.3.0",
     "component-emitter": "^1.2.1",
     "css-loader": "^0.25.0",
@@ -49,6 +51,7 @@
     "webpack": "^1.13.2"
   },
   "devDependencies": {
+    "assert": "^1.4.1",
     "casperjs": "^1.1.3",
     "eslint": "^3.4.0",
     "mocha": "^3.1.0",
