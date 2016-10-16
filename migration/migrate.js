@@ -1,0 +1,2 @@
+
+console.log('Migration successful.');

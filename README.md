@@ -43,6 +43,22 @@ The test suite includes:
 - Server API tests powered by **mocha**. Run separately by `$ npm run test:api`.
 - Client-side UI tests powered by **casperjs**. Run separately by `$ npm run test:client`.
 
+## Migration
+
+During development, the database schema can and will evolve. For each schema evolution step, the major package version is increased. To update old schemas, we implement programmatic migration steps for each version increment and a script to execute them.
+
+You can run the migration by:
+
+    $ npm run migrate
+
+Under the hood, the migration script:
+
+- figures out the current database schema version
+- figures out the required database schema version
+- deduces required migration steps, specified under `migration/versions/`
+- updates the database by executing the steps.
+
+
 ## Production
 
 Here are some notes and tips for putting a TresDB instance into production.
