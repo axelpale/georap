@@ -51,12 +51,34 @@ You can run the migration by:
 
     $ npm run migrate
 
-Under the hood, the migration script:
+Under the hood, the migration script does the following:
 
 - figures out the current database schema version
 - figures out the required database schema version
 - deduces required migration steps, specified under `migration/versions/`
 - updates the database by executing the steps.
+
+## Database backups
+
+To take a snapshot of the database:
+
+    $ npm run backup
+
+To restore the latest snapshot:
+
+    $ npm run restore
+
+The snapshots are named after their creation time.
+
+To list available snapshots:
+
+    $ npm run backup list
+
+To restore a specific snapshot:
+
+    $ npm run restore 2016-12-31T23-59-59
+
+The backups are stored under `.data/backups` by default. To change this, modify `config.local.mongo.backupDir`. To remove a backup, remove its directory, e.g. `$ rm -rf .data/backups/2016-12-31T23-59-59`.
 
 
 ## Production
