@@ -1,7 +1,7 @@
 {
   "name": "tresdb",
   "private": true,
-  "version": "1.1.1",
+  "version": "2.0.0",
   "description": "Esoteric location CMS built on Express",
   "keywords": [
     "GIS",
@@ -20,7 +20,7 @@
     "restore": "node migration/restore.js",
     "test": "npm run test:api && npm run test:client",
     "test:api": "mocha specs/api/auth.spec.js",
-    "test:migration": "mocha specs/migration/*.spec.js",
+    "test:migration": "mocha migration/specs/*.spec.js",
     "test:client": "casperjs test specs/client/test-login.js",
     "lint": "eslint --config ./config/eslint.js . && echo 'Lint successful.'",
     "mongo": "mongo tresdb",

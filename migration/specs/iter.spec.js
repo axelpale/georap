@@ -1,4 +1,4 @@
-/* global describe, context, it, before, after */
+/* global describe, it, beforeEach, afterEach */
 
 // eslint-disable-next-line no-unused-vars
 var should = require('should');
@@ -12,25 +12,27 @@ var db = monk(local.mongo.url);
 var TEST_COLLECTION_NAME = 'test_collection';
 
 // The Unit
-var iter = require('../../migration/lib/iter');
+var iter = require('../lib/iter');
 
+// Test data
+var fixture = [
+  {
+    name: 'Harrison',
+  },
+  {
+    name: 'Barry',
+  },
+  {
+    name: 'Iris',
+  },
+];
 
 describe('iter.updateEach', function () {
   var collection;
 
   beforeEach(function (done) {
     collection = db.get(TEST_COLLECTION_NAME);
-    collection.insert([
-      {
-        name: 'Harrison',
-      },
-      {
-        name: 'Barry',
-      },
-      {
-        name: 'Iris',
-      }
-    ], done);
+    collection.insert(fixture, done);
   });
 
   afterEach(function (done) {
@@ -43,11 +45,11 @@ describe('iter.updateEach', function () {
       next(person);
     }, function (err) {
       assert.ok(!err);
-      collection.find({ name: { $regex: (/^Dr\./) }}).then(function (doctors) {
-        assert.equal(doctors.length, 3);
+      collection.find({ name: { $regex: (/^Dr\./) } }).then(function (doctors) {
+        assert.equal(doctors.length, fixture.length);
         done();
-      }).catch(function (err) {
-        done(err);
+      }).catch(function (err2) {
+        done(err2);
       });
     });
   });

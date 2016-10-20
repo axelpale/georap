@@ -9,10 +9,11 @@ exports.getVersion = function (configColl, callback) {
   //   callback
   //     function (err, version)
 
-  configColl.findOne({key: 'schemaVersion'}).then(function (doc) {
+  configColl.findOne({ key: 'schemaVersion' }).then(function (doc) {
     if (doc) {
       return callback(null, doc.value);
     }  // else
+
     // No schema found. Must be v1.
     return callback(null, 1);
   }).catch(function (err) {
@@ -24,8 +25,8 @@ exports.setVersion = function (configColl, version, callback) {
   // Update database schema version.
 
   configColl.update({ key: 'schemaVersion' }, {
-    $set: { value: version }
-  }).then(function () {
+    $set: { value: version },
+  }, { upsert: true }).then(function () {
     callback(null);
   }).catch(function (err) {
     callback(err);

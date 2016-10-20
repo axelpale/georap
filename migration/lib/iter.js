@@ -1,4 +1,5 @@
 var async = require('async');
+var ObjectID = require('mongodb').ObjectID;
 
 exports.updateEach = function (collection, iteratee, callback) {
   // Update each document in a MongoDB collection. Iteratee is the update
@@ -33,18 +34,35 @@ exports.updateEach = function (collection, iteratee, callback) {
   //
 
   collection.find({}).then(function (allDocuments) {
-    async.each(allDocuments, function (doc, next) {
+    async.eachSeries(allDocuments, function (doc, next2) {
       var id = doc._id;  // Take before modification
-      iteratee(doc, function (updated) {
-        collection.update(id, updated, function (err) {
-          if (err) {
-            return next(err);
-          }  // else
-          return next();
+
+      // Ensure ObjectID.
+      if (typeof id === 'string') {
+        id = new ObjectID(id);
+      }
+
+      iteratee(doc, function (updatedDoc) {
+
+        // Ensure _id is not replaced by an _id literal.
+        delete updatedDoc._id;
+
+        collection.update(id, updatedDoc).then(function () {
+          // Parameters:
+          //   info
+          return next2();
+        }).catch(function (err2) {
+          return next2(err2);
         });
       });
-    }, function eachCb(err) {
-      return callback(err);
+    }, function afterNext2s(err) {
+      collection.find({}).then(function () {
+        // Parameters:
+        //   docs
+        return callback(err);
+      }).catch(function (err3) {
+        return callback(err3);
+      });
     });
   }).catch(function onError(err) {
     return callback(err);
