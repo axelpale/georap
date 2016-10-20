@@ -97,7 +97,7 @@ Create an administrator that can add other users. For example, create a database
     > use admin
     > db.createUser({
       user: 'foodmin',
-      pwd: 'barword'
+      pwd: 'barword',
       roles: ['userAdminAnyDatabase']
     })
 
