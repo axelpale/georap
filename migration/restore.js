@@ -17,9 +17,9 @@ backups.restore(backupName, function (err, restoredName) {
       console.log(err.message);
       console.log('');
       console.log('Available backups:');
-      backups.list(function (err, namelist) {
-        if (err) {
-          throw err;
+      backups.list(function (err2, namelist) {
+        if (err2) {
+          throw err2;
         }  // else
 
         namelist.forEach(function (name) {
