@@ -47,6 +47,7 @@ exports.backupTo = function (dirPath, callback) {
     uri: local.mongo.url,
     root: dirPath,
     parser: 'bson',
+    metadata: true,
     callback: function (err) {
       if (err) {
         return callback(err);
@@ -92,6 +93,7 @@ exports.restoreFrom = function (dirPath, callback) {
       uri: local.mongo.url,
       root: root,
       parser: 'bson',
+      metadata: true,
       dropCollections: true,
       callback: function (err3) {
         if (err3) {
