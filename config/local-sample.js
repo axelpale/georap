@@ -63,4 +63,9 @@ module.exports = {
   bcrypt: {
     rounds: 10,
   },
+
+  // Node environment.
+  // Define only once. See https://github.com/eslint/eslint/issues/657
+  // eslint-disable-next-line no-process-env
+  env: (process.env.NODE_ENV === 'production') ? 'production' : 'development',
 };
