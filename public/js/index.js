@@ -205,17 +205,6 @@ window.initMap = function () {
     });
   };
 
-  var addLocations = function () {
-    locationsService.fetchAll(function (err, locs) {
-      if (err) {
-        console.error(err);
-
-        return;
-      }  // else
-
-      mapController.locations.add(locs);
-    });
-  };
 
   // Bind menu to auth events.
   authService.on('login', addMainMenu);
@@ -224,14 +213,17 @@ window.initMap = function () {
   });
 
   // Bind map locations to auth events.
-  authService.on('login', addLocations);
+  authService.on('login', function () {
+    locationsService.listen(mapController);
+  });
   authService.on('logout', function () {
-    mapController.locations.removeAll();
+    locationsService.unlisten();
   });
 
-  // Init mainmenu and locations if user logged in
+  // Init mainmenu and locations if user is already logged in,
+  // because no initial login or logout events will be fired.
   if (authService.isLoggedIn()) {
-    addLocations();
+    locationsService.listen(mapController);
     addMainMenu();
   }
 
