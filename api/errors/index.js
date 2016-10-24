@@ -1,0 +1,2 @@
+
+exports.responses = require('./responses');

@@ -144,8 +144,12 @@ module.exports = function (htmlElement, defaultMapstate) {
 
     // Add new markers. TODO partial update
     _.each(locs, function (loc) {
+
+      var lng = loc.geom.coordinates[0];
+      var lat = loc.geom.coordinates[1];
+
       var m = new google.maps.Marker({
-        position: new google.maps.LatLng(loc.lat, loc.lng),
+        position: new google.maps.LatLng(lat, lng),
         title: loc.name,
       });
 

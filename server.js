@@ -189,6 +189,9 @@ io.on('connection', function (socket) {
   socket.on('locations/get', function (data, res) {
     controllers.locations.get(db, data, res);
   });
+  socket.on('locations/getWithin', function (data, res) {
+    controllers.locations.getWithin(db, data, res);
+  });
 });
 
 
