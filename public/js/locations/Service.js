@@ -47,12 +47,14 @@ module.exports = function (socket, auth) {
     });
   };
 
-  this.fetchWithin = function (center, radius, callback) {
+  this.fetchWithin = function (center, radius, zoomLevel, callback) {
     // Parameters
     //   center
     //     google.maps.LatLng instance
     //   radius
     //     number of meters
+    //   zoomLevel
+    //     only locations on this layer and above will be fetched.
     //   callback
     //     function (err, locations)
 
@@ -63,6 +65,7 @@ module.exports = function (socket, auth) {
       token: auth.getToken(),
       center: legacyCenter,
       radius: radius,
+      layer: zoomLevel,
     };
 
     socket.emit('locations/getWithin', payload, function (response) {
@@ -95,10 +98,10 @@ module.exports = function (socket, auth) {
 
       var center = map.getCenter();
       var bounds = map.getBounds();
-
       var radius = Math.ceil(getBoundsDiagonal(bounds) / 2);
+      var zoomLevel = map.getZoom();
 
-      self.fetchWithin(center, radius, function (err, locs) {
+      self.fetchWithin(center, radius, zoomLevel, function (err, locs) {
         if (err) {
           return console.error(err);
         }  // else

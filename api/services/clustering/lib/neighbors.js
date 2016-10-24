@@ -1,5 +1,71 @@
 var async = require('async');
 
+exports.findWithin = function (coll, loc, d, callback) {
+  // Find neighbors within given distance.
+  //
+  // Parameters:
+  //   coll
+  //     Locations collection
+  //   loc
+  //     location document
+  //   d
+  //     the maximum distance from loc
+  //   callback
+  //     function (err, neighbors)
+  //
+  coll.aggregate([
+    {
+      $geoNear: {
+        near: loc.geom,
+        distanceField: 'dist',
+        minDistance: 1,  // excludes the loc itself
+        maxDistance: d,
+        spherical: true,
+      },
+    },
+  ]).then(function (results) {
+    return callback(null, results);
+  }).catch(callback);
+};
+
+exports.findWithinLayer = function (options, callback) {
+  // Find neighbors within given distance.
+  //
+  // Parameters:
+  //   options
+  //     object
+  //   callback
+  //     function (err, neighborLocs)
+  //
+  // Options:
+  //   collection
+  //     Locations collection
+  //   location
+  //     location document whose neighbors to find
+  //   maxDistance
+  //     the maximum distance from location
+  //   layer
+  //     integer, the layer onto find the locations
+
+  var q = {
+    $geoNear: {
+      near: options.location.geom,
+      distanceField: 'dist',  // mandatory
+      minDistance: 1,  // excludes the loc itself
+      maxDistance: options.maxDistance,
+      spherical: true,
+      limit: 1000,
+      query: { layer: options.layer },
+    },
+  };
+
+  options.collection.aggregate([q]).then(function (results) {
+    return callback(null, results);
+  }).catch(function (err) {
+    return callback(err);
+  });
+};
+
 exports.computeAvgDist = function (coll, loc, k, callback) {
   // Given single document loc in collection coll
   // - find k nearest neighbors

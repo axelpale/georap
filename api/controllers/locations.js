@@ -49,6 +49,8 @@ exports.getWithin = function (db, data, response) {
   //       [lng, lat] array
   //     radius
   //       max distance from the center in meters
+  //     layer
+  //       equals to zoom level. Get only locations on this and higher layers.
   //   response
   //     Socket.io response
 
@@ -62,7 +64,9 @@ exports.getWithin = function (db, data, response) {
                       'length' in data.center &&
                       data.center.length === 2 &&
                       data.hasOwnProperty('radius') &&
-                      typeof data.radius === 'number');
+                      typeof data.radius === 'number') &&
+                      data.hasOwnProperty('layer') &&
+                      typeof data.layer === 'number';
 
   if (!validRequest) {
     console.log('Invalid request');
@@ -82,6 +86,8 @@ exports.getWithin = function (db, data, response) {
       db: db,
       center: data.center,
       radius: data.radius,
+      // Only locations on the layer or higher (smalle layer number).
+      query: { layer: { $lte: data.layer } },
       callback: function (err2, locs) {
         if (err2) {
           console.error(err2);
