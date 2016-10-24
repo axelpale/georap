@@ -1,5 +1,4 @@
 /* global google */
-var _ = require('lodash');
 var infoTemplate = require('../../templates/infowindow.ejs');
 
 module.exports = function (htmlElement, defaultMapstate) {
@@ -88,10 +87,9 @@ module.exports = function (htmlElement, defaultMapstate) {
   // Private methods declaration
 
   var addMarker;
-  var addLocations;
+  var removeMarker;
   var updateLocations;
-  var removeAllLocations;
-
+  var removeAllMarkers;
 
   // Public methods
 
@@ -131,14 +129,11 @@ module.exports = function (htmlElement, defaultMapstate) {
   };
 
   this.locations = {
-    add: function (locations) {
-      addLocations(locations);
-    },
     update: function (locations) {
       updateLocations(locations);
     },
     removeAll: function () {
-      removeAllLocations();
+      removeAllMarkers();
     },
   };
 
@@ -169,7 +164,7 @@ module.exports = function (htmlElement, defaultMapstate) {
       infowindow.open(map, m);
     });
 
-    m.set('id', loc._id)
+    m.set('id', loc._id);
     markers[loc._id] = m;
 
     return m;
@@ -211,27 +206,20 @@ module.exports = function (htmlElement, defaultMapstate) {
         m = markers[i];
         k = m.get('keep');
 
-        if (!k) {
-          // Remove
-          removeMarker(m);
-        } else {
+        if (k) {
           // Reset for next update
           m.set('keep', false);
+        } else {
+          // Remove
+          removeMarker(m);
         }
       }
     }
 
   };
 
-  addLocations = function (locs) {
-    // Add new markers.
-
-    _.each(locs, addMarker);
-  };
-
-  removeAllLocations = function () {
-    // Remove all markers.
-
+  removeAllMarkers = function () {
+    // Clear the map.
     var i;
 
     for (i in markers) {
