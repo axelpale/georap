@@ -111,8 +111,7 @@ module.exports = function (socket, auth) {
         // });
         console.log('fetched', locs.length, 'locations');
 
-        mapController.locations.removeAll();
-        mapController.locations.add(locs);
+        mapController.locations.update(locs);
       });
 
     });
