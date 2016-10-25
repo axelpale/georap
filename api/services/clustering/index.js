@@ -248,10 +248,16 @@ exports.recomputeClusters = function (db, callback) {
   // 1. Reset clustering data.
 
   async.waterfall([
-    // function (cb) {
-    //   cb(null, db);
-    // },
-    // exports.recomputeNeighborsAvgDist,
+    function (cb) {
+      // Ensure geospatial index exist before recomputing because
+      // the index is required.
+      coll.ensureIndex({ 'geom': '2dsphere' }).then(function () {
+        return cb(null, db);
+      }).catch(function (err) {
+        return cb(err);
+      });
+    },
+    exports.recomputeNeighborsAvgDist,
     function (cb) {
       cb(null, coll, BOTTOM_LAYER);
     },
