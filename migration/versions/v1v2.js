@@ -13,6 +13,7 @@ exports.run = function (db, callback) {
   //   callback
   //     function (err)
 
+  console.log();
   console.log('### Step v1 to v2 ###');
 
   // 1. Create schema version tag

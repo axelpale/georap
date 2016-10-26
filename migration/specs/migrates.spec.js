@@ -31,13 +31,13 @@ describe('migrates.migrate', function () {
     backups.restoreFrom(vpath, done);
   });
 
-  it('should be able to migrate v1 to v2', function (done) {
+  it('should be able to migrate from v1 to current', function (done) {
     migrates.migrate(function (err) {
       assert.ifError(err);
 
       schema.getVersion(db.get('config'), function (err2, vers) {
         assert.ifError(err2);
-        assert.equal(vers, 2);
+        assert.equal(vers, schema.getDesiredVersion());
         done();
       });
     });

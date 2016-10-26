@@ -1,5 +1,13 @@
 // Tools to find out and update the current database schema version.
 
+var pjson = require('../../package.json');
+var semver = require('semver');
+
+exports.getDesiredVersion = function () {
+  // Get desired version
+  return semver.major(pjson.version);
+};
+
 exports.getVersion = function (configColl, callback) {
   // Find current schema version.
   //

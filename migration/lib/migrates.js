@@ -1,10 +1,8 @@
-var pjson = require('../../package.json');
+
 var local = require('../../config/local');
 var versions = require('../versions');
 var schema = require('./schema');
 var monk = require('monk');
-var semver = require('semver');
-
 
 exports.migrate = function (callback) {
 
@@ -12,7 +10,7 @@ exports.migrate = function (callback) {
   var db = monk(local.mongo.url);
 
   // Get desired version
-  var targetVersion = semver.major(pjson.version);
+  var targetVersion = schema.getDesiredVersion();
 
   // Do not call callback elsewhere. Call 'then' instead.
   var then = function (err) {
@@ -33,9 +31,9 @@ exports.migrate = function (callback) {
 
     console.log('  Current DB schema version:', currentVersion);
     console.log('  Desired DB schema version:', targetVersion);
-    console.log('');
 
     if (currentVersion < targetVersion) {
+      console.log();
       console.log('#### Migrating from', currentVersion, 'to',
                   targetVersion, '####');
 
@@ -54,6 +52,7 @@ exports.migrate = function (callback) {
         return then();
       });
     } else {
+      console.log();
       console.log('DB schema versions are already met.');
       console.log();
       console.log('##### Migration SUCCESS #####');

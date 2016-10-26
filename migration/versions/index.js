@@ -4,10 +4,11 @@ var async = require('async');
 var v = {
   0: require('./v0v1'),
   1: require('./v1v2'),
+  2: require('./v2v3'),
 };
 
 
-exports.load = function (currentVersion, targetVersion) {
+var getSteps = function (currentVersion, targetVersion) {
   // Returns array of migration functions
 
   var i;
@@ -42,13 +43,13 @@ exports.run = function (db, currentVersion, targetVersion, callback) {
 
   // Load steps
   try {
-    steps = this.load(currentVersion, targetVersion);
+    steps = getSteps(currentVersion, targetVersion);
   } catch (e) {
     return callback(e);
   }
 
   // Run steps in series
-  async.each(steps, function (step, next) {
+  async.eachSeries(steps, function (step, next) {
     return step(db, next);
   }, function (err) {
     // Finally

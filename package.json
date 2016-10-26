@@ -1,7 +1,7 @@
 {
   "name": "tresdb",
   "private": true,
-  "version": "2.0.0",
+  "version": "3.0.0",
   "description": "Esoteric location CMS built on Express",
   "keywords": [
     "GIS",
@@ -18,7 +18,7 @@
     "migrate": "node migration/migrate.js",
     "backup": "node migration/backup.js",
     "restore": "node migration/restore.js",
-    "recomputeClusters": "node api/services/clustering/refresh.js",
+    "cluster": "node api/services/clustering/refresh.js",
     "test": "npm run test:api && npm run test:client",
     "test:api": "mocha specs/api/auth.spec.js",
     "test:migration": "mocha migration/specs/*.spec.js",

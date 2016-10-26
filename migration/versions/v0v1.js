@@ -7,6 +7,7 @@ exports.run = function (db, callback) {
   //   callback
   //     function (err)
 
+  console.log();
   console.log('### Step v0 to v1 ###');
   console.log('### Step successful ###');
 
