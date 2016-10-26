@@ -1,5 +1,11 @@
 var path = require('path');
 
+// First, we ensure that local.js is not accidentally included in
+// client code, even in the weird case that the path module is available.
+if (typeof window !== 'undefined') {
+  throw new Error('Local.js leaked into client-side code.');
+}
+
 module.exports = {
 
   // Site secret. CHANGE! DO NOT EXPOSE TO CLIENT!
@@ -34,6 +40,7 @@ module.exports = {
   // Mongo database settings
   mongo: {
     url: 'mongodb://foouser:barword@localhost:27017/tresdb',
+    backupDir: path.resolve(__dirname, '../.data/backups/'),
   },
 
   // Email server connection
@@ -56,4 +63,9 @@ module.exports = {
   bcrypt: {
     rounds: 10,
   },
+
+  // Node environment.
+  // Define only once. See https://github.com/eslint/eslint/issues/657
+  // eslint-disable-next-line no-process-env
+  env: (process.env.NODE_ENV === 'production') ? 'production' : 'development',
 };

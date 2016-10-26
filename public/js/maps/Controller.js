@@ -1,5 +1,4 @@
 /* global google */
-var _ = require('lodash');
 var infoTemplate = require('../../templates/infowindow.ejs');
 
 module.exports = function (htmlElement, defaultMapstate) {
@@ -87,9 +86,10 @@ module.exports = function (htmlElement, defaultMapstate) {
 
   // Private methods declaration
 
-  var addLocations;
-  var removeAllLocations;
-
+  var addMarker;
+  var removeMarker;
+  var updateLocations;
+  var removeAllMarkers;
 
   // Public methods
 
@@ -129,44 +129,103 @@ module.exports = function (htmlElement, defaultMapstate) {
   };
 
   this.locations = {
-    add: function (locations) {
-      addLocations(locations);
+    update: function (locations) {
+      updateLocations(locations);
     },
     removeAll: function () {
-      removeAllLocations();
+      removeAllMarkers();
     },
   };
 
 
   // Private methods
 
-  addLocations = function (locs) {
+  addMarker = function (loc) {
+    // Create marker and add it to the map.
+    //
+    // Return
+    //   the created marker
 
-    // Add new markers. TODO partial update
-    _.each(locs, function (loc) {
-      var m = new google.maps.Marker({
-        position: new google.maps.LatLng(loc.lat, loc.lng),
-        title: loc.name,
-      });
+    var lng = loc.geom.coordinates[0];
+    var lat = loc.geom.coordinates[1];
 
-      m.setMap(map);
-      m.addListener('click', function () {
-        // Open info window
-        var infowindow = new google.maps.InfoWindow({
-          content: infoTemplate({ location: loc }),
-        });
-
-        infowindow.open(map, m);
-      });
-      markers.push(m);
+    var m = new google.maps.Marker({
+      position: new google.maps.LatLng(lat, lng),
+      title: loc.name,
     });
+
+    m.setMap(map);
+    m.addListener('click', function () {
+      // Open info window
+      var infowindow = new google.maps.InfoWindow({
+        content: infoTemplate({ location: loc }),
+      });
+
+      infowindow.open(map, m);
+    });
+
+    m.set('id', loc._id);
+    markers[loc._id] = m;
+
+    return m;
   };
 
-  removeAllLocations = function () {
-    // Remove markers.
-    _.each(markers, function (mk) {
-      mk.setMap(null);
-    });
-    markers = [];
+  removeMarker = function (m) {
+    if (m) {
+      m.setMap(null);
+      delete markers[m.get('id')];
+    }
+  };
+
+  updateLocations = function (locs) {
+    // Add new markers and removes the excess.
+    // To speed up things and avoid flicker,
+    // only adds those markers on the screen that are not already there.
+
+    var i, l, m, k;
+
+    // For each location candidate
+    for (i = 0; i < locs.length; i += 1) {
+      l = locs[i];
+
+      // If location already on the map
+      if (markers.hasOwnProperty(l._id)) {
+        // Mark that it does not need to be removed.
+        markers[l._id].set('keep', true);
+      } else {
+        // otherwise, add it to the map.
+        m = addMarker(l);
+        m.set('keep', true);
+      }
+    }
+
+    // Remove markers that were not marked to be kept.
+    // Also, reset keep for next update.
+    for (i in markers) {
+      if (markers.hasOwnProperty(i)) {
+        m = markers[i];
+        k = m.get('keep');
+
+        if (k) {
+          // Reset for next update
+          m.set('keep', false);
+        } else {
+          // Remove
+          removeMarker(m);
+        }
+      }
+    }
+
+  };
+
+  removeAllMarkers = function () {
+    // Clear the map.
+    var i;
+
+    for (i in markers) {
+      if (markers.hasOwnProperty(i)) {
+        removeMarker(markers[i]);
+      }
+    }
   };
 };

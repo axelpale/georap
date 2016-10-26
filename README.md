@@ -43,6 +43,44 @@ The test suite includes:
 - Server API tests powered by **mocha**. Run separately by `$ npm run test:api`.
 - Client-side UI tests powered by **casperjs**. Run separately by `$ npm run test:client`.
 
+## Migration
+
+During development, the database schema can and will evolve. For each schema evolution step, the major package version is increased. To update old schemas, we implement programmatic migration steps for each version increment and a script to execute them.
+
+You can run the migration by:
+
+    $ npm run migrate
+
+Under the hood, the migration script does the following:
+
+- figures out the current database schema version
+- figures out the required database schema version
+- deduces required migration steps, specified under `migration/versions/`
+- updates the database by executing the steps.
+
+## Database backups
+
+To take a snapshot of the database:
+
+    $ npm run backup
+
+To restore the latest snapshot:
+
+    $ npm run restore
+
+The snapshots are named after their creation time.
+
+To list available snapshots:
+
+    $ npm run backup list
+
+To restore a specific snapshot:
+
+    $ npm run restore 2016-12-31T23-59-59
+
+The backups are stored under `.data/backups` by default. To change this, modify `config.local.mongo.backupDir`. To remove a backup, remove its directory, e.g. `$ rm -rf .data/backups/2016-12-31T23-59-59`.
+
+
 ## Production
 
 Here are some notes and tips for putting a TresDB instance into production.
@@ -59,7 +97,7 @@ Create an administrator that can add other users. For example, create a database
     > use admin
     > db.createUser({
       user: 'foodmin',
-      pwd: 'barword'
+      pwd: 'barword',
       roles: ['userAdminAnyDatabase']
     })
 
@@ -119,6 +157,11 @@ Development tools:
 - [Mocha](https://mochajs.org/)
 - [Should](http://shouldjs.github.io/)
 
+For production, we recommend:
+
+- [DigitalOcean](https://m.do.co/c/3e63e3de8e31)
+- [Nginx](https://www.nginx.com/)
+- [Let's Encrypt](https://letsencrypt.org/)
 
 
 ## Versioning
