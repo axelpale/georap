@@ -11,3 +11,7 @@ exports.InvalidRequestError = {
 exports.DatabaseError = {
   error: 'DatabaseError',
 };
+
+exports.NotFoundError = {
+  error: 'NotFoundError',
+};
