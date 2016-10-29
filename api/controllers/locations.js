@@ -4,6 +4,48 @@ var local = require('../../config/local');
 var errors = require('../errors');
 var clustering = require('../services/clustering');
 
+exports.getOne = function (db, data, response) {
+  // Parameters
+  //   db
+  //     Monk db instance
+  //   data
+  //     token
+  //       JWT token string
+  //     locationId
+  //       object id as string
+  //   response
+  //     Socket.io response
+
+  if (typeof data.token !== 'string') {
+    return response(errors.responses.InvalidRequestError);
+  }
+
+  if (typeof data.locationId !== 'string') {
+    return response(errors.responses.InvalidRequestError);
+  }
+
+  jwt.verify(data.token, local.secret, function (err) {
+    if (err) {
+      return response(errors.responses.InvalidTokenError);
+    }
+
+    var locations = db.get('locations');
+
+    locations.findOne({ _id: data.locationId }).then(function (loc) {
+      if (loc) {
+        return response({
+          success: loc,
+        });
+      }
+
+      return response(errors.responses.NotFoundError);
+    }).catch(function (err2) {
+      console.error(err2);
+      return response(errors.responses.DatabaseError);
+    });
+  });
+};
+
 exports.get = function (db, data, response) {
   // Parameters
   //   db

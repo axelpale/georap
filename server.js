@@ -194,6 +194,9 @@ io.on('connection', function (socket) {
   });
 
   // Locations
+  socket.on('locations/getOne', function (data, res) {
+    controllers.locations.getOne(db, data, res);
+  });
   socket.on('locations/get', function (data, res) {
     controllers.locations.get(db, data, res);
   });
