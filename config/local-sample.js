@@ -18,6 +18,12 @@ module.exports = {
   // URLs of the static files are prefixed with this static URL root path:
   staticUrl: '/assets',
 
+  // Uploaded files
+  // Express will serve uploaded files (location attachments) from this dir.
+  uploadDir: path.resolve(__dirname, '../.data/uploads'),
+  // URLs of the uploaded files are prefixed with this URL root path:
+  uploadUrl: '/uploads',
+
   // HTTPS
   // TresDB itself uses only HTTP. However if TresDB is running behind
   // a TLS-endpoint reverse-proxy like Nginx, the protocol appears to be

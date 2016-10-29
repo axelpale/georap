@@ -133,10 +133,18 @@ if (local.env === 'development') {
     // See https://webpack.github.io/docs/node.js-api.html#error-handling
   });
   app.use(local.staticUrl, express.static(local.staticDir));
-  console.log('Serving static files in', local.staticDir);
+  console.log('Serving static files from', local.staticUrl);
 }
 // -------------
 // Static assets END
+
+
+// Uploaded files
+// --------------
+app.use(local.uploadUrl, express.static(local.uploadDir));
+console.log('Serving uploaded files from', local.uploadUrl);
+// --------------
+// Uploaded files END
 
 
 // Catch all to single page app.
