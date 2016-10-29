@@ -213,9 +213,9 @@ module.exports = {
     // require parentheses when invoking a constructor with no arguments
     'new-parens': 'error',
     // require or disallow an empty line after variable declarations
-    'newline-after-var': 'error',
+    'newline-after-var': 'off',
     // require an empty line before return statements
-    'newline-before-return': 'error',
+    'newline-before-return': 'off',
     // require a newline after each call in a method chain
     'newline-per-chained-call': ['error', { 'ignoreChainWithDepth': 3 } ],
     // disallow Array constructors
