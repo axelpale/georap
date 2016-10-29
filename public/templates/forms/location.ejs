@@ -2,6 +2,33 @@
   <div class="row">
     <div class="col-md-12">
       <h1><%= location.name %></h1>
+
+      <% var lng = location.geom.coordinates[0]; %>
+      <% var lat = location.geom.coordinates[1]; %>
+      <p>longitude <%= lng %>, latitude <%= lat %></p>
+
+      <% var i, cs, c; %>
+      <% cs = location.content; %>
+      <% for (var i = 0; i < cs.length; i += 1) { %>
+        <% c = cs[i]; %>
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <%= c.user %> <%= c.time %>
+        </div>
+        <div class="panel-body">
+          <% if (c.type === 'story') { %>
+            <%= c.data.markdown %>
+          <% } else if (c.type === 'created') { %>
+            Added into database.
+          <% } else if (c.type === 'attachment') { %>
+            <%= c.data.filename %>
+          <% } else if (c.type === 'visit') { %>
+            Visited.
+          <% } %>
+        </div>
+      </div>
+      <% } %>
+
     </div>
   </div>
 </div>
