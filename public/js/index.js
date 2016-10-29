@@ -152,6 +152,27 @@ page('/invite', function () {
   inviteForm.bind();
 });
 
+page('/location/:id', function (ctx) {
+
+  // Open a loading card
+  var loadingCard = new cards.Loading();
+
+  card.open(loadingCard.render(), 'page');
+
+  // Fetch location.
+  locationsService.fetchOne(ctx.params.id, function (err, loc) {
+    if (err) {
+      console.error(err);
+      return;
+    }
+
+    // Render location card.
+    var locationForm = new forms.Location(loc);
+
+    card.open(locationForm.render(loc));
+  });
+});
+
 page('*', function () {
   // Page not found.
   var error404 = new errors.Error404();

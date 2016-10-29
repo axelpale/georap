@@ -27,6 +27,27 @@ module.exports = function (socket, auth) {
 
   // Public methods
 
+  this.fetchOne = function (locationId, callback) {
+    // Get single location from server
+
+    var payload = {
+      token: auth.getToken(),
+      locationId: locationId,
+    };
+
+    socket.emit('locations/getOne', payload, function (response) {
+      if (response.hasOwnProperty('success')) {
+        return callback(null, response.success);
+      }
+
+      if (response.hasOwnProperty('error')) {
+        return callback(new Error(response.error));
+      }
+
+      throw new Error('invalid server response');
+    });
+  };
+
   this.fetchAll = function (callback) {
     // Get all locations from server.
 
