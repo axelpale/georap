@@ -1,3 +1,5 @@
+var marked = require('marked');
+var timestamp = require('./lib/timestamp');
 
 // Templates
 var locationTemplate = require('../../templates/forms/location.ejs');
@@ -13,8 +15,11 @@ module.exports = function (loc) {
 
 
   this.render = function () {
+
     return locationTemplate({
       location: loc,
+      marked: marked,
+      timestamp: timestamp,
     });
   };
 

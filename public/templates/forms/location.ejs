@@ -7,23 +7,31 @@
       <% var lat = location.geom.coordinates[1]; %>
       <p>longitude <%= lng %>, latitude <%= lat %></p>
 
+      <% var j, ts; %>
+      <% ts = location.tags; %>
+      <ul>
+      <% for (j = 0; j < ts.length; j += 1) { %>
+        <li><%= ts[j] %></li>
+      <% } %>
+      </ul>
+
       <% var i, cs, c; %>
       <% cs = location.content; %>
-      <% for (var i = 0; i < cs.length; i += 1) { %>
+      <% for (i = 0; i < cs.length; i += 1) { %>
         <% c = cs[i]; %>
       <div class="panel panel-default">
         <div class="panel-heading">
-          <%= c.user %> <%= c.time %>
+          <%= c.user %>, <%= timestamp(c.time) %>
         </div>
         <div class="panel-body">
           <% if (c.type === 'story') { %>
-            <%= c.data.markdown %>
+            <%= marked(c.data.markdown) %>
           <% } else if (c.type === 'created') { %>
-            Added into database.
+            Added <%= location.name %> into database.
           <% } else if (c.type === 'attachment') { %>
             <%= c.data.filename %>
           <% } else if (c.type === 'visit') { %>
-            Visited.
+            Visited <%= location.name %>.
           <% } %>
         </div>
       </div>
