@@ -138,6 +138,7 @@ Now you can and should run mongod with authentication:
 ## Technology stack
 
 - [Google Maps JavaScript API](https://developers.google.com/maps/documentation/javascript/)
+- [Marked](https://github.com/chjj/marked)
 - [Bootstrap](http://getbootstrap.com/)
 - [jQuery](https://jquery.com/)
 - [Lodash](https://lodash.com/)
