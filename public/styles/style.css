@@ -43,6 +43,7 @@ html, body {
   position: absolute;
   z-index: 3;
   background: white;
+  overflow-y: scroll;
 }
 
 #card-container.tresdb-card-full {
