@@ -1,8 +1,10 @@
 
 var jwt = require('jsonwebtoken');
+var mime = require('mime');
 var local = require('../../config/local');
 var errors = require('../errors');
 var clustering = require('../services/clustering');
+var attachments = require('../services/attachments');
 
 exports.getOne = function (db, data, response) {
   // Parameters
@@ -33,6 +35,19 @@ exports.getOne = function (db, data, response) {
 
     locations.findOne({ _id: data.locationId }).then(function (loc) {
       if (loc) {
+
+        // Transform location to be suitable for the client.
+        loc.content = loc.content.map(function (entry) {
+          if (entry.type === 'attachment') {
+            // Attach an url to each attachment.
+            entry.data.url = attachments.getAbsoluteUrl(entry);
+
+            // Figure out the content mime type.
+            entry.data.mimetype = mime.lookup(entry.data.filename);
+          }
+          return entry;
+        });
+
         return response({
           success: loc,
         });
