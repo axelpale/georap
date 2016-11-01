@@ -145,7 +145,7 @@ console.log('Serving uploaded files from', local.uploadUrl);
 // Catch all to single page app.
 // Must be the final step in the app middleware chain.
 app.get('/*', function (req, res) {
-  res.sendFile(path.resolve(__dirname, '..', 'public', 'index.html'));
+  res.sendFile(path.resolve(__dirname, '..', 'client', 'index.html'));
 });
 
 

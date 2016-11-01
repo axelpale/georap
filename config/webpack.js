@@ -12,7 +12,7 @@ var PROD = (local.env === 'production');
 module.exports = {
 
   // Context: the directory for Webpack to look for assets.
-  context: path.resolve(__dirname, '../public'),
+  context: path.resolve(__dirname, '../client'),
 
   // Entry: the main file that requires all others. Relative to the context.
   entry: './index.js',
