@@ -1,9 +1,11 @@
 /* eslint max-lines: 'off' */
 
+var local = require('../../config/local');
+var errors = require('../errors');
+
 var bcrypt = require('bcryptjs');
 var jwt = require('jsonwebtoken');
 var validator = require('email-validator');
-var local = require('../../config/local');
 
 var fs = require('fs');
 var path = require('path');
@@ -278,9 +280,19 @@ exports.sendResetPasswordEmail = function (db, mailer, host, data, response) {
   //   host
   //     Server hostname e.g. 'mydomain.com' or 'localhost:3000'
   //   data
-  //     Socket.io event payload
+  //     Socket.io event payload. Properties:
+  //       email
+  //         string
   //   response
   //     Socket.io response.
+
+  var validRequest = (
+    data.hasOwnProperty('email') && typeof data.email === 'string'
+  );
+
+  if (!validRequest) {
+    return response(errors.responses.InvalidRequestError);
+  }
 
   // Fetch user from database to ensure the email exists.
   // First get collection.
@@ -360,13 +372,17 @@ exports.resetPassword = function (db, data, response) {
   //   InvalidPasswordError
   //   InvalidTokenError
 
-  if (typeof data.password !== 'string') {
-    return response({
-      error: 'InvalidPasswordError',
-    });
+  var validRequest = (
+    data.hasOwnProperty('password') && typeof data.password === 'string' &&
+    data.hasOwnProperty('token') && typeof data.token === 'string'
+  );
+
+  if (!validRequest) {
+    return response(errors.responses.InvalidRequestError);
   }
 
   jwt.verify(data.token, local.secret, function (err, payload) {
+
     if (err || typeof payload.email !== 'string') {
       // E.g. expired token
       return response({
@@ -411,29 +427,26 @@ exports.sendInviteEmail = function (db, mailer, host, data, response) {
   //   response
   //     Socket.io response.
 
+  var validRequest = (
+    data.hasOwnProperty('email') && typeof data.email === 'string' &&
+    data.hasOwnProperty('token') && typeof data.token === 'string'
+  );
+
+  if (!validRequest) {
+    return response(errors.responses.InvalidRequestError);
+  }
+
   jwt.verify(data.token, local.secret, function (err, payload) {
     if (err) {
-      response({
+      return response({
         error: 'InvalidTokenError',
       });
-
-      return;
     }  // else
 
     if (payload.admin !== true) {
-      response({
+      return response({
         error: 'PrivilegeError',
       });
-
-      return;
-    }  // else
-
-    if (!data.hasOwnProperty('email') || typeof data.email !== 'string') {
-      response({
-        error: 'InvalidRequestError',
-      });
-
-      return;
     }  // else
 
     if (!validator.validate(data.email)) {
@@ -525,6 +538,18 @@ exports.signup = function (db, data, response) {
   //   response
   //     Socket.io response.
 
+  // Ensure username and password are strings.
+  // This prevents Mongo injection.
+  var validRequest = (
+    data.hasOwnProperty('token') && typeof data.token === 'string' &&
+    data.hasOwnProperty('username') && typeof data.username === 'string' &&
+    data.hasOwnProperty('password') && typeof data.password === 'string'
+  );
+
+  if (!validRequest) {
+    return response(errors.responses.InvalidRequestError);
+  }
+
   jwt.verify(data.token, local.secret, function (err, payload) {
     if (err) {
       return response({
@@ -541,23 +566,6 @@ exports.signup = function (db, data, response) {
     if (!validator.validate(payload.email)) {
       return response({
         error: 'InvalidTokenError',
-      });
-    }  // else
-
-    if (!data.hasOwnProperty('username') || !data.hasOwnProperty('password')) {
-      return response({
-        error: 'InvalidRequestError',
-      });
-    }  // else
-
-    // Ensure username and password are strings.
-    // This prevents Mongo injection.
-    var usernameType = typeof data.username;  // to shorten linelength
-    var passwordType = typeof data.password;
-
-    if (usernameType !== 'string' || passwordType !== 'string') {
-      return response({
-        error: 'InvalidRequestError',
       });
     }  // else
 
