@@ -72,6 +72,8 @@ exports.get = function (db, data, response) {
   //   response
   //     Socket.io response
 
+  throw new Error('deprecated');
+
   jwt.verify(data.token, local.secret, function (err) {
     if (err) {
       // Problems with token
