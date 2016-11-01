@@ -13,6 +13,9 @@ module.exports = function (htmlElement, defaultMapstate) {
   // Markers on the map.
   var markers = [];
 
+  // An open infowindow. Allow only single infowindow to be open at the time.
+  var infowindow = null;
+
   var map = new google.maps.Map(htmlElement, {
     center: {
       lat: defaultMapstate.lat,
@@ -156,8 +159,14 @@ module.exports = function (htmlElement, defaultMapstate) {
 
     m.setMap(map);
     m.addListener('click', function () {
-      // Open info window
-      var infowindow = new google.maps.InfoWindow({
+
+      // Close previous, possibly open infowindow.
+      if (infowindow !== null) {
+        infowindow.close();
+      }
+
+      // Open new info window
+      infowindow = new google.maps.InfoWindow({
         content: infoTemplate({ location: loc }),
       });
 
