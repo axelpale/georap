@@ -10,11 +10,15 @@ module.exports = function (htmlElement, defaultMapstate) {
 
   // Init
 
-  // Markers on the map.
+  // Location markers on the map.
   var markers = [];
 
   // An open infowindow. Allow only single infowindow to be open at the time.
   var infowindow = null;
+
+  // Marker that represents geolocation of the user
+  var geolocationMarker = null;
+  var geolocationWatchId = null;
 
   var map = new google.maps.Map(htmlElement, {
     center: {
@@ -39,52 +43,6 @@ module.exports = function (htmlElement, defaultMapstate) {
       position: google.maps.ControlPosition.RIGHT_BOTTOM,
     },
   });
-
-  // Show current location on the map
-  if ('geolocation' in navigator) {
-    console.log('Navigator has geolocation');
-    (function () {
-      var m, update, icon, geoSuccess, geoError;
-      var SIZE = 32;
-
-      icon = {
-        url: '/assets/images/mapicons/mylocation.png',
-        size: new google.maps.Size(SIZE, SIZE),
-        origin: new google.maps.Point(0, 0),
-        anchor: new google.maps.Point(SIZE / 2, SIZE / 2),
-      };
-
-      m = new google.maps.Marker({
-        position: new google.maps.LatLng(0.0, 0.0),
-        map: map,
-        icon: icon,
-      });
-
-      update = function (lat, lng) {
-        console.log(lat, lng);
-        m.setPosition({
-          lat: lat,
-          lng: lng,
-        });
-      };
-
-      geoSuccess = function (position) {
-        console.log('geoSuccess');
-        update(position.coords.latitude, position.coords.longitude);
-      };
-
-      geoError = function (err) {
-        console.log('ERROR(' + err.code + '): ' + err.message);
-      };
-
-      //console.log('getCurrentPosition');
-      //navigator.geolocation.getCurrentPosition(geoSuccess, geoError);
-      console.log('watchPosition');
-      navigator.geolocation.watchPosition(geoSuccess, geoError);
-    }());
-  } else {
-    console.log('No navigator.geolocation available');
-  }
 
 
   // Private methods declaration
@@ -129,6 +87,71 @@ module.exports = function (htmlElement, defaultMapstate) {
     });
     map.setZoom(mapstate.zoom);
     map.setMapTypeId(mapstate.mapTypeId);
+  };
+
+  this.hideGeolocation = function () {
+    // Stop watching device's location
+    if (geolocationWatchId !== null) {
+      if ('geolocation' in navigator) {
+        navigator.geolocation.clearWatch(geolocationWatchId);
+        geolocationWatchId = null;
+      }
+    }
+    // Remove marker
+    if (geolocationMarker !== null) {
+      geolocationMarker.setMap(null);
+      geolocationMarker = null;
+    }
+  };
+
+  this.showGeolocation = function () {
+    // Show current location on the map. Does nothing if already shown.
+
+    var update, icon, geoSuccess, geoError, id;
+    var SIZE = 32;
+
+    // If geolocation is not already shown and geolocation is available.
+    if (geolocationMarker === null && 'geolocation' in navigator) {
+
+      console.log('Navigator has geolocation');
+
+      icon = {
+        url: '/assets/images/mapicons/mylocation.png',
+        size: new google.maps.Size(SIZE, SIZE),
+        origin: new google.maps.Point(0, 0),
+        anchor: new google.maps.Point(SIZE / 2, SIZE / 2),
+      };
+
+      geolocationMarker = new google.maps.Marker({
+        position: new google.maps.LatLng(0.0, 0.0),
+        map: map,
+        icon: icon,
+      });
+
+      update = function (lat, lng) {
+        console.log(lat, lng);
+        geolocationMarker.setPosition({
+          lat: lat,
+          lng: lng,
+        });
+      };
+
+      geoSuccess = function (position) {
+        console.log('geoSuccess');
+        update(position.coords.latitude, position.coords.longitude);
+      };
+
+      geoError = function (err) {
+        console.log('ERROR(' + err.code + '): ' + err.message);
+      };
+
+      console.log('watchPosition');
+      id = navigator.geolocation.watchPosition(geoSuccess, geoError);
+      geolocationWatchId = id;
+
+    } else {
+      console.log('No navigator.geolocation available');
+    }
   };
 
   this.locations = {

@@ -233,12 +233,17 @@ window.initMap = function () {
     mapController.removeControls();
   });
 
-  // Bind map locations to auth events.
+  // Bind fetch of locations and user's geolocation to auth events.
+  // We could ask unauthenticated user for geolocation but this might
+  // lead user's disallowing sharing their location because no map is
+  // yet visible.
   authService.on('login', function () {
     locationsService.listen(mapController);
+    mapController.showGeolocation();
   });
   authService.on('logout', function () {
     locationsService.unlisten();
+    mapController.hideGeolocation();
   });
 
   // Init mainmenu and locations if user is already logged in,
