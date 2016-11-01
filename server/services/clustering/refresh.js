@@ -1,5 +1,5 @@
 // Usage:
-//   $ node api/services/clustering/refresh.js
+//   $ node refresh.js
 
 var local = require('../../../config/local');
 var monk = require('monk');

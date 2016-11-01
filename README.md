@@ -40,7 +40,7 @@ First, fire up mongo and node. Then, run full test suite:
 
 The test suite includes:
 
-- Server API tests powered by **mocha**. Run separately by `$ npm run test:api`.
+- Server API tests powered by **mocha**. Run separately by `$ npm run test:server`.
 - Client-side UI tests powered by **casperjs**. Run separately by `$ npm run test:client`.
 
 ## Migration

@@ -1,5 +1,5 @@
 
-var local = require('./config/local');
+var local = require('../config/local');
 var http = require('http');
 var express = require('express');
 var app = express();
@@ -13,13 +13,13 @@ var monk = require('monk');
 var path = require('path');
 
 var webpack = require('webpack');
-var webpackConfig = require('./config/webpack');
+var webpackConfig = require('../config/webpack');
 
 // Run immediately after server is up.
-var bootstrap = require('./config/bootstrap');
+var bootstrap = require('../config/bootstrap');
 
-var authController = require('./api/controllers/auth');
-var locationsController = require('./api/controllers/locations');
+var authController = require('./controllers/auth');
+var locationsController = require('./controllers/locations');
 
 
 // Controllers setup
@@ -149,9 +149,8 @@ console.log('Serving uploaded files from', local.uploadUrl);
 
 // Catch all to single page app.
 // Must be the final step in the app middleware chain.
-// Note: the url /index.html is served via webpack in dev.
 app.get('/*', function (req, res) {
-  res.sendFile(path.resolve(__dirname, 'public', 'index.html'));
+  res.sendFile(path.resolve(__dirname, '..', 'public', 'index.html'));
 });
 
 
