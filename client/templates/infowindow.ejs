@@ -1,2 +1,11 @@
 <a href="/location/<%= location._id %>"><strong><%= location.name %></strong></a>
-<p>See at <a href="http://stalkers.kohteet.org/location.php?lid=<%= location.locatorId %>" target="_blank">stalkers.kohteet.org</a>.</p>
+
+<% var j, ts; %>
+<% ts = location.tags; %>
+<p class="tresdb-tags">
+<% for (j = 0; j < ts.length; j += 1) { %>
+  <span class="label label-default"><%= ts[j] %></span>
+<% } %>
+</p>
+
+<a href="/location/<%= location._id %>">See more...</a>
