@@ -78,6 +78,11 @@ exports.getWithin = function (db, data, response) {
   //       equals to zoom level. Get only locations on this and higher layers.
   //   response
   //     Socket.io response
+  //
+  // Response on success:
+  //   {
+  //     locations: arrayOfLocations
+  //   }
 
   // Validate the request to prevent injection
   var validRequest = (data.hasOwnProperty('token') &&
