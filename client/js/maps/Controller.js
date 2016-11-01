@@ -167,6 +167,7 @@ module.exports = function (htmlElement, defaultMapstate) {
 
       // Open new info window
       infowindow = new google.maps.InfoWindow({
+        maxWidth: 250,
         content: infoTemplate({ location: loc }),
       });
 
