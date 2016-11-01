@@ -24,6 +24,10 @@ module.exports = {
   // URLs of the uploaded files are prefixed with this URL root path:
   uploadUrl: '/uploads',
 
+  // Log files
+  // Logs about requests are stored under this directory:
+  logDir: path.resolve(__dirname, '../.data/logs'),
+
   // HTTPS
   // TresDB itself uses only HTTP. However if TresDB is running behind
   // a TLS-endpoint reverse-proxy like Nginx, the protocol appears to be

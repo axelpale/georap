@@ -43,6 +43,10 @@ The test suite includes:
 - Server API tests powered by **mocha**. Run separately by `$ npm run test:server`.
 - Client-side UI tests powered by **casperjs**. Run separately by `$ npm run test:client`.
 
+## Logging
+
+Server logs are stored under `.data/logs/` by default. To change the dir, see `config/local.js`. See `server/services/logs` for how logs are created.
+
 ## Migration
 
 During development, the database schema can and will evolve. For each schema evolution step, the major package version is increased. To update old schemas, we implement programmatic migration steps for each version increment and a script to execute them.

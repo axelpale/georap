@@ -15,6 +15,9 @@ var path = require('path');
 var webpack = require('webpack');
 var webpackConfig = require('../config/webpack');
 
+// Logging
+var loggers = require('./services/logs/loggers');
+
 // Run immediately after server is up.
 var bootstrap = require('../config/bootstrap');
 
@@ -70,6 +73,13 @@ app.disable('x-powered-by');
 
 // -----------------------
 // Security best practices END
+
+
+// Request logging
+// ---------------
+app.use(loggers.http());
+// ---------------
+// Request logging END
 
 
 // Static assets
