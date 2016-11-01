@@ -63,6 +63,14 @@ exports.findWithin = function (options) {
         spherical: true,
       },
     },
+    // Return only what is needed for displaying markers and infowindows.
+    {
+      $project: {
+        name: true,
+        geom: true,
+        tags: true,
+      },
+    },
   ]).then(function (results) {
     return callback(null, results);
   }).catch(callback);
