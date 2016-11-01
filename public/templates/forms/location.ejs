@@ -9,11 +9,11 @@
 
       <% var j, ts; %>
       <% ts = location.tags; %>
-      <ul>
+      <p class="tresdb-tags">
       <% for (j = 0; j < ts.length; j += 1) { %>
-        <li><%= ts[j] %></li>
+        <span class="label label-default"><%= ts[j] %></span>
       <% } %>
-      </ul>
+      </p>
 
       <% var i, cs, c; %>
       <% cs = location.content; %>
