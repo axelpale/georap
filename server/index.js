@@ -18,15 +18,10 @@ var webpackConfig = require('../config/webpack');
 // Run immediately after server is up.
 var bootstrap = require('../config/bootstrap');
 
-var authController = require('./controllers/auth');
-var locationsController = require('./controllers/locations');
+// Request handlers
+var authHandlers = require('./handlers/auth');
+var locationsHandlers = require('./handlers/locations');
 
-
-// Controllers setup
-var controllers = {
-  auth: authController,
-  locations: locationsController,
-};
 
 
 // Log environment
@@ -168,39 +163,39 @@ io.on('connection', function (socket) {
 
   // Authentication
   socket.on('auth/login', function (data, res) {
-    controllers.auth.login(db, data, res);
+    authHandlers.login(db, data, res);
   });
 
   // Change password
   socket.on('auth/changePassword', function (data, res) {
-    controllers.auth.changePassword(db, data, res);
+    authHandlers.changePassword(db, data, res);
   });
 
   // Password reset
   socket.on('auth/sendResetPasswordEmail', function (data, res) {
-    controllers.auth.sendResetPasswordEmail(db, mailer, host, data, res);
+    authHandlers.sendResetPasswordEmail(db, mailer, host, data, res);
   });
   socket.on('auth/resetPassword', function (data, res) {
-    controllers.auth.resetPassword(db, data, res);
+    authHandlers.resetPassword(db, data, res);
   });
 
   // Invitation & post-invite sign up
   socket.on('auth/sendInviteEmail', function (data, res) {
-    controllers.auth.sendInviteEmail(db, mailer, host, data, res);
+    authHandlers.sendInviteEmail(db, mailer, host, data, res);
   });
   socket.on('auth/signup', function (data, res) {
-    controllers.auth.signup(db, data, res);
+    authHandlers.signup(db, data, res);
   });
 
   // Locations
   socket.on('locations/getOne', function (data, res) {
-    controllers.locations.getOne(db, data, res);
+    locationsHandlers.getOne(db, data, res);
   });
   socket.on('locations/get', function (data, res) {
-    controllers.locations.get(db, data, res);
+    locationsHandlers.get(db, data, res);
   });
   socket.on('locations/getWithin', function (data, res) {
-    controllers.locations.getWithin(db, data, res);
+    locationsHandlers.getWithin(db, data, res);
   });
 });
 

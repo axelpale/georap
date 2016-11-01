@@ -22,7 +22,7 @@ exports.recomputeNeighborsAvgDist = function (db, callback) {
 };
 
 exports.findWithin = function (options) {
-  // Used by the locations controller.
+  // Used by the locations handler.
   // Most calls to this function are coming from real users.
   //
   // Options:
