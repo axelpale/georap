@@ -43,7 +43,9 @@ exports.getOne = function (db, data, response) {
             entry.data.url = attachments.getAbsoluteUrl(entry);
 
             // Figure out the content mime type.
-            entry.data.mimetype = mime.lookup(entry.data.filename);
+            if (!entry.data.hasOwnProperty('mimetype')) {
+              entry.data.mimetype = mime.lookup(entry.data.filename);
+            }
           }
           return entry;
         });
