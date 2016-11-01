@@ -116,7 +116,7 @@ exports.getWithin = function (db, data, response) {
       db: db,
       center: data.center,
       radius: data.radius,
-      // Only locations on the layer or higher (smalle layer number).
+      // Only locations on the layer or higher (smaller layer number).
       query: {
         layer: { $lte: data.layer },
         deleted: false,
