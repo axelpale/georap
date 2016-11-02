@@ -12,6 +12,8 @@ var local = require('../../config/local');
 var FORMAT = 'YYYY-MM-DDTHH-mm-ss';
 
 var findLatest = function (callback) {
+  // Find name of the latest backup.
+  //
   // Parameters:
   //   callback
   //     function (err, latestName)
