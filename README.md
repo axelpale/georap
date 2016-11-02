@@ -75,9 +75,13 @@ Server logs are stored under `.data/logs/` by default. To change the dir, see `c
 
 ## Migration
 
-During development, the database schema can and will evolve. For each schema evolution step, the major package version is increased. To update old schemas, we implement programmatic migration steps for each version increment and a script to execute them.
+During development, the database schema can and will evolve. For each schema evolution step, the major package version is increased (e.g. from 1.2.3 to 2.0.0). To update old TresDB instances and their databases, we implement programmatic migration steps for each version increment and a script to execute them.
 
-You can run the migration by:
+First, pull the desired new TresDB version from git:
+
+    $ git pull
+
+Then, you can run the migration by:
 
     $ npm run migrate
 
