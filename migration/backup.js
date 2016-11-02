@@ -7,7 +7,7 @@ program
   .version('0.0.1')
   .arguments('[cmd]')
   .action(function (cmd) {
-    if (cmd) {
+    if (cmd === 'list') {
       listBackups = true;
     }
   })
