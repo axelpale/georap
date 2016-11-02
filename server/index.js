@@ -32,8 +32,13 @@ console.log('Starting TresDB in environment:', local.env);
 
 
 // Database
+var db;
 
-var db = monk(local.mongo.url);
+if (local.env === 'test') {
+  db = monk(local.mongo.testUrl);
+} else {
+  db = monk(local.mongo.url);
+}
 
 db.then(function () {
   console.log('Connected to MongoDB...');
@@ -84,7 +89,7 @@ app.use(loggers.http());
 
 // Static assets
 // -------------
-if (local.env === 'development') {
+if (local.env === 'development' || local.env === 'test') {
   // Webpack development middleware
   //
   // The following middleware is only for development.

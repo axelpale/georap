@@ -32,9 +32,31 @@ Second, start the Node server:
 
 Finally, browse to [localhost:3000](http://localhost:3000).
 
+
+
+## Environments
+
+TresDB's Node server can be started in 3 environments: `development`, `production`, and `test`. The effects of each env is listed below:
+
+- `development`: Client-side JS is bundled but not minified. Webpack server static assets from memory and recompiles the changes automatically without need to restart the server.
+- `production`: Client-side JS is bundled and minified once on server start. Static files are served by Express.
+- `test`: Same as development but a test MongoDB database is used instead of the main one. The test database is cleared and populated with fixture data before each test.
+
+The environment to use is specified by setting `NODE_ENV`. For example to run server in dev env, use `NODE_ENV=development node server/index.js`. Most `npm run` scripts of TresDB already include this env specification. See `package.json` for details.
+
+
+
 ## Testing
 
-First, fire up mongo and node. Then, run full test suite:
+First, we need to create a database `test` for tests and a database user. See MongoDB instructions below. Second, fire up mongod:
+
+    $ npm run mongod
+
+Third, open new terminal session and fire up the server in test environment:
+
+    $ npm run server:test
+
+Finally, open yet another terminal session and run the full test suite:
 
     $ npm test
 
@@ -42,6 +64,8 @@ The test suite includes:
 
 - Server API tests powered by **mocha**. Run separately by `$ npm run test:server`.
 - Client-side UI tests powered by **casperjs**. Run separately by `$ npm run test:client`.
+
+
 
 ## Logging
 
@@ -61,6 +85,8 @@ Under the hood, the migration script does the following:
 - figures out the required database schema version
 - deduces required migration steps, specified under `migration/versions/`
 - updates the database by executing the steps.
+
+
 
 ## Database backups
 
@@ -83,6 +109,7 @@ To restore a specific snapshot:
     $ npm run restore 2016-12-31T23-59-59
 
 The backups are stored under `.data/backups` by default. To change this, modify `config.local.mongo.backupDir`. To remove a backup, remove its directory, e.g. `$ rm -rf .data/backups/2016-12-31T23-59-59`.
+
 
 
 ## Production
@@ -127,8 +154,6 @@ Now you can and should run mongod with authentication:
 
     $ mongod --auth --dbpath=.data/db
 
-
-
 ### Check dependencies for vulnerabilities
 
     $ npm install nsp -g
@@ -137,6 +162,7 @@ Now you can and should run mongod with authentication:
 ### Run in production environment
 
     $ npm run production
+
 
 
 ## Technology stack
