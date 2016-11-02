@@ -50,7 +50,6 @@ module.exports = {
   plugins: PROD ? [
     new webpack.optimize.UglifyJsPlugin(),
   ] : [
-    new webpack.HotModuleReplacementPlugin(),
     new webpack.NoErrorsPlugin(),
   ],
 
