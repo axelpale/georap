@@ -69,7 +69,9 @@ The test suite includes:
 
 ## Logging
 
-Server logs are stored under `.data/logs/` by default. To change the dir, see `config/local.js`. See `server/services/logs` for how logs are created.
+Server logs are stored under `.data/logs/` by default. To change the dir, see `config/local.js`. See `server/services/logs` for how logs are created. Logging is enabled only if `NODE_ENV=production`.
+
+
 
 ## Migration
 

@@ -82,7 +82,9 @@ app.disable('x-powered-by');
 
 // Request logging
 // ---------------
-app.use(loggers.http());
+if (local.env === 'production') {
+  app.use(loggers.http());
+}
 // ---------------
 // Request logging END
 
