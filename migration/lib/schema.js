@@ -4,7 +4,7 @@ var pjson = require('../../package.json');
 var semver = require('semver');
 
 exports.getDesiredVersion = function () {
-  // Get desired version
+  // Return desired version as integer. Equals to package major version.
   return semver.major(pjson.version);
 };
 
@@ -16,6 +16,11 @@ exports.getVersion = function (configColl, callback) {
   //     A MongoDB collection where the schema version is kept.
   //   callback
   //     function (err, version)
+  //       Parameters:
+  //         err
+  //           null if no errors
+  //         version
+  //           integer
 
   configColl.findOne({ key: 'schemaVersion' }).then(function (doc) {
     if (doc) {
