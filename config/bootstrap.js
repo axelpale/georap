@@ -2,31 +2,54 @@
 
 var local = require('./local');
 var bcrypt = require('bcryptjs');
+var async = require('async');
 
 var MONGO_DUPLICATE_KEY_ERROR = 11000;
 var MONGO_ASCENDING = 1;
 
 module.exports = function (db) {
 
-  (function insertDefaultUser() {
+  async.series([
 
-    var pwd = local.admin.password;
-    var r = local.bcrypt.rounds;
+    function ensureDefaultUser(next) {
+      var users = db.get('users');
 
-    bcrypt.hash(pwd, r, function (err0, hash) {
-      if (err0) {
-        throw err0;
-      }  // else
+      users.findOne({ name: local.admin.username }).then(function (user) {
+        if (user) {
+          // User exists. No need to create.
+          return next();
+        }
 
-      var user = {
-        name: local.admin.username,
-        email: local.admin.email,
-        hash: hash,
-        admin: true,
-      };
+        // Create the default user
+        var pwd = local.admin.password;
+        var r = local.bcrypt.rounds;
 
-      // Ensure collection
-      var users = db.create('users');
+        bcrypt.hash(pwd, r, function (err, hash) {
+          if (err) {
+            return next(err);
+          }  // else
+
+          var user = {
+            name: local.admin.username,
+            email: local.admin.email,
+            hash: hash,
+            admin: true,
+          };
+
+          users.insert(user).then(function () {
+            console.log('Default user inserted.');
+            return next();
+          }).catch(function (err1) {
+            return next(err1);
+          });
+        });
+      }).catch(function (err) {
+        return next(err);
+      });
+    },
+
+    function createUserIndices(next) {
+      var users = db.get('users');
 
       // Ensure unique index
       var query = { email: MONGO_ASCENDING };
@@ -34,10 +57,7 @@ module.exports = function (db) {
       users.ensureIndex(query, { unique: true }, function (err1) {
         if (err1) {
           // Documents in the collection makes this index impossible.
-          console.error('config/bootstrap: ensureIndex error');
-          console.error(err1);
-
-          return;
+          return next(err1);
         }
 
         var query2 = { name: MONGO_ASCENDING };
@@ -45,27 +65,35 @@ module.exports = function (db) {
         users.ensureIndex(query2, { unique: true }, function (err2) {
           if (err2) {
             // Documents in the collection makes this index impossible.
-            console.error('config/bootstrap: ensureIndex error');
-            console.error(err2);
-
-            return;
+            return next(err2);
           }
 
-          users.insert(user)
-          .then(function () {
-            console.log('Default user inserted.');
-          })
-          .catch(function (err3) {
-            if (err3.code === MONGO_DUPLICATE_KEY_ERROR) {
-              // User with this email already exists. Nice :)
-            } else {
-              console.error('config/bootstrap: insert error');
-              console.error(err3);
-            }
-          });
+          return next();
         });
       });
-    });  // bcrypt hash
+    },
 
-  }());  // insert default user END
+    function createLocationIndices(next) {
+      var locs = db.get('locations');
+
+      locs.ensureIndex({ geom: '2dsphere' }, {}, function (err1) {
+        if (err1) {
+          return next(err1);
+        }
+
+        locs.ensureIndex({ layer: 1 }, {}, function (err2) {
+          if (err2) {
+            return next(err2);
+          }
+
+          return next();
+        });
+      });
+    },
+
+  ], function afterSeries(err) {
+    if (err) {
+      console.error(err);
+    }
+  });
 };
