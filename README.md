@@ -169,32 +169,33 @@ Now you can and should run mongod with authentication:
 
 ## Technology stack
 
-- [Google Maps JavaScript API](https://developers.google.com/maps/documentation/javascript/)
-- [Marked](https://github.com/chjj/marked)
-- [Bootstrap](http://getbootstrap.com/)
-- [jQuery](https://jquery.com/)
-- [Lodash](https://lodash.com/)
-- [Webpack](https://webpack.github.io/)
-- [Socket.io](http://socket.io/)
-- [bcrypt](https://www.npmjs.com/package/bcryptjs)
-- [JSON Web Tokens](https://github.com/auth0/node-jsonwebtoken)
-- [Express](https://expressjs.com/)
-- [Node.js](https://nodejs.org/en/)
-- [Monk](https://github.com/Automattic/monk)
-- [MongoDB](https://docs.mongodb.com/manual/)
+- [Google Maps JavaScript API](https://developers.google.com/maps/documentation/javascript/): maps and markers
+- [Marked](https://github.com/chjj/marked): markdown parser
+- [Bootstrap](http://getbootstrap.com/): styles
+- [jQuery](https://jquery.com/): DOM manipulation
+- [Lodash](https://lodash.com/): utility functions
+- [Webpack](https://webpack.github.io/): client code bundling
+- [Socket.io](http://socket.io/): client-server connection
+- [bcrypt](https://www.npmjs.com/package/bcryptjs): password hashing
+- [JSON Web Tokens](https://github.com/auth0/node-jsonwebtoken): session management
+- [Morgan](https://github.com/expressjs/morgan): request logging
+- [Express](https://expressjs.com/): server framework
+- [Node.js](https://nodejs.org/en/): runtime environment
+- [Monk](https://github.com/Automattic/monk): database connection layer
+- [MongoDB](https://docs.mongodb.com/manual/): document database
 
 Development tools:
 
-- [ESLint](http://eslint.org/)
-- [CasperJS](http://casperjs.org/)
-- [Mocha](https://mochajs.org/)
-- [Should](http://shouldjs.github.io/)
+- [ESLint](http://eslint.org/): linting
+- [CasperJS](http://casperjs.org/): headless testing
+- [Mocha](https://mochajs.org/): test runner
+- [Should](http://shouldjs.github.io/): assertions
 
 For production, we recommend:
 
-- [DigitalOcean](https://m.do.co/c/3e63e3de8e31)
-- [Nginx](https://www.nginx.com/)
-- [Let's Encrypt](https://letsencrypt.org/)
+- [DigitalOcean](https://m.do.co/c/3e63e3de8e31): cloud servers
+- [Nginx](https://www.nginx.com/): reverse proxy
+- [Let's Encrypt](https://letsencrypt.org/): TLS certificates
 
 
 ## Versioning
