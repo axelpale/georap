@@ -186,6 +186,19 @@ describe('TresDB Socket.io API', function () {
         }, done);
       });
     });
+
+    context('success when', function () {
+      var assertSuccess = createResponseAssert('auth/changePassword', 'success',
+                                               true);
+
+      it('token ok, passwords match', function (done) {
+        assertSuccess({
+          token: goodToken,
+          currentPassword: local.admin.password,
+          newPassword: local.admin.password,
+        }, done);
+      });
+    });
   });
 
 });
