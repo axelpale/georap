@@ -1,4 +1,5 @@
-/* global describe, context, it, before, after */
+/* global describe, context, it, before, after, beforeEach */
+/* eslint-disable no-sync */
 
 var local = require('../../config/local');
 // eslint-disable-next-line no-unused-vars
@@ -91,7 +92,6 @@ describe('TresDB Socket.io API', function () {
   };
 
   describe('auth/login should response with', function () {
-
 
     context('JWT token when', function () {
 
