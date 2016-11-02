@@ -21,7 +21,7 @@
     "backup": "node migration/backup.js",
     "restore": "node migration/restore.js",
     "cluster": "node server/services/clustering/refresh.js",
-    "test": "npm run test:server && npm run test:client",
+    "test": "npm run test:server && npm run test:client && npm run test:migration && npm run test:clustering",
     "test:server": "mocha specs/server/auth.spec.js",
     "test:migration": "mocha migration/specs/*.spec.js",
     "test:clustering": "mocha server/services/clustering/lib/specs/*.spec.js",
