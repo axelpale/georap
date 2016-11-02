@@ -7,7 +7,7 @@ var local = require('../../config/local');
 var monk = require('monk');
 
 // DB
-var db = monk(local.mongo.url);
+var db = monk(local.mongo.testUrl);
 
 var TEST_COLLECTION_NAME = 'test_collection';
 
