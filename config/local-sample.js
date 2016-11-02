@@ -75,7 +75,17 @@ module.exports = {
   },
 
   // Node environment.
-  // Define only once. See https://github.com/eslint/eslint/issues/657
+  // Defaults to 'development' like app.get('env') in Express.
+  // Access process.env only in one place, here.
+  // See https://github.com/eslint/eslint/issues/657
   // eslint-disable-next-line no-process-env
-  env: (process.env.NODE_ENV === 'production') ? 'production' : 'development',
+  env: (function () {
+    var env = process.env.NODE_ENV;
+
+    if (env === 'production' || env === 'development' || env === 'test') {
+      return env;
+    }  // else
+
+    return 'development';
+  }()),
 };

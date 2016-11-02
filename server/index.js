@@ -28,7 +28,7 @@ var locationsHandlers = require('./handlers/locations');
 
 
 // Log environment
-console.log('Starting TresDB in environment:', app.get('env'));
+console.log('Starting TresDB in environment:', local.env);
 
 
 // Database
