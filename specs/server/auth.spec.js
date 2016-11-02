@@ -1,10 +1,42 @@
 /* global describe, context, it, before, after */
 
+var local = require('../../config/local');
 // eslint-disable-next-line no-unused-vars
 var should = require('should');
 var jwt = require('jsonwebtoken');
-var local = require('../../config/local');
 var io = require('socket.io-client');
+var monk = require('monk');
+var bcrypt = require('bcryptjs');
+
+var db = monk(local.mongo.testUrl);
+
+
+// Set up test fixtures
+
+var ADMIN_USER = 'admin';
+var ADMIN_EMAIL = 'admin@example.com';
+var ADMIN_PASSWORD = 'admin_password';
+
+var TESTER_USER = 'tester';
+var TESTER_EMAIL = 'tester@example.com';
+var TESTER_PASSWORD = 'tester_password';
+
+var fixture = {
+  users: [
+    {
+      name: ADMIN_USER,
+      email: ADMIN_EMAIL,
+      hash: bcrypt.hashSync(ADMIN_PASSWORD, local.bcrypt.rounds),
+      admin: true,
+    },
+    {
+      name: TESTER_USER,
+      email: TESTER_EMAIL,
+      hash: bcrypt.hashSync(TESTER_PASSWORD, local.bcrypt.rounds),
+      admin: false,
+    },
+  ],
+};
 
 
 describe('TresDB Socket.io API', function () {
@@ -17,6 +49,19 @@ describe('TresDB Socket.io API', function () {
 
   after(function () {
     socket.disconnect();
+  });
+
+  beforeEach(function (done) {
+    // Drop possibly existing collections
+    var users = db.get('users');
+    users.drop().then(function () {
+
+      // Populate with test users
+      users.insert(fixture.users).then(function () {
+        done();
+      }).catch(done);
+
+    }).catch(done);
   });
 
   var createResponseAssert = function (ev, key, val) {
@@ -54,8 +99,8 @@ describe('TresDB Socket.io API', function () {
 
       it('known email and password are provided', function (done) {
         assertToken({
-          email: local.admin.email,
-          password: local.admin.password,
+          email: TESTER_EMAIL,
+          password: TESTER_PASSWORD,
         }, done);
       });
     });
@@ -70,7 +115,7 @@ describe('TresDB Socket.io API', function () {
       });
 
       it('a valid email is provided without password', function (done) {
-        assertIRE({ email: local.admin.email }, done);
+        assertIRE({ email: TESTER_EMAIL }, done);
       });
 
       it('an unknown email is provided without password', function (done) {
@@ -118,9 +163,9 @@ describe('TresDB Socket.io API', function () {
     });
 
     context('IncorrectPasswordError when', function () {
-      it('a wrong is given with known email', function (done) {
+      it('a wrong pwd is given with known email', function (done) {
         var payload = {
-          email: local.admin.email,
+          email: TESTER_EMAIL,
           password: 'foobar',
         };
 
@@ -134,10 +179,10 @@ describe('TresDB Socket.io API', function () {
 
   describe('auth/changePassword should response with', function () {
 
-    var goodToken = jwt.sign({ email: local.admin.email }, local.secret);
+    var goodToken = jwt.sign({ email: TESTER_EMAIL }, local.secret);
     var badEmailToken = jwt.sign({ email: 'foo123@bar.com' }, local.secret);
     var badToken1 = jwt.sign({ foo: 'bar' }, local.secret);
-    var badToken2 = jwt.sign({ email: local.admin.email }, 'foo');
+    var badToken2 = jwt.sign({ email: TESTER_EMAIL }, 'foo');
 
     context('InvalidRequestError when', function () {
       var assertIRE = createResponseAssert('auth/changePassword', 'error',
@@ -167,8 +212,8 @@ describe('TresDB Socket.io API', function () {
       it('unknown email is provided', function (done) {
         assertUEE({
           token: badEmailToken,
-          currentPassword: local.admin.password,
-          newPassword: local.admin.password,
+          currentPassword: TESTER_PASSWORD,
+          newPassword: TESTER_PASSWORD,
         }, done);
       });
 
@@ -194,8 +239,8 @@ describe('TresDB Socket.io API', function () {
       it('token ok, passwords match', function (done) {
         assertSuccess({
           token: goodToken,
-          currentPassword: local.admin.password,
-          newPassword: local.admin.password,
+          currentPassword: TESTER_PASSWORD,
+          newPassword: TESTER_PASSWORD,
         }, done);
       });
     });
