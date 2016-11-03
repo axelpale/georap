@@ -2,7 +2,7 @@
   "name": "tresdb",
   "private": true,
   "version": "3.1.1",
-  "description": "Esoteric location CMS built on Express",
+  "description": "Geographical CMS built on Express.js",
   "keywords": [
     "GIS",
     "CMS"
