@@ -4,7 +4,6 @@ var local = require('./local');
 var bcrypt = require('bcryptjs');
 var async = require('async');
 
-var MONGO_DUPLICATE_KEY_ERROR = 11000;
 var MONGO_ASCENDING = 1;
 
 module.exports = function (db) {
@@ -29,14 +28,14 @@ module.exports = function (db) {
             return next(err);
           }  // else
 
-          var user = {
+          var adminUser = {
             name: local.admin.username,
             email: local.admin.email,
             hash: hash,
             admin: true,
           };
 
-          users.insert(user).then(function () {
+          users.insert(adminUser).then(function () {
             console.log('Default user inserted.');
             return next();
           }).catch(function (err1) {
