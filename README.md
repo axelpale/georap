@@ -4,6 +4,23 @@ Everyone has their own secret places. TresDB was created to allow you to browse,
 
 TresDB is also a web application and thus requires installation to a web server. The web server is required to have Node.js and MongoDB available.
 
+**Table of Contents**
+
+- [Install](#)
+- [Quick start](#)
+- [Environments](#)
+- [Testing](#)
+- [Logging](#)
+- [Migration](#)
+- [Database backups](#)
+- [MongoDB user setup](#)
+- [Production](#)
+	- [Check dependencies for vulnerabilities](#)
+	- [Run in production environment](#)
+- [Technology stack](#)
+- [Versioning](#)
+- [Issues](#)
+- [License](#)
 
 
 ## Install
