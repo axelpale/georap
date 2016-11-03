@@ -6,21 +6,19 @@ TresDB is also a web application and thus requires installation to a web server.
 
 **Table of Contents**
 
-- [Install](#)
-- [Quick start](#)
-- [Environments](#)
-- [Testing](#)
-- [Logging](#)
-- [Migration](#)
-- [Database backups](#)
-- [MongoDB user setup](#)
-- [Production](#)
-	- [Check dependencies for vulnerabilities](#)
-	- [Run in production environment](#)
-- [Technology stack](#)
-- [Versioning](#)
-- [Issues](#)
-- [License](#)
+- [Install](#install)
+- [Quick start](#quick-start)
+- [Environments](#environments)
+- [Testing](#testing)
+- [Logging](#logging)
+- [Migration](#migration)
+- [Database backups](#database-backups)
+- [MongoDB user setup](#mongodb-user-setup)
+- [Production](#production)
+- [Technology stack](#technology-stack)
+- [Versioning](#versioning)
+- [Issues](#issues)
+- [License](#license)
 
 
 ## Install
