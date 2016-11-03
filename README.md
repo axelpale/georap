@@ -1,55 +1,111 @@
 # tresdb
 
-Esoteric Location CMS built on Express.
+Everyone has their own secret places. TresDB was created to allow you to browse, manage, and describe those secret geographical locations in a private but easy manner. It is a geographical content management system and targeted to persons, groups, or organisations who fear revealing their precious locations to the public or to big companies like Google who offer similar map services. Whether your topic is urban exploration, traveling, berry picking, or treasure hunting, we bet you will find TresDB useful.
+
+TresDB is also a web application and thus requires installation to a web server. The web server is required to have Node.js and MongoDB available.
+
+**Table of Contents**
+
+- [Install](#install)
+- [Quick start](#quick-start)
+- [Environments](#environments)
+- [Testing](#testing)
+- [Logging](#logging)
+- [Migration](#migration)
+- [Database backups](#database-backups)
+- [MongoDB user setup](#mongodb-user-setup)
+- [Production](#production)
+- [Technology stack](#technology-stack)
+- [Versioning](#versioning)
+- [Issues](#issues)
+- [License](#license)
+
 
 ## Install
 
-Clone the repository:
+First, clone the repository:
 
     $ git clone https://github.com/axelpale/tresdb.git
 
-Install MongoDB by following [the instructions](https://www.mongodb.org/downloads). For example, on OS X:
+Second, install MongoDB by following [the instructions](https://www.mongodb.org/downloads). For example, on OS X:
 
     $ brew install mongodb
 
-Install dependencies:
+Third, create `tresdb` database and user for the database. See [MongoDB user setup](#mongodb-user-setup) below for details.
+
+Then, install dependencies:
 
     $ npm install
 
-Rename `config/local-sample.js` to `config/local.js` and rewrite it with your settings.
+Finally, rename `config/local-sample.js` to `config/local.js` and modify it to match your setting.
 
 
 
 ## Quick start
 
-First, start MongoDB (if it ever refuses to stop, try `killall mongod`):
+First, after installation, start MongoDB (if it ever refuses to stop, try `killall mongod`):
 
-    $ npm run mongo
+    $ npm run mongod
 
-Second, start the Node server:
+Second, start the TresDB Node.js server:
 
     $ npm start
 
-Finally, browse to [localhost:3000](http://localhost:3000).
+Finally, browse to [localhost:3000](http://localhost:3000). You can change the port by editing `config/local.js`.
+
+
+
+## Environments
+
+TresDB's Node server can be started in 3 environments: `development`, `production`, and `test`. The effects of each env is listed below:
+
+- `development`: Client-side JS is bundled but not minified. Webpack server static assets from memory and recompiles the changes automatically without need to restart the server.
+- `production`: Client-side JS is bundled and minified once on server start. Static files are served by Express.
+- `test`: Same as development but a test MongoDB database is used instead of the main one. The test database is cleared and populated with fixture data before each test.
+
+You specify the environment to use by setting `NODE_ENV`. For example to run server in dev env, use `NODE_ENV=development node server/index.js`. Most `npm run` scripts of TresDB already include this env specification. See `package.json` for details.
+
+
 
 ## Testing
 
-First, fire up mongo and node. Then, run full test suite:
+First, we need to create a database `test` for tests and a database user. See [MongoDB user setup](#mongodb-user-setup) instructions below.
+
+After initial setup, fire up mongod:
+
+    $ npm run mongod
+
+Then, open a new terminal session and fire up the server in the test environment:
+
+    $ npm run server:test
+
+Finally, open yet another terminal session and run the full test suite:
 
     $ npm test
 
-The test suite includes:
+See `package.json` for test suite details.
 
-- Server API tests powered by **mocha**. Run separately by `$ npm run test:api`.
-- Client-side UI tests powered by **casperjs**. Run separately by `$ npm run test:client`.
+
+
+## Logging
+
+Server logs are stored under `.data/logs/` by default. To change the dir, edit `config/local.js`. See `server/services/logs/` for how logs are created. Logging is enabled only if `NODE_ENV=production`.
+
+
 
 ## Migration
 
-During development, the database schema can and will evolve. For each schema evolution step, the major package version is increased. To update old schemas, we implement programmatic migration steps for each version increment and a script to execute them.
+During development, the database schema can and will evolve. For each schema evolution step, the major package version is increased (e.g. from 1.2.3 to 2.0.0). To update old TresDB instances and their databases, we provice programmatic migration steps for each version increment and a script to execute them.
 
-You can run the migration by:
+First, pull the desired TresDB version from git:
+
+    $ git pull
+
+Then, you can run the migration by:
 
     $ npm run migrate
+
+You will see output about steps taken during migration.
 
 Under the hood, the migration script does the following:
 
@@ -57,6 +113,8 @@ Under the hood, the migration script does the following:
 - figures out the required database schema version
 - deduces required migration steps, specified under `migration/versions/`
 - updates the database by executing the steps.
+
+
 
 ## Database backups
 
@@ -78,20 +136,19 @@ To restore a specific snapshot:
 
     $ npm run restore 2016-12-31T23-59-59
 
-The backups are stored under `.data/backups` by default. To change this, modify `config.local.mongo.backupDir`. To remove a backup, remove its directory, e.g. `$ rm -rf .data/backups/2016-12-31T23-59-59`.
+The backups are stored under `.data/backups` by default. To change this, modify `mongo.backupDir` in `config/local.js`. To remove a backup, remove its directory, e.g. `$ rm -rf .data/backups/2016-12-31T23-59-59`.
 
 
-## Production
 
-Here are some notes and tips for putting a TresDB instance into production.
+## MongoDB user setup
 
-### Secure MongoDB
+We recommend running MongoDB in auth mode to prevent free access to the database. For that, we create three database users: one to add new database users, one to access the main database from TresDB app, and one to access the test database. The last is required only to run the test suite.
 
-Start mongod without authentication:
+To create users, start mongod without authentication:
 
     $ mongod --dbpath=.data/db
 
-Create an administrator that can add other users. For example, create a database user into `admin` database with `userAdminAnyDatabase` permission:
+Create an administrator that can add other users. Create the admin user into `admin` database with `userAdminAnyDatabase` permission like below. Replace the username and password with yours.
 
     $ mongo
     > use admin
@@ -103,26 +160,36 @@ Create an administrator that can add other users. For example, create a database
 
 Next, create a user with permission to access only `tresdb`. Note that this user needs to be created into `tresdb` database instead of `admin`. Thus, authenticate first on `admin`, and then switch to `tresdb` to create.
 
+    > use admin
     > db.auth('foodmin', 'barword')
     > use tresdb
-    > db.createUser({
-      user: 'foo',
-      pwd: 'bar',
-      roles: [{ role: 'readWrite', db: 'tresdb' }]
-    })
+    > db.createUser({ user: 'foo', pwd: 'bar', roles: ['readWrite'] })
 
-Modify `mongo.url` property in `config/local.js` to include the new credentials of the `tresdb` database user:
+Then in similar manner, create the test user that can access only 'test':
+
+    > use test
+    > db.createUser({ user: 'foo', pwd: 'bar', roles: ['readWrite'] })
+
+Modify `mongo.url` and `mongo.testUrl` properties in `config/local.js` to include the new credentials of the database users:
 
     ...
     mongo: {
-      url: 'mongodb://foo:bar@localhost:27017/tresdb'
+      url: 'mongodb://foo:bar@localhost:27017/tresdb',
+      testUrl: 'mongodb://foo:bar@localhost:27017/test'
     }
     ...
 
-Now you can and should run mongod with authentication:
+From now on, you can and you should run mongod with authentication:
 
     $ mongod --auth --dbpath=.data/db
 
+or alternatively just `$ npm run mongod`.
+
+
+
+## Production
+
+Here are some notes and tips for putting a TresDB instance into production.
 
 
 ### Check dependencies for vulnerabilities
@@ -135,33 +202,36 @@ Now you can and should run mongod with authentication:
     $ npm run production
 
 
+
 ## Technology stack
 
-- [Google Maps JavaScript API](https://developers.google.com/maps/documentation/javascript/)
-- [Bootstrap](http://getbootstrap.com/)
-- [jQuery](https://jquery.com/)
-- [Lodash](https://lodash.com/)
-- [Webpack](https://webpack.github.io/)
-- [Socket.io](http://socket.io/)
-- [bcrypt](https://www.npmjs.com/package/bcryptjs)
-- [JSON Web Tokens](https://github.com/auth0/node-jsonwebtoken)
-- [Express](https://expressjs.com/)
-- [Node.js](https://nodejs.org/en/)
-- [Monk](https://github.com/Automattic/monk)
-- [MongoDB](https://docs.mongodb.com/manual/)
+- [Google Maps JavaScript API](https://developers.google.com/maps/documentation/javascript/): maps and markers
+- [Marked](https://github.com/chjj/marked): markdown parser
+- [Bootstrap](http://getbootstrap.com/): styles
+- [jQuery](https://jquery.com/): DOM manipulation
+- [Lodash](https://lodash.com/): utility functions
+- [Webpack](https://webpack.github.io/): client code bundling
+- [Socket.io](http://socket.io/): client-server connection
+- [bcrypt](https://www.npmjs.com/package/bcryptjs): password hashing
+- [JSON Web Tokens](https://github.com/auth0/node-jsonwebtoken): session management
+- [Morgan](https://github.com/expressjs/morgan): request logging
+- [Express](https://expressjs.com/): server framework
+- [Node.js](https://nodejs.org/en/): runtime environment
+- [Monk](https://github.com/Automattic/monk): database connection layer
+- [MongoDB](https://docs.mongodb.com/manual/): document database
 
 Development tools:
 
-- [ESLint](http://eslint.org/)
-- [CasperJS](http://casperjs.org/)
-- [Mocha](https://mochajs.org/)
-- [Should](http://shouldjs.github.io/)
+- [ESLint](http://eslint.org/): linting
+- [CasperJS](http://casperjs.org/): headless testing
+- [Mocha](https://mochajs.org/): test runner
+- [Should](http://shouldjs.github.io/): assertions
 
 For production, we recommend:
 
-- [DigitalOcean](https://m.do.co/c/3e63e3de8e31)
-- [Nginx](https://www.nginx.com/)
-- [Let's Encrypt](https://letsencrypt.org/)
+- [DigitalOcean](https://m.do.co/c/3e63e3de8e31): cloud servers
+- [Nginx](https://www.nginx.com/): reverse proxy
+- [Let's Encrypt](https://letsencrypt.org/): TLS certificates
 
 
 ## Versioning

@@ -1,22 +1,35 @@
 
-var local = require('../../config/local');
 var versions = require('../versions');
 var schema = require('./schema');
-var monk = require('monk');
 
-exports.migrate = function (callback) {
+exports.migrate = function (options) {
+  // Parameters:
+  //   options
+  //     db
+  //       monk database instance
+  //     targetVersion
+  //       Optional version integer to migrate to. If not specified,
+  //       the target version is fetched from the package.json.
+  //     callback
+  //       function (err)
+  var db, targetVersion;
 
-  // DB
-  var db = monk(local.mongo.url);
+  // Database
+  db = options.db;
 
   // Get desired version
-  var targetVersion = schema.getDesiredVersion();
+  if (options.hasOwnProperty('targetVersion')) {
+    if (typeof options.targetVersion !== 'number') {
+      throw new Error('targetVersion must be a number');
+    }
+    targetVersion = options.targetVersion;
+  } else {
+    targetVersion = schema.getDesiredVersion();
+  }
 
   // Do not call callback elsewhere. Call 'then' instead.
   var then = function (err) {
-    db.close();
-
-    return callback(err);
+    return options.callback(err);
   };
 
   console.log('##### Migration #####');

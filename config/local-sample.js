@@ -15,8 +15,18 @@ module.exports = {
   // Static files
   // Express/Webpack will copy the static files to be served to this directory:
   staticDir: path.resolve(__dirname, '../.tmp/public'),
-  // URLs of the the static files are prefixed with this static URL root path:
+  // URLs of the static files are prefixed with this static URL root path:
   staticUrl: '/assets',
+
+  // Uploaded files
+  // Express will serve uploaded files (location attachments) from this dir.
+  uploadDir: path.resolve(__dirname, '../.data/uploads'),
+  // URLs of the uploaded files are prefixed with this URL root path:
+  uploadUrl: '/uploads',
+
+  // Log files
+  // Logs about requests are stored under this directory:
+  logDir: path.resolve(__dirname, '../.data/logs'),
 
   // HTTPS
   // TresDB itself uses only HTTP. However if TresDB is running behind
@@ -40,6 +50,7 @@ module.exports = {
   // Mongo database settings
   mongo: {
     url: 'mongodb://foouser:barword@localhost:27017/tresdb',
+    testUrl: 'mongodb://foouser:barword@localhost:27017/test',
     backupDir: path.resolve(__dirname, '../.data/backups/'),
   },
 
@@ -65,7 +76,17 @@ module.exports = {
   },
 
   // Node environment.
-  // Define only once. See https://github.com/eslint/eslint/issues/657
-  // eslint-disable-next-line no-process-env
-  env: (process.env.NODE_ENV === 'production') ? 'production' : 'development',
+  // Defaults to 'development' like app.get('env') in Express.
+  // Access process.env only in one place, here.
+  // See https://github.com/eslint/eslint/issues/657
+  env: (function () {
+    // eslint-disable-next-line no-process-env
+    var env = process.env.NODE_ENV;
+
+    if (env === 'production' || env === 'development' || env === 'test') {
+      return env;
+    }  // else
+
+    return 'development';
+  }()),
 };

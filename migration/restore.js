@@ -11,6 +11,8 @@ program
   })
   .parse(process.argv);
 
+// If backupName is null or empty, most recent backup is used.
+
 backups.restore(backupName, function (err, restoredName) {
   if (err) {
     if (err.name === 'InvalidBackupName') {

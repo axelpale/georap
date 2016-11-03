@@ -4,15 +4,11 @@ var webpack = require('webpack');
 var path = require('path');
 var local = require('./local');
 
-// Depend on environment.
-// See http://stackoverflow.com/a/31228568/638546
-var PROD = (local.env === 'production');
-
 // compile js assets into a single bundle file
 module.exports = {
 
   // Context: the directory for Webpack to look for assets.
-  context: path.resolve(__dirname, '../public'),
+  context: path.resolve(__dirname, '../client'),
 
   // Entry: the main file that requires all others. Relative to the context.
   entry: './index.js',
@@ -47,10 +43,11 @@ module.exports = {
 
   devtool: 'source-map',
 
-  plugins: PROD ? [
+  // Plugins depend on environment.
+  // See http://stackoverflow.com/a/31228568/638546
+  plugins: (local.env === 'production') ? [
     new webpack.optimize.UglifyJsPlugin(),
   ] : [
-    new webpack.HotModuleReplacementPlugin(),
     new webpack.NoErrorsPlugin(),
   ],
 

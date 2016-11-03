@@ -1,0 +1,46 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-12">
+      <h1><%= location.name %></h1>
+
+      <% var lng = location.geom.coordinates[0]; %>
+      <% var lat = location.geom.coordinates[1]; %>
+      <p>longitude <%= lng %>, latitude <%= lat %></p>
+
+      <% var j, ts; %>
+      <% ts = location.tags; %>
+      <p class="tresdb-tags">
+      <% for (j = 0; j < ts.length; j += 1) { %>
+        <span class="label label-default"><%= ts[j] %></span>
+      <% } %>
+      </p>
+
+      <% var i, cs, c; %>
+      <% cs = location.content; %>
+      <% for (i = 0; i < cs.length; i += 1) { %>
+        <% c = cs[i]; %>
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <%= c.user %>, <%= timestamp(c.time) %>
+        </div>
+        <div class="panel-body">
+          <% if (c.type === 'story') { %>
+            <%= marked(c.data.markdown) %>
+          <% } else if (c.type === 'created') { %>
+            Added <%= location.name %> into database.
+          <% } else if (c.type === 'attachment') { %>
+            <% if (c.data.mimetype.startsWith('image')) { %>
+              <img src="<%= c.data.url %>" style="width: 100%">
+            <% } else { %>
+              <a href="<%= c.data.url %>" target="_blank"><%= c.data.filename %></a>
+            <% } %>
+          <% } else if (c.type === 'visit') { %>
+            Visited <%= location.name %>.
+          <% } %>
+        </div>
+      </div>
+      <% } %>
+
+    </div>
+  </div>
+</div>
