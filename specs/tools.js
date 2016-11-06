@@ -35,10 +35,10 @@ exports.loadFixture = function (db, fixture, callback) {
   colls = fixture.collections;
 
   // Indices are optional
-  if (!fixture.hasOwnProperty('indices')) {
-    indices = [];
-  } else {
+  if (fixture.hasOwnProperty('indices')) {
     indices = fixture.indices;
+  } else {
+    indices = [];
   }
 
   async.eachOfSeries(colls, function (items, collName, next) {
@@ -56,17 +56,21 @@ exports.loadFixture = function (db, fixture, callback) {
 
   }, function afterEachOfSeries(err) {
 
+    if (err) {
+      return callback(err);
+    }
+
     // Create indices
     async.eachSeries(indices, function (index, next) {
 
       var coll = db.get(index.collection);
 
-      coll.ensureIndex(index.spec, index.options, function (err) {
-        return next(err);
+      coll.ensureIndex(index.spec, index.options, function (err2) {
+        return next(err2);
       });
 
-    }, function afterEachSeries(err) {
-      return callback(err);
+    }, function afterEachSeries(err3) {
+      return callback(err3);
     });
 
   });
