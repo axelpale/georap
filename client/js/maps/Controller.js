@@ -116,8 +116,6 @@ module.exports = function (htmlElement, defaultMapstate) {
     // If geolocation is not already shown and geolocation is available.
     if (geolocationMarker === null && 'geolocation' in navigator) {
 
-      console.log('Navigator has geolocation');
-
       geolocationMarker = new google.maps.Marker({
         position: new google.maps.LatLng(0.0, 0.0),
         map: map,
@@ -125,7 +123,6 @@ module.exports = function (htmlElement, defaultMapstate) {
       });
 
       update = function (lat, lng) {
-        console.log(lat, lng);
         geolocationMarker.setPosition({
           lat: lat,
           lng: lng,
@@ -133,15 +130,13 @@ module.exports = function (htmlElement, defaultMapstate) {
       };
 
       geoSuccess = function (position) {
-        console.log('geoSuccess');
         update(position.coords.latitude, position.coords.longitude);
       };
 
       geoError = function (err) {
-        console.log('ERROR(' + err.code + '): ' + err.message);
+        console.error(err);
       };
 
-      console.log('watchPosition');
       id = navigator.geolocation.watchPosition(geoSuccess, geoError);
       geolocationWatchId = id;
 
