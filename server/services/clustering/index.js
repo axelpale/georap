@@ -1,3 +1,5 @@
+/* eslint-disable max-lines */
+
 var async = require('async');
 var neighbors = require('./lib/neighbors');
 var maxDistance = require('./lib/maxDistance');
@@ -19,6 +21,88 @@ exports.recomputeNeighborsAvgDist = function (db, callback) {
 
     return callback(null);
   });
+};
+
+exports.computeNeighborsAvgDistForPoint = function (db, geom, callback) {
+  // Compute neighborsAvgDist for given GeoJSON point.
+  //
+  // Parameters:
+  //   db
+  //   geom
+  //     GeoJSON Point
+  //   callback
+  //     function (err, avgDist)
+
+  var coll = db.get('locations');
+
+  // Dummy location
+  var loc = {
+    geom: geom,
+  };
+
+  neighbors.computeAvgDist(coll, loc, NEIGHBORHOOD, function (err, newLoc) {
+    if (err) {
+      return callback(err);
+    }
+
+    return callback(null, newLoc.neighborsAvgDist);
+  });
+};
+
+exports.findLayerForPoint = function (db, geom, topLayer, callback) {
+  // Find highest layer for a point in a recursive manner.
+  //
+  // Parameters:
+  //   db
+  //     Monk DB instance
+  //   geom
+  //     GeoJSON Point
+  //   topLayer
+  //     integer, start from this layer
+  //   callback
+  //     function (err, layer)
+  //       Parameters:
+  //         err
+  //           null if no error
+  //         layer
+  //           integer
+  //
+
+  // Go no deeper than bottom layer. This ensures that the recursion ends.
+  if (topLayer >= BOTTOM_LAYER) {
+    return callback(null, BOTTOM_LAYER);
+  }
+
+  // Find the desired radius of the cluster on this zoom level.
+  var d = maxDistance.getFromZoomLevel(topLayer);
+
+  //console.log('Top:', top.name);
+  //console.log('find neighbors within ', d, 'meters on layer', layer);
+
+  // Find neighbors within that radius.
+  neighbors.findWithinLayer({
+    collection: db.get('locations'),
+    location: { geom: geom },
+    maxDistance: d,
+    layer: topLayer,
+  }, function (err, neighborLocs) {
+
+    if (err) {
+      return callback(err);
+    }
+
+    if (neighborLocs.length > 0) {
+      // There is neighbors close by. Therefore we must go a layer deeper.
+      return exports.findLayerForPoint(db, geom, topLayer - 1, callback);
+    }  // else
+
+    // No neighbors close by. This is our layer.
+    return callback(null, topLayer);
+  });
+};
+
+exports.getBottomLayerNumber = function () {
+  return BOTTOM_LAYER;
 };
 
 exports.findWithin = function (options) {
