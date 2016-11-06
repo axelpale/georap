@@ -1,4 +1,5 @@
 /* global describe, it, beforeEach */
+/* eslint-disable object-property-newline */
 
 var local = require('../../config/local');
 var fixture = require('./fixtures/small');
