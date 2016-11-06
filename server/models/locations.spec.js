@@ -27,6 +27,7 @@ describe('server.models.locations', function () {
         coordinates: [0.0, 0.0],
       }, function (err, newloc) {
         if (err) {
+          // Because Monk somehow eats thrown errors.
           console.error(err);
         }
         assert.ifError(err);
@@ -34,8 +35,8 @@ describe('server.models.locations', function () {
         assert.equal(newloc.content[0].user, 'admin');
         assert.strictEqual(newloc.layer, 1);
 
-        unit.count(db, function (err, num) {
-          assert.ifError(err);
+        unit.count(db, function (err2, num) {
+          assert.ifError(err2);
           assert.equal(num, 2);
           done();
         });

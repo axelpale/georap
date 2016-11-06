@@ -32,6 +32,6 @@ module.exports = {
       collection: 'locations',
       spec: { geom: '2dsphere' },
       options: {},
-    }
+    },
   ],
 };
