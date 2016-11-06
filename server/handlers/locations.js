@@ -1,10 +1,65 @@
 
-var jwt = require('jsonwebtoken');
-var mime = require('mime');
 var local = require('../../config/local');
 var errors = require('../errors');
 var clustering = require('../services/clustering');
 var attachments = require('../services/attachments');
+var model = require('../models/locations');
+
+var ObjectId = require('mongodb').ObjectId;
+var jwt = require('jsonwebtoken');
+var mime = require('mime');
+
+
+exports.addOne = function (db, data, response) {
+  // Add new location
+  //
+  // Parameters:
+  //   db
+  //     Monk db instance
+  //   data
+  //     token
+  //       JWT token string
+  //     geom
+  //       GeoJSON point
+  //   response
+  //     Socket.io response
+  var coords;
+
+  // Request validation
+
+  if (typeof data.token !== 'string') {
+    return response(errors.responses.InvalidRequestError);
+  }
+
+  if (typeof data.geom !== 'object' || data.geom.type !== 'Point' ||
+      typeof data.geom.coordinates !== 'object') {
+    return response(errors.responses.InvalidRequestError);
+  }
+
+  coords = data.geom.coordinates;
+
+  if (coords.length !== 2 || typeof coords[0] !== 'number' ||
+      typeof coords[1] !== 'number') {
+    return response(errors.responses.InvalidRequestError);
+  }
+
+  // Token check
+  jwt.verify(data.token, local.secret, function (err, payload) {
+    if (err) {
+      return response(errors.responses.InvalidTokenError);
+    }
+
+    model.create(db, payload.name, data.geom, function (err2, newLoc) {
+      if (err2) {
+        return response(errors.responses.DatabaseError);
+      }
+
+      return response({
+        success: newLoc,
+      });
+    });
+  });
+};
 
 exports.getOne = function (db, data, response) {
   // Parameters
@@ -14,15 +69,22 @@ exports.getOne = function (db, data, response) {
   //     token
   //       JWT token string
   //     locationId
-  //       object id as string
+  //       valid object id as string
   //   response
   //     Socket.io response
+  var objId;
 
   if (typeof data.token !== 'string') {
     return response(errors.responses.InvalidRequestError);
   }
 
   if (typeof data.locationId !== 'string') {
+    return response(errors.responses.InvalidRequestError);
+  }
+
+  try {
+    objId = new ObjectId(data.locationId);
+  } catch (e) {
     return response(errors.responses.InvalidRequestError);
   }
 
@@ -33,7 +95,7 @@ exports.getOne = function (db, data, response) {
 
     var locations = db.get('locations');
 
-    locations.findOne({ _id: data.locationId }).then(function (loc) {
+    locations.findOne({ _id: objId }).then(function (loc) {
       if (loc) {
 
         // Transform location to be suitable for the client.
