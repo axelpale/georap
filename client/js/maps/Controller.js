@@ -1,5 +1,6 @@
 /* global google */
 var infoTemplate = require('../../templates/infowindow.ejs');
+var icons = require('./lib/icons');
 
 module.exports = function (htmlElement, defaultMapstate) {
   // Parameters:
@@ -107,25 +108,17 @@ module.exports = function (htmlElement, defaultMapstate) {
   this.showGeolocation = function () {
     // Show current location on the map. Does nothing if already shown.
 
-    var update, icon, geoSuccess, geoError, id;
-    var SIZE = 32;
+    var update, geoSuccess, geoError, id;
 
     // If geolocation is not already shown and geolocation is available.
     if (geolocationMarker === null && 'geolocation' in navigator) {
 
       console.log('Navigator has geolocation');
 
-      icon = {
-        url: '/assets/images/mapicons/mylocation.png',
-        size: new google.maps.Size(SIZE, SIZE),
-        origin: new google.maps.Point(0, 0),
-        anchor: new google.maps.Point(SIZE / 2, SIZE / 2),
-      };
-
       geolocationMarker = new google.maps.Marker({
         position: new google.maps.LatLng(0.0, 0.0),
         map: map,
-        icon: icon,
+        icon: icons.geolocation(),
       });
 
       update = function (lat, lng) {

@@ -17,8 +17,8 @@ require('./images/logo/16.png');
 require('./images/logo/32.png');
 
 // Custom markers
-// eslint-disable-next-line max-len
-require('./images/mapicons/mylocation.png');
+require('./images/mapicons/geolocation.png');
+require('./images/mapicons/additionMarker.png');
 
 // JavaScript
 require('./js/index.js');
