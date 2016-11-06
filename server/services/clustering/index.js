@@ -49,16 +49,14 @@ exports.computeNeighborsAvgDistForPoint = function (db, geom, callback) {
   });
 };
 
-exports.findLayerForPoint = function (db, geom, topLayer, callback) {
-  // Find highest layer for a point in a recursive manner.
+exports.findLayerForPoint = function (db, geom, callback) {
+  // Find highest layer for a point.
   //
   // Parameters:
   //   db
   //     Monk DB instance
   //   geom
   //     GeoJSON Point
-  //   topLayer
-  //     integer, start from this layer
   //   callback
   //     function (err, layer)
   //       Parameters:
@@ -68,36 +66,25 @@ exports.findLayerForPoint = function (db, geom, topLayer, callback) {
   //           integer
   //
 
-  // Go no deeper than bottom layer. This ensures that the recursion ends.
-  if (topLayer >= BOTTOM_LAYER) {
-    return callback(null, BOTTOM_LAYER);
-  }
-
-  // Find the desired radius of the cluster on this zoom level.
-  var d = maxDistance.getFromZoomLevel(topLayer);
-
-  //console.log('Top:', top.name);
-  //console.log('find neighbors within ', d, 'meters on layer', layer);
-
-  // Find neighbors within that radius.
-  neighbors.findWithinLayer({
-    collection: db.get('locations'),
-    location: { geom: geom },
-    maxDistance: d,
-    layer: topLayer,
-  }, function (err, neighborLocs) {
-
+  neighbors.findNearestOne(db.get('locations'), geom, function (err, result) {
     if (err) {
       return callback(err);
     }
 
-    if (neighborLocs.length > 0) {
-      // There is neighbors close by. Therefore we must go a layer deeper.
-      return exports.findLayerForPoint(db, geom, topLayer - 1, callback);
-    }  // else
+    var layer, r;
+    var nearDist = result.dist;
 
-    // No neighbors close by. This is our layer.
-    return callback(null, topLayer);
+    // Begin from the highest layer. For each layer, compute the required
+    // cluster radius. Stop when the radius is decreased below the distance
+    // to the nearest.
+    for (layer = 1; layer < BOTTOM_LAYER; layer += 1) {
+      r = maxDistance.getFromZoomLevel(layer);
+      if (r < nearDist) {
+        return callback(null, layer);
+      }
+    }
+
+    return callback(null, BOTTOM_LAYER);
   });
 };
 

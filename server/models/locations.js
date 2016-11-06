@@ -15,7 +15,7 @@ exports.create = function (db, username, geom, callback) {
   //   callback
   //     function (err, newLocation)
 
-  clustering.findLayerForPoint(db, geom, 1, function (err, layer) {
+  clustering.findLayerForPoint(db, geom, function (err, layer) {
     if (err) {
       return callback(err);
     }
