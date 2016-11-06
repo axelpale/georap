@@ -1,4 +1,6 @@
 /* global google */
+/* eslint-disable max-statements */
+
 var infoTemplate = require('../../templates/infowindow.ejs');
 var icons = require('./lib/icons');
 
@@ -48,10 +50,11 @@ module.exports = function (htmlElement, defaultMapstate) {
 
   // Private methods declaration
 
-  var addMarker;
-  var removeMarker;
-  var updateLocations;
-  var removeAllMarkers;
+  var addMarker,
+      removeMarker,
+      updateLocations,
+      removeAllMarkers;
+
 
   // Public methods
 
@@ -246,9 +249,7 @@ module.exports = function (htmlElement, defaultMapstate) {
 
   removeAllMarkers = function () {
     // Clear the map.
-    var i;
-
-    for (i in markers) {
+    for (var i in markers) {
       if (markers.hasOwnProperty(i)) {
         removeMarker(markers[i]);
       }
