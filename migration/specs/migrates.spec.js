@@ -9,7 +9,7 @@ var fixtures = require('./fixtures');
 // var should = require('should');
 var assert = require('assert');
 var monk = require('monk');
-var async = require('async');
+var tools = require('../../specs/tools');
 
 var db = monk(local.mongo.testUrl);
 
@@ -27,23 +27,7 @@ var loadFixture = function (versionTag, callback) {
     throw new Error('invalid version tag:' + versionTag);
   }
 
-  async.eachOfSeries(fixtures[versionTag], function (items, collName, next) {
-
-    var coll = db.get(collName);
-
-    // Drop possibly existing collection before population.
-    coll.drop().then(function () {
-      // Populate
-      coll.insert(items).then(function () {
-        // Next collection
-        return next();
-      }).catch(next);
-    }).catch(next);
-
-  }, function then(err) {
-    return callback(err);
-  });
-
+  tools.loadFixture(db, fixtures[versionTag], callback);
 };
 
 
