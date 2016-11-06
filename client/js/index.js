@@ -216,8 +216,29 @@ window.initMap = function () {
   mapstateService.listen(mapController.getMap());
 
   var addMainMenu = function () {
-    var mainMenu = new menus.MainMenu(authService, function go(path) {
-      return page.show(path);
+    var mainMenu = new menus.MainMenu(authService, {
+      go: function (path) {
+        return page.show(path);
+      },
+      onAdditionStart: function () {
+        mapController.addAdditionMarker();
+      },
+      onAdditionCancel: function () {
+        mapController.removeAdditionMarker();
+      },
+      onAdditionCreate: function () {
+        var geom = mapController.getAdditionMarkerGeom();
+        mapController.removeAdditionMarker();
+
+        locationsService.addOne(geom, function (err, newLoc) {
+          if (err) {
+            console.error(err);
+            return;
+          }
+
+          mapController.locations.addOne(newLoc);
+        });
+      },
     });
 
     mapController.addControl(mainMenu.render(), function (root) {

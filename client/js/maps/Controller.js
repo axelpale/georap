@@ -19,6 +19,10 @@ module.exports = function (htmlElement, defaultMapstate) {
   // An open infowindow. Allow only single infowindow to be open at the time.
   var infowindow = null;
 
+  // An addition marker. User moves this large marker to point where
+  // the new location is to be created.
+  var additionMarker = null;
+
   // Marker that represents geolocation of the user
   var geolocationMarker = null;
   var geolocationWatchId = null;
@@ -45,6 +49,13 @@ module.exports = function (htmlElement, defaultMapstate) {
     zoomControlOptions: {
       position: google.maps.ControlPosition.RIGHT_BOTTOM,
     },
+  });
+
+  // Make addition marker to follow map center.
+  map.addListener('center_changed', function () {
+    if (additionMarker) {
+      additionMarker.setPosition(map.getCenter());
+    }
   });
 
 
@@ -140,12 +151,44 @@ module.exports = function (htmlElement, defaultMapstate) {
       id = navigator.geolocation.watchPosition(geoSuccess, geoError);
       geolocationWatchId = id;
 
-    } else {
-      console.log('No navigator.geolocation available');
+    }  // Else, no navigator.geolocation available
+  };
+
+  this.addAdditionMarker = function () {
+    // Creates a draggable marker at the middle of the map.
+    additionMarker = new google.maps.Marker({
+      position: map.getCenter(),
+      map: map,
+      icon: icons.additionMarker(),
+    });
+  };
+
+  this.getAdditionMarkerGeom = function () {
+    // Return GeoJSON Point at the addition marker. Throws if
+    // the marker is not set.
+
+    if (additionMarker === null) {
+      throw new Error('additionMarker needs to be created first');
     }
+
+    var latlng = additionMarker.getPosition();
+
+    return {
+      type: 'Point',
+      coordinates: [latlng.lng(), latlng.lat()],
+    };
+  };
+
+  this.removeAdditionMarker = function () {
+    // Remove addition marker from the map.
+    additionMarker.setMap(null);
+    additionMarker = null;
   };
 
   this.locations = {
+    addOne: function (location) {
+      addMarker(location);
+    },
     update: function (locations) {
       updateLocations(locations);
     },

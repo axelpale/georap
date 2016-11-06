@@ -1,14 +1,20 @@
 var mainmenuTemplate = require('../../templates/menus/mainmenu.ejs');
 var glyphiconTemplate = require('../../templates/glyphicon.ejs');
 
-module.exports = function (auth, go) {
+module.exports = function (auth, handlers) {
   // Parameters:
   //   auth
   //     instance of auth.Service
-  //   go
-  //     function go(path): ask router to go to path. Is a way to expose the
-  //     router for the menu.
+  //   handlers
+  //     Object with the following properties:
+  //       go
+  //         function go(path): ask router to go to path. Is a way to expose
+  //         the router for the menu.
+  //       onAdditionStart
+  //       onAdditionCreate
+  //       onAdditionCancel
 
+  var go = handlers.go;
 
   // Public methods
 
@@ -51,6 +57,42 @@ module.exports = function (auth, go) {
       ev.preventDefault();
 
       return go('/login');
+    });
+
+    r.on('click', '#tresdb-mainmenu-add', function (ev) {
+      ev.preventDefault();
+
+      // Hide other menus
+      $('#tresdb-toolbar-user').addClass('hidden');
+      $('#tresdb-toolbar-tools').addClass('hidden');
+      // Show addition menu
+      $('#tresdb-toolbar-addition').removeClass('hidden');
+
+      return handlers.onAdditionStart();
+    });
+
+    r.on('click', '#tresdb-addition-cancel', function (ev) {
+      ev.preventDefault();
+
+      // Show other menus
+      $('#tresdb-toolbar-user').removeClass('hidden');
+      $('#tresdb-toolbar-tools').removeClass('hidden');
+      // Hide addition menu
+      $('#tresdb-toolbar-addition').addClass('hidden');
+
+      return handlers.onAdditionCancel();
+    });
+
+    r.on('click', '#tresdb-addition-create', function (ev) {
+      ev.preventDefault();
+
+      // Show other menus
+      $('#tresdb-toolbar-user').removeClass('hidden');
+      $('#tresdb-toolbar-tools').removeClass('hidden');
+      // Hide addition menu
+      $('#tresdb-toolbar-addition').addClass('hidden');
+
+      return handlers.onAdditionCreate();
     });
   };
 };

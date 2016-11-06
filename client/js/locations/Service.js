@@ -27,6 +27,27 @@ module.exports = function (socket, auth) {
 
   // Public methods
 
+  this.addOne = function (geom, callback) {
+    // Create single location at geom and store it to server.
+
+    var payload = {
+      token: auth.getToken(),
+      geom: geom,
+    };
+
+    socket.emit('locations/addOne', payload, function (response) {
+      if (response.hasOwnProperty('success')) {
+        return callback(null, response.success);
+      }
+
+      if (response.hasOwnProperty('error')) {
+        return callback(new Error(response.error));
+      }
+
+      throw new Error('invalid server response');
+    });
+  };
+
   this.fetchOne = function (locationId, callback) {
     // Get single location from server
 
