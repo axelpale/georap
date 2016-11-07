@@ -6,6 +6,16 @@
 
 var SIZE = 32;
 
+exports.marker = function () {
+  return {
+    labelOrigin: new google.maps.Point(11, 50),
+    url: '/assets/images/mapicons/marker.png',
+    size: new google.maps.Size(22, 40),
+    origin: new google.maps.Point(0, 0),
+    anchor: new google.maps.Point(11, 40),
+  };
+};
+
 exports.geolocation = function () {
   return {
     url: '/assets/images/mapicons/geolocation.png',

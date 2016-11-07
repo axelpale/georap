@@ -3,6 +3,7 @@
 
 var infoTemplate = require('../../templates/infowindow.ejs');
 var icons = require('./lib/icons');
+var labels = require('./lib/labels');
 
 module.exports = function (htmlElement, defaultMapstate, api) {
   // Parameters:
@@ -16,7 +17,7 @@ module.exports = function (htmlElement, defaultMapstate, api) {
   // Init
 
   // Location markers on the map.
-  var markers = [];
+  var markers = {};
 
   // An open infowindow. Allow only single infowindow to be open at the time.
   var infowindow = null;
@@ -66,6 +67,22 @@ module.exports = function (htmlElement, defaultMapstate, api) {
     if (infowindow) {
       if (infowindow.get('location')._id === updatedLoc._id) {
         infowindow.setContent(infoTemplate({ location: updatedLoc }));
+      }
+    }
+  });
+
+  // Listen map type change to invert label text colors.
+  map.addListener('maptypeid_changed', function () {
+    var type, color, k, label;
+
+    type = map.getMapTypeId();
+    color = labels.mapTypeIdToLabelColor(type);
+
+    for (k in markers) {
+      if (markers.hasOwnProperty(k)) {
+        label = markers[k].getLabel();
+        label.color = color;
+        markers[k].setLabel(label);
       }
     }
   });
@@ -223,7 +240,11 @@ module.exports = function (htmlElement, defaultMapstate, api) {
 
     var m = new google.maps.Marker({
       position: new google.maps.LatLng(lat, lng),
-      title: loc.name,
+      label: {
+        color: labels.mapTypeIdToLabelColor(map.getMapTypeId()),
+        text: loc.name,
+      },
+      icon: icons.marker(),
     });
 
     m.setMap(map);

@@ -17,6 +17,7 @@ require('./images/logo/16.png');
 require('./images/logo/32.png');
 
 // Custom markers
+require('./images/mapicons/marker.png');
 require('./images/mapicons/geolocation.png');
 require('./images/mapicons/additionMarker.png');
 
