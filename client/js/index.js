@@ -211,7 +211,8 @@ window.initMap = function () {
   });
 
   var defaultMapstate = mapstateService.getState();
-  var mapController = new maps.Controller(mapElement, defaultMapstate);
+  var mapController = new maps.Controller(mapElement, defaultMapstate,
+                                          locationsService);
 
   // Start tracking for the last known state.
   mapstateService.listen(mapController.getMap());

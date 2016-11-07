@@ -1,15 +1,17 @@
+/* eslint-disable max-statements, max-lines */
 /* global google */
-/* eslint-disable max-statements */
 
 var infoTemplate = require('../../templates/infowindow.ejs');
 var icons = require('./lib/icons');
 
-module.exports = function (htmlElement, defaultMapstate) {
+module.exports = function (htmlElement, defaultMapstate, api) {
   // Parameters:
   //   htmlElement
   //     for the google map
   //   mapstate
   //     the default map state.
+  //   api
+  //     locations.Service instance.
 
   // Init
 
@@ -55,6 +57,16 @@ module.exports = function (htmlElement, defaultMapstate) {
   map.addListener('center_changed', function () {
     if (additionMarker) {
       additionMarker.setPosition(map.getCenter());
+    }
+  });
+
+  // Listen for changes in locations so that the markers and infowindows
+  // are up to date.
+  api.on('rename', function (updatedLoc) {
+    if (infowindow) {
+      if (infowindow.get('location')._id === updatedLoc._id) {
+        infowindow.setContent(infoTemplate({ location: updatedLoc }));
+      }
     }
   });
 
@@ -227,6 +239,7 @@ module.exports = function (htmlElement, defaultMapstate) {
         maxWidth: 250,
         content: infoTemplate({ location: loc }),
       });
+      infowindow.set('location', loc);
 
       infowindow.open(map, m);
     });

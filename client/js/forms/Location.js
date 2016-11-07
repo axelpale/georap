@@ -35,12 +35,20 @@ module.exports = function (loc, api) {
 
     return locationTemplate({
       location: loc,
-      marked: marked,
+      marked: marked,  // markdown parser
       timestamp: timestamp,
     });
   };
 
   this.bind = function () {
+
+    // Listen possible changes in the location.
+    api.on('rename', function (updatedLoc) {
+      if (loc._id === updatedLoc._id) {
+        var s = (updatedLoc.name === '' ? 'Untitled' : updatedLoc.name);
+        $('#tresdb-location-name').text(s);
+      }
+    });
 
     $('#tresdb-location-rename-show').click(function (ev) {
       ev.preventDefault();
@@ -58,7 +66,7 @@ module.exports = function (loc, api) {
       ev.preventDefault();
 
       var newName = $('#tresdb-location-rename-input').val();
-      api.rename(loc._id, newName.trim(), function (err, updatedLoc) {
+      api.rename(loc._id, newName.trim(), function (err) {
         if (err) {
           console.error(err);
           $('#tresdb-location-rename-form').addClass('hidden');
@@ -66,7 +74,6 @@ module.exports = function (loc, api) {
         }
 
         $('#tresdb-location-rename-form').addClass('hidden');
-        $('#tresdb-location-name').text(updatedLoc.name);  // madness for mvc
       });
     });
   };

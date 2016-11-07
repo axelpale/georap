@@ -145,6 +145,7 @@ module.exports = function (socket, auth) {
 
     socket.emit('locations/rename', payload, function (response) {
       if (response.hasOwnProperty('success')) {
+        self.emit('rename', response.success);
         return callback(null, response.success);
       }
 
