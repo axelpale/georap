@@ -159,7 +159,7 @@ page('/location/:id', function (ctx) {
 
   card.open(loadingCard.render(), 'page');
 
-  // Fetch location.
+  // Fetch location before rendering.
   locationsService.fetchOne(ctx.params.id, function (err, loc) {
     if (err) {
       console.error(err);
@@ -167,9 +167,10 @@ page('/location/:id', function (ctx) {
     }
 
     // Render location card.
-    var locationForm = new forms.Location(loc);
+    var locationForm = new forms.Location(loc, locationsService);
 
     card.open(locationForm.render(loc));
+    locationForm.bind();
   });
 });
 

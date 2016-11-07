@@ -1,5 +1,7 @@
 /* global google */
 
+var Emitter = require('component-emitter');
+
 var getBoundsDiagonal = function (bounds) {
   // A google.maps.LatLngBounds diagonal distance in meters.
 
@@ -20,6 +22,7 @@ var getBoundsDiagonal = function (bounds) {
 
 module.exports = function (socket, auth) {
 
+  Emitter(this);
   var self = this;
 
   // We will listen the map for changes.
@@ -118,6 +121,36 @@ module.exports = function (socket, auth) {
       if (response.hasOwnProperty('error')) {
         return callback(new Error(response.error));
       }  // else
+
+      throw new Error('invalid server response');
+    });
+  };
+
+  this.rename = function (locationId, newName, callback) {
+    // Rename a location
+    //
+    // Parameters:
+    //   locationId
+    //     object id compatible string
+    //   newName
+    //     string
+    //   callback
+    //     function (err, updatedLoc)
+
+    var payload = {
+      token: auth.getToken(),
+      locationId: locationId,
+      newName: newName,
+    };
+
+    socket.emit('locations/rename', payload, function (response) {
+      if (response.hasOwnProperty('success')) {
+        return callback(null, response.success);
+      }
+
+      if (response.hasOwnProperty('error')) {
+        return callback(new Error(response.error));
+      }
 
       throw new Error('invalid server response');
     });
