@@ -215,6 +215,9 @@ io.on('connection', function (socket) {
   socket.on('locations/getWithin', function (data, res) {
     locationsHandlers.getWithin(db, data, res);
   });
+  socket.on('locations/rename', function (data, res) {
+    locationsHandlers.rename(db, data, res);
+  });
 });
 
 
