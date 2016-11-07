@@ -3,10 +3,10 @@
 
 var local = require('../../config/local');
 var tools = require('../../specs/tools');
-var fixtures = require('./fixtures');
+var fixture = require('./fixtures/single');
 var unit = require('./locations');
 
-// var should = require('should');
+var ObjectId = require('mongodb').ObjectId;
 var assert = require('assert');
 var monk = require('monk');
 
@@ -16,7 +16,7 @@ var db = monk(local.mongo.testUrl);
 describe('server.models.locations', function () {
 
   beforeEach(function (done) {
-    tools.loadFixture(db, fixtures, done);
+    tools.loadFixture(db, fixture, done);
   });
 
   describe('create', function () {
@@ -51,6 +51,25 @@ describe('server.models.locations', function () {
       unit.count(db, function (err, num) {
         assert.ifError(err);
         assert.strictEqual(num, 1);
+        done();
+      });
+    });
+
+  });
+
+  describe('rename', function () {
+
+    it('should add content entry', function (done) {
+      var id = new ObjectId('581f166110a1482dd0b7cd13');
+      var newName = 'Ghost Town';
+
+      unit.rename(db, 'admin', id, newName, function (err, updatedLoc) {
+        if (err) {
+          console.error(err);
+        }
+        assert.ifError(err);
+        assert.equal(updatedLoc.name, newName);
+        assert.strictEqual(updatedLoc.content.length, 3);
         done();
       });
     });

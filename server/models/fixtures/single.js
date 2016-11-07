@@ -1,8 +1,11 @@
 /* eslint-disable no-magic-numbers */
 
+var ObjectId = require('mongodb').ObjectId;
+
 module.exports = {
   collections: {
     locations: [{
+      _id: new ObjectId('581f166110a1482dd0b7cd13'),
       name: 'Irbene',
       geom: {
         type: 'Point',
