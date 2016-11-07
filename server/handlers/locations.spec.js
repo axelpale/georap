@@ -94,4 +94,49 @@ describe('server.handlers.locations', function () {
     });
   });
 
+  describe('rename', function () {
+
+    it('should rename', function (done) {
+      var id = '581f166110a1482dd0b7cd13';
+      var newName = 'Ghost Town';
+      var data = {
+        token: goodToken,
+        locationId: id,
+        newName: newName,
+      };
+
+      unit.rename(db, data, function (response) {
+        assert.equal(response.success.name, newName);
+        done();
+      });
+    });
+
+    it('should detect unknown location', function (done) {
+      var id = '2222222110a1482dd0b7cd13';
+      var data = {
+        token: goodToken,
+        locationId: id,
+        newName: 'Ghost Town',
+      };
+
+      unit.rename(db, data, function (response) {
+        assert.strictEqual(response, errors.responses.NotFoundError);
+        done();
+      });
+    });
+
+    it('should detect invalid ObjectId', function (done) {
+      var id = 'foobar';
+      var data = {
+        token: goodToken,
+        locationId: id,
+        newName: 'Ghost Town',
+      };
+
+      unit.rename(db, data, function (response) {
+        assert.strictEqual(response, errors.responses.InvalidRequestError);
+        done();
+      });
+    });
+  });
 });

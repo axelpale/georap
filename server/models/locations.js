@@ -1,6 +1,7 @@
 /* eslint-disable max-params */
 
 var clustering = require('../services/clustering');
+var errors = require('../errors');
 
 
 exports.create = function (db, username, geom, callback) {
@@ -87,6 +88,10 @@ exports.rename = function (db, username, id, newName, callback) {
       return callback(err);
     }
 
+    if (!loc) {
+      return callback(errors.NotFoundError);
+    }
+
     var now = new Date();
     var contentEntry = {
       type: 'rename',
@@ -102,7 +107,10 @@ exports.rename = function (db, username, id, newName, callback) {
       $set: { name: newName },
       $push: { content: contentEntry },
     }).then(function (updatedLoc) {
-      return callback(null, updatedLoc);
+      if (updatedLoc) {
+        return callback(null, updatedLoc);
+      }
+      return callback(errors.NotFoundError);
     }).catch(function (err2) {
       return callback(err2);
     });
