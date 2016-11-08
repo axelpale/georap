@@ -71,3 +71,11 @@ html, body {
 }
 
 /* Tag labels END */
+
+/* Content Entries */
+
+.tresdb-content-story .panel-body > p:last-child{
+  margin-bottom: 0px;
+}
+
+/* Content Entries END*/
