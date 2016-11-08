@@ -14,6 +14,14 @@ module.exports = function (htmlElement, defaultMapstate, api) {
   //   api
   //     locations.Service instance.
 
+  // Private methods declaration
+
+  var addMarker;
+  var removeMarker;
+  var updateLocations;
+  var removeAllMarkers;
+  var ensureLabel;
+
   // Init
 
   // Location markers on the map.
@@ -64,10 +72,18 @@ module.exports = function (htmlElement, defaultMapstate, api) {
   // Listen for changes in locations so that the markers and infowindows
   // are up to date.
   api.on('rename', function (updatedLoc) {
+    var m;
+
     if (infowindow) {
       if (infowindow.get('location')._id === updatedLoc._id) {
         infowindow.setContent(infoTemplate({ location: updatedLoc }));
       }
+    }
+
+    if (markers.hasOwnProperty(updatedLoc._id)) {
+      m = markers[updatedLoc._id];
+      m.set('location', updatedLoc);
+      ensureLabel(m, true);  // force update even if label already visible
     }
   });
 
@@ -94,21 +110,13 @@ module.exports = function (htmlElement, defaultMapstate, api) {
 
     z = map.getZoom();
 
-
     for (k in markers) {
       if (markers.hasOwnProperty(k)) {
         m = markers[k];
         loc = m.get('location');
         if (loc.layer < z - 1) {
-          // Ensure label is visible.
-          // Note: getLabel can return undefined or null, regarding
-          // whether setLabel(null) is called or not.
-          if (!m.getLabel()) {
-            m.setLabel({
-              color: labels.mapTypeIdToLabelColor(map.getMapTypeId()),
-              text: (loc.name === '' ? 'Untitled' : loc.name),
-            });
-          }
+          // Ensure that label is visible.
+          ensureLabel(m);
         } else {
           // Hide label
           m.setLabel(null);
@@ -116,14 +124,6 @@ module.exports = function (htmlElement, defaultMapstate, api) {
       }
     }
   });
-
-
-  // Private methods declaration
-
-  var addMarker,
-      removeMarker,
-      updateLocations,
-      removeAllMarkers;
 
 
   // Public methods
@@ -279,10 +279,7 @@ module.exports = function (htmlElement, defaultMapstate, api) {
 
     // Label only the important, higher markers.
     if (loc.layer < map.getZoom() - 1) {
-      m.setLabel({
-        color: labels.mapTypeIdToLabelColor(map.getMapTypeId()),
-        text: (loc.name === '' ? 'Untitled' : loc.name),
-      });
+      ensureLabel(m, true);
     }
 
     m.setMap(map);
@@ -307,6 +304,28 @@ module.exports = function (htmlElement, defaultMapstate, api) {
     markers[loc._id] = m;
 
     return m;
+  };
+
+  ensureLabel = function (marker, forceUpdate) {
+    // Ensure that label is visible.
+    //
+    // Parameters:
+    //   marker
+    //     A marker with marker.get('location') set.
+    //   forceUpdate
+    //     bool. Optional, default false.
+    //     If true, update the label even when already visible.
+
+    var loc = marker.get('location');
+
+    // Note: getLabel can return undefined or null, regarding
+    // whether setLabel(null) is called or not.
+    if (forceUpdate || !marker.getLabel()) {
+      marker.setLabel({
+        color: labels.mapTypeIdToLabelColor(map.getMapTypeId()),
+        text: (loc.name === '' ? 'Untitled' : loc.name),
+      });
+    }
   };
 
   removeMarker = function (m) {
