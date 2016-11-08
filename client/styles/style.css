@@ -71,3 +71,20 @@ html, body {
 }
 
 /* Tag labels END */
+
+/* Content Entries */
+
+.tresdb-content-story .panel-body > p:last-child {
+  margin-bottom: 0px;
+}
+
+.tresdb-content-attachment-image-body {
+  padding: 0px;
+  text-align: center;
+}
+.tresdb-content-attachment-image-body img {
+  max-width: 100%;
+  /*margin: 0px auto 0px auto;*/
+}
+
+/* Content Entries END*/

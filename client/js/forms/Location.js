@@ -53,12 +53,22 @@ module.exports = function (loc, api) {
 
     $('#tresdb-location-rename-show').click(function (ev) {
       ev.preventDefault();
-      // Show or hide
-      $('#tresdb-location-rename-form').toggleClass('hidden');
-      // Remove possible error messages
-      $('#tresdb-location-rename-error').addClass('hidden');
-      // Prefill the form with the current name
-      $('#tresdb-location-rename-input').val(loc.name);
+
+      if ($('#tresdb-location-rename-form').hasClass('hidden')) {
+        // Show
+        $('#tresdb-location-rename-form').removeClass('hidden');
+        // Remove possible error messages
+        $('#tresdb-location-rename-error').addClass('hidden');
+        // Prefill the form with the current name
+        $('#tresdb-location-rename-input').val(loc.name);
+        // Focus to input field
+        $('#tresdb-location-rename-input').focus();
+      } else {
+        // Hide
+        $('#tresdb-location-rename-form').addClass('hidden');
+        // Remove possible error messages
+        $('#tresdb-location-rename-error').addClass('hidden');
+      }
     });
 
     $('#tresdb-location-rename-cancel').click(function (ev) {
@@ -69,8 +79,16 @@ module.exports = function (loc, api) {
     $('#tresdb-location-rename-form').submit(function (ev) {
       ev.preventDefault();
 
-      var newName = $('#tresdb-location-rename-input').val();
-      api.rename(loc._id, newName.trim(), function (err) {
+      var newName = $('#tresdb-location-rename-input').val().trim();
+      var oldName = loc.name;
+
+      if (newName === oldName) {
+        // If name not changed, just close the form.
+        $('#tresdb-location-rename-form').addClass('hidden');
+        $('#tresdb-location-rename-error').addClass('hidden');
+      }
+
+      api.rename(loc._id, newName, function (err) {
         if (err) {
           console.error(err);
           $('#tresdb-location-rename-form').addClass('hidden');

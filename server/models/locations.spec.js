@@ -74,5 +74,20 @@ describe('server.models.locations', function () {
       });
     });
 
+    it('should not add content entry if no change in name', function (done) {
+      var id = new ObjectId('581f166110a1482dd0b7cd13');
+      var newName = 'Irbene  ';  // test trim also
+
+      unit.rename(db, 'admin', id, newName, function (err, updatedLoc) {
+        if (err) {
+          console.error(err);
+        }
+        assert.ifError(err);
+        assert.equal(updatedLoc.name, 'Irbene');  // test the test sanity
+        assert.strictEqual(updatedLoc.content.length, 2);  // no change
+        done();
+      });
+    });
+
   });
 });

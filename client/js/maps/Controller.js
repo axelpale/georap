@@ -212,6 +212,12 @@ module.exports = function (htmlElement, defaultMapstate, api, go) {
       position: map.getCenter(),
       map: map,
       icon: icons.additionMarker(),
+      draggable: true,
+    });
+
+    additionMarker.addListener('dragend', function () {
+      // Move the map so that the marker is at the middle.
+      map.panTo(additionMarker.getPosition());
     });
   };
 
