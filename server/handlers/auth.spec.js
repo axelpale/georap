@@ -1,46 +1,25 @@
 /* global describe, context, it, before, after, beforeEach */
-/* eslint-disable no-sync */
 
 var local = require('../../config/local');
+var fixture = require('./fixtures/small');
+var tools = require('../../specs/tools');
+
 // eslint-disable-next-line no-unused-vars
 var should = require('should');
 var jwt = require('jsonwebtoken');
 var io = require('socket.io-client');
 var monk = require('monk');
-var bcrypt = require('bcryptjs');
 
 var db = monk(local.mongo.testUrl);
 
 
-// Set up test fixtures
-
-var ADMIN_USER = 'admin';
-var ADMIN_EMAIL = 'admin@example.com';
-var ADMIN_PASSWORD = 'admin_password';
-
-var TESTER_USER = 'tester';
+// User data found in the fixture
 var TESTER_EMAIL = 'tester@example.com';
 var TESTER_PASSWORD = 'tester_password';
 
-var fixture = {
-  users: [
-    {
-      name: ADMIN_USER,
-      email: ADMIN_EMAIL,
-      hash: bcrypt.hashSync(ADMIN_PASSWORD, local.bcrypt.rounds),
-      admin: true,
-    },
-    {
-      name: TESTER_USER,
-      email: TESTER_EMAIL,
-      hash: bcrypt.hashSync(TESTER_PASSWORD, local.bcrypt.rounds),
-      admin: false,
-    },
-  ],
-};
 
 
-describe('TresDB Socket.io API', function () {
+describe('server.handlers.auth', function () {
   var socket;
 
   before(function (done) {
@@ -53,16 +32,7 @@ describe('TresDB Socket.io API', function () {
   });
 
   beforeEach(function (done) {
-    // Drop possibly existing collections
-    var users = db.get('users');
-    users.drop().then(function () {
-
-      // Populate with test users
-      users.insert(fixture.users).then(function () {
-        done();
-      }).catch(done);
-
-    }).catch(done);
+    tools.loadFixture(db, fixture, done);
   });
 
   var createResponseAssert = function (ev, key, val) {

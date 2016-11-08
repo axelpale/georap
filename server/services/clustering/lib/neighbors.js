@@ -1,5 +1,31 @@
 var async = require('async');
 
+exports.findNearestOne = function (coll, geom, callback) {
+  // Find the single nearest location and distance to it.
+  //
+  // Parameters:
+  //   coll
+  //     locations collection
+  //   geom
+  //     GeoJSON Point
+  //   callback
+  //     function (err, nearestLoc)
+
+  coll.aggregate([
+    {
+      $geoNear: {
+        near: geom,
+        distanceField: 'dist',
+        minDistance: 1,  // 1 metre, exclude the point itself
+        spherical: true,
+        limit: 1,  // Retrieve only the closest
+      },
+    },
+  ]).then(function (result) {
+    return callback(null, result[0]);
+  }).catch(callback);
+};
+
 exports.findWithin = function (coll, loc, d, callback) {
   // Find neighbors within given distance.
   //

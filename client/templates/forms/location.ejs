@@ -1,7 +1,22 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col-md-12">
-      <h1><%= location.name %></h1>
+      <h1><span id="tresdb-location-name"><%= (location.name === '' ? 'Untitled' : location.name) %></span> <button id="tresdb-location-rename-show" type="button" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-pencil"></span> Edit name</button></h1>
+
+      <form id="tresdb-location-rename-form" class="hidden panel panel-primary">
+        <div class="panel-body">
+          <div class="form-group">
+            <label for="tresdb-location-rename-input">New name:</label>
+            <input type="text" class="form-control" id="tresdb-location-rename-input">
+          </div>
+          <button id="tresdb-location-rename-cancel" type="button" class="btn btn-default">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+      </form>
+
+      <div id="tresdb-location-rename-error" class="hidden">
+        <div class="alert alert-danger" role="alert">Renaming the location failed.</div>
+      </div>
 
       <% var lng = location.geom.coordinates[0]; %>
       <% var lat = location.geom.coordinates[1]; %>

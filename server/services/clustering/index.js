@@ -1,3 +1,5 @@
+/* eslint-disable max-lines */
+
 var async = require('async');
 var neighbors = require('./lib/neighbors');
 var maxDistance = require('./lib/maxDistance');
@@ -19,6 +21,75 @@ exports.recomputeNeighborsAvgDist = function (db, callback) {
 
     return callback(null);
   });
+};
+
+exports.computeNeighborsAvgDistForPoint = function (db, geom, callback) {
+  // Compute neighborsAvgDist for given GeoJSON point.
+  //
+  // Parameters:
+  //   db
+  //   geom
+  //     GeoJSON Point
+  //   callback
+  //     function (err, avgDist)
+
+  var coll = db.get('locations');
+
+  // Dummy location
+  var loc = {
+    geom: geom,
+  };
+
+  neighbors.computeAvgDist(coll, loc, NEIGHBORHOOD, function (err, newLoc) {
+    if (err) {
+      return callback(err);
+    }
+
+    return callback(null, newLoc.neighborsAvgDist);
+  });
+};
+
+exports.findLayerForPoint = function (db, geom, callback) {
+  // Find highest layer for a point.
+  //
+  // Parameters:
+  //   db
+  //     Monk DB instance
+  //   geom
+  //     GeoJSON Point
+  //   callback
+  //     function (err, layer)
+  //       Parameters:
+  //         err
+  //           null if no error
+  //         layer
+  //           integer
+  //
+
+  neighbors.findNearestOne(db.get('locations'), geom, function (err, result) {
+    if (err) {
+      return callback(err);
+    }
+
+    var layer, r;
+    var nearDist = result.dist;
+
+    // Begin from the highest layer. For each layer, compute the required
+    // cluster radius. Stop when the radius is decreased below the distance
+    // to the nearest.
+    for (layer = 1; layer < BOTTOM_LAYER; layer += 1) {
+      r = maxDistance.getFromZoomLevel(layer);
+      if (r < nearDist) {
+        return callback(null, layer);
+      }
+    }
+
+    return callback(null, BOTTOM_LAYER);
+  });
+};
+
+exports.getBottomLayerNumber = function () {
+  return BOTTOM_LAYER;
 };
 
 exports.findWithin = function (options) {
@@ -69,6 +140,7 @@ exports.findWithin = function (options) {
         name: true,
         geom: true,
         tags: true,
+        layer: true,
       },
     },
   ]).then(function (results) {

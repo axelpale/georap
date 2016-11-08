@@ -159,7 +159,7 @@ page('/location/:id', function (ctx) {
 
   card.open(loadingCard.render(), 'page');
 
-  // Fetch location.
+  // Fetch location before rendering.
   locationsService.fetchOne(ctx.params.id, function (err, loc) {
     if (err) {
       console.error(err);
@@ -167,9 +167,10 @@ page('/location/:id', function (ctx) {
     }
 
     // Render location card.
-    var locationForm = new forms.Location(loc);
+    var locationForm = new forms.Location(loc, locationsService);
 
     card.open(locationForm.render(loc));
+    locationForm.bind();
   });
 });
 
@@ -209,15 +210,40 @@ window.initMap = function () {
     mapTypeId: 'hybrid',
   });
 
+  // A method to expose router to map controller and main menu.
+  var go = function (path) {
+    return page.show(path);
+  };
+
   var defaultMapstate = mapstateService.getState();
-  var mapController = new maps.Controller(mapElement, defaultMapstate);
+  var mapController = new maps.Controller(mapElement, defaultMapstate,
+                                          locationsService, go);
 
   // Start tracking for the last known state.
   mapstateService.listen(mapController.getMap());
 
   var addMainMenu = function () {
-    var mainMenu = new menus.MainMenu(authService, function go(path) {
-      return page.show(path);
+    var mainMenu = new menus.MainMenu(authService, {
+      go: go,
+      onAdditionStart: function () {
+        mapController.addAdditionMarker();
+      },
+      onAdditionCancel: function () {
+        mapController.removeAdditionMarker();
+      },
+      onAdditionCreate: function () {
+        var geom = mapController.getAdditionMarkerGeom();
+        mapController.removeAdditionMarker();
+
+        locationsService.addOne(geom, function (err, newLoc) {
+          if (err) {
+            console.error(err);
+            return;
+          }
+
+          mapController.locations.addOne(newLoc);
+        });
+      },
     });
 
     mapController.addControl(mainMenu.render(), function (root) {

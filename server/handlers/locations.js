@@ -1,10 +1,57 @@
 
-var jwt = require('jsonwebtoken');
-var mime = require('mime');
-var local = require('../../config/local');
 var errors = require('../errors');
 var clustering = require('../services/clustering');
 var attachments = require('../services/attachments');
+var model = require('../models/locations');
+var handleToken = require('./lib/handleToken');
+
+var ObjectId = require('mongodb').ObjectId;
+var mime = require('mime');
+
+
+exports.addOne = function (db, data, response) {
+  // Add new location
+  //
+  // Parameters:
+  //   db
+  //     Monk db instance
+  //   data
+  //     token
+  //       JWT token string
+  //     geom
+  //       GeoJSON point
+  //   response
+  //     Socket.io response
+  var coords;
+
+  // Request validation
+
+  if (typeof data.geom !== 'object' || data.geom.type !== 'Point' ||
+      typeof data.geom.coordinates !== 'object') {
+    return response(errors.responses.InvalidRequestError);
+  }
+
+  coords = data.geom.coordinates;
+
+  if (coords.length !== 2 || typeof coords[0] !== 'number' ||
+      typeof coords[1] !== 'number') {
+    return response(errors.responses.InvalidRequestError);
+  }
+
+  // Token check
+  handleToken(data.token, response, function (payload) {
+
+    model.create(db, payload.name, data.geom, function (err2, newLoc) {
+      if (err2) {
+        return response(errors.responses.DatabaseError);
+      }
+
+      return response({
+        success: newLoc,
+      });
+    });
+  });
+};
 
 exports.getOne = function (db, data, response) {
   // Parameters
@@ -14,26 +61,26 @@ exports.getOne = function (db, data, response) {
   //     token
   //       JWT token string
   //     locationId
-  //       object id as string
+  //       valid object id as string
   //   response
   //     Socket.io response
-
-  if (typeof data.token !== 'string') {
-    return response(errors.responses.InvalidRequestError);
-  }
+  var objId;
 
   if (typeof data.locationId !== 'string') {
     return response(errors.responses.InvalidRequestError);
   }
 
-  jwt.verify(data.token, local.secret, function (err) {
-    if (err) {
-      return response(errors.responses.InvalidTokenError);
-    }
+  try {
+    objId = new ObjectId(data.locationId);
+  } catch (e) {
+    return response(errors.responses.InvalidRequestError);
+  }
+
+  handleToken(data.token, response, function () {
 
     var locations = db.get('locations');
 
-    locations.findOne({ _id: data.locationId }).then(function (loc) {
+    locations.findOne({ _id: objId }).then(function (loc) {
       if (loc) {
 
         // Transform location to be suitable for the client.
@@ -85,9 +132,7 @@ exports.getWithin = function (db, data, response) {
   //   }
 
   // Validate the request to prevent injection
-  var validRequest = (data.hasOwnProperty('token') &&
-                      typeof data.token === 'string' &&
-                      data.hasOwnProperty('center') &&
+  var validRequest = (data.hasOwnProperty('center') &&
                       typeof data.center === 'object' &&
                       typeof data.center[0] === 'number' &&
                       typeof data.center[1] === 'number' &&
@@ -99,18 +144,10 @@ exports.getWithin = function (db, data, response) {
                       typeof data.layer === 'number';
 
   if (!validRequest) {
-    console.log('Invalid request');
-    console.log(data);
-
     return response(errors.responses.InvalidRequestError);
   }  // else
 
-  jwt.verify(data.token, local.secret, function (err) {
-    if (err) {
-      // Problems with token
-
-      return response(errors.responses.InvalidTokenError);
-    }  // else
+  handleToken(data.token, response, function () {
 
     clustering.findWithin({
       db: db,
@@ -134,5 +171,53 @@ exports.getWithin = function (db, data, response) {
       },
     });
 
+  });
+};
+
+
+exports.rename = function (db, data, response) {
+  // Parameters:
+  //   db
+  //     Monk db instance
+  //   data
+  //     token
+  //       string
+  //     locationId
+  //       string, ObjectId compatible
+  //     newName
+  //       string
+  //   response
+  //     Socket.io response
+  handleToken(data.token, response, function (payload) {
+    var validRequest, id, username, newName;
+
+    validRequest = (typeof data.locationId === 'string' &&
+                    typeof data.newName === 'string');
+
+    if (!validRequest) {
+      return response(errors.responses.InvalidRequestError);
+    }
+
+    try {
+      id = new ObjectId(data.locationId);
+    } catch (e) {
+      return response(errors.responses.InvalidRequestError);
+    }
+
+    username = payload.name;
+    newName = data.newName.trim();
+
+    model.rename(db, username, id, newName, function (err, updatedLoc) {
+      if (err) {
+        if (err.name === 'NotFoundError') {
+          return response(errors.responses.NotFoundError);
+        }
+        return response(errors.responses.DatabaseError);
+      }
+
+      return response({
+        success: updatedLoc,
+      });
+    });
   });
 };

@@ -1,4 +1,4 @@
-<a href="/location/<%= location._id %>"><strong><%= location.name %></strong></a>
+<a href="/location/<%= location._id %>"><strong><%= (location.name === '' ? 'Untitled' : location.name) %></strong></a>
 
 <% var j, ts; %>
 <% ts = location.tags; %>
@@ -9,3 +9,5 @@
 </p>
 
 <a href="/location/<%= location._id %>">See more...</a>
+
+<div>layer: <%= location.layer %></div>

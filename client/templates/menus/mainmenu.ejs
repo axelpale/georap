@@ -1,4 +1,4 @@
-<div class="btn-toolbar" role="toolbar">
+<div id="tresdb-toolbar-user" class="btn-toolbar" role="toolbar">
 
   <div class="btn-group" role="group" aria-label="">
     <img src="/assets/images/logo/32.png" />
@@ -18,7 +18,7 @@
   </div>
   --->
 
-  <div class="dropdown btn-group" role="group" aria-label="user management">
+  <div class="dropdown btn-group" role="group" aria-label="account">
     <button id="tresdb-mainmenu-account" type="button" data-toggle="dropdown" class="dropdown-toggle btn btn-default" aria-haspopup="true" aria-expanded="false">
       <%= glyphicon({ name: 'user' }) %> <%= user.name %>
       <span class="caret"></span>
@@ -40,3 +40,19 @@
     </ul>
   </div><!-- .dropdown -->
 </div><!-- .btn-toolbar -->
+
+<div id="tresdb-toolbar-tools" class="btn-toolbar" role="toolbar">
+  <div class="btn-group" role="group" aria-label="location tools">
+    <button id="tresdb-mainmenu-add" type="button" class="btn btn-primary"><%= glyphicon({ name: 'map-marker' }) %> Add</button>
+  </div>
+</div>
+
+<div id="tresdb-toolbar-addition" class="btn-toolbar hidden" role="toolbar">
+  <div class="btn-group" role="group" aria-label="location tools">
+    <button id="tresdb-addition-cancel" type="button" class="btn btn-default">Cancel</button>
+  </div>
+
+  <div class="btn-group" role="group" aria-label="location tools">
+    <button id="tresdb-addition-create" type="button" class="btn btn-primary">Create</button>
+  </div>
+</div>

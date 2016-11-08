@@ -1,7 +1,7 @@
 {
   "name": "tresdb",
   "private": true,
-  "version": "3.1.1",
+  "version": "3.2.0",
   "description": "Geographical CMS built on Express.js",
   "keywords": [
     "GIS",
@@ -20,9 +20,10 @@
     "migrate": "node migration/migrate.js",
     "backup": "node migration/backup.js",
     "restore": "node migration/restore.js",
-    "cluster": "node server/services/clustering/refresh.js",
-    "test": "npm run test:server && npm run test:client && npm run test:migration && npm run test:clustering",
-    "test:server": "mocha specs/server/auth.spec.js",
+    "cluster": "node cli/cluster.js",
+    "test": "npm run test:server && npm run test:models && npm run test:client && npm run test:migration && npm run test:clustering",
+    "test:server": "mocha server/handlers/**.spec.js",
+    "test:models": "mocha server/models/**.spec.js",
     "test:migration": "mocha migration/specs/*.spec.js",
     "test:clustering": "mocha server/services/clustering/lib/specs/*.spec.js",
     "test:client": "casperjs test specs/client/test-login.js",
