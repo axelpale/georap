@@ -79,8 +79,16 @@ module.exports = function (loc, api) {
     $('#tresdb-location-rename-form').submit(function (ev) {
       ev.preventDefault();
 
-      var newName = $('#tresdb-location-rename-input').val();
-      api.rename(loc._id, newName.trim(), function (err) {
+      var newName = $('#tresdb-location-rename-input').val().trim();
+      var oldName = loc.name;
+
+      if (newName === oldName) {
+        // If name not changed, just close the form.
+        $('#tresdb-location-rename-form').addClass('hidden');
+        $('#tresdb-location-rename-error').addClass('hidden');
+      }
+
+      api.rename(loc._id, newName, function (err) {
         if (err) {
           console.error(err);
           $('#tresdb-location-rename-form').addClass('hidden');
