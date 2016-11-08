@@ -1,12 +1,12 @@
 // Usage:
 //   $ node refresh.js
 
-var local = require('../../../config/local');
+var local = require('../config/local');
 var monk = require('monk');
 
 var db = monk(local.mongo.url);
 
-var clustering = require('./index');
+var clustering = require('../server/services/clustering');
 
 clustering.recomputeClusters(db, function (err) {
   if (err) {
