@@ -140,6 +140,7 @@ exports.findWithin = function (options) {
         name: true,
         geom: true,
         tags: true,
+        layer: true,
       },
     },
   ]).then(function (results) {
