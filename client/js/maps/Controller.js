@@ -87,6 +87,36 @@ module.exports = function (htmlElement, defaultMapstate, api) {
     }
   });
 
+  // Listen zoom level change to only show labels of locations
+  // with higher level than current zoom level.
+  map.addListener('zoom_changed', function () {
+    var z, k, m, loc;
+
+    z = map.getZoom();
+
+
+    for (k in markers) {
+      if (markers.hasOwnProperty(k)) {
+        m = markers[k];
+        loc = m.get('location');
+        if (loc.layer < z - 1) {
+          // Ensure label is visible.
+          // Note: getLabel can return undefined or null, regarding
+          // whether setLabel(null) is called or not.
+          if (!m.getLabel()) {
+            m.setLabel({
+              color: labels.mapTypeIdToLabelColor(map.getMapTypeId()),
+              text: (loc.name === '' ? 'Untitled' : loc.name),
+            });
+          }
+        } else {
+          // Hide label
+          m.setLabel(null);
+        }
+      }
+    }
+  });
+
 
   // Private methods declaration
 
@@ -234,18 +264,26 @@ module.exports = function (htmlElement, defaultMapstate, api) {
     //
     // Return
     //   the created marker
+    var lng, lat, m;
 
-    var lng = loc.geom.coordinates[0];
-    var lat = loc.geom.coordinates[1];
+    lng = loc.geom.coordinates[0];
+    lat = loc.geom.coordinates[1];
 
-    var m = new google.maps.Marker({
+    m = new google.maps.Marker({
       position: new google.maps.LatLng(lat, lng),
-      label: {
-        color: labels.mapTypeIdToLabelColor(map.getMapTypeId()),
-        text: loc.name,
-      },
       icon: icons.marker(),
     });
+
+    // Store the location for _id, name, and layer info.
+    m.set('location', loc);
+
+    // Label only the important, higher markers.
+    if (loc.layer < map.getZoom() - 1) {
+      m.setLabel({
+        color: labels.mapTypeIdToLabelColor(map.getMapTypeId()),
+        text: (loc.name === '' ? 'Untitled' : loc.name),
+      });
+    }
 
     m.setMap(map);
     m.addListener('click', function () {
