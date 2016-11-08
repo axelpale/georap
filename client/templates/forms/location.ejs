@@ -34,25 +34,38 @@
       <% cs = location.content; %>
       <% for (i = 0; i < cs.length; i += 1) { %>
         <% c = cs[i]; %>
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <%= c.user %>, <%= timestamp(c.time) %>
-        </div>
-        <div class="panel-body">
-          <% if (c.type === 'story') { %>
-            <%= marked(c.data.markdown) %>
-          <% } else if (c.type === 'created') { %>
-            Added <%= location.name %> into database.
-          <% } else if (c.type === 'attachment') { %>
+      <div class="panel panel-default tresdb-content-<%= c.type %>">
+        <% if (c.type === 'story') { %>
+          <div class="panel-heading">
+            <%= c.user %> wrote <%= timestamp(c.time) %>
+          </div>
+          <div class="panel-body">
+          <%= marked(c.data.markdown, { sanitize: true }) %>
+          </div>
+        <% } else if (c.type === 'created') { %>
+          <div class="panel-heading">
+            <%= c.user %> created <em><%= location.name %></em> <%= timestamp(c.time) %>
+          </div>
+        <% } else if (c.type === 'visit') { %>
+          <div class="panel-heading">
+            <%= c.user %> visited <em><%= location.name %></em> <%= timestamp(c.time) %>
+          </div>
+        <% } else if (c.type === 'rename') { %>
+          <div class="panel-heading">
+            <%= c.user %> renamed <em><%= c.data.oldName %></em> to <em><%= c.data.newName %></em> <%= timestamp(c.time) %>
+          </div>
+        <% } else if (c.type === 'attachment') { %>
+          <div class="panel-heading">
+            <%= c.user %> uploaded <%= timestamp(c.time) %>
+          </div>
+          <div class="panel-body">
             <% if (c.data.mimetype.startsWith('image')) { %>
-              <img src="<%= c.data.url %>" style="width: 100%">
+              <a href="<%= c.data.url %>" target="_blank"><img src="<%= c.data.url %>" style="width: 100%"></a>
             <% } else { %>
               <a href="<%= c.data.url %>" target="_blank"><%= c.data.filename %></a>
             <% } %>
-          <% } else if (c.type === 'visit') { %>
-            Visited <%= location.name %>.
-          <% } %>
-        </div>
+          </div>
+        <% } %>
       </div>
       <% } %>
 
