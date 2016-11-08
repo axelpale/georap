@@ -58,13 +58,15 @@
           <div class="panel-heading">
             <%= c.user %> uploaded <%= timestamp(c.time) %>
           </div>
-          <div class="panel-body">
-            <% if (c.data.mimetype.startsWith('image')) { %>
-              <a href="<%= c.data.url %>" target="_blank"><img src="<%= c.data.url %>" style="width: 100%"></a>
-            <% } else { %>
+          <% if (c.data.mimetype.startsWith('image')) { %>
+            <div class="panel-body tresdb-content-attachment-image-body">
+              <a href="<%= c.data.url %>" target="_blank"><img src="<%= c.data.url %>"></a>
+            </div>
+          <% } else { %>
+            <div class="panel-body">
               <a href="<%= c.data.url %>" target="_blank"><%= c.data.filename %></a>
-            <% } %>
-          </div>
+            </div>
+          <% } %>
         <% } %>
       </div>
       <% } %>
