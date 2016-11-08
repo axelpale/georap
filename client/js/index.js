@@ -210,18 +210,21 @@ window.initMap = function () {
     mapTypeId: 'hybrid',
   });
 
+  // A method to expose router to map controller and main menu.
+  var go = function (path) {
+    return page.show(path);
+  };
+
   var defaultMapstate = mapstateService.getState();
   var mapController = new maps.Controller(mapElement, defaultMapstate,
-                                          locationsService);
+                                          locationsService, go);
 
   // Start tracking for the last known state.
   mapstateService.listen(mapController.getMap());
 
   var addMainMenu = function () {
     var mainMenu = new menus.MainMenu(authService, {
-      go: function (path) {
-        return page.show(path);
-      },
+      go: go,
       onAdditionStart: function () {
         mapController.addAdditionMarker();
       },

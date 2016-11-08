@@ -1,11 +1,10 @@
 /* eslint-disable max-statements, max-lines */
 /* global google */
 
-var infoTemplate = require('../../templates/infowindow.ejs');
 var icons = require('./lib/icons');
 var labels = require('./lib/labels');
 
-module.exports = function (htmlElement, defaultMapstate, api) {
+module.exports = function (htmlElement, defaultMapstate, api, go) {
   // Parameters:
   //   htmlElement
   //     for the google map
@@ -13,22 +12,22 @@ module.exports = function (htmlElement, defaultMapstate, api) {
   //     the default map state.
   //   api
   //     locations.Service instance.
+  //   go
+  //     function (path): ask router to go to path.
 
   // Private methods declaration
 
   var addMarker;
+  var ensureLabel;
+  var hasLabel;
   var removeMarker;
   var updateLocations;
   var removeAllMarkers;
-  var ensureLabel;
 
   // Init
 
   // Location markers on the map.
   var markers = {};
-
-  // An open infowindow. Allow only single infowindow to be open at the time.
-  var infowindow = null;
 
   // An addition marker. User moves this large marker to point where
   // the new location is to be created.
@@ -69,16 +68,10 @@ module.exports = function (htmlElement, defaultMapstate, api) {
     }
   });
 
-  // Listen for changes in locations so that the markers and infowindows
+  // Listen for changes in locations so that the markers and labels
   // are up to date.
   api.on('rename', function (updatedLoc) {
     var m;
-
-    if (infowindow) {
-      if (infowindow.get('location')._id === updatedLoc._id) {
-        infowindow.setContent(infoTemplate({ location: updatedLoc }));
-      }
-    }
 
     if (markers.hasOwnProperty(updatedLoc._id)) {
       m = markers[updatedLoc._id];
@@ -285,19 +278,12 @@ module.exports = function (htmlElement, defaultMapstate, api) {
     m.setMap(map);
     m.addListener('click', function () {
 
-      // Close previous, possibly open infowindow.
-      if (infowindow !== null) {
-        infowindow.close();
+      if (hasLabel(m)) {
+        go('/location/' + loc._id);
+      } else {
+        ensureLabel(m, true);
       }
 
-      // Open new info window
-      infowindow = new google.maps.InfoWindow({
-        maxWidth: 250,
-        content: infoTemplate({ location: loc }),
-      });
-      infowindow.set('location', loc);
-
-      infowindow.open(map, m);
     });
 
     m.set('id', loc._id);
@@ -326,6 +312,11 @@ module.exports = function (htmlElement, defaultMapstate, api) {
         text: (loc.name === '' ? 'Untitled' : loc.name),
       });
     }
+  };
+
+  hasLabel = function (marker) {
+    // Return true if marker has label visible.
+    return Boolean(marker.getLabel());
   };
 
   removeMarker = function (m) {
