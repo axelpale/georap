@@ -92,6 +92,11 @@ exports.rename = function (db, username, id, newName, callback) {
       return callback(errors.NotFoundError);
     }
 
+    // If names equal, no need to call database or add a content entry.
+    if (loc.name === newName.trim()) {
+      return callback(null, loc);
+    }
+
     var now = new Date();
     var contentEntry = {
       type: 'rename',
