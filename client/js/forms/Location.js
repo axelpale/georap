@@ -53,12 +53,22 @@ module.exports = function (loc, api) {
 
     $('#tresdb-location-rename-show').click(function (ev) {
       ev.preventDefault();
-      // Show or hide
-      $('#tresdb-location-rename-form').toggleClass('hidden');
-      // Remove possible error messages
-      $('#tresdb-location-rename-error').addClass('hidden');
-      // Prefill the form with the current name
-      $('#tresdb-location-rename-input').val(loc.name);
+
+      if ($('#tresdb-location-rename-form').hasClass('hidden')) {
+        // Show
+        $('#tresdb-location-rename-form').removeClass('hidden');
+        // Remove possible error messages
+        $('#tresdb-location-rename-error').addClass('hidden');
+        // Prefill the form with the current name
+        $('#tresdb-location-rename-input').val(loc.name);
+        // Focus to input field
+        $('#tresdb-location-rename-input').focus();
+      } else {
+        // Hide
+        $('#tresdb-location-rename-form').addClass('hidden');
+        // Remove possible error messages
+        $('#tresdb-location-rename-error').addClass('hidden');
+      }
     });
 
     $('#tresdb-location-rename-cancel').click(function (ev) {
