@@ -45,6 +45,7 @@ module.exports = function (loc, api) {
     // Listen possible changes in the location.
     api.on('rename', function (updatedLoc) {
       if (loc._id === updatedLoc._id) {
+        loc.name = updatedLoc.name;
         var s = (updatedLoc.name === '' ? 'Untitled' : updatedLoc.name);
         $('#tresdb-location-name').text(s);
       }
@@ -52,9 +53,12 @@ module.exports = function (loc, api) {
 
     $('#tresdb-location-rename-show').click(function (ev) {
       ev.preventDefault();
+      // Show or hide
       $('#tresdb-location-rename-form').toggleClass('hidden');
       // Remove possible error messages
       $('#tresdb-location-rename-error').addClass('hidden');
+      // Prefill the form with the current name
+      $('#tresdb-location-rename-input').val(loc.name);
     });
 
     $('#tresdb-location-rename-cancel').click(function (ev) {
