@@ -5,6 +5,6 @@ module.exports = function (isoTime) {
   //   isoTime
   //     string in ISO format. See ISO 8601
 
-  return '<time datetime="' + isoTime + '" title="' + isoTime + '">' +
+  return '<time datetime="' + isoTime + '" title="' + isoTime + '" data-toggle="tooltip" data-placement="top">' +
          timeago(isoTime) + '</time>';
 };

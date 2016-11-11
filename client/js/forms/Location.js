@@ -51,6 +51,10 @@ module.exports = function (loc, api) {
       }
     });
 
+    // Enable tooltips. See http://getbootstrap.com/javascript/#tooltips
+    $('[data-toggle="tooltip"]').tooltip();
+
+    // Rename form
     $('#tresdb-location-rename-show').click(function (ev) {
       ev.preventDefault();
 

@@ -87,4 +87,8 @@ html, body {
   /*margin: 0px auto 0px auto;*/
 }
 
+time {
+  text-decoration: underline;
+}
+
 /* Content Entries END*/
