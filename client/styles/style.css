@@ -70,6 +70,14 @@ html, body {
   font-size: 1.38em;
 }
 
+.tresdb-coordinates {
+  font-size: 1.38em;
+}
+
+.tresdb-coordinates a {
+  color: white !important;
+}
+
 /* Tag labels END */
 
 /* Content Entries */

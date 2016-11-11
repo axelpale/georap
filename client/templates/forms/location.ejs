@@ -1,7 +1,7 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col-md-12">
-      <h1><span id="tresdb-location-name"><%= (location.name === '' ? 'Untitled' : location.name) %></span> <button id="tresdb-location-rename-show" type="button" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-pencil"></span> Edit name</button></h1>
+      <h1><span id="tresdb-location-name"><%= (location.name === '' ? 'Untitled' : location.name) %></span> <button id="tresdb-location-rename-show" type="button" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-pencil"></span> Edit</button></h1>
 
       <form id="tresdb-location-rename-form" class="hidden panel panel-primary">
         <div class="panel-body">
@@ -18,14 +18,24 @@
         <div class="alert alert-danger" role="alert">Renaming the location failed.</div>
       </div>
 
-      <p><%= geostamp(location.geom, { precision: 5 }) %></p>
-
       <% var j, ts; %>
       <% ts = location.tags; %>
       <p class="tresdb-tags">
       <% for (j = 0; j < ts.length; j += 1) { %>
         <span class="label label-default"><%= ts[j] %></span>
       <% } %>
+      <button id="tresdb-location-edit-tags-show" type="button" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-pencil"></span> Edit</button>
+      </p>
+
+      <p class="tresdb-coordinates">
+        <span class="label label-default"><%= geostamp(location.geom, { precision: 5 }) %></span>
+        <button id="tresdb-location-edit-coordinates-show" type="button" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-pencil"></span> Edit</button>
+      </p>
+
+      <p>
+        <button id="tresdb-location-text" type="button" class="btn btn-default"><span class="glyphicon glyphicon-comment"></span> Write</button>
+        <button id="tresdb-location-photo" type="button" class="btn btn-default"><span class="glyphicon glyphicon-paperclip"></span> Upload</button>
+        <button id="tresdb-location-visit" type="button" class="btn btn-default"><span class="glyphicon glyphicon-star"></span> Visit</button>
       </p>
 
       <% var i, cs, c; %>
