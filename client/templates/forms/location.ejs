@@ -18,9 +18,7 @@
         <div class="alert alert-danger" role="alert">Renaming the location failed.</div>
       </div>
 
-      <% var lng = location.geom.coordinates[0]; %>
-      <% var lat = location.geom.coordinates[1]; %>
-      <p>longitude <%= lng %>, latitude <%= lat %></p>
+      <p><%= geostamp(location.geom, { precision: 5 }) %></p>
 
       <% var j, ts; %>
       <% ts = location.tags; %>

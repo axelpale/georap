@@ -1,5 +1,6 @@
 var marked = require('marked');
 var timestamp = require('./lib/timestamp');
+var geostamp = require('./lib/geostamp');
 
 // Templates
 var locationTemplate = require('../../templates/forms/location.ejs');
@@ -36,6 +37,7 @@ module.exports = function (loc, api) {
     return locationTemplate({
       location: loc,
       marked: marked,  // markdown parser
+      geostamp: geostamp,
       timestamp: timestamp,
     });
   };
