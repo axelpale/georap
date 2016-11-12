@@ -166,7 +166,7 @@ exports.getWithin = function (db, data, response) {
         }  // else
 
         return response({
-          locations: locs,
+          success: locs,
         });
       },
     });

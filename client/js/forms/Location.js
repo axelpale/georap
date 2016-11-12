@@ -45,7 +45,7 @@ module.exports = function (loc, api) {
   this.bind = function () {
 
     // Listen possible changes in the location.
-    api.on('rename', function (updatedLoc) {
+    api.on('locations/rename/success', function (updatedLoc) {
       if (loc._id === updatedLoc._id) {
         loc.name = updatedLoc.name;
         var s = (updatedLoc.name === '' ? 'Untitled' : updatedLoc.name);

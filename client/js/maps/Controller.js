@@ -70,7 +70,7 @@ module.exports = function (htmlElement, defaultMapstate, api, go) {
 
   // Listen for changes in locations so that the markers and labels
   // are up to date.
-  api.on('rename', function (updatedLoc) {
+  api.on('locations/rename/success', function (updatedLoc) {
     var m;
 
     if (markers.hasOwnProperty(updatedLoc._id)) {

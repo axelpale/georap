@@ -20,6 +20,7 @@ var getBoundsDiagonal = function (bounds) {
 };
 
 
+
 module.exports = function (socket, auth) {
 
   Emitter(this);
@@ -27,6 +28,24 @@ module.exports = function (socket, auth) {
 
   // We will listen the map for changes.
   var listener = null;
+
+  // Private methods
+
+  var callApi = function (route, payload, callback) {
+    // General emit and response handler
+    socket.emit(route, payload, function (response) {
+      if (response.hasOwnProperty('success')) {
+        self.emit(route + '/success', response.success);
+        return callback(null, response.success);
+      }
+
+      if (response.hasOwnProperty('error')) {
+        return callback(new Error(response.error));
+      }
+
+      throw new Error('invalid server response');
+    });
+  };
 
   // Public methods
 
@@ -38,17 +57,7 @@ module.exports = function (socket, auth) {
       geom: geom,
     };
 
-    socket.emit('locations/addOne', payload, function (response) {
-      if (response.hasOwnProperty('success')) {
-        return callback(null, response.success);
-      }
-
-      if (response.hasOwnProperty('error')) {
-        return callback(new Error(response.error));
-      }
-
-      throw new Error('invalid server response');
-    });
+    callApi('locations/addOne', payload, callback);
   };
 
   this.fetchOne = function (locationId, callback) {
@@ -59,37 +68,7 @@ module.exports = function (socket, auth) {
       locationId: locationId,
     };
 
-    socket.emit('locations/getOne', payload, function (response) {
-      if (response.hasOwnProperty('success')) {
-        return callback(null, response.success);
-      }
-
-      if (response.hasOwnProperty('error')) {
-        return callback(new Error(response.error));
-      }
-
-      throw new Error('invalid server response');
-    });
-  };
-
-  this.fetchAll = function (callback) {
-    // Get all locations from server.
-
-    var payload = { token: auth.getToken() };
-
-    socket.emit('locations/get', payload, function (response) {
-      if (response.hasOwnProperty('locations')) {
-        // Successful fetch.
-        // Inform about new data.
-        return callback(null, response.locations);
-      }  // else
-
-      if (response.hasOwnProperty('error')) {
-        return callback(new Error(response.error));
-      } // else
-
-      throw new Error('invalid server response');
-    });
+    callApi('locations/getOne', payload, callback);
   };
 
   this.fetchWithin = function (center, radius, zoomLevel, callback) {
@@ -113,17 +92,7 @@ module.exports = function (socket, auth) {
       layer: zoomLevel,
     };
 
-    socket.emit('locations/getWithin', payload, function (response) {
-      if (response.hasOwnProperty('locations')) {
-        return callback(null, response.locations);
-      }  // else
-
-      if (response.hasOwnProperty('error')) {
-        return callback(new Error(response.error));
-      }  // else
-
-      throw new Error('invalid server response');
-    });
+    callApi('locations/getWithin', payload, callback);
   };
 
   this.rename = function (locationId, newName, callback) {
@@ -143,18 +112,7 @@ module.exports = function (socket, auth) {
       newName: newName,
     };
 
-    socket.emit('locations/rename', payload, function (response) {
-      if (response.hasOwnProperty('success')) {
-        self.emit('rename', response.success);
-        return callback(null, response.success);
-      }
-
-      if (response.hasOwnProperty('error')) {
-        return callback(new Error(response.error));
-      }
-
-      throw new Error('invalid server response');
-    });
+    callApi('locations/rename', payload, callback);
   };
 
 
