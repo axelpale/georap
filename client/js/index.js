@@ -167,7 +167,7 @@ page('/location/:id', function (ctx) {
     }
 
     // Render location card.
-    var locationForm = new forms.Location(loc, locationsService);
+    var locationForm = new forms.Location(loc, locationsService, authService);
 
     card.open(locationForm.render(loc));
     locationForm.bind();

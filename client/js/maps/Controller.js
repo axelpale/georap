@@ -3,6 +3,7 @@
 
 var icons = require('./lib/icons');
 var labels = require('./lib/labels');
+var getBoundsDiagonal = require('./lib/getBoundsDiagonal');
 
 module.exports = function (htmlElement, defaultMapstate, api, go) {
   // Parameters:
@@ -25,6 +26,10 @@ module.exports = function (htmlElement, defaultMapstate, api, go) {
   var removeAllMarkers;
 
   // Init
+
+  // Does the map load markers form the api and display them on the map.
+  // Will be set e.g. when client is ready to load markers (logged in)
+  var loaderListener = null;
 
   // Location markers on the map.
   var markers = {};
@@ -204,6 +209,35 @@ module.exports = function (htmlElement, defaultMapstate, api, go) {
       geolocationWatchId = id;
 
     }  // Else, no navigator.geolocation available
+  };
+
+  this.startLoadingMarkers = function () {
+    // Each idle, fetch a new set of locations.
+
+    // Prevent duplicate listeners.
+    if (loaderListener !== null) {
+      return;
+    }
+
+    loaderListener = map.addListener('idle', function () {
+      var center = map.getCenter();
+      var bounds = map.getBounds();
+      var radius = Math.ceil(getBoundsDiagonal(bounds) / 2);
+      var zoomLevel = map.getZoom();
+
+      api.getMarkersWithin(center, radius, zoomLevel, function (err, locs) {
+        if (err) {
+          return console.error(err);
+        }  // else
+
+        updateLocations(locs);
+      });
+    });
+  };
+
+  this.stopLoadingMarkers = function () {
+    google.maps.event.removeListener(loaderListener);
+    loaderListener = null;
   };
 
   this.addAdditionMarker = function () {

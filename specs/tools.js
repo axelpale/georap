@@ -43,7 +43,7 @@ exports.loadFixture = function (db, fixture, callback) {
 
   async.eachOfSeries(colls, function (items, collName, next) {
 
-    var coll = db.get(collName);
+    var coll = db.collection(collName);
 
     // Drop possibly existing collection before population.
     coll.drop().then(function () {
@@ -63,7 +63,7 @@ exports.loadFixture = function (db, fixture, callback) {
     // Create indices
     async.eachSeries(indices, function (index, next) {
 
-      var coll = db.get(index.collection);
+      var coll = db.collection(index.collection);
 
       coll.ensureIndex(index.spec, index.options, function (err2) {
         return next(err2);

@@ -19,7 +19,7 @@ exports.run = function (db, callback) {
   // 1. Create schema version tag
   console.log('Creating schema version tag...');
 
-  var configColl = db.get('config');
+  var configColl = db.collection('config');
 
   schema.setVersion(configColl, 2, function (err) {
     if (err) {
@@ -30,7 +30,7 @@ exports.run = function (db, callback) {
     // 2. Transform locations to have a geometry in GeoJSON
     console.log('Transforming locations to have GeoJSON geometry...');
 
-    var locsColl = db.get('locations');
+    var locsColl = db.collection('locations');
 
     iter.updateEach(locsColl, function (loc, next) {
 

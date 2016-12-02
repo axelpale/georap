@@ -19,7 +19,7 @@ var TESTER_PASSWORD = 'tester_password';
 
 
 
-describe('server.handlers.auth', function () {
+describe('server.handlers.account', function () {
   var socket;
 
   before(function (done) {
@@ -43,7 +43,8 @@ describe('server.handlers.auth', function () {
     // The returned function takes payload, and done-callback as its params.
     //
     // Usage:
-    //   var he = createResponseAssert('auth/login', 'error', 'HashingError');
+    //   var he = createResponseAssert('account/login', 'error',
+    //                                 'HashingError');
     //   ...
     //   it('should response with HashingError', function (done) {
     //     he({ pay: load, that: causes, hashing: error }, done);
@@ -61,11 +62,11 @@ describe('server.handlers.auth', function () {
     };
   };
 
-  describe('auth/login should response with', function () {
+  describe('account/login should response with', function () {
 
     context('JWT token when', function () {
 
-      var assertToken = createResponseAssert('auth/login', 'token');
+      var assertToken = createResponseAssert('account/login', 'token');
 
       it('known email and password are provided', function (done) {
         assertToken({
@@ -77,7 +78,7 @@ describe('server.handlers.auth', function () {
 
     context('InvalidRequestError when', function () {
 
-      var assertIRE = createResponseAssert('auth/login', 'error',
+      var assertIRE = createResponseAssert('account/login', 'error',
                                            'InvalidRequestError');
 
       it('an empty payload is provided', function (done) {
@@ -125,7 +126,7 @@ describe('server.handlers.auth', function () {
           password: 'foobar',
         };
 
-        socket.emit('auth/login', payload, function (res) {
+        socket.emit('account/login', payload, function (res) {
           res.should.have.property('error', 'UnknownEmailError');
           done();
         });
@@ -139,7 +140,7 @@ describe('server.handlers.auth', function () {
           password: 'foobar',
         };
 
-        socket.emit('auth/login', payload, function (res) {
+        socket.emit('account/login', payload, function (res) {
           res.should.have.property('error', 'IncorrectPasswordError');
           done();
         });
@@ -147,7 +148,7 @@ describe('server.handlers.auth', function () {
     });
   });
 
-  describe('auth/changePassword should response with', function () {
+  describe('account/changePassword should response with', function () {
 
     var goodToken = jwt.sign({ email: TESTER_EMAIL }, local.secret);
     var badEmailToken = jwt.sign({ email: 'foo123@bar.com' }, local.secret);
@@ -155,7 +156,7 @@ describe('server.handlers.auth', function () {
     var badToken2 = jwt.sign({ email: TESTER_EMAIL }, 'foo');
 
     context('InvalidRequestError when', function () {
-      var assertIRE = createResponseAssert('auth/changePassword', 'error',
+      var assertIRE = createResponseAssert('account/changePassword', 'error',
                                            'InvalidRequestError');
 
       it('no token is provided', function (done) {
@@ -176,7 +177,7 @@ describe('server.handlers.auth', function () {
     });
 
     context('UnknownEmailError when', function () {
-      var assertUEE = createResponseAssert('auth/changePassword', 'error',
+      var assertUEE = createResponseAssert('account/changePassword', 'error',
                                            'UnknownEmailError');
 
       it('unknown email is provided', function (done) {
@@ -190,7 +191,7 @@ describe('server.handlers.auth', function () {
     });
 
     context('IncorrectPasswordError when', function () {
-      var assertIPE = createResponseAssert('auth/changePassword', 'error',
+      var assertIPE = createResponseAssert('account/changePassword', 'error',
                                            'IncorrectPasswordError');
 
       it('the current password is incorrect', function (done) {
@@ -203,11 +204,11 @@ describe('server.handlers.auth', function () {
     });
 
     context('success when', function () {
-      var assertSuccess = createResponseAssert('auth/changePassword', 'success',
+      var assertSucc = createResponseAssert('account/changePassword', 'success',
                                                true);
 
       it('token ok, passwords match', function (done) {
-        assertSuccess({
+        assertSucc({
           token: goodToken,
           currentPassword: TESTER_PASSWORD,
           newPassword: TESTER_PASSWORD,

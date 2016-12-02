@@ -1,116 +1,148 @@
 
 var errors = require('../errors');
 var clustering = require('../services/clustering');
-var attachments = require('../services/attachments');
 var model = require('../models/locations');
 var handleToken = require('./lib/handleToken');
+var handleObjectId = require('./lib/handleObjectId');
+var prepareForClient = require('./lib/prepareForClient');
 
-var ObjectId = require('mongodb').ObjectId;
-var mime = require('mime');
+// Precompile schemas
+var putSchema = require('./schemas/locations/put');
+var getSchema = require('./schemas/locations/get');
+var delSchema = require('./schemas/locations/del');
+var countSchema = require('./schemas/locations/count');
+var Validator = require('ajv');
+var validator = new Validator();
+var validatePut = validator.compile(putSchema);
+var validateGet = validator.compile(getSchema);
+var validateDel = validator.compile(delSchema);
+var validateCount = validator.compile(countSchema);
 
 
-exports.addOne = function (db, data, response) {
-  // Add new location
-  //
-  // Parameters:
-  //   db
-  //     Monk db instance
-  //   data
-  //     token
-  //       JWT token string
-  //     geom
-  //       GeoJSON point
-  //   response
-  //     Socket.io response
-  var coords;
+exports.put = function (db, data, response) {
+  // Add or update new location
 
-  // Request validation
+  var valid = validatePut(data);
 
-  if (typeof data.geom !== 'object' || data.geom.type !== 'Point' ||
-      typeof data.geom.coordinates !== 'object') {
+  if (!valid) {
     return response(errors.responses.InvalidRequestError);
   }
 
-  coords = data.geom.coordinates;
-
-  if (coords.length !== 2 || typeof coords[0] !== 'number' ||
-      typeof coords[1] !== 'number') {
-    return response(errors.responses.InvalidRequestError);
-  }
-
-  // Token check
-  handleToken(data.token, response, function (payload) {
-
-    model.create(db, payload.name, data.geom, function (err2, newLoc) {
-      if (err2) {
+  var thenPut = function () {
+    model.put(db, data.location, function (err, loc) {
+      if (err) {
         return response(errors.responses.DatabaseError);
       }
 
-      return response({
-        success: newLoc,
+      // Transform location to be suitable for the client.
+      prepareForClient.location(loc);
+
+      return response({ success: loc });
+    });
+  };
+
+  handleToken(data.token, response, function () {
+    if (data.location.hasOwnProperty('_id')) {
+      return handleObjectId(data.location._id, response, function (objId) {
+        data.location._id = objId;
+        return thenPut();
+      });
+    }
+    return thenPut();
+  });
+};
+
+exports.get = function (db, data, response) {
+
+  var valid = validateGet(data);
+
+  if (!valid) {
+    return response(errors.responses.InvalidRequestError);
+  }
+
+  handleToken(data.token, response, function () {
+    handleObjectId(data.location._id, response, function (objId) {
+
+      data.location._id = objId;
+
+      model.get(db, data.location, function (err, loc) {
+        if (err) {
+          if (err.name === 'NotFoundError') {
+            return response(errors.responses.NotFoundError);
+          }
+          return response(errors.responses.DatabaseError);
+        }
+
+        // Transform location to be suitable for the client.
+        prepareForClient.location(loc);
+
+        return response({ success: loc });
       });
     });
   });
 };
 
-exports.getOne = function (db, data, response) {
-  // Parameters
+exports.del = function (db, data, response) {
+  // Parameters:
   //   db
-  //     Monk db instance
   //   data
-  //     token
-  //       JWT token string
-  //     locationId
-  //       valid object id as string
   //   response
-  //     Socket.io response
-  var objId;
+  //     function (responseObject)
 
-  if (typeof data.locationId !== 'string') {
-    return response(errors.responses.InvalidRequestError);
-  }
+  var valid = validateDel(data);
 
-  try {
-    objId = new ObjectId(data.locationId);
-  } catch (e) {
+  if (!valid) {
     return response(errors.responses.InvalidRequestError);
   }
 
   handleToken(data.token, response, function () {
+    handleObjectId(data.location._id, response, function (objId) {
 
-    var locations = db.get('locations');
+      console.log('objId', objId);
 
-    locations.findOne({ _id: objId }).then(function (loc) {
-      if (loc) {
+      data.location._id = objId;
+
+      model.del(db, data.location, function (err, loc) {
+        if (err) {
+          console.error(err);
+          if (err.name === 'NotFoundError') {
+            return response(errors.responses.NotFoundError);
+          }
+          return response(errors.responses.DatabaseError);
+        }
 
         // Transform location to be suitable for the client.
-        loc.content = loc.content.map(function (entry) {
-          if (entry.type === 'attachment') {
-            // Attach an url to each attachment.
-            entry.data.url = attachments.getAbsoluteUrl(entry);
+        console.log(loc);
+        prepareForClient.location(loc);
+        console.log('after preparation');
 
-            // Figure out the content mime type.
-            if (!entry.data.hasOwnProperty('mimetype')) {
-              entry.data.mimetype = mime.lookup(entry.data.filename);
-            }
-          }
-          return entry;
-        });
-
-        return response({
-          success: loc,
-        });
-      }
-
-      return response(errors.responses.NotFoundError);
-    }).catch(function (err2) {
-      console.error(err2);
-      return response(errors.responses.DatabaseError);
+        return response({ success: loc });
+      });
     });
   });
 };
 
-exports.getWithin = function (db, data, response) {
+exports.count = function (db, data, response) {
+  // Retrieve the number of locations.
+
+  var valid = validateCount(data);
+
+  if (!valid) {
+    return response(errors.responses.InvalidRequestError);
+  }
+
+  handleToken(data.token, response, function () {
+    model.count(db, function (err, num) {
+      if (err) {
+        console.error(err);
+        return response(errors.responses.DatabaseError);
+      }
+      return response({ success: num });
+    });
+  });
+};
+
+exports.getMarkersWithin = function (db, data, response) {
   // Parameters:
   //   db
   //     Monk db instance
@@ -171,53 +203,5 @@ exports.getWithin = function (db, data, response) {
       },
     });
 
-  });
-};
-
-
-exports.rename = function (db, data, response) {
-  // Parameters:
-  //   db
-  //     Monk db instance
-  //   data
-  //     token
-  //       string
-  //     locationId
-  //       string, ObjectId compatible
-  //     newName
-  //       string
-  //   response
-  //     Socket.io response
-  handleToken(data.token, response, function (payload) {
-    var validRequest, id, username, newName;
-
-    validRequest = (typeof data.locationId === 'string' &&
-                    typeof data.newName === 'string');
-
-    if (!validRequest) {
-      return response(errors.responses.InvalidRequestError);
-    }
-
-    try {
-      id = new ObjectId(data.locationId);
-    } catch (e) {
-      return response(errors.responses.InvalidRequestError);
-    }
-
-    username = payload.name;
-    newName = data.newName.trim();
-
-    model.rename(db, username, id, newName, function (err, updatedLoc) {
-      if (err) {
-        if (err.name === 'NotFoundError') {
-          return response(errors.responses.NotFoundError);
-        }
-        return response(errors.responses.DatabaseError);
-      }
-
-      return response({
-        success: updatedLoc,
-      });
-    });
   });
 };

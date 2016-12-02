@@ -31,7 +31,7 @@ describe('iter.updateEach', function () {
   var collection;
 
   beforeEach(function (done) {
-    collection = db.get(TEST_COLLECTION_NAME);
+    collection = db.collection(TEST_COLLECTION_NAME);
     collection.insert(fixture, done);
   });
 

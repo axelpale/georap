@@ -22,7 +22,7 @@ exports.updateEach = function (collection, iteratee, callback) {
   // Example:
   //
   //   var iter = require('./lib/iter');
-  //   var users = db.get('users');
+  //   var users = db.collection('users');
   //   iter.updateEach(users, function (doc, next) {
   //     doc.name = 'Dr. ' + doc.name;
   //     next(doc);

@@ -47,7 +47,7 @@ describe('migrates.migrate', function () {
         callback: function (err) {
           assert.ifError(err);
 
-          schema.getVersion(db.get('config'), function (err2, vers) {
+          schema.getVersion(db.collection('config'), function (err2, vers) {
             assert.ifError(err2);
             assert.equal(vers, 2);
             done();
@@ -72,7 +72,7 @@ describe('migrates.migrate', function () {
         callback: function (err) {
           assert.ifError(err);
 
-          schema.getVersion(db.get('config'), function (err2, vers) {
+          schema.getVersion(db.collection('config'), function (err2, vers) {
             assert.ifError(err2);
             assert.equal(vers, 3);
             done();

@@ -1,5 +1,8 @@
+// Account
 //
 // Responsible:
+// - authentication login
+// - current user data
 // - communication with the server
 // - handling tokens in browser memory
 //
@@ -10,17 +13,20 @@
 var Emitter = require('component-emitter');
 var jwtDecode = require('jwt-decode');
 
-var TOKEN_KEY = 'tresdb-session-token';
-
-module.exports = function (socket, storage) {
+module.exports = function (api, storage) {
   // Parameters:
-  //   socket
+  //   api
+  //     api.Api instance
   //   storage
+  //
   // Emits:
   //   login
   //   logout
+
   Emitter(this);
   var self = this;
+
+  var TOKEN_KEY = api.getTokenKey();
 
   this.login = function (email, password, callback) {
     // Parameters:
@@ -28,7 +34,7 @@ module.exports = function (socket, storage) {
     //     email address
     //   password
     //   callback
-    //     function (err)
+    //     function (err), optional
     // Emits:
     //   login
     //     On successful login.
@@ -38,26 +44,21 @@ module.exports = function (socket, storage) {
       password: password,
     };
 
-    socket.emit('auth/login', payload, function (response) {
-      if (response.hasOwnProperty('token')) {
-        // Success
-        storage.setItem(TOKEN_KEY, response.token);
-        // Publish within client
-        self.emit('login');
-        if (typeof callback === 'function') {
-          return callback(null);
-        }
-      } else if (response.hasOwnProperty('error')) {
-        // Failure
-        if (typeof callback === 'function') {
-          return callback({
-            name: response.error,
-          });
-        }
-      } else {
-        // Error
-        console.error('Invalid response to loginRequest');
+    if (typeof callback !== 'function') {
+      callback = function () {};
+    }
+
+    api.requestRaw('account/login', payload, function (err, result) {
+      if (err) {
+        return callback(err);
       }
+
+      storage.setItem(TOKEN_KEY, result);
+
+      // Publish within client
+      self.emit('login');
+
+      return callback();
     });
   };
 
@@ -92,23 +93,11 @@ module.exports = function (socket, storage) {
 
     // Data to send to server.
     var payload = {
-      token: this.getToken(),
       currentPassword: currentPassword,
       newPassword: newPassword,
     };
 
-    // Ask server to change the password.
-    socket.emit('auth/changePassword', payload, function (response) {
-      if (response.hasOwnProperty('error')) {
-        return callback({
-          name: response.error,
-        });
-      }  // else
-      if (response.hasOwnProperty('success')) {
-        return callback(null);
-      }  // else
-      console.error('Invalid response from auth/changePassword');
-    });
+    api.request('account/changePassword', payload, callback);
   };
 
   this.sendResetPasswordEmail = function (email, callback) {
@@ -118,17 +107,7 @@ module.exports = function (socket, storage) {
       email: email,
     };
 
-    socket.emit('auth/sendResetPasswordEmail', payload, function (response) {
-      if (response.hasOwnProperty('error')) {
-        return callback({
-          name: response.error,
-        });
-      }  // else
-      if (response.hasOwnProperty('success')) {
-        return callback(null);
-      }  // else
-      console.error('Invalid response from auth/sendResetPasswordEmail');
-    });
+    api.requestRaw('account/sendResetPasswordEmail', payload, callback);
   };
 
   this.resetPassword = function (token, newPassword, callback) {
@@ -138,37 +117,16 @@ module.exports = function (socket, storage) {
       password: newPassword,
     };
 
-    socket.emit('auth/resetPassword', payload, function (response) {
-      if (response.hasOwnProperty('error')) {
-        return callback({
-          name: response.error,
-        });
-      }  // else
-      if (response.hasOwnProperty('success')) {
-        return callback(null);
-      }  // else
-      console.error('Invalid response from auth/resetPassword');
-    });
+    api.requestRaw('account/resetPassword', payload, callback);
   };
 
   this.sendInviteEmail = function (email, callback) {
 
     var payload = {
-      token: this.getToken(),
       email: email,
     };
 
-    socket.emit('auth/sendInviteEmail', payload, function (response) {
-      if (response.hasOwnProperty('error')) {
-        return callback({
-          name: response.error,
-        });
-      }  // else
-      if (response.hasOwnProperty('success')) {
-        return callback(null);
-      }  // else
-      console.error('Invalid response from auth/sendInviteEmail');
-    });
+    api.request('account/sendInviteEmail', payload, callback);
   };
 
   this.signup = function (token, username, password, callback) {
@@ -185,20 +143,7 @@ module.exports = function (socket, storage) {
       password: password,
     };
 
-    socket.emit('auth/signup', payload, function (response) {
-      console.log('auth/signup socket responsed.');
-      if (response.hasOwnProperty('error')) {
-        console.log(response.error);
-
-        return callback({
-          name: response.error,
-        });
-      }  // else
-      if (response.hasOwnProperty('success')) {
-        return callback(null);
-      }  // else
-      console.error('Invalid response from auth/sendInviteEmail');
-    });
+    api.requestRaw('account/signup', payload, callback);
   };
 
   this.isLoggedIn = function () {
@@ -234,5 +179,10 @@ module.exports = function (socket, storage) {
     }
 
     return jwtDecode(storage.getItem(TOKEN_KEY));
+  };
+
+  this.getName = function () {
+    // Return username as a string
+    return this.getUser().name;
   };
 };

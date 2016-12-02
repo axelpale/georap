@@ -5,6 +5,7 @@ var neighbors = require('./lib/neighbors');
 var maxDistance = require('./lib/maxDistance');
 var DensityList = require('./lib/DensityList');
 
+var TOP_LAYER = 1;
 var BOTTOM_LAYER = 15;
 var NEIGHBORHOOD = 7;  // k
 
@@ -12,7 +13,7 @@ exports.recomputeNeighborsAvgDist = function (db, callback) {
   // Recompute average distance value for each location.
 
 
-  var coll = db.get('locations');
+  var coll = db.collection('locations');
 
   neighbors.updateEachAvgDist(coll, NEIGHBORHOOD, function (err) {
     if (err) {
@@ -33,7 +34,7 @@ exports.computeNeighborsAvgDistForPoint = function (db, geom, callback) {
   //   callback
   //     function (err, avgDist)
 
-  var coll = db.get('locations');
+  var coll = db.collection('locations');
 
   // Dummy location
   var loc = {
@@ -66,9 +67,16 @@ exports.findLayerForPoint = function (db, geom, callback) {
   //           integer
   //
 
-  neighbors.findNearestOne(db.get('locations'), geom, function (err, result) {
+  var coll = db.collection('locations');
+
+  neighbors.findNearestOne(coll, geom, function (err, result) {
     if (err) {
       return callback(err);
+    }
+
+    if (!result) {
+      // There is no nearest one.
+      return callback(null, TOP_LAYER);
     }
 
     var layer, r;
@@ -77,7 +85,7 @@ exports.findLayerForPoint = function (db, geom, callback) {
     // Begin from the highest layer. For each layer, compute the required
     // cluster radius. Stop when the radius is decreased below the distance
     // to the nearest.
-    for (layer = 1; layer < BOTTOM_LAYER; layer += 1) {
+    for (layer = TOP_LAYER; layer < BOTTOM_LAYER; layer += 1) {
       r = maxDistance.getFromZoomLevel(layer);
       if (r < nearDist) {
         return callback(null, layer);
@@ -114,7 +122,7 @@ exports.findWithin = function (options) {
   var query = options.query;
   var callback = options.callback;
 
-  var coll = db.get('locations');
+  var coll = db.collection('locations');
 
   coll.aggregate([
     {
@@ -143,9 +151,13 @@ exports.findWithin = function (options) {
         layer: true,
       },
     },
-  ]).then(function (results) {
+  ], function (err, results) {
+    if (err) {
+      return callback(err);
+    }
+
     return callback(null, results);
-  }).catch(callback);
+  });
 };
 
 exports.findDensest = function (coll, callback) {
@@ -239,7 +251,7 @@ exports.computeLayer = function (db, layer, callback) {
 
   console.log('computeLayer', layer);
 
-  var coll = db.get('locations');
+  var coll = db.collection('locations');
 
   // Get locations on the layer and order by their density and
   // store them into a list.
@@ -323,7 +335,7 @@ exports.computeLayer = function (db, layer, callback) {
 
 exports.recomputeClusters = function (db, callback) {
 
-  var coll = db.get('locations');
+  var coll = db.collection('locations');
 
   // 1. Reset clustering data.
 

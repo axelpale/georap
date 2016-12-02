@@ -1,7 +1,13 @@
+
+// In this version increase:
+// - Create _id for each content entry
+// - Remove neighborsAvgDist property
+
 var iter = require('../lib/iter');
 var schema = require('../lib/schema');
+var shortid = require('shortid');
 
-var FROM_VERSION = 2;
+var FROM_VERSION = 3;
 var TO_VERSION = FROM_VERSION + 1;
 
 exports.run = function (db, callback) {
@@ -28,20 +34,19 @@ exports.run = function (db, callback) {
 
     // 2. Transform locations to have locatorId instead of locator_id
     // and fields for tags, content, deleted, layer, and neighborsAvgDist
-    console.log('Transforming locations to have new fields...');
+    console.log('Transforming locations\' content to have _id and');
+    console.log('lose neighborsAvgDist field...');
 
     var locsColl = db.collection('locations');
 
     iter.updateEach(locsColl, function (loc, next) {
 
-      loc.locatorId = loc.locator_id;
-      delete loc.locator_id;
+      loc.content = loc.content.map(function (entry) {
+        entry._id = shortid.generate();
+        return entry;
+      });
 
-      loc.tags = [];
-      loc.content = [];
-      loc.deleted = false;
-      loc.layer = 15;
-      loc.neighborsAvgDist = 1000;
+      delete loc.neighborsAvgDist;
 
       return next(loc);
     }, function (err2) {

@@ -37,7 +37,7 @@ exports.migrate = function (options) {
 
   // Get current version.
   console.log('Checking versions...');
-  schema.getVersion(db.get('config'), function (err, currentVersion) {
+  schema.getVersion(db.collection('config'), function (err, currentVersion) {
     if (err) {
       return then(err);
     }  // else

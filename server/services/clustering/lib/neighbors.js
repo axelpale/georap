@@ -21,9 +21,12 @@ exports.findNearestOne = function (coll, geom, callback) {
         limit: 1,  // Retrieve only the closest
       },
     },
-  ]).then(function (result) {
+  ], function (err, result) {
+    if (err) {
+      return callback(err);
+    }
     return callback(null, result[0]);
-  }).catch(callback);
+  });
 };
 
 exports.findWithin = function (coll, loc, d, callback) {
@@ -49,9 +52,12 @@ exports.findWithin = function (coll, loc, d, callback) {
         spherical: true,
       },
     },
-  ]).then(function (results) {
+  ], function (err, results) {
+    if (err) {
+      return callback(err);
+    }
     return callback(null, results);
-  }).catch(callback);
+  });
 };
 
 exports.findWithinLayer = function (options, callback) {
@@ -117,7 +123,10 @@ exports.computeAvgDist = function (coll, loc, k, callback) {
         },
       },
     },
-  ]).then(function (results) {
+  ], function (err, results) {
+    if (err) {
+      return callback(err);
+    }
 
     var neighborsAvgDist;
 
@@ -132,7 +141,7 @@ exports.computeAvgDist = function (coll, loc, k, callback) {
     loc.neighborsAvgDist = neighborsAvgDist;
 
     return callback(null, loc);
-  }).catch(callback);
+  });
 };
 
 exports.updateAvgDist = function (coll, loc, k, callback) {

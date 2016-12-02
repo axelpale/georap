@@ -21,11 +21,8 @@ var loggers = require('./services/logs/loggers');
 // Run immediately after server is up.
 var bootstrap = require('../config/bootstrap');
 
-// Request handlers
-var authHandlers = require('./handlers/auth');
-var locationsHandlers = require('./handlers/locations');
-
-
+// Router
+var routes = require('./routes');
 
 // Log environment
 console.log('Starting TresDB in environment:', local.env);
@@ -178,46 +175,7 @@ io.on('connection', function (socket) {
 
   console.log('New connection from app hosted at', host);
 
-  // Authentication
-  socket.on('auth/login', function (data, res) {
-    authHandlers.login(db, data, res);
-  });
-
-  // Change password
-  socket.on('auth/changePassword', function (data, res) {
-    authHandlers.changePassword(db, data, res);
-  });
-
-  // Password reset
-  socket.on('auth/sendResetPasswordEmail', function (data, res) {
-    authHandlers.sendResetPasswordEmail(db, mailer, host, data, res);
-  });
-  socket.on('auth/resetPassword', function (data, res) {
-    authHandlers.resetPassword(db, data, res);
-  });
-
-  // Invitation & post-invite sign up
-  socket.on('auth/sendInviteEmail', function (data, res) {
-    authHandlers.sendInviteEmail(db, mailer, host, data, res);
-  });
-  socket.on('auth/signup', function (data, res) {
-    authHandlers.signup(db, data, res);
-  });
-
-  // Locations
-
-  socket.on('locations/addOne', function (data, res) {
-    locationsHandlers.addOne(db, data, res);
-  });
-  socket.on('locations/getOne', function (data, res) {
-    locationsHandlers.getOne(db, data, res);
-  });
-  socket.on('locations/getWithin', function (data, res) {
-    locationsHandlers.getWithin(db, data, res);
-  });
-  socket.on('locations/rename', function (data, res) {
-    locationsHandlers.rename(db, data, res);
-  });
+  return routes(socket, db, mailer, host);
 });
 
 

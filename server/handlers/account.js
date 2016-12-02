@@ -72,7 +72,7 @@ var setPassword = function (db, email, password, callback) {
     var updateQuery = { $set: { hash: newHash } };
 
     // Collection
-    var users = db.get('users');
+    var users = db.collection('users');
 
     users.findOneAndUpdate(findQuery, updateQuery).then(function (user) {
       var err3;
@@ -134,7 +134,7 @@ exports.login = function (db, data, response) {
     });
   }
 
-  var users = db.get('users');
+  var users = db.collection('users');
   var query = { email: data.email };
 
   users.findOne(query).then(function (user) {
@@ -164,7 +164,7 @@ exports.login = function (db, data, response) {
         };
 
         return response({
-          token: jwt.sign(tokenPayload, local.secret),
+          success: jwt.sign(tokenPayload, local.secret),
         });
       }  // else
 
@@ -212,7 +212,7 @@ exports.changePassword = function (db, data, response) {
     }  // else
 
     // User is logged in. Good. Find if user with this email still exists.
-    var users = db.get('users');
+    var users = db.collection('users');
     var query = { email: payload.email };
 
     users.findOne(query).then(function (user) {
@@ -296,7 +296,7 @@ exports.sendResetPasswordEmail = function (db, mailer, host, data, response) {
 
   // Fetch user from database to ensure the email exists.
   // First get collection.
-  var users = db.get('users');
+  var users = db.collection('users');
 
   users.findOne({ email: data.email }).then(function (user) {
 
@@ -458,7 +458,7 @@ exports.sendInviteEmail = function (db, mailer, host, data, response) {
     }  // else
 
     // Check if an account with this email already exists
-    var users = db.get('users');
+    var users = db.collection('users');
 
     users.findOne({ email: data.email }).then(function (user) {
 
@@ -574,7 +574,7 @@ exports.signup = function (db, data, response) {
     // username index violation and email index violation.
     // We also avoid computing password hash.
 
-    var users = db.get('users');
+    var users = db.collection('users');
 
     users.findOne({
       $or: [ { name: data.username }, { email: payload.email } ],

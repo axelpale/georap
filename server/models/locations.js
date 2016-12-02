@@ -3,121 +3,100 @@
 var clustering = require('../services/clustering');
 var errors = require('../errors');
 
-
-exports.create = function (db, username, geom, callback) {
-  // Create a new location from GeoJSON Point and store it to DB.
+exports.put = function (db, loc, callback) {
+  // Create or update a location.
   //
   // Parameters:
   //   db
-  //     Monk DB instance
-  //   username
-  //     string, the creator
-  //   geom
-  //     GeoJSON Point
+  //     Monk db instance
+  //   loc
+  //     plain location object. If has _id, loc will be updated, insert otherw.
   //   callback
-  //     function (err, newLocation)
+  //     function (err, updatedOrInsertedLoc)
 
-  clustering.findLayerForPoint(db, geom, function (err, layer) {
+  clustering.findLayerForPoint(db, loc.geom, function (err, layer) {
     if (err) {
       return callback(err);
     }
 
-    var coll = db.get('locations');
-    var now = new Date();
+    var coll = db.collection('locations');
 
-    var newLoc = {
-      name: '',
-      geom: geom,
-      deleted: false,
-      tags: [],
-      content: [{
-        type: 'created',
-        user: username,
-        time: now.toISOString(),
-        data: {},
-      }],
-      neighborsAvgDist: 1000,  // dummy value
-      layer: layer,
-    };
+    loc.layer = layer;
 
-    coll.insert(newLoc, {}, function (err2, result) {
+    var opts = { upsert: true };
+    coll.findOneAndUpdate({ _id: loc._id }, loc, opts, function (err2, result) {
       if (err2) {
         return callback(err2);
       }
 
-      // For result docs, see:
-      // http://mongodb.github.io/node-mongodb-native/2.0/
-      // api/Collection.html#~insertWriteOpResult
-      //
-      // But suprise suprice.... Monk has its own undocumented
-      // behavior. :(
-      // It returns the inserted document with the _id.
-
-      return callback(null, result);
+      return callback(null, result.value);
     });
   });
-
 };
 
-
-exports.count = function (db, callback) {
-
-  var coll = db.get('locations');
-
-  coll.count({ deleted: false }, {}, function (err, number) {
-    return callback(err, number);
-  });
-};
-
-
-exports.rename = function (db, username, id, newName, callback) {
+exports.get = function (db, loc, callback) {
+  // Get single location
+  //
   // Parameters:
   //   db
-  //     Monk DB instance
-  //   id
-  //     MongoDB ObjectId
-  //   newName
-  //     string
+  //   loc
+  //     plain object with _id property
   //   callback
-  //     function (err, updatedLoc)
+  //     function (err, loc)
+  //
+  var coll = db.collection('locations');
 
-  var coll = db.get('locations');
+  coll.findOne({ _id: loc._id }, {}, function (err, doc) {
+    console.log('findOne result', doc);
 
-  coll.findOne(id, {}, function (err, loc) {
     if (err) {
       return callback(err);
     }
 
-    if (!loc) {
+    if (!doc) {
       return callback(errors.NotFoundError);
     }
 
-    // If names equal, no need to call database or add a content entry.
-    if (loc.name === newName.trim()) {
-      return callback(null, loc);
-    }
+    return callback(null, doc);
+  });
+};
 
-    var now = new Date();
-    var contentEntry = {
-      type: 'rename',
-      user: username,
-      time: now.toISOString(),
-      data: {
-        oldName: loc.name,
-        newName: newName,
-      },
-    };
+exports.del = function (db, loc, callback) {
+  // Remove single location
+  //
+  // Parameters:
+  //   db
+  //   loc
+  //     plain object with _id property
+  //   callback
+  //     function (err, deletedLocation)
+  var coll = db.collection('locations');
 
-    coll.findOneAndUpdate(id, {
-      $set: { name: newName },
-      $push: { content: contentEntry },
-    }).then(function (updatedLoc) {
-      if (updatedLoc) {
-        return callback(null, updatedLoc);
-      }
-      return callback(errors.NotFoundError);
-    }).catch(function (err2) {
-      return callback(err2);
-    });
+  coll.findOneAndDelete({ _id: loc._id }).then(function (result) {
+    //console.log('findOneAndDelete result', result);
+    // The removed doc is given as the result.
+    //if (result.result.value) {
+    //  return callback(errors.NotFoundError);
+    //}
+    return callback(null, result);
+  }).catch(function (err) {
+    return callback(err);
+  });
+};
+
+exports.count = function (db, callback) {
+  // Count non-deleted locations
+  //
+  // Parameters:
+  //   db
+  //   callback
+  //     function (err, number)
+
+  var coll = db.collection('locations');
+
+  coll.count({ deleted: false }).then(function (number) {
+    return callback(null, number);
+  }).catch(function (err) {
+    return callback(err);
   });
 };

@@ -6,43 +6,91 @@ var tools = require('../../specs/tools');
 var fixture = require('./fixtures/single');
 var unit = require('./locations');
 
-var ObjectId = require('mongodb').ObjectId;
 var assert = require('assert');
-var monk = require('monk');
-
-var db = monk(local.mongo.testUrl);
+var mongoClient = require('mongodb').MongoClient;
 
 
 describe('server.models.locations', function () {
+  var db;
+
+  before(function (done) {
+    mongoClient.connect(local.mongo.testUrl, function (dbErr, dbConn) {
+      if (dbErr) {
+        return console.error('Failed to connect to MongoDB.');
+      }
+      db = dbConn;
+
+      return done();
+    });
+  });
+
+  after(function (done) {
+    db.close();
+    done();
+  });
 
   beforeEach(function (done) {
     tools.loadFixture(db, fixture, done);
   });
 
-  describe('create', function () {
+  describe('put & get', function () {
 
-    it('should add one', function (done) {
-      unit.create(db, 'admin', {
-        type: 'Point',
-        coordinates: [0.0, 0.0],
-      }, function (err, newloc) {
+    it('should update', function (done) {
+
+      var irbene = fixture.collections.locations[0];
+      irbene.name = 'Irbene Ghost Town';
+
+      unit.put(db, irbene, function (err, town) {
         if (err) {
-          // Because Monk somehow eats thrown errors.
-          console.error(err);
+          return done(err);
         }
-        assert.ifError(err);
-        assert.strictEqual(newloc.name, '');
-        assert.equal(newloc.content[0].user, 'admin');
-        assert.strictEqual(newloc.layer, 1);
+        assert.equal(town.name, 'Irbene Ghost Town');
 
+        unit.get(db, irbene, function (err2, town2) {
+          if (err2) {
+            return done(err2);
+          }
+          assert.equal(town2.name, 'Irbene Ghost Town');
+          return done();
+        });
+
+      });
+    });
+
+    it('should create and generate id', function (done) {
+      var irbene = fixture.collections.locations[0];
+      var origId = irbene._id;
+      delete irbene._id;
+      unit.put(db, irbene, function (err, town) {
+        if (err) {
+          return done(err);
+        }
+        assert.notEqual(town._id, origId);
         unit.count(db, function (err2, num) {
-          assert.ifError(err2);
+          if (err2) {
+            return done(err2);
+          }
           assert.equal(num, 2);
-          done();
+          return done();
         });
       });
     });
 
+  });
+
+  describe('del & get', function () {
+    it('should remove', function (done) {
+      var irbene = fixture.collections.locations[0];
+      unit.del(db, irbene, function (err) {
+        if (err) {
+          return done(err);
+        }
+        unit.get(db, irbene, function (err2) {
+          assert.equal(err2.name, 'NotFoundError');
+          return done();
+        });
+      });
+    });
   });
 
   describe('count', function () {
@@ -57,37 +105,4 @@ describe('server.models.locations', function () {
 
   });
 
-  describe('rename', function () {
-
-    it('should add content entry', function (done) {
-      var id = new ObjectId('581f166110a1482dd0b7cd13');
-      var newName = 'Ghost Town';
-
-      unit.rename(db, 'admin', id, newName, function (err, updatedLoc) {
-        if (err) {
-          console.error(err);
-        }
-        assert.ifError(err);
-        assert.equal(updatedLoc.name, newName);
-        assert.strictEqual(updatedLoc.content.length, 3);
-        done();
-      });
-    });
-
-    it('should not add content entry if no change in name', function (done) {
-      var id = new ObjectId('581f166110a1482dd0b7cd13');
-      var newName = 'Irbene  ';  // test trim also
-
-      unit.rename(db, 'admin', id, newName, function (err, updatedLoc) {
-        if (err) {
-          console.error(err);
-        }
-        assert.ifError(err);
-        assert.equal(updatedLoc.name, 'Irbene');  // test the test sanity
-        assert.strictEqual(updatedLoc.content.length, 2);  // no change
-        done();
-      });
-    });
-
-  });
 });
