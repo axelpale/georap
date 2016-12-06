@@ -18,7 +18,6 @@ exports.location = function (location) {
 
   // Attachment urls
   location.content = exports.content(location.content);
-
 };
 
 exports.content = function (entries) {
