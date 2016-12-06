@@ -1,6 +1,8 @@
 
 var async = require('async');
 
+var COLL_NOT_EXISTS_ERROR = 26;
+
 exports.loadFixture = function (db, fixture, callback) {
   // Load fixture into the database. Existing collections in the DB
   // will be dropped.
@@ -43,16 +45,26 @@ exports.loadFixture = function (db, fixture, callback) {
 
   async.eachOfSeries(colls, function (items, collName, next) {
 
-    var coll = db.collection(collName);
-
     // Drop possibly existing collection before population.
-    coll.drop().then(function () {
+    db.dropCollection(collName, function (err) {
       // Populate
-      coll.insert(items).then(function () {
-        // Next collection
-        return next();
-      }).catch(next);
-    }).catch(next);
+      if (err) {
+        // Continue if collection does not exist.
+        // Stop if other error.
+        if (err.code !== COLL_NOT_EXISTS_ERROR) {
+          console.error(err);
+          return next(err);
+        }
+      }
+
+      db.collection(collName)
+        .insert(items)
+        .then(function () {
+          // Next collection
+          return next();
+        })
+        .catch(next);
+    });
 
   }, function afterEachOfSeries(err) {
 
@@ -65,7 +77,7 @@ exports.loadFixture = function (db, fixture, callback) {
 
       var coll = db.collection(index.collection);
 
-      coll.ensureIndex(index.spec, index.options, function (err2) {
+      coll.createIndex(index.spec, index.options, function (err2) {
         return next(err2);
       });
 
