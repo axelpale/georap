@@ -9,6 +9,26 @@ var TOP_LAYER = 1;
 var BOTTOM_LAYER = 15;
 var NEIGHBORHOOD = 7;  // k
 
+var findLayerWithClusterRadiusSmallerThan = function (distance) {
+  // Find highest such layer that cluster radius
+  // (cluster radius = minimum distance between markers)
+  // is smaller than the given distance.
+  //
+  // Begin from the highest layer. For each layer, compute the required
+  // cluster radius. Stop when the radius is decreased below the distance
+  // to the nearest.
+  var layer, r;
+
+  for (layer = TOP_LAYER; layer < BOTTOM_LAYER; layer += 1) {
+    r = maxDistance.getFromZoomLevel(layer);
+    if (r < distance) {
+      return layer;
+    }
+  }
+
+  return layer;
+};
+
 exports.recomputeNeighborsAvgDist = function (db, callback) {
   // Recompute average distance value for each location.
 
@@ -51,7 +71,9 @@ exports.computeNeighborsAvgDistForPoint = function (db, geom, callback) {
 };
 
 exports.findLayerForPoint = function (db, geom, callback) {
-  // Find highest layer for a point.
+  // Find highest layer for a point. Do this by starting on the topmost layer
+  // and then lowering the layer until the point is within the radius of
+  // the nearest neighbor.
   //
   // Parameters:
   //   db
@@ -79,21 +101,31 @@ exports.findLayerForPoint = function (db, geom, callback) {
       return callback(null, TOP_LAYER);
     }
 
-    var layer, r;
-    var nearDist = result.dist;
+    var layer = findLayerWithClusterRadiusSmallerThan(result.dist);
 
-    // Begin from the highest layer. For each layer, compute the required
-    // cluster radius. Stop when the radius is decreased below the distance
-    // to the nearest.
-    for (layer = TOP_LAYER; layer < BOTTOM_LAYER; layer += 1) {
-      r = maxDistance.getFromZoomLevel(layer);
-      if (r < nearDist) {
-        return callback(null, layer);
-      }
+    return callback(null, layer);
+  });
+};
+
+exports.findLayerForLocation = function (db, loc, callback) {
+
+  var coll = db.collection('locations');
+
+  neighbors.findNearestOther(coll, loc, function (err, result) {
+    if (err) {
+      return callback(err);
     }
 
-    return callback(null, BOTTOM_LAYER);
+    if (!result) {
+      // There is no nearest other.
+      return callback(null, TOP_LAYER);
+    }
+
+    var layer = findLayerWithClusterRadiusSmallerThan(result.dist);
+
+    return callback(null, layer);
   });
+
 };
 
 exports.getBottomLayerNumber = function () {

@@ -16,7 +16,28 @@ exports.findNearestOne = function (coll, geom, callback) {
       $geoNear: {
         near: geom,
         distanceField: 'dist',
-        minDistance: 1,  // 1 metre, exclude the point itself
+        spherical: true,
+        limit: 1,  // Retrieve only the closest
+      },
+    },
+  ], function (err, result) {
+    if (err) {
+      return callback(err);
+    }
+    return callback(null, result[0]);
+  });
+};
+
+exports.findNearestOther = function (coll, location, callback) {
+  // Find the distance and the single nearest location that is not
+  // the given location.
+
+  coll.aggregate([
+    {
+      $geoNear: {
+        near: location.geom,
+        query: { _id: { $ne: location._id } },  // exclude the loc itself
+        distanceField: 'dist',
         spherical: true,
         limit: 1,  // Retrieve only the closest
       },
