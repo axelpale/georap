@@ -1,4 +1,4 @@
-/* global describe, it, beforeEach */
+/* global describe, it, beforeEach, before, after */
 /* eslint-disable no-magic-numbers */
 
 var local = require('../../config/local');
@@ -7,6 +7,7 @@ var fixture = require('./fixtures/single');
 var unit = require('./locations');
 
 var assert = require('assert');
+var clone = require('clone');
 var mongoClient = require('mongodb').MongoClient;
 
 
@@ -35,9 +36,9 @@ describe('server.models.locations', function () {
 
   describe('put & get', function () {
 
-    it('should update', function (done) {
+    it('should update name', function (done) {
 
-      var irbene = fixture.collections.locations[0];
+      var irbene = clone(fixture.collections.locations[0]);
       irbene.name = 'Irbene Ghost Town';
 
       unit.put(db, irbene, function (err, town) {
@@ -58,7 +59,7 @@ describe('server.models.locations', function () {
     });
 
     it('should create and generate id', function (done) {
-      var irbene = fixture.collections.locations[0];
+      var irbene = clone(fixture.collections.locations[0]);
       var origId = irbene._id;
       delete irbene._id;
       unit.put(db, irbene, function (err, town) {
@@ -76,19 +77,60 @@ describe('server.models.locations', function () {
       });
     });
 
+    it('should set the layer properly', function (done) {
+      var irbene = clone(fixture.collections.locations[0]);
+      var originalLayer = irbene.layer;
+
+      // Update the coords. Layer should remain the same.
+      irbene.geom.coordinates[0] += 0.00001;
+
+      unit.put(db, irbene, function (err, town) {
+        if (err) {
+          return done(err);
+        }
+
+        assert.equal(town.layer, originalLayer);
+
+        // Insert as a new location. The new location should go below the
+        // existing one.
+        var layerOfExisting = town.layer;
+        delete town._id;
+
+        unit.put(db, town, function (err, town2) {
+          if (err) {
+            return done(err);
+          }
+          assert.ok(town2.layer > layerOfExisting);
+          return done();
+        });
+      });
+    });
+
   });
 
   describe('del & get', function () {
     it('should remove', function (done) {
-      var irbene = fixture.collections.locations[0];
-      unit.del(db, irbene, function (err) {
+      var irbene = clone(fixture.collections.locations[0]);
+      unit.del(db, irbene, function (err, removedLoc) {
         if (err) {
           return done(err);
         }
+
+        assert.equal(removedLoc.name, fixture.collections.locations[0].name);
+
         unit.get(db, irbene, function (err2) {
           assert.equal(err2.name, 'NotFoundError');
           return done();
         });
+      });
+    });
+
+    it('should fail gracefully if not found', function (done) {
+      var foo = { _id: '2222222110a1482dd0f00b42' };
+
+      unit.del(db, foo, function (err, removedLoc) {
+        assert.equal(err.name, 'NotFoundError');
+        return done();
       });
     });
   });

@@ -60,8 +60,8 @@ exports.get = function (db, data, response) {
     return response(errors.responses.InvalidRequestError);
   }
 
-  handleToken(data.token, response, function () {
-    handleObjectId(data.location._id, response, function (objId) {
+  handleToken(data.token, response, function success() {
+    handleObjectId(data.location._id, response, function success(objId) {
 
       data.location._id = objId;
 
@@ -98,13 +98,10 @@ exports.del = function (db, data, response) {
   handleToken(data.token, response, function () {
     handleObjectId(data.location._id, response, function (objId) {
 
-      console.log('objId', objId);
-
       data.location._id = objId;
 
       model.del(db, data.location, function (err, loc) {
         if (err) {
-          console.error(err);
           if (err.name === 'NotFoundError') {
             return response(errors.responses.NotFoundError);
           }
@@ -112,9 +109,7 @@ exports.del = function (db, data, response) {
         }
 
         // Transform location to be suitable for the client.
-        console.log(loc);
         prepareForClient.location(loc);
-        console.log('after preparation');
 
         return response({ success: loc });
       });

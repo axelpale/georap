@@ -77,7 +77,7 @@ describe('server.handlers.locations', function () {
         assert.ok(response.hasOwnProperty('success'), response.error);
         assert.deepEqual(response.success.geom.coordinates,
                          goodNewLocation.geom.coordinates);
-        done();
+        return done();
       });
     });
 
@@ -94,10 +94,11 @@ describe('server.handlers.locations', function () {
       unit.put(db, data, function (response) {
         if (response.error) {
           console.error(response.error);
+          return;
         }
         assert.ok(response.success);
         assert.equal(response.success.name, 'Ghost Town');
-        done();
+        return done();
       });
     });
 
@@ -125,7 +126,7 @@ describe('server.handlers.locations', function () {
 
       unit.get(db, data, function (result) {
         assert.ok(result.hasOwnProperty('success'));
-        assert.ok(result.success._id.equals(id));  // Tests id serialization
+        assert.equal(result.success._id, id);  // Tests id serialization
         done();
       });
     });
@@ -168,7 +169,8 @@ describe('server.handlers.locations', function () {
         // Ensure the doc was removed.
         unit.count(db, dataForCount, function (result2) {
           if (result2.error) {
-            console.error(result2);
+            console.error(result2.error);
+            return;
           }
           assert.equal(result2.success, 0);
           done();
