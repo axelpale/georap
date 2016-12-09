@@ -286,11 +286,12 @@ exports.sendResetPasswordEmail = function (db, mailer, host, data, response) {
   //   response
   //     Socket.io response.
 
-  var validRequest = (
-    data.hasOwnProperty('email') && typeof data.email === 'string'
-  );
+  if (!data.hasOwnProperty('email')) {
+    return response(errors.responses.InvalidRequestError);
+  }
 
-  if (!validRequest) {
+  if (!validator.validate(data.email)) {
+    // Only client should inform the user that especially the email is invalid.
     return response(errors.responses.InvalidRequestError);
   }
 
@@ -298,13 +299,15 @@ exports.sendResetPasswordEmail = function (db, mailer, host, data, response) {
   // First get collection.
   var users = db.collection('users');
 
-  users.findOne({ email: data.email }).then(function (user) {
+  users.findOne({ email: data.email }, {}, function (err, user) {
 
-    if (user === null) {
+    if (err) {
+      return response(errors.responses.DatabaseError);
+    }
+
+    if (!user) {
       // User not found with that email address.
-      return response({
-        error: 'reset-password-invalid-email',
-      });
+      return response(errors.responses.UnknownEmailError);
     }
 
     // Okay, user exists. We do not clear user password now, because
@@ -338,20 +341,12 @@ exports.sendResetPasswordEmail = function (db, mailer, host, data, response) {
     // Send the mail.
     mailer.sendMail(mailOptions, function (err, info) {
       if (err) {
-        return response({
-          error: 'reset-password-mail-server-failure',
-        });
+        return response(errors.responses.MailServerError);
       }  // else
-      console.log('Mail sent: ' + info.response);
 
       return response({
         success: true,
       });
-    });
-  }).catch(function () {
-    // A query error.
-    return response({
-      error: 'reset-password-find-query-failure',
     });
   });
 };
@@ -450,11 +445,9 @@ exports.sendInviteEmail = function (db, mailer, host, data, response) {
     }  // else
 
     if (!validator.validate(data.email)) {
-      response({
+      return response({
         error: 'InvalidEmailError',
       });
-
-      return;
     }  // else
 
     // Check if an account with this email already exists
