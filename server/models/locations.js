@@ -122,7 +122,7 @@ exports.del = function (db, loc, callback) {
 
   coll.findOneAndDelete({ _id: loc._id }).then(function (result) {
     // The removed doc is given as the result.value
-    
+
     if (result.value === null) {
       return callback(errors.NotFoundError);
     }

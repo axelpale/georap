@@ -96,9 +96,9 @@ describe('server.models.locations', function () {
         var layerOfExisting = town.layer;
         delete town._id;
 
-        unit.put(db, town, function (err, town2) {
-          if (err) {
-            return done(err);
+        unit.put(db, town, function (err2, town2) {
+          if (err2) {
+            return done(err2);
           }
           assert.ok(town2.layer > layerOfExisting);
           return done();
@@ -130,6 +130,7 @@ describe('server.models.locations', function () {
 
       unit.del(db, foo, function (err, removedLoc) {
         assert.equal(err.name, 'NotFoundError');
+        assert.ok(!removedLoc);
         return done();
       });
     });

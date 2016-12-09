@@ -60,8 +60,8 @@ exports.get = function (db, data, response) {
     return response(errors.responses.InvalidRequestError);
   }
 
-  handleToken(data.token, response, function success() {
-    handleObjectId(data.location._id, response, function success(objId) {
+  handleToken(data.token, response, function () {
+    handleObjectId(data.location._id, response, function (objId) {
 
       data.location._id = objId;
 
