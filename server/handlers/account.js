@@ -339,8 +339,9 @@ exports.sendResetPasswordEmail = function (db, mailer, host, data, response) {
     };
 
     // Send the mail.
-    mailer.sendMail(mailOptions, function (err, info) {
-      if (err) {
+    // eslint-disable-next-line no-unused-vars
+    mailer.sendMail(mailOptions, function (err2, info) {
+      if (err2) {
         return response(errors.responses.MailServerError);
       }  // else
 

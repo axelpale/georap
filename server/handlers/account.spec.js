@@ -1,4 +1,5 @@
 /* global describe, context, it, before, after, beforeEach */
+/* eslint max-lines: 'off' */
 
 var unit = require('./account');
 
@@ -6,7 +7,6 @@ var local = require('../../config/local');
 var fixture = require('./fixtures/small');
 var tools = require('../../specs/tools');
 var MailerMock = require('../../specs/MailerMock');
-var errors = require('../errors');
 
 var assert = require('assert');
 var jwt = require('jsonwebtoken');
