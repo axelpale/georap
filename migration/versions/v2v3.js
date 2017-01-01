@@ -1,4 +1,4 @@
-var iter = require('../lib/iter');
+var iter = require('../iter');
 var schema = require('../lib/schema');
 
 var FROM_VERSION = 2;

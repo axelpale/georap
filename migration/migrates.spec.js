@@ -1,19 +1,16 @@
 /* global describe, it, beforeEach */
 /* eslint-disable no-magic-numbers */
 
-var local = require('../../config/local');
-var migrates = require('../lib/migrates');
-var schema = require('../lib/schema');
-var fixtures = require('./fixtures');
-
-// var should = require('should');
+var mongoClient = require('mongodb').MongoClient;
 var assert = require('assert');
-var monk = require('monk');
-var tools = require('../../specs/tools');
 
-var db = monk(local.mongo.testUrl);
+var local = require('../config/local');
+var migrates = require('./migrates');
+var schema = require('./lib/schema');
+var fixtures = require('./fixtures');
+var tools = require('../specs/tools');
 
-var loadFixture = function (versionTag, callback) {
+var loadFixture = function (db, versionTag, callback) {
   // Load fixture into the database.
   //
   // Parameters:
@@ -32,12 +29,28 @@ var loadFixture = function (versionTag, callback) {
 
 
 describe('migrates.migrate', function () {
+  var db;
 
+  before(function (done) {
+    mongoClient.connect(local.mongo.testUrl, function (dbErr, dbConn) {
+      if (dbErr) {
+        return console.error('Failed to connect to MongoDB.');
+      }
+      db = dbConn;
+
+      return done();
+    });
+  });
+
+  after(function (done) {
+    db.close();
+    done();
+  });
 
   describe('v1 to v2', function () {
 
     beforeEach(function (done) {
-      loadFixture('v1', done);
+      loadFixture(db, 'v1', done);
     });
 
     it('should be able to migrate from v1 to v2', function (done) {
@@ -62,7 +75,7 @@ describe('migrates.migrate', function () {
   describe('v2 to v3', function () {
 
     beforeEach(function (done) {
-      loadFixture('v2', done);
+      loadFixture(db, 'v2', done);
     });
 
     it('should be able to migrate from v2 to v3', function (done) {
@@ -75,6 +88,31 @@ describe('migrates.migrate', function () {
           schema.getVersion(db.collection('config'), function (err2, vers) {
             assert.ifError(err2);
             assert.equal(vers, 3);
+            done();
+          });
+        },
+      });
+    });
+
+  });
+
+
+  describe('v3 to v4', function () {
+
+    beforeEach(function (done) {
+      loadFixture(db, 'v3', done);
+    });
+
+    it('should be able to migrate from v3 to v4', function (done) {
+      migrates.migrate({
+        db: db,
+        targetVersion: 4,
+        callback: function (err) {
+          assert.ifError(err);
+
+          schema.getVersion(db.collection('config'), function (err2, vers) {
+            assert.ifError(err2);
+            assert.equal(vers, 4);
             done();
           });
         },

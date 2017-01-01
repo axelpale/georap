@@ -6,7 +6,7 @@ var mongodbRestore = require('mongodb-restore');
 var moment = require('moment');
 var path = require('path');
 var fs = require('fs');
-var local = require('../../config/local');
+var local = require('../config/local');
 
 // Dir name format
 var FORMAT = 'YYYY-MM-DDTHH-mm-ss';

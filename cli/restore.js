@@ -1,4 +1,4 @@
-var backups = require('./lib/backups');
+var backups = require('../migration/backups');
 var program = require('commander');
 
 var backupName;

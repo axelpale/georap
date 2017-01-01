@@ -1,6 +1,6 @@
 
-var versions = require('../versions');
-var schema = require('./schema');
+var versions = require('./versions');
+var schema = require('./lib/schema');
 
 exports.migrate = function (options) {
   // Parameters:

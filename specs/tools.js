@@ -57,13 +57,20 @@ exports.loadFixture = function (db, fixture, callback) {
         }
       }
 
-      db.collection(collName)
-        .insert(items)
-        .then(function () {
+      var coll = db.collection(collName);
+
+      if (items.length > 0) {
+        // Bulk insert of zero items throws an error.
+        coll.insertMany(items, function (err) {
+          if (err) {
+            return next(err);
+          }
           // Next collection
           return next();
-        })
-        .catch(next);
+        });
+      } else {
+        return next();
+      }
     });
 
   }, function afterEachOfSeries(err) {

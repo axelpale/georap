@@ -3,16 +3,14 @@
 // eslint-disable-next-line no-unused-vars
 var should = require('should');
 var assert = require('assert');
-var local = require('../../config/local');
-var monk = require('monk');
+var mongoClient = require('mongodb').MongoClient;
+var local = require('../config/local');
 
-// DB
-var db = monk(local.mongo.testUrl);
+// The Unit
+var iter = require('./iter');
 
 var TEST_COLLECTION_NAME = 'test_collection';
 
-// The Unit
-var iter = require('../lib/iter');
 
 // Test data
 var fixture = [
@@ -28,11 +26,27 @@ var fixture = [
 ];
 
 describe('iter.updateEach', function () {
-  var collection;
+  var db, collection;
+
+  before(function (done) {
+    mongoClient.connect(local.mongo.testUrl, function (dbErr, dbConn) {
+      if (dbErr) {
+        return console.error('Failed to connect to MongoDB.');
+      }
+      db = dbConn;
+
+      return done();
+    });
+  });
+
+  after(function (done) {
+    db.close();
+    return done();
+  });
 
   beforeEach(function (done) {
     collection = db.collection(TEST_COLLECTION_NAME);
-    collection.insert(fixture, done);
+    collection.insertMany(fixture, done);
   });
 
   afterEach(function (done) {
@@ -42,27 +56,38 @@ describe('iter.updateEach', function () {
   it('should add Dr. prefix', function (done) {
     iter.updateEach(collection, function (person, next) {
       person.name = 'Dr. ' + person.name;
-      next(person);
+      return next(person);
     }, function (err) {
       assert.ok(!err);
-      collection.find({ name: { $regex: (/^Dr\./) } }).then(function (doctors) {
+
+      var q = {
+        name: {
+          $regex: (/^Dr\./),
+        },
+      };
+
+      collection.find(q).toArray(function (err2, doctors) {
+        if (err2) {
+          return done(err2);
+        }
         assert.equal(doctors.length, fixture.length);
-        done();
-      }).catch(function (err2) {
-        done(err2);
+        return done();
       });
     });
   });
 
   it('should replace instead of extend', function (done) {
     iter.updateEach(collection, function (person, next) {
-      next({ username: person.name });
+      return next({ username: person.name });
     }, function (err) {
       assert.ifError(err);
-      collection.find({}).then(function (users) {
+      collection.find().toArray(function (err, users) {
+        if (err) {
+          return done(err);
+        }
         users[0].should.not.have.ownProperty('name');
         assert.ok(!users[1].hasOwnProperty('name'));
-        done();
+        return done();
       });
     });
   });

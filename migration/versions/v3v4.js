@@ -3,7 +3,7 @@
 // - Create _id for each content entry
 // - Remove neighborsAvgDist property
 
-var iter = require('../lib/iter');
+var iter = require('../iter');
 var schema = require('../lib/schema');
 var shortid = require('shortid');
 

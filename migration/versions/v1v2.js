@@ -1,4 +1,4 @@
-var iter = require('../lib/iter');
+var iter = require('../iter');
 var schema = require('../lib/schema');
 
 var LNG_MAX = 180;
@@ -56,13 +56,15 @@ exports.run = function (db, callback) {
       // 3. Create 2dsphere index
       console.log('Creating 2dsphere index for locations...');
 
-      locsColl.ensureIndex({ 'geom': '2dsphere' }).then(function () {
+      locsColl.createIndex({ 'geom': '2dsphere' }, function (err3) {
+        if (err3) {
+          return callback(err3)
+        }
+
         console.log('Index created.');
         console.log('### Step successful ###');
 
-        return callback();
-      }).catch(function (err3) {
-        return callback(err3);
+        return callback(null);
       });
 
     });

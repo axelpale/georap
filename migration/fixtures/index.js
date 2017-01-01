@@ -1,6 +1,6 @@
 /* eslint-disable camelcase, no-magic-numbers */
 
-var local = require('../../../config/local');
+var local = require('../../config/local');
 var bcrypt = require('bcryptjs');
 
 // eslint-disable-next-line no-sync

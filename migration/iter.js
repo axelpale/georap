@@ -8,9 +8,9 @@ exports.updateEach = function (collection, iteratee, callback) {
   //
   // Parameters:
   //   collection
-  //     Monk DB collection
+  //     MongoDB collection
   //   iteratee
-  //     function (document, save)
+  //     function (document, next)
   //       Parameters:
   //         document
   //           collection item
@@ -33,8 +33,12 @@ exports.updateEach = function (collection, iteratee, callback) {
   //   });
   //
 
-  collection.find({}).then(function (allDocuments) {
-    async.eachSeries(allDocuments, function (doc, next2) {
+  collection.find().toArray(function (err, allDocuments) {
+    if (err) {
+      return callback(err);
+    }
+
+    async.eachSeries(allDocuments, function (doc, next) {
       var id = doc._id;  // Take before modification
 
       // Ensure ObjectID.
@@ -47,24 +51,19 @@ exports.updateEach = function (collection, iteratee, callback) {
         // Ensure _id is not replaced by an _id literal.
         delete updatedDoc._id;
 
-        collection.update(id, updatedDoc).then(function () {
-          // Parameters:
-          //   info
-          return next2();
-        }).catch(function (err2) {
-          return next2(err2);
+        collection.updateOne({ _id: id }, updatedDoc, {}, function (err2) {
+          if (err2) {
+            return next(err2);
+          }
+          return next(null);
         });
       });
-    }, function afterNext2s(err) {
-      collection.find({}).then(function () {
-        // Parameters:
-        //   docs
-        return callback(err);
-      }).catch(function (err3) {
+    }, function afterNexts(err3) {
+      if (err3) {
         return callback(err3);
-      });
+      }
+      
+      return callback(null);
     });
-  }).catch(function onError(err) {
-    return callback(err);
   });
 };
