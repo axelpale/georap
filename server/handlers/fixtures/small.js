@@ -55,7 +55,6 @@ module.exports = {
             markdown: 'A ghost town',
           },
         }],
-        neighborsAvgDist: 42886.25362949583,
         layer: 1,
       },
     ],
