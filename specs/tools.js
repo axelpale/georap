@@ -61,9 +61,9 @@ exports.loadFixture = function (db, fixture, callback) {
 
       if (items.length > 0) {
         // Bulk insert of zero items throws an error.
-        coll.insertMany(items, function (err) {
-          if (err) {
-            return next(err);
+        coll.insertMany(items, function (err2) {
+          if (err2) {
+            return next(err2);
           }
           // Next collection
           return next();
@@ -73,10 +73,10 @@ exports.loadFixture = function (db, fixture, callback) {
       }
     });
 
-  }, function afterEachOfSeries(err) {
+  }, function afterEachOfSeries(err3) {
 
-    if (err) {
-      return callback(err);
+    if (err3) {
+      return callback(err3);
     }
 
     // Create indices
@@ -84,12 +84,15 @@ exports.loadFixture = function (db, fixture, callback) {
 
       var coll = db.collection(index.collection);
 
-      coll.createIndex(index.spec, index.options, function (err2) {
-        return next(err2);
+      coll.createIndex(index.spec, index.options, function (err4) {
+        return next(err4);
       });
 
-    }, function afterEachSeries(err3) {
-      return callback(err3);
+    }, function afterEachSeries(err5) {
+      if (err5) {
+        return callback(err5);
+      }
+      return callback();
     });
 
   });
