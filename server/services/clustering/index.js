@@ -206,9 +206,12 @@ exports.findDensest = function (coll, callback) {
     sort: {
       neighborsAvgDist: 1,
     },
-  }).then(function (locs) {
+  }).toArray(function (err, locs) {
+    if (err) {
+      return callback(err);
+    }
     return callback(null, locs);
-  }).catch(callback);
+  });
 };
 
 exports.findDensestOnLayer = function (coll, layer, callback) {
@@ -229,9 +232,12 @@ exports.findDensestOnLayer = function (coll, layer, callback) {
     sort: {
       neighborsAvgDist: 1,
     },
-  }).then(function (locs) {
+  }).toArray(function (err, locs) {
+    if (err) {
+      return callback(err);
+    }
     return callback(null, locs);
-  }).catch(callback);
+  });
 };
 
 exports.updateLocationLayer = function (coll, loc, l, callback) {
@@ -244,15 +250,18 @@ exports.updateLocationLayer = function (coll, loc, l, callback) {
   //     integer. The new level.
   //   callback
   //     function (err)
-  coll.update(loc._id, {
+  coll.updateOne({ _id: loc._id }, {
     $set: {
       layer: l,
     },
-  }).then(function (results) {
+  }, function (err, results) {
     // Results contain data about the operation.
     // console.log('updated location layer from ', loc.layer, 'to', l);
+    if (err) {
+      return callback(err);
+    }
     return callback(null, results);
-  }).catch(callback);
+  });
 };
 
 exports.flatten = function (coll, l, callback) {
@@ -273,10 +282,13 @@ exports.flatten = function (coll, l, callback) {
   }, {
     // Update multiple
     multi: true,
-  }).then(function (results) {
+  }, function (err, results) {
+    if (err) {
+      return callback(err);
+    }
     // Results contain data about the operation.
     return callback(null, results);
-  }).catch(callback);
+  });
 };
 
 exports.computeLayer = function (db, layer, callback) {
@@ -375,10 +387,11 @@ exports.recomputeClusters = function (db, callback) {
     function (cb) {
       // Ensure geospatial index exist before recomputing because
       // the index is required.
-      coll.ensureIndex({ 'geom': '2dsphere' }).then(function () {
+      coll.createIndex({ 'geom': '2dsphere' }, function (err) {
+        if (err) {
+          return cb(err);
+        }
         return cb(null, db);
-      }).catch(function (err) {
-        return cb(err);
       });
     },
     exports.recomputeNeighborsAvgDist,

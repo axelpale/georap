@@ -112,10 +112,11 @@ exports.findWithinLayer = function (options, callback) {
     },
   };
 
-  options.collection.aggregate([q]).then(function (results) {
+  options.collection.aggregate([q], function (err, results) {
+    if (err) {
+      return callback(err);
+    }
     return callback(null, results);
-  }).catch(function (err) {
-    return callback(err);
   });
 };
 
@@ -175,9 +176,12 @@ exports.updateAvgDist = function (coll, loc, k, callback) {
       return callback(err);
     }  // else
 
-    coll.update(updatedLoc._id, updatedLoc).then(function () {
+    coll.updateOne({ _id: updatedLoc._id }, updatedLoc, function (err2) {
+      if (err2) {
+        return callback(err2);
+      }
       return callback(null);
-    }).catch(callback);
+    });
   });
 };
 
@@ -192,13 +196,16 @@ exports.updateEachAvgDist = function (coll, k, callback) {
   //   callback
   //     function (err)
 
-  coll.find({}).then(function (locs) {
+  coll.find().toArray(function (err, locs) {
+    if (err) {
+      return callback(err);
+    }
 
     async.eachSeries(locs, function (loc, next) {
       exports.updateAvgDist(coll, loc, k, next);
-    }, function afterEach(err) {
-      return callback(err);
+    }, function afterEach(err2) {
+      return callback(err2);
     });
 
-  }).catch(callback);
+  });
 };
