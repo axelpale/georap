@@ -1,4 +1,4 @@
-/* global describe, it, beforeEach */
+/* global describe, it, beforeEach, before, after */
 /* eslint-disable no-magic-numbers */
 
 var mongoClient = require('mongodb').MongoClient;

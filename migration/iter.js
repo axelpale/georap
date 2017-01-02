@@ -62,7 +62,7 @@ exports.updateEach = function (collection, iteratee, callback) {
       if (err3) {
         return callback(err3);
       }
-      
+
       return callback(null);
     });
   });

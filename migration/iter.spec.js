@@ -1,4 +1,4 @@
-/* global describe, it, beforeEach, afterEach */
+/* global describe, it, beforeEach, afterEach, before, after */
 
 // eslint-disable-next-line no-unused-vars
 var should = require('should');
@@ -81,9 +81,9 @@ describe('iter.updateEach', function () {
       return next({ username: person.name });
     }, function (err) {
       assert.ifError(err);
-      collection.find().toArray(function (err, users) {
-        if (err) {
-          return done(err);
+      collection.find().toArray(function (err2, users) {
+        if (err2) {
+          return done(err2);
         }
         users[0].should.not.have.ownProperty('name');
         assert.ok(!users[1].hasOwnProperty('name'));

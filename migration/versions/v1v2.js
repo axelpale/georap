@@ -58,7 +58,7 @@ exports.run = function (db, callback) {
 
       locsColl.createIndex({ 'geom': '2dsphere' }, function (err3) {
         if (err3) {
-          return callback(err3)
+          return callback(err3);
         }
 
         console.log('Index created.');
