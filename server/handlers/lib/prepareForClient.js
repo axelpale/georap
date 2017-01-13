@@ -16,7 +16,7 @@ exports.location = function (location) {
   // ObjectId to string
   location._id = location._id.toString();
 
-  // Attachment urls
+  // Prepare the content too
   location.content = exports.content(location.content);
 };
 

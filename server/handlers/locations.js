@@ -11,8 +11,8 @@ var putSchema = require('./schemas/locations/put');
 var getSchema = require('./schemas/locations/get');
 var delSchema = require('./schemas/locations/del');
 var countSchema = require('./schemas/locations/count');
-var Validator = require('ajv');
-var validator = new Validator();
+var Ajv = require('ajv');
+var validator = new Ajv();
 var validatePut = validator.compile(putSchema);
 var validateGet = validator.compile(getSchema);
 var validateDel = validator.compile(delSchema);
@@ -155,8 +155,20 @@ exports.getMarkersWithin = function (db, data, response) {
   //
   // Response on success:
   //   {
-  //     locations: arrayOfLocations
+  //     locations: arrayOfMarkerLocations
   //   }
+  //
+  // Each MarkerLocation has following properties
+  //   _id
+  //     string
+  //   name
+  //     string
+  //   geom
+  //     GeoJSON point
+  //   tags
+  //     array of strings
+  //   layer
+  //     integer
 
   // Validate the request to prevent injection
   var validRequest = (data.hasOwnProperty('center') &&
