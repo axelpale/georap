@@ -5,14 +5,15 @@ var geostamp = require('./lib/geostamp');
 var getEntryView = require('./lib/getEntryView');
 
 // Entry models
+var Story = require('../models/entries/Story');
 
 // Templates
 var locationTemplate = require('../../templates/forms/location.ejs');
 var markdownSyntax = require('../../templates/markdownSyntax.ejs');
 
-module.exports = function (locModel, accountModel) {
+module.exports = function (location, account) {
   // Parameters
-  //   locModel
+  //   location
   //     models.Location object
   //   accountModel
   //     models.Account object, the current user
@@ -20,9 +21,9 @@ module.exports = function (locModel, accountModel) {
   // Init
 
   // Build child views
-  var entryModels = locModel.getEntries();
-  var entryViews = entryModels.map(function (entryModel) {
-    return getEntryView(entryModel);
+  var entries = location.getEntries();
+  var entryViews = entries.map(function (entry) {
+    return getEntryView(entry, account);
   });
 
   // Private methods declaration
@@ -36,10 +37,10 @@ module.exports = function (locModel, accountModel) {
     });
 
     return locationTemplate({
-      location: locModel,
+      location: location,
       geostamp: geostamp,
       entriesHtml: entriesHtml,
-      account: accountModel,
+      account: account,
       markdownSyntax: markdownSyntax,
     });
   };
@@ -52,18 +53,33 @@ module.exports = function (locModel, accountModel) {
     });
 
     // Listen possible changes in the location.
-    api.on('locations/rename/success', function (updatedLoc) {
-      if (loc._id === updatedLoc._id) {
-        loc.name = updatedLoc.name;
-        var s = (updatedLoc.name === '' ? 'Untitled' : updatedLoc.name);
-        $('#tresdb-location-name').text(s);
-      }
+
+    location.on('name_changed', function () {
+      var newName = location.getName();
+      var s = (newName === '' ? 'Untitled' : newName);
+      $('#tresdb-location-name').text(s);
+    });
+
+    location.on('entry_added', function (ev) {
+      // Create entry model
+      var entry = self.getEntry(ev.entryId);
+      // Create entry view
+      var entryView = getEntryView(entry);
+      // Render, attach to dom and bind handlers
+      var html = entryView.render();
+      $('#tresdb-location-content-entries').prepend(html);
+      entryView.bind();
+    });
+
+    location.on('entry_removed', function (ev) {
+      $('#' + ev.entryId).remove();
     });
 
     // Enable tooltips. See http://getbootstrap.com/javascript/#tooltips
     $('[data-toggle="tooltip"]').tooltip();
 
     // Rename form
+
     $('#tresdb-location-rename-show').click(function (ev) {
       ev.preventDefault();
 
@@ -73,7 +89,7 @@ module.exports = function (locModel, accountModel) {
         // Remove possible error messages
         $('#tresdb-location-rename-error').addClass('hidden');
         // Prefill the form with the current name
-        $('#tresdb-location-rename-input').val(loc.name);
+        $('#tresdb-location-rename-input').val(location.getName());
         // Focus to input field
         $('#tresdb-location-rename-input').focus();
       } else {
@@ -93,7 +109,7 @@ module.exports = function (locModel, accountModel) {
       ev.preventDefault();
 
       var newName = $('#tresdb-location-rename-input').val().trim();
-      var oldName = loc.name;
+      var oldName = location.getName();
 
       if (newName === oldName) {
         // If name not changed, just close the form.
@@ -102,7 +118,7 @@ module.exports = function (locModel, accountModel) {
         return;
       }
 
-      api.rename(loc._id, newName, function (err) {
+      location.setName(newName, function (err) {
         if (err) {
           console.error(err);
           $('#tresdb-location-rename-form').addClass('hidden');
@@ -153,7 +169,7 @@ module.exports = function (locModel, accountModel) {
 
       var markdown = $('#tresdb-location-story-input').val().trim();
 
-      console.log('markdown', markdown);
+      // console.log('markdown', markdown);
 
       // If no content, just close the form.
       if (markdown === '') {
@@ -168,7 +184,11 @@ module.exports = function (locModel, accountModel) {
 
       console.log('progress bar visible');
 
-      api.addStory(loc._id, markdown, function (err, entry) {
+      var story = new Story(markdown);
+
+      location.addEntry(story);
+
+      location.save(function (err) {
 
         console.log('api responsed');
 
@@ -181,17 +201,6 @@ module.exports = function (locModel, accountModel) {
           $('#tresdb-location-story-error').removeClass('hidden');
           return;
         }
-
-        // Render and add the new entry
-        var html = contentEntryTemplate({
-          entry: entry,
-          timestamp: timestamp,
-          marked: marked,
-          getEntryId: getEntryId,
-          user: auth.getUser(),
-          markdownSyntax: markdownSyntax,
-        });
-        $('#tresdb-location-content-entries').prepend(html);
 
         // Hide the form container
         $('#tresdb-location-story-container').addClass('hidden');

@@ -1,14 +1,21 @@
+// Story View
+//
 // Usage:
 //   var s = new Story(api, auth);
 //   s.render(node);
 //   s.bind();
 
 var marked = require('marked');
-var timestamp = require('./lib/timestamp');
-var storyTemplate = require('../../templates/entries/story.ejs');
-var markdownSyntax = require('../../templates/markdownSyntax.ejs');
+var timestamp = require('../lib/timestamp');
+var storyTemplate = require('../../../templates/entries/story.ejs');
+var markdownSyntax = require('../../../templates/markdownSyntax.ejs');
 
-module.exports = function (entryModel, accountModel, api) {
+module.exports = function (entry, account) {
+  // Parameters:
+  //   entry
+  //     models.Entry
+  //   account
+  //     models.Account
 
   // Private methods
 
@@ -47,17 +54,17 @@ module.exports = function (entryModel, accountModel, api) {
 
   this.render = function () {
     return storyTemplate({
-      entry: entryModel,
+      entry: entry,
       marked: marked,  // markdown parser
       timestamp: timestamp,
-      account: accountModel,
+      account: account,
       markdownSyntax: markdownSyntax,
     });
   };
 
   this.bind = function () {
 
-    var id = entryModel.getId();
+    var id = entry.getId();
 
     // If own story, display form
     if (entry.getUserName() === account.getName()) {
@@ -66,7 +73,6 @@ module.exports = function (entryModel, accountModel, api) {
         if (isFormOpen(id)) {
           closeForm(id);
         } else {
-          console.log('fooo');
           openForm(id);
           prefillTextarea(id, entry.data.markdown);
         }

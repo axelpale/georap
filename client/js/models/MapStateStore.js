@@ -3,7 +3,7 @@
 
 var GEO_KEY = 'tresdb-geo-location';
 
-module.exports = function (storage) {
+module.exports = function (storage, defaultState) {
 
   this.update = function (state) {
     // Parameters:
@@ -34,7 +34,7 @@ module.exports = function (storage) {
 
   this.isEmpty = function () {
     // Return
-    //   false if there is a viewport stored
+    //   false if there is a viewport stored, other than default
     //   true otherwise
     if (storage.getItem(GEO_KEY)) {
       return false;
@@ -60,6 +60,6 @@ module.exports = function (storage) {
       return JSON.parse(s);
     }  // else
 
-    return null;
+    return defaultState;
   };
 };

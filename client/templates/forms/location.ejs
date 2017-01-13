@@ -1,7 +1,9 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col-md-12">
-      <h1><span id="tresdb-location-name"><%= (location.name === '' ? 'Untitled' : location.name) %></span> <button id="tresdb-location-rename-show" type="button" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-pencil"></span> Edit</button></h1>
+      <% var locName = location.getName(); %>
+      <% locName = (locName === '' ? 'Untitled' : locName); %>
+      <h1><span id="tresdb-location-name"><%= locName %></span> <button id="tresdb-location-rename-show" type="button" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-pencil"></span> Edit</button></h1>
 
       <form id="tresdb-location-rename-form" class="hidden panel panel-primary">
         <div class="panel-body">
@@ -19,7 +21,7 @@
       </div>
 
       <% var j, ts; %>
-      <% ts = location.tags; %>
+      <% ts = location.getTags(); %>
       <p class="tresdb-tags">
       <% for (j = 0; j < ts.length; j += 1) { %>
         <span class="label label-default"><%= ts[j] %></span>
@@ -28,7 +30,7 @@
       </p>
 
       <p class="tresdb-coordinates">
-        <span class="label label-default"><%= geostamp(location.geom, { precision: 5 }) %></span>
+        <span class="label label-default"><%= geostamp(location.getGeom(), { precision: 5 }) %></span>
         <button id="tresdb-location-edit-coordinates-show" type="button" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-pencil"></span> Edit</button>
       </p>
 
@@ -115,17 +117,9 @@
       </div>
 
       <div id="tresdb-location-content-entries">
-        <% var i, cs; %>
-        <% cs = location.content; %>
-        <% for (i = 0; i < cs.length; i += 1) { %>
-          <%= contentEntry({
-            entry: cs[i],
-            marked: marked,
-            timestamp: timestamp,
-            getEntryId: getEntryId,
-            user: user,
-            markdownSyntax: markdownSyntax,
-          }) %>
+        <% var i; %>
+        <% for (i = 0; i < entriesHtml.length; i += 1) { %>
+          <%= entriesHtml[i] %>
         <% } %>
       </div>
 

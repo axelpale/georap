@@ -39,6 +39,10 @@ module.exports = function (api, storage) {
     //   login
     //     On successful login.
 
+    if (typeof email !== 'string' || typeof password !== 'string') {
+      throw new Error('invalid parameters');
+    }
+
     var payload = {
       email: email,
       password: password,
@@ -48,17 +52,21 @@ module.exports = function (api, storage) {
       callback = function () {};
     }
 
-    api.requestRaw('account/login', payload, function (err, result) {
+    api.requestRaw('account/login', payload, function (err, token) {
       if (err) {
         return callback(err);
       }
 
-      storage.setItem(TOKEN_KEY, result);
+      if (typeof token !== 'string') {
+        throw new Error('invalid server response');
+      }
+
+      storage.setItem(TOKEN_KEY, token);
 
       // Publish within client
       self.emit('login');
 
-      return callback();
+      return callback(null);
     });
   };
 

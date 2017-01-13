@@ -11,10 +11,10 @@
   </div>
 
   <div id="<%= entry.getId() %>-body" class="panel-body">
-  <%= marked(entry.data.markdown, { sanitize: true }) %>
+  <%= marked(entry.getMarkdown(), { sanitize: true }) %>
   </div>
 
-  <% if (entry.user === user.name) { %>
+  <% if (entry.getUserName() === account.getName()) { %>
     <div id="<%= entry.getId() %>-form-container" class="panel-body hidden">
       <form id="<%= entry.getId() %>-form">
         <div class="form-group">

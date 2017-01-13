@@ -3,12 +3,12 @@ var validator = require('email-validator');
 // Templates
 var loginTemplate = require('../../templates/forms/login.ejs');
 
-module.exports = function (auth, onSuccess) {
+module.exports = function (account, onSuccess) {
   // Parameters:
-  //   auth
-  //     Instance of auth.Service.
+  //   account
+  //     Instance of models.Account
   //   onSuccess
-  //
+  //     function (), called on successful login
 
   // Private methods.
 
@@ -83,7 +83,7 @@ module.exports = function (auth, onSuccess) {
     // Hide the password reset form
     $('#tresdb-password-reset').addClass('hidden');
 
-    auth.login(email, password, loginResponseHandler);
+    account.login(email, password, loginResponseHandler);
   };
 
   var resetButtonHandler = function (ev) {
@@ -105,8 +105,15 @@ module.exports = function (auth, onSuccess) {
     $('#tresdb-password-reset-in-progress').addClass('hidden');
 
     if (err) {
-      // Display error message
-      $('#tresdb-password-reset-server-error').removeClass('hidden');
+
+      if (err.name === 'UnknownEmailError') {
+        // Display error message and show the form.
+        $('#tresdb-password-reset-unknown-email').removeClass('hidden');
+        $('#tresdb-password-reset-form').removeClass('hidden');
+      } else {
+        // Display general error message
+        $('#tresdb-password-reset-server-error').removeClass('hidden');
+      }
 
       return;
     }  // else
@@ -123,6 +130,7 @@ module.exports = function (auth, onSuccess) {
 
     // Hide possible earlier error messages
     $('#tresdb-password-reset-invalid-email').addClass('hidden');
+    $('#tresdb-password-reset-unknown-email').addClass('hidden');
     $('#tresdb-password-reset-server-error').addClass('hidden');
     // Hide also possible earlier success message
     $('#tresdb-password-reset-success').addClass('hidden');
@@ -142,7 +150,7 @@ module.exports = function (auth, onSuccess) {
     // Hide the form
     $('#tresdb-password-reset-form').addClass('hidden');
 
-    auth.sendResetPasswordEmail(resetEmail, resetResponseHandler);
+    account.sendResetPasswordEmail(resetEmail, resetResponseHandler);
   };
 
   // Public methods

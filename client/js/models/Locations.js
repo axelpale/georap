@@ -1,10 +1,40 @@
-// Usage:
-//   var locationsModel = new models.Locations(api, auth)
-//
 
+var emitter = require('component-emitter');
 var LocationModel = require('./Location');
 
-module.exports = function (api, auth) {
+module.exports = function (api, account) {
+  // Usage:
+  //   var locations = new models.Locations(api, account)
+  //
+  // Parameters:
+  //   api
+  //     an api.Api instance
+  //   account
+  //     a models.Account
+  emitter(this);
+  var self = this;
+
+  // To inform views (especially Map) about changes in locations,
+  // we listen the previously created/retrieved location. This surveillance
+  // should cover all the locations in the cache but as we do not have a cache,
+  // the easiest solution is to listen only the last retrieved location.
+  var listenForChanges = (function () {
+    var loc2listen = null;
+
+    var handler = function () {
+      self.emit('location_changed', loc2listen);
+    };
+
+    return function listen(location) {
+      if (loc2listen !== null) {
+        loc2listen.off('saved', handler);
+        loc2listen = null;
+      }
+
+      loc2listen = location;
+      loc2listen.on('saved', handler);
+    };
+  }());
 
   this.create = function (geom, callback) {
     // Create a new location on the server.
@@ -15,12 +45,36 @@ module.exports = function (api, auth) {
     //   callback
     //     function (err, createdLocation)
 
-    api.request('locations/addOne', { geom: geom }, function (err, loc) {
+    var rawLoc = {
+      name: '',
+      geom: geom,
+      deleted: false,
+      tags: [],
+      content: [{
+        type: 'created',
+        user: account.getName(),
+        time: (new Date()).toISOString(),
+        data: {},
+      }],
+      layer: 1,  // dummy
+    };
+
+    var payload = {
+      location: rawLoc,
+    };
+
+    api.request('locations/put', payload, function (err, rawLoc) {
       if (err) {
         return callback(err);
       }
 
-      var newLoc = new LocationModel(loc, api, auth);
+      var newLoc = new LocationModel(api, account, rawLoc);
+
+      // Emit changes of this location until next loc in focus.
+      listenForChanges(newLoc);
+
+      // Inform others that new location has been created.
+      self.emit('location_changed', newLoc);
 
       return callback(null, newLoc);
     });
@@ -36,13 +90,16 @@ module.exports = function (api, auth) {
     //   callback
     //     function (err, location)
     //
+    var payload = { location: { _id: id } };
 
-    api.request('locations/getOne', { locationId: id }, function (err, loc) {
+    api.request('locations/get', payload, function (err, rawLoc) {
       if (err) {
         return callback(err);
       }
 
-      var newLoc = new LocationModel(loc, api, auth);
+      var newLoc = new LocationModel(api, account, rawLoc);
+
+      listenForChanges(newLoc);
 
       return callback(null, newLoc);
     });
@@ -57,7 +114,7 @@ module.exports = function (api, auth) {
     //   zoomLevel
     //     only locations on this layer and above will be fetched.
     //   callback
-    //     function (err, locations)
+    //     function (err, markerLocations)
 
     // API requires MongoDB legacy coordinate format
     var legacyCenter = [center.lng(), center.lat()];
@@ -68,7 +125,7 @@ module.exports = function (api, auth) {
       layer: zoomLevel,
     };
 
-    api.request('locations/getWithin', payload, callback);
+    api.request('locations/getMarkersWithin', payload, callback);
   };
 
 };
