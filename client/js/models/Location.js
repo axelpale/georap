@@ -253,7 +253,7 @@ module.exports = function (api, account, rawLoc) {
         loc.name = oldName;
         return callback(err);
       }
-      this.emit('name_changed');
+      self.emit('name_changed');
       return callback();
     });
   };

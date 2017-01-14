@@ -101,17 +101,19 @@ module.exports = function (storage, locations, go) {
     // Parameters
     //   updatedLoc
     //     models.Location
-    var m;
+    var m, mloc;
 
-    if (markers.hasOwnProperty(updatedLoc._id)) {
-      m = markers[updatedLoc._id];
-      m.set('location', updatedLoc);
+    mloc = updatedLoc.getMarkerLocation();
+
+    if (markers.hasOwnProperty(mloc._id)) {
+      m = markers[mloc._id];
+      m.set('location', mloc);
 
       // Force update even if label already visible
       labels.ensureLabel(m, map.getMapTypeId(), true);
     } else {
       // New location
-      addMarker(updatedLoc.getMarkerLocation());
+      addMarker(mloc);
     }
   });
 
@@ -328,8 +330,6 @@ module.exports = function (storage, locations, go) {
     // Return
     //   the created marker
     var lng, lat, m;
-
-    console.log('addMarler loc:', loc);
 
     lng = loc.geom.coordinates[0];
     lat = loc.geom.coordinates[1];

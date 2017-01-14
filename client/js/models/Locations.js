@@ -26,6 +26,9 @@ module.exports = function (api, account) {
     };
 
     return function listen(location) {
+      // Parameters
+      //   location
+      //     a models.Location
       if (loc2listen !== null) {
         loc2listen.off('saved', handler);
         loc2listen = null;
