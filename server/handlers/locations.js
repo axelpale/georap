@@ -25,6 +25,8 @@ exports.put = function (db, data, response) {
   var valid = validatePut(data);
 
   if (!valid) {
+    console.log('Invalid locations put payload:');
+    console.log(data);
     return response(errors.responses.InvalidRequestError);
   }
 
