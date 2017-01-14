@@ -3,6 +3,7 @@
 
 var geostamp = require('./lib/geostamp');
 var getEntryView = require('./lib/getEntryView');
+var NameView = require('./locationParts/Name');
 
 // Entry models
 var Story = require('../models/entries/Story');
@@ -21,6 +22,9 @@ module.exports = function (location, account) {
   // Init
 
   // Build child views
+
+  var nameView = new NameView(location);
+
   var entries = location.getEntriesInTimeOrder();
   var entryViews = entries.map(function (entry) {
     return getEntryView(entry, account);
@@ -35,6 +39,8 @@ module.exports = function (location, account) {
     // Sort content, newest first, create-event to bottom.
     //sortEntries(loc.content);
 
+    var nameHtml = nameView.render();
+
     var entriesHtml = entryViews.map(function (entryView) {
       return entryView.render();
     });
@@ -42,6 +48,7 @@ module.exports = function (location, account) {
     return locationTemplate({
       location: location,
       geostamp: geostamp,
+      nameHtml: nameHtml,
       entriesHtml: entriesHtml,
       account: account,
       markdownSyntax: markdownSyntax,
@@ -50,18 +57,14 @@ module.exports = function (location, account) {
 
   this.bind = function () {
 
+    nameView.bind();
+
     // Bind children first for clarity
     entryViews.forEach(function (entryView) {
       entryView.bind();
     });
 
     // Listen possible changes in the location.
-
-    location.on('name_changed', function () {
-      var newName = location.getName();
-      var s = (newName === '' ? 'Untitled' : newName);
-      $('#tresdb-location-name').text(s);
-    });
 
     location.on('entry_added', function (ev) {
       // Get entry model
@@ -80,58 +83,6 @@ module.exports = function (location, account) {
 
     // Enable tooltips. See http://getbootstrap.com/javascript/#tooltips
     $('[data-toggle="tooltip"]').tooltip();
-
-    // Rename form
-
-    $('#tresdb-location-rename-show').click(function (ev) {
-      ev.preventDefault();
-
-      if ($('#tresdb-location-rename-form').hasClass('hidden')) {
-        // Show
-        $('#tresdb-location-rename-form').removeClass('hidden');
-        // Remove possible error messages
-        $('#tresdb-location-rename-error').addClass('hidden');
-        // Prefill the form with the current name
-        $('#tresdb-location-rename-input').val(location.getName());
-        // Focus to input field
-        $('#tresdb-location-rename-input').focus();
-      } else {
-        // Hide
-        $('#tresdb-location-rename-form').addClass('hidden');
-        // Remove possible error messages
-        $('#tresdb-location-rename-error').addClass('hidden');
-      }
-    });
-
-    $('#tresdb-location-rename-cancel').click(function (ev) {
-      ev.preventDefault();
-      $('#tresdb-location-rename-form').addClass('hidden');
-    });
-
-    $('#tresdb-location-rename-form').submit(function (ev) {
-      ev.preventDefault();
-
-      var newName = $('#tresdb-location-rename-input').val().trim();
-      var oldName = location.getName();
-
-      if (newName === oldName) {
-        // If name not changed, just close the form.
-        $('#tresdb-location-rename-form').addClass('hidden');
-        $('#tresdb-location-rename-error').addClass('hidden');
-        return;
-      }
-
-      location.setName(newName, function (err) {
-        if (err) {
-          console.error(err);
-          $('#tresdb-location-rename-form').addClass('hidden');
-          $('#tresdb-location-rename-error').removeClass('hidden');
-          return;
-        }
-
-        $('#tresdb-location-rename-form').addClass('hidden');
-      });
-    });
 
 
     // Story form

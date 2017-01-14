@@ -1,4 +1,4 @@
-/* eslint-disable max-statements */
+/* eslint-disable max-statements, max-lines */
 
 var shortid = require('shortid');
 var extend = require('extend');
