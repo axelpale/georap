@@ -64,8 +64,8 @@ module.exports = function (location, account) {
     });
 
     location.on('entry_added', function (ev) {
-      // Create entry model
-      var entry = self.getEntry(ev.entryId);
+      // Get entry model
+      var entry = location.getEntry(ev.entryId);
       // Create entry view
       var entryView = getEntryView(entry);
       // Render, attach to dom and bind handlers

@@ -268,6 +268,7 @@ module.exports = function (api, account, rawLoc) {
         return callback(err);
       }
       self.emit('name_changed');
+      self.emit('entry_added', { entryId: rawEntry._id });
       return callback();
     });
   };
