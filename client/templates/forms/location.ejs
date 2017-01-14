@@ -23,8 +23,12 @@
       <% var j, ts; %>
       <% ts = location.getTags(); %>
       <p class="tresdb-tags">
+        <span>Tags:</span>
       <% for (j = 0; j < ts.length; j += 1) { %>
-        <span class="label label-default"><%= ts[j] %></span>
+        <span class="label label-default tresdb-tag"><%= ts[j] %></span>
+      <% } %>
+      <% if (ts.length === 0) { %>
+        <span class="tresdb-none">none yet</span>
       <% } %>
       <button id="tresdb-location-edit-tags-show" type="button" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-pencil"></span> Edit</button>
       </p>
