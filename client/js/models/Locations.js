@@ -1,9 +1,9 @@
 
 var emitter = require('component-emitter');
 var shortid = require('shortid');
-var LocationModel = require('./Location');
+var Location = require('./Location');
 
-module.exports = function (api, account) {
+module.exports = function (api, account, tags) {
   // Usage:
   //   var locations = new models.Locations(api, account)
   //
@@ -12,6 +12,9 @@ module.exports = function (api, account) {
   //     an api.Api instance
   //   account
   //     a models.Account
+  //   tags
+  //     a models.Tags
+
   emitter(this);
   var self = this;
 
@@ -73,7 +76,7 @@ module.exports = function (api, account) {
         return callback(err);
       }
 
-      var newLoc = new LocationModel(api, account, newRawLoc);
+      var newLoc = new Location(api, account, tags, newRawLoc);
 
       // Emit changes of this location until next loc in focus.
       listenForChanges(newLoc);
@@ -102,7 +105,7 @@ module.exports = function (api, account) {
         return callback(err);
       }
 
-      var newLoc = new LocationModel(api, account, rawLoc);
+      var newLoc = new Location(api, account, tags, rawLoc);
 
       listenForChanges(newLoc);
 

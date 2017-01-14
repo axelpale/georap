@@ -16,7 +16,7 @@ var ChangePasswordView = require('./views/ChangePassword');
 
 var AfterLogin = require('./models/AfterLogin');
 
-exports.route = function (page, account, locations) {
+exports.route = function (page, account, locations, tags) {
 
   // Init
 
@@ -139,7 +139,7 @@ exports.route = function (page, account, locations) {
       }
 
       // Render location card.
-      var view = new LocationView(loc, account);
+      var view = new LocationView(loc, account, tags);
 
       card.open(view.render());
       view.bind();

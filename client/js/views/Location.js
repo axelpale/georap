@@ -1,9 +1,9 @@
-/* eslint-disable max-lines */
 // View for location
 
 var geostamp = require('./lib/geostamp');
 var getEntryView = require('./lib/getEntryView');
 var NameView = require('./locationParts/Name');
+var TagsView = require('./locationParts/Tags');
 
 // Entry models
 var Story = require('../models/entries/Story');
@@ -12,18 +12,22 @@ var Story = require('../models/entries/Story');
 var locationTemplate = require('../../templates/forms/location.ejs');
 var markdownSyntax = require('../../templates/markdownSyntax.ejs');
 
-module.exports = function (location, account) {
+module.exports = function (location, account, tags) {
   // Parameters
   //   location
   //     models.Location object
-  //   accountModel
+  //   account
   //     models.Account object, the current user
+  //   tags
+  //     models.Tags object
 
   // Init
 
   // Build child views
 
   var nameView = new NameView(location);
+
+  var tagsView = new TagsView(location, tags);
 
   var entries = location.getEntriesInTimeOrder();
   var entryViews = entries.map(function (entry) {
@@ -40,6 +44,7 @@ module.exports = function (location, account) {
     //sortEntries(loc.content);
 
     var nameHtml = nameView.render();
+    var tagsHtml = tagsView.render();
 
     var entriesHtml = entryViews.map(function (entryView) {
       return entryView.render();
@@ -49,6 +54,7 @@ module.exports = function (location, account) {
       location: location,
       geostamp: geostamp,
       nameHtml: nameHtml,
+      tagsHtml: tagsHtml,
       entriesHtml: entriesHtml,
       account: account,
       markdownSyntax: markdownSyntax,
@@ -58,6 +64,7 @@ module.exports = function (location, account) {
   this.bind = function () {
 
     nameView.bind();
+    tagsView.bind();
 
     // Bind children first for clarity
     entryViews.forEach(function (entryView) {

@@ -3,20 +3,20 @@
 var shortid = require('shortid');
 var extend = require('extend');
 var clone = require('clone');
-var Emitter = require('component-emitter');
+var emitter = require('component-emitter');
 
 var defaultRawLocation = require('./lib/defaultRawLocation');
 var sortEntries = require('./lib/sortEntries');
 var toEntry = require('./lib/toEntryModel');
 
-module.exports = function (api, account, rawLoc) {
+module.exports = function (api, account, tags, rawLoc) {
   // Usage:
   //   Update an existing Location:
-  //     var l = new Location(api, account, fullLocFromServer);
+  //     var l = new Location(api, account, tags, fullLocFromServer);
   //     l.setName('new name');
   //     l.save(function (err) { ... });
   //   Create a new location and send it to server:
-  //     var l = new Location(api, account, { geom: geom });
+  //     var l = new Location(api, account, tags, { geom: geom });
   //     l.save(function (err) { ... });
   //
   // Parameters:
@@ -24,12 +24,14 @@ module.exports = function (api, account, rawLoc) {
   //     a api.Api
   //   account
   //     a models.Account
+  //   tags
+  //     a models.Tags
   //   rawLoc
   //     Optional location properties that override the default.
 
   // Init
 
-  Emitter(this);
+  emitter(this);
   var self = this;
 
   // Deep extend the default location.
@@ -39,6 +41,17 @@ module.exports = function (api, account, rawLoc) {
   }
 
   // Private methods
+
+  var addRawTag = function (tag) {
+    loc.tags.push(tag);
+  };
+
+  var removeRawTag = function (tag) {
+    var index = loc.tags.indexOf(tag);
+    if (index > -1) {
+      loc.tags.splice(index, 1);
+    }
+  };
 
   var getRawEntry = function (id) {
     // Return a raw entry with given id
@@ -160,6 +173,10 @@ module.exports = function (api, account, rawLoc) {
     return loc.tags;
   };
 
+  this.hasTag = function (tag) {
+    return (loc.tags.indexOf(tag) > -1);
+  };
+
 
   // Public Mutators
 
@@ -189,6 +206,42 @@ module.exports = function (api, account, rawLoc) {
 
   this.addAttachment = function (callback) {
     return callback(new Error('not implemented'));
+  };
+
+  this.addTag = function (tag, callback) {
+    // Parameters:
+    //   tag
+    //     string
+    //   callback
+    //     function (err)
+
+    if (typeof tag !== 'string') {
+      throw new Error('invalid tag type: ' + (typeof tag));
+    }
+
+    if (!tags.isValidTag(tag)) {
+      throw new Error('unknown tag: ' + tag);
+    }
+
+    if (this.hasTag(tag)) {
+      // Success, tag already added
+      return callback(null);
+    }
+
+    addRawTag(tag);
+
+    this.save(function (err) {
+      if (err) {
+        // Remove the added tag. Other tags could have been added and
+        // the tag also removed during the save.
+        removeRawTag(tag);
+
+        return callback(err);
+      }
+
+      self.emit('tags_changed');
+      return callback();
+    });
   };
 
   this.addVisit = function (year, callback) {
@@ -241,6 +294,26 @@ module.exports = function (api, account, rawLoc) {
       // If already removed
       return callback();
     }
+  };
+
+  this.removeTag = function (tag, callback) {
+
+    if (typeof tag !== 'string') {
+      throw new Error('invalid tag type: ' + (typeof tag));
+    }
+
+    removeRawTag(tag);
+
+    this.save(function (err) {
+      if (err) {
+        addRawTag(tag);
+        return callback(err);
+      }
+
+      self.emit('tags_changed');
+      return callback();
+    });
+
   };
 
   this.setName = function (newName, callback) {

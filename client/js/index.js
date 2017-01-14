@@ -5,6 +5,7 @@ var page = require('page');
 var routes = require('./routes');
 
 var Api = require('./api/Api');
+var Tags = require('./models/Tags');
 var Account = require('./models/Account');
 var Locations = require('./models/Locations');
 
@@ -33,14 +34,17 @@ var api = new Api(socket, storage);
 // Authentication & Account API
 var account = new Account(api, storage);
 
+// Tags API
+var tags = new Tags();
+
 // Locations API
-var locations = new Locations(api, account);
+var locations = new Locations(api, account, tags);
 
 
 
 // Routing
 
-routes.route(page, account, locations);
+routes.route(page, account, locations, tags);
 page.start();
 
 // A method to expose router to map controller and main menu.

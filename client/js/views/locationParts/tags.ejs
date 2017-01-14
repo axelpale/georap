@@ -1,0 +1,22 @@
+<p>
+  <span>Tags:</span>
+  <span id="tresdb-location-tags" class="tresdb-tags">
+    <%= tagsListHtml %>
+  </span>
+<button id="tresdb-location-edit-tags-show" type="button" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-pencil"></span> Edit</button>
+</p>
+
+<div id="tresdb-location-edit-tags-form" class="hidden panel panel-primary">
+  <div class="panel-body">
+
+    <div id="tresdb-location-edit-tags-list">
+      <%= tagsFormListHtml %>
+    </div>
+
+    <button id="tresdb-location-edit-tags-cancel" type="button" class="btn btn-default">Close</button>
+  </div>
+</div>
+
+<div id="tresdb-location-edit-tags-remove-error" class="hidden">
+  <div class="alert alert-danger" role="alert">Removing the tag failed.</div>
+</div>
