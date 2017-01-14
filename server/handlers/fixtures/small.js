@@ -43,11 +43,13 @@ module.exports = {
         deleted: false,
         tags: ['walk-in'],
         content: [{
+          _id: 'abcd1234',
           type: 'created',
           user: 'admin',
           time: '2009-07-30T10:44:58.000Z',
           data: {},
         }, {
+          _id: 'abcd1235',
           type: 'story',
           user: 'admin',
           time: '2009-09-04T23:44:21.000Z',
@@ -55,8 +57,7 @@ module.exports = {
             markdown: 'A ghost town',
           },
         }],
-        neighborsAvgDist: 42886.25362949583,
-        layer: 12,
+        layer: 1,
       },
     ],
   },

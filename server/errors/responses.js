@@ -12,6 +12,14 @@ exports.DatabaseError = {
   error: 'DatabaseError',
 };
 
+exports.UnknownEmailError = {
+  error: 'UnknownEmailError',
+};
+
+exports.MailServerError = {
+  error: 'MailServerError',
+};
+
 exports.NotFoundError = {
   error: 'NotFoundError',
 };

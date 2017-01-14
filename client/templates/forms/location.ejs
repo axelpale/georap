@@ -1,7 +1,9 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col-md-12">
-      <h1><span id="tresdb-location-name"><%= (location.name === '' ? 'Untitled' : location.name) %></span> <button id="tresdb-location-rename-show" type="button" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-pencil"></span> Edit</button></h1>
+      <% var locName = location.getName(); %>
+      <% locName = (locName === '' ? 'Untitled' : locName); %>
+      <h1><span id="tresdb-location-name"><%= locName %></span> <button id="tresdb-location-rename-show" type="button" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-pencil"></span> Edit</button></h1>
 
       <form id="tresdb-location-rename-form" class="hidden panel panel-primary">
         <div class="panel-body">
@@ -19,65 +21,111 @@
       </div>
 
       <% var j, ts; %>
-      <% ts = location.tags; %>
+      <% ts = location.getTags(); %>
       <p class="tresdb-tags">
+        <span>Tags:</span>
       <% for (j = 0; j < ts.length; j += 1) { %>
-        <span class="label label-default"><%= ts[j] %></span>
+        <span class="label label-default tresdb-tag"><%= ts[j] %></span>
+      <% } %>
+      <% if (ts.length === 0) { %>
+        <span class="tresdb-none">none yet</span>
       <% } %>
       <button id="tresdb-location-edit-tags-show" type="button" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-pencil"></span> Edit</button>
       </p>
 
       <p class="tresdb-coordinates">
-        <span class="label label-default"><%= geostamp(location.geom, { precision: 5 }) %></span>
+        <span class="label label-default"><%= geostamp(location.getGeom(), { precision: 5 }) %></span>
         <button id="tresdb-location-edit-coordinates-show" type="button" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-pencil"></span> Edit</button>
       </p>
 
       <p>
-        <button id="tresdb-location-text" type="button" class="btn btn-default"><span class="glyphicon glyphicon-comment"></span> Write</button>
-        <button id="tresdb-location-photo" type="button" class="btn btn-default"><span class="glyphicon glyphicon-paperclip"></span> Upload</button>
-        <button id="tresdb-location-visit" type="button" class="btn btn-default"><span class="glyphicon glyphicon-star"></span> Visit</button>
+        <button id="tresdb-location-story-show" type="button" class="btn btn-default"><span class="glyphicon glyphicon-comment"></span> Write</button>
+        <button id="tresdb-location-attachment-show" type="button" class="btn btn-default"><span class="glyphicon glyphicon-paperclip"></span> Upload</button>
+        <button id="tresdb-location-visit-show" type="button" class="btn btn-default"><span class="glyphicon glyphicon-star"></span> Visit</button>
       </p>
 
-      <% var i, cs, c; %>
-      <% cs = location.content; %>
-      <% for (i = 0; i < cs.length; i += 1) { %>
-        <% c = cs[i]; %>
-      <div class="panel panel-default tresdb-content-<%= c.type %>">
-        <% if (c.type === 'story') { %>
+      <div id="tresdb-location-story-container" class="hidden">
+        <form id="tresdb-location-story-form" class="panel panel-primary">
           <div class="panel-heading">
-            <%= c.user %> wrote <%= timestamp(c.time) %>
+            Write a note, a comment, or any other textual piece
           </div>
           <div class="panel-body">
-          <%= marked(c.data.markdown, { sanitize: true }) %>
-          </div>
-        <% } else if (c.type === 'created') { %>
-          <div class="panel-heading">
-            <%= c.user %> created <em><%= location.name %></em> <%= timestamp(c.time) %>
-          </div>
-        <% } else if (c.type === 'visit') { %>
-          <div class="panel-heading">
-            <%= c.user %> visited <em><%= location.name %></em> <%= timestamp(c.time) %>
-          </div>
-        <% } else if (c.type === 'rename') { %>
-          <div class="panel-heading">
-            <%= c.user %> renamed <em><%= c.data.oldName %></em> to <em><%= c.data.newName %></em> <%= timestamp(c.time) %>
-          </div>
-        <% } else if (c.type === 'attachment') { %>
-          <div class="panel-heading">
-            <%= c.user %> uploaded <%= timestamp(c.time) %>
-          </div>
-          <% if (c.data.mimetype.startsWith('image')) { %>
-            <div class="panel-body tresdb-content-attachment-image-body">
-              <a href="<%= c.data.url %>" target="_blank"><img src="<%= c.data.url %>"></a>
+            <div class="form-group">
+              <label for="tresdb-location-story-input">Content:</label>
+              <textarea id="tresdb-location-story-input" class="form-control" rows="3"></textarea>
             </div>
-          <% } else { %>
-            <div class="panel-body">
-              <a href="<%= c.data.url %>" target="_blank"><%= c.data.filename %></a>
+            <div>
+              <%= markdownSyntax() %>
             </div>
-          <% } %>
+            <button id="tresdb-location-story-cancel" type="button" class="btn btn-default">Cancel</button>
+            <button type="submit" class="btn btn-primary">Save</button>
+          </div>
+        </form>
+
+        <div id="tresdb-location-story-progress" class="progress hidden">
+          <div class="progress-bar progress-bar-striped active" role="progressbar" style="width: 100%">
+            <span class="sr-only">Waiting for server</span>
+          </div>
+        </div>
+
+        <div id="tresdb-location-story-error" class="hidden">
+          <div class="alert alert-danger" role="alert">Adding the text failed. Might be a connection issue.</div>
+        </div>
+      </div>
+
+      <div id="tresdb-location-attachment-container" class="hidden">
+        <form id="tresdb-location-attachment-form" class="panel panel-primary">
+          <div class="panel-heading">
+            Upload a photo, a document, or any other file attachment
+          </div>
+          <div class="panel-body">
+            <div class="form-group">
+              <label class="btn btn-default btn-file">
+                Browse... <input type="file" style="display: none;">
+              </label>
+            </div>
+            <button id="tresdb-location-attachment-cancel" type="button" class="btn btn-default">Cancel</button>
+            <button type="submit" class="btn btn-primary">Upload</button>
+          </div>
+        </form>
+
+        <div id="tresdb-location-attachment-error" class="hidden">
+          <div class="alert alert-danger" role="alert">Uploading failed. Might be a connection issue.</div>
+        </div>
+      </div>
+
+      <div id="tresdb-location-visit-container" class="hidden">
+        <form id="tresdb-location-visit-form" class="panel panel-primary">
+          <div class="panel-heading">
+            Mark you have visited the location
+          </div>
+          <div class="panel-body">
+            <div class="form-group">
+              <label for="tresdb-location-visit-input">Year:</label>
+              <select id="tresdb-location-visit-input" class="form-control">
+                <% var nowYear = (new Date()).getFullYear(); %>
+                <option selected="selected"><%= nowYear %></option>
+                <% for (var y = nowYear - 1; y >= 1960; y -= 1) { %>
+                  <option><%= y %></option>
+                <% } %>
+              </select>
+            </div>
+            <button id="tresdb-location-visit-cancel" type="button" class="btn btn-default">Cancel</button>
+            <button type="submit" class="btn btn-primary">Save</button>
+          </div>
+        </form>
+
+        <div id="tresdb-location-visit-error" class="hidden">
+          <div class="alert alert-danger" role="alert">Marking the visit failed. Might be a connection issue.</div>
+        </div>
+      </div>
+
+      <div id="tresdb-location-content-entries">
+        <% var i; %>
+        <% for (i = 0; i < entriesHtml.length; i += 1) { %>
+          <%= entriesHtml[i] %>
         <% } %>
       </div>
-      <% } %>
 
     </div>
   </div>

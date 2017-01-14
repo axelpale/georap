@@ -40,8 +40,8 @@ exports.setVersion = function (configColl, version, callback) {
   configColl.update({ key: 'schemaVersion' }, {
     $set: { value: version },
   }, { upsert: true }).then(function () {
-    callback(null);
+    return callback(null);
   }).catch(function (err) {
-    callback(err);
+    return callback(err);
   });
 };

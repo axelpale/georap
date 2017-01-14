@@ -1,4 +1,4 @@
-var iter = require('../lib/iter');
+var iter = require('../iter');
 var schema = require('../lib/schema');
 
 var FROM_VERSION = 2;
@@ -17,7 +17,7 @@ exports.run = function (db, callback) {
   // 1. Schema version tag update
   console.log('Setting schema version tag...');
 
-  var configColl = db.get('config');
+  var configColl = db.collection('config');
 
   schema.setVersion(configColl, TO_VERSION, function (err) {
     if (err) {
@@ -30,7 +30,7 @@ exports.run = function (db, callback) {
     // and fields for tags, content, deleted, layer, and neighborsAvgDist
     console.log('Transforming locations to have new fields...');
 
-    var locsColl = db.get('locations');
+    var locsColl = db.collection('locations');
 
     iter.updateEach(locsColl, function (loc, next) {
 

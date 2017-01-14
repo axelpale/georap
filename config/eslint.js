@@ -186,6 +186,7 @@ module.exports = {
       'FunctionExpression': {
         'parameters': 'first',
       },
+      'SwitchCase': 1,
     } ],
     // enforce consistent spacing between keys and values in object
     // literal properties

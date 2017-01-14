@@ -1,0 +1,63 @@
+
+<div id="<%= getEntryId(entry) %>" class="panel panel-default tresdb-content-<%= entry.type %>">
+  <% if (entry.type === 'story') { %>
+
+    <div class="panel-heading">
+      <% if (entry.user === user.name) { %>
+        <div class="btn-group pull-right">
+          <button id="<%= getEntryId(entry) %>-edit" type="button" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-pencil"></span> Edit</a>
+        </div>
+      <% } %>
+      <%= entry.user %> wrote <%= timestamp(entry.time) %>
+    </div>
+
+    <div id="<%= getEntryId(entry) %>-body" class="panel-body">
+    <%= marked(entry.data.markdown, { sanitize: true }) %>
+    </div>
+
+    <% if (entry.user === user.name) { %>
+      <div id="<%= getEntryId(entry) %>-form-container" class="panel-body hidden">
+        <form id="<%= getEntryId(entry) %>-form">
+          <div class="form-group">
+            <label for="<%= getEntryId(entry) %>-input">Edit content:</label>
+            <textarea id="<%= getEntryId(entry) %>-input" class="form-control" rows="3"></textarea>
+          </div>
+          <div>
+            <%= markdownSyntax() %>
+          </div>
+          <div class="pull-right">
+            <button id="<%= getEntryId(entry) %>-delete" type="button" class="btn btn-danger">Delete</button>
+          </div>
+          <button id="<%= getEntryId(entry) %>-cancel" type="button" class="btn btn-default">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save</button>
+        </form>
+      </div>
+    <% } %>
+
+  <% } else if (entry.type === 'created') { %>
+    <div class="panel-heading">
+      <%= entry.user %> created <em><%= location.name %></em> <%= timestamp(entry.time) %>
+    </div>
+  <% } else if (entry.type === 'visit') { %>
+    <div class="panel-heading">
+      <%= entry.user %> visited <em><%= location.name %></em> <%= timestamp(entry.time) %>
+    </div>
+  <% } else if (entry.type === 'rename') { %>
+    <div class="panel-heading">
+      <%= entry.user %> renamed <em><%= entry.data.oldName %></em> to <em><%= entry.data.newName %></em> <%= timestamp(entry.time) %>
+    </div>
+  <% } else if (entry.type === 'attachment') { %>
+    <div class="panel-heading">
+      <%= entry.user %> uploaded <%= timestamp(entry.time) %>
+    </div>
+    <% if (entry.data.mimetype.startsWith('image')) { %>
+      <div class="panel-body tresdb-content-attachment-image-body">
+        <a href="<%= entry.data.url %>" target="_blank"><img src="<%= entry.data.url %>"></a>
+      </div>
+    <% } else { %>
+      <div class="panel-body">
+        <a href="<%= entry.data.url %>" target="_blank"><%= entry.data.filename %></a>
+      </div>
+    <% } %>
+  <% } %>
+</div>

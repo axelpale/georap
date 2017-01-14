@@ -1,0 +1,12 @@
+
+<div id="<%= entry.getId() %>" class="panel panel-default tresdb-content-rename">
+
+  <div class="panel-heading">
+    <% if (entry.getOldName() === '') { %>
+      <%= entry.getUserName() %> named the location as <em><%= entry.getNewName() %></em> <%= timestamp(entry.getTime()) %>
+    <% } else { %>
+      <%= entry.getUserName() %> renamed <em><%= entry.getOldName() %></em> to <em><%= entry.getNewName() %></em> <%= timestamp(entry.getTime()) %>
+    <% } %>
+  </div>
+
+</div>

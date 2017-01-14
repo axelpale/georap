@@ -11,7 +11,7 @@ module.exports = function (db) {
   async.series([
 
     function ensureDefaultUser(next) {
-      var users = db.get('users');
+      var users = db.collection('users');
 
       users.findOne({ name: local.admin.username }).then(function (user) {
         if (user) {
@@ -48,7 +48,7 @@ module.exports = function (db) {
     },
 
     function createUserIndices(next) {
-      var users = db.get('users');
+      var users = db.collection('users');
 
       // Ensure unique index
       var query = { email: MONGO_ASCENDING };
@@ -73,7 +73,7 @@ module.exports = function (db) {
     },
 
     function createLocationIndices(next) {
-      var locs = db.get('locations');
+      var locs = db.collection('locations');
 
       locs.ensureIndex({ geom: '2dsphere' }, {}, function (err1) {
         if (err1) {

@@ -16,14 +16,38 @@ exports.findNearestOne = function (coll, geom, callback) {
       $geoNear: {
         near: geom,
         distanceField: 'dist',
-        minDistance: 1,  // 1 metre, exclude the point itself
         spherical: true,
         limit: 1,  // Retrieve only the closest
       },
     },
-  ]).then(function (result) {
+  ], function (err, result) {
+    if (err) {
+      return callback(err);
+    }
     return callback(null, result[0]);
-  }).catch(callback);
+  });
+};
+
+exports.findNearestOther = function (coll, location, callback) {
+  // Find the distance and the single nearest location that is not
+  // the given location.
+
+  coll.aggregate([
+    {
+      $geoNear: {
+        near: location.geom,
+        query: { _id: { $ne: location._id } },  // exclude the loc itself
+        distanceField: 'dist',
+        spherical: true,
+        limit: 1,  // Retrieve only the closest
+      },
+    },
+  ], function (err, result) {
+    if (err) {
+      return callback(err);
+    }
+    return callback(null, result[0]);
+  });
 };
 
 exports.findWithin = function (coll, loc, d, callback) {
@@ -49,9 +73,12 @@ exports.findWithin = function (coll, loc, d, callback) {
         spherical: true,
       },
     },
-  ]).then(function (results) {
+  ], function (err, results) {
+    if (err) {
+      return callback(err);
+    }
     return callback(null, results);
-  }).catch(callback);
+  });
 };
 
 exports.findWithinLayer = function (options, callback) {
@@ -85,10 +112,11 @@ exports.findWithinLayer = function (options, callback) {
     },
   };
 
-  options.collection.aggregate([q]).then(function (results) {
+  options.collection.aggregate([q], function (err, results) {
+    if (err) {
+      return callback(err);
+    }
     return callback(null, results);
-  }).catch(function (err) {
-    return callback(err);
   });
 };
 
@@ -117,7 +145,10 @@ exports.computeAvgDist = function (coll, loc, k, callback) {
         },
       },
     },
-  ]).then(function (results) {
+  ], function (err, results) {
+    if (err) {
+      return callback(err);
+    }
 
     var neighborsAvgDist;
 
@@ -132,7 +163,7 @@ exports.computeAvgDist = function (coll, loc, k, callback) {
     loc.neighborsAvgDist = neighborsAvgDist;
 
     return callback(null, loc);
-  }).catch(callback);
+  });
 };
 
 exports.updateAvgDist = function (coll, loc, k, callback) {
@@ -145,9 +176,12 @@ exports.updateAvgDist = function (coll, loc, k, callback) {
       return callback(err);
     }  // else
 
-    coll.update(updatedLoc._id, updatedLoc).then(function () {
+    coll.updateOne({ _id: updatedLoc._id }, updatedLoc, function (err2) {
+      if (err2) {
+        return callback(err2);
+      }
       return callback(null);
-    }).catch(callback);
+    });
   });
 };
 
@@ -162,13 +196,16 @@ exports.updateEachAvgDist = function (coll, k, callback) {
   //   callback
   //     function (err)
 
-  coll.find({}).then(function (locs) {
+  coll.find().toArray(function (err, locs) {
+    if (err) {
+      return callback(err);
+    }
 
     async.eachSeries(locs, function (loc, next) {
       exports.updateAvgDist(coll, loc, k, next);
-    }, function afterEach(err) {
-      return callback(err);
+    }, function afterEach(err2) {
+      return callback(err2);
     });
 
-  }).catch(callback);
+  });
 };
