@@ -1,5 +1,6 @@
 
 var emitter = require('component-emitter');
+var shortid = require('shortid');
 var LocationModel = require('./Location');
 
 module.exports = function (api, account) {
@@ -54,6 +55,7 @@ module.exports = function (api, account) {
       deleted: false,
       tags: [],
       content: [{
+        _id: shortid.generate(),
         type: 'created',
         user: account.getName(),
         time: (new Date()).toISOString(),
@@ -66,12 +68,12 @@ module.exports = function (api, account) {
       location: rawLoc,
     };
 
-    api.request('locations/put', payload, function (err, rawLoc) {
+    api.request('locations/put', payload, function (err, newRawLoc) {
       if (err) {
         return callback(err);
       }
 
-      var newLoc = new LocationModel(api, account, rawLoc);
+      var newLoc = new LocationModel(api, account, newRawLoc);
 
       // Emit changes of this location until next loc in focus.
       listenForChanges(newLoc);

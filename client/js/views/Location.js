@@ -21,7 +21,7 @@ module.exports = function (location, account) {
   // Init
 
   // Build child views
-  var entries = location.getEntries();
+  var entries = location.getEntriesInTimeOrder();
   var entryViews = entries.map(function (entry) {
     return getEntryView(entry, account);
   });
@@ -31,6 +31,9 @@ module.exports = function (location, account) {
   // Public methods
 
   this.render = function () {
+
+    // Sort content, newest first, create-event to bottom.
+    //sortEntries(loc.content);
 
     var entriesHtml = entryViews.map(function (entryView) {
       return entryView.render();

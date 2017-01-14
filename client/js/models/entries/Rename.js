@@ -14,4 +14,12 @@ module.exports = function (rawEntry, location) {
   assertEntryType(rawEntry.type, 'rename');
 
   makeEntry(this, rawEntry, location);
+
+  this.getOldName = function () {
+    return rawEntry.data.oldName;
+  };
+
+  this.getNewName = function () {
+    return rawEntry.data.newName;
+  };
 };

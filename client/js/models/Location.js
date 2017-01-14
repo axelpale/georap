@@ -1,12 +1,13 @@
 /* eslint-disable max-statements */
 
-var defaultRawLocation = require('./lib/defaultRawLocation');
-var toEntry = require('./lib/toEntryModel');
-
 var shortid = require('shortid');
 var extend = require('extend');
+var clone = require('clone');
 var Emitter = require('component-emitter');
 
+var defaultRawLocation = require('./lib/defaultRawLocation');
+var sortEntries = require('./lib/sortEntries');
+var toEntry = require('./lib/toEntryModel');
 
 module.exports = function (api, account, rawLoc) {
   // Usage:
@@ -36,10 +37,6 @@ module.exports = function (api, account, rawLoc) {
   if (typeof rawLoc === 'object') {
     extend(true, loc, rawLoc);
   }
-
-  // Sort content, newest first, create-event to bottom.
-  //sortEntries(loc.content);
-
 
   // Private methods
 
@@ -135,6 +132,15 @@ module.exports = function (api, account, rawLoc) {
   this.getEntries = function () {
     // Return content entry models as an array.
     return loc.content.map(function (rawEntry) {
+      return toEntry(rawEntry, self);
+    });
+  };
+
+  this.getEntriesInTimeOrder = function () {
+    // Shallow clone the content array
+    var tempContent = loc.content.slice(0);
+    sortEntries(tempContent);
+    return tempContent.map(function (rawEntry) {
       return toEntry(rawEntry, self);
     });
   };
@@ -245,12 +251,20 @@ module.exports = function (api, account, rawLoc) {
     //     string
     //   callback
     //     function (err)
-    var oldName = loc.name;
+
+    var oldLoc = clone(loc);
     loc.name = newName;
+
+    var rawEntry = createRawEntry('rename', {
+      oldName: oldLoc.name,
+      newName: newName,
+    });
+    addRawEntry(rawEntry);
 
     this.save(function (err) {
       if (err) {
-        loc.name = oldName;
+        // Fallback
+        loc = oldLoc;
         return callback(err);
       }
       self.emit('name_changed');
