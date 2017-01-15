@@ -43,6 +43,11 @@ module.exports = function (auth, token, showLogin) {
     $('#tresdb-reset-password-form').submit(submitHandler);
   };
 
+  this.unbind = function () {
+    $('#tresdb-continue-to-login-button').off();
+    $('#tresdb-reset-password-form').off();
+  };
+
 
   // Private methods
 

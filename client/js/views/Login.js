@@ -165,4 +165,10 @@ module.exports = function (account, onSuccess) {
     $('#tresdb-password-reset-form').submit(resetFormSubmitHandler);
   };
 
+  this.unbind = function () {
+    $('#tresdb-login-form').off();
+    $('#tresdb-password-reset-button').off();
+    $('#tresdb-password-reset-form').off();
+  };
+
 };

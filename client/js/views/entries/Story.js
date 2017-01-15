@@ -27,6 +27,11 @@ module.exports = function (entry, account) {
     });
   };
 
+  var offEdit = function (id) {
+    var q = '#' + id + '-edit';
+    $(q).off();
+  };
+
   var isFormOpen = function (id) {
     var isHidden = $('#' + id + '-form-container').hasClass('hidden');
     return !isHidden;
@@ -79,6 +84,10 @@ module.exports = function (entry, account) {
       });
     }
 
+  };
+
+  this.unbind = function () {
+    offEdit(entry.getId());
   };
 
 };

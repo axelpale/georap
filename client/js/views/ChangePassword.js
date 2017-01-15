@@ -26,6 +26,10 @@ module.exports = function (auth) {
     $('#tresdb-change-password-form').submit(submitHandler);
   };
 
+  this.unbind = function () {
+    $('#tresdb-change-password-form').off();
+  };
+
 
   // Private methods
 

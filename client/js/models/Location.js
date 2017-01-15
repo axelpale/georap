@@ -35,7 +35,7 @@ module.exports = function (api, account, tags, rawLoc) {
   var self = this;
 
   // Deep extend the default location.
-  var loc = defaultRawLocation;
+  var loc = clone(defaultRawLocation);
   if (typeof rawLoc === 'object') {
     extend(true, loc, rawLoc);
   }

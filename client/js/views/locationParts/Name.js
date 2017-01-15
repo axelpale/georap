@@ -69,4 +69,11 @@ module.exports = function (location) {
     });
 
   };
+
+  this.unbind = function () {
+    location.off('name_changed');
+    $('#tresdb-location-rename-show').off();
+    $('#tresdb-location-rename-cancel').off();
+    $('#tresdb-location-rename-form').off();
+  };
 };

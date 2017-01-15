@@ -8,7 +8,7 @@ module.exports = function (onUserClose) {
   var self = this;
 
   // State
-  // - stored in DOM
+  var activeView = null;
 
   // Private methods
 
@@ -30,11 +30,11 @@ module.exports = function (onUserClose) {
 
   // Public methods
 
-  this.open = function (htmlContent, cardClass) {
+  this.open = function (view, cardClass) {
     // Open a card over the map and close any other open cards.
     //
     // Parameters:
-    //   htmlContent
+    //   view
     //     to be rendered inside the card
     //   cardClass
     //     string, optional. Card type. Available types:
@@ -53,15 +53,22 @@ module.exports = function (onUserClose) {
 
     // Create card
     card = cardTemplate({
-      content: htmlContent,
+      content: view.render(),
       cardClass: cardType,
     });
 
     // Remove possible other cards
+    if (activeView !== null) {
+      activeView.unbind();
+    }
+    activeView = view;
     fillCardLayer(card);
 
     // Display if hidden
     cardLayer.style.display = 'block';  // from 'none' if hidden
+
+    // Activate input bindings
+    view.bind();
 
     // Initialize close mechanism
     if (cardType === 'page') {
@@ -76,6 +83,10 @@ module.exports = function (onUserClose) {
   this.close = function () {
     cardLayer.style.display = 'none';
     // Remove possible cards
+    if (activeView !== null) {
+      activeView.unbind();
+    }
+    activeView = null;
     clearCardLayer();
   };
 

@@ -14,7 +14,11 @@ module.exports = function () {
   };
 
   this.bind = function () {
-    throw new Error('not implemented');
+    // noop
+  };
+
+  this.unbind = function () {
+    // noop
   };
 
   // Private methods

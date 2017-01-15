@@ -18,7 +18,10 @@ module.exports = function (entry) {
 
   this.bind = function () {
     // noop
+  };
 
+  this.unbind = function () {
+    // noop
   };
 
 };

@@ -10,4 +10,8 @@ module.exports = function () {
   this.bind = function () {
     // Noop. For future, e.g. search
   };
+
+  this.unbind = function () {
+    // Noop
+  };
 };

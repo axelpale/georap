@@ -16,6 +16,9 @@ module.exports = function (auth, handlers) {
 
   var go = handlers.go;
 
+  // Root element. Remember for the unbinding.
+  var r = null;
+
   // Public methods
 
   this.render = function () {
@@ -39,7 +42,7 @@ module.exports = function (auth, handlers) {
     //     it contents can be dynamically modified later, including
     //     the buttons to bind events to.
 
-    var r = $(rootElement);
+    r = $(rootElement);
 
     r.on('click', '#tresdb-mainmenu-change-password', function (ev) {
       ev.preventDefault();
@@ -94,5 +97,11 @@ module.exports = function (auth, handlers) {
 
       return handlers.onAdditionCreate();
     });
+  };
+
+  this.unbind = function () {
+    if (r !== null) {
+      r.off('click');
+    }
   };
 };

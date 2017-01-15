@@ -40,6 +40,11 @@ module.exports = function (auth, token, goLogin) {
     $('#tresdb-signup-form').submit(submitHandler);
   };
 
+  this.unbind = function () {
+    $('#tresdb-signup-to-login-button').off();
+    $('#tresdb-signup-form').off();
+  };
+
 
   // Private methods
 

@@ -84,4 +84,10 @@ module.exports = function (location, tags) {
     });
 
   };
+
+  this.unbind = function () {
+    location.off('tags_changed');
+    $('#tresdb-location-edit-tags-show').off();
+    $('#tresdb-location-edit-tags-cancel').off();
+  };
 };

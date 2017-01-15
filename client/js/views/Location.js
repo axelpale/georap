@@ -226,6 +226,23 @@ module.exports = function (location, account, tags) {
 
   };  // end bind
 
+  this.unbind = function () {
+    nameView.unbind();
+    tagsView.unbind();
+    entryViews.forEach(function (view) {
+      view.unbind();
+    });
+    location.off();
+
+    $('#tresdb-location-story-show').off();
+    $('#tresdb-location-story-cancel').off();
+    $('#tresdb-location-story-form').off();
+    $('#tresdb-location-attachment-show').off();
+    $('#tresdb-location-attachment-cancel').off();
+    $('#tresdb-location-visit-show').off();
+    $('#tresdb-location-visit-cancel').off();
+  };
+
   // Private methods
 
 };

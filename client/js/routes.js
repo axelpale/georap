@@ -49,9 +49,7 @@ exports.route = function (page, account, locations, tags) {
         // Reset for another login during the same session.
         afterLogin.reset();
       });
-
-      card.open(view.render(), 'full');
-      view.bind();
+      card.open(view, 'full');
     });
   });
 
@@ -60,9 +58,7 @@ exports.route = function (page, account, locations, tags) {
     var view = new ResetPasswordView(account, token, function success() {
       page.show('/login');
     });
-
-    card.open(view.render(), 'full');
-    view.bind();
+    card.open(view, 'full');
   });
 
   page('/signup/:token', function (context) {
@@ -70,9 +66,7 @@ exports.route = function (page, account, locations, tags) {
     var view = new SignupView(account, token, function success() {
       page.show('/login');
     });
-
-    card.open(view.render(), 'full');
-    view.bind();
+    card.open(view, 'full');
   });
 
   // Backwards compatiblity with v1 invite URLs
@@ -112,16 +106,12 @@ exports.route = function (page, account, locations, tags) {
 
   page('/password', function () {
     var view = new ChangePasswordView(account);
-
-    card.open(view.render(), 'page');
-    view.bind();
+    card.open(view, 'page');
   });
 
   page('/invite', function () {
     var view = new InviteView(account);
-
-    card.open(view.render(), 'page');
-    view.bind();
+    card.open(view, 'page');
   });
 
   page('/location/:id', function (ctx) {
@@ -129,7 +119,7 @@ exports.route = function (page, account, locations, tags) {
     // Open a loading card
     var loadingView = new LoadingView();
 
-    card.open(loadingView.render(), 'page');
+    card.open(loadingView, 'page');
 
     // Fetch location before rendering.
     locations.get(ctx.params.id, function (err, loc) {
@@ -140,18 +130,14 @@ exports.route = function (page, account, locations, tags) {
 
       // Render location card.
       var view = new LocationView(loc, account, tags);
-
-      card.open(view.render());
-      view.bind();
+      card.open(view);
     });
   });
 
   page('*', function () {
     // Page not found.
     var view = new Error404View();
-
-    card.open(view.render(), 'page');
-    view.bind();
+    card.open(view, 'page');
   });
 
 };

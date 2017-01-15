@@ -29,6 +29,11 @@ module.exports = function (auth) {
     $('#tresdb-invite-form').submit(inviteFormSubmitHandler);
   };
 
+  this.unbind = function () {
+    $('#tresdb-invite-another-button').off();
+    $('#tresdb-invite-form').off();
+  };
+
 
   // Private methods
 
