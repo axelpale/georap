@@ -1,6 +1,7 @@
 // Usage:
 //   var story = new Story(entry, locationModel)
 
+var emitter = require('component-emitter');
 var makeEntry = require('../lib/makeEntry');
 var assertEntryType = require('../lib/assertEntryType');
 
@@ -11,6 +12,9 @@ module.exports = function (rawEntry, location) {
   //     for save to work.
   //   location
   //     models.Location instance. Work as a parent of Story.
+
+  emitter(this);
+  var self = this;
 
   assertEntryType(rawEntry.type, 'story');
 
@@ -26,6 +30,7 @@ module.exports = function (rawEntry, location) {
       if (err) {
         return callback(err);
       }
+      self.emit('markdown_change');
       return callback();
     });
   };

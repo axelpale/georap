@@ -7,7 +7,7 @@
 
 var marked = require('marked');
 var timestamp = require('../lib/timestamp');
-var storyTemplate = require('../../../templates/entries/story.ejs');
+var storyTemplate = require('./story.ejs');
 var markdownSyntax = require('../locationParts/markdownSyntax.ejs');
 
 module.exports = function (entry, account) {
@@ -71,6 +71,11 @@ module.exports = function (entry, account) {
 
     var id = entry.getId();
 
+    entry.on('markdown_change', function () {
+      var newParsed = marked(entry.getMarkdown(), { sanitize: true });
+      $('#' + id + '-body').html(newParsed);
+    });
+
     // If own story, display form
     if (entry.getUserName() === account.getName()) {
       // allow reveal of the edit form
@@ -79,8 +84,39 @@ module.exports = function (entry, account) {
           closeForm(id);
         } else {
           openForm(id);
-          prefillTextarea(id, entry.data.markdown);
+          prefillTextarea(id, entry.getMarkdown());
         }
+      });
+
+      $('#' + id + '-cancel').click(function (ev) {
+        ev.preventDefault();
+
+        closeForm(id);
+      });
+
+      $('#' + id + '-form').submit(function (ev) {
+        ev.preventDefault();
+
+        var newMarkdown = $('#' + id + '-input').val().trim();
+
+        // Show progress bar and close the form.
+        $('#' + id + '-progress').removeClass('hidden');
+        closeForm(id);
+
+        entry.setMarkdown(newMarkdown, function (err) {
+          // Hide progress bar
+          $('#' + id + '-progress').addClass('hidden');
+
+          if (err) {
+            // Show error message
+            $('#' + id + '-error').removeClass('hidden');
+            return;
+          }
+        });
+      });
+
+      $('#' + id + '-delete').click(function (ev) {
+        ev.preventDefault();
       });
     }
 
