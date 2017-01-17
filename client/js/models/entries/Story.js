@@ -25,6 +25,7 @@ module.exports = function (rawEntry, location) {
   };
 
   this.setMarkdown = function (markdown, callback) {
+    // Update markdown and save change to backend.
     rawEntry.data.markdown = markdown.trim();
     location.save(function (err) {
       if (err) {

@@ -25,10 +25,15 @@
           <%= markdownSyntax() %>
         </div>
         <div class="pull-right">
-          <button id="<%= entry.getId() %>-delete" type="button" class="btn btn-danger">Delete</button>
+          <button id="<%= entry.getId() %>-cancel" type="button" class="btn btn-default">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save</button>
         </div>
-        <button id="<%= entry.getId() %>-cancel" type="button" class="btn btn-default">Cancel</button>
-        <button type="submit" class="btn btn-primary">Save</button>
+        <button id="<%= entry.getId() %>-delete-ensure" type="button" class="btn btn-danger">Delete</button>
+
+        <div id="<%= entry.getId() %>-delete-final" class="hidden">
+          Are you sure?
+          <button id="<%= entry.getId() %>-delete" type="button" class="btn btn-danger">Yes, delete!</button>
+        </div>
       </form>
     </div>
 
@@ -38,8 +43,12 @@
       </div>
     </div>
 
-    <div id="<%= entry.getId() %>-error" class="hidden">
-      <div class="alert alert-danger" role="alert">Update failed. Might be a connection issue.</div>
+    <div id="<%= entry.getId() %>-error" class="hidden panel-body">
+      <div class="alert alert-danger" role="alert">Save failed. Might be a connection issue.</div>
+    </div>
+
+    <div id="<%= entry.getId() %>-delete-error" class="hidden panel-body">
+      <div class="alert alert-danger" role="alert">Deletion failed. Might be a connection issue.</div>
     </div>
   <% } %>
 

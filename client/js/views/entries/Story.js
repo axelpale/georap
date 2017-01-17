@@ -40,6 +40,9 @@ module.exports = function (entry, account) {
   var openForm = function (id) {
     $('#' + id + '-body').addClass('hidden');
     $('#' + id + '-form-container').removeClass('hidden');
+    // Hide all possible error messages
+    $('#' + id + '-error').addClass('hidden');
+    $('#' + id + '-delete-error').addClass('hidden');
   };
 
   var prefillTextarea = function (id, content) {
@@ -52,6 +55,10 @@ module.exports = function (entry, account) {
   var closeForm = function (id) {
     $('#' + id + '-form-container').addClass('hidden');
     $('#' + id + '-body').removeClass('hidden');
+    $('#' + id + '-delete-final').addClass('hidden');
+    // Hide all possible error messages
+    $('#' + id + '-error').addClass('hidden');
+    $('#' + id + '-delete-error').addClass('hidden');
   };
 
 
@@ -115,15 +122,36 @@ module.exports = function (entry, account) {
         });
       });
 
+      $('#' + id + '-delete-ensure').click(function () {
+        $('#' + id + '-delete-final').toggleClass('hidden');
+      });
+
       $('#' + id + '-delete').click(function (ev) {
         ev.preventDefault();
+
+        entry.remove(function (err) {
+          if (err) {
+            // Show deletion failed error message
+            closeForm(id);
+            $('#' + id + '-delete-error').removeClass('hidden');
+            return;
+          }
+          // ON successful removal the location will emit entry_removed event
+        });
       });
     }
 
   };
 
   this.unbind = function () {
-    offEdit(entry.getId());
+
+    var id = entry.getId();
+
+    offEdit(id);
+    entry.off('markdown_change');
+    $('#' + id + '-cancel').off();
+    $('#' + id + '-form').off();
+    $('#' + id + '-delete').off();
   };
 
 };
