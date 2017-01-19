@@ -10,7 +10,7 @@ module.exports = {
       {
         _id: new ObjectId('58092312bbba430a35fb4139'),
         key: 'schemaVersion',
-        value: 4,
+        value: 5,
       },
     ],
     locations: [
@@ -36,6 +36,15 @@ module.exports = {
           time: '2009-09-04T23:44:21.000Z',
           data: {
             markdown: 'A ghost town',
+          },
+        }, {
+          _id: 'RxRvKSlbl',
+          type: 'attachment',
+          user: local.admin.username,
+          time: '2009-10-05T12:23:34.000Z',
+          data: {
+            filepath: '2009/RxRvKSlbl/radar.jpg',
+            mimetype: 'image/jpeg',
           },
         }],
         layer: 1,
