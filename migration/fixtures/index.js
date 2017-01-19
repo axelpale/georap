@@ -82,6 +82,15 @@ module.exports = {
           data: {
             markdown: 'A ghost town',
           },
+        }, {
+          type: 'attachment',
+          user: 'admin',
+          time: '2009-10-02T11:11:01.000Z',
+          data: {
+            filename: 'foobar.jpg',
+            key: '1234rghn23erfg23rtg23erg',
+            mimetype: 'image/jpeg',
+          },
         }],
         neighborsAvgDist: 42886.25362949583,
         layer: 12,
@@ -123,6 +132,66 @@ module.exports = {
           time: '2009-09-04T23:44:21.000Z',
           data: {
             markdown: 'A ghost town',
+          },
+        }, {
+          _id: 'Aebej325',
+          type: 'attachment',
+          user: 'admin',
+          time: '2009-10-02T11:11:01.000Z',
+          data: {
+            filename: 'foobar.jpg',
+            key: '1234rghn23erfg23rtg23erg',
+            mimetype: 'image/jpeg',
+          },
+        }],
+        layer: 12,
+      }],
+    },
+  },
+
+  'v5': {
+    collections: {
+      config: [{
+        key: 'schemaVersion',
+        value: 5,
+      }],
+      users: [{
+        name: 'admin',
+        email: 'admin@example.com',
+        hash: PASSWORD,
+        admin: true,
+      }],
+      locations: [{
+        name: 'Irbene',
+        geom: {
+          type: 'Point',
+          coordinates: [21.857705, 57.55341],
+        },
+        locatorId: 604,
+        deleted: false,
+        tags: ['walk-in'],
+        content: [{
+          _id: 'Aebej323',
+          type: 'created',
+          user: 'admin',
+          time: '2009-07-30T10:44:58.000Z',
+          data: {},
+        }, {
+          _id: 'Aebej324',
+          type: 'story',
+          user: 'admin',
+          time: '2009-09-04T23:44:21.000Z',
+          data: {
+            markdown: 'A ghost town',
+          },
+        }, {
+          _id: 'Aebej325',
+          type: 'attachment',
+          user: 'admin',
+          time: '2009-10-02T11:11:01.000Z',
+          data: {
+            filepath: '2009/1234rghn23erfg23rtg23erg/foobar.jpg',
+            mimetype: 'image/jpeg',
           },
         }],
         layer: 12,

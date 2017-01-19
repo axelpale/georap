@@ -1,12 +1,14 @@
 /* global describe, it, beforeEach, before, after */
 /* eslint-disable no-magic-numbers */
 
-var mongoClient = require('mongodb').MongoClient;
+var mongodb = require('mongodb');
+var mongoClient = mongodb.MongoClient;
 var assert = require('assert');
 
 var local = require('../config/local');
 var migrates = require('./migrates');
 var schema = require('./lib/schema');
+var assertFixtureEqual = require('./lib/assertFixtureEqual');
 var fixtures = require('./fixtures');
 var tools = require('../specs/tools');
 
@@ -114,6 +116,33 @@ describe('migrates.migrate', function () {
             assert.ifError(err2);
             assert.equal(vers, 4);
             done();
+          });
+        },
+      });
+    });
+
+  });
+
+  describe('v4 to v5', function () {
+
+    beforeEach(function (done) {
+      loadFixture(db, 'v4', done);
+    });
+
+    it('should be able to migrate from v4 to v5', function (done) {
+      migrates.migrate({
+        db: db,
+        targetVersion: 5,
+        callback: function (err) {
+          assert.ifError(err);
+
+          assertFixtureEqual(db, 'config', 'v5', function (err2) {
+            assert.ifError(err2);
+
+            assertFixtureEqual(db, 'locations', 'v5', function (err3) {
+              assert.ifError(err3);
+              done();
+            });
           });
         },
       });
