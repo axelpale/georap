@@ -10,7 +10,7 @@ module.exports = function (stringId, response, onSuccess) {
   //   response
   //     Socket.io response. Will be called on error.
   //   onSuccess
-  //     function (tokenPayload). Will be called on success.
+  //     function (objectId). Will be called on success.
   var objId;
 
   if (typeof stringId !== 'string') {

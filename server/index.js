@@ -1,6 +1,7 @@
 /* eslint-disable max-statements */
 
 var local = require('../config/local');
+var path = require('path');
 var http = require('http');
 var express = require('express');
 var app = express();
@@ -11,8 +12,6 @@ var io = require('socket.io')(server);
 var nodemailer = require('nodemailer');
 var mongoClient = require('mongodb').MongoClient;
 
-var path = require('path');
-
 var webpack = require('webpack');
 var webpackConfig = require('../config/webpack');
 
@@ -22,8 +21,9 @@ var loggers = require('./services/logs/loggers');
 // Run immediately after server is up.
 var bootstrap = require('../config/bootstrap');
 
-// Router
-var routes = require('./routes');
+// Routes
+var httpRoutes = require('./httpRoutes');
+var socketRoutes = require('./socketRoutes');
 
 // Log environment
 console.log('Starting TresDB in environment:', local.env);
@@ -158,6 +158,8 @@ mongoClient.connect(mongoUrl, function (dbErr, db) {
   // --------------
   // Uploaded files END
 
+  // HTTP API routes here
+  httpRoutes(app, db);
 
   // Catch all to single page app.
   // Must be the final step in the app middleware chain.
@@ -178,7 +180,7 @@ mongoClient.connect(mongoUrl, function (dbErr, db) {
 
     console.log('New connection from app hosted at', host);
 
-    return routes(socket, db, mailer, host);
+    return socketRoutes(socket, db, mailer, host);
   });
 
 

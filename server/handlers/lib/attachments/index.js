@@ -1,22 +1,15 @@
 
-var local = require('../../../config/local');
+var local = require('../../../../config/local');
 var path = require('path');
 var urljoin = require('url-join');
 
 exports.getRelativeFilePath = function (fileEntry) {
-  var time = new Date(fileEntry.time);
-  var key = fileEntry.data.key;
-  var year = time.getFullYear().toString();
-
-  return path.join(year, key, fileEntry.data.filename);
+  return fileEntry.data.filepath;
 };
 
 exports.getRelativeUrl = function (fileEntry) {
-  var time = new Date(fileEntry.time);
-  var key = fileEntry.data.key;
-  var year = time.getFullYear().toString();
-
-  return urljoin(year, key, fileEntry.data.filename);
+  // FIXME: this would yield invalid url on windows servers.
+  return fileEntry.data.filepath;
 };
 
 exports.getAbsoluteFilePath = function (fileEntry) {

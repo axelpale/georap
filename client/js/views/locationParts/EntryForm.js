@@ -94,8 +94,9 @@ module.exports = function (location) {
       $('#tresdb-location-attachment-error').addClass('hidden');
 
       if ($('#tresdb-location-attachment-container').hasClass('hidden')) {
-        // Show
+        // Show. Form might also be hidden.
         $('#tresdb-location-attachment-container').removeClass('hidden');
+        $('#tresdb-location-attachment-form').removeClass('hidden');
         // Hide others
         $('#tresdb-location-story-container').addClass('hidden');
         $('#tresdb-location-visit-container').addClass('hidden');
@@ -104,6 +105,32 @@ module.exports = function (location) {
         $('#tresdb-location-attachment-container').addClass('hidden');
       }
 
+    });
+
+    var attForm = $('#tresdb-location-attachment-form');
+    attForm.submit(function (ev) {
+      // Prevent page reload
+      ev.preventDefault();
+
+      // Hide the upload form and show progress bar.
+      attForm.addClass('hidden');
+      $('#tresdb-location-attachment-progress').removeClass('hidden');
+
+      location.addAttachment(attForm, function (err) {
+        // Hide progress bar
+        $('#tresdb-location-attachment-progress').addClass('hidden');
+
+        if (err) {
+          // Show error message
+          console.error(err);
+          $('#tresdb-location-attachment-error').removeClass('hidden');
+        }
+
+        // Success! Hide the upload container but also secretly reveal
+        // the previously hidden form.
+        $('#tresdb-location-attachment-container').addClass('hidden');
+        $('#tresdb-location-attachment-form').removeClass('hidden');
+      });
     });
 
     $('#tresdb-location-attachment-cancel').click(function (ev) {

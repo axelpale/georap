@@ -1,8 +1,11 @@
 
 var timestamp = require('../lib/timestamp');
-var template = require('../../../templates/entries/attachment.ejs');
+var template = require('./attachment.ejs');
 
 module.exports = function (entry) {
+  // Parameters:
+  //   entry
+  //     any in models.entries
 
   // Private methods
 

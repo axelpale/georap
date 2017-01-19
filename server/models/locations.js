@@ -2,7 +2,7 @@
 
 var clustering = require('../services/clustering');
 var errors = require('../errors');
-
+var shortid = require('shortid');
 var clone = require('clone');
 
 var create = function (db, location, callback) {
@@ -147,5 +147,49 @@ exports.count = function (db, callback) {
     return callback(null, number);
   }).catch(function (err) {
     return callback(err);
+  });
+};
+
+exports.addAttachment = function (params, callback) {
+  // Parameters:
+  //   params
+  //     object with properties:
+  //       db
+  //         Mongodb instance
+  //       locationId
+  //         string
+  //       userName
+  //         string
+  //       filePathInUploadDir
+  //         string
+  //       fileMimeType
+  //         string
+  //  callback
+  //    function (err, newEntry)
+
+  var entry = {
+    _id: shortid.generate(),
+    time: (new Date()).toISOString(),
+    type: 'attachment',
+    user: params.userName,
+    data: {
+      filepath: params.filePathInUploadDir,
+      mimetype: params.fileMimeType,
+    },
+  };
+
+  var coll = params.db.collection('locations');
+
+  var query = { _id: params.locationId };
+  var updateq = { $push: { content: entry } };
+
+  coll.updateOne(query, updateq, null, function (err, result) {
+    if (err) {
+      return callback(err);
+    }
+
+    console.log(result.result);
+
+    return callback(null, entry);
   });
 };

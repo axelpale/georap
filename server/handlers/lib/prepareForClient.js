@@ -1,7 +1,9 @@
 // This module is responsible for preparing database content entries
 // for the clients.
+//
+// The opposite is done in prepareForModel.js
 
-var attachments = require('../../services/attachments');
+var attachments = require('./attachments');
 var mime = require('mime');
 
 exports.location = function (location) {
@@ -21,16 +23,18 @@ exports.location = function (location) {
 };
 
 exports.content = function (entries) {
-  return entries.map(function (entry) {
-    if (entry.type === 'attachment') {
-      // Attach an url to each attachment.
-      entry.data.url = attachments.getAbsoluteUrl(entry);
+  return entries.map(exports.entry);
+};
 
-      // Figure out the content mime type.
-      if (!entry.data.hasOwnProperty('mimetype')) {
-        entry.data.mimetype = mime.lookup(entry.data.filename);
-      }
+exports.entry = function (entry) {
+  if (entry.type === 'attachment') {
+    // Attach an url to each attachment.
+    entry.data.url = attachments.getAbsoluteUrl(entry);
+
+    // Figure out the content mime type.
+    if (!entry.data.hasOwnProperty('mimetype')) {
+      entry.data.mimetype = mime.lookup(entry.data.filename);
     }
-    return entry;
-  });
+  }
+  return entry;
 };

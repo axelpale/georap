@@ -1,0 +1,20 @@
+
+<div id="<%= entry.getId() %>" class="panel panel-default tresdb-content-attachment">
+
+  <div class="panel-heading">
+    <%= entry.getUserName() %> uploaded <%= timestamp(entry.getTime()) %>
+  </div>
+
+  <% var url = entry.getUrl(); %>
+  <% var mime = entry.getMimeType(); %>
+  <% var filename = url.substr(url.lastIndexOf('/') + 1); %>
+  <% if (mime.substr(0, 6) === 'image/') { %>
+    <div class="panel-body tresdb-content-attachment-image-body">
+      <img src="<%= url %>" title="<%= filename %>">
+    </div>
+  <% } else { %>
+    <div class="panel-body">
+      <a href="<%= url %>" target="_blank"><%= filename %></a>
+    </div>
+  <% } %>
+</div>

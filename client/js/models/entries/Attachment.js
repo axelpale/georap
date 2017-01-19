@@ -14,4 +14,12 @@ module.exports = function (rawEntry, location) {
   assertEntryType(rawEntry.type, 'attachment');
 
   makeEntry(this, rawEntry, location);
+
+  this.getUrl = function () {
+    return rawEntry.data.url;
+  };
+
+  this.getMimeType = function () {
+    return rawEntry.data.mimetype;
+  };
 };

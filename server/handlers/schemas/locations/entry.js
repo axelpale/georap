@@ -29,15 +29,12 @@ module.exports = {
         data: {
           type: 'object',
           required: [
-            'filename',
-            'key',
+            'filepath',
             'mimetype',
-            'url',
           ],
           additionalProperties: false,
           properties: {
-            filename: { type: 'string' },
-            key: { type: 'string' },
+            filepath: { type: 'string' },
             mimetype: { type: 'string' },
             url: { type: 'string' },
           },
