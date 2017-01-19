@@ -39,8 +39,7 @@ module.exports = function (db, collectionName, versionTag, callback) {
     // Deep compare & find differences.
     // See http://stackoverflow.com/a/31686152/638546
     var diffs = _.reduce(realFirst, function (result, value, key) {
-      return _.isEqual(value, fixFirst[key]) ?
-        result : result.concat(key);
+      return _.isEqual(value, fixFirst[key]) ? result : result.concat(key);
     }, []);
 
     if (diffs.length === 0) {
