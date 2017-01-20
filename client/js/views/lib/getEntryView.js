@@ -10,7 +10,7 @@ module.exports = function (entryModel, account) {
 
   switch (type) {
     case 'attachment':
-      return new AttachmentView(entryModel);
+      return new AttachmentView(entryModel, account);
     case 'created':
       return new CreatedView(entryModel);
     case 'rename':
@@ -18,7 +18,7 @@ module.exports = function (entryModel, account) {
     case 'story':
       return new StoryView(entryModel, account);
     case 'visit':
-      return new VisitView(entryModel);
+      return new VisitView(entryModel, account);
     default:
       throw new Error('unknown content entry type: ' + type);
   }

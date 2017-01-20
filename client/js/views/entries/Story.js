@@ -122,7 +122,8 @@ module.exports = function (entry, account) {
         });
       });
 
-      $('#' + id + '-delete-ensure').click(function () {
+      $('#' + id + '-delete-ensure').click(function (ev) {
+        ev.preventDefault();
         $('#' + id + '-delete-final').toggleClass('hidden');
       });
 
@@ -151,6 +152,7 @@ module.exports = function (entry, account) {
     entry.off('markdown_change');
     $('#' + id + '-cancel').off();
     $('#' + id + '-form').off();
+    $('#' + id + '-delete-ensure').off();
     $('#' + id + '-delete').off();
   };
 
