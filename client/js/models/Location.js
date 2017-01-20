@@ -6,6 +6,7 @@ var clone = require('clone');
 var emitter = require('component-emitter');
 
 var defaultRawLocation = require('./lib/defaultRawLocation');
+var validateCoords = require('./lib/validateCoords');
 var sortEntries = require('./lib/sortEntries');
 var toEntry = require('./lib/toEntryModel');
 
@@ -368,6 +369,36 @@ module.exports = function (api, account, tags, rawLoc) {
       return callback();
     });
 
+  };
+
+  this.setGeom = function (lng, lat, callback) {
+    // Parameters:
+    //   lng
+    //   lat
+
+    if (!validateCoords.isValidLongitude(lng)) {
+      return callback(new Error('Invalid coordinate'));
+    }
+    if (!validateCoords.isValidLatitude(lat)) {
+      return callback(new Error('Invalid coordinate'));
+    }
+
+    // Store old coords if things go bad
+    var oldGeom = clone(loc.geom);
+
+    // Update coords
+    loc.geom.coordinates[0] = lng;
+    loc.geom.coordinates[1] = lat;
+
+    this.save(function (err) {
+      if (err) {
+        // Fallback
+        loc.geom = oldGeom;
+        return callback(err);
+      }
+      self.emit('geom_changed');
+      return callback();
+    });
   };
 
   this.setName = function (newName, callback) {

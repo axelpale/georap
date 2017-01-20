@@ -109,6 +109,12 @@ module.exports = function (storage, locations, go) {
       m = markers[mloc._id];
       m.set('location', mloc);
 
+      // Ensure coordinates are up to date
+      m.setPosition({
+        lat: updatedLoc.getLatitude(),
+        lng: updatedLoc.getLongitude(),
+      });
+
       // Force update even if label already visible
       labels.ensureLabel(m, map.getMapTypeId(), true);
     } else {

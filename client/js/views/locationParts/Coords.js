@@ -18,61 +18,102 @@ module.exports = function (location) {
 
     // Preparation
 
-    // var $edit = $('#tresdb-location-coords-edit');
-    // var $container = $('#tresdb-location-coords-container');
-    // var $cancel = $('#tresdb-location-visit-cancel');
-    // var $error = $('#tresdb-location-coords-error');
-    //
-    // var isFormOpen = function () {
-    //   var isHidden = $container.hasClass('hidden');
-    //   return !isHidden;
-    // };
+    var $edit = $('#tresdb-location-coords-edit');
+    var $container = $('#tresdb-location-coords-container');
+    var $progress = $('#tresdb-location-coords-progress');
+    var $geostamp = $('#tresdb-location-coords-geostamp');
+    var $form = $('#tresdb-location-coords-form');
+    var $cancel = $('#tresdb-location-coords-cancel');
+    var $error = $('#tresdb-location-coords-error');
+    var $lng = $('#tresdb-location-coords-longitude');
+    var $lat = $('#tresdb-location-coords-latitude');
 
-    // var map = null;
-    //
-    // var openForm = function () {
-    //   $container.removeClass('hidden');
-    //   // Hide all possible error messages
-    //   $error.addClass('hidden');
-    //
-    //   // Create google maps
-    //   var mapEl = $('#tresdb-location-coords-map')[0];
-    //   map = new google.maps.Map(mapEl, {
-    //     center: {
-    //       lat: location.getLatitude(),
-    //       lng: location.getLongitude(),
-    //     },
-    //     zoom: 7,
-    //     mapTypeId: 'satellite',
-    //   });
-    // };
-    //
-    // var closeForm = function () {
-    //   $container.addClass('hidden');
-    //   // Hide all possible error messages
-    //   $error.addClass('hidden');
-    // };
-    //
-    // // Binds
-    //
-    // $edit.click(function (ev) {
-    //   ev.preventDefault();
-    //
-    //   if (isFormOpen()) {
-    //     closeForm();
-    //   } else {
-    //     openForm();
-    //   }
-    // });
-    //
-    // $cancel.click(function (ev) {
-    //   ev.preventDefault();
-    //   closeForm();
-    // });
+    var isFormOpen = function () {
+      var isHidden = $container.hasClass('hidden');
+      return !isHidden;
+    };
+
+    var openForm = function () {
+      $container.removeClass('hidden');
+      $form.removeClass('hidden');
+      // Hide all possible error messages
+      $error.addClass('hidden');
+    };
+
+    var closeForm = function () {
+      $container.addClass('hidden');
+      // Hide all possible error messages
+      $error.addClass('hidden');
+    };
+
+    var prefill = function () {
+      var lng = location.getLongitude();
+      var lat = location.getLatitude();
+
+      $lng.val(lng);
+      $lat.val(lat);
+    };
+
+    // Binds
+
+    $edit.click(function (ev) {
+      ev.preventDefault();
+
+      if (isFormOpen()) {
+        closeForm();
+      } else {
+        openForm();
+        prefill();
+      }
+    });
+
+    $cancel.click(function (ev) {
+      ev.preventDefault();
+      closeForm();
+    });
+
+    $form.submit(function (ev) {
+      ev.preventDefault();
+
+      var lngRaw = $lng.val();
+      var latRaw = $lat.val();
+
+      var lng = parseFloat(lngRaw);
+      var lat = parseFloat(latRaw);
+
+
+
+      // Hide form and show progress bar
+      $form.addClass('hidden');
+      $progress.removeClass('hidden');
+
+      location.setGeom(lng, lat, function (err) {
+        // Hide progress bar
+        $progress.addClass('hidden');
+
+        if (err) {
+          $error.removeClass('hidden');
+          return;
+        }
+        closeForm();
+      });
+    });
+
+    location.on('geom_changed', function () {
+      var geostampHtml = geostamp(location.getGeom(), { precision: 5 });
+      $geostamp.html(geostampHtml);
+    });
 
   };
 
   this.unbind = function () {
+    var $edit = $('#tresdb-location-coords-edit');
+    var $form = $('#tresdb-location-coords-form');
+    var $cancel = $('#tresdb-location-coords-cancel');
+
+    $edit.off();
+    $form.off();
+    $cancel.off();
 
   };
 };
