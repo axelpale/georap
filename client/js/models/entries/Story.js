@@ -31,7 +31,7 @@ module.exports = function (rawEntry, location) {
       if (err) {
         return callback(err);
       }
-      self.emit('markdown_change');
+      self.emit('markdown_changed');
       return callback();
     });
   };

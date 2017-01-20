@@ -17,9 +17,12 @@ module.exports = function (entry, account) {
   //   account
   //     models.Account
 
+  var id = entry.getId();
+
+
   // Private methods
 
-  var onEdit = function (id, clickHandler) {
+  var onEdit = function (clickHandler) {
     var q = '#' + id + '-edit';
     $(q).click(function (ev) {
       ev.preventDefault();
@@ -27,17 +30,17 @@ module.exports = function (entry, account) {
     });
   };
 
-  var offEdit = function (id) {
+  var offEdit = function () {
     var q = '#' + id + '-edit';
     $(q).off();
   };
 
-  var isFormOpen = function (id) {
+  var isFormOpen = function () {
     var isHidden = $('#' + id + '-form-container').hasClass('hidden');
     return !isHidden;
   };
 
-  var openForm = function (id) {
+  var openForm = function () {
     $('#' + id + '-body').addClass('hidden');
     $('#' + id + '-form-container').removeClass('hidden');
     // Hide all possible error messages
@@ -45,14 +48,14 @@ module.exports = function (entry, account) {
     $('#' + id + '-delete-error').addClass('hidden');
   };
 
-  var prefillTextarea = function (id, content) {
+  var prefillTextarea = function (content) {
     var textarea = $('#' + id + '-input');
     textarea.val(content);
     // Resize to content. See http://stackoverflow.com/a/13085420/638546
     textarea.height(textarea[0].scrollHeight);
   };
 
-  var closeForm = function (id) {
+  var closeForm = function () {
     $('#' + id + '-form-container').addClass('hidden');
     $('#' + id + '-body').removeClass('hidden');
     $('#' + id + '-delete-final').addClass('hidden');
@@ -76,9 +79,7 @@ module.exports = function (entry, account) {
 
   this.bind = function () {
 
-    var id = entry.getId();
-
-    entry.on('markdown_change', function () {
+    entry.on('markdown_changed', function () {
       var newParsed = marked(entry.getMarkdown(), { sanitize: true });
       $('#' + id + '-body').html(newParsed);
     });
@@ -86,19 +87,19 @@ module.exports = function (entry, account) {
     // If own story, display form
     if (entry.getUserName() === account.getName()) {
       // allow reveal of the edit form
-      onEdit(id, function () {
-        if (isFormOpen(id)) {
-          closeForm(id);
+      onEdit(function () {
+        if (isFormOpen()) {
+          closeForm();
         } else {
-          openForm(id);
-          prefillTextarea(id, entry.getMarkdown());
+          openForm();
+          prefillTextarea(entry.getMarkdown());
         }
       });
 
       $('#' + id + '-cancel').click(function (ev) {
         ev.preventDefault();
 
-        closeForm(id);
+        closeForm();
       });
 
       $('#' + id + '-form').submit(function (ev) {
@@ -108,7 +109,7 @@ module.exports = function (entry, account) {
 
         // Show progress bar and close the form.
         $('#' + id + '-progress').removeClass('hidden');
-        closeForm(id);
+        closeForm();
 
         entry.setMarkdown(newMarkdown, function (err) {
           // Hide progress bar
@@ -133,7 +134,7 @@ module.exports = function (entry, account) {
         entry.remove(function (err) {
           if (err) {
             // Show deletion failed error message
-            closeForm(id);
+            closeForm();
             $('#' + id + '-delete-error').removeClass('hidden');
             return;
           }
@@ -146,10 +147,8 @@ module.exports = function (entry, account) {
 
   this.unbind = function () {
 
-    var id = entry.getId();
-
-    offEdit(id);
-    entry.off('markdown_change');
+    offEdit();
+    entry.off('markdown_changed');
     $('#' + id + '-cancel').off();
     $('#' + id + '-form').off();
     $('#' + id + '-delete-ensure').off();
