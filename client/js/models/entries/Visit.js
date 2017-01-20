@@ -1,6 +1,7 @@
 // Usage:
 //   var visit = new Visit(rawEntry, location)
 
+var emitter = require('component-emitter');
 var makeEntry = require('../lib/makeEntry');
 var assertEntryType = require('../lib/assertEntryType');
 
@@ -11,6 +12,9 @@ module.exports = function (rawEntry, location) {
   //   location
   //     models.Location instance. Work as a parent.
 
+  emitter(this);
+  var self = this;
+
   assertEntryType(rawEntry.type, 'visit');
 
   makeEntry(this, rawEntry, location);
@@ -19,8 +23,20 @@ module.exports = function (rawEntry, location) {
     return rawEntry.data.year;
   };
 
-  this.setYear = function (year) {
-    rawEntry.data.year = parseInt(year, 10);
-    this.emit('year_changed');
+  this.setYear = function (year, callback) {
+    // Change year and store to backend
+    //
+    // Parameters:
+    //   year
+    //     integer
+    rawEntry.data.year = year;
+
+    location.save(function (err) {
+      if (err) {
+        return callback(err);
+      }
+      self.emit('year_changed');
+      return callback();
+    });
   };
 };
