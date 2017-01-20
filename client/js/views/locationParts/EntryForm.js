@@ -164,6 +164,28 @@ module.exports = function (location) {
       ev.preventDefault();
       $('#tresdb-location-visit-container').addClass('hidden');
     });
+
+    $('#tresdb-location-visit-form').submit(function (ev) {
+      ev.preventDefault();
+
+      // Hide form but show progress bar
+      $('#tresdb-location-visit-form').addClass('hidden');
+      $('#tresdb-location-visit-progress').removeClass('hidden');
+
+      var year = $('#tresdb-location-visit-input').val();
+      year = parseInt(year, 10);
+
+      location.addVisit(year, function (err) {
+        $('#tresdb-location-visit-progress').addClass('hidden');
+
+        if (err) {
+          $('#tresdb-location-visit-error').removeClass('hidden');
+          return;
+        }
+
+        $('#tresdb-location-visit-container').addClass('hidden');
+      });
+    });
   };
 
   this.unbind = function () {

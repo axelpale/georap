@@ -297,7 +297,7 @@ module.exports = function (api, account, tags, rawLoc) {
     //   callback
     //     function (err)
 
-    if (typeof year !== 'number' || year !== null) {
+    if (typeof year !== 'number') {
       throw new Error('invalid visit year type: ' + (typeof year));
     }
 

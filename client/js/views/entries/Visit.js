@@ -1,6 +1,6 @@
 
 var timestamp = require('../lib/timestamp');
-var visitTemplate = require('../../../templates/entries/visit.ejs');
+var template = require('./visit.ejs');
 
 module.exports = function (entry) {
 
@@ -10,7 +10,7 @@ module.exports = function (entry) {
   // Public methods
 
   this.render = function () {
-    return visitTemplate({
+    return template({
       entry: entry,
       timestamp: timestamp,
     });
