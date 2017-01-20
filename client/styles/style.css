@@ -75,11 +75,11 @@ html, body {
   color: #999;
 }
 
-.tresdb-coordinates {
+.tresdb-coords {
   font-size: 1.38em;
 }
 
-.tresdb-coordinates a {
+.tresdb-coords a {
   color: white !important;
 }
 

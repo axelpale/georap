@@ -1,13 +1,13 @@
 // View for location
 
-var geostamp = require('./lib/geostamp');
 var getEntryView = require('./lib/getEntryView');
 var NameView = require('./locationParts/Name');
+var CoordsView = require('./locationParts/Coords');
 var TagsView = require('./locationParts/Tags');
 var EntryFormView = require('./locationParts/EntryForm');
 
 // Templates
-var locationTemplate = require('../../templates/forms/location.ejs');
+var locationTemplate = require('./location.ejs');
 
 module.exports = function (location, account, tags) {
   // Parameters
@@ -23,9 +23,8 @@ module.exports = function (location, account, tags) {
   // Build child views
 
   var nameView = new NameView(location);
-
+  var coordsView = new CoordsView(location);
   var tagsView = new TagsView(location, tags);
-
   var entryFormView = new EntryFormView(location);
 
   var entries = location.getEntriesInTimeOrder();
@@ -43,8 +42,8 @@ module.exports = function (location, account, tags) {
     //sortEntries(loc.content);
 
     var nameHtml = nameView.render();
+    var coordsHtml = coordsView.render();
     var tagsHtml = tagsView.render();
-
     var entryFormHtml = entryFormView.render();
 
     var entriesHtml = entryViews.map(function (entryView) {
@@ -54,8 +53,8 @@ module.exports = function (location, account, tags) {
 
     return locationTemplate({
       location: location,
-      geostamp: geostamp,
       nameHtml: nameHtml,
+      coordsHtml: coordsHtml,
       tagsHtml: tagsHtml,
       entryFormHtml: entryFormHtml,
       entriesHtml: entriesHtml,
@@ -66,6 +65,7 @@ module.exports = function (location, account, tags) {
   this.bind = function () {
 
     nameView.bind();
+    coordsView.bind();
     tagsView.bind();
     entryFormView.bind();
 
@@ -98,6 +98,7 @@ module.exports = function (location, account, tags) {
 
   this.unbind = function () {
     nameView.unbind();
+    coordsView.unbind();
     tagsView.unbind();
     entryFormView.unbind();
     entryViews.forEach(function (view) {

@@ -133,6 +133,14 @@ module.exports = function (api, account, tags, rawLoc) {
     return loc.geom;
   };
 
+  this.getLongitude = function () {
+    return loc.geom.coordinates[0];
+  };
+
+  this.getLatitude = function () {
+    return loc.geom.coordinates[1];
+  };
+
   this.getEntry = function (entryId) {
     // Return
     //   Content entry model or null if not found.
