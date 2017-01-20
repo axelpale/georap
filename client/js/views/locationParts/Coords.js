@@ -1,4 +1,3 @@
-/* global google */
 
 var geostamp = require('../lib/geostamp');
 var template = require('./coords.ejs');
