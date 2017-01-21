@@ -69,7 +69,7 @@ module.exports = {
     // disallow labeled statements
     'no-labels': 'error',
     // disallow unnecessary nested blocks
-    'no-lone-blocks': 'error',
+    'no-lone-blocks': 'off',
     // disallow function declarations and expressions inside loop statements
     'no-loop-func': 'error',
     // disallow magic numbers
@@ -87,7 +87,7 @@ module.exports = {
     // disallow octal escape sequences in string literals
     'no-octal-escape': 'error',
     // disallow reassigning function parameters
-    'no-param-reassign': 'error',
+    'no-param-reassign': 'off',
     // disallow the use of the __proto__ property
     'no-proto': 'error',
     // disallow assignment operators in return statements
@@ -186,6 +186,7 @@ module.exports = {
       'FunctionExpression': {
         'parameters': 'first',
       },
+      'SwitchCase': 1,
     } ],
     // enforce consistent spacing between keys and values in object
     // literal properties

@@ -66,8 +66,21 @@ html, body {
 
 /* Tag labels */
 
-.tresdb-tags {
+.tresdb-tags .tresdb-tag {
+  font-size: 1.0em;
+}
+
+.tresdb-tags .tresdb-none {
+  font-style: italic;
+  color: #999;
+}
+
+.tresdb-coords {
   font-size: 1.38em;
+}
+
+.tresdb-coords a {
+  color: white !important;
 }
 
 /* Tag labels END */
@@ -85,6 +98,10 @@ html, body {
 .tresdb-content-attachment-image-body img {
   max-width: 100%;
   /*margin: 0px auto 0px auto;*/
+}
+
+time {
+  text-decoration: underline;
 }
 
 /* Content Entries END*/

@@ -1,119 +1,160 @@
 
+var local = require('../../config/local');
 var errors = require('../errors');
 var clustering = require('../services/clustering');
-var attachments = require('../services/attachments');
 var model = require('../models/locations');
 var handleToken = require('./lib/handleToken');
+var uploads = require('./lib/attachments/uploads');
 
-var ObjectId = require('mongodb').ObjectId;
-var mime = require('mime');
+var prepareForModel = require('./lib/prepareForModel');
+var prepareForClient = require('./lib/prepareForClient');
+
+// HTTP JWT handling
+var expressJwt = require('express-jwt');
+// handleHttpToken
+//   function (req, res, next)
+var handleHttpToken = expressJwt({ secret: local.secret });
+
+// Precompile schemas
+var putSchema = require('./schemas/locations/put');
+var getSchema = require('./schemas/locations/get');
+var delSchema = require('./schemas/locations/del');
+var countSchema = require('./schemas/locations/count');
+var Ajv = require('ajv');
+var validator = new Ajv();
+var validatePut = validator.compile(putSchema);
+var validateGet = validator.compile(getSchema);
+var validateDel = validator.compile(delSchema);
+var validateCount = validator.compile(countSchema);
 
 
-exports.addOne = function (db, data, response) {
-  // Add new location
-  //
-  // Parameters:
-  //   db
-  //     Monk db instance
-  //   data
-  //     token
-  //       JWT token string
-  //     geom
-  //       GeoJSON point
-  //   response
-  //     Socket.io response
-  var coords;
+exports.put = function (db, data, response) {
+  // Add or update new location
 
-  // Request validation
+  var valid = validatePut(data);
 
-  if (typeof data.geom !== 'object' || data.geom.type !== 'Point' ||
-      typeof data.geom.coordinates !== 'object') {
+  if (!valid) {
+    console.log('Invalid locations put payload:');
+    console.log(data);
     return response(errors.responses.InvalidRequestError);
   }
 
-  coords = data.geom.coordinates;
+  handleToken(data.token, response, function () {
+    // Transform location to be suitable for the model
+    try {
+      prepareForModel.location(data.location);
+    } catch (e) {
+      return response(errors.responses.InvalidRequestError);
+    }
 
-  if (coords.length !== 2 || typeof coords[0] !== 'number' ||
-      typeof coords[1] !== 'number') {
-    return response(errors.responses.InvalidRequestError);
-  }
-
-  // Token check
-  handleToken(data.token, response, function (payload) {
-
-    model.create(db, payload.name, data.geom, function (err2, newLoc) {
-      if (err2) {
+    model.put(db, data.location, function (err, loc) {
+      if (err) {
         return response(errors.responses.DatabaseError);
       }
 
-      return response({
-        success: newLoc,
-      });
+      // Transform location to be suitable for the client.
+      prepareForClient.location(loc);
+
+      return response({ success: loc });
     });
   });
 };
 
-exports.getOne = function (db, data, response) {
-  // Parameters
-  //   db
-  //     Monk db instance
-  //   data
-  //     token
-  //       JWT token string
-  //     locationId
-  //       valid object id as string
-  //   response
-  //     Socket.io response
-  var objId;
+exports.get = function (db, data, response) {
 
-  if (typeof data.locationId !== 'string') {
-    return response(errors.responses.InvalidRequestError);
-  }
+  var valid = validateGet(data);
 
-  try {
-    objId = new ObjectId(data.locationId);
-  } catch (e) {
+  if (!valid) {
     return response(errors.responses.InvalidRequestError);
   }
 
   handleToken(data.token, response, function () {
 
-    var locations = db.get('locations');
+    // Transform location to be suitable for the model
+    try {
+      prepareForModel.location(data.location);
+    } catch (e) {
+      return response(errors.responses.InvalidRequestError);
+    }
 
-    locations.findOne({ _id: objId }).then(function (loc) {
-      if (loc) {
-
-        // Transform location to be suitable for the client.
-        loc.content = loc.content.map(function (entry) {
-          if (entry.type === 'attachment') {
-            // Attach an url to each attachment.
-            entry.data.url = attachments.getAbsoluteUrl(entry);
-
-            // Figure out the content mime type.
-            if (!entry.data.hasOwnProperty('mimetype')) {
-              entry.data.mimetype = mime.lookup(entry.data.filename);
-            }
-          }
-          return entry;
-        });
-
-        return response({
-          success: loc,
-        });
+    model.get(db, data.location, function (err, loc) {
+      if (err) {
+        if (err.name === 'NotFoundError') {
+          return response(errors.responses.NotFoundError);
+        }
+        return response(errors.responses.DatabaseError);
       }
 
-      return response(errors.responses.NotFoundError);
-    }).catch(function (err2) {
-      console.error(err2);
-      return response(errors.responses.DatabaseError);
+      // Transform location to be suitable for the client.
+      prepareForClient.location(loc);
+
+      return response({ success: loc });
     });
   });
 };
 
-exports.getWithin = function (db, data, response) {
+exports.del = function (db, data, response) {
   // Parameters:
   //   db
-  //     Monk db instance
+  //   data
+  //   response
+  //     function (responseObject)
+
+  var valid = validateDel(data);
+
+  if (!valid) {
+    return response(errors.responses.InvalidRequestError);
+  }
+
+  handleToken(data.token, response, function () {
+
+    // Transform location to be suitable for the model
+    try {
+      prepareForModel.location(data.location);
+    } catch (e) {
+      return response(errors.responses.InvalidRequestError);
+    }
+
+    model.del(db, data.location, function (err, loc) {
+      if (err) {
+        if (err.name === 'NotFoundError') {
+          return response(errors.responses.NotFoundError);
+        }
+        return response(errors.responses.DatabaseError);
+      }
+
+      // Transform location to be suitable for the client.
+      prepareForClient.location(loc);
+
+      return response({ success: loc });
+    });
+  });
+};
+
+exports.count = function (db, data, response) {
+  // Retrieve the number of locations.
+
+  var valid = validateCount(data);
+
+  if (!valid) {
+    return response(errors.responses.InvalidRequestError);
+  }
+
+  handleToken(data.token, response, function () {
+    model.count(db, function (err, num) {
+      if (err) {
+        console.error(err);
+        return response(errors.responses.DatabaseError);
+      }
+      return response({ success: num });
+    });
+  });
+};
+
+exports.getMarkersWithin = function (db, data, response) {
+  // Parameters:
+  //   db
+  //     Mongo db instance
   //   data
   //     token
   //       JWT token
@@ -124,12 +165,24 @@ exports.getWithin = function (db, data, response) {
   //     layer
   //       equals to zoom level. Get only locations on this and higher layers.
   //   response
-  //     Socket.io response
+  //     Socket.io response function
   //
   // Response on success:
   //   {
-  //     locations: arrayOfLocations
+  //     locations: arrayOfMarkerLocations
   //   }
+  //
+  // Each MarkerLocation has following properties
+  //   _id
+  //     string
+  //   name
+  //     string
+  //   geom
+  //     GeoJSON point
+  //   tags
+  //     array of strings
+  //   layer
+  //     integer
 
   // Validate the request to prevent injection
   var validRequest = (data.hasOwnProperty('center') &&
@@ -166,7 +219,7 @@ exports.getWithin = function (db, data, response) {
         }  // else
 
         return response({
-          locations: locs,
+          success: locs,
         });
       },
     });
@@ -174,49 +227,68 @@ exports.getWithin = function (db, data, response) {
   });
 };
 
-
-exports.rename = function (db, data, response) {
-  // Parameters:
+exports.addAttachment = function (db, req, res) {
+  // HTTP request handler
+  //
+  // Parameters
   //   db
-  //     Monk db instance
   //   data
-  //     token
-  //       string
-  //     locationId
-  //       string, ObjectId compatible
-  //     newName
-  //       string
   //   response
-  //     Socket.io response
-  handleToken(data.token, response, function (payload) {
-    var validRequest, id, username, newName;
 
-    validRequest = (typeof data.locationId === 'string' &&
-                    typeof data.newName === 'string');
+  var rawLocationId = req.params.locationId;
+  var uploadHandler = uploads.uploader.single('locfile');
 
-    if (!validRequest) {
-      return response(errors.responses.InvalidRequestError);
+  // Ensure user has rights
+  handleHttpToken(req, res, function (err) {
+    var userName, locationId;
+
+    if (err) {
+      console.error(err);
+      return res.json(errors.responses.InvalidTokenError);
     }
+
+    userName = req.user.name;
 
     try {
-      id = new ObjectId(data.locationId);
+      locationId = prepareForModel.id(rawLocationId);
     } catch (e) {
-      return response(errors.responses.InvalidRequestError);
+      return res.json(errors.responses.InvalidRequestError);
     }
 
-    username = payload.name;
-    newName = data.newName.trim();
-
-    model.rename(db, username, id, newName, function (err, updatedLoc) {
-      if (err) {
-        if (err.name === 'NotFoundError') {
-          return response(errors.responses.NotFoundError);
-        }
-        return response(errors.responses.DatabaseError);
+    uploadHandler(req, res, function (err2) {
+      if (err2) {
+        console.error(err2);
+        return res.json({ error: 'UploadError' });
       }
+      //
+      // console.log('req.file:');
+      // console.log(req.file);
 
-      return response({
-        success: updatedLoc,
+      // Upload successful. Append an attachment entry to the location.
+      model.addAttachment({
+        db: db,
+        locationId: locationId,
+        userName: userName,
+        filePathInUploadDir: uploads.getRelativePath(req.file.path),
+        fileMimeType: req.file.mimetype,
+      }, function (err3, newEntry) {
+        if (err3) {
+          console.error(err3);
+          return res.json(errors.responses.DatabaseError);
+        }
+
+        // Send delta event
+        return res.json({
+          success: {
+            type: 'entry_added',
+            actor: userName,
+            data: {
+              locationId: locationId,
+              entry: prepareForClient.entry(newEntry),
+            },
+          },
+        });
+
       });
     });
   });

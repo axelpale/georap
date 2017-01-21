@@ -1,0 +1,22 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-12">
+
+      <%= nameHtml %>
+
+      <%= coordsHtml %>
+
+      <%= tagsHtml %>
+
+      <%= entryFormHtml %>
+
+      <div id="tresdb-location-content-entries">
+        <% var i; %>
+        <% for (i = 0; i < entriesHtml.length; i += 1) { %>
+          <%= entriesHtml[i] %>
+        <% } %>
+      </div>
+
+    </div>
+  </div>
+</div>

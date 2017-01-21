@@ -2,122 +2,194 @@
 
 var clustering = require('../services/clustering');
 var errors = require('../errors');
+var shortid = require('shortid');
+var clone = require('clone');
 
-
-exports.create = function (db, username, geom, callback) {
-  // Create a new location from GeoJSON Point and store it to DB.
-  //
+var create = function (db, location, callback) {
   // Parameters:
   //   db
-  //     Monk DB instance
-  //   username
-  //     string, the creator
-  //   geom
-  //     GeoJSON Point
+  //   location
+  //     plain location object
   //   callback
-  //     function (err, newLocation)
-
-  clustering.findLayerForPoint(db, geom, function (err, layer) {
+  //     function (err, insertedLocation)
+  //
+  clustering.findLayerForPoint(db, location.geom, function (err, layer) {
     if (err) {
       return callback(err);
     }
 
-    var coll = db.get('locations');
-    var now = new Date();
+    var coll = db.collection('locations');
 
-    var newLoc = {
-      name: '',
-      geom: geom,
-      deleted: false,
-      tags: [],
-      content: [{
-        type: 'created',
-        user: username,
-        time: now.toISOString(),
-        data: {},
-      }],
-      neighborsAvgDist: 1000,  // dummy value
-      layer: layer,
-    };
+    // Clone location before modification. This prevents possible
+    // side effects. Also return this new instance afterwards.
+    var loc = clone(location);
+    loc.layer = layer;
 
-    coll.insert(newLoc, {}, function (err2, result) {
+    coll.insertOne(loc, function (err2, result) {
       if (err2) {
         return callback(err2);
       }
 
-      // For result docs, see:
-      // http://mongodb.github.io/node-mongodb-native/2.0/
-      // api/Collection.html#~insertWriteOpResult
-      //
-      // But suprise suprice.... Monk has its own undocumented
-      // behavior. :(
-      // It returns the inserted document with the _id.
+      loc._id = result.insertedId;
 
-      return callback(null, result);
+      return callback(null, loc);
     });
   });
-
 };
 
-
-exports.count = function (db, callback) {
-
-  var coll = db.get('locations');
-
-  coll.count({ deleted: false }, {}, function (err, number) {
-    return callback(err, number);
-  });
-};
-
-
-exports.rename = function (db, username, id, newName, callback) {
-  // Parameters:
-  //   db
-  //     Monk DB instance
-  //   id
-  //     MongoDB ObjectId
-  //   newName
-  //     string
-  //   callback
-  //     function (err, updatedLoc)
-
-  var coll = db.get('locations');
-
-  coll.findOne(id, {}, function (err, loc) {
+var update = function (db, loc, callback) {
+  // Note: findLayerForLocation ensures that the nearest neighbor point
+  // is not the same location.
+  clustering.findLayerForLocation(db, loc, function (err, layer) {
     if (err) {
       return callback(err);
     }
 
-    if (!loc) {
-      return callback(errors.NotFoundError);
-    }
+    var coll = db.collection('locations');
 
-    // If names equal, no need to call database or add a content entry.
-    if (loc.name === newName.trim()) {
-      return callback(null, loc);
-    }
+    loc.layer = layer;
 
-    var now = new Date();
-    var contentEntry = {
-      type: 'rename',
-      user: username,
-      time: now.toISOString(),
-      data: {
-        oldName: loc.name,
-        newName: newName,
-      },
-    };
-
-    coll.findOneAndUpdate(id, {
-      $set: { name: newName },
-      $push: { content: contentEntry },
-    }).then(function (updatedLoc) {
-      if (updatedLoc) {
-        return callback(null, updatedLoc);
+    var q = { _id: loc._id };
+    coll.findOneAndUpdate(q, loc, {}, function (err2, result) {
+      if (err2) {
+        return callback(err2);
       }
-      return callback(errors.NotFoundError);
-    }).catch(function (err2) {
-      return callback(err2);
+
+      var wasUpdated = result.lastErrorObject.updatedExisting;
+      if (wasUpdated) {
+        return callback(null, loc);
+      }  // else was created
+      return callback(null, result.value);
     });
+  });
+};
+
+exports.put = function (db, loc, callback) {
+  // Create or update a location.
+  //
+  // Parameters:
+  //   db
+  //     Monk db instance
+  //   loc
+  //     plain location object. If has _id, loc will be updated, insert otherw.
+  //   callback
+  //     function (err, updatedOrInsertedLoc)
+
+  var updateExisting = loc.hasOwnProperty('_id');
+
+  if (updateExisting) {
+    update(db, loc, callback);
+  } else {
+    create(db, loc, callback);
+  }
+};
+
+exports.get = function (db, loc, callback) {
+  // Get single location
+  //
+  // Parameters:
+  //   db
+  //   loc
+  //     plain object with _id property
+  //   callback
+  //     function (err, loc)
+  //
+  var coll = db.collection('locations');
+
+  coll.findOne({ _id: loc._id }, {}, function (err, doc) {
+    if (err) {
+      return callback(err);
+    }
+
+    if (!doc) {
+      return callback(errors.NotFoundError);
+    }
+
+    return callback(null, doc);
+  });
+};
+
+exports.del = function (db, loc, callback) {
+  // Remove single location
+  //
+  // Parameters:
+  //   db
+  //   loc
+  //     plain object with _id property
+  //   callback
+  //     function (err, deletedLocation)
+  var coll = db.collection('locations');
+
+  coll.findOneAndDelete({ _id: loc._id }).then(function (result) {
+    // The removed doc is given as the result.value
+
+    if (result.value === null) {
+      return callback(errors.NotFoundError);
+    }
+
+    return callback(null, result.value);
+  }).catch(function (err) {
+    return callback(err);
+  });
+};
+
+exports.count = function (db, callback) {
+  // Count non-deleted locations
+  //
+  // Parameters:
+  //   db
+  //   callback
+  //     function (err, number)
+
+  var coll = db.collection('locations');
+
+  coll.count({ deleted: false }).then(function (number) {
+    return callback(null, number);
+  }).catch(function (err) {
+    return callback(err);
+  });
+};
+
+exports.addAttachment = function (params, callback) {
+  // Parameters:
+  //   params
+  //     object with properties:
+  //       db
+  //         Mongodb instance
+  //       locationId
+  //         string
+  //       userName
+  //         string
+  //       filePathInUploadDir
+  //         string
+  //       fileMimeType
+  //         string
+  //  callback
+  //    function (err, newEntry)
+
+  var entry = {
+    _id: shortid.generate(),
+    time: (new Date()).toISOString(),
+    type: 'attachment',
+    user: params.userName,
+    data: {
+      filepath: params.filePathInUploadDir,
+      mimetype: params.fileMimeType,
+    },
+  };
+
+  var coll = params.db.collection('locations');
+
+  var query = { _id: params.locationId };
+  var updateq = { $push: { content: entry } };
+
+  coll.updateOne(query, updateq, null, function (err, result) {
+    if (err) {
+      return callback(err);
+    }
+
+    console.log(result.result);
+
+    return callback(null, entry);
   });
 };

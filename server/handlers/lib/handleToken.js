@@ -5,7 +5,8 @@ var jwt = require('jsonwebtoken');
 
 module.exports = function (token, response, onSuccess) {
   // Parameters:
-  //   requestData
+  //   token
+  //     string
   //   response
   //     Socket.io response. Will be called on error.
   //   onSuccess

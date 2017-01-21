@@ -27,7 +27,7 @@ module.exports = {
         },
       }],
       neighborsAvgDist: 42886.25362949583,
-      layer: 12,
+      layer: 1,
     }],
   },
   indices: [

@@ -1,6 +1,8 @@
 
 var async = require('async');
 
+var COLL_NOT_EXISTS_ERROR = 26;
+
 exports.loadFixture = function (db, fixture, callback) {
   // Load fixture into the database. Existing collections in the DB
   // will be dropped.
@@ -43,34 +45,54 @@ exports.loadFixture = function (db, fixture, callback) {
 
   async.eachOfSeries(colls, function (items, collName, next) {
 
-    var coll = db.get(collName);
-
     // Drop possibly existing collection before population.
-    coll.drop().then(function () {
+    db.dropCollection(collName, function (err) {
       // Populate
-      coll.insert(items).then(function () {
-        // Next collection
+      if (err) {
+        // Continue if collection does not exist.
+        // Stop if other error.
+        if (err.code !== COLL_NOT_EXISTS_ERROR) {
+          console.error(err);
+          return next(err);
+        }
+      }
+
+      var coll = db.collection(collName);
+
+      if (items.length > 0) {
+        // Bulk insert of zero items throws an error.
+        coll.insertMany(items, function (err2) {
+          if (err2) {
+            return next(err2);
+          }
+          // Next collection
+          return next();
+        });
+      } else {
         return next();
-      }).catch(next);
-    }).catch(next);
+      }
+    });
 
-  }, function afterEachOfSeries(err) {
+  }, function afterEachOfSeries(err3) {
 
-    if (err) {
-      return callback(err);
+    if (err3) {
+      return callback(err3);
     }
 
     // Create indices
     async.eachSeries(indices, function (index, next) {
 
-      var coll = db.get(index.collection);
+      var coll = db.collection(index.collection);
 
-      coll.ensureIndex(index.spec, index.options, function (err2) {
-        return next(err2);
+      coll.createIndex(index.spec, index.options, function (err4) {
+        return next(err4);
       });
 
-    }, function afterEachSeries(err3) {
-      return callback(err3);
+    }, function afterEachSeries(err5) {
+      if (err5) {
+        return callback(err5);
+      }
+      return callback();
     });
 
   });
