@@ -45,6 +45,9 @@ exports.run = function (db, callback) {
     //   }
     console.log('Transforming locations\' attachments data schema:');
     console.log('  combine year, key, and filename to filepath.');
+    console.log('Filling null visit years.');
+    console.log('Deleting locations\' locatorId property.');
+    console.log('Changing tag "heavy-industry" to "factory".');
 
     var locsColl = db.collection('locations');
 
@@ -52,6 +55,14 @@ exports.run = function (db, callback) {
 
       // Some locatorId's might still exist
       delete loc.locatorId;
+
+      // Update tags
+      loc.tags = loc.tags.map(function (tag) {
+        if (tag === 'heavy-industry') {
+          return 'factory';
+        }
+        return tag;
+      });
 
       loc.content = loc.content.map(function (entry) {
         var year, key, filename, filepath;
