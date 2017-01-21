@@ -150,6 +150,7 @@ module.exports = function (location) {
       if ($('#tresdb-location-visit-container').hasClass('hidden')) {
         // Show
         $('#tresdb-location-visit-container').removeClass('hidden');
+        $('#tresdb-location-visit-form').removeClass('hidden');
         // Hide others
         $('#tresdb-location-story-container').addClass('hidden');
         $('#tresdb-location-attachment-container').addClass('hidden');
@@ -184,6 +185,7 @@ module.exports = function (location) {
         }
 
         $('#tresdb-location-visit-container').addClass('hidden');
+        $('#tresdb-location-visit-form').removeClass('hidden');
       });
     });
   };
@@ -195,6 +197,7 @@ module.exports = function (location) {
     $('#tresdb-location-attachment-show').off();
     $('#tresdb-location-attachment-cancel').off();
     $('#tresdb-location-visit-show').off();
+    $('#tresdb-location-visit-form').off();
     $('#tresdb-location-visit-cancel').off();
   };
 };
