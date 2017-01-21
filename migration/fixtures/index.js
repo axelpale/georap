@@ -167,7 +167,6 @@ module.exports = {
           type: 'Point',
           coordinates: [21.857705, 57.55341],
         },
-        locatorId: 604,
         deleted: false,
         tags: ['walk-in'],
         content: [{
