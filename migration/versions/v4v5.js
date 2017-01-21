@@ -50,6 +50,9 @@ exports.run = function (db, callback) {
 
     iter.updateEach(locsColl, function (loc, next) {
 
+      // Some locatorId's might still exist
+      delete loc.locatorId;
+
       loc.content = loc.content.map(function (entry) {
         var year, key, filename, filepath;
         if (entry.type === 'attachment') {
@@ -64,6 +67,15 @@ exports.run = function (db, callback) {
           delete entry.data.filename;
           delete entry.data.key;
         }
+
+        if (entry.type === 'visit') {
+          year = (new Date(entry.time)).getFullYear();
+          // Update null to year
+          if (entry.data.year === null) {
+            entry.data.year = year;
+          }
+        }
+
         return entry;
       });
 
