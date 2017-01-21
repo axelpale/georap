@@ -15,7 +15,7 @@ exports.isValidLongitude = function (lng) {
   // Parameters
   //   lng
   //     number
-  if (typeof lng !== 'number' || Number.isNaN(lng)) {
+  if (typeof lng !== 'number' || Number.isNaN(lng)) {
     return false;
   }
 

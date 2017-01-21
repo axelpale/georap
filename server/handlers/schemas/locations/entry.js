@@ -1,3 +1,5 @@
+var geom = require('./geom');
+
 var idSchema = {
   type: 'string',
 };
@@ -126,6 +128,77 @@ module.exports = {
           additionalProperties: false,
           properties: {
             year: { type: 'integer' },
+          },
+        },
+      },
+    },
+
+    {
+      additionalProperties: false,
+      properties: {
+        _id: idSchema,
+        time: timeSchema,
+        type: {
+          type: 'string',
+          enum: ['move'],
+        },
+        user: userSchema,
+        data: {
+          type: 'object',
+          required: [
+            'oldGeom',
+            'newGeom',
+          ],
+          additionalProperties: false,
+          properties: {
+            oldGeom: geom,
+            newGeom: geom,
+          },
+        },
+      },
+    },
+
+    {
+      additionalProperties: false,
+      properties: {
+        _id: idSchema,
+        time: timeSchema,
+        type: {
+          type: 'string',
+          enum: ['tagadd'],
+        },
+        user: userSchema,
+        data: {
+          type: 'object',
+          required: [
+            'tag',
+          ],
+          additionalProperties: false,
+          properties: {
+            tag: { type: 'string' },
+          },
+        },
+      },
+    },
+
+    {
+      additionalProperties: false,
+      properties: {
+        _id: idSchema,
+        time: timeSchema,
+        type: {
+          type: 'string',
+          enum: ['tagdel'],
+        },
+        user: userSchema,
+        data: {
+          type: 'object',
+          required: [
+            'tag',
+          ],
+          additionalProperties: false,
+          properties: {
+            tag: { type: 'string' },
           },
         },
       },

@@ -1,0 +1,12 @@
+
+<div id="<%= entry.getId() %>" class="panel panel-default tresdb-content-move">
+
+  <div class="panel-heading">
+    <%= entry.getUserName() %> changed coordinates <%= timestamp(entry.getTime()) %>
+  </div>
+
+  <div class="panel-body">
+    From <em><%= oldGeomHtml %></em> to <em><%= newGeomHtml %></em>
+  </div>
+
+</div>

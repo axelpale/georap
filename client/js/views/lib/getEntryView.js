@@ -1,8 +1,11 @@
 var AttachmentView = require('../entries/Attachment');
 var CreatedView = require('../entries/Created');
 var RenameView = require('../entries/Rename');
+var TagaddView = require('../entries/Tagadd');
+var TagdelView = require('../entries/Tagdel');
 var StoryView = require('../entries/Story');
 var VisitView = require('../entries/Visit');
+var MoveView = require('../entries/Move');
 
 module.exports = function (entryModel, account) {
 
@@ -15,10 +18,16 @@ module.exports = function (entryModel, account) {
       return new CreatedView(entryModel);
     case 'rename':
       return new RenameView(entryModel);
+    case 'tagadd':
+      return new TagaddView(entryModel);
+    case 'tagdel':
+      return new TagdelView(entryModel);
     case 'story':
       return new StoryView(entryModel, account);
     case 'visit':
       return new VisitView(entryModel, account);
+    case 'move':
+      return new MoveView(entryModel);
     default:
       throw new Error('unknown content entry type: ' + type);
   }

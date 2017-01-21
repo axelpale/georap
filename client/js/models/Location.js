@@ -285,16 +285,21 @@ module.exports = function (api, account, tags, rawLoc) {
 
     addRawTag(tag);
 
+    var rawEntry = createRawEntry('tagadd', { tag: tag });
+    addRawEntry(rawEntry);
+
     this.save(function (err) {
       if (err) {
         // Remove the added tag. Other tags could have been added and
         // the tag also removed during the save.
         removeRawTag(tag);
+        removeRawEntry(rawEntry._id);
 
         return callback(err);
       }
 
       self.emit('tags_changed');
+      self.emit('entry_added', { entryId: rawEntry._id });
       return callback();
     });
   };
@@ -334,8 +339,10 @@ module.exports = function (api, account, tags, rawLoc) {
     var removedEntry;
 
     if (hasRawEntry(entryId)) {
+
       removedEntry = getRawEntry(entryId);
       removeRawEntry(entryId);
+
       this.save(function (err) {
         if (err) {
           loc.content.push(removedEntry);
@@ -359,13 +366,18 @@ module.exports = function (api, account, tags, rawLoc) {
 
     removeRawTag(tag);
 
+    var rawEntry = createRawEntry('tagdel', { tag: tag });
+    addRawEntry(rawEntry);
+
     this.save(function (err) {
       if (err) {
         addRawTag(tag);
+        removeRawEntry(rawEntry._id);
         return callback(err);
       }
 
       self.emit('tags_changed');
+      self.emit('entry_added', { entryId: rawEntry._id });
       return callback();
     });
 
@@ -390,13 +402,22 @@ module.exports = function (api, account, tags, rawLoc) {
     loc.geom.coordinates[0] = lng;
     loc.geom.coordinates[1] = lat;
 
+    // Create entry
+    var rawEntry = createRawEntry('move', {
+      oldGeom: clone(oldGeom),
+      newGeom: clone(loc.geom),
+    });
+    addRawEntry(rawEntry);
+
     this.save(function (err) {
       if (err) {
         // Fallback
         loc.geom = oldGeom;
+        removeRawEntry(rawEntry._id);
         return callback(err);
       }
       self.emit('geom_changed');
+      self.emit('entry_added', { entryId: rawEntry._id });
       return callback();
     });
   };
@@ -423,6 +444,7 @@ module.exports = function (api, account, tags, rawLoc) {
       if (err) {
         // Fallback
         loc = oldLoc;
+        removeRawEntry(rawEntry._id);
         return callback(err);
       }
       self.emit('name_changed');
