@@ -63,13 +63,13 @@ module.exports = function (location, account, tags) {
 
     return locationTemplate({
       location: location,
+      account: account,
       nameHtml: nameHtml,
       coordsHtml: coordsHtml,
       tagsHtml: tagsHtml,
       entryFormHtml: entryFormHtml,
       entriesHtml: entriesHtml,
       removeHtml: removeHtml,
-      account: account,
     });
   };
 
