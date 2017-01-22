@@ -121,6 +121,37 @@ module.exports = function (api, account, tags, rawLoc) {
 
   // Public Getters
 
+  this.getAgeInHours = function () {
+    // Finds the created event and returns hours between the creation and now.
+    // Returns 0 if no such entry;
+    var ent = this.getCreatedEntry();
+
+    if (!ent) {
+      return 0;
+    }
+
+    var MS = 1000;
+    var S = 60;
+    var M = 60;
+    var now = Date.now();
+    var backThen = (new Date(ent.time)).getTime();
+    var diffMs = now - backThen;
+    var diffHours = diffMs / (M * S * MS);
+
+    return diffHours;
+  };
+
+  this.getCreator = function () {
+    // Return the username of the creator of the location.
+    // Return '' if not known.
+    var ent = this.getCreatedEntry();
+
+    if (!ent) {
+      return '';
+    }
+    return ent.user;
+  };
+
   this.getId = function () {
     return loc._id;
   };
@@ -149,6 +180,22 @@ module.exports = function (api, account, tags, rawLoc) {
       return null;
     }
     return toEntry(getRawEntry(entryId), this);
+  };
+
+  this.getCreatedEntry = function () {
+    // Returns an entry of 'created' type. Return null if no such entry.
+    var i, entry;
+    for (i = 0; i < loc.content.length; i += 1) {
+      if (loc.content[i].type === 'created') {
+        entry = loc.content[i];
+        break;
+      }
+    }
+
+    if (entry) {
+      return entry;
+    }
+    return null;
   };
 
   this.getEntries = function () {
@@ -479,7 +526,7 @@ module.exports = function (api, account, tags, rawLoc) {
         return callback(err);
       }
       // Inform
-      self.emit('removed');
+      self.emit('removed', self);
       return callback();
     });
   };

@@ -17,6 +17,10 @@
         <% } %>
       </div>
 
+      <% if (location.getCreator() === account.getName()) { %>
+        <%= removeHtml %>
+      <% } %>
+
     </div>
   </div>
 </div>

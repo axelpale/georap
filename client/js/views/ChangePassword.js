@@ -1,4 +1,6 @@
 
+var emitter = require('component-emitter');
+
 // Templates
 var passwordTemplate = require('../../templates/forms/changePassword.ejs');
 
@@ -7,6 +9,8 @@ module.exports = function (auth) {
   //   auth
   //     Instance of auth.Service
 
+  // Init
+  emitter(this);
 
   // Private methods declaration
 

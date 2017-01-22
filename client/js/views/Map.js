@@ -123,6 +123,13 @@ module.exports = function (storage, locations, go) {
     }
   });
 
+  locations.on('location_removed', function (location) {
+    if (markers.hasOwnProperty(location.getId())) {
+      var mToRemove = markers[location.getId()];
+      removeMarker(mToRemove);
+    }
+  });
+
   // Listen map type change to invert label text colors.
   map.addListener('maptypeid_changed', function () {
     labels.updateMarkerLabels(markers, map.getMapTypeId());

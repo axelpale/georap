@@ -21,8 +21,9 @@ exports.route = function (page, account, locations, tags) {
   // Init
 
   // A card is used to display content.
-  var card = new CardView(function onUserClose() {
-    page.show('/');
+  var card = new CardView();
+  card.on('closed', function () {
+    page('/');
   });
   // Handle paths where to redirect after login.
   var afterLogin = new AfterLogin();

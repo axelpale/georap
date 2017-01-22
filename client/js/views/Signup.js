@@ -1,5 +1,6 @@
 // A form for an invited user to sign up.
 
+var emitter = require('component-emitter');
 var jwtDecode = require('jwt-decode');
 
 // Templates
@@ -15,6 +16,7 @@ module.exports = function (auth, token, goLogin) {
   //     function (): will ask router to go to login
 
   // Init
+  emitter(this);
 
   var parsedToken = jwtDecode(token);
 

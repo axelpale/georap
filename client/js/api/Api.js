@@ -23,12 +23,12 @@ module.exports = function (socket, storage) {
     //   callback
     //     function (err, successResponseData)
 
-    console.log('payload:', payload);
+    //console.log('payload:', payload);
 
     socket.emit(route, payload, function (response) {
       var err;
 
-      console.log('response:', response);
+      //console.log('response:', response);
 
       if (response.hasOwnProperty('success')) {
         return callback(null, response.success);

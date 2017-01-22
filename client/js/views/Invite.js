@@ -1,5 +1,6 @@
 // Form to invite new users.
 
+var emitter = require('component-emitter');
 var validator = require('email-validator');
 
 // Templates
@@ -10,6 +11,8 @@ module.exports = function (auth) {
   //   auth
   //     Instance of auth.Service.
 
+  // Init
+  emitter(this);
 
   // Private methods declaration
 
