@@ -1,3 +1,4 @@
+var emitter = require('component-emitter');
 var validator = require('email-validator');
 
 // Templates
@@ -9,6 +10,9 @@ module.exports = function (account, onSuccess) {
   //     Instance of models.Account
   //   onSuccess
   //     function (), called on successful login
+
+  // Init
+  emitter(this);
 
   // Private methods.
 

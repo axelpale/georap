@@ -25,8 +25,13 @@ module.exports = function (api, account, tags) {
   var listenForChanges = (function () {
     var loc2listen = null;
 
-    var handler = function () {
+    var savedHandler = function () {
       self.emit('location_changed', loc2listen);
+    };
+
+    var removeHandler = function () {
+      self.emit('location_removed', loc2listen);
+      loc2listen = null;
     };
 
     return function listen(location) {
@@ -34,12 +39,14 @@ module.exports = function (api, account, tags) {
       //   location
       //     a models.Location
       if (loc2listen !== null) {
-        loc2listen.off('saved', handler);
+        loc2listen.off('saved', savedHandler);
+        loc2listen.off('removed', removeHandler);
         loc2listen = null;
       }
 
       loc2listen = location;
-      loc2listen.on('saved', handler);
+      loc2listen.on('saved', savedHandler);
+      loc2listen.on('removed', removeHandler);
     };
   }());
 

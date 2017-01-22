@@ -1,7 +1,11 @@
 
+var emitter = require('component-emitter');
 var cardTemplate = require('../../templates/card.ejs');
 
-module.exports = function (onUserClose) {
+module.exports = function () {
+
+  // Init
+  emitter(this);
 
   // Constants
   var cardLayer = document.getElementById('card-layer');
@@ -59,6 +63,7 @@ module.exports = function (onUserClose) {
 
     // Remove possible other cards
     if (activeView !== null) {
+      activeView.off();
       activeView.unbind();
     }
     activeView = view;
@@ -70,24 +75,32 @@ module.exports = function (onUserClose) {
     // Activate input bindings
     view.bind();
 
+    // Listen & close if the model of the view becomes removed.
+    view.once('removed', function () {
+      self.close();
+    });
+
     // Initialize close mechanism
     if (cardType === 'page') {
       $('#card-background').click(function () {
         self.close();
-
-        return onUserClose();
       });
     }
+
+    self.emit('opened');
   };
 
   this.close = function () {
-    cardLayer.style.display = 'none';
-    // Remove possible cards
     if (activeView !== null) {
+      activeView.off();
       activeView.unbind();
+      activeView = null;
+
+      cardLayer.style.display = 'none';
+      clearCardLayer();
+
+      self.emit('closed');
     }
-    activeView = null;
-    clearCardLayer();
   };
 
 };

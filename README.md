@@ -201,6 +201,10 @@ Here are some notes and tips for putting a TresDB instance into production.
 
     $ npm run production
 
+### Recommendation: use pm2 for process management
+
+    $ pm2 restart ecosystem.json
+
 
 
 ## Technology stack

@@ -1,3 +1,4 @@
+var emitter = require('component-emitter');
 var mainmenuTemplate = require('../../templates/menus/mainmenu.ejs');
 var glyphiconTemplate = require('../../templates/glyphicon.ejs');
 
@@ -14,6 +15,8 @@ module.exports = function (auth, handlers) {
   //       onAdditionCreate
   //       onAdditionCancel
 
+  // Init
+  emitter(this);
   var go = handlers.go;
 
   // Root element. Remember for the unbinding.

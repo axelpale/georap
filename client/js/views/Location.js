@@ -1,10 +1,12 @@
 // View for location
 
+var emitter = require('component-emitter');
 var getEntryView = require('./lib/getEntryView');
 var NameView = require('./locationParts/Name');
 var CoordsView = require('./locationParts/Coords');
 var TagsView = require('./locationParts/Tags');
 var EntryFormView = require('./locationParts/EntryForm');
+var RemoveView = require('./locationParts/Remove');
 
 // Templates
 var locationTemplate = require('./location.ejs');
@@ -17,8 +19,14 @@ module.exports = function (location, account, tags) {
   //     models.Account object, the current user
   //   tags
   //     models.Tags object
+  //
+  // Emits
+  //   removed
+  //     when model emits "removed"
 
   // Init
+  emitter(this);
+  var self = this;
 
   // Build child views
 
@@ -26,6 +34,7 @@ module.exports = function (location, account, tags) {
   var coordsView = new CoordsView(location);
   var tagsView = new TagsView(location, tags);
   var entryFormView = new EntryFormView(location);
+  var removeView = new RemoveView(location);
 
   var entries = location.getEntriesInTimeOrder();
   var entryViews = entries.map(function (entry) {
@@ -45,6 +54,7 @@ module.exports = function (location, account, tags) {
     var coordsHtml = coordsView.render();
     var tagsHtml = tagsView.render();
     var entryFormHtml = entryFormView.render();
+    var removeHtml = removeView.render();
 
     var entriesHtml = entryViews.map(function (entryView) {
       return entryView.render();
@@ -58,6 +68,7 @@ module.exports = function (location, account, tags) {
       tagsHtml: tagsHtml,
       entryFormHtml: entryFormHtml,
       entriesHtml: entriesHtml,
+      removeHtml: removeHtml,
       account: account,
     });
   };
@@ -68,6 +79,7 @@ module.exports = function (location, account, tags) {
     coordsView.bind();
     tagsView.bind();
     entryFormView.bind();
+    removeView.bind();
 
     // Bind children first for clarity
     entryViews.forEach(function (entryView) {
@@ -91,6 +103,10 @@ module.exports = function (location, account, tags) {
       $('#' + ev.entryId).remove();
     });
 
+    location.on('removed', function () {
+      self.emit('removed');
+    });
+
     // Enable tooltips. See http://getbootstrap.com/javascript/#tooltips
     $('[data-toggle="tooltip"]').tooltip();
 
@@ -101,6 +117,7 @@ module.exports = function (location, account, tags) {
     coordsView.unbind();
     tagsView.unbind();
     entryFormView.unbind();
+    removeView.unbind();
     entryViews.forEach(function (view) {
       view.unbind();
     });

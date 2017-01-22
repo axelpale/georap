@@ -1,5 +1,6 @@
 // This is the form the user arrives via the link in a password reset email.
 
+var emitter = require('component-emitter');
 var jwtDecode = require('jwt-decode');
 
 // Templates
@@ -13,6 +14,9 @@ module.exports = function (auth, token, showLogin) {
   //     string
   //   showLogin
   //     function ()
+
+  // Init
+  emitter(this);
 
   var parsedToken = jwtDecode(token);
   // Note: server will check if token still fresh. No need to check it here

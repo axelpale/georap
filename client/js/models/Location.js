@@ -479,7 +479,7 @@ module.exports = function (api, account, tags, rawLoc) {
         return callback(err);
       }
       // Inform
-      self.emit('removed');
+      self.emit('removed', self);
       return callback();
     });
   };
