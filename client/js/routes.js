@@ -115,7 +115,7 @@ exports.route = function (page, account, locations, tags) {
     card.open(view, 'page');
   });
 
-  page('/location/:id', function (ctx) {
+  page('/locations/:id', function (ctx) {
 
     // Open a loading card
     var loadingView = new LoadingView();

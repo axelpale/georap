@@ -63,7 +63,7 @@ window.initMap = function () {
   var mapView = new MapView(storage, locations);
 
   mapView.on('location_activated', function (locationId) {
-    page.show('/location/' + locationId);
+    page.show('/locations/' + locationId);
   });
 
   var mainMenuView = new MainMenuView(account, {
