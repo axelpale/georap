@@ -1,6 +1,8 @@
 /* eslint-disable max-statements, max-lines */
 /* global google */
 
+var emitter = require('component-emitter');
+
 var MapStateStore = require('../models/MapStateStore');
 
 var icons = require('./lib/icons');
@@ -8,14 +10,16 @@ var labels = require('./lib/labels');
 var getBoundsDiagonal = require('./lib/getBoundsDiagonal');
 var readGoogleMapState = require('./lib/readGoogleMapState');
 
-module.exports = function (storage, locations, go) {
+module.exports = function (storage, locations) {
   // Parameters:
   //   storage
   //     e.g. a localStorage
   //   locations
   //     models.Locations instance.
-  //   go
-  //     function (path): ask router to go to path.
+  //
+  // Emits:
+  //   location_activated, locationId
+  //     when user clicks the marker to see the location in detail
   //
 
   // Private methods declaration
@@ -25,6 +29,8 @@ module.exports = function (storage, locations, go) {
   var updateMarkers;
 
   // Init
+  emitter(this);
+  var self = this;
 
   // Element for the google map
   var htmlElement = document.getElementById('map');
@@ -364,7 +370,7 @@ module.exports = function (storage, locations, go) {
     m.addListener('click', function () {
 
       if (labels.hasLabel(m)) {
-        go('/location/' + loc._id);
+        self.emit('location_activated', loc._id);
       } else {
         labels.ensureLabel(m, map.getMapTypeId(), true);
       }
@@ -379,7 +385,12 @@ module.exports = function (storage, locations, go) {
 
   removeMarker = function (m) {
     if (m) {
+      // Remove from map
       m.setMap(null);
+
+      // Remove click listener
+      google.maps.event.clearInstanceListeners(m);
+
       delete markers[m.get('id')];
     }
   };

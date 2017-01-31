@@ -60,7 +60,11 @@ var go = function (path) {
 // loaded. Lay the main menu immediately on the map.
 window.initMap = function () {
 
-  var mapView = new MapView(storage, locations, go);
+  var mapView = new MapView(storage, locations);
+
+  mapView.on('location_activated', function (locationId) {
+    page.show('/location/' + locationId);
+  });
 
   var mainMenuView = new MainMenuView(account, {
     go: go,
