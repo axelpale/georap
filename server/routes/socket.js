@@ -4,8 +4,8 @@
 // to request handlers.
 
 // Request handlers
-var account = require('./handlers/account');
-var locations = require('./handlers/locations');
+var account = require('../handlers/account');
+var locations = require('../handlers/locations');
 
 module.exports = function (socket, db, mailer, host) {
 

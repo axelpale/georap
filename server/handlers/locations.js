@@ -227,13 +227,8 @@ exports.getMarkersWithin = function (db, data, response) {
   });
 };
 
-exports.addAttachment = function (db, req, res) {
+exports.addAttachment = function (req, res) {
   // HTTP request handler
-  //
-  // Parameters
-  //   db
-  //   data
-  //   response
 
   var rawLocationId = req.params.locationId;
   var uploadHandler = uploads.uploader.single('locfile');
@@ -266,7 +261,7 @@ exports.addAttachment = function (db, req, res) {
 
       // Upload successful. Append an attachment entry to the location.
       model.addAttachment({
-        db: db,
+        db: req.db,
         locationId: locationId,
         userName: userName,
         filePathInUploadDir: uploads.getRelativePath(req.file.path),

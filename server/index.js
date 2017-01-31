@@ -22,8 +22,8 @@ var loggers = require('./services/logs/loggers');
 var bootstrap = require('../config/bootstrap');
 
 // Routes
-var httpRoutes = require('./httpRoutes');
-var socketRoutes = require('./socketRoutes');
+var apiRoutes = require('./routes/api');
+var socketRoutes = require('./routes/socket');
 
 // Log environment
 console.log('Starting TresDB in environment:', local.env);
@@ -158,8 +158,15 @@ mongoClient.connect(mongoUrl, function (dbErr, db) {
   // --------------
   // Uploaded files END
 
+  // Middleware to provide database, mailer and other common deps.
+  app.use(function (req, res, next) {
+    req.db = db;
+    req.mailer = mailer;
+    next();
+  });
+
   // HTTP API routes here
-  httpRoutes(app, db);
+  app.use('/api', apiRoutes);
 
   // Catch all to single page app.
   // Must be the final step in the app middleware chain.
