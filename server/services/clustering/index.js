@@ -174,7 +174,7 @@ exports.findWithin = function (options) {
         spherical: true,
       },
     },
-    // Return only what is needed for displaying markers and infowindows.
+    // Return only what is needed for displaying markers.
     {
       $project: {
         name: true,
