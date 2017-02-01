@@ -3,6 +3,10 @@
 var local = require('../../config/local');
 var errors = require('../errors');
 
+var db = require('../services/db');
+var mailer = require('../services/mailer');
+var hostname = require('../services/hostname');
+
 var bcrypt = require('bcryptjs');
 var jwt = require('jsonwebtoken');
 var validator = require('email-validator');
@@ -28,12 +32,10 @@ var inviteMailTemplate = (function () {
 
 // Private methods
 
-var setPassword = function (db, email, password, callback) {
+var setPassword = function (email, password, callback) {
   // Just change the password for the account.
   //
   // Parameters:
-  //   db
-  //     Monk db instance
   //   email
   //     string, Account email
   //   password
@@ -72,7 +74,7 @@ var setPassword = function (db, email, password, callback) {
     var updateQuery = { $set: { hash: newHash } };
 
     // Collection
-    var users = db.collection('users');
+    var users = db.get().collection('users');
 
     users.findOneAndUpdate(findQuery, updateQuery).then(function (user) {
       var err3;
@@ -104,10 +106,8 @@ var setPassword = function (db, email, password, callback) {
 // Public methods
 
 
-exports.login = function (db, data, response) {
+exports.login = function (data, response) {
   // Parameters:
-  //   db
-  //     Monk db instance
   //   data
   //     Socket.io event payload.
   //     Required keys:
@@ -134,7 +134,7 @@ exports.login = function (db, data, response) {
     });
   }
 
-  var users = db.collection('users');
+  var users = db.get().collection('users');
   var query = { email: data.email };
 
   users.findOne(query).then(function (user) {
@@ -182,10 +182,8 @@ exports.login = function (db, data, response) {
   });
 };
 
-exports.changePassword = function (db, data, response) {
+exports.changePassword = function (data, response) {
   // Parameters:
-  //   db
-  //     Monk db instance
   //   data
   //     Socket.io event payload. Required keys:
   //       token
@@ -212,7 +210,7 @@ exports.changePassword = function (db, data, response) {
     }  // else
 
     // User is logged in. Good. Find if user with this email still exists.
-    var users = db.collection('users');
+    var users = db.get().collection('users');
     var query = { email: payload.email };
 
     users.findOne(query).then(function (user) {
@@ -271,14 +269,8 @@ exports.changePassword = function (db, data, response) {
 };
 
 // eslint-disable-next-line max-params
-exports.sendResetPasswordEmail = function (db, mailer, host, data, response) {
+exports.sendResetPasswordEmail = function (data, response) {
   // Parameters:
-  //   db
-  //     Monk db instance
-  //   mailer
-  //     Nodemailer transporter instance
-  //   host
-  //     Server hostname e.g. 'mydomain.com' or 'localhost:3000'
   //   data
   //     Socket.io event payload. Properties:
   //       email
@@ -297,7 +289,7 @@ exports.sendResetPasswordEmail = function (db, mailer, host, data, response) {
 
   // Fetch user from database to ensure the email exists.
   // First get collection.
-  var users = db.collection('users');
+  var users = db.get().collection('users');
 
   users.findOne({ email: data.email }, {}, function (err, user) {
 
@@ -326,6 +318,7 @@ exports.sendResetPasswordEmail = function (db, mailer, host, data, response) {
     var token = jwt.sign(tokenPayload, local.secret, {
       expiresIn: '30m',
     });
+    var host = hostname.get();
     var url = local.publicProtocol + '://' + host + '/reset/' + token;
 
     var mailOptions = {
@@ -340,7 +333,7 @@ exports.sendResetPasswordEmail = function (db, mailer, host, data, response) {
 
     // Send the mail.
     // eslint-disable-next-line no-unused-vars
-    mailer.sendMail(mailOptions, function (err2, info) {
+    mailer.get().sendMail(mailOptions, function (err2, info) {
       if (err2) {
         return response(errors.responses.MailServerError);
       }  // else
@@ -353,10 +346,8 @@ exports.sendResetPasswordEmail = function (db, mailer, host, data, response) {
 };
 
 
-exports.resetPassword = function (db, data, response) {
+exports.resetPassword = function (data, response) {
   // Parameters:
-  //   db
-  //     Monk db instance
   //   data
   //     plain object, Socket.io event payload:
   //       token
@@ -386,7 +377,7 @@ exports.resetPassword = function (db, data, response) {
       });
     }  // else
 
-    setPassword(db, payload.email, data.password, function (err2) {
+    setPassword(payload.email, data.password, function (err2) {
       if (err2) {
         return response({
           error: err2.name,
@@ -401,18 +392,12 @@ exports.resetPassword = function (db, data, response) {
 };
 
 // eslint-disable-next-line max-params
-exports.sendInviteEmail = function (db, mailer, host, data, response) {
+exports.sendInviteEmail = function (data, response) {
   // Invite a user by sending an email with a link that includes a token.
   // With that token the user is allowed to create a single account within
   // a time limit.
   //
   // Parameters:
-  //   db
-  //     Monk db instance
-  //   mailer
-  //     Nodemailer transporter instance
-  //   host
-  //     Hostname e.g. 'localhost:3000' or 'mydomain.com'
   //   data
   //     plain object, Socket.io event payload:
   //       token
@@ -452,7 +437,7 @@ exports.sendInviteEmail = function (db, mailer, host, data, response) {
     }  // else
 
     // Check if an account with this email already exists
-    var users = db.collection('users');
+    var users = db.get().collection('users');
 
     users.findOne({ email: data.email }).then(function (user) {
 
@@ -474,6 +459,7 @@ exports.sendInviteEmail = function (db, mailer, host, data, response) {
       var token = jwt.sign(tokenPayload, local.secret, {
         expiresIn: '7d',
       });
+      var host = hostname.get();
       var url = local.publicProtocol + '://' + host + '/signup/' + token;
 
       var mailOptions = {
@@ -487,7 +473,7 @@ exports.sendInviteEmail = function (db, mailer, host, data, response) {
       };
 
       // Send the mail.
-      mailer.sendMail(mailOptions, function (err2, info) {
+      mailer.get().sendMail(mailOptions, function (err2, info) {
         if (err2) {
           return response({
             error: 'MailServerError',
@@ -514,13 +500,11 @@ exports.sendInviteEmail = function (db, mailer, host, data, response) {
   });  // jwt
 };
 
-exports.signup = function (db, data, response) {
+exports.signup = function (data, response) {
   // After invite, a user signs up. The client must send the token that was
   // associated with the invite email.
   //
   // Parameters:
-  //   db
-  //     Monk db instance
   //   data
   //     plain object, Socket.io event payload:
   //       token
@@ -568,7 +552,7 @@ exports.signup = function (db, data, response) {
     // username index violation and email index violation.
     // We also avoid computing password hash.
 
-    var users = db.collection('users');
+    var users = db.get().collection('users');
 
     users.findOne({
       $or: [ { name: data.username }, { email: payload.email } ],

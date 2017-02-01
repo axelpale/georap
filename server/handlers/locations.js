@@ -1,4 +1,5 @@
 
+var db = require('../services/db');
 var local = require('../../config/local');
 var errors = require('../errors');
 var clustering = require('../services/clustering');
@@ -28,7 +29,7 @@ var validateDel = validator.compile(delSchema);
 var validateCount = validator.compile(countSchema);
 
 
-exports.put = function (db, data, response) {
+exports.put = function (data, response) {
   // Add or update new location
 
   var valid = validatePut(data);
@@ -47,7 +48,7 @@ exports.put = function (db, data, response) {
       return response(errors.responses.InvalidRequestError);
     }
 
-    model.put(db, data.location, function (err, loc) {
+    model.put(db.get(), data.location, function (err, loc) {
       if (err) {
         return response(errors.responses.DatabaseError);
       }
@@ -60,7 +61,7 @@ exports.put = function (db, data, response) {
   });
 };
 
-exports.get = function (db, data, response) {
+exports.get = function (data, response) {
 
   var valid = validateGet(data);
 
@@ -77,7 +78,7 @@ exports.get = function (db, data, response) {
       return response(errors.responses.InvalidRequestError);
     }
 
-    model.get(db, data.location, function (err, loc) {
+    model.get(db.get(), data.location, function (err, loc) {
       if (err) {
         if (err.name === 'NotFoundError') {
           return response(errors.responses.NotFoundError);
@@ -93,9 +94,8 @@ exports.get = function (db, data, response) {
   });
 };
 
-exports.del = function (db, data, response) {
+exports.del = function (data, response) {
   // Parameters:
-  //   db
   //   data
   //   response
   //     function (responseObject)
@@ -115,7 +115,7 @@ exports.del = function (db, data, response) {
       return response(errors.responses.InvalidRequestError);
     }
 
-    model.del(db, data.location, function (err, loc) {
+    model.del(db.get(), data.location, function (err, loc) {
       if (err) {
         if (err.name === 'NotFoundError') {
           return response(errors.responses.NotFoundError);
@@ -131,7 +131,7 @@ exports.del = function (db, data, response) {
   });
 };
 
-exports.count = function (db, data, response) {
+exports.count = function (data, response) {
   // Retrieve the number of locations.
 
   var valid = validateCount(data);
@@ -141,7 +141,7 @@ exports.count = function (db, data, response) {
   }
 
   handleToken(data.token, response, function () {
-    model.count(db, function (err, num) {
+    model.count(db.get(), function (err, num) {
       if (err) {
         console.error(err);
         return response(errors.responses.DatabaseError);
@@ -151,10 +151,8 @@ exports.count = function (db, data, response) {
   });
 };
 
-exports.getMarkersWithin = function (db, data, response) {
+exports.getMarkersWithin = function (data, response) {
   // Parameters:
-  //   db
-  //     Mongo db instance
   //   data
   //     token
   //       JWT token
@@ -203,7 +201,7 @@ exports.getMarkersWithin = function (db, data, response) {
   handleToken(data.token, response, function () {
 
     clustering.findWithin({
-      db: db,
+      db: db.get(),
       center: data.center,
       radius: data.radius,
       // Only locations on the layer or higher (smaller layer number).
@@ -261,7 +259,7 @@ exports.addAttachment = function (req, res) {
 
       // Upload successful. Append an attachment entry to the location.
       model.addAttachment({
-        db: req.db,
+        db: db.get(),
         locationId: locationId,
         userName: userName,
         filePathInUploadDir: uploads.getRelativePath(req.file.path),

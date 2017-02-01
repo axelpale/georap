@@ -11,22 +11,21 @@ var MailerMock = require('../../specs/MailerMock');
 var assert = require('assert');
 var jwt = require('jsonwebtoken');
 
-var mongoClient = require('mongodb').MongoClient;
+var db = require('../services/db');
+var mailer = require('../services/mailer');
+var hostname = require('../services/hostname');
 
 // User data found in the fixture
 var TESTER_EMAIL = 'tester@example.com';
 var TESTER_PASSWORD = 'tester_password';
 
 describe('server.handlers.account', function () {
-  var db;
 
   before(function (done) {
-    mongoClient.connect(local.mongo.testUrl, function (dbErr, dbConn) {
+    db.init(local.mongo.testUrl, function (dbErr) {
       if (dbErr) {
         return console.error('Failed to connect to MongoDB.');
       }
-      db = dbConn;
-
       return done();
     });
   });
@@ -37,7 +36,7 @@ describe('server.handlers.account', function () {
   });
 
   beforeEach(function (done) {
-    tools.loadFixture(db, fixture, done);
+    tools.loadFixture(db.get(), fixture, done);
   });
 
 
@@ -48,7 +47,7 @@ describe('server.handlers.account', function () {
         email: TESTER_EMAIL,
         password: TESTER_PASSWORD,
       };
-      unit.login(db, payload, function (r) {
+      unit.login(payload, function (r) {
         assert.ok(typeof r.success === 'string');
         return done();
       });
@@ -57,21 +56,21 @@ describe('server.handlers.account', function () {
     context('should response with InvalidRequestError when', function () {
 
       it('an empty payload is provided', function (done) {
-        unit.login(db, {}, function (r) {
+        unit.login({}, function (r) {
           assert.equal(r.error, 'InvalidRequestError');
           return done();
         });
       });
 
       it('a valid email is provided without password', function (done) {
-        unit.login(db, { email: TESTER_EMAIL }, function (r) {
+        unit.login({ email: TESTER_EMAIL }, function (r) {
           assert.equal(r.error, 'InvalidRequestError');
           return done();
         });
       });
 
       it('an unknown email is provided without password', function (done) {
-        unit.login(db, { email: 'foo@bar.com' }, function (r) {
+        unit.login({ email: 'foo@bar.com' }, function (r) {
           assert.equal(r.error, 'InvalidRequestError');
           return done();
         });
@@ -85,7 +84,7 @@ describe('server.handlers.account', function () {
           password: 'foobar',
         };
 
-        unit.login(db, payload, function (r) {
+        unit.login(payload, function (r) {
           assert.equal(r.error, 'InvalidRequestError');
           return done();
         });
@@ -98,7 +97,7 @@ describe('server.handlers.account', function () {
           password: 'foobar',
         };
 
-        unit.login(db, payload, function (r) {
+        unit.login(payload, function (r) {
           assert.equal(r.error, 'InvalidRequestError');
           return done();
         });
@@ -110,7 +109,7 @@ describe('server.handlers.account', function () {
           password: '',
         };
 
-        unit.login(db, payload, function (r) {
+        unit.login(payload, function (r) {
           assert.equal(r.error, 'InvalidRequestError');
           return done();
         });
@@ -125,7 +124,7 @@ describe('server.handlers.account', function () {
           password: 'foobar',
         };
 
-        unit.login(db, payload, function (r) {
+        unit.login(payload, function (r) {
           assert.equal(r.error, 'UnknownEmailError');
           return done();
         });
@@ -139,7 +138,7 @@ describe('server.handlers.account', function () {
           password: 'foobar',
         };
 
-        unit.login(db, payload, function (r) {
+        unit.login(payload, function (r) {
           assert.equal(r.error, 'IncorrectPasswordError');
           return done();
         });
@@ -157,28 +156,28 @@ describe('server.handlers.account', function () {
     context('InvalidRequestError when', function () {
 
       it('no token is provided', function (done) {
-        unit.changePassword(db, {}, function (r) {
+        unit.changePassword({}, function (r) {
           assert.equal(r.error, 'InvalidRequestError');
           return done();
         });
       });
 
       it('the token has signed but unexpected content', function (done) {
-        unit.changePassword(db, { token: badToken1 }, function (r) {
+        unit.changePassword({ token: badToken1 }, function (r) {
           assert.equal(r.error, 'InvalidRequestError');
           return done();
         });
       });
 
       it('the token is signed with unknown key', function (done) {
-        unit.changePassword(db, { token: badToken2 }, function (r) {
+        unit.changePassword({ token: badToken2 }, function (r) {
           assert.equal(r.error, 'InvalidRequestError');
           return done();
         });
       });
 
       it('no current password is provided', function (done) {
-        unit.changePassword(db, { token: goodToken }, function (r) {
+        unit.changePassword({ token: goodToken }, function (r) {
           assert.equal(r.error, 'InvalidRequestError');
           return done();
         });
@@ -188,7 +187,7 @@ describe('server.handlers.account', function () {
     context('UnknownEmailError when', function () {
 
       it('unknown email is provided', function (done) {
-        unit.changePassword(db, {
+        unit.changePassword({
           token: badEmailToken,
           currentPassword: TESTER_PASSWORD,
           newPassword: TESTER_PASSWORD,
@@ -203,7 +202,7 @@ describe('server.handlers.account', function () {
     context('IncorrectPasswordError when', function () {
 
       it('the current password is incorrect', function (done) {
-        unit.changePassword(db, {
+        unit.changePassword({
           token: goodToken,
           currentPassword: 'foo',
           newPassword: 'bar',
@@ -217,7 +216,7 @@ describe('server.handlers.account', function () {
     context('success when', function () {
 
       it('token ok, passwords match', function (done) {
-        unit.changePassword(db, {
+        unit.changePassword({
           token: goodToken,
           currentPassword: TESTER_PASSWORD,
           newPassword: TESTER_PASSWORD,
@@ -231,12 +230,10 @@ describe('server.handlers.account', function () {
   });
 
   describe('.sendResetPasswordEmail should response with', function () {
-    var mailer;
-    var host;
 
     beforeEach(function (done) {
-      mailer = new MailerMock();
-      host = 'localhost';
+      mailer.mock(new MailerMock());
+      hostname.mock('localhost');
       return done();
     });
 
@@ -245,7 +242,7 @@ describe('server.handlers.account', function () {
         var payload = {
           email: 'foo@bar',
         };
-        unit.sendResetPasswordEmail(db, mailer, host, payload, function (r) {
+        unit.sendResetPasswordEmail(payload, function (r) {
           assert.equal(r.error, 'InvalidRequestError');
           return done();
         });
@@ -257,7 +254,7 @@ describe('server.handlers.account', function () {
         var payload = {
           email: 'foo@bar.com',
         };
-        unit.sendResetPasswordEmail(db, mailer, host, payload, function (r) {
+        unit.sendResetPasswordEmail(payload, function (r) {
           assert.equal(r.error, 'UnknownEmailError');
           return done();
         });
@@ -266,14 +263,17 @@ describe('server.handlers.account', function () {
 
     context('MailServerError when', function () {
       it('mailer gives an error', function (done) {
+
+        // Setup mailer so that it returns error.
         var broken = new MailerMock();
         broken.break();
+        mailer.mock(broken);
 
         var payload = {
           email: TESTER_EMAIL,
         };
 
-        unit.sendResetPasswordEmail(db, broken, host, payload, function (r) {
+        unit.sendResetPasswordEmail(payload, function (r) {
           assert.equal(r.error, 'MailServerError');
           return done();
         });
@@ -286,10 +286,11 @@ describe('server.handlers.account', function () {
           email: TESTER_EMAIL,
         };
 
-        assert.ok(!mailer.didSendMail());  // test that mock correctly init
+        // test that mock correctly init
+        assert.ok(!mailer.get().didSendMail());
 
-        unit.sendResetPasswordEmail(db, mailer, host, payload, function (r) {
-          assert.ok(mailer.didSendMail());
+        unit.sendResetPasswordEmail(payload, function (r) {
+          assert.ok(mailer.get().didSendMail());
           assert.strictEqual(r.success, true);
           return done();
         });

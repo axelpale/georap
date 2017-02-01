@@ -7,10 +7,14 @@ var express = require('express');
 var app = express();
 
 var server = http.createServer(app);
-var io = require('socket.io')(server);
 
-var nodemailer = require('nodemailer');
-var mongoClient = require('mongodb').MongoClient;
+var io = require('./services/io');
+io.init(server);
+
+var mailer = require('./services/mailer');
+mailer.init();
+
+var db = require('./services/db');
 
 var webpack = require('webpack');
 var webpackConfig = require('../config/webpack');
@@ -31,14 +35,7 @@ console.log('Starting TresDB in environment:', local.env);
 
 // Database connection first
 
-var mongoUrl;
-if (local.env === 'test') {
-  mongoUrl = local.mongo.testUrl;
-} else {
-  mongoUrl = local.mongo.url;
-}
-
-mongoClient.connect(mongoUrl, function (dbErr, db) {
+db.init(function (dbErr) {
   if (dbErr) {
     console.error('Failed to connect to MongoDB.');
     console.error(dbErr);
@@ -46,20 +43,6 @@ mongoClient.connect(mongoUrl, function (dbErr, db) {
   }
   // Success
   console.log('Connected to MongoDB...');
-
-
-  // Email transporter setup and verification.
-
-  var mailer = nodemailer.createTransport(local.smtp);
-
-  mailer.verify(function (err) {
-    if (err) {
-      console.log('Connection to mail server failed:');
-      console.log(err);
-    } else {
-      console.log('Connected to mail server...');
-    }
-  });
 
 
   // Start the server.
@@ -158,12 +141,6 @@ mongoClient.connect(mongoUrl, function (dbErr, db) {
   // --------------
   // Uploaded files END
 
-  // Middleware to provide database, mailer and other common deps.
-  app.use(function (req, res, next) {
-    req.db = db;
-    req.mailer = mailer;
-    next();
-  });
 
   // HTTP API routes here
   app.use('/api', apiRoutes);
@@ -177,21 +154,13 @@ mongoClient.connect(mongoUrl, function (dbErr, db) {
 
   // Socket.io routing
 
-  io.on('connection', function (socket) {
-
-    // Domain name is required by some handlers, for example
-    // when a link is sent via email. It does not matter if
-    // the connection is transported via polling or websockets,
-    // the host stays the same.
-    var host = socket.request.headers.host;
-
-    console.log('New connection from app hosted at', host);
-
-    return socketRoutes(socket, db, mailer, host);
+  io.get().on('connection', function (socket) {
+    console.log('New connection');
+    return socketRoutes(socket);
   });
 
 
   // Populate database
 
-  bootstrap(db);
+  bootstrap(db.get());
 });

@@ -11,7 +11,7 @@ var assert = require('assert');
 var jwt = require('jsonwebtoken');
 var clone = require('clone');
 
-var mongoClient = require('mongodb').MongoClient;
+var db = require('../services/db');
 
 var TESTER_USER = 'tester';
 var TESTER_EMAIL = 'tester@example.com';
@@ -43,15 +43,12 @@ badLocation.name = 2;  // invalid name
 
 
 describe('server.handlers.locations', function () {
-  var db;
 
   before(function (done) {
-    mongoClient.connect(local.mongo.testUrl, function (dbErr, dbConn) {
+    db.init(local.mongo.testUrl, function (dbErr) {
       if (dbErr) {
         return console.error('Failed to connect to MongoDB.');
       }
-      db = dbConn;
-
       return done();
     });
   });
@@ -62,7 +59,7 @@ describe('server.handlers.locations', function () {
   });
 
   beforeEach(function (done) {
-    tools.loadFixture(db, fixture, done);
+    tools.loadFixture(db.get(), fixture, done);
   });
 
   describe('put', function () {
@@ -73,7 +70,7 @@ describe('server.handlers.locations', function () {
         location: goodNewLocation,
       };
 
-      unit.put(db, data, function (response) {
+      unit.put(data, function (response) {
         assert.ok(response.hasOwnProperty('success'), response.error);
         assert.deepEqual(response.success.geom.coordinates,
                          goodNewLocation.geom.coordinates);
@@ -91,7 +88,7 @@ describe('server.handlers.locations', function () {
         location: renamedLocation,
       };
 
-      unit.put(db, data, function (response) {
+      unit.put(data, function (response) {
         if (response.error) {
           console.error(response.error);
           return;
@@ -108,7 +105,7 @@ describe('server.handlers.locations', function () {
         location: goodNewLocation,
       };
 
-      unit.put(db, data, function (response) {
+      unit.put(data, function (response) {
         assert.strictEqual(response, errors.responses.InvalidTokenError);
         done();
       });
@@ -124,7 +121,7 @@ describe('server.handlers.locations', function () {
       var id = '581f166110a1482dd0b7cd13';
       var data = { token: goodToken, location: { '_id': id } };
 
-      unit.get(db, data, function (result) {
+      unit.get(data, function (result) {
         assert.ok(result.hasOwnProperty('success'));
         assert.equal(result.success._id, id);  // Tests id serialization
         done();
@@ -135,7 +132,7 @@ describe('server.handlers.locations', function () {
       var id = '2222222110a1482dd0b7cd13';
       var data = { token: goodToken, location: { '_id': id } };
 
-      unit.get(db, data, function (response) {
+      unit.get(data, function (response) {
         assert.strictEqual(response, errors.responses.NotFoundError);
         done();
       });
@@ -145,7 +142,7 @@ describe('server.handlers.locations', function () {
       var id = 'foobar';
       var data = { token: goodToken, location: { '_id': id } };
 
-      unit.get(db, data, function (response) {
+      unit.get(data, function (response) {
         assert.strictEqual(response, errors.responses.InvalidRequestError);
         done();
       });
@@ -162,12 +159,12 @@ describe('server.handlers.locations', function () {
       var dataForDel = { token: goodToken, location: { '_id': id } };
       var dataForCount = { token: goodToken };
 
-      unit.del(db, dataForDel, function (result) {
+      unit.del(dataForDel, function (result) {
         assert.ok(result.hasOwnProperty('success'));
         // Ensure that the deleted loc is given as the result.
         assert.equal(result.success.name, 'Irbene');
         // Ensure the doc was removed.
-        unit.count(db, dataForCount, function (result2) {
+        unit.count(dataForCount, function (result2) {
           if (result2.error) {
             console.error(result2.error);
             return;
@@ -182,7 +179,7 @@ describe('server.handlers.locations', function () {
       var id = '2222222110a1482dd0f00b42';
       var data = { token: goodToken, location: { '_id': id } };
 
-      unit.del(db, data, function (result) {
+      unit.del(data, function (result) {
         assert.strictEqual(result, errors.responses.NotFoundError);
         done();
       });
@@ -192,7 +189,7 @@ describe('server.handlers.locations', function () {
       var id = 'foobar';
       var data = { token: goodToken, location: { '_id': id } };
 
-      unit.del(db, data, function (result) {
+      unit.del(data, function (result) {
         assert.strictEqual(result, errors.responses.InvalidRequestError);
         done();
       });
