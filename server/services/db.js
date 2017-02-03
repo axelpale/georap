@@ -6,6 +6,12 @@ var mongoClient = require('mongodb').MongoClient;
 var db = null;
 
 exports.init = function (mongoUrl, callback) {
+  // Usage:
+  //   db.init(function (err) {
+  //     if (err) ...
+  //     db.get().collection('mydocs').find()...
+  //   });
+  //
   // Parameters:
   //   mongoUrl
   //     optional connection url. If not given, local.env is used to determine

@@ -15,6 +15,7 @@ module.exports = function (api, account, tags) {
   //   tags
   //     a models.Tags
 
+  // Init
   emitter(this);
   var self = this;
 

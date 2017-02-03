@@ -26,7 +26,7 @@ var loggers = require('./services/logs/loggers');
 var bootstrap = require('../config/bootstrap');
 
 // Routes
-var apiRoutes = require('./routes/api');
+var apiRoutes = require('./api/routes');
 var socketRoutes = require('./routes/socket');
 
 // Log environment

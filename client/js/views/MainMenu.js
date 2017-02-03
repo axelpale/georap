@@ -1,5 +1,5 @@
 var emitter = require('component-emitter');
-var mainmenuTemplate = require('../../templates/menus/mainmenu.ejs');
+var mainmenuTemplate = require('./MainMenu.ejs');
 var glyphiconTemplate = require('../../templates/glyphicon.ejs');
 
 module.exports = function (auth, handlers) {
@@ -46,6 +46,12 @@ module.exports = function (auth, handlers) {
     //     the buttons to bind events to.
 
     r = $(rootElement);
+
+    r.on('click', '#tresdb-mainmenu-events', function (ev) {
+      ev.preventDefault();
+
+      return go('/latest');
+    });
 
     r.on('click', '#tresdb-mainmenu-change-password', function (ev) {
       ev.preventDefault();

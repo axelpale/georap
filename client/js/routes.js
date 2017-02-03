@@ -1,3 +1,4 @@
+/* eslint-disable max-params */
 
 // Client-side routing
 
@@ -8,6 +9,7 @@ var CardView = require('./views/Card');
 var LoginView = require('./views/Login');
 var SignupView = require('./views/Signup');
 var InviteView = require('./views/Invite');
+var EventsView = require('./views/Events');
 var LoadingView = require('./views/Loading');
 var LocationView = require('./views/Location');
 var Error404View = require('./views/Error404');
@@ -16,7 +18,7 @@ var ChangePasswordView = require('./views/ChangePassword');
 
 var AfterLogin = require('./models/AfterLogin');
 
-exports.route = function (page, account, locations, tags) {
+exports.route = function (page, account, locations, tags, events) {
 
   // Init
 
@@ -113,6 +115,26 @@ exports.route = function (page, account, locations, tags) {
   page('/invite', function () {
     var view = new InviteView(account);
     card.open(view, 'page');
+  });
+
+  page('/latest', function () {
+
+    // Open a loading card
+    var loadingView = new LoadingView();
+
+    card.open(loadingView, 'page');
+
+    // Fetch events before rendering.
+    events.getRecent(0, function (err, rawEvents) {
+      if (err) {
+        console.error(err);
+        return;
+      }
+
+      // Render & bind
+      var view = new EventsView(rawEvents);
+      card.open(view);
+    });
   });
 
   page('/locations/:id', function (ctx) {
