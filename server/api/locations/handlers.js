@@ -2,7 +2,6 @@
 var status = require('http-status-codes');
 
 var dal = require('./dal');
-var errors = require('../../errors');
 var uploads = require('../../handlers/lib/attachments/uploads');
 var prepare = require('./lib/prepare');
 

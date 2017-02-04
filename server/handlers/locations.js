@@ -1,7 +1,6 @@
 
 var db = require('../services/db');
 var errors = require('../errors');
-var clustering = require('../services/clustering');
 var model = require('../models/locations');
 var handleToken = require('./lib/handleToken');
 
