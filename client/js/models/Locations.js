@@ -136,16 +136,24 @@ module.exports = function (api, account, tags) {
     //   callback
     //     function (err, markerLocations)
 
-    // API requires MongoDB legacy coordinate format
-    var legacyCenter = [center.lng(), center.lat()];
-
-    var payload = {
-      center: legacyCenter,
-      radius: radius,
-      layer: zoomLevel,
-    };
-
-    api.request('locations/getMarkersWithin', payload, callback);
+    $.ajax({
+      url: '/api/markers',
+      method: 'GET',
+      data: {
+        lat: center.lat(),
+        lng: center.lng(),
+        radius: radius,
+        layer: zoomLevel,
+      },
+      dataType: 'json',
+      headers: { 'Authorization': 'Bearer ' + account.getToken() },
+      success: function (rawMarkers) {
+        return callback(null, rawMarkers);
+      },
+      error: function (jqxhr, textStatus, errorThrown) {
+        return callback(errorThrown);
+      },
+    });
   };
 
 };
