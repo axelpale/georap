@@ -1,20 +1,12 @@
 
 var db = require('../services/db');
-var local = require('../../config/local');
 var errors = require('../errors');
 var clustering = require('../services/clustering');
 var model = require('../models/locations');
 var handleToken = require('./lib/handleToken');
-var uploads = require('./lib/attachments/uploads');
 
 var prepareForModel = require('./lib/prepareForModel');
 var prepareForClient = require('./lib/prepareForClient');
-
-// HTTP JWT handling
-var expressJwt = require('express-jwt');
-// handleHttpToken
-//   function (req, res, next)
-var handleHttpToken = expressJwt({ secret: local.secret });
 
 // Precompile schemas
 var putSchema = require('./schemas/locations/put');
@@ -222,67 +214,5 @@ exports.getMarkersWithin = function (data, response) {
       },
     });
 
-  });
-};
-
-exports.addAttachment = function (req, res) {
-  // HTTP request handler
-
-  var rawLocationId = req.params.locationId;
-  var uploadHandler = uploads.uploader.single('locfile');
-
-  // Ensure user has rights
-  handleHttpToken(req, res, function (err) {
-    var userName, locationId;
-
-    if (err) {
-      console.error(err);
-      return res.json(errors.responses.InvalidTokenError);
-    }
-
-    userName = req.user.name;
-
-    try {
-      locationId = prepareForModel.id(rawLocationId);
-    } catch (e) {
-      return res.json(errors.responses.InvalidRequestError);
-    }
-
-    uploadHandler(req, res, function (err2) {
-      if (err2) {
-        console.error(err2);
-        return res.json({ error: 'UploadError' });
-      }
-      //
-      // console.log('req.file:');
-      // console.log(req.file);
-
-      // Upload successful. Append an attachment entry to the location.
-      model.addAttachment({
-        db: db.get(),
-        locationId: locationId,
-        userName: userName,
-        filePathInUploadDir: uploads.getRelativePath(req.file.path),
-        fileMimeType: req.file.mimetype,
-      }, function (err3, newEntry) {
-        if (err3) {
-          console.error(err3);
-          return res.json(errors.responses.DatabaseError);
-        }
-
-        // Send delta event
-        return res.json({
-          success: {
-            type: 'entry_added',
-            actor: userName,
-            data: {
-              locationId: locationId,
-              entry: prepareForClient.entry(newEntry),
-            },
-          },
-        });
-
-      });
-    });
   });
 };

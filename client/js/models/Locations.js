@@ -102,22 +102,26 @@ module.exports = function (api, account, tags) {
     //
     // Parameters:
     //   id
-    //     Object ID string
+    //     ID string
     //   callback
     //     function (err, location)
     //
-    var payload = { location: { _id: id } };
 
-    api.request('locations/get', payload, function (err, rawLoc) {
-      if (err) {
-        return callback(err);
-      }
+    $.ajax({
+      url: '/api/locations/' + id,
+      method: 'GET',
+      dataType: 'json',
+      headers: { 'Authorization': 'Bearer ' + account.getToken() },
+      success: function (rawLoc) {
 
-      var newLoc = new Location(api, account, tags, rawLoc);
+        var newLoc = new Location(api, account, tags, rawLoc);
+        listenForChanges(newLoc);
 
-      listenForChanges(newLoc);
-
-      return callback(null, newLoc);
+        return callback(null, newLoc);
+      },
+      error: function (jqxhr, textStatus, errorThrown) {
+        return callback(errorThrown);
+      },
     });
   };
 

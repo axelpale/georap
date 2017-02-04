@@ -3,7 +3,7 @@
 var dal = require('./dal');
 
 var errors = require('../../errors');
-var SERVER_ERROR = 500;
+var status = require('http-status-codes');
 
 exports.getRecent = function (req, res) {
   // HTTP request handler
@@ -14,7 +14,9 @@ exports.getRecent = function (req, res) {
 
   dal.getRecent(n, page, function (err, events) {
     if (err) {
-      return res.status(SERVER_ERROR).json(errors.responses.DatabaseError);
+      return res
+        .status(status.INTERNAL_SERVER_ERROR)
+        .json(errors.responses.DatabaseError);
     }
     return res.json(events);
   });
