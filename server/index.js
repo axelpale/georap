@@ -148,7 +148,6 @@ db.init(function (dbErr) {
   // Catch all to single page app.
   // Must be the final step in the app middleware chain.
   app.get('/*', function (req, res) {
-    console.log('sendFile index.html');
     res.sendFile(path.resolve(__dirname, '..', 'client', 'index.html'));
   });
 

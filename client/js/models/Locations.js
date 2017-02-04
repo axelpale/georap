@@ -1,6 +1,5 @@
 
 var emitter = require('component-emitter');
-var shortid = require('shortid');
 var Location = require('./Location');
 
 module.exports = function (api, account, tags) {
@@ -60,39 +59,30 @@ module.exports = function (api, account, tags) {
     //   callback
     //     function (err, createdLocation)
 
-    var rawLoc = {
-      name: '',
-      geom: geom,
-      deleted: false,
-      tags: [],
-      content: [{
-        _id: shortid.generate(),
-        type: 'created',
-        user: account.getName(),
-        time: (new Date()).toISOString(),
-        data: {},
-      }],
-      layer: 1,  // dummy
-    };
+    $.ajax({
+      url: '/api/locations',
+      method: 'POST',
+      data: {
+        lat: geom.coordinates[1],
+        lng: geom.coordinates[0],
+      },
+      dataType: 'json',
+      headers: { 'Authorization': 'Bearer ' + account.getToken() },
+      success: function (rawLoc) {
 
-    var payload = {
-      location: rawLoc,
-    };
+        var newLoc = new Location(api, account, tags, rawLoc);
 
-    api.request('locations/put', payload, function (err, newRawLoc) {
-      if (err) {
-        return callback(err);
-      }
+        // Emit changes of this location until next loc in focus.
+        listenForChanges(newLoc);
 
-      var newLoc = new Location(api, account, tags, newRawLoc);
+        // Inform others that new location has been created.
+        self.emit('location_changed', newLoc);
 
-      // Emit changes of this location until next loc in focus.
-      listenForChanges(newLoc);
-
-      // Inform others that new location has been created.
-      self.emit('location_changed', newLoc);
-
-      return callback(null, newLoc);
+        return callback(null, newLoc);
+      },
+      error: function (jqxhr, textStatus, errorThrown) {
+        return callback(errorThrown);
+      },
     });
   };
 

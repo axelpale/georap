@@ -5,6 +5,37 @@ var dal = require('./dal');
 var uploads = require('../../handlers/lib/attachments/uploads');
 var prepare = require('./lib/prepare');
 
+exports.create = function (req, res) {
+
+  var lat, lng;
+  var valid = (typeof req.body === 'object' &&
+               typeof req.body.lat === 'string' &&
+               typeof req.body.lng === 'string');
+
+  if (valid) {
+    try {
+      lat = parseFloat(req.body.lat);
+      lng = parseFloat(req.body.lng);
+    } catch (err) {
+      valid = false;
+    }
+  }
+
+  if (!valid) {
+    return res.sendStatus(status.BAD_REQUEST);
+  }
+
+  dal.create(lat, lng, req.user.name, function (err, rawLoc) {
+    if (err) {
+      return res.sendStatus(status.INTERNAL_SERVER_ERROR);
+    }
+
+    var loc = prepare.location(rawLoc);
+
+    return res.json(loc);
+  });
+};
+
 exports.getOne = function (req, res) {
   // Fetch single location
 

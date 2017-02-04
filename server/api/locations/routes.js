@@ -5,8 +5,14 @@ var status = require('http-status-codes');
 var ObjectId = require('mongodb').ObjectId;
 var express = require('express');
 var router = express.Router();
+var bodyParser = require('body-parser');
+var urlencodedParser = bodyParser.urlencoded({ extended: false });
 
-// Locations
+// Location collection
+
+router.post('/', urlencodedParser, handlers.create);
+
+// Single location
 
 router.use('/:locationId', function (req, res, next) {
   // Converts string object id to ObjectId

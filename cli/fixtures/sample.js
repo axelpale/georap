@@ -21,7 +21,10 @@ module.exports = {
         locationId: new ObjectId('581f166110a1482dd0b7cd13'),
         user: local.admin.username,
         time: '2009-07-30T10:44:58.000Z',
-        data: {},
+        data: {
+          lat: 57.55341,
+          lng: 21.857705,
+        },
       },
       {
         _id: new ObjectId('58092312bbba430a35fb4101'),
@@ -62,7 +65,10 @@ module.exports = {
           type: 'created',
           user: local.admin.username,
           time: '2009-07-30T10:44:58.000Z',
-          data: {},
+          data: {
+            lat: 57.55341,
+            lng: 21.857705,
+          },
         }, {
           _id: 'rkMxRvKSl',
           type: 'story',
