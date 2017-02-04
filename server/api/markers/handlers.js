@@ -49,10 +49,7 @@ exports.getWithin = function (req, res) {
   }
 
   if (!validRequest) {
-    console.log('getWithin');
-    return res.status(status.BAD_REQUEST).json({
-      error: status.getStatusText(status.BAD_REQUEST),
-    });
+    return res.sendStatus(status.BAD_REQUEST);
   }  // else
 
   dal.getWithin({
@@ -63,9 +60,7 @@ exports.getWithin = function (req, res) {
   }, function (err, markers) {
     if (err) {
       console.error(err);
-      return res.status(status.INTERNAL_SERVER_ERROR).json({
-        error: status.getStatusText(status.INTERNAL_SERVER_ERROR),
-      });
+      return res.sendStatus(status.INTERNAL_SERVER_ERROR);
     }
 
     return res.json(markers);

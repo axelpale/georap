@@ -25,6 +25,5 @@ module.exports = function (socket) {
   socket.on('locations/put', locations.put);
   socket.on('locations/get', locations.get);
   socket.on('locations/del', locations.del);
-  socket.on('locations/getMarkersWithin', locations.getMarkersWithin);
 
 };

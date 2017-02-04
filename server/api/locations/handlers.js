@@ -11,15 +11,11 @@ exports.getOne = function (req, res) {
 
   dal.getOne(req.locationId, function (err, rawLoc) {
     if (err) {
-      return res.status(status.INTERNAL_SERVER_ERROR).json({
-        error: status.getStatusText(status.INTERNAL_SERVER_ERROR),
-      });
+      return res.sendStatus(status.INTERNAL_SERVER_ERROR);
     }
 
     if (!rawLoc) {
-      return res.status(status.NOT_FOUND).json({
-        error: status.getStatusText(status.NOT_FOUND),
-      });
+      return res.sendStatus(status.NOT_FOUND);
     }
 
     var loc = prepare.location(rawLoc);
@@ -38,7 +34,7 @@ exports.addAttachment = function (req, res) {
   uploadHandler(req, res, function (err2) {
     if (err2) {
       console.error(err2);
-      return res.json({ error: 'UploadError' });
+      return res.sendStatus(status.INTERNAL_SERVER_ERROR);
     }
     //
     // console.log('req.file:');
@@ -53,7 +49,7 @@ exports.addAttachment = function (req, res) {
     }, function (err3, newEntry) {
       if (err3) {
         console.error(err3);
-        return res.json(errors.responses.DatabaseError);
+        return res.sendStatus(status.INTERNAL_SERVER_ERROR);
       }
 
       // Send delta event
