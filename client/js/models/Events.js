@@ -11,12 +11,22 @@ module.exports = function (account) {
 
   this.getRecent = function (page, callback) {
 
-    $.getJSON('/api/events', {
-      page: page,
-      token: account.getToken(),
-    }, function (data) {
-      return callback(null, data);
+    $.ajax({
+      url: '/api/events',
+      method: 'GET',
+      data: {
+        page: page,
+      },
+      dataType: 'json',
+      headers: { 'Authorization': 'Bearer ' + account.getToken() },
+      success: function (data) {
+        return callback(null, data);
+      },
+      error: function (jqxhr, textStatus, errorThrown) {
+        return callback(errorThrown);
+      },
     });
 
   };
+
 };
