@@ -52,12 +52,14 @@ exports.create = function (lat, lng, username, callback) {
   });
 };
 
-exports.removeOne = function (id, callback) {
+exports.removeOne = function (id, username, callback) {
   // Remove single location
   //
   // Parameters:
   //   id
   //     ObjectId
+  //   username
+  //     string
   //   callback
   //     function (err)
   //
@@ -69,7 +71,10 @@ exports.removeOne = function (id, callback) {
       return callback(err);
     }
 
-    return callback(null);
+    eventsDal.createLocationRemoved({
+      locationId: id,
+      username: username,
+    }, callback);
   });
 };
 

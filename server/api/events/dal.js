@@ -1,6 +1,52 @@
 var db = require('../../services/db');
 var io = require('../../services/io');
 
+// Private methods
+
+var emitOne = function (ev) {
+  if (!ev.hasOwnProperty('_id')) {
+    throw new Error('Event must have a _id before emitting');
+  }
+
+  io.get().emit(ev.type, ev);
+};
+
+var insertOne = function (ev, callback) {
+  // Parameters:
+  //   ev
+  //     event object to insert
+  //   callback
+  //     function (err, eventId);
+  var coll = db.get().collection('events');
+
+  coll.insertOne(ev, function (err, result) {
+    if (err) {
+      return callback(err);
+    }
+    return callback(null, result.insertedId);
+  });
+};
+
+var insertAndEmit = function (ev, callback) {
+  // Parameters:
+  //   ev
+  //     event object to insert and emit after insertion. Ev is given a _id.
+  //   callback
+  //     function (err)
+  //
+  insertOne(ev, function (err, newId) {
+    if (err) {
+      return callback(err);
+    }
+    ev._id = newId;
+    emitOne(ev);
+    return callback(null);
+  });
+};
+
+
+// Public methods
+
 exports.createLocationCreated = function (params, callback) {
   // Parameters:
   //   params:
@@ -25,18 +71,28 @@ exports.createLocationCreated = function (params, callback) {
     },
   };
 
-  var coll = db.get().collection('events');
+  insertAndEmit(newEvent, callback);
+};
 
-  coll.insertOne(newEvent, function (err, result) {
-    if (err) {
-      return callback(err);
-    }
+exports.createLocationRemoved = function (params, callback) {
+  // Parameters:
+  //   params:
+  //     locationId
+  //       ObjectId, location id
+  //     username
+  //       string
+  //   callback
+  //     function (err);
 
-    newEvent._id = result.insertedId;
+  var newEvent = {
+    type: 'location_removed',
+    user: params.username,
+    time: (new Date()).toISOString(),
+    locationId: params.locationId,
+    data: {},
+  };
 
-    io.get().emit('location_created', newEvent);
-    return callback();
-  });
+  insertAndEmit(newEvent, callback);
 };
 
 exports.getRecent = function (n, page, callback) {

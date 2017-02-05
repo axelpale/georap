@@ -39,7 +39,7 @@ exports.create = function (req, res) {
 exports.removeOne = function (req, res) {
   // Delete single location
 
-  dal.removeOne(req.locationId, function (err) {
+  dal.removeOne(req.locationId, req.user.name, function (err) {
     if (err) {
       return res.sendStatus(status.INTERNAL_SERVER_ERROR);
     }
