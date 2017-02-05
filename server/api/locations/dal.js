@@ -66,13 +66,17 @@ exports.removeOne = function (id, username, callback) {
 
   var coll = db.get().collection('locations');
 
-  coll.deleteOne({ _id: id }, {}, function (err) {
+  var q = { _id: id };
+  var u = { $set: { deleted: true } };
+
+  coll.findOneAndUpdate(q, u, function (err, result) {
     if (err) {
       return callback(err);
     }
 
     eventsDal.createLocationRemoved({
       locationId: id,
+      locationName: result.value.name,
       username: username,
     }, callback);
   });

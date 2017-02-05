@@ -79,6 +79,8 @@ exports.createLocationRemoved = function (params, callback) {
   //   params:
   //     locationId
   //       ObjectId, location id
+  //     locationName
+  //       string
   //     username
   //       string
   //   callback
@@ -105,10 +107,47 @@ exports.getRecent = function (n, page, callback) {
   //   callback
   //     function (err, events)
 
-  var coll = db.get().collection('events');
+  var eventsColl = db.get().collection('events');
+  //var locsColl = db.get().collection('locations');
 
-  coll.find({}).sort({ time: 1 }).toArray(function (err, docs) {
+  /*eventsColl.find({}).sort({ time: -1 }).toArray(function (err, docs) {
     if (err) {
+      return callback(err);
+    }
+
+    return callback(null, docs);
+  });*/
+
+  eventsColl.aggregate([
+    {
+      $sort: {
+        time: -1,
+      },
+    },
+    {
+      // Specify first document to return
+      $skip: n * page,
+    },
+    {
+      // Specify last document to return
+      $limit: n,
+    },
+    {
+      // Join with location data
+      $lookup: {
+        from: 'locations',
+        localField: 'locationId',
+        foreignField: '_id',
+        as: 'location',
+      },
+    },
+    {
+      // Change the location array to the single location (the first item).
+      $unwind: '$location',
+    },
+  ], function (err, docs) {
+    if (err) {
+      console.error(err);
       return callback(err);
     }
 

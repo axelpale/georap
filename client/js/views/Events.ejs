@@ -4,9 +4,24 @@
 
       <h1>Latest activity</h1>
 
-      <div id="tresdb-events">
-        <%= events.length %> events.
-      </div>
+      <ul id="tresdb-events" class="list-group">
+        <% var i, ev, t, name; %>
+        <% for (i = 0; i < events.length; i += 1) { %>
+          <% ev = events[i]; %>
+          <% t = ev.type; %>
+          <% name = ev.location.name; %>
+          <% name = (name === '' ? 'Untitled' : name) %>
+          <li class="list-group-item">
+            <% if (t === 'location_created') { %>
+              <%= ev.user %> created <a href="/locations/<%= ev.locationId %>"><%= name %></a> <%= timestamp(ev.time) %>
+            <% } else if (t === 'location_removed') { %>
+              <%= ev.user %> deleted <a href="/locations/<%= ev.locationId %>"><%= name %></a> <%= timestamp(ev.time) %>
+            <% } else { %>
+              <%= ev.type %>
+            <% } %>
+          </li>
+        <% } %>
+      </ul>
 
     </div>
   </div>
