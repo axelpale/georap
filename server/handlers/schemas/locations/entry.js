@@ -56,7 +56,10 @@ module.exports = {
         user: userSchema,
         data: {
           type: 'object',
-          properties: {},
+          properties: {
+            lat: { type: 'number' },
+            lng: { type: 'number' },
+          },
           additionalProperties: false,
         },
       },
