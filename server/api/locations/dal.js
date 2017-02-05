@@ -52,6 +52,27 @@ exports.create = function (lat, lng, username, callback) {
   });
 };
 
+exports.removeOne = function (id, callback) {
+  // Remove single location
+  //
+  // Parameters:
+  //   id
+  //     ObjectId
+  //   callback
+  //     function (err)
+  //
+
+  var coll = db.get().collection('locations');
+
+  coll.deleteOne({ _id: id }, {}, function (err) {
+    if (err) {
+      return callback(err);
+    }
+
+    return callback(null);
+  });
+};
+
 exports.getOne = function (id, callback) {
   // Get single location
   //

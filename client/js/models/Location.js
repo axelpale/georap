@@ -520,14 +520,20 @@ module.exports = function (api, account, tags, rawLoc) {
   };
 
   this.remove = function (callback) {
-    var payload = { location: { _id: loc._id } };
-    api.request('locations/del', payload, function (err) {
-      if (err) {
-        return callback(err);
-      }
-      // Inform
-      self.emit('removed', self);
-      return callback();
+
+    $.ajax({
+      url: '/api/locations/' + loc._id,
+      method: 'DELETE',
+      headers: { 'Authorization': 'Bearer ' + account.getToken() },
+      success: function () {
+        // Inform
+        self.emit('removed', self);
+        return callback();
+      },
+      error: function (jqxhr, textStatus, errorThrown) {
+        return callback(errorThrown);
+      },
     });
+
   };
 };

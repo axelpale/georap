@@ -36,6 +36,18 @@ exports.create = function (req, res) {
   });
 };
 
+exports.removeOne = function (req, res) {
+  // Delete single location
+
+  dal.removeOne(req.locationId, function (err) {
+    if (err) {
+      return res.sendStatus(status.INTERNAL_SERVER_ERROR);
+    }
+
+    return res.sendStatus(status.OK);
+  });
+};
+
 exports.getOne = function (req, res) {
   // Fetch single location
 
