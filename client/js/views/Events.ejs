@@ -5,7 +5,7 @@
       <h1>Latest activity</h1>
 
       <ul id="tresdb-events" class="list-group">
-        <% var i, ev, t, name; %>
+        <% var i, ev, t, name, a, b; %>
         <% for (i = 0; i < events.length; i += 1) { %>
           <% ev = events[i]; %>
           <% t = ev.type; %>
@@ -16,6 +16,17 @@
               <%= ev.user %> created <a href="/locations/<%= ev.locationId %>"><%= name %></a> <%= timestamp(ev.time) %>
             <% } else if (t === 'location_removed') { %>
               <%= ev.user %> deleted <a href="/locations/<%= ev.locationId %>"><%= name %></a> <%= timestamp(ev.time) %>
+            <% } else if (t === 'location_name_changed') { %>
+              <% a = ev.data.oldName; %>
+              <% if (a === '') { %>
+                <%= ev.user %> named <a href="/locations/<%= ev.locationId %>"><%= ev.data.newName %></a> <%= timestamp(ev.time) %>
+              <% } else { %>
+                <%= ev.user %> renamed <a href="/locations/<%= ev.locationId %>"><%= ev.data.oldName %></a> to <a href="/locations/<%= ev.locationId %>"><%= ev.data.newName %></a> <%= timestamp(ev.time) %>
+              <% } %>
+            <% } else if (t === 'location_story_created') { %>
+              <%= ev.user %> wrote to <a href="/locations/<%= ev.locationId %>"><%= name %></a> <%= timestamp(ev.time) %>
+            <% } else if (t === 'location_attachment_created') { %>
+              <%= ev.user %> attached a file to <a href="/locations/<%= ev.locationId %>"><%= name %></a> <%= timestamp(ev.time) %>
             <% } else { %>
               <%= ev.type %>
             <% } %>
