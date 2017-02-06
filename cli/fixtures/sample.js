@@ -16,9 +16,8 @@ module.exports = {
     events: [
       {
         _id: new ObjectId('58092312bbba430a35fb4100'),
-        clientGeneratedId: 'rkblRPFrg',
-        type: 'location_created',
         locationId: new ObjectId('581f166110a1482dd0b7cd13'),
+        type: 'location_created',
         user: local.admin.username,
         time: '2009-07-30T10:44:58.000Z',
         data: {
@@ -28,9 +27,8 @@ module.exports = {
       },
       {
         _id: new ObjectId('58092312bbba430a35fb4101'),
-        clientGeneratedId: 'rkMxRvKSl',
-        type: 'location_story_created',
         locationId: new ObjectId('581f166110a1482dd0b7cd13'),
+        type: 'location_story_created',
         user: local.admin.username,
         time: '2009-09-04T23:44:21.000Z',
         data: {
@@ -39,15 +37,44 @@ module.exports = {
       },
       {
         _id: new ObjectId('58092312bbba430a35fb4102'),
-        clientGeneratedId: 'RxRvKSlbl',
-        type: 'location_attachment_created',
         locationId: new ObjectId('581f166110a1482dd0b7cd13'),
+        type: 'location_attachment_created',
         user: local.admin.username,
         time: '2009-10-05T12:23:34.000Z',
         data: {
           filepath: '2009/RxRvKSlbl/radar.jpg',
           mimetype: 'image/jpeg',
         },
+      },
+      {
+        _id: new ObjectId('58092312bbba430a35fb4103'),
+        locationId: new ObjectId('581f166130a1482dd0b7cd15'),
+        type: 'location_created',
+        user: local.admin.username,
+        time: '2017-02-06T12:23:34.000Z',
+        data: {
+          lat: 59.22667,
+          lng: 24.19462,
+        },
+      },
+      {
+        _id: new ObjectId('58092312bcba430a35fb4104'),
+        locationId: new ObjectId('581f166130a1482dd0b7cd15'),
+        type: 'location_name_changed',
+        user: local.admin.username,
+        time: '2017-02-06T12:24:00.000Z',
+        data: {
+          oldName: '',
+          newName: 'Rummu',
+        },
+      },
+      {
+        _id: new ObjectId('58092332bcba430a35fb4105'),
+        locationId: new ObjectId('581f166130a1482dd0b7cd15'),
+        type: 'location_removed',
+        user: local.admin.username,
+        time: '2017-02-06T12:25:00.000Z',
+        data: {},
       },
     ],
     locations: [
@@ -60,34 +87,50 @@ module.exports = {
         },
         deleted: false,
         tags: ['walk-in'],
-        content: [{
-          _id: 'rkblRPFrg',
-          type: 'created',
-          user: local.admin.username,
-          time: '2009-07-30T10:44:58.000Z',
-          data: {
-            lat: 57.55341,
-            lng: 21.857705,
+        content: [
+          {
+            _id: 'rkblRPFrg',
+            type: 'created',
+            user: local.admin.username,
+            time: '2009-07-30T10:44:58.000Z',
+            data: {
+              lat: 57.55341,
+              lng: 21.857705,
+            },
           },
-        }, {
-          _id: 'rkMxRvKSl',
-          type: 'story',
-          user: local.admin.username,
-          time: '2009-09-04T23:44:21.000Z',
-          data: {
-            markdown: 'A ghost town',
+          {
+            _id: 'rkMxRvKSl',
+            type: 'story',
+            user: local.admin.username,
+            time: '2009-09-04T23:44:21.000Z',
+            data: {
+              markdown: 'A ghost town',
+            },
           },
-        }, {
-          _id: 'RxRvKSlbl',
-          type: 'attachment',
-          user: local.admin.username,
-          time: '2009-10-05T12:23:34.000Z',
-          data: {
-            filepath: '2009/RxRvKSlbl/radar.jpg',
-            mimetype: 'image/jpeg',
+          {
+            _id: 'RxRvKSlbl',
+            type: 'attachment',
+            user: local.admin.username,
+            time: '2009-10-05T12:23:34.000Z',
+            data: {
+              filepath: '2009/RxRvKSlbl/radar.jpg',
+              mimetype: 'image/jpeg',
+            },
           },
-        }],
+        ],
         layer: 1,
+      },
+      {
+        _id: new ObjectId('581f166130a1482dd0b7cd15'),
+        name: 'Rummu',
+        geom: {
+          type: 'Point',
+          coordinates: [24.19462, 59.22667],
+        },
+        deleted: true,
+        tags: [],
+        content: [],
+        layer: 2,
       },
     ],
     users: [
