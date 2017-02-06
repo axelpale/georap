@@ -5,6 +5,17 @@ var dal = require('./dal');
 var uploads = require('../../handlers/lib/attachments/uploads');
 var prepare = require('./lib/prepare');
 
+exports.count = function (req, res) {
+
+  dal.count(function (err, numLocs) {
+    if (err) {
+      return res.sendStatus(status.INTERNAL_SERVER_ERROR);
+    }
+
+    return res.json(numLocs);
+  });
+};
+
 exports.create = function (req, res) {
 
   var lat, lng;

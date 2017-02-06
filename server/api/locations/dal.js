@@ -2,6 +2,22 @@ var db = require('../../services/db');
 var shortid = require('shortid');
 var eventsDal = require('../events/dal');
 
+exports.count = function (callback) {
+  // Count non-deleted locations
+  //
+  // Parameters:
+  //   callback
+  //     function (err, number)
+
+  var coll = db.get().collection('locations');
+
+  coll.count({ deleted: false }).then(function (number) {
+    return callback(null, number);
+  }).catch(function (err) {
+    return callback(err);
+  });
+};
+
 exports.create = function (lat, lng, username, callback) {
   // Create a location to given coordinates.
 

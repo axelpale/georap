@@ -11,6 +11,7 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false });
 // Location collection
 
 router.post('/', urlencodedParser, handlers.create);
+router.get('/count', handlers.count);
 
 // Single location
 
