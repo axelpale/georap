@@ -2,6 +2,34 @@ var db = require('../../services/db');
 var shortid = require('shortid');
 var eventsDal = require('../events/dal');
 
+exports.changeName = function (id, newName, username, callback) {
+
+  var locColl = db.get().collection('locations');
+  var q = { _id: id };
+  var u = { $set: { name: newName } };
+
+  locColl.findOneAndUpdate(q, u, function (err, result) {
+    if (err) {
+      return callback(err);
+    }
+
+    var oldName = result.value.name;
+
+    eventsDal.createLocationNameChanged({
+      locationId: id,
+      username: username,
+      newName: newName,
+      oldName: oldName,
+    }, function (err2) {
+      if (err2) {
+        return callback(err2);
+      }
+
+      return callback(null);
+    });
+  });
+};
+
 exports.count = function (callback) {
   // Count non-deleted locations
   //

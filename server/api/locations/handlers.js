@@ -77,6 +77,24 @@ exports.getOne = function (req, res) {
   });
 };
 
+exports.changeName = function (req, res) {
+
+  if (typeof req.body.newName !== 'string') {
+    return res.sendStatus(status.BAD_REQUEST);
+  }
+
+  var id = req.locationId;
+  var u = req.user.name;
+
+  dal.changeName(id, req.body.newName, u, function (err) {
+    if (err) {
+      return res.sendStatus(status.INTERNAL_SERVER_ERROR);
+    }
+
+    return res.sendStatus(status.OK);
+  });
+};
+
 exports.addAttachment = function (req, res) {
   // HTTP request handler
 

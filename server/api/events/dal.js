@@ -3,6 +3,10 @@ var io = require('../../services/io');
 
 // Private methods
 
+var timestamp = function () {
+  return (new Date()).toISOString();
+};
+
 var emitOne = function (ev) {
   if (!ev.hasOwnProperty('_id')) {
     throw new Error('Event must have a _id before emitting');
@@ -63,11 +67,35 @@ exports.createLocationCreated = function (params, callback) {
   var newEvent = {
     type: 'location_created',
     user: params.username,
-    time: (new Date()).toISOString(),
+    time: timestamp(),
     locationId: params.locationId,
     data: {
       lat: params.lat,
       lng: params.lng,
+    },
+  };
+
+  insertAndEmit(newEvent, callback);
+};
+
+exports.createLocationNameChanged = function (params, callback) {
+  // Parameters:
+  //   params:
+  //     locationId
+  //     username
+  //     newName
+  //       string
+  //     oldName
+  //       string
+
+  var newEvent = {
+    type: 'location_name_changed',
+    user: params.username,
+    time: timestamp(),
+    locationId: params.locationId,
+    data: {
+      newName: params.newName,
+      oldName: params.oldName,
     },
   };
 

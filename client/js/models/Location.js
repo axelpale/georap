@@ -478,25 +478,21 @@ module.exports = function (api, account, tags, rawLoc) {
     //   callback
     //     function (err)
 
-    var oldLoc = clone(loc);
-    loc.name = newName;
-
-    var rawEntry = createRawEntry('rename', {
-      oldName: oldLoc.name,
-      newName: newName,
-    });
-    addRawEntry(rawEntry);
-
-    this.save(function (err) {
-      if (err) {
-        // Fallback
-        loc = oldLoc;
-        removeRawEntry(rawEntry._id);
-        return callback(err);
-      }
-      self.emit('name_changed');
-      self.emit('entry_added', { entryId: rawEntry._id });
-      return callback();
+    $.ajax({
+      url: '/api/locations/' + loc._id + '/name',
+      method: 'POST',
+      data: {
+        newName: newName,
+      },
+      headers: { 'Authorization': 'Bearer ' + account.getToken() },
+      success: function () {
+        loc.name = newName;
+        self.emit('name_changed');
+        return callback(null);
+      },
+      error: function (jqxhr, textStatus, errorThrown) {
+        return callback(errorThrown);
+      },
     });
   };
 
