@@ -126,6 +126,30 @@ exports.createLocationNameChanged = function (params, callback) {
   insertAndEmit(newEvent, callback);
 };
 
+exports.createLocationTagsChanged = function (params, callback) {
+  // Parameters:
+  //   params:
+  //     locationId
+  //     username
+  //     newTags
+  //       array of strings
+  //     oldTags
+  //       array of string
+
+  var newEvent = {
+    type: 'location_tags_changed',
+    user: params.username,
+    time: timestamp(),
+    locationId: params.locationId,
+    data: {
+      newTags: params.newTags,
+      oldTags: params.oldTags,
+    },
+  };
+
+  insertAndEmit(newEvent, callback);
+};
+
 exports.createLocationRemoved = function (params, callback) {
   // Parameters:
   //   params:

@@ -6,6 +6,7 @@ var ObjectId = require('mongodb').ObjectId;
 var express = require('express');
 var router = express.Router();
 var bodyParser = require('body-parser');
+var jsonParser = bodyParser.json();
 var urlencodedParser = bodyParser.urlencoded({ extended: false });
 
 // Location collection
@@ -31,8 +32,9 @@ router.use('/:locationId', function (req, res, next) {
 
 router.get('/:locationId', handlers.getOne);
 router.delete('/:locationId', handlers.removeOne);
-router.post('/:locationId/name', urlencodedParser, handlers.changeName);
-router.post('/:locationId/geom', urlencodedParser, handlers.changeGeom);
 router.post('/:locationId/attachments', handlers.addAttachment);
+router.post('/:locationId/geom', urlencodedParser, handlers.changeGeom);
+router.post('/:locationId/name', urlencodedParser, handlers.changeName);
+router.post('/:locationId/tags', jsonParser, handlers.changeTags);
 
 module.exports = router;

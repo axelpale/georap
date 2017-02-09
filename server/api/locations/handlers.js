@@ -128,6 +128,32 @@ exports.changeGeom = function (req, res) {
   });
 };
 
+exports.changeTags = function (req, res) {
+
+  var id, u, tags;
+
+  if (typeof req.body.tags !== 'object') {
+    return res.sendStatus(status.BAD_REQUEST);
+  }
+
+  id = req.locationId;
+  u = req.user.name;
+  tags = req.body.tags;
+
+  dal.changeTags({
+    locationId: id,
+    username: u,
+    tags: tags,
+  }, function (err) {
+    if (err) {
+      console.error(err);
+      return res.sendStatus(status.INTERNAL_SERVER_ERROR);
+    }
+
+    return res.sendStatus(status.OK);
+  });
+};
+
 exports.addAttachment = function (req, res) {
   // HTTP request handler
 

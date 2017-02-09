@@ -5,9 +5,18 @@
       <% tag = allTags[j]; %>
       <% isActive = (locationTags.indexOf(tag) > -1); %>
       <% if (isActive) { %>
-        <div id="tresdb-location-edit-tags-<%= tag %>" class="col-sm-5 bg-info"><span class="label label-primary tresdb-tag"><%= tag %></span> <button id="tresdb-location-edit-tags-<%= tag %>-button" type="button" class="btn btn-default btn-sm">Remove</button></div>
+
+        <label id="tresdb-location-edit-tags-<%= tag %>" class="col-sm-5">
+          <input type="checkbox" name="tags" value="<%= tag %>" checked="checked">
+          <span class="label label-primary tresdb-tag"><%= tag %></span>
+          <!--button id="tresdb-location-edit-tags-<%= tag %>-button" type="button" class="btn btn-default btn-sm">Remove</button-->
+        </label>
       <% } else { %>
-        <div id="tresdb-location-edit-tags-<%= tag %>" class="col-sm-5"><span class="label label-default tresdb-tag"><%= tag %></span> <button id="tresdb-location-edit-tags-<%= tag %>-button" type="button" class="btn btn-default btn-sm">Add</button></div>
+        <label id="tresdb-location-edit-tags-<%= tag %>" class="col-sm-5">
+          <input type="checkbox" name="tags" value="<%= tag %>">
+          <span class="label label-default tresdb-tag"><%= tag %></span>
+          <!--button id="tresdb-location-edit-tags-<%= tag %>-button" type="button" class="btn btn-default btn-sm">Add</button-->
+        </label>
       <% } %>
     <% } %>
   </div>

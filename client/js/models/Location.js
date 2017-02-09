@@ -43,17 +43,6 @@ module.exports = function (api, account, tags, rawLoc) {
 
   // Private methods
 
-  var addRawTag = function (tag) {
-    loc.tags.push(tag);
-  };
-
-  var removeRawTag = function (tag) {
-    var index = loc.tags.indexOf(tag);
-    if (index > -1) {
-      loc.tags.splice(index, 1);
-    }
-  };
-
   var getRawEntry = function (id) {
     // Return a raw entry with given id
     var i;
@@ -310,47 +299,6 @@ module.exports = function (api, account, tags, rawLoc) {
     });
   };
 
-  this.addTag = function (tag, callback) {
-    // Parameters:
-    //   tag
-    //     string
-    //   callback
-    //     function (err)
-
-    if (typeof tag !== 'string') {
-      throw new Error('invalid tag type: ' + (typeof tag));
-    }
-
-    if (!tags.isValidTag(tag)) {
-      throw new Error('unknown tag: ' + tag);
-    }
-
-    if (this.hasTag(tag)) {
-      // Success, tag already added
-      return callback(null);
-    }
-
-    addRawTag(tag);
-
-    var rawEntry = createRawEntry('tagadd', { tag: tag });
-    addRawEntry(rawEntry);
-
-    this.save(function (err) {
-      if (err) {
-        // Remove the added tag. Other tags could have been added and
-        // the tag also removed during the save.
-        removeRawTag(tag);
-        removeRawEntry(rawEntry._id);
-
-        return callback(err);
-      }
-
-      self.emit('tags_changed');
-      self.emit('entry_added', { entryId: rawEntry._id });
-      return callback();
-    });
-  };
-
   this.addVisit = function (year, callback) {
     // Parameters:
     //   year
@@ -403,31 +351,6 @@ module.exports = function (api, account, tags, rawLoc) {
       // If already removed
       return callback();
     }
-  };
-
-  this.removeTag = function (tag, callback) {
-
-    if (typeof tag !== 'string') {
-      throw new Error('invalid tag type: ' + (typeof tag));
-    }
-
-    removeRawTag(tag);
-
-    var rawEntry = createRawEntry('tagdel', { tag: tag });
-    addRawEntry(rawEntry);
-
-    this.save(function (err) {
-      if (err) {
-        addRawTag(tag);
-        removeRawEntry(rawEntry._id);
-        return callback(err);
-      }
-
-      self.emit('tags_changed');
-      self.emit('entry_added', { entryId: rawEntry._id });
-      return callback();
-    });
-
   };
 
   this.setGeom = function (lng, lat, callback) {
@@ -488,6 +411,44 @@ module.exports = function (api, account, tags, rawLoc) {
       success: function () {
         loc.name = newName;
         self.emit('name_changed');
+        return callback(null);
+      },
+      error: function (jqxhr, textStatus, errorThrown) {
+        return callback(errorThrown);
+      },
+    });
+  };
+
+  this.setTags = function (newTags, callback) {
+    // Replaces the current taglist with the new one and saves to server.
+    //
+    // Parameters
+    //   newTags
+    //     array of strings
+    //   callback
+    //     function (err)
+
+    // Validate
+    var i, t;
+    for (i = 0; i < newTags.length; i += 1) {
+      t = newTags[i];
+      if (!tags.isValidTag(t)) {
+        throw new Error('unknown tag: ' + t);
+      }
+    }
+
+    // Post
+    $.ajax({
+      url: '/api/locations/' + loc._id + '/tags',
+      method: 'POST',
+      contentType: 'application/json',
+      data: JSON.stringify({
+        tags: newTags,
+      }),
+      headers: { 'Authorization': 'Bearer ' + account.getToken() },
+      success: function () {
+        loc.tags = newTags;
+        self.emit('tags_changed');
         return callback(null);
       },
       error: function (jqxhr, textStatus, errorThrown) {

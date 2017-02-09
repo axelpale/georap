@@ -74,6 +74,45 @@ exports.changeName = function (id, newName, username, callback) {
   });
 };
 
+exports.changeTags = function (params, callback) {
+  // Parameters:
+  //   params
+  //     locationId
+  //       ObjectId
+  //     username
+  //       string
+  //     tags
+  //       array of strings
+  //   callback
+  //     function (err)
+
+  var locColl = db.get().collection('locations');
+  var q = { _id: params.locationId };
+  var newTags = params.tags;
+  var u = { $set: { tags: newTags } };
+
+  locColl.findOneAndUpdate(q, u, function (err, result) {
+    if (err) {
+      return callback(err);
+    }
+
+    var oldTags = result.value.tags;
+
+    eventsDal.createLocationTagsChanged({
+      locationId: params.locationId,
+      username: params.username,
+      newTags: newTags,
+      oldTags: oldTags,
+    }, function (err2) {
+      if (err2) {
+        return callback(err2);
+      }
+
+      return callback(null);
+    });
+  });
+};
+
 exports.count = function (callback) {
   // Count non-deleted locations
   //
