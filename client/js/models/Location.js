@@ -433,7 +433,11 @@ module.exports = function (api, account, tags, rawLoc) {
   this.setGeom = function (lng, lat, callback) {
     // Parameters:
     //   lng
+    //     number
     //   lat
+    //     number
+    //   callback
+    //     function (err)
 
     if (!validateCoords.isValidLongitude(lng)) {
       return callback(new Error('Invalid coordinate'));
@@ -442,30 +446,26 @@ module.exports = function (api, account, tags, rawLoc) {
       return callback(new Error('Invalid coordinate'));
     }
 
-    // Store old coords if things go bad
-    var oldGeom = clone(loc.geom);
+    $.ajax({
+      url: '/api/locations/' + loc._id + '/geom',
+      method: 'POST',
+      data: {
+        lat: lat,
+        lng: lng,
+      },
+      headers: { 'Authorization': 'Bearer ' + account.getToken() },
+      success: function () {
 
-    // Update coords
-    loc.geom.coordinates[0] = lng;
-    loc.geom.coordinates[1] = lat;
+        // Update coords
+        loc.geom.coordinates[0] = lng;
+        loc.geom.coordinates[1] = lat;
+        self.emit('geom_changed');
 
-    // Create entry
-    var rawEntry = createRawEntry('move', {
-      oldGeom: clone(oldGeom),
-      newGeom: clone(loc.geom),
-    });
-    addRawEntry(rawEntry);
-
-    this.save(function (err) {
-      if (err) {
-        // Fallback
-        loc.geom = oldGeom;
-        removeRawEntry(rawEntry._id);
-        return callback(err);
-      }
-      self.emit('geom_changed');
-      self.emit('entry_added', { entryId: rawEntry._id });
-      return callback();
+        return callback(null);
+      },
+      error: function (jqxhr, textStatus, errorThrown) {
+        return callback(errorThrown);
+      },
     });
   };
 

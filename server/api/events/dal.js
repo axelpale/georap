@@ -78,6 +78,30 @@ exports.createLocationCreated = function (params, callback) {
   insertAndEmit(newEvent, callback);
 };
 
+exports.createLocationGeomChanged = function (params, callback) {
+  // Parameters:
+  //   params:
+  //     locationId
+  //     username
+  //     newGeom
+  //       GeoJSON Point
+  //     oldGeom
+  //       GeoJSON Point
+
+  var newEvent = {
+    type: 'location_geom_changed',
+    user: params.username,
+    time: timestamp(),
+    locationId: params.locationId,
+    data: {
+      newGeom: params.newGeom,
+      oldGeom: params.oldGeom,
+    },
+  };
+
+  insertAndEmit(newEvent, callback);
+};
+
 exports.createLocationNameChanged = function (params, callback) {
   // Parameters:
   //   params:

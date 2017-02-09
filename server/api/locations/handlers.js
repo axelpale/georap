@@ -95,6 +95,39 @@ exports.changeName = function (req, res) {
   });
 };
 
+exports.changeGeom = function (req, res) {
+
+  var id, u, lat, lng;
+
+  if (typeof req.body.lat !== 'string' ||
+      typeof req.body.lng !== 'string') {
+    return res.sendStatus(status.BAD_REQUEST);
+  }
+
+  try {
+    lat = parseFloat(req.body.lat);
+    lng = parseFloat(req.body.lng);
+  } catch (e) {
+    return res.sendStatus(status.BAD_REQUEST);
+  }
+
+  id = req.locationId;
+  u = req.user.name;
+
+  dal.changeGeom({
+    locationId: id,
+    username: u,
+    latitude: lat,
+    longitude: lng,
+  }, function (err) {
+    if (err) {
+      return res.sendStatus(status.INTERNAL_SERVER_ERROR);
+    }
+
+    return res.sendStatus(status.OK);
+  });
+};
+
 exports.addAttachment = function (req, res) {
   // HTTP request handler
 

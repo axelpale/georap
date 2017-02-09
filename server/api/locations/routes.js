@@ -32,6 +32,7 @@ router.use('/:locationId', function (req, res, next) {
 router.get('/:locationId', handlers.getOne);
 router.delete('/:locationId', handlers.removeOne);
 router.post('/:locationId/name', urlencodedParser, handlers.changeName);
+router.post('/:locationId/geom', urlencodedParser, handlers.changeGeom);
 router.post('/:locationId/attachments', handlers.addAttachment);
 
 module.exports = router;

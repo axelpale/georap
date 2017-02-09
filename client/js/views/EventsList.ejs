@@ -11,6 +11,8 @@
         <%= ev.user %> created <a href="/locations/<%= ev.locationId %>"><%= name %></a> <%= timestamp(ev.time) %>
       <% } else if (t === 'location_removed') { %>
         <%= ev.user %> deleted <a href="/locations/<%= ev.locationId %>"><%= name %></a> <%= timestamp(ev.time) %>
+      <% } else if (t === 'location_geom_changed') { %>
+        <%= ev.user %> edited coords of <a href="/locations/<%= ev.locationId %>"><%= name %></a> <%= timestamp(ev.time) %>
       <% } else if (t === 'location_name_changed') { %>
         <% a = ev.data.oldName; %>
         <% if (a === '') { %>

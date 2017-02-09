@@ -2,6 +2,50 @@ var db = require('../../services/db');
 var shortid = require('shortid');
 var eventsDal = require('../events/dal');
 
+exports.changeGeom = function (params, callback) {
+  // Parameters:
+  //   params
+  //     locationId
+  //       ObjectId
+  //     username
+  //       string
+  //     latitude
+  //       number
+  //     longitude
+  //       number
+
+  var locColl = db.get().collection('locations');
+  var q = { _id: params.locationId };
+
+  var newGeom = {
+    type: 'Point',
+    coordinates: [params.longitude, params.latitude],
+  };
+
+  var u = { $set: { geom: newGeom } };
+
+  locColl.findOneAndUpdate(q, u, function (err, result) {
+    if (err) {
+      return callback(err);
+    }
+
+    var oldGeom = result.value.geom;
+
+    eventsDal.createLocationGeomChanged({
+      locationId: params.locationId,
+      username: params.username,
+      newGeom: newGeom,
+      oldGeom: oldGeom,
+    }, function (err2) {
+      if (err2) {
+        return callback(err2);
+      }
+
+      return callback(null);
+    });
+  });
+};
+
 exports.changeName = function (id, newName, username, callback) {
 
   var locColl = db.get().collection('locations');
