@@ -1,4 +1,5 @@
 var db = require('../../services/db');
+var eventsDal = require('../events/dal');
 
 exports.getAll = function (callback) {
   // Get all users
@@ -34,13 +35,13 @@ exports.getOne = function (username, callback) {
   //       err null and user null if no user found
   //
 
-  var coll = db.get().collection('users');
+  var usersColl = db.get().collection('users');
   var proj = {
     hash: false,
     email: false,
   };
 
-  coll.findOne({ name: username }, proj, function (err, doc) {
+  usersColl.findOne({ name: username }, proj, function (err, doc) {
     if (err) {
       return callback(err);
     }
@@ -49,6 +50,17 @@ exports.getOne = function (username, callback) {
       return callback(null, null);
     }
 
-    return callback(null, doc);
+    var num = 10;
+    var page = 0;
+
+    eventsDal.getRecentOfUser(username, num, page, function (err2, docs) {
+      if (err2) {
+        return callback(err2);
+      }
+
+      doc.events = docs;
+      return callback(null, doc);
+    });
+
   });
 };

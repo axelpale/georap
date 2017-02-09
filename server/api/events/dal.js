@@ -134,19 +134,33 @@ exports.getRecent = function (n, page, callback) {
   //     from the array of all events, ordered by time, most recent first
   //   callback
   //     function (err, events)
+  return exports.getRecentFiltered({}, n, page, callback);
+};
+
+exports.getRecentOfUser = function (username, n, page, callback) {
+  return exports.getRecentFiltered({ user: username }, n, page, callback);
+};
+
+exports.getRecentFiltered = function (filter, n, page, callback) {
+  // Parameters
+  //   filter
+  //     the value of $match operator. See
+  //     https://docs.mongodb.com/manual/reference/operator/aggregation/match/
+  //     Use {} to filter nothing.
+  //   n
+  //     number of events to return
+  //   page
+  //     page number. 0 = first page. Return range [n * page, n * (page + 1)[
+  //     from the array of all events, ordered by time, most recent first
+  //   callback
+  //     function (err, events)
 
   var eventsColl = db.get().collection('events');
-  //var locsColl = db.get().collection('locations');
-
-  /*eventsColl.find({}).sort({ time: -1 }).toArray(function (err, docs) {
-    if (err) {
-      return callback(err);
-    }
-
-    return callback(null, docs);
-  });*/
 
   eventsColl.aggregate([
+    {
+      $match: filter,
+    },
     {
       $sort: {
         time: -1,

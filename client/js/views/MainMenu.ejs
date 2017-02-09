@@ -27,16 +27,16 @@
       <li>
         <a id="tresdb-mainmenu-events" href="#"><%= glyphicon({ name: 'bell' }) %> Latest activity...</a>
       </li>
-      <li role="separator" class="divider"></li>
       <li>
         <a id="tresdb-mainmenu-users" href="#"><%= glyphicon({ name: 'user' }) %> Users...</a>
       </li>
+      <li role="separator" class="divider"></li>
       <% if (user.admin) { %>
         <li>
           <a id="tresdb-mainmenu-invite" href="#"><%= glyphicon({ name: 'envelope' }) %> Invite...</a>
         </li>
+        <li role="separator" class="divider"></li>
       <% } %>
-      <li role="separator" class="divider"></li>
       <li>
         <a id="tresdb-mainmenu-change-password" href="#"><%= glyphicon({ name: 'asterisk' }) %> Change password...</a>
       </li>

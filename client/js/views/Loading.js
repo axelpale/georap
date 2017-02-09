@@ -14,7 +14,6 @@ module.exports = function () {
   // Public methods
 
   this.render = function () {
-    console.log('render loading');
     return template();
   };
 

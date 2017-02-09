@@ -2,6 +2,7 @@
 var emitter = require('component-emitter');
 var timestamp = require('./lib/timestamp');
 var template = require('./Events.ejs');
+var eventsListTemplate = require('./EventsList.ejs');
 
 module.exports = function (events) {
   // Parameters:
@@ -16,9 +17,13 @@ module.exports = function (events) {
   // Public methods
 
   this.render = function () {
-    return template({
+    var eventsHtml = eventsListTemplate({
       timestamp: timestamp,
       events: events,
+    });
+
+    return template({
+      eventsHtml: eventsHtml,
     });
   };
 
