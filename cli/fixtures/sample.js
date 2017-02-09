@@ -141,6 +141,13 @@ module.exports = {
         hash: bcrypt.hashSync(local.admin.password, local.bcrypt.rounds),
         admin: true,
       },
+      {
+        _id: new ObjectId('5867bdf00b5a9e18d7755e33'),
+        name: 'johndoe',
+        email: 'john.doe@subterranea.fi',
+        hash: bcrypt.hashSync('foobar', local.bcrypt.rounds),
+        admin: false,
+      },
     ],
   },
   indices: [

@@ -1,0 +1,19 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-12">
+
+      <h1>Users</h1>
+
+      <ul id="tresdb-users" class="list-group">
+        <% var i, u; %>
+        <% for (i = 0; i < users.length; i += 1) { %>
+          <% u = users[i]; %>
+          <li class="list-group-item">
+            <a href="/users/<%= u.name %>"><%= u.name %></a>
+          </li>
+        <% } %>
+      </ul>
+
+    </div>
+  </div>
+</div>

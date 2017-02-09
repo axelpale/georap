@@ -4,7 +4,7 @@ var Location = require('./Location');
 
 module.exports = function (api, account, tags) {
   // Usage:
-  //   var locations = new models.Locations(api, account)
+  //   var locations = new models.Locations(api, account, tags)
   //
   // Parameters:
   //   api
@@ -104,10 +104,10 @@ module.exports = function (api, account, tags) {
       headers: { 'Authorization': 'Bearer ' + account.getToken() },
       success: function (rawLoc) {
 
-        var newLoc = new Location(api, account, tags, rawLoc);
-        listenForChanges(newLoc);
+        var loc = new Location(api, account, tags, rawLoc);
+        listenForChanges(loc);
 
-        return callback(null, newLoc);
+        return callback(null, loc);
       },
       error: function (jqxhr, textStatus, errorThrown) {
         return callback(errorThrown);

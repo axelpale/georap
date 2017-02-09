@@ -3,6 +3,7 @@
 var eventsRouter = require('./events/routes');
 var locationsRouter = require('./locations/routes');
 var markersRouter = require('./markers/routes');
+var usersRouter = require('./users/routes');
 
 var local = require('../../config/local');
 var jwt = require('express-jwt');
@@ -18,6 +19,7 @@ router.use(jwt({ secret: local.secret }));
 router.use('/events', eventsRouter);
 router.use('/locations', locationsRouter);
 router.use('/markers', markersRouter);
+router.use('/users', usersRouter);
 
 // Token error handling
 // See http://expressjs.com/en/guide/error-handling.html

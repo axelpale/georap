@@ -29,15 +29,18 @@
       </li>
       <li role="separator" class="divider"></li>
       <li>
-        <a id="tresdb-mainmenu-change-password" href="#"><%= glyphicon({ name: 'asterisk' }) %> Change password...</a>
+        <a id="tresdb-mainmenu-users" href="#"><%= glyphicon({ name: 'user' }) %> Users...</a>
       </li>
-      <li role="separator" class="divider"></li>
       <% if (user.admin) { %>
         <li>
           <a id="tresdb-mainmenu-invite" href="#"><%= glyphicon({ name: 'envelope' }) %> Invite...</a>
         </li>
-        <li role="separator" class="divider"></li>
       <% } %>
+      <li role="separator" class="divider"></li>
+      <li>
+        <a id="tresdb-mainmenu-change-password" href="#"><%= glyphicon({ name: 'asterisk' }) %> Change password...</a>
+      </li>
+      <li role="separator" class="divider"></li>
       <li>
         <a id="tresdb-mainmenu-logout" href="#"><%= glyphicon({ name: 'off' }) %> Log out</a>
       </li>

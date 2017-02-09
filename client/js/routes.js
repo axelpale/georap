@@ -12,13 +12,15 @@ var InviteView = require('./views/Invite');
 var EventsView = require('./views/Events');
 var LoadingView = require('./views/Loading');
 var LocationView = require('./views/Location');
+var UsersView = require('./views/Users');
+var UserView = require('./views/User');
 var Error404View = require('./views/Error404');
 var ResetPasswordView = require('./views/ResetPassword');
 var ChangePasswordView = require('./views/ChangePassword');
 
 var AfterLogin = require('./models/AfterLogin');
 
-exports.route = function (page, account, locations, tags, events) {
+exports.route = function (page, account, locations, tags, events, users) {
 
   // Init
 
@@ -153,6 +155,44 @@ exports.route = function (page, account, locations, tags, events) {
 
       // Render location card.
       var view = new LocationView(loc, account, tags);
+      card.open(view);
+    });
+  });
+
+  page('/users', function () {
+    // Open a loading card
+    var loadingView = new LoadingView();
+
+    card.open(loadingView, 'page');
+
+    // Fetch users before rendering.
+    users.getAll(function (err, rawUsers) {
+      if (err) {
+        console.error(err);
+        return;
+      }
+
+      // Render
+      var view = new UsersView(rawUsers);
+      card.open(view);
+    });
+  });
+
+  page('/users/:username', function (ctx) {
+    // Open a loading card
+    var loadingView = new LoadingView();
+
+    card.open(loadingView, 'page');
+
+    // Fetch user before rendering.
+    users.getOne(ctx.params.username, function (err, user) {
+      if (err) {
+        console.error(err);
+        return;
+      }
+
+      // Render
+      var view = new UserView(user);
       card.open(view);
     });
   });

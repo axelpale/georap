@@ -9,6 +9,7 @@ var Tags = require('./models/Tags');
 var Account = require('./models/Account');
 var Locations = require('./models/Locations');
 var Events = require('./models/Events');
+var Users = require('./models/Users');
 
 var MapView = require('./views/Map');
 var MainMenuView = require('./views/MainMenu');
@@ -44,11 +45,14 @@ var locations = new Locations(api, account, tags);
 // Events API
 var events = new Events(account);
 
+// Users API
+var users = new Users(account);
+
 
 
 // Routing
 
-routes.route(page, account, locations, tags, events);
+routes.route(page, account, locations, tags, events, users);
 page.start();
 
 // A method to expose router to map controller and main menu.

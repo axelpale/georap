@@ -59,6 +59,12 @@ module.exports = function (auth, handlers) {
       return go('/password');
     });
 
+    r.on('click', '#tresdb-mainmenu-users', function (ev) {
+      ev.preventDefault();
+
+      return go('/users');
+    });
+
     r.on('click', '#tresdb-mainmenu-invite', function (ev) {
       ev.preventDefault();
 
