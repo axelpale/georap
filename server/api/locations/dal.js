@@ -274,3 +274,25 @@ exports.addAttachment = function (params, callback) {
     return callback(null, entry);
   });
 };
+
+exports.addStory = function (params, callback) {
+  // Parameters:
+  //   params
+  //     object with properties:
+  //       locationId
+  //         string
+  //       username
+  //         string
+  //       markdown
+  //         string
+  //  callback
+  //    function (err, newEntry)
+
+  eventsDal.createLocationStoryCreated(params, function (err) {
+    if (err) {
+      return callback(err);
+    }
+
+    return callback(null);
+  });
+};

@@ -228,6 +228,7 @@ module.exports = function (api, account, tags, rawLoc) {
   this.addStory = function (markdown, callback) {
     // Parameters:
     //   markdown
+    //     string
     //   callback
     //     function (err)
 
@@ -235,17 +236,21 @@ module.exports = function (api, account, tags, rawLoc) {
       throw new Error('invalid story markdown type: ' + (typeof markdown));
     }
 
-    var rawEntry = createRawEntry('story', { markdown: markdown.trim() });
-    addRawEntry(rawEntry);
-
-    this.save(function (err) {
-      if (err) {
-        removeRawEntry(rawEntry._id);
+    $.ajax({
+      url: '/api/locations/' + loc._id + '/stories',
+      type: 'POST',
+      contentType: 'application/json',
+      data: JSON.stringify({
+        markdown: markdown.trim(),
+      }),
+      headers: { 'Authorization': 'Bearer ' + account.getToken() },
+      success: function () {
+        return callback(null);
+      },
+      error: function (jqxhr, status, err) {
+        console.error(err);
         return callback(err);
-      }
-
-      self.emit('entry_added', { entryId: rawEntry._id });
-      return callback();
+      },
     });
   };
 

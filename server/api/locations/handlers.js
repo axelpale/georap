@@ -197,3 +197,24 @@ exports.addAttachment = function (req, res) {
     });
   });
 };
+
+exports.addStory = function (req, res) {
+  // HTTP request handler
+
+  var locationId = req.locationId;
+  var username = req.user.name;
+  var markdown = req.body.markdown;
+
+  dal.addStory({
+    locationId: locationId,
+    username: username,
+    markdown: markdown,
+  }, function (err) {
+    if (err) {
+      console.error(err);
+      return res.sendStatus(status.INTERNAL_SERVER_ERROR);
+    }
+
+    return res.sendStatus(status.OK);
+  });
+};

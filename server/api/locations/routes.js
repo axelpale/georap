@@ -35,6 +35,7 @@ router.delete('/:locationId', handlers.removeOne);
 router.post('/:locationId/attachments', handlers.addAttachment);
 router.post('/:locationId/geom', urlencodedParser, handlers.changeGeom);
 router.post('/:locationId/name', urlencodedParser, handlers.changeName);
+router.post('/:locationId/stories', jsonParser, handlers.addStory);
 router.post('/:locationId/tags', jsonParser, handlers.changeTags);
 
 module.exports = router;

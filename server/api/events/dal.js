@@ -126,6 +126,26 @@ exports.createLocationNameChanged = function (params, callback) {
   insertAndEmit(newEvent, callback);
 };
 
+exports.createLocationStoryCreated = function (params, callback) {
+  // Parameters:
+  //   params:
+  //     locationId
+  //     username
+  //     markdown
+
+  var newEvent = {
+    type: 'location_story_created',
+    user: params.username,
+    time: timestamp(),
+    locationId: params.locationId,
+    data: {
+      markdown: params.markdown,
+    },
+  };
+
+  insertAndEmit(newEvent, callback);
+};
+
 exports.createLocationTagsChanged = function (params, callback) {
   // Parameters:
   //   params:
