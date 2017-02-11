@@ -246,6 +246,43 @@ exports.create = function (lat, lng, username, callback) {
   });
 };
 
+exports.getOne = function (id, callback) {
+  // Get single location
+  //
+  // Parameters:
+  //   id
+  //     ObjectId
+  //   callback
+  //     function (err, loc)
+  //       err null and loc null if no loc found
+  //
+
+  var locColl = db.get().collection('locations');
+  var evColl = db.get().collection('events');
+
+  locColl.findOne({ _id: id }, {}, function (err, doc) {
+    if (err) {
+      return callback(err);
+    }
+
+    if (!doc) {
+      return callback(null, null);
+    }
+
+    var q = { locationId: id };
+    var opt = { sort: { time: -1 } };
+    evColl.find(q, opt).toArray(function (err2, docs) {
+      if (err2) {
+        return callback(err2);
+      }
+
+      doc.events = docs;
+
+      return callback(null, doc);
+    });
+  });
+};
+
 exports.removeOne = function (id, username, callback) {
   // Remove single location
   //
@@ -273,31 +310,5 @@ exports.removeOne = function (id, username, callback) {
       locationName: result.value.name,
       username: username,
     }, callback);
-  });
-};
-
-exports.getOne = function (id, callback) {
-  // Get single location
-  //
-  // Parameters:
-  //   id
-  //     ObjectId
-  //   callback
-  //     function (err, loc)
-  //       err null and loc null if no loc found
-  //
-
-  var coll = db.get().collection('locations');
-
-  coll.findOne({ _id: id }, {}, function (err, doc) {
-    if (err) {
-      return callback(err);
-    }
-
-    if (!doc) {
-      return callback(null, null);
-    }
-
-    return callback(null, doc);
   });
 };
