@@ -22,6 +22,8 @@
         <% } %>
       <% } else if (t === 'location_story_created') { %>
         <%= ev.user %> wrote to <a href="/locations/<%= ev.locationId %>"><%= name %></a> <%= timestamp(ev.time) %>
+      <% } else if (t === 'location_tags_changed') { %>
+        <%= ev.user %> tagged <a href="/locations/<%= ev.locationId %>"><%= name %></a> as <%= ev.data.newTags.join(', ') %> <%= timestamp(ev.time) %>
       <% } else if (t === 'location_attachment_created') { %>
         <%= ev.user %> attached a file to <a href="/locations/<%= ev.locationId %>"><%= name %></a> <%= timestamp(ev.time) %>
       <% } else { %>
