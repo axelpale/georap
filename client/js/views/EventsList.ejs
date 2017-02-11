@@ -26,6 +26,8 @@
         <%= ev.user %> tagged <a href="/locations/<%= ev.locationId %>"><%= name %></a> as <%= ev.data.newTags.join(', ') %> <%= timestamp(ev.time) %>
       <% } else if (t === 'location_attachment_created') { %>
         <%= ev.user %> attached a file to <a href="/locations/<%= ev.locationId %>"><%= name %></a> <%= timestamp(ev.time) %>
+      <% } else if (t === 'location_visit_created') { %>
+        <%= ev.user %> visited <a href="/locations/<%= ev.locationId %>"><%= name %></a> in <%= ev.data.year %>, added <%= timestamp(ev.time) %>
       <% } else { %>
         <%= ev.type %>
       <% } %>

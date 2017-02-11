@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 var db = require('../../services/db');
 var io = require('../../services/io');
 
@@ -50,6 +51,30 @@ var insertAndEmit = function (ev, callback) {
 
 
 // Public methods
+
+exports.createLocationAttachmentCreated = function (params, callback) {
+  // Parameters:
+  //   params:
+  //     locationId
+  //     username
+  //     filePathInUploadDir
+  //       string
+  //     fileMimeType
+  //       string
+
+  var newEvent = {
+    type: 'location_attachment_created',
+    user: params.username,
+    time: timestamp(),
+    locationId: params.locationId,
+    data: {
+      filepath: params.filePathInUploadDir,
+      mimetype: params.fileMimeType,
+    },
+  };
+
+  insertAndEmit(newEvent, callback);
+};
 
 exports.createLocationCreated = function (params, callback) {
   // Parameters:
@@ -188,6 +213,27 @@ exports.createLocationRemoved = function (params, callback) {
     time: (new Date()).toISOString(),
     locationId: params.locationId,
     data: {},
+  };
+
+  insertAndEmit(newEvent, callback);
+};
+
+exports.createLocationVisitCreated = function (params, callback) {
+  // Parameters:
+  //   params:
+  //     locationId
+  //     username
+  //     year
+  //       integer
+
+  var newEvent = {
+    type: 'location_visit_created',
+    user: params.username,
+    time: timestamp(),
+    locationId: params.locationId,
+    data: {
+      year: params.year,
+    },
   };
 
   insertAndEmit(newEvent, callback);

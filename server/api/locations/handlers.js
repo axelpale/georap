@@ -159,7 +159,7 @@ exports.addAttachment = function (req, res) {
 
   var locationId = req.locationId;
   var uploadHandler = uploads.uploader.single('locfile');
-  var userName = req.user.name;
+  var username = req.user.name;
 
   uploadHandler(req, res, function (err2) {
     if (err2) {
@@ -173,27 +173,15 @@ exports.addAttachment = function (req, res) {
     // Upload successful. Append an attachment entry to the location.
     dal.addAttachment({
       locationId: locationId,
-      userName: userName,
+      username: username,
       filePathInUploadDir: uploads.getRelativePath(req.file.path),
       fileMimeType: req.file.mimetype,
-    }, function (err3, newEntry) {
+    }, function (err3) {
       if (err3) {
         console.error(err3);
         return res.sendStatus(status.INTERNAL_SERVER_ERROR);
       }
-
-      // Send delta event
-      return res.json({
-        success: {
-          type: 'entry_added',
-          actor: userName,
-          data: {
-            locationId: locationId,
-            entry: prepare.entry(newEntry),
-          },
-        },
-      });
-
+      return res.sendStatus(status.OK);
     });
   });
 };
@@ -205,10 +193,49 @@ exports.addStory = function (req, res) {
   var username = req.user.name;
   var markdown = req.body.markdown;
 
+  if (typeof markdown !== 'string') {
+    return res.sendStatus(status.BAD_REQUEST);
+  }
+
   dal.addStory({
     locationId: locationId,
     username: username,
     markdown: markdown,
+  }, function (err) {
+    if (err) {
+      console.error(err);
+      return res.sendStatus(status.INTERNAL_SERVER_ERROR);
+    }
+
+    return res.sendStatus(status.OK);
+  });
+};
+
+exports.addVisit = function (req, res) {
+  // HTTP request handler
+
+  var locationId = req.locationId;
+  var username = req.user.name;
+
+  var year;
+  var MIN_YEAR = 1900;
+  var MAX_YEAR = 3000;
+  try {
+    if (!req.body.hasOwnProperty('year')) {
+      throw new Error();
+    }
+    year = parseInt(req.body.year, 10);
+    if (year < MIN_YEAR || year > MAX_YEAR) {
+      throw new Error('year out of range');
+    }
+  } catch (e) {
+    return res.sendStatus(status.BAD_REQUEST);
+  }
+
+  dal.addVisit({
+    locationId: locationId,
+    username: username,
+    year: year,
   }, function (err) {
     if (err) {
       console.error(err);

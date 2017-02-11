@@ -1,6 +1,73 @@
+/* eslint-disable max-lines */
+
 var db = require('../../services/db');
 var shortid = require('shortid');
 var eventsDal = require('../events/dal');
+
+exports.addAttachment = function (params, callback) {
+  // Parameters:
+  //   params
+  //     object with properties:
+  //       locationId
+  //         string
+  //       username
+  //         string
+  //       filePathInUploadDir
+  //         string
+  //       fileMimeType
+  //         string
+  //  callback
+  //    function (err)
+
+  eventsDal.createLocationAttachmentCreated(params, function (err) {
+    if (err) {
+      return callback(err);
+    }
+    return callback(null);
+  });
+};
+
+exports.addStory = function (params, callback) {
+  // Parameters:
+  //   params
+  //     object with properties:
+  //       locationId
+  //         string
+  //       username
+  //         string
+  //       markdown
+  //         string
+  //  callback
+  //    function (err)
+
+  eventsDal.createLocationStoryCreated(params, function (err) {
+    if (err) {
+      return callback(err);
+    }
+    return callback(null);
+  });
+};
+
+exports.addVisit = function (params, callback) {
+  // Parameters:
+  //   params
+  //     object with properties:
+  //       locationId
+  //         string
+  //       username
+  //         string
+  //       year
+  //         integer
+  //  callback
+  //    function (err)
+
+  eventsDal.createLocationVisitCreated(params, function (err) {
+    if (err) {
+      return callback(err);
+    }
+    return callback(null);
+  });
+};
 
 exports.changeGeom = function (params, callback) {
   // Parameters:
@@ -232,67 +299,5 @@ exports.getOne = function (id, callback) {
     }
 
     return callback(null, doc);
-  });
-};
-
-exports.addAttachment = function (params, callback) {
-  // Parameters:
-  //   params
-  //     object with properties:
-  //       locationId
-  //         string
-  //       userName
-  //         string
-  //       filePathInUploadDir
-  //         string
-  //       fileMimeType
-  //         string
-  //  callback
-  //    function (err, newEntry)
-
-  var entry = {
-    _id: shortid.generate(),
-    time: (new Date()).toISOString(),
-    type: 'attachment',
-    user: params.userName,
-    data: {
-      filepath: params.filePathInUploadDir,
-      mimetype: params.fileMimeType,
-    },
-  };
-
-  var coll = db.get().collection('locations');
-
-  var query = { _id: params.locationId };
-  var updateq = { $push: { content: entry } };
-
-  coll.updateOne(query, updateq, null, function (err) {
-    if (err) {
-      return callback(err);
-    }
-
-    return callback(null, entry);
-  });
-};
-
-exports.addStory = function (params, callback) {
-  // Parameters:
-  //   params
-  //     object with properties:
-  //       locationId
-  //         string
-  //       username
-  //         string
-  //       markdown
-  //         string
-  //  callback
-  //    function (err, newEntry)
-
-  eventsDal.createLocationStoryCreated(params, function (err) {
-    if (err) {
-      return callback(err);
-    }
-
-    return callback(null);
   });
 };

@@ -1,6 +1,5 @@
 /* eslint-disable max-statements, max-lines */
 
-var shortid = require('shortid');
 var extend = require('extend');
 var clone = require('clone');
 var emitter = require('component-emitter');
@@ -84,26 +83,6 @@ module.exports = function (api, account, tags, rawLoc) {
 
     // Remove in place
     loc.content.splice(index, 1);
-  };
-
-  var createRawEntry = function (type, data) {
-    // Constructs a raw entry object. Use addRawEntry to add it to location.
-    var entryId, entry;
-
-    // Find unique id for entry.
-    do {
-      entryId = shortid.generate();
-    } while (hasRawEntry(entryId));
-
-    entry = {
-      _id: entryId,
-      type: type,
-      user: account.getUser().name,
-      time: (new Date()).toISOString(),
-      data: data,
-    };
-
-    return entry;
   };
 
 
@@ -285,20 +264,11 @@ module.exports = function (api, account, tags, rawLoc) {
       headers: { 'Authorization': 'Bearer ' + account.getToken() },
       processData: false,
       success: function (response) {
-        // console.log('Upload success');
-        // console.log(response, status);
-        // console.log(jqxhr.responseText);
-
-        var rawEntry = response.success.data.entry;
-        addRawEntry(rawEntry);
-        self.emit('entry_added', { entryId: rawEntry._id });
-
         return callback(null);
       },
       error: function (jqxhr, status, err) {
         console.log('Upload error');
         console.log(status, err);
-        console.log(jqxhr.responseText);
         return callback(err);
       },
     });
@@ -315,17 +285,21 @@ module.exports = function (api, account, tags, rawLoc) {
       throw new Error('invalid visit year type: ' + (typeof year));
     }
 
-    var rawEntry = createRawEntry('visit', { year: year });
-    addRawEntry(rawEntry);
-
-    this.save(function (err) {
-      if (err) {
-        removeRawEntry(rawEntry._id);
+    $.ajax({
+      url: '/api/locations/' + loc._id + '/visits',
+      type: 'POST',
+      contentType: 'application/json',
+      data: JSON.stringify({
+        year: year,
+      }),
+      headers: { 'Authorization': 'Bearer ' + account.getToken() },
+      success: function () {
+        return callback(null);
+      },
+      error: function (jqxhr, status, err) {
+        console.error(err);
         return callback(err);
-      }
-
-      self.emit('entry_added', { entryId: rawEntry._id });
-      return callback();
+      },
     });
   };
 
