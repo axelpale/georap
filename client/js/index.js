@@ -1,5 +1,4 @@
 
-var io = require('socket.io-client');
 var page = require('page');
 
 var routes = require('./routes');
@@ -14,24 +13,12 @@ var Users = require('./models/Users');
 var MapView = require('./views/Map');
 var MainMenuView = require('./views/MainMenu');
 
-
-
-
-// Websocket connection and connection error handling
-
-var socket = io('/');
-
-socket.on('connect-error', function () {
-  console.error('TresDB: io connect-error');
-});
-
-
-
 // Client-side storage
-var storage = window.localStorage;
+var storage = require('./connection/storage');
+
 
 // Connection layer
-var api = new Api(socket, storage);
+var api = new Api();
 
 // Authentication & Account API
 var account = new Account(api, storage);

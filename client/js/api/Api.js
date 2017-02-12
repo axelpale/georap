@@ -4,13 +4,10 @@
 //  var api = new Api(socket);
 
 var TOKEN_KEY = 'tresdb-session-token';
+var socket = require('../connection/socket');
+var storage = require('../connection/storage');
 
-module.exports = function (socket, storage) {
-  // Parameters:
-  //   socket
-  //     socket.io socket
-  //   storage
-  //     For authenticated requests
+module.exports = function () {
 
   this.requestRaw = function (route, payload, callback) {
     // No authentication
@@ -23,12 +20,8 @@ module.exports = function (socket, storage) {
     //   callback
     //     function (err, successResponseData)
 
-    //console.log('payload:', payload);
-
     socket.emit(route, payload, function (response) {
       var err;
-
-      //console.log('response:', response);
 
       if (response.hasOwnProperty('success')) {
         return callback(null, response.success);

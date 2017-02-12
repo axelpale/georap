@@ -12,12 +12,12 @@
 
 var Emitter = require('component-emitter');
 var jwtDecode = require('jwt-decode');
+var storage = require('../connection/storage');
 
-module.exports = function (api, storage) {
+module.exports = function (api) {
   // Parameters:
   //   api
   //     api.Api instance
-  //   storage
   //
   // Emits:
   //   login

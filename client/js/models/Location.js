@@ -58,10 +58,10 @@ module.exports = function (api, account, tags, rawLoc) {
     return getRawEntry(id) !== null;
   };
 
-  var addRawEntry = function (rawEntry) {
-    // Add raw entry locally to location.
-    loc.content.push(rawEntry);
-  };
+  // var addRawEntry = function (rawEntry) {
+  //   // Add raw entry locally to location.
+  //   loc.content.push(rawEntry);
+  // };
 
   var removeRawEntry = function (id) {
     // Remove locally a raw entry with the given id.
@@ -263,7 +263,7 @@ module.exports = function (api, account, tags, rawLoc) {
       data: formData,
       headers: { 'Authorization': 'Bearer ' + account.getToken() },
       processData: false,
-      success: function (response) {
+      success: function () {
         return callback(null);
       },
       error: function (jqxhr, status, err) {
