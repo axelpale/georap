@@ -4,18 +4,15 @@
 var emitter = require('component-emitter');
 
 var MapStateStore = require('../models/MapStateStore');
+var locations = require('../stores/locations');
+var markerStore = require('../stores/markers');
 
 var icons = require('./lib/icons');
 var labels = require('./lib/labels');
 var getBoundsDiagonal = require('./lib/getBoundsDiagonal');
 var readGoogleMapState = require('./lib/readGoogleMapState');
 
-module.exports = function (storage, locations) {
-  // Parameters:
-  //   storage
-  //     e.g. a localStorage
-  //   locations
-  //     models.Locations instance.
+module.exports = function () {
   //
   // Emits:
   //   location_activated, locationId
@@ -43,7 +40,7 @@ module.exports = function (storage, locations) {
   //   should be stored device-wise.
   // - If no location is stored and none can be retrieved from the browser,
   //   fallback to southern finland.
-  var mapStateStore = new MapStateStore(storage, {
+  var mapStateStore = new MapStateStore({
     // Default map state
     lat: 61.0,
     lng: 24.0,
@@ -163,7 +160,7 @@ module.exports = function (storage, locations) {
   });
 
   (function defineMapStateChange() {
-    // Save new state to storage when the state of the map changes.
+    // Save new state to the state store when the state of the map changes.
     var handleStateChange = function () {
       mapStateStore.update(readGoogleMapState(map));
     };
@@ -276,7 +273,7 @@ module.exports = function (storage, locations) {
       var radius = Math.ceil(getBoundsDiagonal(bounds) / 2);
       var zoom = map.getZoom();
 
-      locations.getMarkersWithin(center, radius, zoom, function (err, locs) {
+      markerStore.getWithin(center, radius, zoom, function (err, locs) {
         if (err) {
           return console.error(err);
         }  // else

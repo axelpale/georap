@@ -6,31 +6,18 @@ var routes = require('./routes');
 var MapView = require('./views/Map');
 var MainMenuView = require('./views/MainMenu');
 
-// Client-side storage
-var storage = require('./connection/storage');
-
 // Authentication & Account API
 var account = require('./stores/account');
 
 // Locations API
-var Locations = require('./models/Locations');
-var locations = new Locations();
-
-// Users API
-var Users = require('./models/Users');
-var users = new Users();
+var locations = require('./stores/locations');
 
 
 
 // Routing
 
-routes.route(page, locations, users);
+routes.route(page);
 page.start();
-
-// A method to expose router to map controller and main menu.
-var go = function (path) {
-  return page.show(path);
-};
 
 
 
@@ -40,14 +27,16 @@ var go = function (path) {
 // loaded. Lay the main menu immediately on the map.
 window.initMap = function () {
 
-  var mapView = new MapView(storage, locations);
+  var mapView = new MapView();
 
   mapView.on('location_activated', function (locationId) {
     page.show('/locations/' + locationId);
   });
 
   var mainMenuView = new MainMenuView({
-    go: go,
+    go: function (path) {
+      return page.show(path);
+    },
     onAdditionStart: function () {
       mapView.addAdditionMarker();
     },

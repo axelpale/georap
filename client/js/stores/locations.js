@@ -1,11 +1,9 @@
 
 var emitter = require('component-emitter');
-var account = require('../stores/account');
-var Location = require('./Location');
+var account = require('./account');
+var Location = require('../models/Location');
 
-module.exports = function () {
-  // Usage:
-  //   var locations = new models.Locations()
+module.exports = (function () {
 
   // Init
   emitter(this);
@@ -108,35 +106,5 @@ module.exports = function () {
     });
   };
 
-  this.getMarkersWithin = function (center, radius, zoomLevel, callback) {
-    // Parameters
-    //   center
-    //     google.maps.LatLng instance
-    //   radius
-    //     number of meters
-    //   zoomLevel
-    //     only locations on this layer and above will be fetched.
-    //   callback
-    //     function (err, markerLocations)
-
-    $.ajax({
-      url: '/api/markers',
-      method: 'GET',
-      data: {
-        lat: center.lat(),
-        lng: center.lng(),
-        radius: radius,
-        layer: zoomLevel,
-      },
-      dataType: 'json',
-      headers: { 'Authorization': 'Bearer ' + account.getToken() },
-      success: function (rawMarkers) {
-        return callback(null, rawMarkers);
-      },
-      error: function (jqxhr, textStatus, errorThrown) {
-        return callback(errorThrown);
-      },
-    });
-  };
-
-};
+  return this;
+}());

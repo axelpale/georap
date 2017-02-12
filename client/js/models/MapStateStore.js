@@ -2,8 +2,9 @@
 // to a given storage, e.g. localStorage.
 
 var GEO_KEY = 'tresdb-geo-location';
+var storage = require('../connection/storage');
 
-module.exports = function (storage, defaultState) {
+module.exports = function (defaultState) {
 
   this.update = function (state) {
     // Parameters:

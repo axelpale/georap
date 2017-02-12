@@ -3,8 +3,11 @@
 
 var queryString = require('query-string');
 
+var locations = require('./stores/locations');
 var account = require('./stores/account');
 var events = require('./stores/events');
+var users = require('./stores/users');
+
 var CardView = require('./views/Card');
 
 var LoginView = require('./views/Login');
@@ -21,7 +24,7 @@ var ChangePasswordView = require('./views/ChangePassword');
 
 var AfterLogin = require('./models/AfterLogin');
 
-exports.route = function (page, locations, users) {
+exports.route = function (page) {
 
   // Init
 

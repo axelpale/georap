@@ -1,13 +1,13 @@
 var emitter = require('component-emitter');
-var account = require('../stores/account');
+var account = require('./account');
 
-module.exports = function () {
+module.exports = (function () {
   // Usage:
-  //   var users = new models.Users()
+  //   var users = require('./stores/users');
   //
 
   // Init
-  emitter(self);
+  emitter(this);
 
   // Public methods
 
@@ -60,4 +60,6 @@ module.exports = function () {
       },
     });
   };
-};
+
+  return this;
+}());
