@@ -3,43 +3,28 @@ var page = require('page');
 
 var routes = require('./routes');
 
-var Api = require('./api/Api');
-var Tags = require('./models/Tags');
-var Account = require('./models/Account');
-var Locations = require('./models/Locations');
-var Events = require('./models/Events');
-var Users = require('./models/Users');
-
 var MapView = require('./views/Map');
 var MainMenuView = require('./views/MainMenu');
 
 // Client-side storage
 var storage = require('./connection/storage');
 
-
-// Connection layer
-var api = new Api();
-
 // Authentication & Account API
-var account = new Account(api, storage);
-
-// Tags API
-var tags = new Tags();
+var account = require('./stores/account');
 
 // Locations API
-var locations = new Locations(api, account, tags);
-
-// Events API
-var events = new Events(account);
+var Locations = require('./models/Locations');
+var locations = new Locations();
 
 // Users API
-var users = new Users(account);
+var Users = require('./models/Users');
+var users = new Users();
 
 
 
 // Routing
 
-routes.route(page, account, locations, tags, events, users);
+routes.route(page, locations, users);
 page.start();
 
 // A method to expose router to map controller and main menu.
@@ -61,7 +46,7 @@ window.initMap = function () {
     page.show('/locations/' + locationId);
   });
 
-  var mainMenuView = new MainMenuView(account, {
+  var mainMenuView = new MainMenuView({
     go: go,
     onAdditionStart: function () {
       mapView.addAdditionMarker();

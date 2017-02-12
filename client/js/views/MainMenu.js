@@ -1,11 +1,10 @@
 var emitter = require('component-emitter');
+var account = require('../stores/account');
 var mainmenuTemplate = require('./MainMenu.ejs');
 var glyphiconTemplate = require('../../templates/glyphicon.ejs');
 
-module.exports = function (auth, handlers) {
+module.exports = function (handlers) {
   // Parameters:
-  //   auth
-  //     instance of auth.Service
   //   handlers
   //     Object with the following properties:
   //       go
@@ -31,7 +30,7 @@ module.exports = function (auth, handlers) {
     // Render menu
     return mainmenuTemplate({
       glyphicon: glyphiconTemplate,
-      user: auth.getUser(),  // might be undefined
+      user: account.getUser(),  // might be undefined
     });
   };
 

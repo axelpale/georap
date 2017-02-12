@@ -1,6 +1,8 @@
 // View for location
 
 var emitter = require('component-emitter');
+
+var account = require('../stores/account');
 var getEntryView = require('./lib/getEntryView');
 var NameView = require('./locationParts/Name');
 var CoordsView = require('./locationParts/Coords');
@@ -11,14 +13,10 @@ var RemoveView = require('./locationParts/Remove');
 // Templates
 var locationTemplate = require('./location.ejs');
 
-module.exports = function (location, account, tags) {
+module.exports = function (location) {
   // Parameters
   //   location
   //     models.Location object
-  //   account
-  //     models.Account object, the current user
-  //   tags
-  //     models.Tags object
   //
   // Emits
   //   removed
@@ -32,13 +30,13 @@ module.exports = function (location, account, tags) {
 
   var nameView = new NameView(location);
   var coordsView = new CoordsView(location);
-  var tagsView = new TagsView(location, tags);
+  var tagsView = new TagsView(location);
   var entryFormView = new EntryFormView(location);
   var removeView = new RemoveView(location);
 
   var entries = location.getEntriesInTimeOrder();
   var entryViews = entries.map(function (entry) {
-    return getEntryView(entry, account);
+    return getEntryView(entry);
   });
 
   // Private methods declaration
@@ -92,7 +90,7 @@ module.exports = function (location, account, tags) {
       // Get entry model
       var entry = location.getEntry(ev.entryId);
       // Create entry view
-      var entryView = getEntryView(entry, account);
+      var entryView = getEntryView(entry);
       // Render, attach to dom and bind handlers
       var html = entryView.render();
       $('#tresdb-location-content-entries').prepend(html);

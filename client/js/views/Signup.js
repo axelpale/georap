@@ -2,14 +2,13 @@
 
 var emitter = require('component-emitter');
 var jwtDecode = require('jwt-decode');
+var account = require('../stores/account');
 
 // Templates
 var signupTemplate = require('../../templates/forms/signup.ejs');
 
-module.exports = function (auth, token, goLogin) {
+module.exports = function (token, goLogin) {
   // Parameters:
-  //   auth
-  //     Instance of auth.Service.
   //   token
   //     The invitation token the user received by email.
   //   goLogin
@@ -89,7 +88,7 @@ module.exports = function (auth, token, goLogin) {
     // Hide form
     $('#tresdb-signup-form').addClass('hidden');
 
-    auth.signup(token, username, password, responseHandler);
+    account.signup(token, username, password, responseHandler);
   };
 
   responseHandler = function (err) {

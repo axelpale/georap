@@ -37,9 +37,9 @@ var setPassword = function (email, password, callback) {
   //
   // Parameters:
   //   email
-  //     string, Account email
+  //     string, account email
   //   password
-  //     string, The new password
+  //     string, the new password
   //   callback
   //     function (err)
   //

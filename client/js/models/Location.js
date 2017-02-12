@@ -4,28 +4,19 @@ var extend = require('extend');
 var clone = require('clone');
 var emitter = require('component-emitter');
 
+var api = require('../connection/api');
+var account = require('../stores/account');
+var tags = require('../stores/tags');
 var defaultRawLocation = require('./lib/defaultRawLocation');
 var validateCoords = require('./lib/validateCoords');
 var sortEntries = require('./lib/sortEntries');
 var toEntry = require('./lib/toEntryModel');
 
-module.exports = function (api, account, tags, rawLoc) {
+module.exports = function (rawLoc) {
   // Usage:
-  //   Update an existing Location:
-  //     var l = new Location(api, account, tags, fullLocFromServer);
-  //     l.setName('new name');
-  //     l.save(function (err) { ... });
-  //   Create a new location and send it to server:
-  //     var l = new Location(api, account, tags, { geom: geom });
-  //     l.save(function (err) { ... });
+  //   var l = new Location(fullLocFromServer);
   //
   // Parameters:
-  //   api
-  //     a api.Api
-  //   account
-  //     a models.Account
-  //   tags
-  //     a models.Tags
   //   rawLoc
   //     Optional location properties that override the default.
 

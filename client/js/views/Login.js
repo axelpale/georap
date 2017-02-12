@@ -1,13 +1,12 @@
 var emitter = require('component-emitter');
 var validator = require('email-validator');
+var account = require('../stores/account');
 
 // Templates
 var loginTemplate = require('../../templates/forms/login.ejs');
 
-module.exports = function (account, onSuccess) {
+module.exports = function (onSuccess) {
   // Parameters:
-  //   account
-  //     Instance of models.Account
   //   onSuccess
   //     function (), called on successful login
 

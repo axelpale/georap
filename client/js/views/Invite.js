@@ -2,15 +2,12 @@
 
 var emitter = require('component-emitter');
 var validator = require('email-validator');
+var account = require('../stores/account');
 
 // Templates
 var inviteTemplate = require('../../templates/forms/invite.ejs');
 
-module.exports = function (auth) {
-  // Parameters:
-  //   auth
-  //     Instance of auth.Service.
-
+module.exports = function () {
   // Init
   emitter(this);
 
@@ -72,7 +69,7 @@ module.exports = function (auth) {
     // Display loading animation
     $('#tresdb-invite-in-progress').removeClass('hidden');
 
-    auth.sendInviteEmail(email, inviteSubmitResponseHandler);
+    account.sendInviteEmail(email, inviteSubmitResponseHandler);
   };
 
   inviteSubmitResponseHandler = function (err) {

@@ -1,9 +1,10 @@
-/* eslint-disable max-params */
 
 // Client-side routing
 
 var queryString = require('query-string');
 
+var account = require('./stores/account');
+var events = require('./stores/events');
 var CardView = require('./views/Card');
 
 var LoginView = require('./views/Login');
@@ -20,7 +21,7 @@ var ChangePasswordView = require('./views/ChangePassword');
 
 var AfterLogin = require('./models/AfterLogin');
 
-exports.route = function (page, account, locations, tags, events, users) {
+exports.route = function (page, locations, users) {
 
   // Init
 
@@ -48,7 +49,7 @@ exports.route = function (page, account, locations, tags, events, users) {
   page('/login', function () {
     // Logout should be immediate; no reason to show progress bar.
     account.logout(function () {
-      var view = new LoginView(account, function onSuccess() {
+      var view = new LoginView(function onSuccess() {
         // After successful login, go to original path.
         page.show(afterLogin.get());
         // Reset for another login during the same session.
@@ -60,7 +61,7 @@ exports.route = function (page, account, locations, tags, events, users) {
 
   page('/reset/:token', function (context) {
     var token = context.params.token;
-    var view = new ResetPasswordView(account, token, function success() {
+    var view = new ResetPasswordView(token, function success() {
       page.show('/login');
     });
     card.open(view, 'full');
@@ -68,7 +69,7 @@ exports.route = function (page, account, locations, tags, events, users) {
 
   page('/signup/:token', function (context) {
     var token = context.params.token;
-    var view = new SignupView(account, token, function success() {
+    var view = new SignupView(token, function success() {
       page.show('/login');
     });
     card.open(view, 'full');
@@ -110,12 +111,12 @@ exports.route = function (page, account, locations, tags, events, users) {
   });
 
   page('/password', function () {
-    var view = new ChangePasswordView(account);
+    var view = new ChangePasswordView();
     card.open(view, 'page');
   });
 
   page('/invite', function () {
-    var view = new InviteView(account);
+    var view = new InviteView();
     card.open(view, 'page');
   });
 
@@ -154,7 +155,7 @@ exports.route = function (page, account, locations, tags, events, users) {
       }
 
       // Render location card.
-      var view = new LocationView(loc, account, tags);
+      var view = new LocationView(loc);
       card.open(view);
     });
   });

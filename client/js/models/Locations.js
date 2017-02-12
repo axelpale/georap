@@ -1,18 +1,11 @@
 
 var emitter = require('component-emitter');
+var account = require('../stores/account');
 var Location = require('./Location');
 
-module.exports = function (api, account, tags) {
+module.exports = function () {
   // Usage:
-  //   var locations = new models.Locations(api, account, tags)
-  //
-  // Parameters:
-  //   api
-  //     an api.Api instance
-  //   account
-  //     a models.Account
-  //   tags
-  //     a models.Tags
+  //   var locations = new models.Locations()
 
   // Init
   emitter(this);
@@ -70,7 +63,7 @@ module.exports = function (api, account, tags) {
       headers: { 'Authorization': 'Bearer ' + account.getToken() },
       success: function (rawLoc) {
 
-        var newLoc = new Location(api, account, tags, rawLoc);
+        var newLoc = new Location(rawLoc);
 
         // Emit changes of this location until next loc in focus.
         listenForChanges(newLoc);
@@ -104,7 +97,7 @@ module.exports = function (api, account, tags) {
       headers: { 'Authorization': 'Bearer ' + account.getToken() },
       success: function (rawLoc) {
 
-        var loc = new Location(api, account, tags, rawLoc);
+        var loc = new Location(rawLoc);
         listenForChanges(loc);
 
         return callback(null, loc);

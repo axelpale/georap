@@ -1,8 +1,9 @@
 
+var account = require('../../stores/account');
 var timestamp = require('../lib/timestamp');
 var template = require('./attachment.ejs');
 
-module.exports = function (entry, account) {
+module.exports = function (entry) {
   // Parameters:
   //   entry
   //     any in models.entries

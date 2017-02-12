@@ -1,13 +1,11 @@
 
 var emitter = require('component-emitter');
+var account = require('../stores/account');
 
 // Templates
 var passwordTemplate = require('../../templates/forms/changePassword.ejs');
 
-module.exports = function (auth) {
-  // Parameters:
-  //   auth
-  //     Instance of auth.Service
+module.exports = function () {
 
   // Init
   emitter(this);
@@ -22,7 +20,7 @@ module.exports = function (auth) {
 
   this.render = function () {
     return passwordTemplate({
-      user: auth.getUser(),
+      user: account.getUser(),
     });
   };
 
@@ -70,7 +68,7 @@ module.exports = function (auth) {
     // Hide the form
     $('#tresdb-change-password-form').addClass('hidden');
 
-    auth.changePassword(curPass, newPass, responseHandler);
+    account.changePassword(curPass, newPass, responseHandler);
   };
 
   responseHandler = function (err) {

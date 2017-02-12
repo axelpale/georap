@@ -2,14 +2,13 @@
 
 var emitter = require('component-emitter');
 var jwtDecode = require('jwt-decode');
+var account = require('../stores/account');
 
 // Templates
 var resetFormTemplate = require('../../templates/forms/resetPassword.ejs');
 
-module.exports = function (auth, token, showLogin) {
+module.exports = function (token, showLogin) {
   // Parameters
-  //   auth
-  //     instance of auth.Service
   //   token
   //     string
   //   showLogin
@@ -77,7 +76,7 @@ module.exports = function (auth, token, showLogin) {
     // Hide possible earlier no-match error message
     $('#tresdb-reset-password-no-match').addClass('hidden');
 
-    auth.resetPassword(token, password, responseHandler);
+    account.resetPassword(token, password, responseHandler);
   };
 
   responseHandler = function (err) {

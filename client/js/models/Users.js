@@ -1,12 +1,9 @@
 var emitter = require('component-emitter');
+var account = require('../stores/account');
 
-module.exports = function (account) {
+module.exports = function () {
   // Usage:
-  //   var users = new models.Users(account)
-  //
-  // Parameters:
-  //   account
-  //     a models.Account
+  //   var users = new models.Users()
   //
 
   // Init

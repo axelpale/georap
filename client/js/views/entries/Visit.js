@@ -1,8 +1,9 @@
 
+var account = require('../../stores/account');
 var timestamp = require('../lib/timestamp');
 var template = require('./visit.ejs');
 
-module.exports = function (entry, account) {
+module.exports = function (entry) {
 
   var id = entry.getId();
 

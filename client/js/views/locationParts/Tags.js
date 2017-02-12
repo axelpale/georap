@@ -1,8 +1,9 @@
+var tags = require('../../stores/tags');
 var template = require('./tags.ejs');
 var tagsListTemplate = require('./tagsList.ejs');
 var tagsFormListTemplate = require('./tagsFormList.ejs');
 
-module.exports = function (location, tags) {
+module.exports = function (location) {
 
   this.render = function () {
     return template({

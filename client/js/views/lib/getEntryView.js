@@ -7,13 +7,13 @@ var StoryView = require('../entries/Story');
 var VisitView = require('../entries/Visit');
 var MoveView = require('../entries/Move');
 
-module.exports = function (entryModel, account) {
+module.exports = function (entryModel) {
 
   var type = entryModel.getType();
 
   switch (type) {
     case 'attachment':
-      return new AttachmentView(entryModel, account);
+      return new AttachmentView(entryModel);
     case 'created':
       return new CreatedView(entryModel);
     case 'rename':
@@ -23,9 +23,9 @@ module.exports = function (entryModel, account) {
     case 'tagdel':
       return new TagdelView(entryModel);
     case 'story':
-      return new StoryView(entryModel, account);
+      return new StoryView(entryModel);
     case 'visit':
-      return new VisitView(entryModel, account);
+      return new VisitView(entryModel);
     case 'move':
       return new MoveView(entryModel);
     default:

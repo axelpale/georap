@@ -6,16 +6,15 @@
 //   s.bind();
 
 var marked = require('marked');
+var account = require('../../stores/account');
 var timestamp = require('../lib/timestamp');
 var storyTemplate = require('./story.ejs');
 var markdownSyntax = require('../locationParts/markdownSyntax.ejs');
 
-module.exports = function (entry, account) {
+module.exports = function (entry) {
   // Parameters:
   //   entry
   //     models.Entry
-  //   account
-  //     models.Account
 
   var id = entry.getId();
 
