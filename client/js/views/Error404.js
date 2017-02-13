@@ -1,5 +1,5 @@
 
-var template = require('../../templates/errors/error404.ejs');
+var template = require('./Error404.ejs');
 
 module.exports = function () {
 
@@ -8,7 +8,7 @@ module.exports = function () {
   };
 
   this.bind = function () {
-    // Noop. For future, e.g. search
+    // Noop
   };
 
   this.unbind = function () {
