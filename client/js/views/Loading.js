@@ -2,7 +2,7 @@
 var emitter = require('component-emitter');
 
 // Templates
-var template = require('../../templates/cards/loading.ejs');
+var template = require('./Loading.ejs');
 
 module.exports = function () {
 

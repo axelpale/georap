@@ -1,6 +1,6 @@
 
 var emitter = require('component-emitter');
-var cardTemplate = require('../../templates/card.ejs');
+var cardTemplate = require('./Card.ejs');
 
 module.exports = function () {
 
