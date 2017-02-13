@@ -1,9 +1,7 @@
 
 var emitter = require('component-emitter');
 var account = require('../stores/account');
-
-// Templates
-var passwordTemplate = require('../../templates/forms/changePassword.ejs');
+var template = require('./ChangePassword.ejs');
 
 module.exports = function () {
 
@@ -19,7 +17,7 @@ module.exports = function () {
   // Public methods
 
   this.render = function () {
-    return passwordTemplate({
+    return template({
       user: account.getUser(),
     });
   };

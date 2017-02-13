@@ -1,7 +1,7 @@
 var emitter = require('component-emitter');
 var account = require('../stores/account');
 var mainmenuTemplate = require('./MainMenu.ejs');
-var glyphiconTemplate = require('../../templates/glyphicon.ejs');
+var glyphiconTemplate = require('./lib/glyphicon.ejs');
 
 module.exports = function (handlers) {
   // Parameters:

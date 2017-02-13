@@ -3,7 +3,7 @@ var validator = require('email-validator');
 var account = require('../stores/account');
 
 // Templates
-var loginTemplate = require('../../templates/forms/login.ejs');
+var loginTemplate = require('./Login.ejs');
 
 module.exports = function (onSuccess) {
   // Parameters:

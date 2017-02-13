@@ -5,7 +5,7 @@ var jwtDecode = require('jwt-decode');
 var account = require('../stores/account');
 
 // Templates
-var resetFormTemplate = require('../../templates/forms/resetPassword.ejs');
+var template = require('./ResetPassword.ejs');
 
 module.exports = function (token, showLogin) {
   // Parameters
@@ -31,7 +31,7 @@ module.exports = function (token, showLogin) {
   // Public methods
 
   this.render = function () {
-    return resetFormTemplate({ email: parsedToken.email });
+    return template({ email: parsedToken.email });
   };
 
   this.bind = function () {

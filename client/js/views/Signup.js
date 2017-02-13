@@ -3,9 +3,7 @@
 var emitter = require('component-emitter');
 var jwtDecode = require('jwt-decode');
 var account = require('../stores/account');
-
-// Templates
-var signupTemplate = require('../../templates/forms/signup.ejs');
+var template = require('./Signup.ejs');
 
 module.exports = function (token, goLogin) {
   // Parameters:
@@ -29,7 +27,7 @@ module.exports = function (token, goLogin) {
   // Public methods
 
   this.render = function () {
-    return signupTemplate({ email: parsedToken.email });
+    return template({ email: parsedToken.email });
   };
 
   this.bind = function () {
