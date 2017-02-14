@@ -74,7 +74,10 @@ module.exports = function () {
     activeView = view;
 
     // Activate view.
-    $cont.html(view.render());
+    // Backwards compatibility: call render method if available.
+    if ('render' in view) {
+      $cont.html(view.render());
+    }
     $cont.addClass('tresdb-card-' + cardType);
     view.bind($cont);
 

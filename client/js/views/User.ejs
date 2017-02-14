@@ -2,9 +2,17 @@
   <div class="row">
     <div class="col-md-12">
 
-      <h1><%= user.name %></h1>
+      <h1><%= username %></h1>
 
-      <%= eventsHtml %>
+      <div id="tresdb-user-loading">
+        <div class="progress">
+          <div class="progress-bar progress-bar-striped active" role="progressbar" style="width: 100%">
+            <span class="sr-only">Waiting for server</span>
+          </div>
+        </div>
+      </div>
+
+      <div id="tresdb-user-events"></div>
 
     </div>
   </div>

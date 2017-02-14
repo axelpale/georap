@@ -6,7 +6,6 @@ var queryString = require('query-string');
 var locations = require('./stores/locations');
 var account = require('./stores/account');
 var events = require('./stores/events');
-var users = require('./stores/users');
 
 var CardView = require('./views/Card');
 
@@ -167,41 +166,13 @@ exports.route = function (page) {
   });
 
   page('/users', function () {
-    // Open a loading card
-    var loadingView = new LoadingView();
-
-    card.open(loadingView, 'page');
-
-    // Fetch users before rendering.
-    users.getAll(function (err, rawUsers) {
-      if (err) {
-        console.error(err);
-        return;
-      }
-
-      // Render
-      var view = new UsersView(rawUsers);
-      card.open(view);
-    });
+    var view = new UsersView();
+    card.open(view);
   });
 
   page('/users/:username', function (ctx) {
-    // Open a loading card
-    var loadingView = new LoadingView();
-
-    card.open(loadingView, 'page');
-
-    // Fetch user before rendering.
-    users.getOne(ctx.params.username, function (err, user) {
-      if (err) {
-        console.error(err);
-        return;
-      }
-
-      // Render
-      var view = new UserView(user);
-      card.open(view);
-    });
+    var view = new UserView(ctx.params.username);
+    card.open(view);
   });
 
   page('*', function () {

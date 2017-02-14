@@ -4,15 +4,15 @@
 
       <h1>Users</h1>
 
-      <ul id="tresdb-users" class="list-group">
-        <% var i, u; %>
-        <% for (i = 0; i < users.length; i += 1) { %>
-          <% u = users[i]; %>
-          <li class="list-group-item">
-            <a href="/users/<%= u.name %>"><%= u.name %></a>
-          </li>
-        <% } %>
-      </ul>
+      <div id="tresdb-users-loading">
+        <div class="progress">
+          <div class="progress-bar progress-bar-striped active" role="progressbar" style="width: 100%">
+            <span class="sr-only">Waiting for server</span>
+          </div>
+        </div>
+      </div>
+
+      <div id="tresdb-users"></div>
 
     </div>
   </div>

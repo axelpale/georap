@@ -1,0 +1,10 @@
+
+<ul class="list-group">
+  <% var i, u; %>
+  <% for (i = 0; i < users.length; i += 1) { %>
+    <% u = users[i]; %>
+    <li class="list-group-item">
+      <a href="/users/<%= u.name %>"><%= u.name %></a>
+    </li>
+  <% } %>
+</ul>

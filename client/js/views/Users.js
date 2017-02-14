@@ -1,35 +1,39 @@
 
 var emitter = require('component-emitter');
+var users = require('../stores/users');
 var template = require('./Users.ejs');
+var listTemplate = require('./UsersList.ejs');
 
-module.exports = function (users) {
-  // Parameters:
-  //   users
-  //     array of raw users from server
+module.exports = function () {
 
   // Init
   emitter(this);
 
-  // Private methods declaration
-
   // Public methods
 
-  this.render = function () {
-    return template({
-      users: users,
-    });
-  };
+  this.bind = function ($mount) {
 
-  this.bind = function () {
-    // noop
+    $mount.html(template());
+
+    // Fetch users and include to page.
+    users.getAll(function (err, rawUsers) {
+      // Hide loading bar
+      $('#tresdb-users-loading').addClass('hidden');
+
+      if (err) {
+        console.error(err);
+        return;
+      }
+
+      // Reveal list
+      $('#tresdb-users').html(listTemplate({
+        users: rawUsers,
+      }));
+    });
   };
 
   this.unbind = function () {
     // noop
   };
-
-
-  // Private methods
-
 
 };
