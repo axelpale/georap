@@ -1,36 +1,45 @@
-
+// Card
+//
+// Provides a container for page-like views.
+//
+// Interface:
+//   open(view, cardClass?)
+//     Closes previous view if open.
+//     Calls view.bind(HTMLElement mountpoint)
+//   close()
+//     Calls view.unbind()
+//
+// Emits:
+//   opened
+//     after open
+//   closed
+//     after close
+// Usage:
+//   var card = new Card();
+//   card.open(new Login());
+//   card.close()
+//
 var emitter = require('component-emitter');
-var cardTemplate = require('./Card.ejs');
 
 module.exports = function () {
 
-  // Init
-  emitter(this);
-
   // Constants
-  var cardLayer = document.getElementById('card-layer');
-  var self = this;
+  var $layer = $('#card-layer');
+  var $bg = $('#card-background');
+  var $cont = $('#card-container');
 
   // State
   var activeView = null;
 
-  // Private methods
+  // Init
+  emitter(this);
+  var self = this;
 
-  var fillCardLayer = function (content) {
-    // Parameters:
-    //   content
-    //     string
-    //       html content.
-    cardLayer.innerHTML = content;
-  };
+  // Init close mechanism
+  $bg.click(function () {
+    self.close();
+  });
 
-  var clearCardLayer = function () {
-    // Note: innerHTML = '' is a slow method to do the same.
-    // See http://stackoverflow.com/a/3450726/638546
-    while (cardLayer.firstChild) {
-      cardLayer.removeChild(cardLayer.firstChild);
-    }
-  };
 
   // Public methods
 
@@ -46,7 +55,7 @@ module.exports = function () {
     //         A fraction of the map is visible.
     //       full
     //         Fills the map area completely.
-    var card, cardType;
+    var cardType;
 
     // Handle default parameters
     if (typeof cardClass === 'undefined') {
@@ -55,50 +64,49 @@ module.exports = function () {
       cardType = cardClass;
     }
 
-    // Create card
-    card = cardTemplate({
-      content: view.render(),
-      cardClass: cardType,
-    });
-
     // Remove possible other cards
     if (activeView !== null) {
       activeView.off();
       activeView.unbind();
+      $cont.removeClass();  // removes previous tresdb-card-* classes
+      $cont.empty();
     }
     activeView = view;
-    fillCardLayer(card);
 
-    // Display if hidden
-    cardLayer.style.display = 'block';  // from 'none' if hidden
+    // Activate view.
+    $cont.html(view.render());
+    $cont.addClass('tresdb-card-' + cardType);
+    view.bind($cont);
 
-    // Activate input bindings
-    view.bind();
+    // Reveal if hidden
+    $layer.removeClass('hidden');
 
     // Listen & close if the model of the view becomes removed.
     view.once('removed', function () {
       self.close();
     });
 
-    // Initialize close mechanism
-    if (cardType === 'page') {
-      $('#card-background').click(function () {
-        self.close();
-      });
-    }
-
     self.emit('opened');
   };
 
-  this.close = function () {
+  this.close = function (silent) {
+    // Parameters:
+    //   silent, optional, default false
+    //     prevent emitting of 'closed' event
+    if (typeof silent !== 'boolean') {
+      silent = false;
+    }
+
     if (activeView !== null) {
       activeView.off();
       activeView.unbind();
       activeView = null;
+    }
 
-      cardLayer.style.display = 'none';
-      clearCardLayer();
+    $layer.addClass('hidden');
+    $cont.empty();
 
+    if (!silent) {
       self.emit('closed');
     }
   };

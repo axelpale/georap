@@ -110,7 +110,10 @@ exports.route = function (page) {
 
   page('/', function () {
     // Map is always open on the background.
-    card.close();
+    // Infinite loop prevention:
+    //   Do not emit 'closed' event because it causes redirection to '/'
+    var silent = true;
+    card.close(silent);
   });
 
   page('/password', function () {
