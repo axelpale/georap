@@ -5,10 +5,8 @@ var clone = require('clone');
 var emitter = require('component-emitter');
 
 var api = require('../connection/api');
-var account = require('../stores/account');
-var tags = require('../stores/tags');
+var locations = require('../stores/locations');
 var defaultRawLocation = require('./lib/defaultRawLocation');
-var validateCoords = require('./lib/validateCoords');
 var sortEntries = require('./lib/sortEntries');
 var toEntry = require('./lib/toEntryModel');
 
@@ -201,27 +199,7 @@ module.exports = function (rawLoc) {
     //     string
     //   callback
     //     function (err)
-
-    if (typeof markdown !== 'string') {
-      throw new Error('invalid story markdown type: ' + (typeof markdown));
-    }
-
-    $.ajax({
-      url: '/api/locations/' + loc._id + '/stories',
-      type: 'POST',
-      contentType: 'application/json',
-      data: JSON.stringify({
-        markdown: markdown.trim(),
-      }),
-      headers: { 'Authorization': 'Bearer ' + account.getToken() },
-      success: function () {
-        return callback(null);
-      },
-      error: function (jqxhr, status, err) {
-        console.error(err);
-        return callback(err);
-      },
-    });
+    locations.addStory(loc._id, markdown, callback);
   };
 
   this.addAttachment = function (form, callback) {
@@ -230,39 +208,7 @@ module.exports = function (rawLoc) {
     //     jQuery instance of the file upload form
     //   callback
     //     function (err)
-    //
-    // Emits
-    //   entry_added, { entryId: <string> }
-    //     on successful upload
-
-    var formData = new FormData(form[0]);
-
-    // Attach auth token
-    formData.append('token', account.getToken());
-
-    // Send. The contentType must be false, otherwise a Boundary header
-    // becomes missing and multer on the server side throws an error about it.
-    // The browser will attach the correct headers to the request.
-    //
-    // Official JWT auth header is used:
-    //   Authorization: Bearer mF_9.B5f-4.1JqM
-    // For details, see https://tools.ietf.org/html/rfc6750#section-2.1
-    $.ajax({
-      url: '/api/locations/' + loc._id + '/attachments',
-      type: 'POST',
-      contentType: false,
-      data: formData,
-      headers: { 'Authorization': 'Bearer ' + account.getToken() },
-      processData: false,
-      success: function () {
-        return callback(null);
-      },
-      error: function (jqxhr, status, err) {
-        console.log('Upload error');
-        console.log(status, err);
-        return callback(err);
-      },
-    });
+    locations.addAttachment(loc._id, form, callback);
   };
 
   this.addVisit = function (year, callback) {
@@ -271,27 +217,7 @@ module.exports = function (rawLoc) {
     //     integer or null if not given
     //   callback
     //     function (err)
-
-    if (typeof year !== 'number') {
-      throw new Error('invalid visit year type: ' + (typeof year));
-    }
-
-    $.ajax({
-      url: '/api/locations/' + loc._id + '/visits',
-      type: 'POST',
-      contentType: 'application/json',
-      data: JSON.stringify({
-        year: year,
-      }),
-      headers: { 'Authorization': 'Bearer ' + account.getToken() },
-      success: function () {
-        return callback(null);
-      },
-      error: function (jqxhr, status, err) {
-        console.error(err);
-        return callback(err);
-      },
-    });
+    locations.addVisit(loc._id, year, callback);
   };
 
   this.removeEntry = function (entryId, callback) {
@@ -331,34 +257,17 @@ module.exports = function (rawLoc) {
     //     number
     //   callback
     //     function (err)
+    locations.setGeom(loc._id, lng, lat, function (err) {
+      if (err) {
+        return callback(err);
+      }
 
-    if (!validateCoords.isValidLongitude(lng)) {
-      return callback(new Error('Invalid coordinate'));
-    }
-    if (!validateCoords.isValidLatitude(lat)) {
-      return callback(new Error('Invalid coordinate'));
-    }
+      // Update coords
+      loc.geom.coordinates[0] = lng;
+      loc.geom.coordinates[1] = lat;
+      self.emit('geom_changed');
 
-    $.ajax({
-      url: '/api/locations/' + loc._id + '/geom',
-      method: 'POST',
-      data: {
-        lat: lat,
-        lng: lng,
-      },
-      headers: { 'Authorization': 'Bearer ' + account.getToken() },
-      success: function () {
-
-        // Update coords
-        loc.geom.coordinates[0] = lng;
-        loc.geom.coordinates[1] = lat;
-        self.emit('geom_changed');
-
-        return callback(null);
-      },
-      error: function (jqxhr, textStatus, errorThrown) {
-        return callback(errorThrown);
-      },
+      return callback();
     });
   };
 
@@ -371,21 +280,15 @@ module.exports = function (rawLoc) {
     //   callback
     //     function (err)
 
-    $.ajax({
-      url: '/api/locations/' + loc._id + '/name',
-      method: 'POST',
-      data: {
-        newName: newName,
-      },
-      headers: { 'Authorization': 'Bearer ' + account.getToken() },
-      success: function () {
-        loc.name = newName;
-        self.emit('name_changed');
-        return callback(null);
-      },
-      error: function (jqxhr, textStatus, errorThrown) {
-        return callback(errorThrown);
-      },
+    locations.setName(loc._id, newName, function (err) {
+      if (err) {
+        return callback(err);
+      }
+
+      loc.name = newName;
+      self.emit('name_changed');
+
+      return callback();
     });
   };
 
@@ -397,33 +300,15 @@ module.exports = function (rawLoc) {
     //     array of strings
     //   callback
     //     function (err)
-
-    // Validate
-    var i, t;
-    for (i = 0; i < newTags.length; i += 1) {
-      t = newTags[i];
-      if (!tags.isValidTag(t)) {
-        throw new Error('unknown tag: ' + t);
+    locations.setTags(loc._id, newTags, function (err) {
+      if (err) {
+        return callback(err);
       }
-    }
 
-    // Post
-    $.ajax({
-      url: '/api/locations/' + loc._id + '/tags',
-      method: 'POST',
-      contentType: 'application/json',
-      data: JSON.stringify({
-        tags: newTags,
-      }),
-      headers: { 'Authorization': 'Bearer ' + account.getToken() },
-      success: function () {
-        loc.tags = newTags;
-        self.emit('tags_changed');
-        return callback(null);
-      },
-      error: function (jqxhr, textStatus, errorThrown) {
-        return callback(errorThrown);
-      },
+      loc.tags = newTags;
+      self.emit('tags_changed');
+
+      return callback();
     });
   };
 
@@ -447,20 +332,12 @@ module.exports = function (rawLoc) {
   };
 
   this.remove = function (callback) {
-
-    $.ajax({
-      url: '/api/locations/' + loc._id,
-      method: 'DELETE',
-      headers: { 'Authorization': 'Bearer ' + account.getToken() },
-      success: function () {
-        // Inform
-        self.emit('removed', self);
-        return callback();
-      },
-      error: function (jqxhr, textStatus, errorThrown) {
-        return callback(errorThrown);
-      },
+    locations.removeOne(loc._id, function (err) {
+      if (err) {
+        return callback(err);
+      }
+      self.emit('removed', self);
+      return callback();
     });
-
   };
 };
