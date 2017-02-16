@@ -5,7 +5,6 @@ var queryString = require('query-string');
 
 var locations = require('./stores/locations');
 var account = require('./stores/account');
-var events = require('./stores/events');
 
 var CardView = require('./views/Card');
 
@@ -126,23 +125,8 @@ exports.route = function (page) {
   });
 
   page('/latest', function () {
-
-    // Open a loading card
-    var loadingView = new LoadingView();
-
-    card.open(loadingView, 'page');
-
-    // Fetch events before rendering.
-    events.getRecent(0, function (err, rawEvents) {
-      if (err) {
-        console.error(err);
-        return;
-      }
-
-      // Render & bind
-      var view = new EventsView(rawEvents);
-      card.open(view);
-    });
+    var view = new EventsView();
+    card.open(view);
   });
 
   page('/locations/:id', function (ctx) {
