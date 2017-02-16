@@ -2,21 +2,22 @@
 
 var emitter = require('component-emitter');
 
-var account = require('../stores/account');
-var getEntryView = require('./lib/getEntryView');
+var locations = require('../stores/locations');
+
+//var getEntryView = require('./lib/getEntryView');
 var NameView = require('./locationParts/Name');
-var CoordsView = require('./locationParts/Coords');
+var GeomView = require('./locationParts/Geom');
 var TagsView = require('./locationParts/Tags');
-var EntryFormView = require('./locationParts/EntryForm');
+var FormsView = require('./locationParts/Forms');
 var RemoveView = require('./locationParts/Remove');
 
 // Templates
-var locationTemplate = require('./location.ejs');
+var locationTemplate = require('./Location.ejs');
 
-module.exports = function (location) {
+module.exports = function (id) {
   // Parameters
-  //   location
-  //     models.Location object
+  //   id
+  //     location id
   //
   // Emits
   //   removed
@@ -26,102 +27,112 @@ module.exports = function (location) {
   emitter(this);
   var self = this;
 
-  // Build child views
+  // State
+  var location;
+  var nameView, geomView, tagsView, formsView, removeView;
 
-  var nameView = new NameView(location);
-  var coordsView = new CoordsView(location);
-  var tagsView = new TagsView(location);
-  var entryFormView = new EntryFormView(location);
-  var removeView = new RemoveView(location);
-
-  var entries = location.getEntriesInTimeOrder();
-  var entryViews = entries.map(function (entry) {
-    return getEntryView(entry);
-  });
-
-  // Private methods declaration
 
   // Public methods
 
-  this.render = function () {
+  this.bind = function ($mount) {
 
-    // Sort content, newest first, create-event to bottom.
-    //sortEntries(loc.content);
+    // Loading
+    $mount.html(locationTemplate());
 
-    var nameHtml = nameView.render();
-    var coordsHtml = coordsView.render();
-    var tagsHtml = tagsView.render();
-    var entryFormHtml = entryFormView.render();
-    var removeHtml = removeView.render();
+    var $loading = $('#tresdb-location-loading');
 
-    var entriesHtml = entryViews.map(function (entryView) {
-      return entryView.render();
+    // Fetch location before rendering.
+    locations.get(id, function (err, loc) {
+
+      $loading.addClass('hidden');
+
+      if (err) {
+        console.error(err);
+        return;
+      }
+
+      // Set state
+      location = loc;
+
+      nameView = new NameView(location);
+      geomView = new GeomView(location);
+      tagsView = new TagsView(location);
+      formsView = new FormsView(location);
+      removeView = new RemoveView(location);
+
+      nameView.bind($('#tresdb-location-name'));
+      geomView.bind($('#tresdb-location-geom'));
+      tagsView.bind($('#tresdb-location-tags'));
+      formsView.bind($('#tresdb-location-forms'));
+      removeView.bind($('#tresdb-location-remove'));
+
+      // var entries = location.getEntriesInTimeOrder();
+      // var entryViews = entries.map(function (entry) {
+      //   return getEntryView(entry);
+      // });
+
+      // Listen possible changes in the location.
+
+      // location.on('entry_added', function (ev) {
+      //   // Get entry model
+      //   var entry = location.getEntry(ev.entryId);
+      //   // Create entry view
+      //   var entryView = getEntryView(entry);
+      //   // Render, attach to dom and bind handlers
+      //   var html = entryView.render();
+      //   $('#tresdb-location-content-entries').prepend(html);
+      //   entryView.bind();
+      // });
+      //
+      // location.on('entry_removed', function (ev) {
+      //   $('#' + ev.entryId).remove();
+      // });
+
+      location.on('removed', function () {
+        self.emit('removed');
+      });
+
+      // Enable tooltips. See http://getbootstrap.com/javascript/#tooltips
+      $('[data-toggle="tooltip"]').tooltip();
+
     });
 
 
-    return locationTemplate({
-      location: location,
-      account: account,
-      nameHtml: nameHtml,
-      coordsHtml: coordsHtml,
-      tagsHtml: tagsHtml,
-      entryFormHtml: entryFormHtml,
-      entriesHtml: entriesHtml,
-      removeHtml: removeHtml,
-    });
-  };
+    // // Bind children first for clarity
+    // entryViews.forEach(function (entryView) {
+    //   entryView.bind();
+    // });
 
-  this.bind = function () {
+    // var entriesHtml = entryViews.map(function (entryView) {
+    //   return entryView.render();
+    // });
 
-    nameView.bind();
-    coordsView.bind();
-    tagsView.bind();
-    entryFormView.bind();
-    removeView.bind();
-
-    // Bind children first for clarity
-    entryViews.forEach(function (entryView) {
-      entryView.bind();
-    });
-
-    // Listen possible changes in the location.
-
-    location.on('entry_added', function (ev) {
-      // Get entry model
-      var entry = location.getEntry(ev.entryId);
-      // Create entry view
-      var entryView = getEntryView(entry);
-      // Render, attach to dom and bind handlers
-      var html = entryView.render();
-      $('#tresdb-location-content-entries').prepend(html);
-      entryView.bind();
-    });
-
-    location.on('entry_removed', function (ev) {
-      $('#' + ev.entryId).remove();
-    });
-
-    location.on('removed', function () {
-      self.emit('removed');
-    });
-
-    // Enable tooltips. See http://getbootstrap.com/javascript/#tooltips
-    $('[data-toggle="tooltip"]').tooltip();
+    // return locationTemplate({
+    //   location: location,
+    //   account: account,
+    //   nameHtml: nameHtml,
+    //   coordsHtml: coordsHtml,
+    //   tagsHtml: tagsHtml,
+    //   entryFormHtml: entryFormHtml,
+    //   entriesHtml: entriesHtml,
+    //   removeHtml: removeHtml,
+    // });
 
   };  // end bind
 
   this.unbind = function () {
-    nameView.unbind();
-    coordsView.unbind();
-    tagsView.unbind();
-    entryFormView.unbind();
-    removeView.unbind();
-    entryViews.forEach(function (view) {
-      view.unbind();
-    });
-    location.off();
-  };
 
-  // Private methods
+    if (location) {
+      nameView.unbind();
+      geomView.unbind();
+      tagsView.unbind();
+      formsView.unbind();
+      removeView.unbind();
+      // entryViews.forEach(function (view) {
+      //   view.unbind();
+      // });
+      location.off();
+    }
+  };
 
 };

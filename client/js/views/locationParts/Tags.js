@@ -1,21 +1,19 @@
 var tags = require('../../stores/tags');
-var template = require('./tags.ejs');
+var template = require('./Tags.ejs');
 var tagsListTemplate = require('./tagsList.ejs');
 var tagsFormListTemplate = require('./tagsFormList.ejs');
 
 module.exports = function (location) {
 
-  this.render = function () {
-    return template({
+  this.bind = function ($mount) {
+
+    $mount.html(template({
       tagsListHtml: tagsListTemplate({ tags: location.getTags() }),
       tagsFormListHtml: tagsFormListTemplate({
         allTags: tags.getAllTags(),
         locationTags: location.getTags(),
       }),
-    });
-  };
-
-  this.bind = function () {
+    }));
 
     var $list = $('#tresdb-location-edit-tags-list');
     var $show = $('#tresdb-location-edit-tags-show');

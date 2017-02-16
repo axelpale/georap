@@ -1,20 +1,17 @@
 
 var geostamp = require('../lib/geostamp');
-var template = require('./coords.ejs');
+var template = require('./Geom.ejs');
 
 module.exports = function (location) {
 
-
   // Public methods
 
-  this.render = function () {
-    return template({
+  this.bind = function ($mount) {
+
+    $mount.html(template({
       location: location,
       geostamp: geostamp,
-    });
-  };
-
-  this.bind = function () {
+    }));
 
     // Preparation
 

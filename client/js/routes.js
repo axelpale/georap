@@ -3,7 +3,6 @@
 
 var queryString = require('query-string');
 
-var locations = require('./stores/locations');
 var account = require('./stores/account');
 
 var CardView = require('./views/Card');
@@ -12,7 +11,6 @@ var LoginView = require('./views/Login');
 var SignupView = require('./views/Signup');
 var InviteView = require('./views/Invite');
 var EventsView = require('./views/Events');
-var LoadingView = require('./views/Loading');
 var LocationView = require('./views/Location');
 var UsersView = require('./views/Users');
 var UserView = require('./views/User');
@@ -130,23 +128,8 @@ exports.route = function (page) {
   });
 
   page('/locations/:id', function (ctx) {
-
-    // Open a loading card
-    var loadingView = new LoadingView();
-
-    card.open(loadingView, 'page');
-
-    // Fetch location before rendering.
-    locations.get(ctx.params.id, function (err, loc) {
-      if (err) {
-        console.error(err);
-        return;
-      }
-
-      // Render location card.
-      var view = new LocationView(loc);
-      card.open(view);
-    });
+    var view = new LocationView(ctx.params.id);
+    card.open(view);
   });
 
   page('/users', function () {

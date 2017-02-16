@@ -1,14 +1,12 @@
-var template = require('./name.ejs');
+var template = require('./Name.ejs');
 
 module.exports = function (location) {
 
-  this.render = function () {
-    return template({
-      location: location,
-    });
-  };
+  this.bind = function ($mount) {
 
-  this.bind = function () {
+    $mount.html(template({
+      location: location,
+    }));
 
     location.on('name_changed', function () {
       var newName = location.getName();

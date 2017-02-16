@@ -1,19 +1,13 @@
 
-var template = require('./remove.ejs');
+var template = require('./Remove.ejs');
 
 module.exports = function (location) {
 
-  // Private methods
+  this.bind = function ($mount) {
 
-  // Public methods
-
-  this.render = function () {
-    return template({
+    $mount.html(template({
       location: location,
-    });
-  };
-
-  this.bind = function () {
+    }));
 
     $('#tresdb-location-delete-ensure').click(function (ev) {
       ev.preventDefault();

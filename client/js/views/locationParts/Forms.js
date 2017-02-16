@@ -1,5 +1,5 @@
 // Templates
-var template = require('./entryForm.ejs');
+var template = require('./Forms.ejs');
 var markdownSyntax = require('./markdownSyntax.ejs');
 
 module.exports = function (location) {
@@ -7,14 +7,11 @@ module.exports = function (location) {
   //   location
   //     models.Location object
 
-  this.render = function () {
-    return template({
-      markdownSyntax: markdownSyntax,
-    });
-  };
+  this.bind = function ($mount) {
 
-  this.bind = function () {
-    // Story form
+    $mount.html(template({
+      markdownSyntax: markdownSyntax,
+    }));
 
     $('#tresdb-location-story-show').click(function (ev) {
       ev.preventDefault();
