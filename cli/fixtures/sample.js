@@ -32,7 +32,7 @@ module.exports = {
         user: local.admin.username,
         time: '2009-09-04T23:44:21.000Z',
         data: {
-          markdown: 'A ghost town',
+          markdown: 'It is a soviet union ghost town.',
         },
       },
       {
