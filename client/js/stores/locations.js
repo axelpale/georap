@@ -56,8 +56,8 @@ var postJSON = function (params, callback) {
     contentType: 'application/json',
     data: JSON.stringify(params.data),
     headers: { 'Authorization': 'Bearer ' + account.getToken() },
-    success: function () {
-      return callback();
+    success: function (responseData) {
+      return callback(null, responseData);
     },
     error: function (jqxhr, status, err) {
       console.error(err);
@@ -152,30 +152,25 @@ exports.create = function (geom, callback) {
   //   callback
   //     function (err, createdLocation)
 
-  $.ajax({
+  postJSON({
     url: '/api/locations',
-    method: 'POST',
     data: {
       lat: geom.coordinates[1],
       lng: geom.coordinates[0],
     },
-    dataType: 'json',
-    headers: { 'Authorization': 'Bearer ' + account.getToken() },
-    success: function (rawLoc) {
+  }, function (err, rawLoc) {
+    if (err) {
+      return callback(err);
+    }
 
-      var newLoc = new Location(rawLoc);
+    // Convert to Location model
+    var newLoc = new Location(rawLoc);
+    // Emit changes of this location until next loc in focus.
+    listenForChanges(newLoc);
+    // Inform others that new location has been created.
+    exports.emit('location_changed', newLoc);
 
-      // Emit changes of this location until next loc in focus.
-      listenForChanges(newLoc);
-
-      // Inform others that new location has been created.
-      exports.emit('location_changed', newLoc);
-
-      return callback(null, newLoc);
-    },
-    error: function (jqxhr, textStatus, errorThrown) {
-      return callback(errorThrown);
-    },
+    return callback(null, newLoc);
   });
 };
 
@@ -226,21 +221,13 @@ this.setGeom = function (id, lng, lat, callback) {
     return callback(new Error('Invalid coordinate'));
   }
 
-  $.ajax({
+  return postJSON({
     url: '/api/locations/' + id + '/geom',
-    method: 'POST',
     data: {
       lat: lat,
       lng: lng,
     },
-    headers: { 'Authorization': 'Bearer ' + account.getToken() },
-    success: function () {
-      return callback();
-    },
-    error: function (jqxhr, textStatus, errorThrown) {
-      return callback(errorThrown);
-    },
-  });
+  }, callback);
 };
 
 exports.setName = function (id, newName, callback) {
@@ -252,20 +239,10 @@ exports.setName = function (id, newName, callback) {
   //   callback
   //     function (err)
 
-  $.ajax({
+  return postJSON({
     url: '/api/locations/' + id + '/name',
-    method: 'POST',
-    data: {
-      newName: newName,
-    },
-    headers: { 'Authorization': 'Bearer ' + account.getToken() },
-    success: function () {
-      return callback();
-    },
-    error: function (jqxhr, textStatus, errorThrown) {
-      return callback(errorThrown);
-    },
-  });
+    data: { newName: newName },
+  }, callback);
 };
 
 this.setTags = function (id, newTags, callback) {
