@@ -25,7 +25,7 @@ module.exports = function (location) {
     location.on('tags_changed', function () {
       // Update tags list
       var tagsListHtml = tagsListTemplate({ tags: location.getTags() });
-      $('#tresdb-location-tags').html(tagsListHtml);
+      $('#tresdb-location-tags-list').html(tagsListHtml);
 
       // Update form
       var tagsFormListHtml = tagsFormListTemplate({

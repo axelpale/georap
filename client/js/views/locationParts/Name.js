@@ -8,61 +8,68 @@ module.exports = function (location) {
       location: location,
     }));
 
+    var $display = $('#tresdb-location-name-display');
+    var $show = $('#tresdb-location-rename-show');
+    var $form = $('#tresdb-location-rename-form');
+    var $error = $('#tresdb-location-rename-error');
+    var $input = $('#tresdb-location-rename-input');
+    var $cancel = $('#tresdb-location-rename-cancel');
+
     location.on('name_changed', function () {
       var newName = location.getName();
       var s = (newName === '' ? 'Untitled' : newName);
-      $('#tresdb-location-name').text(s);
+      $display.text(s);
     });
 
     // Rename form
 
-    $('#tresdb-location-rename-show').click(function (ev) {
+    $show.click(function (ev) {
       ev.preventDefault();
 
-      if ($('#tresdb-location-rename-form').hasClass('hidden')) {
+      if ($form.hasClass('hidden')) {
         // Show
-        $('#tresdb-location-rename-form').removeClass('hidden');
+        $form.removeClass('hidden');
         // Remove possible error messages
-        $('#tresdb-location-rename-error').addClass('hidden');
+        $error.addClass('hidden');
         // Prefill the form with the current name
-        $('#tresdb-location-rename-input').val(location.getName());
+        $input.val(location.getName());
         // Focus to input field
-        $('#tresdb-location-rename-input').focus();
+        $input.focus();
       } else {
         // Hide
-        $('#tresdb-location-rename-form').addClass('hidden');
+        $form.addClass('hidden');
         // Remove possible error messages
-        $('#tresdb-location-rename-error').addClass('hidden');
+        $error.addClass('hidden');
       }
     });
 
-    $('#tresdb-location-rename-cancel').click(function (ev) {
+    $cancel.click(function (ev) {
       ev.preventDefault();
-      $('#tresdb-location-rename-form').addClass('hidden');
+      $form.addClass('hidden');
     });
 
-    $('#tresdb-location-rename-form').submit(function (ev) {
+    $form.submit(function (ev) {
       ev.preventDefault();
 
-      var newName = $('#tresdb-location-rename-input').val().trim();
+      var newName = $input.val().trim();
       var oldName = location.getName();
 
       if (newName === oldName) {
         // If name not changed, just close the form.
-        $('#tresdb-location-rename-form').addClass('hidden');
-        $('#tresdb-location-rename-error').addClass('hidden');
+        $form.addClass('hidden');
+        $error.addClass('hidden');
         return;
       }
 
       location.setName(newName, function (err) {
         if (err) {
           console.error(err);
-          $('#tresdb-location-rename-form').addClass('hidden');
-          $('#tresdb-location-rename-error').removeClass('hidden');
+          $form.addClass('hidden');
+          $error.removeClass('hidden');
           return;
         }
 
-        $('#tresdb-location-rename-form').addClass('hidden');
+        $form.addClass('hidden');
       });
     });
 
