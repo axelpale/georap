@@ -1,7 +1,6 @@
 /* eslint-disable max-lines */
 
 var db = require('../../services/db');
-var shortid = require('shortid');
 var eventsDal = require('../events/dal');
 
 exports.count = function (callback) {
@@ -23,19 +22,8 @@ exports.count = function (callback) {
 exports.create = function (lat, lng, username, callback) {
   // Create a location to given coordinates.
 
-  var now = (new Date()).toISOString();
-
   var newLoc = {
-    content: [{
-      _id: shortid.generate(),
-      type: 'created',
-      user: username,
-      time: now,
-      data: {
-        lat: lat,
-        lng: lng,
-      },
-    }],
+    creator: username,
     deleted: false,
     geom: {
       type: 'Point',

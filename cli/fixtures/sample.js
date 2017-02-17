@@ -105,17 +105,19 @@ module.exports = {
     locations: [
       {
         _id: new ObjectId('581f166110a1482dd0b7cd13'),
+        creator: local.admin.username,
         name: 'Irbene',
         geom: {
           type: 'Point',
           coordinates: [21.857705, 57.55341],
         },
         deleted: false,
-        tags: ['walk-in'],
+        tags: ['walk-in', 'town'],
         layer: 1,
       },
       {
         _id: new ObjectId('581f166130a1482dd0b7cd15'),
+        creator: local.admin.username,
         name: 'Rummu',
         geom: {
           type: 'Point',

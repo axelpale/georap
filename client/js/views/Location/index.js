@@ -1,3 +1,4 @@
+/* eslint-disable max-statements */
 // View for location
 
 var emitter = require('component-emitter');
@@ -10,6 +11,7 @@ var GeomView = require('./parts/Geom');
 var TagsView = require('./parts/Tags');
 var FormsView = require('./parts/Forms');
 var RemoveView = require('./parts/Remove');
+var EntriesView = require('./Entries');
 
 // Templates
 var locationTemplate = require('./template.ejs');
@@ -29,7 +31,8 @@ module.exports = function (id) {
 
   // State
   var location;
-  var nameView, geomView, tagsView, formsView, removeView;
+  var nameView, geomView, tagsView, formsView;
+  var entriesView, eventsView, removeView;
 
 
   // Public methods
@@ -58,18 +61,18 @@ module.exports = function (id) {
       geomView = new GeomView(location);
       tagsView = new TagsView(location);
       formsView = new FormsView(location);
+      entriesView = new EntriesView(location);
+      eventsView = new EntriesView(location);
       removeView = new RemoveView(location);
 
       nameView.bind($('#tresdb-location-name'));
       geomView.bind($('#tresdb-location-geom'));
       tagsView.bind($('#tresdb-location-tags'));
       formsView.bind($('#tresdb-location-forms'));
+      entriesView.bind($('#tresdb-location-entries'));
+      eventsView.bind($('#tresdb-location-events'));
       removeView.bind($('#tresdb-location-remove'));
 
-      // var entries = location.getEntriesInTimeOrder();
-      // var entryViews = entries.map(function (entry) {
-      //   return getEntryView(entry);
-      // });
 
       // Listen possible changes in the location.
 
@@ -96,28 +99,6 @@ module.exports = function (id) {
       $('[data-toggle="tooltip"]').tooltip();
 
     });
-
-
-    // // Bind children first for clarity
-    // entryViews.forEach(function (entryView) {
-    //   entryView.bind();
-    // });
-
-    // var entriesHtml = entryViews.map(function (entryView) {
-    //   return entryView.render();
-    // });
-
-    // return locationTemplate({
-    //   location: location,
-    //   account: account,
-    //   nameHtml: nameHtml,
-    //   coordsHtml: coordsHtml,
-    //   tagsHtml: tagsHtml,
-    //   entryFormHtml: entryFormHtml,
-    //   entriesHtml: entriesHtml,
-    //   removeHtml: removeHtml,
-    // });
-
   };  // end bind
 
   this.unbind = function () {
@@ -127,10 +108,9 @@ module.exports = function (id) {
       geomView.unbind();
       tagsView.unbind();
       formsView.unbind();
+      entriesView.unbind();
+      eventsView.unbind();
       removeView.unbind();
-      // entryViews.forEach(function (view) {
-      //   view.unbind();
-      // });
       location.off();
     }
   };
