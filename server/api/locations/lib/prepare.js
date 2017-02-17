@@ -14,17 +14,17 @@ exports.location = function (location) {
   cliloc._id = location._id.toString();
 
   // Prepare the content too
-  cliloc.content = exports.content(location.content);
+  cliloc.entries = exports.entries(location.entries);
 
   return cliloc;
 };
 
-exports.content = function (entries) {
+exports.entries = function (entries) {
   return entries.map(exports.entry);
 };
 
 exports.entry = function (entry) {
-  if (entry.type === 'attachment') {
+  if (entry.type === 'location_attachment') {
     // Attach an url to each attachment.
     entry.data.url = attachmentPaths.getAbsoluteUrl(entry);
   }

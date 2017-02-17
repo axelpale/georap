@@ -1,6 +1,6 @@
 // File upload request parser config
 
-var local = require('../../../../config/local');
+var local = require('../../../../../../config/local');
 var multer = require('multer');
 var path = require('path');
 var fse = require('fs-extra');

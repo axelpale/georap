@@ -1,42 +1,17 @@
 /* eslint-disable new-cap */
 
-var handlers = require('./handlers');
-var status = require('http-status-codes');
-var ObjectId = require('mongodb').ObjectId;
 var express = require('express');
 var router = express.Router();
-var bodyParser = require('body-parser');
-var jsonParser = bodyParser.json();
-// var urlencodedParser = bodyParser.urlencoded({ extended: false });
+var jsonParser = require('body-parser').json();
+
+var handlers = require('./handlers');
+var locationIdParser = require('./lib/locationIdParser');
+var locationRouter = require('./location/routes');
 
 // Location collection
 
 router.post('/', jsonParser, handlers.create);
 router.get('/count', handlers.count);
-
-// Single location
-
-router.use('/:locationId', function (req, res, next) {
-  // Converts string object id to ObjectId
-
-  var stringId = req.params.locationId;
-
-  try {
-    req.locationId = new ObjectId(stringId);
-  } catch (e) {
-    return res.sendStatus(status.NOT_FOUND);
-  }
-
-  return next();
-});
-
-router.get('/:locationId', handlers.getOne);
-router.delete('/:locationId', handlers.removeOne);
-router.post('/:locationId/attachments', handlers.addAttachment);
-router.post('/:locationId/geom', jsonParser, handlers.changeGeom);
-router.post('/:locationId/name', jsonParser, handlers.changeName);
-router.post('/:locationId/stories', jsonParser, handlers.addStory);
-router.post('/:locationId/tags', jsonParser, handlers.changeTags);
-router.post('/:locationId/visits', jsonParser, handlers.addVisit);
+router.use('/:locationId', locationIdParser, locationRouter);
 
 module.exports = router;

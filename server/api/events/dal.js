@@ -55,6 +55,7 @@ var insertAndEmit = function (ev, callback) {
 exports.createLocationAttachmentCreated = function (params, callback) {
   // Parameters:
   //   params:
+  //     entryId
   //     locationId
   //     username
   //     filePathInUploadDir
@@ -68,8 +69,31 @@ exports.createLocationAttachmentCreated = function (params, callback) {
     time: timestamp(),
     locationId: params.locationId,
     data: {
+      entryId: params.entryId,
       filepath: params.filePathInUploadDir,
       mimetype: params.fileMimeType,
+    },
+  };
+
+  insertAndEmit(newEvent, callback);
+};
+
+exports.createLocationAttachmentRemoved = function (params, callback) {
+  // Parameters:
+  //   params:
+  //     entryId
+  //     locationId
+  //     username
+  //   callback
+  //     function (err)
+
+  var newEvent = {
+    type: 'location_attachment_removed',
+    user: params.username,
+    time: timestamp(),
+    locationId: params.locationId,
+    data: {
+      entryId: params.entryId,
     },
   };
 
@@ -151,12 +175,43 @@ exports.createLocationNameChanged = function (params, callback) {
   insertAndEmit(newEvent, callback);
 };
 
+exports.createLocationStoryChanged = function (params, callback) {
+  // Parameters:
+  //   params:
+  //     locationId
+  //     entryId
+  //     username
+  //     newMarkdown
+
+  if (typeof params.entryId !== 'object') {
+    throw new Error('invalid entryId type');
+  }
+
+  var newEvent = {
+    type: 'location_story_changed',
+    user: params.username,
+    time: timestamp(),
+    locationId: params.locationId,
+    data: {
+      entryId: params.entryId,
+      newMarkdown: params.newMarkdown,
+    },
+  };
+
+  insertAndEmit(newEvent, callback);
+};
+
 exports.createLocationStoryCreated = function (params, callback) {
   // Parameters:
   //   params:
   //     locationId
+  //     entryId
   //     username
   //     markdown
+
+  if (typeof params.entryId !== 'object') {
+    throw new Error('invalid entryId type');
+  }
 
   var newEvent = {
     type: 'location_story_created',
@@ -164,7 +219,28 @@ exports.createLocationStoryCreated = function (params, callback) {
     time: timestamp(),
     locationId: params.locationId,
     data: {
+      entryId: params.entryId,
       markdown: params.markdown,
+    },
+  };
+
+  insertAndEmit(newEvent, callback);
+};
+
+exports.createLocationStoryRemoved = function (params, callback) {
+  // Parameters:
+  //   params:
+  //     entryId
+  //     locationId
+  //     username
+
+  var newEvent = {
+    type: 'location_story_removed',
+    user: params.username,
+    time: timestamp(),
+    locationId: params.locationId,
+    data: {
+      entryId: params.entryId,
     },
   };
 
@@ -225,6 +301,8 @@ exports.createLocationVisitCreated = function (params, callback) {
   //     username
   //     year
   //       integer
+  //   callback
+  //     function (err)
 
   var newEvent = {
     type: 'location_visit_created',
@@ -232,7 +310,30 @@ exports.createLocationVisitCreated = function (params, callback) {
     time: timestamp(),
     locationId: params.locationId,
     data: {
+      entryId: params.entryId,
       year: params.year,
+    },
+  };
+
+  insertAndEmit(newEvent, callback);
+};
+
+exports.createLocationVisitRemoved = function (params, callback) {
+  // Parameters:
+  //   params:
+  //     entryId
+  //     locationId
+  //     username
+  //   callback
+  //     function (err)
+
+  var newEvent = {
+    type: 'location_visit_removed',
+    user: params.username,
+    time: timestamp(),
+    locationId: params.locationId,
+    data: {
+      entryId: params.entryId,
     },
   };
 

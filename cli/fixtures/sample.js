@@ -13,6 +13,31 @@ module.exports = {
         value: 5,
       },
     ],
+    entries: [
+      {
+        _id: new ObjectId('58092312bbba420a35fb4201'),
+        deleted: false,
+        locationId: new ObjectId('581f166110a1482dd0b7cd13'),
+        time: '2009-09-04T23:44:21.000Z',
+        type: 'location_story',
+        user: local.admin.username,
+        data: {
+          markdown: 'It is a soviet union ghost town.',
+        },
+      },
+      {
+        _id: new ObjectId('58092312bebc430a35fb4102'),
+        deleted: false,
+        locationId: new ObjectId('581f166110a1482dd0b7cd13'),
+        type: 'location_attachment',
+        time: '2009-10-05T12:23:34.000Z',
+        user: local.admin.username,
+        data: {
+          filepath: '2009/RxRvKSlbl/radar.jpg',
+          mimetype: 'image/jpeg',
+        },
+      },
+    ],
     events: [
       {
         _id: new ObjectId('58092312bbba430a35fb4100'),
@@ -87,37 +112,6 @@ module.exports = {
         },
         deleted: false,
         tags: ['walk-in'],
-        content: [
-          {
-            _id: 'rkblRPFrg',
-            type: 'created',
-            user: local.admin.username,
-            time: '2009-07-30T10:44:58.000Z',
-            data: {
-              lat: 57.55341,
-              lng: 21.857705,
-            },
-          },
-          {
-            _id: 'rkMxRvKSl',
-            type: 'story',
-            user: local.admin.username,
-            time: '2009-09-04T23:44:21.000Z',
-            data: {
-              markdown: 'A ghost town',
-            },
-          },
-          {
-            _id: 'RxRvKSlbl',
-            type: 'attachment',
-            user: local.admin.username,
-            time: '2009-10-05T12:23:34.000Z',
-            data: {
-              filepath: '2009/RxRvKSlbl/radar.jpg',
-              mimetype: 'image/jpeg',
-            },
-          },
-        ],
         layer: 1,
       },
       {
@@ -129,7 +123,6 @@ module.exports = {
         },
         deleted: true,
         tags: [],
-        content: [],
         layer: 2,
       },
     ],
@@ -151,6 +144,11 @@ module.exports = {
     ],
   },
   indices: [
+    {
+      collection: 'entries',
+      spec: { locationId: 1 },
+      options: {},
+    },
     {
       collection: 'events',
       spec: { time: 1 },
