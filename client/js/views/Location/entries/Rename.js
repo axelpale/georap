@@ -1,6 +1,6 @@
 
-var timestamp = require('../lib/timestamp');
-var template = require('./tagadd.ejs');
+var timestamp = require('../../lib/timestamp');
+var template = require('./Rename.ejs');
 
 module.exports = function (entry) {
 

@@ -1,4 +1,4 @@
-var tags = require('../../stores/tags');
+var tags = require('../../../stores/tags');
 var template = require('./Tags.ejs');
 var tagsListTemplate = require('./tagsList.ejs');
 var tagsFormListTemplate = require('./tagsFormList.ejs');

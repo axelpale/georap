@@ -6,10 +6,10 @@
 //   s.bind();
 
 var marked = require('marked');
-var account = require('../../stores/account');
-var timestamp = require('../lib/timestamp');
-var storyTemplate = require('./story.ejs');
-var markdownSyntax = require('../locationParts/markdownSyntax.ejs');
+var account = require('../../../stores/account');
+var timestamp = require('../../lib/timestamp');
+var storyTemplate = require('./Story.ejs');
+var markdownSyntax = require('../parts/markdownSyntax.ejs');
 
 module.exports = function (entry) {
   // Parameters:

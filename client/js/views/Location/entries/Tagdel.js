@@ -1,6 +1,6 @@
 
-var timestamp = require('../lib/timestamp');
-var template = require('./tagdel.ejs');
+var timestamp = require('../../lib/timestamp');
+var template = require('./Tagdel.ejs');
 
 module.exports = function (entry) {
 

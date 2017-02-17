@@ -2,17 +2,17 @@
 
 var emitter = require('component-emitter');
 
-var locations = require('../stores/locations');
+var locations = require('../../stores/locations');
 
 //var getEntryView = require('./lib/getEntryView');
-var NameView = require('./locationParts/Name');
-var GeomView = require('./locationParts/Geom');
-var TagsView = require('./locationParts/Tags');
-var FormsView = require('./locationParts/Forms');
-var RemoveView = require('./locationParts/Remove');
+var NameView = require('./parts/Name');
+var GeomView = require('./parts/Geom');
+var TagsView = require('./parts/Tags');
+var FormsView = require('./parts/Forms');
+var RemoveView = require('./parts/Remove');
 
 // Templates
-var locationTemplate = require('./Location.ejs');
+var locationTemplate = require('./template.ejs');
 
 module.exports = function (id) {
   // Parameters

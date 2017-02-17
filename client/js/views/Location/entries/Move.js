@@ -1,6 +1,7 @@
 
-var timestamp = require('../lib/timestamp');
-var template = require('./created.ejs');
+var geostamp = require('../lib/geostamp');
+var timestamp = require('../../lib/timestamp');
+var template = require('./Move.ejs');
 
 module.exports = function (entry) {
 
@@ -13,6 +14,8 @@ module.exports = function (entry) {
     return template({
       entry: entry,
       timestamp: timestamp,
+      oldGeomHtml: geostamp(entry.getOldGeom(), { precision: 5 }),
+      newGeomHtml: geostamp(entry.getNewGeom(), { precision: 5 }),
     });
   };
 
