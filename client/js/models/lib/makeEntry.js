@@ -43,6 +43,7 @@ module.exports = function (context, rawEntry, location) {
 
   context.remove = function (callback) {
     // Remove entry from the backend
-    location.removeEntry(rawEntry._id, callback);
+    //location.removeEntry(rawEntry._id, callback);
+    return callback();
   };
 };

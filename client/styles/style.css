@@ -86,15 +86,15 @@ html, body {
 
 /* Content Entries */
 
-.tresdb-content-story .panel-body > p:last-child {
+.tresdb-entry-story .panel-body > p:last-child {
   margin-bottom: 0px;
 }
 
-.tresdb-content-attachment-image-body {
+.tresdb-entry-attachment-image-body {
   padding: 0px;
   text-align: center;
 }
-.tresdb-content-attachment-image-body img {
+.tresdb-entry-attachment-image-body img {
   max-width: 100%;
   /*margin: 0px auto 0px auto;*/
 }

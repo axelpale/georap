@@ -66,17 +66,15 @@ module.exports = function (entry) {
 
   // Public methods
 
-  this.render = function () {
-    return storyTemplate({
+  this.bind = function ($mount) {
+
+    $mount.html(storyTemplate({
       entry: entry,
       marked: marked,  // markdown parser
       timestamp: timestamp,
       account: account,
       markdownSyntax: markdownSyntax,
-    });
-  };
-
-  this.bind = function () {
+    }));
 
     entry.on('markdown_changed', function () {
       var newParsed = marked(entry.getMarkdown(), { sanitize: true });

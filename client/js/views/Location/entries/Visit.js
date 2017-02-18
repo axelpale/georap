@@ -39,15 +39,14 @@ module.exports = function (entry) {
 
   // Public methods
 
-  this.render = function () {
-    return template({
+  this.bind = function ($mount) {
+
+    $mount.html(template({
       entry: entry,
       account: account,
       timestamp: timestamp,
-    });
-  };
+    }));
 
-  this.bind = function () {
     entry.on('year_changed', function () {
       var newYear = entry.getYear().toString();
       $('#' + id + '-year').html(newYear);
@@ -70,28 +69,6 @@ module.exports = function (entry) {
         ev.preventDefault();
 
         closeForm();
-      });
-
-      $('#' + id + '-form').submit(function (ev) {
-        ev.preventDefault();
-
-        var year = $('#' + id + '-input').val();
-        year = parseInt(year, 10);
-
-        // Show progress bar and close the form.
-        $('#' + id + '-progress').removeClass('hidden');
-        closeForm();
-
-        entry.setYear(year, function (err) {
-          // Hide progress bar
-          $('#' + id + '-progress').addClass('hidden');
-
-          if (err) {
-            // Show error message
-            $('#' + id + '-error').removeClass('hidden');
-            return;
-          }
-        });
       });
 
       $('#' + id + '-delete-ensure').click(function (ev) {
@@ -119,7 +96,6 @@ module.exports = function (entry) {
     entry.off('year_changed');
     if (entry.getUserName() === account.getName()) {
       $('#' + id + '-edit').off();
-      $('#' + id + '-form').off();
       $('#' + id + '-cancel').off();
       $('#' + id + '-delete').off();
       $('#' + id + '-delete-ensure').off();

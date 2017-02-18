@@ -13,9 +13,9 @@ module.exports = function (rawEntry, location) {
   //     models.Location instance. Work as a parent.
 
   emitter(this);
-  var self = this;
+  //var self = this;
 
-  assertEntryType(rawEntry.type, 'visit');
+  assertEntryType(rawEntry.type, 'location_visit');
 
   makeEntry(this, rawEntry, location);
 
@@ -29,14 +29,15 @@ module.exports = function (rawEntry, location) {
     // Parameters:
     //   year
     //     integer
-    rawEntry.data.year = year;
-
-    location.save(function (err) {
-      if (err) {
-        return callback(err);
-      }
-      self.emit('year_changed');
-      return callback();
-    });
+    // rawEntry.data.year = year;
+    //
+    // location.save(function (err) {
+    //   if (err) {
+    //     return callback(err);
+    //   }
+    //   self.emit('year_changed');
+    //   return callback();
+    // });
+    return callback();
   };
 };

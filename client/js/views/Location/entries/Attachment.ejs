@@ -1,5 +1,5 @@
 
-<div id="<%= entry.getId() %>" class="panel panel-default tresdb-content-attachment">
+<div class="panel panel-default tresdb-entry-attachment">
 
   <div class="panel-heading">
     <% if (entry.getUserName() === account.getName()) { %>
@@ -14,7 +14,7 @@
   <% var mime = entry.getMimeType(); %>
   <% var filename = url.substr(url.lastIndexOf('/') + 1); %>
   <% if (mime.substr(0, 6) === 'image/') { %>
-    <div class="panel-body tresdb-content-attachment-image-body">
+    <div class="panel-body tresdb-entry-attachment-image-body">
       <img src="<%= url %>" title="<%= filename %>">
     </div>
   <% } else { %>

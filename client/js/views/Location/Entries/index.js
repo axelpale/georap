@@ -1,24 +1,24 @@
 
+var getEntryView = require('./lib/getEntryView');
+
 module.exports = function (location) {
 
-  this.bind = function ($mount) {
-    // var entries = location.getEntriesInTimeOrder();
-    // var entryViews = entries.map(function (entry) {
-    //    return getEntryView(entry);
-    // });
-    //
-    // // Bind children first for clarity
-    // entryViews.forEach(function (entryView) {
-    //   entryView.bind();
-    // });
+  var entries = location.getEntriesInTimeOrder();
+  var entryViews = entries.map(function (entry) {
+    return getEntryView(entry);
+  });
 
+  this.bind = function ($mount) {
+    entries.forEach(function (e, i) {
+      $mount.append('<div id="' + e.getId() + '"></div>');
+      var v = entryViews[i];
+      v.bind($('#' + e.getId()));
+    });
   };
 
   this.unbind = function () {
-    // Noop
-
-    // entryViews.forEach(function (view) {
-    //   view.unbind();
-    // });
+    entryViews.forEach(function (v) {
+      v.unbind();
+    });
   };
 };

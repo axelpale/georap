@@ -14,9 +14,9 @@ module.exports = function (rawEntry, location) {
   //     models.Location instance. Work as a parent of Story.
 
   emitter(this);
-  var self = this;
+  //var self = this;
 
-  assertEntryType(rawEntry.type, 'story');
+  assertEntryType(rawEntry.type, 'location_story');
 
   makeEntry(this, rawEntry, location);
 
@@ -26,14 +26,15 @@ module.exports = function (rawEntry, location) {
 
   this.setMarkdown = function (markdown, callback) {
     // Update markdown and save change to backend.
-    rawEntry.data.markdown = markdown.trim();
-    location.save(function (err) {
-      if (err) {
-        return callback(err);
-      }
-      self.emit('markdown_changed');
-      return callback();
-    });
+    // rawEntry.data.markdown = markdown.trim();
+    // location.save(function (err) {
+    //   if (err) {
+    //     return callback(err);
+    //   }
+    //   self.emit('markdown_changed');
+    //   return callback();
+    // });
+    return callback();
   };
 
 };

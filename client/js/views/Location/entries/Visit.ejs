@@ -1,5 +1,5 @@
 
-<div id="<%= entry.getId() %>" class="panel panel-default tresdb-content-visit">
+<div class="panel panel-default tresdb-entry-visit">
 
   <div class="panel-heading">
     <% if (entry.getUserName() === account.getName()) { %>
@@ -12,38 +12,21 @@
 
   <% if (entry.getUserName() === account.getName()) { %>
     <div id="<%= entry.getId() %>-form-container" class="panel-body hidden">
-      <form id="<%= entry.getId() %>-form">
-        <div class="form-group">
-          <label for="<%= entry.getId() %>-input">Year:</label>
-          <select id="<%= entry.getId() %>-input" class="form-control">
-            <% var nowYear = (new Date()).getFullYear(); %>
-            <option selected="selected"><%= nowYear %></option>
-            <% for (var y = nowYear - 1; y >= 1960; y -= 1) { %>
-              <option><%= y %></option>
-            <% } %>
-          </select>
-        </div>
-        <div class="pull-right">
-          <button id="<%= entry.getId() %>-cancel" type="button" class="btn btn-default">Cancel</button>
-          <button type="submit" class="btn btn-primary">Save</button>
-        </div>
-        <button id="<%= entry.getId() %>-delete-ensure" type="button" class="btn btn-danger">Delete...</button>
+      <div class="pull-right">
+        <button id="<%= entry.getId() %>-cancel" type="button" class="btn btn-default">Cancel</button>
+      </div>
+      <button id="<%= entry.getId() %>-delete-ensure" type="button" class="btn btn-danger">Delete...</button>
 
-        <div id="<%= entry.getId() %>-delete-final" class="hidden">
-          Are you sure?
-          <button id="<%= entry.getId() %>-delete" type="button" class="btn btn-danger">Yes, delete!</button>
-        </div>
-      </form>
+      <div id="<%= entry.getId() %>-delete-final" class="hidden">
+        Are you sure?
+        <button id="<%= entry.getId() %>-delete" type="button" class="btn btn-danger">Yes, delete!</button>
+      </div>
     </div>
 
     <div id="<%= entry.getId() %>-progress" class="progress hidden">
       <div class="progress-bar progress-bar-striped active" role="progressbar" style="width: 100%">
         <span class="sr-only">Waiting for server</span>
       </div>
-    </div>
-
-    <div id="<%= entry.getId() %>-error" class="hidden panel-body">
-      <div class="alert alert-danger" role="alert">Save failed. Might be a connection issue.</div>
     </div>
 
     <div id="<%= entry.getId() %>-delete-error" class="hidden panel-body">

@@ -11,7 +11,7 @@ module.exports = function (rawEntry, location) {
   //   location
   //     models.Location instance. Work as a parent.
 
-  assertEntryType(rawEntry.type, 'attachment');
+  assertEntryType(rawEntry.type, 'location_attachment');
 
   makeEntry(this, rawEntry, location);
 

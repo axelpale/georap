@@ -30,15 +30,13 @@ module.exports = function (entry) {
 
   // Public methods
 
-  this.render = function () {
-    return template({
+  this.bind = function ($mount) {
+
+    $mount.html(template({
       entry: entry,
       account: account,
       timestamp: timestamp,
-    });
-  };
-
-  this.bind = function () {
+    }));
 
     $('#' + id + '-edit').click(function (ev) {
       ev.preventDefault();
@@ -80,6 +78,7 @@ module.exports = function (entry) {
 
   this.unbind = function () {
 
+    $('#' + id + '-edit').off();
     $('#' + id + '-cancel').off();
     $('#' + id + '-delete-ensure').off();
     $('#' + id + '-delete').off();
