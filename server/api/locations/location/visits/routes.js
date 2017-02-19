@@ -5,8 +5,9 @@ var router = express.Router();
 
 var handlers = require('./handlers');
 var entryIdParser = require('../lib/entryIdParser');
+var jsonParser = require('body-parser').json();
 
-router.post('/', handlers.create);
+router.post('/', jsonParser, handlers.create);
 
 router.use('/:entryId', entryIdParser);
 
