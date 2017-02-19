@@ -67,7 +67,7 @@ var postJSON = function (params, callback) {
 };
 
 
-this.addAttachment = function (id, form, callback) {
+this.createAttachment = function (id, form, callback) {
   // Parameters
   //   id
   //     location id
@@ -103,7 +103,7 @@ this.addAttachment = function (id, form, callback) {
   });
 };
 
-exports.addStory = function (id, markdown, callback) {
+exports.createStory = function (id, markdown, callback) {
   // Parameters:
   //   id
   //     location id
@@ -124,7 +124,7 @@ exports.addStory = function (id, markdown, callback) {
   }, callback);
 };
 
-exports.addVisit = function (id, year, callback) {
+exports.createVisit = function (id, year, callback) {
   // Parameters:
   //   id
   //     location id

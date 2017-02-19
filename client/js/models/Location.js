@@ -137,31 +137,31 @@ module.exports = function (raw) {
 
   // Public Mutators
 
-  this.addStory = function (markdown, callback) {
+  this.createStory = function (markdown, callback) {
     // Parameters:
     //   markdown
     //     string
     //   callback
     //     function (err)
-    locations.addStory(raw._id, markdown, callback);
+    locations.createStory(raw._id, markdown, callback);
   };
 
-  this.addAttachment = function (form, callback) {
+  this.createAttachment = function (form, callback) {
     // Parameters
     //   form
     //     jQuery instance of the file upload form
     //   callback
     //     function (err)
-    locations.addAttachment(raw._id, form, callback);
+    locations.createAttachment(raw._id, form, callback);
   };
 
-  this.addVisit = function (year, callback) {
+  this.createVisit = function (year, callback) {
     // Parameters:
     //   year
     //     integer or null if not given
     //   callback
     //     function (err)
-    locations.addVisit(raw._id, year, callback);
+    locations.createVisit(raw._id, year, callback);
   };
 
   this.setGeom = function (lng, lat, callback) {

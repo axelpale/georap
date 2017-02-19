@@ -62,7 +62,7 @@ module.exports = function (location) {
       $('#tresdb-location-story-form').addClass('hidden');
       $('#tresdb-location-story-progress').removeClass('hidden');
 
-      location.addStory(markdown, function (err) {
+      location.createStory(markdown, function (err) {
 
         // Api responsed. Hide progress bar.
         $('#tresdb-location-story-progress').addClass('hidden');
@@ -113,7 +113,7 @@ module.exports = function (location) {
       attForm.addClass('hidden');
       $('#tresdb-location-attachment-progress').removeClass('hidden');
 
-      location.addAttachment(attForm, function (err) {
+      location.createAttachment(attForm, function (err) {
         // Hide progress bar
         $('#tresdb-location-attachment-progress').addClass('hidden');
 
@@ -173,7 +173,7 @@ module.exports = function (location) {
       var year = $('#tresdb-location-visit-input').val();
       year = parseInt(year, 10);
 
-      location.addVisit(year, function (err) {
+      location.createVisit(year, function (err) {
         $('#tresdb-location-visit-progress').addClass('hidden');
 
         if (err) {
