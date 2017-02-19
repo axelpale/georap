@@ -29,7 +29,7 @@
     "test:migration": "mocha migration/*.spec.js",
     "test:clustering": "mocha server/services/clustering/lib/specs/*.spec.js",
     "test:client": "casperjs test specs/client/test-login.js",
-    "lint": "eslint --config ./config/eslint.js . && echo 'Lint successful.'",
+    "lint": "eslint . && echo 'Lint successful.'",
     "mongo": "mongo tresdb",
     "mongo:test": "mongo test",
     "mongod": "mkdir -p .data/db && mkdir -p .data/backups && mongod --auth --dbpath=.data/db",

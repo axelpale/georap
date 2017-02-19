@@ -1,15 +1,10 @@
-/*eslint no-magic-numbers: "off"*/
+/* eslint no-magic-numbers: "off" */
 
 module.exports = {
+  'root': true,
   'env': {
     // Node.js global variables and Node.js scoping
     'node': true,
-
-    // Browser global variables
-    'browser': true,
-
-    // CommonJS global variables and CommonJS scoping.
-    'commonjs': true,
   },
   'globals': {
     // place settings for globals here
