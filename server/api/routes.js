@@ -27,6 +27,7 @@ router.use(function (err, req, res, next) {
   if (err.name === 'UnauthorizedError') {
     return res.sendStatus(status.UNAUTHORIZED);
   }
+  console.error(err);
   return next();
 });
 
