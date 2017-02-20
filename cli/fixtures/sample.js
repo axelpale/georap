@@ -166,5 +166,20 @@ module.exports = {
       spec: { geom: '2dsphere' },
       options: {},
     },
+    {
+      collection: 'locations',
+      spec: { layer: 1 },
+      options: {},
+    },
+    {
+      collection: 'users',
+      spec: { email: 1 },
+      options: { unique: true },
+    },
+    {
+      collection: 'users',
+      spec: { name: 1 },
+      options: { unique: true },
+    },
   ],
 };

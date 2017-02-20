@@ -22,9 +22,6 @@ var webpackConfig = require('../config/webpack');
 // Logging
 var loggers = require('./services/logs/loggers');
 
-// Run immediately after server is up.
-var bootstrap = require('../config/bootstrap');
-
 // Routes
 var apiRoutes = require('./api/routes');
 
@@ -158,8 +155,4 @@ db.init(function (dbErr) {
     console.log('New connection');
   });
 
-
-  // Populate database
-
-  bootstrap(db.get());
 });
