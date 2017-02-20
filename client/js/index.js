@@ -97,6 +97,7 @@ window.initMap = function () {
   // because no initial login or logout events would be fired.
   if (account.isLoggedIn()) {
     mapView.startLoadingMarkers();
+    mapView.showGeolocation();
     addMainMenu();
   }
 

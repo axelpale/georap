@@ -26,11 +26,9 @@ module.exports = function (token, goLogin) {
 
   // Public methods
 
-  this.render = function () {
-    return template({ email: parsedToken.email });
-  };
+  this.bind = function ($mount) {
+    $mount.html(template({ email: parsedToken.email }));
 
-  this.bind = function () {
     $('#tresdb-signup-to-login-button').click(function (ev) {
       ev.preventDefault();
       // Open login form
@@ -54,8 +52,7 @@ module.exports = function (token, goLogin) {
     (function hidePreviousErrors() {
       $('#tresdb-signup-invalid-username').addClass('hidden');
       $('#tresdb-signup-password-no-match').addClass('hidden');
-      $('#tresdb-signup-username-taken').addClass('hidden');
-      $('#tresdb-signup-email-taken').addClass('hidden');
+      $('#tresdb-signup-email-username-taken').addClass('hidden');
     }());
 
     // Collect values to send
@@ -93,7 +90,7 @@ module.exports = function (token, goLogin) {
     // Hide loading animation
     $('#tresdb-signup-in-progress').addClass('hidden');
 
-    if (err === null) {
+    if (!err) {
       // Show success message
       $('#tresdb-signup-success').removeClass('hidden');
       // Show button to continue to log in.
@@ -102,25 +99,16 @@ module.exports = function (token, goLogin) {
       return;
     }  // else
 
-    if (err.name === 'UsernameTakenError') {
+    if (err.message === 'Conflict') {
       // Duplicate username, show error.
-      $('#tresdb-signup-username-taken').removeClass('hidden');
+      $('#tresdb-signup-email-username-taken').removeClass('hidden');
       // Show form
       $('#tresdb-signup-form').removeClass('hidden');
 
       return;
     }  // else
 
-    if (err.name === 'EmailTakenError') {
-      // Duplicate username, show error.
-      $('#tresdb-signup-email-taken').removeClass('hidden');
-      // Show log in button
-      $('#tresdb-signup-to-login').removeClass('hidden');
-
-      return;
-    }  // else
-
-    if (err.name === 'InvalidTokenError') {
+    if (err.message === 'Unauthorized') {
       // Expired token
       $('#tresdb-signup-token-error').removeClass('hidden');
       // Do not show the form because filling it again would still fail.

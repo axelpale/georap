@@ -27,7 +27,6 @@ var bootstrap = require('../config/bootstrap');
 
 // Routes
 var apiRoutes = require('./api/routes');
-var socketRoutes = require('./routes/socket');
 
 // Log environment
 console.log('Starting TresDB in environment:', local.env);
@@ -153,10 +152,10 @@ db.init(function (dbErr) {
 
 
   // Socket.io routing
-
-  io.get().on('connection', function (socket) {
+  io.get().on('connection', function () {
+    // Parameters:
+    //   socket
     console.log('New connection');
-    return socketRoutes(socket);
   });
 
 

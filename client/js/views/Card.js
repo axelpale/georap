@@ -68,8 +68,6 @@ module.exports = function () {
     if (activeView !== null) {
       activeView.off();
       activeView.unbind();
-      $cont.removeClass();  // removes previous tresdb-card-* classes
-      $cont.empty();
     }
     activeView = view;
 
@@ -77,7 +75,10 @@ module.exports = function () {
     // Backwards compatibility: call render method if available.
     if ('render' in view) {
       $cont.html(view.render());
+    } else {
+      $cont.empty();
     }
+    $cont.removeClass();  // removes previous tresdb-card-* classes
     $cont.addClass('tresdb-card-' + cardType);
     view.bind($cont);
 

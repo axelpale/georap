@@ -16,27 +16,18 @@ module.exports = function (onSuccess) {
   // Private methods.
 
   var loginResponseHandler = function (err) {
-    if (err === null) {
-      // Successful login
-      return onSuccess();
-    }  // else
 
     // Hide the progress bar
     $('#tresdb-login-in-progress').addClass('hidden');
 
-    if (err.name === 'UnknownEmailError') {
-      // Show error
-      $('#tresdb-login-unknown-email').removeClass('hidden');
-      // Show forms
-      $('#tresdb-login-form').removeClass('hidden');
-      $('#tresdb-password-reset').removeClass('hidden');
+    if (!err) {
+      // Successful login
+      return onSuccess();
+    }
 
-      return;
-    }  // else
-
-    if (err.name === 'IncorrectPasswordError') {
+    if (err.message === 'Unauthorized') {
       // Show error
-      $('#tresdb-login-incorrect-password').removeClass('hidden');
+      $('#tresdb-login-incorrect').removeClass('hidden');
       // Show forms
       $('#tresdb-login-form').removeClass('hidden');
       $('#tresdb-password-reset').removeClass('hidden');
@@ -59,8 +50,7 @@ module.exports = function (onSuccess) {
     // Clear possible earlier error messages
     $('#tresdb-login-invalid-email').addClass('hidden');
     $('#tresdb-login-invalid-password').addClass('hidden');
-    $('#tresdb-login-unknown-email').addClass('hidden');
-    $('#tresdb-login-incorrect-password').addClass('hidden');
+    $('#tresdb-login-incorrect').addClass('hidden');
     $('#tresdb-login-server-error').addClass('hidden');
 
     // Validate input
@@ -109,7 +99,7 @@ module.exports = function (onSuccess) {
 
     if (err) {
 
-      if (err.name === 'UnknownEmailError') {
+      if (err.message === 'Conflict') {
         // Display error message and show the form.
         $('#tresdb-password-reset-unknown-email').removeClass('hidden');
         $('#tresdb-password-reset-form').removeClass('hidden');

@@ -21,6 +21,7 @@ var api = require('../connection/api');
 
 emitter(exports);
 
+// Key of token in storage.
 var TOKEN_KEY = api.getTokenKey();
 
 exports.login = function (email, password, callback) {
@@ -30,6 +31,7 @@ exports.login = function (email, password, callback) {
   //   password
   //   callback
   //     function (err), optional
+  //
   // Emits:
   //   login
   //     On successful login.
@@ -47,21 +49,29 @@ exports.login = function (email, password, callback) {
     callback = function () {};
   }
 
-  api.requestRaw('account/login', payload, function (err, token) {
-    if (err) {
+  $.ajax({
+    url: '/api/account/',
+    type: 'POST',
+    contentType: 'application/json',
+    data: JSON.stringify(payload),
+    success: function (tokenResponse) {
+
+      if (typeof tokenResponse !== 'string') {
+        throw new Error('invalid server response');
+      }
+
+      storage.setItem(TOKEN_KEY, tokenResponse);
+
+      // Publish within client
+      exports.emit('login');
+
+      return callback();
+    },
+    error: function (jqxhr, status, errMsg) {
+      var err = new Error(errMsg);
+      console.error(err);
       return callback(err);
-    }
-
-    if (typeof token !== 'string') {
-      throw new Error('invalid server response');
-    }
-
-    storage.setItem(TOKEN_KEY, token);
-
-    // Publish within client
-    exports.emit('login');
-
-    return callback(null);
+    },
   });
 };
 
@@ -100,53 +110,107 @@ exports.changePassword = function (currentPassword, newPassword, callback) {
     newPassword: newPassword,
   };
 
-  api.request('account/changePassword', payload, callback);
+  $.ajax({
+    url: '/api/account/password',
+    type: 'POST',
+    contentType: 'application/json',
+    data: JSON.stringify(payload),
+    headers: { 'Authorization': 'Bearer ' + exports.getToken() },
+    success: function () {
+      return callback();
+    },
+    error: function (jqxhr, status, errMsg) {
+      var err = new Error(errMsg);
+      console.error(err);
+      return callback(err);
+    },
+  });
 };
 
 exports.sendResetPasswordEmail = function (email, callback) {
 
-  // Data to send to server.
-  var payload = {
-    email: email,
-  };
-
-  api.requestRaw('account/sendResetPasswordEmail', payload, callback);
+  $.ajax({
+    url: '/api/account/reset/email',
+    type: 'POST',
+    contentType: 'application/json',
+    data: JSON.stringify({ email: email }),
+    success: function () {
+      return callback();
+    },
+    error: function (jqxhr, status, errMsg) {
+      var err = new Error(errMsg);
+      console.error(err);
+      return callback(err);
+    },
+  });
 };
 
-exports.resetPassword = function (token, newPassword, callback) {
+exports.resetPassword = function (resetToken, newPassword, callback) {
 
-  var payload = {
-    token: token,
-    password: newPassword,
-  };
-
-  api.requestRaw('account/resetPassword', payload, callback);
+  $.ajax({
+    url: '/api/account/reset',
+    type: 'POST',
+    contentType: 'application/json',
+    data: JSON.stringify({ password: newPassword }),
+    headers: { 'Authorization': 'Bearer ' + resetToken },
+    success: function () {
+      return callback();
+    },
+    error: function (jqxhr, status, errMsg) {
+      var err = new Error(errMsg);
+      console.error(err);
+      return callback(err);
+    },
+  });
 };
 
 exports.sendInviteEmail = function (email, callback) {
 
-  var payload = {
-    email: email,
-  };
-
-  api.request('account/sendInviteEmail', payload, callback);
+  $.ajax({
+    url: '/api/account/invite',
+    type: 'POST',
+    contentType: 'application/json',
+    data: JSON.stringify({ email: email }),
+    headers: { 'Authorization': 'Bearer ' + exports.getToken() },
+    success: function () {
+      return callback();
+    },
+    error: function (jqxhr, status, errMsg) {
+      var err = new Error(errMsg);
+      console.error(err);
+      return callback(err);
+    },
+  });
 };
 
-exports.signup = function (token, username, password, callback) {
+exports.signup = function (signupToken, username, password, callback) {
   // Parameters
-  //   token
+  //   signupToken
   //     The token user received in email. Contains email address
   //   username
   //   password
   //   callback
 
   var payload = {
-    token: token,
     username: username,
     password: password,
   };
 
-  api.requestRaw('account/signup', payload, callback);
+  $.ajax({
+    url: '/api/account/signup',
+    type: 'POST',
+    contentType: 'application/json',
+    data: JSON.stringify(payload),
+    headers: { 'Authorization': 'Bearer ' + signupToken },
+    success: function () {
+      return callback();
+    },
+    error: function (jqxhr, status, errMsg) {
+      var err = new Error(errMsg);
+      console.error(err);
+      return callback(err);
+    },
+  });
 };
 
 exports.isLoggedIn = function () {

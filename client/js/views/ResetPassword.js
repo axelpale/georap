@@ -80,7 +80,7 @@ module.exports = function (token, showLogin) {
   };
 
   responseHandler = function (err) {
-    if (err === null) {
+    if (!err) {
       // Successful reset
       // Reveal success message
       $('#tresdb-reset-password-success').removeClass('hidden');
@@ -92,7 +92,7 @@ module.exports = function (token, showLogin) {
       return;
     }  // else
 
-    if (err.name === 'InvalidTokenError') {
+    if (err.message === 'Unauthorized') {
       // False token
       // Display token error message.
       $('#tresdb-reset-password-token-error').removeClass('hidden');

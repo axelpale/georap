@@ -16,13 +16,12 @@ module.exports = function () {
 
   // Public methods
 
-  this.render = function () {
-    return template({
-      user: account.getUser(),
-    });
-  };
+  this.bind = function ($mount) {
 
-  this.bind = function () {
+    $mount.html(template({
+      user: account.getUser(),
+    }));
+
     $('#tresdb-change-password-form').submit(submitHandler);
   };
 
@@ -74,25 +73,23 @@ module.exports = function () {
     // Hide the progress bar
     $('#tresdb-change-password-in-progress').addClass('hidden');
 
-    if (err === null) {
-      // Successfully changed. Show success message. No need to show form.
-      $('#tresdb-change-password-success').removeClass('hidden');
+    if (err) {
+      if (err.message === 'Unauthorized') {
+        // Show form and error message.
+        $('#tresdb-change-password-form').removeClass('hidden');
+        $('#tresdb-change-password-incorrect-curpass').removeClass('hidden');
+        return;
+      }  // else
 
+      // A rare error. Show error:
+      $('#tresdb-change-password-server-error').removeClass('hidden');
+      $('#tresdb-change-password-server-error-name').text(err.message);
       return;
     }  // else
 
-    if (err.name === 'IncorrectPasswordError') {
-      // Show form and error message.
-      $('#tresdb-change-password-form').removeClass('hidden');
-      $('#tresdb-change-password-incorrect-curpass').removeClass('hidden');
-
-      return;
-    }  // else
-
-    // A rare error. Show error:
-    $('#tresdb-change-password-server-error').removeClass('hidden');
-    $('#tresdb-change-password-server-error-name').text(err.name);
-
+    // Successfully changed. Show success message. No need to show form.
+    $('#tresdb-change-password-success').removeClass('hidden');
+    return;
   };
 
 };

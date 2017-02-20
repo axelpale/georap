@@ -20,11 +20,9 @@ module.exports = function () {
 
   // Public methods
 
-  this.render = function () {
-    return inviteTemplate();
-  };
+  this.bind = function ($mount) {
+    $mount.html(inviteTemplate());
 
-  this.bind = function () {
     $('#tresdb-invite-another-button').click(inviteAnotherButtonHandler);
     $('#tresdb-invite-form').submit(inviteFormSubmitHandler);
   };
@@ -77,7 +75,7 @@ module.exports = function () {
     $('#tresdb-invite-in-progress').addClass('hidden');
 
     if (err) {
-      if (err.name === 'AccountExistsError') {
+      if (err.message === 'Conflict') {
         // Show error message.
         $('#tresdb-invite-exist-error').removeClass('hidden');
         // Show form
@@ -85,6 +83,7 @@ module.exports = function () {
 
         return;
       }  // else
+
       // Show error message. Do not show form because the issue
       // probably does not solve by instant retry (leading to frustration).
       $('#tresdb-invite-server-error').removeClass('hidden');
