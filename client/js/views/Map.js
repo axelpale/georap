@@ -49,6 +49,12 @@ module.exports = function () {
     mapTypeId: 'hybrid',
   });
 
+  // True if map is ready for use. Will be switched to true at the first
+  // 'idle' event. See addListenerOnce('idle', ...) below.
+  // We need to track this for startLoadingMarkers: if map is ready
+  // then load the markers immediately when called, otherwise wait for idle.
+  var mapReady = false;
+
   // Does the map load markers from the locations and display them on the map.
   // Will be set when client is ready to load markers (logged in)
   var loaderListener = null;
@@ -89,6 +95,12 @@ module.exports = function () {
     zoomControlOptions: {
       position: google.maps.ControlPosition.RIGHT_BOTTOM,
     },
+  });
+
+  // Track when map becomes usable.
+  // See 'var mapReady = false' above for details.
+  google.maps.event.addListenerOnce(map, 'idle', function () {
+    mapReady = true;
   });
 
   // Make addition marker to follow map center.
@@ -267,7 +279,7 @@ module.exports = function () {
       return;
     }
 
-    loaderListener = map.addListener('idle', function () {
+    var loadMarkers = function () {
       var center = map.getCenter();
       var bounds = map.getBounds();
       var radius = Math.ceil(getBoundsDiagonal(bounds) / 2);
@@ -280,7 +292,15 @@ module.exports = function () {
 
         updateMarkers(locs);
       });
-    });
+    };
+
+    // Each time map stops, fetch.
+    loaderListener = map.addListener('idle', loadMarkers);
+    // Load the first manually but only if the map is ready.
+    // Map emits 'idle' when ready but user might not have been logged in yet.
+    if (mapReady) {
+      loadMarkers();
+    }
   };
 
   this.stopLoadingMarkers = function () {
