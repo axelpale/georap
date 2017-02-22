@@ -50,15 +50,15 @@ exports.changeLocationStory = function (params, callback) {
   //   params:
   //     entryId
   //     locationId
+  //     locationName
   //     newMarkdown
   //     username
   //   callback
   //     function (err)
 
   var coll = db.get().collection('entries');
-  var q = {
-    _id: params.entryId,
-  };
+
+  var q = { _id: params.entryId };
   var u = {
     $set: { 'data.markdown': params.newMarkdown },
   };
@@ -68,12 +68,7 @@ exports.changeLocationStory = function (params, callback) {
       return callback(err);
     }
 
-    eventsDal.createLocationStoryChanged({
-      entryId: params.entryId,
-      locationId: params.locationId,
-      newMarkdown: params.newMarkdown,
-      username: params.username,
-    }, callback);
+    eventsDal.createLocationStoryChanged(params, callback);
   });
 };
 
@@ -81,6 +76,9 @@ exports.createLocationAttachment = function (params, callback) {
   // Parameters:
   //   params:
   //     locationId
+  //       ObjectId
+  //     locationName
+  //       string
   //     username
   //     filePathInUploadDir
   //       string
@@ -94,6 +92,7 @@ exports.createLocationAttachment = function (params, callback) {
     user: params.username,
     time: timestamp(),
     locationId: params.locationId,
+    locationName: params.locationName,
     deleted: false,
     data: {
       filepath: params.filePathInUploadDir,
@@ -106,13 +105,8 @@ exports.createLocationAttachment = function (params, callback) {
       return callback(err);
     }
 
-    eventsDal.createLocationAttachmentCreated({
-      entryId: entryId,
-      locationId: params.locationId,
-      username: params.username,
-      filePathInUploadDir: params.filePathInUploadDir,
-      fileMimeType: params.fileMimeType,
-    }, callback);
+    params.entryId = entryId;
+    eventsDal.createLocationAttachmentCreated(params, callback);
   });
 };
 
@@ -130,6 +124,7 @@ exports.createLocationStory = function (params, callback) {
     user: params.username,
     time: timestamp(),
     locationId: params.locationId,
+    locationName: params.locationName,
     deleted: false,
     data: {
       markdown: params.markdown,
@@ -141,12 +136,8 @@ exports.createLocationStory = function (params, callback) {
       return callback(err);
     }
 
-    eventsDal.createLocationStoryCreated({
-      entryId: entryId,
-      locationId: params.locationId,
-      username: params.username,
-      markdown: params.markdown,
-    }, callback);
+    params.entryId = entryId;
+    eventsDal.createLocationStoryCreated(params, callback);
   });
 };
 
@@ -154,6 +145,7 @@ exports.createLocationVisit = function (params, callback) {
   // Parameters:
   //   params:
   //     locationId
+  //     locationName
   //     username
   //     year
   //       integer
@@ -165,6 +157,7 @@ exports.createLocationVisit = function (params, callback) {
     user: params.username,
     time: timestamp(),
     locationId: params.locationId,
+    locationName: params.locationName,
     data: {
       year: params.year,
     },
@@ -175,12 +168,8 @@ exports.createLocationVisit = function (params, callback) {
       return callback(err);
     }
 
-    eventsDal.createLocationVisitCreated({
-      entryId: entryId,
-      locationId: params.locationId,
-      username: params.username,
-      year: params.year,
-    }, callback);
+    params.entryId = entryId;
+    eventsDal.createLocationVisitCreated(params, callback);
   });
 };
 
@@ -207,6 +196,7 @@ exports.removeLocationAttachment = function (params, callback) {
   //   params:
   //     entryId
   //     locationId
+  //     locationName
   //     username
   //   callback
   //     function (err)
@@ -225,6 +215,7 @@ exports.removeLocationStory = function (params, callback) {
   //   params
   //     entryId
   //     locationId
+  //     locationName
   //     username
   //   callback
   //     function (err)
@@ -242,6 +233,7 @@ exports.removeLocationVisit = function (params, callback) {
   //   params
   //     entryId
   //     locationId
+  //     locationName
   //     username
   //   callback
   //     function (err)

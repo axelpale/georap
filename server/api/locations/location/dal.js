@@ -8,6 +8,10 @@ exports.changeGeom = function (params, callback) {
   //   params
   //     locationId
   //       ObjectId
+  //     locationName
+  //       string
+  //     locationGeom
+  //       GeoJSON Point
   //     username
   //       string
   //     latitude
@@ -25,15 +29,16 @@ exports.changeGeom = function (params, callback) {
 
   var u = { $set: { geom: newGeom } };
 
-  locColl.findOneAndUpdate(q, u, function (err, result) {
+  locColl.updateOne(q, u, function (err) {
     if (err) {
       return callback(err);
     }
 
-    var oldGeom = result.value.geom;
+    var oldGeom = params.locationGeom;
 
     eventsDal.createLocationGeomChanged({
       locationId: params.locationId,
+      locationName: params.locationName,
       username: params.username,
       newGeom: newGeom,
       oldGeom: oldGeom,
@@ -42,35 +47,44 @@ exports.changeGeom = function (params, callback) {
         return callback(err2);
       }
 
-      return callback(null);
+      return callback();
     });
   });
 };
 
-exports.changeName = function (id, newName, username, callback) {
+exports.changeName = function (params, callback) {
+  // Parameters
+  //   params
+  //     locationId
+  //     locationName
+  //     newName
+  //     username
+  //
 
   var locColl = db.get().collection('locations');
-  var q = { _id: id };
-  var u = { $set: { name: newName } };
 
-  locColl.findOneAndUpdate(q, u, function (err, result) {
+  var q = { _id: params.locationId };
+  var u = { $set: { name: params.newName } };
+
+  locColl.updateOne(q, u, function (err) {
     if (err) {
       return callback(err);
     }
 
-    var oldName = result.value.name;
+    var oldName = params.locationName;
 
     eventsDal.createLocationNameChanged({
-      locationId: id,
-      username: username,
-      newName: newName,
+      locationId: params.locationId,
+      locationName: params.locationName,
+      username: params.username,
+      newName: params.newName,
       oldName: oldName,
     }, function (err2) {
       if (err2) {
         return callback(err2);
       }
 
-      return callback(null);
+      return callback();
     });
   });
 };
@@ -79,7 +93,9 @@ exports.changeTags = function (params, callback) {
   // Parameters:
   //   params
   //     locationId
-  //       ObjectId
+  //     locationName
+  //     locationTags
+  //       array, old tags
   //     username
   //       string
   //     tags
@@ -88,19 +104,21 @@ exports.changeTags = function (params, callback) {
   //     function (err)
 
   var locColl = db.get().collection('locations');
+
   var q = { _id: params.locationId };
   var newTags = params.tags;
   var u = { $set: { tags: newTags } };
 
-  locColl.findOneAndUpdate(q, u, function (err, result) {
+  locColl.updateOne(q, u, function (err) {
     if (err) {
       return callback(err);
     }
 
-    var oldTags = result.value.tags;
+    var oldTags = params.locationTags;
 
     eventsDal.createLocationTagsChanged({
       locationId: params.locationId,
+      locationName: params.locationName,
       username: params.username,
       newTags: newTags,
       oldTags: oldTags,
@@ -109,13 +127,39 @@ exports.changeTags = function (params, callback) {
         return callback(err2);
       }
 
-      return callback(null);
+      return callback();
     });
   });
 };
 
+exports.getRaw = function (id, callback) {
+  // Get single location without events and entries
+  //
+  // Parameters:
+  //   id
+  //     ObjectId
+  //   callback
+  //     function (err, loc)
+  //       err null and loc null if no loc found
+  //
+
+  var locColl = db.get().collection('locations');
+
+  locColl.findOne({ _id: id }, {}, function (err, doc) {
+    if (err) {
+      return callback(err);
+    }
+
+    if (!doc) {
+      return callback(null, null);
+    }
+
+    return callback(null, doc);
+  });
+};
+
 exports.getOne = function (id, callback) {
-  // Get single location
+  // Get single location with events and entries
   //
   // Parameters:
   //   id
@@ -183,8 +227,7 @@ exports.removeOne = function (id, username, callback) {
     }
 
     eventsDal.createLocationRemoved({
-      locationId: id,
-      locationName: result.value.name,
+      location: result.value,
       username: username,
     }, callback);
   });

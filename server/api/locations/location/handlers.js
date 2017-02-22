@@ -5,7 +5,7 @@ var prepare = require('../lib/prepare');
 
 exports.changeGeom = function (req, res) {
 
-  var id, u, lat, lng;
+  var u, lat, lng;
 
   if (typeof req.body.lat !== 'number' ||
       typeof req.body.lng !== 'number') {
@@ -14,12 +14,12 @@ exports.changeGeom = function (req, res) {
 
   lat = req.body.lat;
   lng = req.body.lng;
-
-  id = req.locationId;
   u = req.user.name;
 
   dal.changeGeom({
-    locationId: id,
+    locationId: req.location._id,
+    locationName: req.location.name,
+    locationGeom: req.location.geom,
     username: u,
     latitude: lat,
     longitude: lng,
@@ -38,10 +38,14 @@ exports.changeName = function (req, res) {
     return res.sendStatus(status.BAD_REQUEST);
   }
 
-  var id = req.locationId;
-  var u = req.user.name;
+  var params = {
+    locationId: req.location._id,
+    locationName: req.location.name,
+    newName: req.body.newName,
+    username: req.user.name,
+  };
 
-  dal.changeName(id, req.body.newName, u, function (err) {
+  dal.changeName(params, function (err) {
     if (err) {
       return res.sendStatus(status.INTERNAL_SERVER_ERROR);
     }
@@ -52,20 +56,16 @@ exports.changeName = function (req, res) {
 
 exports.changeTags = function (req, res) {
 
-  var id, u, tags;
-
   if (typeof req.body.tags !== 'object') {
     return res.sendStatus(status.BAD_REQUEST);
   }
 
-  id = req.locationId;
-  u = req.user.name;
-  tags = req.body.tags;
-
   dal.changeTags({
-    locationId: id,
-    username: u,
-    tags: tags,
+    locationId: req.location._id,
+    locationName: req.location.name,
+    locationTags: req.location.tags,
+    username: req.user.name,
+    tags: req.body.tags,
   }, function (err) {
     if (err) {
       console.error(err);
@@ -77,9 +77,9 @@ exports.changeTags = function (req, res) {
 };
 
 exports.getOne = function (req, res) {
-  // Fetch single location
+  // Fetch single location with entries and events
 
-  dal.getOne(req.locationId, function (err, rawLoc) {
+  dal.getOne(req.location._id, function (err, rawLoc) {
     if (err) {
       return res.sendStatus(status.INTERNAL_SERVER_ERROR);
     }
@@ -97,7 +97,7 @@ exports.getOne = function (req, res) {
 exports.removeOne = function (req, res) {
   // Delete single location
 
-  dal.removeOne(req.locationId, req.user.name, function (err) {
+  dal.removeOne(req.location._id, req.user.name, function (err) {
     if (err) {
       return res.sendStatus(status.INTERNAL_SERVER_ERROR);
     }

@@ -3,6 +3,8 @@
 var db = require('../../services/db');
 var eventsDal = require('../events/dal');
 
+var shortid = require('shortid');
+
 exports.count = function (callback) {
   // Count non-deleted locations
   //
@@ -20,7 +22,7 @@ exports.count = function (callback) {
 };
 
 exports.create = function (lat, lng, username, callback) {
-  // Create a location to given coordinates.
+  // Create a location to given coordinates with a code name.
 
   var newLoc = {
     creator: username,
@@ -30,7 +32,7 @@ exports.create = function (lat, lng, username, callback) {
       coordinates: [lng, lat],
     },
     layer: 1,
-    name: '',
+    name: shortid.generate(),
     tags: [],
   };
 

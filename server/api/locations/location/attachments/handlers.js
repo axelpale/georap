@@ -6,7 +6,8 @@ var uploads = require('./lib/uploads');
 
 exports.create = function (req, res) {
 
-  var locationId = req.locationId;
+  var locationId = req.location._id;
+  var locationName = req.location.name;
   var uploadHandler = uploads.uploader.single('locfile');
   var username = req.user.name;
 
@@ -22,6 +23,7 @@ exports.create = function (req, res) {
     // Upload successful. Append an attachment entry to the location.
     dal.createLocationAttachment({
       locationId: locationId,
+      locationName: locationName,
       username: username,
       filePathInUploadDir: uploads.getRelativePath(req.file.path),
       fileMimeType: req.file.mimetype,
@@ -36,12 +38,14 @@ exports.create = function (req, res) {
 };
 
 exports.remove = function (req, res) {
-  var locationId = req.locationId;
+  var locationId = req.location._id;
+  var locationName = req.location.name;
   var entryId = req.entryId;
   var username = req.user.name;
 
   dal.removeLocationAttachment({
     locationId: locationId,
+    locationName: locationName,
     entryId: entryId,
     username: username,
   }, function (err) {

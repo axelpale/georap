@@ -4,7 +4,8 @@ var status = require('http-status-codes');
 exports.create = function (req, res) {
   // HTTP request handler
 
-  var locationId = req.locationId;
+  var locationId = req.location._id;
+  var locationName = req.location.name;
   var username = req.user.name;
   var markdown = req.body.markdown;
 
@@ -14,6 +15,7 @@ exports.create = function (req, res) {
 
   dal.createLocationStory({
     locationId: locationId,
+    locationName: locationName,
     username: username,
     markdown: markdown,
   }, function (err) {
@@ -29,7 +31,8 @@ exports.change = function (req, res) {
 
   dal.changeLocationStory({
     entryId: req.entryId,
-    locationId: req.locationId,
+    locationId: req.location._id,
+    locationName: req.location.name,
     newMarkdown: req.body.newMarkdown,
     username: req.user.name,
   }, function (err) {
@@ -45,7 +48,8 @@ exports.remove = function (req, res) {
 
   dal.removeLocationStory({
     entryId: req.entryId,
-    locationId: req.locationId,
+    locationId: req.location._id,
+    locationName: req.location.name,
     username: req.user.name,
   }, function (err) {
     if (err) {

@@ -19,7 +19,8 @@ var validYear = function (yearCandidate) {
 
 exports.create = function (req, res) {
 
-  var locationId = req.locationId;
+  var locationId = req.location._id;
+  var locationName = req.location.name;
   var username = req.user.name;
   var year;
 
@@ -34,6 +35,7 @@ exports.create = function (req, res) {
 
   dal.createLocationVisit({
     locationId: locationId,
+    locationName: locationName,
     username: username,
     year: year,
   }, function (err) {
@@ -50,7 +52,8 @@ exports.remove = function (req, res) {
 
   dal.removeLocationVisit({
     entryId: req.entryId,
-    locationId: req.locationId,
+    locationId: req.location._id,
+    locationName: req.location.name,
     username: req.user.name,
   }, function (err) {
     if (err) {

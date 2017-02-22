@@ -4,7 +4,7 @@
   <% for (i = 0; i < events.length; i += 1) { %>
     <% ev = events[i]; %>
     <% t = ev.type; %>
-    <% name = ev.location.name; %>
+    <% name = ev.locationName; %>
     <% name = (name === '' ? 'Untitled' : name) %>
     <li class="list-group-item">
       <% if (t === 'location_created') { %>

@@ -13,7 +13,7 @@ var emitOne = function (ev) {
     throw new Error('Event must have a _id before emitting');
   }
 
-  io.get().emit(ev.type, ev);
+  io.get().emit('tresdb_event', ev);
 };
 
 var insertOne = function (ev, callback) {
@@ -57,6 +57,7 @@ exports.createLocationAttachmentCreated = function (params, callback) {
   //   params:
   //     entryId
   //     locationId
+  //     locationName
   //     username
   //     filePathInUploadDir
   //       string
@@ -68,6 +69,7 @@ exports.createLocationAttachmentCreated = function (params, callback) {
     user: params.username,
     time: timestamp(),
     locationId: params.locationId,
+    locationName: params.locationName,
     data: {
       entryId: params.entryId,
       filepath: params.filePathInUploadDir,
@@ -83,6 +85,7 @@ exports.createLocationAttachmentRemoved = function (params, callback) {
   //   params:
   //     entryId
   //     locationId
+  //     locationName
   //     username
   //   callback
   //     function (err)
@@ -92,6 +95,7 @@ exports.createLocationAttachmentRemoved = function (params, callback) {
     user: params.username,
     time: timestamp(),
     locationId: params.locationId,
+    locationName: params.locationName,
     data: {
       entryId: params.entryId,
     },
@@ -105,6 +109,7 @@ exports.createLocationCreated = function (params, callback) {
   //   params:
   //     locationId
   //       ObjectId, location id
+  //     locationName
   //     lat
   //     lng
   //       float
@@ -118,6 +123,7 @@ exports.createLocationCreated = function (params, callback) {
     user: params.username,
     time: timestamp(),
     locationId: params.locationId,
+    locationName: params.locationName,
     data: {
       lat: params.lat,
       lng: params.lng,
@@ -131,6 +137,7 @@ exports.createLocationGeomChanged = function (params, callback) {
   // Parameters:
   //   params:
   //     locationId
+  //     locationName
   //     username
   //     newGeom
   //       GeoJSON Point
@@ -142,6 +149,7 @@ exports.createLocationGeomChanged = function (params, callback) {
     user: params.username,
     time: timestamp(),
     locationId: params.locationId,
+    locationName: params.locationName,
     data: {
       newGeom: params.newGeom,
       oldGeom: params.oldGeom,
@@ -155,6 +163,7 @@ exports.createLocationNameChanged = function (params, callback) {
   // Parameters:
   //   params:
   //     locationId
+  //     locationName
   //     username
   //     newName
   //       string
@@ -166,6 +175,7 @@ exports.createLocationNameChanged = function (params, callback) {
     user: params.username,
     time: timestamp(),
     locationId: params.locationId,
+    locationName: params.locationName,
     data: {
       newName: params.newName,
       oldName: params.oldName,
@@ -179,6 +189,7 @@ exports.createLocationStoryChanged = function (params, callback) {
   // Parameters:
   //   params:
   //     locationId
+  //     locationName
   //     entryId
   //     username
   //     newMarkdown
@@ -192,6 +203,7 @@ exports.createLocationStoryChanged = function (params, callback) {
     user: params.username,
     time: timestamp(),
     locationId: params.locationId,
+    locationName: params.locationName,
     data: {
       entryId: params.entryId,
       newMarkdown: params.newMarkdown,
@@ -205,6 +217,7 @@ exports.createLocationStoryCreated = function (params, callback) {
   // Parameters:
   //   params:
   //     locationId
+  //     locationName
   //     entryId
   //     username
   //     markdown
@@ -218,6 +231,7 @@ exports.createLocationStoryCreated = function (params, callback) {
     user: params.username,
     time: timestamp(),
     locationId: params.locationId,
+    locationName: params.locationName,
     data: {
       entryId: params.entryId,
       markdown: params.markdown,
@@ -232,6 +246,7 @@ exports.createLocationStoryRemoved = function (params, callback) {
   //   params:
   //     entryId
   //     locationId
+  //     locationName
   //     username
 
   var newEvent = {
@@ -239,6 +254,7 @@ exports.createLocationStoryRemoved = function (params, callback) {
     user: params.username,
     time: timestamp(),
     locationId: params.locationId,
+    locationName: params.locationName,
     data: {
       entryId: params.entryId,
     },
@@ -251,6 +267,7 @@ exports.createLocationTagsChanged = function (params, callback) {
   // Parameters:
   //   params:
   //     locationId
+  //     locationName
   //     username
   //     newTags
   //       array of strings
@@ -262,6 +279,7 @@ exports.createLocationTagsChanged = function (params, callback) {
     user: params.username,
     time: timestamp(),
     locationId: params.locationId,
+    locationName: params.locationName,
     data: {
       newTags: params.newTags,
       oldTags: params.oldTags,
@@ -288,6 +306,7 @@ exports.createLocationRemoved = function (params, callback) {
     user: params.username,
     time: (new Date()).toISOString(),
     locationId: params.locationId,
+    locationName: params.locationName,
     data: {},
   };
 
@@ -298,6 +317,7 @@ exports.createLocationVisitCreated = function (params, callback) {
   // Parameters:
   //   params:
   //     locationId
+  //     locationName
   //     username
   //     year
   //       integer
@@ -309,6 +329,7 @@ exports.createLocationVisitCreated = function (params, callback) {
     user: params.username,
     time: timestamp(),
     locationId: params.locationId,
+    locationName: params.locationName,
     data: {
       entryId: params.entryId,
       year: params.year,
@@ -323,6 +344,7 @@ exports.createLocationVisitRemoved = function (params, callback) {
   //   params:
   //     entryId
   //     locationId
+  //     locationName
   //     username
   //   callback
   //     function (err)
@@ -332,6 +354,7 @@ exports.createLocationVisitRemoved = function (params, callback) {
     user: params.username,
     time: timestamp(),
     locationId: params.locationId,
+    locationName: params.locationName,
     data: {
       entryId: params.entryId,
     },
@@ -340,23 +363,23 @@ exports.createLocationVisitRemoved = function (params, callback) {
   insertAndEmit(newEvent, callback);
 };
 
-exports.getRecent = function (n, page, callback) {
+exports.getRecent = function (n, beforeTime, callback) {
   // Parameters
   //   n
   //     number of events to return
-  //   page
-  //     page number. 0 = first page. Return range [n * page, n * (page + 1)[
-  //     from the array of all events, ordered by time, most recent first
+  //   beforeTime
+  //     time as ISOString
   //   callback
   //     function (err, events)
-  return exports.getRecentFiltered({}, n, page, callback);
+  return exports.getRecentFiltered({}, n, beforeTime, callback);
 };
 
-exports.getRecentOfUser = function (username, n, page, callback) {
-  return exports.getRecentFiltered({ user: username }, n, page, callback);
+exports.getRecentOfUser = function (username, n, beforeTime, callback) {
+  var filter = { user: username };
+  return exports.getRecentFiltered(filter, n, beforeTime, callback);
 };
 
-exports.getRecentFiltered = function (filter, n, page, callback) {
+exports.getRecentFiltered = function (filter, n, beforeTime, callback) {
   // Parameters
   //   filter
   //     the value of $match operator. See
@@ -364,9 +387,8 @@ exports.getRecentFiltered = function (filter, n, page, callback) {
   //     Use {} to filter nothing.
   //   n
   //     number of events to return
-  //   page
-  //     page number. 0 = first page. Return range [n * page, n * (page + 1)[
-  //     from the array of all events, ordered by time, most recent first
+  //   beforeTime
+  //     time as ISOString. Only events before this time are selected.
   //   callback
   //     function (err, events)
 
@@ -382,26 +404,30 @@ exports.getRecentFiltered = function (filter, n, page, callback) {
       },
     },
     {
-      // Specify first document to return
-      $skip: n * page,
+      // Filter out the events with time after or equal to beforeTime
+      $match: {
+        time: {
+          $lt: beforeTime,
+        },
+      },
     },
     {
       // Specify last document to return
       $limit: n,
     },
-    {
-      // Join with location data
-      $lookup: {
-        from: 'locations',
-        localField: 'locationId',
-        foreignField: '_id',
-        as: 'location',
-      },
-    },
-    {
-      // Change the location array to the single location (the first item).
-      $unwind: '$location',
-    },
+    // {
+    //   // Join with location data
+    //   $lookup: {
+    //     from: 'locations',
+    //     localField: 'locationId',
+    //     foreignField: '_id',
+    //     as: 'location',
+    //   },
+    // },
+    // {
+    //   // Change the location array to the single location (the first item).
+    //   $unwind: '$location',
+    // },
   ], function (err, docs) {
     if (err) {
       console.error(err);
