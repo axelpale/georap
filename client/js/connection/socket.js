@@ -1,4 +1,8 @@
 // Socket.io singleton
+//
+// Usage:
+//   var socket = require('./socket');
+//   socket.on('myevent', fn)
 
 var io = require('socket.io-client');
 
