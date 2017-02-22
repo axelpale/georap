@@ -4,20 +4,36 @@ var local = require('../../config/local');
 var bcrypt = require('bcryptjs');
 var ObjectId = require('mongodb').ObjectId;
 
+var id = function (k) {
+  return new ObjectId(k);
+};
+
+var luznaId = id('581f266110a1482dd0b7cd14');
+var rummuId = id('581f166130a1482dd0b7cd15');
+var irbeneId = id('581f166110a1482dd0b7cd13');
+
+var luznaBaby = 'rkVdAtjYg';
+var rummuBaby = 'ByX6eQoYe';
+var irbeneBaby = 'SkdplmsFx';
+
+var luznaName = 'Luzna';
+var rummuName = 'Rummu';
+var irbeneName = 'Irbene';
+
 module.exports = {
   collections: {
     config: [
       {
-        _id: new ObjectId('58092312bbba430a35fb4139'),
+        _id: id('58092312bbba430a35fb4139'),
         key: 'schemaVersion',
         value: 5,
       },
     ],
     entries: [
       {
-        _id: new ObjectId('58092312bbba420a35fb4201'),
+        _id: id('58092312bbba420a35fb4201'),
         deleted: false,
-        locationId: new ObjectId('581f166110a1482dd0b7cd13'),
+        locationId: irbeneId,
         time: '2009-09-04T23:44:21.000Z',
         type: 'location_story',
         user: local.admin.username,
@@ -26,9 +42,9 @@ module.exports = {
         },
       },
       {
-        _id: new ObjectId('58092312bebc430a35fb4102'),
+        _id: id('58092312bebc430a35fb4102'),
         deleted: false,
-        locationId: new ObjectId('581f166110a1482dd0b7cd13'),
+        locationId: irbeneId,
         type: 'location_attachment',
         time: '2009-10-05T12:23:34.000Z',
         user: local.admin.username,
@@ -40,30 +56,54 @@ module.exports = {
     ],
     events: [
       {
-        _id: new ObjectId('58092332bcba430a35fb4105'),
-        locationId: new ObjectId('581f166130a1482dd0b7cd15'),
-        locationName: 'Rummu',
+        _id: id('58092332bcba430a35fb2345'),
+        locationId: luznaId,
+        locationName: luznaBaby,
+        type: 'location_name_changed',
+        user: local.admin.username,
+        time: '2017-02-22T22:40:30.000Z',
+        data: {
+          oldName: luznaBaby,
+          newName: luznaName,
+        },
+      },
+      {
+        _id: id('58092332bcba430a35fb3423'),
+        locationId: luznaId,
+        locationName: luznaBaby,
+        type: 'location_created',
+        user: local.admin.username,
+        time: '2017-02-22T22:18:00.000Z',
+        data: {
+          lat: 57.59686,
+          lng: 21.89747,
+        },
+      },
+      {
+        _id: id('58092332bcba430a35fb4105'),
+        locationId: rummuId,
+        locationName: rummuName,
         type: 'location_removed',
         user: local.admin.username,
         time: '2017-02-06T12:25:00.000Z',
         data: {},
       },
       {
-        _id: new ObjectId('58092312bcba430a35fb4104'),
-        locationId: new ObjectId('581f166130a1482dd0b7cd15'),
-        locationName: 'ByX6eQoYe',
+        _id: id('58092312bcba430a35fb4104'),
+        locationId: rummuId,
+        locationName: rummuBaby,
         type: 'location_name_changed',
         user: local.admin.username,
         time: '2017-02-06T12:24:00.000Z',
         data: {
-          oldName: 'ByX6eQoYe',
-          newName: 'Rummu',
+          oldName: rummuBaby,
+          newName: rummuName,
         },
       },
       {
-        _id: new ObjectId('58092312bbba430a35fb4103'),
-        locationId: new ObjectId('581f166130a1482dd0b7cd15'),
-        locationName: 'ByX6eQoYe',
+        _id: id('58092312bbba430a35fb4103'),
+        locationId: rummuId,
+        locationName: rummuBaby,
         type: 'location_created',
         user: local.admin.username,
         time: '2017-02-06T12:23:34.000Z',
@@ -73,9 +113,9 @@ module.exports = {
         },
       },
       {
-        _id: new ObjectId('58092312bbba430a35fb4102'),
-        locationId: new ObjectId('581f166110a1482dd0b7cd13'),
-        locationName: 'Irbene',
+        _id: id('58092312bbba430a35fb4102'),
+        locationId: irbeneId,
+        locationName: irbeneName,
         type: 'location_attachment_created',
         user: local.admin.username,
         time: '2009-10-05T12:23:34.000Z',
@@ -85,9 +125,9 @@ module.exports = {
         },
       },
       {
-        _id: new ObjectId('58092312bbba430a35fb4101'),
-        locationId: new ObjectId('581f166110a1482dd0b7cd13'),
-        locationName: 'Irbene',
+        _id: id('58092312bbba430a35fb4101'),
+        locationId: irbeneId,
+        locationName: irbeneName,
         type: 'location_story_created',
         user: local.admin.username,
         time: '2009-09-04T23:44:21.000Z',
@@ -96,21 +136,21 @@ module.exports = {
         },
       },
       {
-        _id: new ObjectId('58092312bcba430a35fb3106'),
-        locationId: new ObjectId('581f166110a1482dd0b7cd13'),
-        locationName: 'SkdplmsFx',
+        _id: id('58092312bcba430a35fb3106'),
+        locationId: irbeneId,
+        locationName: irbeneBaby,
         type: 'location_name_changed',
         user: local.admin.username,
         time: '2009-07-30T10:45:20.000Z',
         data: {
-          oldName: 'SkdplmsFx',
-          newName: 'Irbene',
+          oldName: irbeneBaby,
+          newName: irbeneName,
         },
       },
       {
-        _id: new ObjectId('58092312bbba430a35fb4100'),
-        locationId: new ObjectId('581f166110a1482dd0b7cd13'),
-        locationName: 'SkdplmsFx',
+        _id: id('58092312bbba430a35fb4100'),
+        locationId: irbeneId,
+        locationName: irbeneBaby,
         type: 'location_created',
         user: local.admin.username,
         time: '2009-07-30T10:44:58.000Z',
@@ -122,9 +162,21 @@ module.exports = {
     ],
     locations: [
       {
-        _id: new ObjectId('581f166110a1482dd0b7cd13'),
+        _id: luznaId,
         creator: local.admin.username,
-        name: 'Irbene',
+        name: luznaName,
+        geom: {
+          type: 'Point',
+          coordinates: [21.89747, 57.59686],
+        },
+        deleted: false,
+        tags: ['military'],
+        layer: 9,
+      },
+      {
+        _id: irbeneId,
+        creator: local.admin.username,
+        name: irbeneName,
         geom: {
           type: 'Point',
           coordinates: [21.857705, 57.55341],
@@ -134,9 +186,9 @@ module.exports = {
         layer: 1,
       },
       {
-        _id: new ObjectId('581f166130a1482dd0b7cd15'),
+        _id: rummuId,
         creator: local.admin.username,
-        name: 'Rummu',
+        name: rummuName,
         geom: {
           type: 'Point',
           coordinates: [24.19462, 59.22667],
@@ -148,14 +200,14 @@ module.exports = {
     ],
     users: [
       {
-        _id: new ObjectId('5867bdf00a5a9e18d7755e4f'),
+        _id: id('5867bdf00a5a9e18d7755e4f'),
         name: local.admin.username,
         email: local.admin.email,
         hash: bcrypt.hashSync(local.admin.password, local.bcrypt.rounds),
         admin: true,
       },
       {
-        _id: new ObjectId('5867bdf00b5a9e18d7755e33'),
+        _id: id('5867bdf00b5a9e18d7755e33'),
         name: 'johndoe',
         email: 'john.doe@subterranea.fi',
         hash: bcrypt.hashSync('foobar', local.bcrypt.rounds),
