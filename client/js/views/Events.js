@@ -5,7 +5,7 @@ var timestamp = require('./lib/timestamp');
 var template = require('./Events.ejs');
 var listTemplate = require('./EventsList.ejs');
 
-var LIST_SIZE = 10;
+var LIST_SIZE = 100;
 
 module.exports = function () {
   // Parameters:
