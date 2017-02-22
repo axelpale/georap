@@ -5,6 +5,8 @@ var timestamp = require('./lib/timestamp');
 var template = require('./Events.ejs');
 var listTemplate = require('./EventsList.ejs');
 
+var LIST_SIZE = 10;
+
 module.exports = function () {
   // Parameters:
   //   events
@@ -23,8 +25,8 @@ module.exports = function () {
     var $loading = $('#tresdb-events-loading');
     var $list = $('#tresdb-events-list');
 
-    // Fetch events before rendering.
-    events.getRecent(0, function (err, rawEvents) {
+    // Fetch events for rendering.
+    events.getRecent(LIST_SIZE, function (err, rawEvents) {
 
       $loading.addClass('hidden');
 
@@ -37,11 +39,28 @@ module.exports = function () {
         timestamp: timestamp,
         events: rawEvents,
       }));
+
     });
+
+    // Update rendered on change
+    events.on('events_changed', function () {
+      events.getRecent(LIST_SIZE, function (err, rawEvents) {
+        if (err) {
+          console.error(err);
+          return;
+        }
+        $list.html(listTemplate({
+          timestamp: timestamp,
+          events: rawEvents,
+        }));
+      });
+    });
+
   };
 
   this.unbind = function () {
-    // noop
+    // Only view for events, so it is safe to off everything.
+    events.off();
   };
 
 };
