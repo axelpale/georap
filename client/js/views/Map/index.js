@@ -385,6 +385,7 @@ module.exports = function () {
   };
 
   this.panForCardUndo = function () {
+    // Undo the pan made by panForCard
     if (_panForCardUndoLatLng) {
       map.panTo(_panForCardUndoLatLng);
     }
