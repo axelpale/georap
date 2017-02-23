@@ -1,21 +1,26 @@
+<% var url = entry.getUrl(); %>
+<% var thumbUrl = entry.getThumbUrl(); %>
+<% var mime = entry.getMimeType(); %>
+<% var isImage = (mime.substr(0, 6) === 'image/'); %>
+<% var filename = url.substr(url.lastIndexOf('/') + 1); %>
 
 <div class="panel panel-default tresdb-entry-attachment">
 
   <div class="panel-heading">
-    <% if (entry.getUserName() === account.getName()) { %>
-      <div class="btn-group pull-right">
-        <button id="<%= entry.getId() %>-edit" type="button" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-pencil"></span> Edit</a>
+      <div class="pull-right">
+        <% if (isImage) { %>
+          <a href="<%= url %>" target="_blank" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-zoom-in"></span> Full original</a>
+        <% } %>
+        <% if (entry.getUserName() === account.getName()) { %>
+          <button id="<%= entry.getId() %>-edit" type="button" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-pencil"></span> Edit</button>
+        <% } %>
       </div>
-    <% } %>
     <%= entry.getUserName() %> uploaded <%= timestamp(entry.getTime()) %>
   </div>
 
-  <% var url = entry.getUrl(); %>
-  <% var mime = entry.getMimeType(); %>
-  <% var filename = url.substr(url.lastIndexOf('/') + 1); %>
-  <% if (mime.substr(0, 6) === 'image/') { %>
+  <% if (isImage) { %>
     <div class="panel-body tresdb-entry-attachment-image-body">
-      <img src="<%= url %>" title="<%= filename %>">
+      <img src="<%= thumbUrl %>" title="<%= filename %>">
     </div>
   <% } else { %>
     <div class="panel-body">

@@ -63,6 +63,10 @@ exports.createLocationAttachmentCreated = function (params, callback) {
   //       string
   //     fileMimeType
   //       string
+  //     thumbPathInUploadDir
+  //       string
+  //     thumbMimeType
+  //       string
 
   var newEvent = {
     type: 'location_attachment_created',
@@ -74,6 +78,8 @@ exports.createLocationAttachmentCreated = function (params, callback) {
       entryId: params.entryId,
       filepath: params.filePathInUploadDir,
       mimetype: params.fileMimeType,
+      thumbpath: params.thumbPathInUploadDir,
+      thumbmimetype: params.thumbMimeType,
     },
   };
 

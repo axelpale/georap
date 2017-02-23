@@ -24,4 +24,12 @@ module.exports = function (rawEntry, location) {
   this.getMimeType = function () {
     return rawEntry.data.mimetype;
   };
+
+  this.getThumbUrl = function () {
+    return urljoin(config.uploadUrl, rawEntry.data.thumbpath);
+  };
+
+  this.getThumbMimeType = function () {
+    return rawEntry.data.thumbmimetype;
+  };
 };

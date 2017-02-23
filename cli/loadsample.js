@@ -21,6 +21,11 @@ var from = path.join(__dirname, 'fixtures', 'radar.jpg');
 var to = path.join(local.uploadDir, '2009', 'RxRvKSlbl', 'radar.jpg');
 // eslint-disable-next-line no-sync
 fse.copySync(from, to);
+// Thumbnail
+var from2 = path.join(__dirname, 'fixtures', 'radar_medium.jpg');
+var to2 = path.join(local.uploadDir, '2009', 'RxRvKSlbl', 'radar_medium.jpg');
+// eslint-disable-next-line no-sync
+fse.copySync(from2, to2);
 
 // Database.
 db.init(function (dbErr) {

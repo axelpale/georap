@@ -4,6 +4,8 @@ var status = require('http-status-codes');
 var dal = require('../../../entries/dal');
 var uploads = require('./lib/uploads');
 
+var THUMB_SIZE = 568;
+
 exports.create = function (req, res) {
 
   var locationId = req.location._id;
@@ -20,19 +22,28 @@ exports.create = function (req, res) {
     // console.log('req.file:');
     // console.log(req.file);
 
-    // Upload successful. Append an attachment entry to the location.
-    dal.createLocationAttachment({
-      locationId: locationId,
-      locationName: locationName,
-      username: username,
-      filePathInUploadDir: uploads.getRelativePath(req.file.path),
-      fileMimeType: req.file.mimetype,
-    }, function (err3) {
+    uploads.createThumbnail(req.file, THUMB_SIZE, function (err3, thumb) {
       if (err3) {
         console.error(err3);
         return res.sendStatus(status.INTERNAL_SERVER_ERROR);
       }
-      return res.sendStatus(status.OK);
+
+      // Upload successful. Append an attachment entry to the location.
+      dal.createLocationAttachment({
+        locationId: locationId,
+        locationName: locationName,
+        username: username,
+        filePathInUploadDir: uploads.getRelativePath(req.file.path),
+        fileMimeType: req.file.mimetype,
+        thumbPathInUploadDir: uploads.getRelativePath(thumb.path),
+        thumbMimeType: thumb.mimetype,
+      }, function (err4) {
+        if (err4) {
+          console.error(err4);
+          return res.sendStatus(status.INTERNAL_SERVER_ERROR);
+        }
+        return res.sendStatus(status.OK);
+      });
     });
   });
 };

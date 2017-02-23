@@ -51,6 +51,8 @@ module.exports = {
         data: {
           filepath: '2009/RxRvKSlbl/radar.jpg',
           mimetype: 'image/jpeg',
+          thumbpath: '2009/RxRvKSlbl/radar_medium.jpg',
+          thumbmimetype: 'image/jpeg',
         },
       },
     ],
@@ -122,6 +124,8 @@ module.exports = {
         data: {
           filepath: '2009/RxRvKSlbl/radar.jpg',
           mimetype: 'image/jpeg',
+          thumbpath: '2009/RxRvKSlbl/radar_medium.jpg',
+          thumbmimetype: 'image/jpeg',
         },
       },
       {
