@@ -29,8 +29,15 @@ window.initMap = function () {
 
   var mapView = new MapView();
 
-  mapView.on('location_activated', function (locationId) {
-    page.show('/locations/' + locationId);
+  mapView.on('location_activated', function (location) {
+    page.show('/locations/' + location._id);
+
+    // Pan map so that marker becomes visible
+    mapView.panForCard(location.geom.coordinates[1],
+                       location.geom.coordinates[0]);
+    routes.once('map_activated', function () {
+      mapView.panForCardUndo();
+    });
   });
 
   var mainMenuView = new MainMenuView({

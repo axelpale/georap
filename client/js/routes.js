@@ -1,8 +1,6 @@
 
 // Client-side routing
 
-var queryString = require('query-string');
-
 var account = require('./stores/account');
 
 var CardView = require('./views/Card');
@@ -19,6 +17,12 @@ var ResetPasswordView = require('./views/ResetPassword');
 var ChangePasswordView = require('./views/ChangePassword');
 
 var AfterLogin = require('./models/AfterLogin');
+
+var queryString = require('query-string');
+var emitter = require('component-emitter');
+
+// Emit 'map_activated' so that map knows when to pan back to original state.
+emitter(exports);
 
 exports.route = function (page) {
 
@@ -110,6 +114,7 @@ exports.route = function (page) {
     //   Do not emit 'closed' event because it causes redirection to '/'
     var silent = true;
     card.close(silent);
+    exports.emit('map_activated');
   });
 
   page('/password', function () {
