@@ -115,6 +115,10 @@ module.exports = function (raw) {
     });
   };
 
+  this.getRawEvents = function () {
+    return raw.events;
+  };
+
   this.getMarkerLocation = function () {
     return {
       _id: raw._id,

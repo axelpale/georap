@@ -12,6 +12,7 @@ var TagsView = require('./parts/Tags');
 var FormsView = require('./parts/Forms');
 var RemoveView = require('./parts/Remove');
 var EntriesView = require('./Entries');
+var EventsView = require('./Events');
 
 // Templates
 var locationTemplate = require('./template.ejs');
@@ -62,7 +63,7 @@ module.exports = function (id) {
       tagsView = new TagsView(location);
       formsView = new FormsView(location);
       entriesView = new EntriesView(location);
-      eventsView = new EntriesView(location);
+      eventsView = new EventsView(location);
       removeView = new RemoveView(location);
 
       nameView.bind($('#tresdb-location-name'));
