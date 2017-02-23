@@ -22,7 +22,7 @@ module.exports = function (location) {
     var $progress = $('#tresdb-location-edit-tags-progress');
     var $error = $('#tresdb-location-edit-tags-error');
 
-    location.on('tags_changed', function () {
+    location.on('location_tags_changed', function () {
       // Update tags list
       var tagsListHtml = tagsListTemplate({ tags: location.getTags() });
       $('#tresdb-location-tags-list').html(tagsListHtml);

@@ -175,13 +175,9 @@ module.exports = function (raw) {
     //     number
     //   callback
     //     function (err)
-    locations.setGeom(raw._id, lng, lat, function (err) {
-      // Server will emit location_geom_changed event
-      if (err) {
-        return callback(err);
-      }
-      return callback();
-    });
+    //
+    // Server will emit location_geom_changed event
+    locations.setGeom(raw._id, lng, lat, callback);
   };
 
   this.setName = function (newName, callback) {
@@ -192,14 +188,9 @@ module.exports = function (raw) {
     //     string
     //   callback
     //     function (err)
-
-    locations.setName(raw._id, newName, function (err) {
-      // Server will emit location_name_changed event
-      if (err) {
-        return callback(err);
-      }
-      return callback();
-    });
+    //
+    // Server will emit location_name_changed event
+    locations.setName(raw._id, newName, callback);
   };
 
   this.setTags = function (newTags, callback) {
@@ -210,16 +201,9 @@ module.exports = function (raw) {
     //     array of strings
     //   callback
     //     function (err)
-    locations.setTags(raw._id, newTags, function (err) {
-      if (err) {
-        return callback(err);
-      }
-
-      raw.tags = newTags;
-      self.emit('tags_changed');
-
-      return callback();
-    });
+    //
+    // Server will emit location_tags_changed
+    locations.setTags(raw._id, newTags, callback);
   };
 
   this.react = function (ev) {
@@ -238,6 +222,10 @@ module.exports = function (raw) {
 
     if (ev.type === 'location_geom_changed') {
       raw.geom = ev.data.newGeom;
+    }
+
+    if (ev.type === 'location_tags_changed') {
+      raw.tags = ev.data.newTags;
     }
 
     self.emit(ev.type, ev);
