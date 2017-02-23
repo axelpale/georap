@@ -2,7 +2,6 @@
 var status = require('http-status-codes');
 
 var dal = require('./dal');
-var prepare = require('./lib/prepare');
 
 exports.count = function (req, res) {
 
@@ -34,8 +33,6 @@ exports.create = function (req, res) {
       return res.sendStatus(status.INTERNAL_SERVER_ERROR);
     }
 
-    var loc = prepare.location(rawLoc);
-
-    return res.json(loc);
+    return res.json(rawLoc);
   });
 };

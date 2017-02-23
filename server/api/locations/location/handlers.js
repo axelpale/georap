@@ -1,7 +1,6 @@
 
 var status = require('http-status-codes');
 var dal = require('./dal');
-var prepare = require('../lib/prepare');
 
 exports.changeGeom = function (req, res) {
 
@@ -88,9 +87,7 @@ exports.getOne = function (req, res) {
       return res.sendStatus(status.NOT_FOUND);
     }
 
-    var loc = prepare.location(rawLoc);
-
-    return res.json(loc);
+    return res.json(rawLoc);
   });
 };
 
