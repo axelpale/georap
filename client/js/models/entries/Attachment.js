@@ -1,8 +1,10 @@
 // Usage:
 //   var att = new Attachment(entry, location)
 
-var makeEntry = require('../lib/makeEntry');
-var assertEntryType = require('../lib/assertEntryType');
+var config = require('../../../config');
+var urljoin = require('url-join');
+var makeEntry = require('./lib/makeEntryModel');
+var assertEntryType = require('./lib/assertEntryType');
 
 module.exports = function (rawEntry, location) {
   // Parameters:
@@ -16,7 +18,7 @@ module.exports = function (rawEntry, location) {
   makeEntry(this, rawEntry, location);
 
   this.getUrl = function () {
-    return rawEntry.data.url;
+    return urljoin(config.uploadUrl, rawEntry.data.filepath);
   };
 
   this.getMimeType = function () {

@@ -3,6 +3,11 @@ var Story = require('../entries/Story');
 var Visit = require('../entries/Visit');
 
 module.exports = function (rawEntry, location) {
+
+  if (typeof location !== 'object') {
+    throw new Error('Missing or invalid location model.');
+  }
+
   // Convert rawEntry to entry model
   switch (rawEntry.type) {
     case 'location_attachment':

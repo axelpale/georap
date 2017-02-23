@@ -2,8 +2,8 @@
 //   var visit = new Visit(rawEntry, location)
 
 var emitter = require('component-emitter');
-var makeEntry = require('../lib/makeEntry');
-var assertEntryType = require('../lib/assertEntryType');
+var makeEntry = require('./lib/makeEntryModel');
+var assertEntryType = require('./lib/assertEntryType');
 
 module.exports = function (rawEntry, location) {
   // Parameters:

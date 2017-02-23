@@ -18,6 +18,14 @@ module.exports = function (context, rawEntry, location) {
   //   location
   //     models.Location instance. Work as a parent of the entry.
 
+  if (typeof rawEntry !== 'object') {
+    throw new Error('Missing or invalid rawEntry object.');
+  }
+
+  if (typeof location !== 'object') {
+    throw new Error('Missing or invalid location model.');
+  }
+
   emitter(context);
 
   context.getId = function () {

@@ -3,8 +3,8 @@
 var emitter = require('component-emitter');
 
 var locations = require('../stores/locations');
-var sortEntries = require('./lib/sortEntries');
-var toEntryModel = require('./lib/toEntryModel');
+var rawEntryToEntryModel = require('./lib/rawEntryToEntryModel');
+var rawEventToRawEntry = require('./lib/rawEventToRawEntry');
 
 module.exports = function (raw) {
   // Usage:
@@ -95,22 +95,13 @@ module.exports = function (raw) {
     if (!hasRawEntry(entryId)) {
       return null;
     }
-    return toEntryModel(getRawEntry(entryId), this);
+    return rawEntryToEntryModel(getRawEntry(entryId), this);
   };
 
   this.getEntries = function () {
     // Return entry models as an array.
     return raw.entries.map(function (rawEntry) {
-      return toEntryModel(rawEntry, self);
-    });
-  };
-
-  this.getEntriesInTimeOrder = function () {
-    // Shallow clone the entries array
-    var tempContent = raw.entries.slice(0);
-    sortEntries(tempContent);
-    return tempContent.map(function (rawEntry) {
-      return toEntryModel(rawEntry, self);
+      return rawEntryToEntryModel(rawEntry, self);
     });
   };
 
@@ -207,6 +198,7 @@ module.exports = function (raw) {
   };
 
   this.react = function (ev) {
+    var rawEntry, entryModel;
 
     // Record new events. Assume they come in time order.
     raw.events.unshift(ev);
@@ -226,6 +218,15 @@ module.exports = function (raw) {
 
     if (ev.type === 'location_tags_changed') {
       raw.tags = ev.data.newTags;
+    }
+
+    if (ev.type === 'location_attachment_created' ||
+        ev.type === 'location_story_created' ||
+        ev.type === 'location_visit_created') {
+      rawEntry = rawEventToRawEntry(ev);
+      raw.entries.unshift(rawEntry);
+      entryModel = rawEntryToEntryModel(rawEntry, self);
+      self.emit('location_entry_created', entryModel);
     }
 
     self.emit(ev.type, ev);
