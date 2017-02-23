@@ -6,11 +6,11 @@ var emitter = require('component-emitter');
 var locations = require('../../stores/locations');
 
 //var getEntryView = require('./lib/getEntryView');
-var NameView = require('./parts/Name');
-var GeomView = require('./parts/Geom');
-var TagsView = require('./parts/Tags');
-var FormsView = require('./parts/Forms');
-var RemoveView = require('./parts/Remove');
+var NameView = require('./Name');
+var GeomView = require('./Geom');
+var TagsView = require('./Tags');
+var FormsView = require('./Forms');
+var RemoveView = require('./Remove');
 var EntriesView = require('./Entries');
 var EventsView = require('./Events');
 

@@ -9,7 +9,7 @@ var marked = require('marked');
 var account = require('../../../stores/account');
 var timestamp = require('../../lib/timestamp');
 var storyTemplate = require('./Story.ejs');
-var markdownSyntax = require('../parts/markdownSyntax.ejs');
+var markdownSyntax = require('../lib/markdownSyntax.ejs');
 
 module.exports = function (entry) {
   // Parameters:

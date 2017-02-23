@@ -1,6 +1,6 @@
 
-var geostamp = require('../lib/geostamp');
-var template = require('./Geom.ejs');
+var geostamp = require('./geostamp');
+var template = require('./template.ejs');
 
 module.exports = function (location) {
 

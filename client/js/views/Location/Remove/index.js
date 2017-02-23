@@ -1,5 +1,5 @@
 
-var template = require('./Remove.ejs');
+var template = require('./template.ejs');
 
 module.exports = function (location) {
 

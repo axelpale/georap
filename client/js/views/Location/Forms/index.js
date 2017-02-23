@@ -1,6 +1,6 @@
 // Templates
-var template = require('./Forms.ejs');
-var markdownSyntax = require('./markdownSyntax.ejs');
+var template = require('./template.ejs');
+var markdownSyntax = require('../lib/markdownSyntax.ejs');
 
 module.exports = function (location) {
   // Parameters:
