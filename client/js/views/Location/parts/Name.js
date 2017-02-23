@@ -2,6 +2,8 @@ var template = require('./Name.ejs');
 
 module.exports = function (location) {
 
+  var handleNameChange;
+
   this.bind = function ($mount) {
 
     $mount.html(template({
@@ -15,11 +17,14 @@ module.exports = function (location) {
     var $input = $('#tresdb-location-rename-input');
     var $cancel = $('#tresdb-location-rename-cancel');
 
-    location.on('name_changed', function () {
+    // Listen for events
+
+    handleNameChange = function () {
       var newName = location.getName();
       var s = (newName === '' ? 'Untitled' : newName);
       $display.text(s);
-    });
+    };
+    location.on('location_name_changed', handleNameChange);
 
     // Rename form
 
@@ -76,7 +81,7 @@ module.exports = function (location) {
   };
 
   this.unbind = function () {
-    location.off('name_changed');
+    location.off('location_name_changed', handleNameChange);
     $('#tresdb-location-rename-show').off();
     $('#tresdb-location-rename-cancel').off();
     $('#tresdb-location-rename-form').off();

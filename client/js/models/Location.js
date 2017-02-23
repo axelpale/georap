@@ -60,7 +60,6 @@ module.exports = function (raw) {
   // };
 
 
-
   // Public Getters
 
   this.getCreator = function () {
@@ -200,12 +199,10 @@ module.exports = function (raw) {
     //     function (err)
 
     locations.setName(raw._id, newName, function (err) {
+      // Server will emit location_name_changed event
       if (err) {
         return callback(err);
       }
-
-      raw.name = newName;
-      self.emit('name_changed');
 
       return callback();
     });
@@ -229,6 +226,21 @@ module.exports = function (raw) {
 
       return callback();
     });
+  };
+
+  this.react = function (ev) {
+
+    // Record new events. Assume they come in time order.
+    raw.events.unshift(ev);
+
+    // For events view
+    self.emit('location_event_created', ev);
+
+
+    if (ev.type === 'location_name_changed') {
+      raw.name = ev.data.newName;
+      self.emit(ev.type, ev);
+    }
   };
 
   this.remove = function (callback) {

@@ -1,6 +1,8 @@
 /* eslint-disable max-lines */
 
 var emitter = require('component-emitter');
+
+var socket = require('../connection/socket');
 var account = require('./account');
 var tags = require('./tags');
 var validateCoords = require('./lib/validateCoords');
@@ -25,10 +27,19 @@ var listenForChanges = (function () {
     loc2listen = null;
   };
 
+  socket.on('tresdb_event', function (ev) {
+    if (loc2listen !== null) {
+      if (ev.locationId === loc2listen.getId()) {
+        loc2listen.react(ev);
+      }
+    }
+  });
+
   return function listen(location) {
     // Parameters
     //   location
     //     a models.Location
+
     if (loc2listen !== null) {
       loc2listen.off('saved', savedHandler);
       loc2listen.off('removed', removeHandler);
