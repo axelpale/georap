@@ -176,15 +176,10 @@ module.exports = function (raw) {
     //   callback
     //     function (err)
     locations.setGeom(raw._id, lng, lat, function (err) {
+      // Server will emit location_geom_changed event
       if (err) {
         return callback(err);
       }
-
-      // Update coords
-      raw.geom.coordinates[0] = lng;
-      raw.geom.coordinates[1] = lat;
-      self.emit('geom_changed');
-
       return callback();
     });
   };
@@ -203,7 +198,6 @@ module.exports = function (raw) {
       if (err) {
         return callback(err);
       }
-
       return callback();
     });
   };
@@ -236,11 +230,17 @@ module.exports = function (raw) {
     // For events view
     self.emit('location_event_created', ev);
 
+    // Update raw differently by each individual event type
 
     if (ev.type === 'location_name_changed') {
       raw.name = ev.data.newName;
-      self.emit(ev.type, ev);
     }
+
+    if (ev.type === 'location_geom_changed') {
+      raw.geom = ev.data.newGeom;
+    }
+
+    self.emit(ev.type, ev);
   };
 
   this.remove = function (callback) {

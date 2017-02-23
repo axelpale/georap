@@ -96,7 +96,7 @@ module.exports = function (location) {
       });
     });
 
-    location.on('geom_changed', function () {
+    location.on('location_geom_changed', function () {
       var geostampHtml = geostamp(location.getGeom(), { precision: 5 });
       $geostamp.html(geostampHtml);
     });
