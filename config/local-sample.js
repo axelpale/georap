@@ -21,7 +21,8 @@ module.exports = {
   // Uploaded files
   // Express will serve uploaded files (location attachments) from this dir.
   uploadDir: path.resolve(__dirname, '../.data/uploads'),
-  // URLs of the uploaded files are prefixed with this URL root path:
+  // URLs of the uploaded files are prefixed with this URL root path.
+  // If you change the uploadUrl, edit also client/config.js.
   uploadUrl: '/uploads',
 
   // Log files
