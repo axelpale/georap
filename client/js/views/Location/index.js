@@ -31,7 +31,7 @@ module.exports = function (id) {
   var self = this;
 
   // State
-  var location;
+  var _location;
   var nameView, geomView, tagsView, formsView;
   var entriesView, eventsView, removeView;
 
@@ -56,15 +56,15 @@ module.exports = function (id) {
       }
 
       // Set state
-      location = loc;
+      _location = loc;
 
-      nameView = new NameView(location);
-      geomView = new GeomView(location);
-      tagsView = new TagsView(location);
-      formsView = new FormsView(location);
-      entriesView = new EntriesView(location);
-      eventsView = new EventsView(location);
-      removeView = new RemoveView(location);
+      nameView = new NameView(_location);
+      geomView = new GeomView(_location);
+      tagsView = new TagsView(_location);
+      formsView = new FormsView(_location);
+      entriesView = new EntriesView(_location);
+      eventsView = new EventsView(_location);
+      removeView = new RemoveView(_location);
 
       nameView.bind($('#tresdb-location-name'));
       geomView.bind($('#tresdb-location-geom'));
@@ -77,22 +77,9 @@ module.exports = function (id) {
 
       // Listen possible changes in the location.
 
-      // location.on('entry_added', function (ev) {
-      //   // Get entry model
-      //   var entry = location.getEntry(ev.entryId);
-      //   // Create entry view
-      //   var entryView = getEntryView(entry);
-      //   // Render, attach to dom and bind handlers
-      //   var html = entryView.render();
-      //   $('#tresdb-location-content-entries').prepend(html);
-      //   entryView.bind();
-      // });
-      //
-      // location.on('entry_removed', function (ev) {
-      //   $('#' + ev.entryId).remove();
-      // });
-
-      location.on('removed', function () {
+      // Inform parents that view model is removed and view should be closed.
+      _location.on('removed', function () {
+        self.unbind();
         self.emit('removed');
       });
 
@@ -104,7 +91,7 @@ module.exports = function (id) {
 
   this.unbind = function () {
 
-    if (location) {
+    if (_location) {
       nameView.unbind();
       geomView.unbind();
       tagsView.unbind();
@@ -112,8 +99,9 @@ module.exports = function (id) {
       entriesView.unbind();
       eventsView.unbind();
       removeView.unbind();
-      location.off();
+      _location.off();
     }
+    _location = null;
   };
 
 };
