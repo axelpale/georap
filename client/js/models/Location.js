@@ -220,6 +220,7 @@ module.exports = function (raw) {
       raw.tags = ev.data.newTags;
     }
 
+    // Create entry from events
     if (ev.type === 'location_attachment_created' ||
         ev.type === 'location_story_created' ||
         ev.type === 'location_visit_created') {
@@ -229,16 +230,15 @@ module.exports = function (raw) {
       self.emit('location_entry_created', entryModel);
     }
 
+    // Emit model removed so that view can unbind.
+    if (ev.type === 'location_removed') {
+      self.emit('removed');
+    }
+
     self.emit(ev.type, ev);
   };
 
   this.remove = function (callback) {
-    locations.removeOne(raw._id, function (err) {
-      if (err) {
-        return callback(err);
-      }
-      self.emit('removed', self);
-      return callback();
-    });
+    locations.removeOne(raw._id, callback);
   };
 };
