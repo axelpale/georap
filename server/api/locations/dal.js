@@ -43,11 +43,11 @@ exports.create = function (lat, lng, username, callback) {
       return callback(err);
     }
 
-    var id = result.insertedId;
-    newLoc._id = id;
+    newLoc._id = result.insertedId;
 
     eventsDal.createLocationCreated({
-      locationId: id,
+      locationId: newLoc._id,
+      locationName: newLoc.name,
       lat: lat,
       lng: lng,
       username: username,

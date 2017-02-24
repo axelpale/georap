@@ -226,8 +226,11 @@ exports.removeOne = function (id, username, callback) {
       return callback(err);
     }
 
+    var loc = result.value;
+
     eventsDal.createLocationRemoved({
-      location: result.value,
+      locationId: loc._id,
+      locationName: loc.name,
       username: username,
     }, callback);
   });
