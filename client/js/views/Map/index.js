@@ -12,13 +12,13 @@
 var mapStateStore = require('../../stores/mapstate');
 
 var markerStore = require('../../stores/markers');
-
-var convert = require('./lib/convert');
-var rawEventToMarkerLocation = require('./lib/rawEventToMarkerLocation');
-var icons = require('../lib/icons');
-var labels = require('../lib/labels');
 var getBoundsDiagonal = require('../lib/getBoundsDiagonal');
 var readGoogleMapState = require('../lib/readGoogleMapState');
+var labels = require('../lib/labels');
+var icons = require('./lib/icons');
+var rawEventToMarkerLocation = require('./lib/rawEventToMarkerLocation');
+var convert = require('./lib/convert');
+var GeolocationMarker = require('./GeolocationMarker');
 
 var emitter = require('component-emitter');
 
@@ -64,10 +64,6 @@ module.exports = function () {
   // the new location is to be created.
   var additionMarker = null;
 
-  // Marker that represents geolocation of the user
-  var geolocationMarker = null;
-  var geolocationWatchId = null;
-
   // Get initial map state i.e. coordinates, zoom level, and map type
   var initMapState = mapStateStore.get();
 
@@ -94,6 +90,11 @@ module.exports = function () {
       position: google.maps.ControlPosition.RIGHT_BOTTOM,
     },
   });
+
+  // Marker that represents geolocation of the user
+  var _geolocationMarker = new GeolocationMarker(map);
+
+  // Bind
 
   // Track when map becomes usable.
   // See 'var mapReady = false' above for details.
@@ -242,53 +243,13 @@ module.exports = function () {
   };
 
   this.hideGeolocation = function () {
-    // Stop watching device's location
-    if (geolocationWatchId !== null) {
-      if ('geolocation' in navigator) {
-        navigator.geolocation.clearWatch(geolocationWatchId);
-        geolocationWatchId = null;
-      }
-    }
-    // Remove marker
-    if (geolocationMarker !== null) {
-      geolocationMarker.setMap(null);
-      geolocationMarker = null;
-    }
+    // Hide the current location.
+    _geolocationMarker.hide();
   };
 
   this.showGeolocation = function () {
-    // Show current location on the map. Does nothing if already shown.
-
-    var update, geoSuccess, geoError, id;
-
-    // If geolocation is not already shown and geolocation is available.
-    if (geolocationMarker === null && 'geolocation' in navigator) {
-
-      geolocationMarker = new google.maps.Marker({
-        position: new google.maps.LatLng(0.0, 0.0),
-        map: map,
-        icon: icons.geolocation(),
-      });
-
-      update = function (lat, lng) {
-        geolocationMarker.setPosition({
-          lat: lat,
-          lng: lng,
-        });
-      };
-
-      geoSuccess = function (position) {
-        update(position.coords.latitude, position.coords.longitude);
-      };
-
-      geoError = function (err) {
-        console.error(err);
-      };
-
-      id = navigator.geolocation.watchPosition(geoSuccess, geoError);
-      geolocationWatchId = id;
-
-    }  // Else, no navigator.geolocation available
+    // Show the current location on the map. Does nothing if already shown.
+    _geolocationMarker.show();
   };
 
   this.startLoadingMarkers = function () {
