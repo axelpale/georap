@@ -5,16 +5,17 @@ var account = require('../stores/account');
 
 var CardView = require('../views/Card');
 
-var LoginView = require('../components/Login');
-var SignupView = require('../components/Signup');
-var InviteView = require('../components/Invite');
+var ChangePasswordView = require('../components/ChangePassword');
+var Error404View = require('../components/Error404');
 var EventsView = require('../components/Events');
+var InviteView = require('../components/Invite');
 var LocationView = require('../components/Location');
+var LoginView = require('../components/Login');
+var ResetPasswordView = require('../components/ResetPassword');
+var SearchView = require('../components/Search');
+var SignupView = require('../components/Signup');
 var UsersView = require('../components/Users');
 var UserView = require('../components/User');
-var Error404View = require('../components/Error404');
-var ResetPasswordView = require('../components/ResetPassword');
-var ChangePasswordView = require('../components/ChangePassword');
 
 // Help in remembering original url if redirect to login page is required.
 var AfterLogin = require('./lib/AfterLogin');
@@ -135,6 +136,11 @@ exports.route = function (page) {
 
   page('/locations/:id', function (ctx) {
     var view = new LocationView(ctx.params.id);
+    card.open(view);
+  });
+
+  page('/search', function () {
+    var view = new SearchView();
     card.open(view);
   });
 
