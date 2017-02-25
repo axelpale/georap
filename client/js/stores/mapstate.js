@@ -4,7 +4,7 @@
 var GEO_KEY = 'tresdb-geo-location';
 var storage = require('../connection/storage');
 
-module.exports = function (defaultState) {
+var MapStateStore = function (defaultState) {
 
   this.update = function (state) {
     // Parameters:
@@ -45,8 +45,8 @@ module.exports = function (defaultState) {
   };
 
   this.get = function () {
-    // Get the stored viewport location
-    // If there is no location stored, returns null.
+    // Get the stored viewport state
+    // If there is no state stored, returns the default state.
     //
     // Return:
     // {
@@ -64,3 +64,13 @@ module.exports = function (defaultState) {
     return defaultState;
   };
 };
+
+// Singleton
+module.exports = new MapStateStore({
+  // Default map state
+  lat: 61.0,
+  lng: 24.0,
+  zoom: 6,
+  // 'hybrid' is darker and more practical than 'roadmap'
+  mapTypeId: 'hybrid',
+});

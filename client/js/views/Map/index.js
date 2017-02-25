@@ -1,9 +1,16 @@
 /* eslint-disable max-statements, max-lines */
 /* global google */
 
-var emitter = require('component-emitter');
+// Remember map view state (center, zoom, type...)
+// Default to southern Finland.
+//
+// Rules:
+// - Whenever user's location on the map changes, the new location
+//   should be stored device-wise.
+// - If no location is stored and none can be retrieved from the browser,
+//   fallback to southern finland.
+var mapStateStore = require('../../stores/mapstate');
 
-var MapStateStore = require('../../models/MapStateStore');
 var locations = require('../../stores/locations');
 var markerStore = require('../../stores/markers');
 
@@ -12,6 +19,8 @@ var icons = require('../lib/icons');
 var labels = require('../lib/labels');
 var getBoundsDiagonal = require('../lib/getBoundsDiagonal');
 var readGoogleMapState = require('../lib/readGoogleMapState');
+
+var emitter = require('component-emitter');
 
 module.exports = function () {
   //
@@ -32,23 +41,6 @@ module.exports = function () {
 
   // Element for the google map
   var htmlElement = document.getElementById('map');
-
-  // Remember map view state (center, zoom, type...)
-  // Default to southern Finland.
-  //
-  // Rules:
-  // - Whenever user's location on the map changes, the new location
-  //   should be stored device-wise.
-  // - If no location is stored and none can be retrieved from the browser,
-  //   fallback to southern finland.
-  var mapStateStore = new MapStateStore({
-    // Default map state
-    lat: 61.0,
-    lng: 24.0,
-    zoom: 6,
-    // 'hybrid' is darker and more practical than 'roadmap'
-    mapTypeId: 'hybrid',
-  });
 
   // True if map is ready for use. Will be switched to true at the first
   // 'idle' event. See addListenerOnce('idle', ...) below.
