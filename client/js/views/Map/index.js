@@ -11,10 +11,10 @@
 //   fallback to southern finland.
 var mapStateStore = require('../../stores/mapstate');
 
-var locations = require('../../stores/locations');
 var markerStore = require('../../stores/markers');
 
 var convert = require('./lib/convert');
+var rawEventToMarkerLocation = require('./lib/rawEventToMarkerLocation');
 var icons = require('../lib/icons');
 var labels = require('../lib/labels');
 var getBoundsDiagonal = require('../lib/getBoundsDiagonal');
@@ -110,35 +110,58 @@ module.exports = function () {
 
   // Listen for changes in locations so that the markers and labels
   // are up to date.
-  locations.on('location_changed', function (updatedLoc) {
+  markerStore.on('location_name_changed', function (ev) {
     // Parameters
-    //   updatedLoc
-    //     models.Location
+    //   ev
+    //     ev.data.newName
     var m, mloc;
 
-    mloc = updatedLoc.getMarkerLocation();
-
-    if (markers.hasOwnProperty(mloc._id)) {
-      m = markers[mloc._id];
-      m.set('location', mloc);
-
-      // Ensure coordinates are up to date
-      m.setPosition({
-        lat: updatedLoc.getLatitude(),
-        lng: updatedLoc.getLongitude(),
-      });
-
-      // Force update even if label already visible
-      labels.ensureLabel(m, map.getMapTypeId(), true);
-    } else {
-      // New location
-      addMarker(mloc);
+    // No need to update if no such marker on the map.
+    if (!markers.hasOwnProperty(ev.locationId)) {
+      return;
     }
+
+    // Update name of markerLocation
+    m = markers[ev.locationId];
+    mloc = m.get('location');
+    mloc.name = ev.data.newName;
+
+    // Refresh label. Force update even if label already visible
+    labels.ensureLabel(m, map.getMapTypeId(), true);
   });
 
-  locations.on('location_removed', function (location) {
-    if (markers.hasOwnProperty(location.getId())) {
-      var mToRemove = markers[location.getId()];
+  markerStore.on('location_geom_changed', function (ev) {
+    // Parameters
+    //   ev
+    //     ev.data.newGeom
+    var m, g, mloc;
+
+    // No need to update if no such marker on the map.
+    if (!markers.hasOwnProperty(ev.locationId)) {
+      return;
+    }
+
+    // Update geom of markerLocation
+    g = ev.data.newGeom;
+    m = markers[ev.locationId];
+    mloc = m.get('location');
+    mloc.geom = g;
+
+    // Ensure coordinates are up to date
+    m.setPosition({
+      lat: g.coordinates[1],
+      lng: g.coordinates[0],
+    });
+  });
+
+  markerStore.on('location_created', function (ev) {
+    var mloc = rawEventToMarkerLocation(ev);
+    addMarker(mloc);
+  });
+
+  markerStore.on('location_removed', function (ev) {
+    if (markers.hasOwnProperty(ev.locationId)) {
+      var mToRemove = markers[ev.locationId];
       removeMarker(mToRemove);
     }
   });

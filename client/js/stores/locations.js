@@ -206,7 +206,7 @@ exports.create = function (geom, callback) {
   //   geom
   //     GeoJSON Point
   //   callback
-  //     function (err, createdLocation)
+  //     function (err, rawLoc)
 
   postJSON({
     url: '/api/locations',
@@ -214,20 +214,7 @@ exports.create = function (geom, callback) {
       lat: geom.coordinates[1],
       lng: geom.coordinates[0],
     },
-  }, function (err, rawLoc) {
-    if (err) {
-      return callback(err);
-    }
-
-    // Convert to Location model
-    var newLoc = new Location(rawLoc);
-    // Emit changes of this location until next loc in focus.
-    listenForChanges(newLoc);
-    // Inform others that new location has been created.
-    exports.emit('location_changed', newLoc);
-
-    return callback(null, newLoc);
-  });
+  }, callback);
 };
 
 exports.get = function (id, callback) {

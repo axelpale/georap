@@ -1,4 +1,24 @@
+var socket = require('../connection/socket');
 var account = require('./account');
+var emitter = require('component-emitter');
+
+// Init
+
+emitter(exports);
+
+// Bind
+
+socket.on('tresdb_event', function (ev) {
+  // Emit marker events so that map knows how to respond.
+  if (ev.type === 'location_created' ||
+      ev.type === 'location_removed' ||
+      ev.type === 'location_geom_changed' ||
+      ev.type === 'location_name_changed') {
+    exports.emit(ev.type, ev);
+  }
+});
+
+// Public methods
 
 exports.getWithin = function (center, radius, zoomLevel, callback) {
   // Parameters
