@@ -83,6 +83,31 @@ var postJSON = function (params, callback) {
   });
 };
 
+var deleteJSON = function (params, callback) {
+  // General JSON DELETE AJAX request.
+  //
+  // Parameters:
+  //   params
+  //     url
+  //     data
+  //   callback
+  //     function (err, jsonResponse)
+  $.ajax({
+    url: params.url,
+    type: 'DELETE',
+    contentType: 'application/json',
+    data: JSON.stringify(params.data),
+    headers: { 'Authorization': 'Bearer ' + account.getToken() },
+    success: function (responseData) {
+      return callback(null, responseData);
+    },
+    error: function (jqxhr, status, err) {
+      console.error(err);
+      return callback(err);
+    },
+  });
+};
+
 
 
 this.changeStory = function (locationId, entryId, newMarkdown, callback) {
@@ -299,6 +324,27 @@ this.setTags = function (id, newTags, callback) {
   return postJSON({
     url: '/api/locations/' + id + '/tags',
     data: { tags: newTags },
+  }, callback);
+};
+
+exports.removeAttachment = function (locationId, entryId, callback) {
+  return deleteJSON({
+    url: '/api/locations/' + locationId + '/attachments/' + entryId,
+    data: {},
+  }, callback);
+};
+
+exports.removeStory = function (locationId, entryId, callback) {
+  return deleteJSON({
+    url: '/api/locations/' + locationId + '/stories/' + entryId,
+    data: {},
+  }, callback);
+};
+
+exports.removeVisit = function (locationId, entryId, callback) {
+  return deleteJSON({
+    url: '/api/locations/' + locationId + '/visits/' + entryId,
+    data: {},
   }, callback);
 };
 

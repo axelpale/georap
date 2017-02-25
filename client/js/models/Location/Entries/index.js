@@ -64,9 +64,9 @@ module.exports = function (rawEntries, location) {
     }
 
     if (ev.type.endsWith('_removed')) {
-      _removeEntry(ev.data.entryId);
+      var en = _removeEntry(ev.data.entryId);
       self.emit(ev.type, ev);
-      self.emit('location_entry_removed', ev);
+      self.emit('location_entry_removed', ev, en);
     }
 
     if (ev.type.endsWith('_changed')) {

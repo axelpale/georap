@@ -18,16 +18,6 @@
     <%= entry.getUserName() %> uploaded <%= timestamp(entry.getTime()) %>
   </div>
 
-  <% if (isImage) { %>
-    <div class="panel-body tresdb-entry-attachment-image-body">
-      <img src="<%= thumbUrl %>" title="<%= filename %>">
-    </div>
-  <% } else { %>
-    <div class="panel-body">
-      <a href="<%= url %>" target="_blank"><%= filename %></a>
-    </div>
-  <% } %>
-
   <div id="<%= entry.getId() %>-form-container" class="panel-body hidden">
     <div class="pull-right">
       <button id="<%= entry.getId() %>-cancel" type="button" class="btn btn-default">Cancel</button>
@@ -43,4 +33,15 @@
       <div class="alert alert-danger" role="alert">Deletion failed. Might be a connection issue.</div>
     </div>
   </div>
+
+  <% if (isImage) { %>
+    <div class="panel-body tresdb-entry-attachment-image-body">
+      <img src="<%= thumbUrl %>" title="<%= filename %>">
+    </div>
+  <% } else { %>
+    <div class="panel-body">
+      <a href="<%= url %>" target="_blank"><%= filename %></a>
+    </div>
+  <% } %>
+
 </div>

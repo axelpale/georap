@@ -41,14 +41,16 @@ module.exports = function (entries) {
 
     _handleEntryRemoved = function (ev) {
 
-      var removedEntry = entries.getEntry(ev.data.entryId);
-      var id = removedEntry.getId();
+      // Remove entry from _entryViewsMap.
+      var id = ev.data.entryId;
       var v = _entryViewsMap[id];
-
       delete _entryViewsMap[id];
 
+      // Remove entry's HTML and unbind view.
       v.unbind();
-      $('#' + id).remove();
+      $('#' + id).slideUp('slow', function () {
+        $('#' + id).remove();
+      });
     };
 
     entries.on('location_entry_created', _handleEntryCreated);

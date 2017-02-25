@@ -35,6 +35,13 @@ module.exports = function (rawEntry, entries) {
     locations.changeStory(lid, eid, m, callback);
   };
 
+  self.remove = function (callback) {
+    // Remove entry from the backend
+    var lid = rawEntry.locationId;
+    var eid = rawEntry._id;
+    locations.removeStory(lid, eid, callback);
+  };
+
   entries.on('location_story_changed', function (ev) {
     if (ev.data.entryId === self.getId()) {
       rawEntry.data.markdown = ev.data.newMarkdown;

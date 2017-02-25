@@ -1,6 +1,7 @@
 // Usage:
 //   var visit = new Visit(rawEntry, location)
 
+var locations = require('../../../../stores/locations');
 var makeEntryModel = require('../lib/makeEntryModel');
 var assertEntryType = require('../lib/assertEntryType');
 
@@ -22,5 +23,12 @@ module.exports = function (rawEntry, entries) {
 
   self.getYear = function () {
     return rawEntry.data.year;
+  };
+
+  this.remove = function (callback) {
+    // Remove entry from the backend
+    var lid = rawEntry.locationId;
+    var eid = rawEntry._id;
+    locations.removeVisit(lid, eid, callback);
   };
 };

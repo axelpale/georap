@@ -2,6 +2,7 @@
 //   var att = new Attachment(entry, location)
 
 var config = require('../../../../../config');
+var locations = require('../../../../stores/locations');
 var makeEntryModel = require('../lib/makeEntryModel');
 var assertEntryType = require('../lib/assertEntryType');
 
@@ -32,5 +33,12 @@ module.exports = function (rawEntry, entries) {
 
   this.getThumbMimeType = function () {
     return rawEntry.data.thumbmimetype;
+  };
+
+  this.remove = function (callback) {
+    // Remove entry from the backend
+    var lid = rawEntry.locationId;
+    var eid = rawEntry._id;
+    locations.removeAttachment(lid, eid, callback);
   };
 };

@@ -6,7 +6,7 @@ var template = require('./template.ejs');
 module.exports = function (entry) {
   // Parameters:
   //   entry
-  //     any in models.entries
+  //     Attachment, Story, or Visit model.
 
   var id = entry.getId();
 

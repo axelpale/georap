@@ -48,10 +48,4 @@ module.exports = function (context, rawEntry, entries) {
     // Return models.Location instance
     return entries.getLocation();
   };
-
-  context.remove = function (callback) {
-    // Remove entry from the backend
-    //location.removeEntry(rawEntry._id, callback);
-    return callback();
-  };
 };
