@@ -17,9 +17,9 @@ var readGoogleMapState = require('../lib/readGoogleMapState');
 var labels = require('../lib/labels');
 var icons = require('./lib/icons');
 var rawEventToMarkerLocation = require('./lib/rawEventToMarkerLocation');
-var convert = require('./lib/convert');
 var AdditionMarker = require('./AdditionMarker');
 var GeolocationMarker = require('./GeolocationMarker');
+var Panner = require('./Panner');
 
 var emitter = require('component-emitter');
 
@@ -48,11 +48,6 @@ module.exports = function () {
   // We need to track this for startLoadingMarkers: if map is ready
   // then load the markers immediately when called, otherwise wait for idle.
   var mapReady = false;
-
-  // When location page opens, map pans so that location becomes visible
-  // on the background. After location page is closed, this pan is being
-  // undone. We only need to remember the original map center.
-  var _panForCardUndoLatLng = null;
 
   // Does the map load markers from the locations and display them on the map.
   // Will be set when client is ready to load markers (logged in)
@@ -93,6 +88,10 @@ module.exports = function () {
   // An addition marker. User moves this large marker to point where
   // the new location is to be created.
   var _additionMarker = new AdditionMarker(map);
+  // When location page opens, map pans so that location becomes visible
+  // on the background. After location page is closed, this pan is being
+  // undone.
+  var _panner = new Panner(map);
 
   // Bind
 
@@ -220,6 +219,21 @@ module.exports = function () {
     return map;
   };
 
+  this.panForCard = function (lat, lng) {
+    // Pan map so that target location becomes centered on
+    // the visible background.
+    //
+    // Parameters:
+    //   lat, lng
+    //     Coords of the location
+    return _panner.panForCard(lat, lng);
+  };
+
+  this.panForCardUndo = function () {
+    // Undo the pan made by panForCard
+    return _panner.panForCardUndo();
+  };
+
   this.removeControls = function () {
     // Remove all custom elements.
     map.controls[google.maps.ControlPosition.LEFT_TOP].clear();
@@ -303,46 +317,9 @@ module.exports = function () {
     return _additionMarker.getGeom();
   };
 
-  this.panForCard = function (lat, lng) {
-    // Pan map so that target location becomes centered on
-    // the visible background.
-    //
-    // Parameters:
-    //   latlng
-    //     Coords of the location
-
-    // Store current, original center for undo.
-    _panForCardUndoLatLng = map.getCenter();
-
-    var cardWidthPx = $('#card-container').width();
-    var mapWidthPx = $('body').width();
-    var bgWidthPx = (mapWidthPx - cardWidthPx);
-    var bgHeightPx = $('body').height();
-    var bgXPx = Math.round(bgWidthPx / 2);
-    var bgYPx = Math.round(bgHeightPx / 2);
-
-    var bgPx = new google.maps.Point(bgXPx, bgYPx);
-    var bgLatLng = convert.point2LatLng(bgPx, map);
-
-    var dLat = lat - bgLatLng.lat();
-    var dLng = lng - bgLatLng.lng();
-
-    var c = map.getCenter();
-
-    var targetLatLng = new google.maps.LatLng(c.lat() + dLat, c.lng() + dLng);
-    map.panTo(targetLatLng);
-  };
-
-  this.panForCardUndo = function () {
-    // Undo the pan made by panForCard
-    if (_panForCardUndoLatLng) {
-      map.panTo(_panForCardUndoLatLng);
-    }
-  };
-
   this.removeAdditionMarker = function () {
     // Remove addition marker from the map.
-    _additionMarker.hide()
+    return _additionMarker.hide();
   };
 
 

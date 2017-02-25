@@ -1,3 +1,5 @@
+/* global google */
+
 var icons = require('../lib/icons');
 
 module.exports = function (map) {

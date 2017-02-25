@@ -1,3 +1,5 @@
+/* global google */
+
 var icons = require('../lib/icons');
 
 module.exports = function (map) {
@@ -5,6 +7,8 @@ module.exports = function (map) {
   // Marker that represents geolocation of the user
   var geolocationMarker = null;
   var geolocationWatchId = null;
+
+  // Public methods
 
   this.hide = function () {
     // Stop watching device's location
