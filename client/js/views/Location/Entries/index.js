@@ -48,7 +48,7 @@ module.exports = function (entries) {
 
       // Remove entry's HTML and unbind view.
       v.unbind();
-      $('#' + id).slideUp('slow', function () {
+      $('#' + id).fadeOut('slow', function () {
         $('#' + id).remove();
       });
     };
