@@ -12,6 +12,10 @@ module.exports = function (rawEntries, location) {
   //   location
   //     Location model
 
+  if (typeof rawEntries !== 'object') {
+    throw new Error('Missing or invalid rawEntries array');
+  }
+
   // Init
 
   var self = this;
