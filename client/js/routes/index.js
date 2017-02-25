@@ -1,22 +1,23 @@
 
 // Client-side routing
 
-var account = require('./stores/account');
+var account = require('../stores/account');
 
-var CardView = require('./views/Card');
+var CardView = require('../views/Card');
 
-var LoginView = require('./components/Login');
-var SignupView = require('./components/Signup');
-var InviteView = require('./components/Invite');
-var EventsView = require('./components/Events');
-var LocationView = require('./components/Location');
-var UsersView = require('./components/Users');
-var UserView = require('./components/User');
-var Error404View = require('./components/Error404');
-var ResetPasswordView = require('./components/ResetPassword');
-var ChangePasswordView = require('./components/ChangePassword');
+var LoginView = require('../components/Login');
+var SignupView = require('../components/Signup');
+var InviteView = require('../components/Invite');
+var EventsView = require('../components/Events');
+var LocationView = require('../components/Location');
+var UsersView = require('../components/Users');
+var UserView = require('../components/User');
+var Error404View = require('../components/Error404');
+var ResetPasswordView = require('../components/ResetPassword');
+var ChangePasswordView = require('../components/ChangePassword');
 
-var AfterLogin = require('./models/AfterLogin');
+// Help in remembering original url if redirect to login page is required.
+var AfterLogin = require('./lib/AfterLogin');
 
 var queryString = require('query-string');
 var emitter = require('component-emitter');
