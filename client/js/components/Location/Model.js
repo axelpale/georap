@@ -15,11 +15,11 @@ module.exports = function (raw) {
   //     Optional location properties that override the default.
 
   // Init
-  emitter(this);
   var self = this;
+  emitter(self);
 
-  var _events = new EventsModel(raw.events, this);
-  var _entries = new EntriesModel(raw.entries, this);
+  var _events = new EventsModel(raw.events, self);
+  var _entries = new EntriesModel(raw.entries, self);
 
   // Bind
 
@@ -66,49 +66,45 @@ module.exports = function (raw) {
 
   // Public Getters
 
-  // this.hasEntry = function (entryId) {
-  //   this.getEntry(entryId) !== null;
-  // };
-
-  this.getCreator = function () {
+  self.getCreator = function () {
     // TODO ensure creator is everywhere.
     // Return the username of the creator of the location.
     // Return '' if not known.
     return raw.creator;
   };
 
-  this.getId = function () {
+  self.getId = function () {
     return raw._id;
   };
 
-  this.getName = function () {
+  self.getName = function () {
     return raw.name;
   };
 
-  this.getGeom = function () {
+  self.getGeom = function () {
     // Return GeoJSON
     return raw.geom;
   };
 
-  this.getLongitude = function () {
+  self.getLongitude = function () {
     return raw.geom.coordinates[0];
   };
 
-  this.getLatitude = function () {
+  self.getLatitude = function () {
     return raw.geom.coordinates[1];
   };
 
-  this.getEntries = function () {
+  self.getEntries = function () {
     // Return EntriesModel.
     return _entries;
   };
 
-  this.getEvents = function () {
+  self.getEvents = function () {
     // Return EventsModel
     return _events;
   };
 
-  this.getMarkerLocation = function () {
+  self.getMarkerLocation = function () {
     return {
       _id: raw._id,
       name: raw.name,
@@ -118,19 +114,19 @@ module.exports = function (raw) {
     };
   };
 
-  this.getTags = function () {
+  self.getTags = function () {
     // Return array of strings
     return raw.tags;
   };
 
-  this.hasTag = function (tag) {
+  self.hasTag = function (tag) {
     return (raw.tags.indexOf(tag) > -1);
   };
 
 
   // Public Mutators
 
-  this.setGeom = function (lng, lat, callback) {
+  self.setGeom = function (lng, lat, callback) {
     // Parameters:
     //   lng
     //     number
@@ -143,7 +139,7 @@ module.exports = function (raw) {
     locations.setGeom(raw._id, lng, lat, callback);
   };
 
-  this.setName = function (newName, callback) {
+  self.setName = function (newName, callback) {
     // Gives new name to the location and saves the change it to server.
     //
     // Parameters
@@ -156,7 +152,7 @@ module.exports = function (raw) {
     locations.setName(raw._id, newName, callback);
   };
 
-  this.setTags = function (newTags, callback) {
+  self.setTags = function (newTags, callback) {
     // Replaces the current taglist with the new one and saves to server.
     //
     // Parameters
@@ -169,68 +165,7 @@ module.exports = function (raw) {
     locations.setTags(raw._id, newTags, callback);
   };
 
-  //this.react = function (ev) {
-    // var rawEntry, entryModel;
-    //
-    // // Record new events. Assume they come in time order.
-    // raw.events.unshift(ev);
-    //
-    // // For events view
-    // self.emit('location_event_created', ev);
-
-    // Update raw differently by each individual event type
-    //
-    // if (ev.type === 'location_name_changed') {
-    //   raw.name = ev.data.newName;
-    // }
-    //
-    // if (ev.type === 'location_geom_changed') {
-    //   raw.geom = ev.data.newGeom;
-    // }
-    //
-    // if (ev.type === 'location_tags_changed') {
-    //   raw.tags = ev.data.newTags;
-    // }
-
-    // if (ev.type === 'location_story_changed') {
-    //   entryModel = self.getEntry(ev.data.entryId);
-    //   // Null if not found
-    //   if (entryModel) {
-    //     entryModel.react(ev);
-    //   }
-    // }
-
-    // Create entry from events
-    // if (ev.type === 'location_attachment_created' ||
-    //     ev.type === 'location_story_created' ||
-    //     ev.type === 'location_visit_created') {
-    //   rawEntry = rawEventToRawEntry(ev);
-    //   raw.entries.unshift(rawEntry);
-    //   entryModel = rawEntryToEntryModel(rawEntry, self);
-    //   _entryModels.unshift(entryModel);
-    //   self.emit('location_entry_created', entryModel);
-    // }
-
-    // if (ev.type === 'location_attachment_removed' ||
-    //     ev.type === 'location_story_removed' ||
-    //     ev.type === 'location_visit_removed') {
-    //   entryModel = self.getEntry(ev.data.entryId);
-    //   // Null if not found
-    //   if (entryModel) {
-    //     entryModel.react(ev);
-    //   }
-    //
-    // }
-
-    // // Emit model removed so that view can unbind.
-    // if (ev.type === 'location_removed') {
-    //   self.emit('removed');
-    // }
-    //
-    // self.emit(ev.type, ev);
-  //};
-
-  this.remove = function (callback) {
+  self.remove = function (callback) {
     locations.removeOne(raw._id, callback);
   };
 };
