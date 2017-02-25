@@ -1,29 +1,29 @@
 // Abstract Entry model initializer
 //
 // Usage:
-//   var MyEntry = function (rawEntry, location) {
-//     makeEntry(this, rawEntry, location);
+//   var MyEntry = function (rawEntry, entries) {
+//     makeEntry(this, rawEntry, entries);
 //     ...
 //   };
 //
 
 var emitter = require('component-emitter');
 
-module.exports = function (context, rawEntry, location) {
+module.exports = function (context, rawEntry, entries) {
   // Parameters:
   //   context
   //     the "this" context of the inheriting object
   //   rawEntry
   //     plain content entry object
-  //   location
-  //     models.Location instance. Work as a parent of the entry.
+  //   entries
+  //     EntriesModel instance. Work as a parent of the entry.
 
   if (typeof rawEntry !== 'object') {
     throw new Error('Missing or invalid rawEntry object.');
   }
 
-  if (typeof location !== 'object') {
-    throw new Error('Missing or invalid location model.');
+  if (typeof entries !== 'object') {
+    throw new Error('Missing or invalid entries model.');
   }
 
   emitter(context);
@@ -46,7 +46,7 @@ module.exports = function (context, rawEntry, location) {
 
   context.getLocation = function () {
     // Return models.Location instance
-    return location;
+    return entries.getLocation();
   };
 
   context.remove = function (callback) {

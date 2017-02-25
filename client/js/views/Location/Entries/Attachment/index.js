@@ -1,7 +1,7 @@
 
-var account = require('../../../stores/account');
-var timestamp = require('../../lib/timestamp');
-var template = require('./Attachment.ejs');
+var account = require('../../../../stores/account');
+var timestamp = require('../../../lib/timestamp');
+var template = require('./template.ejs');
 
 module.exports = function (entry) {
   // Parameters:

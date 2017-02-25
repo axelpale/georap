@@ -62,8 +62,8 @@ module.exports = function (id) {
       geomView = new GeomView(_location);
       tagsView = new TagsView(_location);
       formsView = new FormsView(_location);
-      entriesView = new EntriesView(_location);
-      eventsView = new EventsView(_location);
+      entriesView = new EntriesView(_location.getEntries());
+      eventsView = new EventsView(_location.getEvents());
       removeView = new RemoveView(_location);
 
       nameView.bind($('#tresdb-location-name'));

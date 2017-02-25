@@ -1,6 +1,6 @@
-// Templates
-var template = require('./template.ejs');
+var locations = require('../../../stores/locations');
 var markdownSyntax = require('../lib/markdownSyntax.ejs');
+var template = require('./template.ejs');
 
 module.exports = function (location) {
   // Parameters:
@@ -62,7 +62,7 @@ module.exports = function (location) {
       $('#tresdb-location-story-form').addClass('hidden');
       $('#tresdb-location-story-progress').removeClass('hidden');
 
-      location.createStory(markdown, function (err) {
+      locations.createStory(location.getId(), markdown, function (err) {
 
         // Api responsed. Hide progress bar.
         $('#tresdb-location-story-progress').addClass('hidden');
@@ -113,7 +113,7 @@ module.exports = function (location) {
       attForm.addClass('hidden');
       $('#tresdb-location-attachment-progress').removeClass('hidden');
 
-      location.createAttachment(attForm, function (err) {
+      locations.createAttachment(location.getId(), attForm, function (err) {
         // Hide progress bar
         $('#tresdb-location-attachment-progress').addClass('hidden');
 
@@ -173,7 +173,7 @@ module.exports = function (location) {
       var year = $('#tresdb-location-visit-input').val();
       year = parseInt(year, 10);
 
-      location.createVisit(year, function (err) {
+      locations.createVisit(location.getId(), year, function (err) {
         $('#tresdb-location-visit-progress').addClass('hidden');
 
         if (err) {

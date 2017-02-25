@@ -1,34 +1,33 @@
-/* eslint-disable no-unused-vars */
 
 var timestamp = require('../../lib/timestamp');
 var eventListTemplate = require('../../EventsList.ejs');
 
-module.exports = function (location) {
+module.exports = function (events) {
+  // Parameters:
+  //   events
+  //     EventsModel
 
-  var handleEvent;
-  var events = location.getRawEvents();
+  var _handleCreated;
 
   this.bind = function ($mount) {
 
     $mount.html(eventListTemplate({
       timestamp: timestamp,
-      events: events,
+      events: events.toRawArray(),
     }));
 
-    handleEvent = function (ev) {
-      // Refresh state
-      events = location.getRawEvents();
-      // Refresh html
+    _handleCreated = function () {
+      // Refresh whole list
       $mount.html(eventListTemplate({
         timestamp: timestamp,
-        events: events,
+        events: events.toRawArray(),
       }));
     };
 
-    location.on('location_event_created', handleEvent);
+    events.on('location_event_created', _handleCreated);
   };
 
   this.unbind = function () {
-    location.off('location_event_created', handleEvent);
+    events.off('location_event_created', _handleCreated);
   };
 };

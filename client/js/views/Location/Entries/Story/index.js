@@ -5,16 +5,17 @@
 //   s.render(node);
 //   s.bind();
 
+var account = require('../../../../stores/account');
+var timestamp = require('../../../lib/timestamp');
+var markdownSyntax = require('../../lib/markdownSyntax.ejs');
+var storyTemplate = require('./template.ejs');
+
 var marked = require('marked');
-var account = require('../../../stores/account');
-var timestamp = require('../../lib/timestamp');
-var storyTemplate = require('./Story.ejs');
-var markdownSyntax = require('../lib/markdownSyntax.ejs');
 
 module.exports = function (entry) {
   // Parameters:
   //   entry
-  //     models.Entry
+  //     Story EntryModel
 
   var id = entry.getId();
 
@@ -76,7 +77,7 @@ module.exports = function (entry) {
       markdownSyntax: markdownSyntax,
     }));
 
-    entry.on('markdown_changed', function () {
+    entry.on('location_story_changed', function () {
       var newParsed = marked(entry.getMarkdown(), { sanitize: true });
       $('#' + id + '-body').html(newParsed);
     });
@@ -145,7 +146,7 @@ module.exports = function (entry) {
   this.unbind = function () {
 
     offEdit();
-    entry.off('markdown_changed');
+    entry.off('location_story_changed');
     $('#' + id + '-cancel').off();
     $('#' + id + '-form').off();
     $('#' + id + '-delete-ensure').off();

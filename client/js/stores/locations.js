@@ -11,6 +11,12 @@ var Location = require('../models/Location');
 // Init
 emitter(exports);
 
+socket.on('tresdb_event', function (ev) {
+  if (ev.type.startsWith('location_')) {
+    exports.emit('location_event', ev);
+  }
+});
+
 // To inform views (especially Map) about changes in locations,
 // we listen the previously created/retrieved location. This surveillance
 // should cover all the locations in the cache but as we do not have a cache,
@@ -27,13 +33,13 @@ var listenForChanges = (function () {
     loc2listen = null;
   };
 
-  socket.on('tresdb_event', function (ev) {
-    if (loc2listen !== null) {
-      if (ev.locationId === loc2listen.getId()) {
-        loc2listen.react(ev);
-      }
-    }
-  });
+  // socket.on('tresdb_event', function (ev) {
+  //   if (loc2listen !== null) {
+  //     if (ev.locationId === loc2listen.getId()) {
+  //       loc2listen.react(ev);
+  //     }
+  //   }
+  // });
 
   return function listen(location) {
     // Parameters
@@ -77,6 +83,20 @@ var postJSON = function (params, callback) {
   });
 };
 
+
+
+this.changeStory = function (locationId, entryId, newMarkdown, callback) {
+  // Parameters:
+  //   locationId
+  //   entryId
+  //   newMarkdown
+  //   callback
+  //     function (err)
+  return postJSON({
+    url: '/api/locations/' + locationId + '/visits/' + entryId,
+    data: { newMarkdown: newMarkdown.trim() },
+  }, callback);
+};
 
 this.createAttachment = function (id, form, callback) {
   // Parameters

@@ -1,21 +1,22 @@
 // Usage:
 //   var att = new Attachment(entry, location)
 
-var config = require('../../../config');
-var urljoin = require('url-join');
-var makeEntry = require('./lib/makeEntryModel');
-var assertEntryType = require('./lib/assertEntryType');
+var config = require('../../../../../config');
+var makeEntryModel = require('../lib/makeEntryModel');
+var assertEntryType = require('../lib/assertEntryType');
 
-module.exports = function (rawEntry, location) {
+var urljoin = require('url-join');
+
+module.exports = function (rawEntry, entries) {
   // Parameters:
   //   rawEntry
   //     plain content entry object
-  //   location
-  //     models.Location instance. Work as a parent.
+  //   entries
+  //     EntriesModel instance. Work as a parent.
 
   assertEntryType(rawEntry.type, 'location_attachment');
 
-  makeEntry(this, rawEntry, location);
+  makeEntryModel(this, rawEntry, entries);
 
   this.getUrl = function () {
     return urljoin(config.uploadUrl, rawEntry.data.filepath);

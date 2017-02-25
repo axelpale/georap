@@ -1,41 +1,72 @@
 
 var getEntryView = require('./lib/getEntryView');
 
-module.exports = function (location) {
+module.exports = function (entries) {
+  // Parameters:
+  //   entries
+  //     EntriesModel
 
-  var _entryViews;
+  var _entryViewsMap = {};  // id -> entryView
+
   var _handleEntryCreated;
+  var _handleEntryRemoved;
+
 
   this.bind = function ($mount) {
 
-    var entries = location.getEntries();
-    _entryViews = entries.map(function (entry) {
-      return getEntryView(entry);
+    var ents = entries.toArray();
+
+    ents.forEach(function (e) {
+      var id = e.getId();
+      var v = getEntryView(e);
+
+      _entryViewsMap[id] = v;
+
+      $mount.append('<div id="' + id + '"></div>');
+      v.bind($('#' + id));
     });
 
-    entries.forEach(function (e, i) {
-      $mount.append('<div id="' + e.getId() + '"></div>');
-      var v = _entryViews[i];
-      v.bind($('#' + e.getId()));
-    });
-
-    _handleEntryCreated = function (newEntry) {
+    _handleEntryCreated = function (ev) {
       // Create view and store it among others
-      var newEntryView = getEntryView(newEntry);
-      _entryViews.unshift(newEntryView);
-      // Bind the new view.
-      $mount.prepend('<div id="' + newEntry.getId() + '"></div>');
-      newEntryView.bind($('#' + newEntry.getId()));
+
+      var newEntry = entries.getEntry(ev.data.entryId);
+      var id = newEntry.getId();
+      var v = getEntryView(newEntry);
+
+      _entryViewsMap[id] = v;
+
+      $mount.prepend('<div id="' + id + '"></div>');
+      v.bind($('#' + id));
     };
 
-    location.on('location_entry_created', _handleEntryCreated);
+    _handleEntryRemoved = function (ev) {
+
+      var removedEntry = entries.getEntry(ev.data.entryId);
+      var id = removedEntry.getId();
+      var v = _entryViewsMap[id];
+
+      delete _entryViewsMap[id];
+
+      v.unbind();
+      $('#' + id).remove();
+    };
+
+    entries.on('location_entry_created', _handleEntryCreated);
+    entries.on('location_entry_removed', _handleEntryRemoved);
   };
 
   this.unbind = function () {
-    _entryViews.forEach(function (v) {
-      v.unbind();
-    });
 
-    location.off('location_entry_created', _handleEntryCreated);
+    // Unbind each child
+    var k, v;
+    for (k in _entryViewsMap) {
+      if (_entryViewsMap.hasOwnProperty(k)) {
+        v = _entryViewsMap[k];
+        v.unbind();
+      }
+    }
+
+    entries.off('location_entry_created', _handleEntryCreated);
+    entries.off('location_entry_removed', _handleEntryRemoved);
   };
 };
