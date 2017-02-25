@@ -80,8 +80,7 @@ module.exports = function (handlers) {
       ev.preventDefault();
 
       // Hide other menus
-      $('#tresdb-toolbar-user').addClass('hidden');
-      $('#tresdb-toolbar-tools').addClass('hidden');
+      $('#tresdb-toolbar-main').addClass('hidden');
       // Show addition menu
       $('#tresdb-toolbar-addition').removeClass('hidden');
 
@@ -92,8 +91,7 @@ module.exports = function (handlers) {
       ev.preventDefault();
 
       // Show other menus
-      $('#tresdb-toolbar-user').removeClass('hidden');
-      $('#tresdb-toolbar-tools').removeClass('hidden');
+      $('#tresdb-toolbar-main').removeClass('hidden');
       // Hide addition menu
       $('#tresdb-toolbar-addition').addClass('hidden');
 
@@ -104,8 +102,7 @@ module.exports = function (handlers) {
       ev.preventDefault();
 
       // Show other menus
-      $('#tresdb-toolbar-user').removeClass('hidden');
-      $('#tresdb-toolbar-tools').removeClass('hidden');
+      $('#tresdb-toolbar-main').removeClass('hidden');
       // Hide addition menu
       $('#tresdb-toolbar-addition').addClass('hidden');
 

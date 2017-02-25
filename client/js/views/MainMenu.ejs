@@ -1,44 +1,55 @@
-<div id="tresdb-toolbar-user" class="btn-toolbar" role="toolbar">
+<div id="tresdb-toolbar-main">
 
-  <div class="btn-group" role="group" aria-label="">
-    <img src="/assets/images/logo/32.png" />
-  </div>
+  <div class="btn-toolbar" style="margin-bottom: 0.5em">
+    <div class="input-group" role="group" aria-label="">
+      <img src="/assets/images/logo/32.png" />
+    </div>
 
-  <div class="dropdown btn-group" role="group" aria-label="account">
-    <button id="tresdb-mainmenu-account" type="button" data-toggle="dropdown" class="dropdown-toggle btn btn-default" aria-haspopup="true" aria-expanded="false">
-      <%= glyphicon({ name: 'user' }) %> <%= user.name %>
-      <span class="caret"></span>
-    </button>
-    <ul class="dropdown-menu" aria-labelledby="tresdb-mainmenu-account">
-      <li>
-        <a id="tresdb-mainmenu-events" href="#"><%= glyphicon({ name: 'bell' }) %> Latest activity...</a>
-      </li>
-      <li>
-        <a id="tresdb-mainmenu-users" href="#"><%= glyphicon({ name: 'user' }) %> Users...</a>
-      </li>
-      <li role="separator" class="divider"></li>
-      <% if (user.admin) { %>
+    <div class="input-group" style="width: 22em">
+      <input type="text" class="form-control" placeholder="e.g. kalkkipetteri...">
+      <span class="input-group-btn">
+        <button class="btn btn-default" type="button"><%= glyphicon({ name: 'search' }) %> Search</button>
+      </span>
+    </div>
+  </div><!-- .btn-toolbar -->
+
+  <div class="btn-toolbar">
+    <div class="dropdown btn-group">
+      <button id="tresdb-mainmenu-account" type="button" data-toggle="dropdown" class="dropdown-toggle btn btn-default" aria-haspopup="true" aria-expanded="false">
+        <%= glyphicon({ name: 'user' }) %> <%= user.name %>
+        <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu" aria-labelledby="tresdb-mainmenu-account">
         <li>
-          <a id="tresdb-mainmenu-invite" href="#"><%= glyphicon({ name: 'envelope' }) %> Invite...</a>
+          <a id="tresdb-mainmenu-events" href="#"><%= glyphicon({ name: 'bell' }) %> Latest activity...</a>
+        </li>
+        <li>
+          <a id="tresdb-mainmenu-users" href="#"><%= glyphicon({ name: 'user' }) %> Users...</a>
         </li>
         <li role="separator" class="divider"></li>
-      <% } %>
-      <li>
-        <a id="tresdb-mainmenu-change-password" href="#"><%= glyphicon({ name: 'asterisk' }) %> Change password...</a>
-      </li>
-      <li role="separator" class="divider"></li>
-      <li>
-        <a id="tresdb-mainmenu-logout" href="#"><%= glyphicon({ name: 'off' }) %> Log out</a>
-      </li>
-    </ul>
-  </div><!-- .dropdown -->
-</div><!-- .btn-toolbar -->
+        <% if (user.admin) { %>
+          <li>
+            <a id="tresdb-mainmenu-invite" href="#"><%= glyphicon({ name: 'envelope' }) %> Invite...</a>
+          </li>
+          <li role="separator" class="divider"></li>
+        <% } %>
+        <li>
+          <a id="tresdb-mainmenu-change-password" href="#"><%= glyphicon({ name: 'asterisk' }) %> Change password...</a>
+        </li>
+        <li role="separator" class="divider"></li>
+        <li>
+          <a id="tresdb-mainmenu-logout" href="#"><%= glyphicon({ name: 'off' }) %> Log out</a>
+        </li>
+      </ul>
+    </div><!-- .dropdown -->
 
-<div id="tresdb-toolbar-tools" class="btn-toolbar" role="toolbar">
-  <div class="btn-group" role="group" aria-label="location tools">
-    <button id="tresdb-mainmenu-add" type="button" class="btn btn-primary"><%= glyphicon({ name: 'map-marker' }) %> Add</button>
-  </div>
-</div>
+    <div class="btn-group" role="group" aria-label="location tools">
+      <button id="tresdb-mainmenu-add" type="button" class="btn btn-primary"><%= glyphicon({ name: 'map-marker' }) %> Add Location</button>
+    </div>
+  </div><!-- .btn-toolbar -->
+
+</div><!-- #main -->
+
 
 <div id="tresdb-toolbar-addition" class="btn-toolbar hidden" role="toolbar">
   <div class="btn-group" role="group" aria-label="location tools">
