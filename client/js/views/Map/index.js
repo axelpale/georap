@@ -58,7 +58,7 @@ module.exports = function () {
   var loaderListener = null;
 
   // Location markers on the map. A mapping from id to google.maps.Marker
-  var markers = {};
+  var _markers = {};
 
   // An addition marker. User moves this large marker to point where
   // the new location is to be created.
@@ -117,12 +117,12 @@ module.exports = function () {
     var m, mloc;
 
     // No need to update if no such marker on the map.
-    if (!markers.hasOwnProperty(ev.locationId)) {
+    if (!_markers.hasOwnProperty(ev.locationId)) {
       return;
     }
 
     // Update name of markerLocation
-    m = markers[ev.locationId];
+    m = _markers[ev.locationId];
     mloc = m.get('location');
     mloc.name = ev.data.newName;
 
@@ -137,13 +137,13 @@ module.exports = function () {
     var m, g, mloc;
 
     // No need to update if no such marker on the map.
-    if (!markers.hasOwnProperty(ev.locationId)) {
+    if (!_markers.hasOwnProperty(ev.locationId)) {
       return;
     }
 
     // Update geom of markerLocation
     g = ev.data.newGeom;
-    m = markers[ev.locationId];
+    m = _markers[ev.locationId];
     mloc = m.get('location');
     mloc.geom = g;
 
@@ -160,15 +160,15 @@ module.exports = function () {
   });
 
   markerStore.on('location_removed', function (ev) {
-    if (markers.hasOwnProperty(ev.locationId)) {
-      var mToRemove = markers[ev.locationId];
+    if (_markers.hasOwnProperty(ev.locationId)) {
+      var mToRemove = _markers[ev.locationId];
       removeMarker(mToRemove);
     }
   });
 
   // Listen map type change to invert label text colors.
   map.addListener('maptypeid_changed', function () {
-    labels.updateMarkerLabels(markers, map.getMapTypeId());
+    labels.updateMarkerLabels(_markers, map.getMapTypeId());
   });
 
   // Listen zoom level change to only show labels of locations
@@ -178,9 +178,9 @@ module.exports = function () {
 
     z = map.getZoom();
 
-    for (k in markers) {
-      if (markers.hasOwnProperty(k)) {
-        m = markers[k];
+    for (k in _markers) {
+      if (_markers.hasOwnProperty(k)) {
+        m = _markers[k];
         loc = m.get('location');
         if (loc.layer < z - 1) {
           // Ensure that label is visible.
@@ -331,9 +331,9 @@ module.exports = function () {
 
   this.removeAllMarkers = function () {
     // Clear the map.
-    for (var i in markers) {
-      if (markers.hasOwnProperty(i)) {
-        removeMarker(markers[i]);
+    for (var i in _markers) {
+      if (_markers.hasOwnProperty(i)) {
+        removeMarker(_markers[i]);
       }
     }
   };
@@ -454,7 +454,7 @@ module.exports = function () {
     });
 
     m.set('id', loc._id);
-    markers[loc._id] = m;
+    _markers[loc._id] = m;
 
     return m;
   };
@@ -467,7 +467,7 @@ module.exports = function () {
       // Remove click listener
       google.maps.event.clearInstanceListeners(m);
 
-      delete markers[m.get('id')];
+      delete _markers[m.get('id')];
     }
   };
 
@@ -483,9 +483,9 @@ module.exports = function () {
       l = locs[i];
 
       // If location already on the map
-      if (markers.hasOwnProperty(l._id)) {
+      if (_markers.hasOwnProperty(l._id)) {
         // Mark that it does not need to be removed.
-        markers[l._id].set('keep', true);
+        _markers[l._id].set('keep', true);
       } else {
         // otherwise, add it to the map.
         m = addMarker(l);
@@ -495,9 +495,9 @@ module.exports = function () {
 
     // Remove markers that were not marked to be kept.
     // Also, reset keep for next update.
-    for (i in markers) {
-      if (markers.hasOwnProperty(i)) {
-        m = markers[i];
+    for (i in _markers) {
+      if (_markers.hasOwnProperty(i)) {
+        m = _markers[i];
         k = m.get('keep');
 
         if (k) {
