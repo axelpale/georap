@@ -118,7 +118,7 @@ this.changeStory = function (locationId, entryId, newMarkdown, callback) {
   //   callback
   //     function (err)
   return postJSON({
-    url: '/api/locations/' + locationId + '/visits/' + entryId,
+    url: '/api/locations/' + locationId + '/stories/' + entryId,
     data: { newMarkdown: newMarkdown.trim() },
   }, callback);
 };
