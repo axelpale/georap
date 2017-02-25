@@ -18,6 +18,7 @@ var labels = require('../lib/labels');
 var icons = require('./lib/icons');
 var rawEventToMarkerLocation = require('./lib/rawEventToMarkerLocation');
 var convert = require('./lib/convert');
+var AdditionMarker = require('./AdditionMarker');
 var GeolocationMarker = require('./GeolocationMarker');
 
 var emitter = require('component-emitter');
@@ -60,10 +61,6 @@ module.exports = function () {
   // Location markers on the map. A mapping from id to google.maps.Marker
   var _markers = {};
 
-  // An addition marker. User moves this large marker to point where
-  // the new location is to be created.
-  var additionMarker = null;
-
   // Get initial map state i.e. coordinates, zoom level, and map type
   var initMapState = mapStateStore.get();
 
@@ -93,6 +90,9 @@ module.exports = function () {
 
   // Marker that represents geolocation of the user
   var _geolocationMarker = new GeolocationMarker(map);
+  // An addition marker. User moves this large marker to point where
+  // the new location is to be created.
+  var _additionMarker = new AdditionMarker(map);
 
   // Bind
 
@@ -100,13 +100,6 @@ module.exports = function () {
   // See 'var mapReady = false' above for details.
   google.maps.event.addListenerOnce(map, 'idle', function () {
     mapReady = true;
-  });
-
-  // Make addition marker to follow map center.
-  map.addListener('center_changed', function () {
-    if (additionMarker) {
-      additionMarker.setPosition(map.getCenter());
-    }
   });
 
   // Listen for changes in locations so that the markers and labels
@@ -301,33 +294,13 @@ module.exports = function () {
 
   this.addAdditionMarker = function () {
     // Creates a draggable marker at the middle of the map.
-    additionMarker = new google.maps.Marker({
-      position: map.getCenter(),
-      map: map,
-      icon: icons.additionMarker(),
-      draggable: true,
-    });
-
-    additionMarker.addListener('dragend', function () {
-      // Move the map so that the marker is at the middle.
-      map.panTo(additionMarker.getPosition());
-    });
+    return _additionMarker.show();
   };
 
   this.getAdditionMarkerGeom = function () {
     // Return GeoJSON Point at the addition marker. Throws if
     // the marker is not set.
-
-    if (additionMarker === null) {
-      throw new Error('additionMarker needs to be created first');
-    }
-
-    var latlng = additionMarker.getPosition();
-
-    return {
-      type: 'Point',
-      coordinates: [latlng.lng(), latlng.lat()],
-    };
+    return _additionMarker.getGeom();
   };
 
   this.panForCard = function (lat, lng) {
@@ -369,8 +342,7 @@ module.exports = function () {
 
   this.removeAdditionMarker = function () {
     // Remove addition marker from the map.
-    additionMarker.setMap(null);
-    additionMarker = null;
+    _additionMarker.hide()
   };
 
 
