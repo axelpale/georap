@@ -1,9 +1,9 @@
 
+var users = require('../../stores/users');
+var eventsListTemplate = require('../Events/list.ejs');
+var timestamp = require('../lib/timestamp');
+var template = require('./template.ejs');
 var emitter = require('component-emitter');
-var users = require('../stores/users');
-var template = require('./User.ejs');
-var timestamp = require('./lib/timestamp');
-var eventsListTemplate = require('./EventsList.ejs');
 
 module.exports = function (username) {
   // Parameters

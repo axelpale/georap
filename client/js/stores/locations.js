@@ -6,7 +6,7 @@ var socket = require('../connection/socket');
 var account = require('./account');
 var tags = require('./tags');
 var validateCoords = require('./lib/validateCoords');
-var Location = require('../models/Location');
+var Location = require('../components/Location/Model');
 
 // Init
 emitter(exports);

@@ -1,5 +1,5 @@
 
-var template = require('./Error404.ejs');
+var template = require('./template.ejs');
 
 module.exports = function () {
 

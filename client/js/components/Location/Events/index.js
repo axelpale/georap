@@ -1,6 +1,6 @@
 
 var timestamp = require('../../lib/timestamp');
-var eventListTemplate = require('../../EventsList.ejs');
+var eventListTemplate = require('../../Events/list.ejs');
 
 module.exports = function (events) {
   // Parameters:

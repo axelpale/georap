@@ -1,11 +1,9 @@
 // This is the form the user arrives via the link in a password reset email.
 
+var account = require('../../stores/account');
+var template = require('./template.ejs');
 var emitter = require('component-emitter');
 var jwtDecode = require('jwt-decode');
-var account = require('../stores/account');
-
-// Templates
-var template = require('./ResetPassword.ejs');
 
 module.exports = function (token, showLogin) {
   // Parameters

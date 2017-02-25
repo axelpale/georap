@@ -3,8 +3,8 @@
 var emitter = require('component-emitter');
 
 var locations = require('../../stores/locations');
-var EventsModel = require('./Events');
-var EntriesModel = require('./Entries');
+var EventsModel = require('./Events/Model');
+var EntriesModel = require('./Entries/Model');
 
 module.exports = function (raw) {
   // Usage:

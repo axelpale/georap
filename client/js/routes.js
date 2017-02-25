@@ -5,16 +5,16 @@ var account = require('./stores/account');
 
 var CardView = require('./views/Card');
 
-var LoginView = require('./views/Login');
-var SignupView = require('./views/Signup');
-var InviteView = require('./views/Invite');
-var EventsView = require('./views/Events');
-var LocationView = require('./views/Location');
-var UsersView = require('./views/Users');
-var UserView = require('./views/User');
-var Error404View = require('./views/Error404');
-var ResetPasswordView = require('./views/ResetPassword');
-var ChangePasswordView = require('./views/ChangePassword');
+var LoginView = require('./components/Login');
+var SignupView = require('./components/Signup');
+var InviteView = require('./components/Invite');
+var EventsView = require('./components/Events');
+var LocationView = require('./components/Location');
+var UsersView = require('./components/Users');
+var UserView = require('./components/User');
+var Error404View = require('./components/Error404');
+var ResetPasswordView = require('./components/ResetPassword');
+var ChangePasswordView = require('./components/ChangePassword');
 
 var AfterLogin = require('./models/AfterLogin');
 

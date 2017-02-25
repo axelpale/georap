@@ -1,9 +1,8 @@
+var account = require('../../stores/account');
+var loginTemplate = require('./template.ejs');
+
 var emitter = require('component-emitter');
 var validator = require('email-validator');
-var account = require('../stores/account');
-
-// Templates
-var loginTemplate = require('./Login.ejs');
 
 module.exports = function (onSuccess) {
   // Parameters:

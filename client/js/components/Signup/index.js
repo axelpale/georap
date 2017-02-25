@@ -1,9 +1,9 @@
 // A form for an invited user to sign up.
 
+var account = require('../../stores/account');
+var template = require('./template.ejs');
 var emitter = require('component-emitter');
 var jwtDecode = require('jwt-decode');
-var account = require('../stores/account');
-var template = require('./Signup.ejs');
 
 module.exports = function (token, goLogin) {
   // Parameters:

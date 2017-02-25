@@ -1,8 +1,8 @@
 
+var users = require('../../stores/users');
+var template = require('./template.ejs');
+var listTemplate = require('./list.ejs');
 var emitter = require('component-emitter');
-var users = require('../stores/users');
-var template = require('./Users.ejs');
-var listTemplate = require('./UsersList.ejs');
 
 module.exports = function () {
 

@@ -1,6 +1,6 @@
-var Attachment = require('../Attachment');
-var Story = require('../Story');
-var Visit = require('../Visit');
+var Attachment = require('../Attachment/Model');
+var Story = require('../Story/Model');
+var Visit = require('../Visit/Model');
 
 module.exports = function (rawEntry, entries) {
   // Parameters:

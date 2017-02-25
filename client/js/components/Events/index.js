@@ -1,9 +1,9 @@
 
 var emitter = require('component-emitter');
-var events = require('../stores/events');
-var timestamp = require('./lib/timestamp');
-var template = require('./Events.ejs');
-var listTemplate = require('./EventsList.ejs');
+var events = require('../../stores/events');
+var timestamp = require('../lib/timestamp');
+var template = require('./template.ejs');
+var listTemplate = require('./list.ejs');
 
 var LIST_SIZE = 100;
 
