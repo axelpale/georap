@@ -11,7 +11,7 @@
 //   fallback to southern finland.
 var mapStateStore = require('../../stores/mapstate');
 
-var readGoogleMapState = require('../lib/readGoogleMapState');
+var readGoogleMapState = require('./lib/readGoogleMapState');
 var AdditionMarker = require('./AdditionMarker');
 var GeolocationMarker = require('./GeolocationMarker');
 var Panner = require('./Panner');
