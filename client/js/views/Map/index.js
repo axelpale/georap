@@ -1,4 +1,4 @@
-/* eslint-disable max-statements, max-lines */
+/* eslint-disable max-statements */
 /* global google */
 
 // Remember map view state (center, zoom, type...)
@@ -11,15 +11,11 @@
 //   fallback to southern finland.
 var mapStateStore = require('../../stores/mapstate');
 
-var markerStore = require('../../stores/markers');
-var getBoundsDiagonal = require('../lib/getBoundsDiagonal');
 var readGoogleMapState = require('../lib/readGoogleMapState');
-var labels = require('../lib/labels');
-var icons = require('./lib/icons');
-var rawEventToMarkerLocation = require('./lib/rawEventToMarkerLocation');
 var AdditionMarker = require('./AdditionMarker');
 var GeolocationMarker = require('./GeolocationMarker');
 var Panner = require('./Panner');
+var LocationMarkers = require('./LocationMarkers');
 
 var emitter = require('component-emitter');
 
@@ -30,31 +26,12 @@ module.exports = function () {
   //     when user clicks the marker to see the location in detail
   //
 
-  // Private methods declaration
-
-  var addMarker;
-  var removeMarker;
-  var updateMarkers;
-
   // Init
-  emitter(this);
   var self = this;
+  emitter(self);
 
   // Element for the google map
   var htmlElement = document.getElementById('map');
-
-  // True if map is ready for use. Will be switched to true at the first
-  // 'idle' event. See addListenerOnce('idle', ...) below.
-  // We need to track this for startLoadingMarkers: if map is ready
-  // then load the markers immediately when called, otherwise wait for idle.
-  var mapReady = false;
-
-  // Does the map load markers from the locations and display them on the map.
-  // Will be set when client is ready to load markers (logged in)
-  var loaderListener = null;
-
-  // Location markers on the map. A mapping from id to google.maps.Marker
-  var _markers = {};
 
   // Get initial map state i.e. coordinates, zoom level, and map type
   var initMapState = mapStateStore.get();
@@ -92,97 +69,15 @@ module.exports = function () {
   // on the background. After location page is closed, this pan is being
   // undone.
   var _panner = new Panner(map);
+  // Manager for the location markers, their loading and refreshing.
+  var _manager = new LocationMarkers(map);
 
   // Bind
 
-  // Track when map becomes usable.
-  // See 'var mapReady = false' above for details.
-  google.maps.event.addListenerOnce(map, 'idle', function () {
-    mapReady = true;
-  });
-
-  // Listen for changes in locations so that the markers and labels
-  // are up to date.
-  markerStore.on('location_name_changed', function (ev) {
-    // Parameters
-    //   ev
-    //     ev.data.newName
-    var m, mloc;
-
-    // No need to update if no such marker on the map.
-    if (!_markers.hasOwnProperty(ev.locationId)) {
-      return;
-    }
-
-    // Update name of markerLocation
-    m = _markers[ev.locationId];
-    mloc = m.get('location');
-    mloc.name = ev.data.newName;
-
-    // Refresh label. Force update even if label already visible
-    labels.ensureLabel(m, map.getMapTypeId(), true);
-  });
-
-  markerStore.on('location_geom_changed', function (ev) {
-    // Parameters
-    //   ev
-    //     ev.data.newGeom
-    var m, g, mloc;
-
-    // No need to update if no such marker on the map.
-    if (!_markers.hasOwnProperty(ev.locationId)) {
-      return;
-    }
-
-    // Update geom of markerLocation
-    g = ev.data.newGeom;
-    m = _markers[ev.locationId];
-    mloc = m.get('location');
-    mloc.geom = g;
-
-    // Ensure coordinates are up to date
-    m.setPosition({
-      lat: g.coordinates[1],
-      lng: g.coordinates[0],
-    });
-  });
-
-  markerStore.on('location_created', function (ev) {
-    var mloc = rawEventToMarkerLocation(ev);
-    addMarker(mloc);
-  });
-
-  markerStore.on('location_removed', function (ev) {
-    if (_markers.hasOwnProperty(ev.locationId)) {
-      var mToRemove = _markers[ev.locationId];
-      removeMarker(mToRemove);
-    }
-  });
-
-  // Listen map type change to invert label text colors.
-  map.addListener('maptypeid_changed', function () {
-    labels.updateMarkerLabels(_markers, map.getMapTypeId());
-  });
-
-  // Listen zoom level change to only show labels of locations
-  // with higher level than current zoom level.
-  map.addListener('zoom_changed', function () {
-    var z, k, m, loc;
-
-    z = map.getZoom();
-
-    for (k in _markers) {
-      if (_markers.hasOwnProperty(k)) {
-        m = _markers[k];
-        loc = m.get('location');
-        if (loc.layer < z - 1) {
-          // Ensure that label is visible.
-          labels.ensureLabel(m, map.getMapTypeId());
-        } else {
-          labels.hideLabel(m);
-        }
-      }
-    }
+  // Inform that user wants to open a location.
+  // Leads to opening of location page.
+  _manager.on('location_activated', function (markerLocation) {
+    self.emit('location_activated', markerLocation);
   });
 
   (function defineMapStateChange() {
@@ -197,7 +92,7 @@ module.exports = function () {
 
   // Public methods
 
-  this.addControl = function (content, bind) {
+  self.addControl = function (content, bind) {
     // Add custom content e.g. a menu on the map.
     // Bind events only after the control content is added to dom.
     // See http://stackoverflow.com/questions/17051816/
@@ -215,11 +110,11 @@ module.exports = function () {
     bind(el);
   };
 
-  this.getMap = function () {
+  self.getMap = function () {
     return map;
   };
 
-  this.panForCard = function (lat, lng) {
+  self.panForCard = function (lat, lng) {
     // Pan map so that target location becomes centered on
     // the visible background.
     //
@@ -229,17 +124,17 @@ module.exports = function () {
     return _panner.panForCard(lat, lng);
   };
 
-  this.panForCardUndo = function () {
+  self.panForCardUndo = function () {
     // Undo the pan made by panForCard
     return _panner.panForCardUndo();
   };
 
-  this.removeControls = function () {
+  self.removeControls = function () {
     // Remove all custom elements.
     map.controls[google.maps.ControlPosition.LEFT_TOP].clear();
   };
 
-  this.setState = function (mapstate) {
+  self.setState = function (mapstate) {
     // Change viewport state
     map.setCenter({
       lat: mapstate.lat,
@@ -249,177 +144,45 @@ module.exports = function () {
     map.setMapTypeId(mapstate.mapTypeId);
   };
 
-  this.hideGeolocation = function () {
+  self.hideGeolocation = function () {
     // Hide the current location.
     _geolocationMarker.hide();
   };
 
-  this.showGeolocation = function () {
+  self.showGeolocation = function () {
     // Show the current location on the map. Does nothing if already shown.
     _geolocationMarker.show();
   };
 
-  this.startLoadingMarkers = function () {
+  self.startLoadingMarkers = function () {
     // Each idle, fetch a new set of locations.
     // The idle is emitted automatically after the initial map load.
-
-    // Prevent duplicate listeners.
-    if (loaderListener !== null) {
-      return;
-    }
-
-    var loadMarkers = function () {
-      var center = map.getCenter();
-      var bounds = map.getBounds();
-      var radius = Math.ceil(getBoundsDiagonal(bounds) / 2);
-      var zoom = map.getZoom();
-
-      markerStore.getWithin(center, radius, zoom, function (err, locs) {
-        if (err) {
-          return console.error(err);
-        }  // else
-
-        updateMarkers(locs);
-      });
-    };
-
-    // Each time map stops, fetch.
-    loaderListener = map.addListener('idle', loadMarkers);
-    // Load the first manually but only if the map is ready.
-    // Map emits 'idle' when ready but user might not have been logged in yet.
-    if (mapReady) {
-      loadMarkers();
-    }
+    _manager.startLoading();
   };
 
-  this.stopLoadingMarkers = function () {
-    google.maps.event.removeListener(loaderListener);
-    loaderListener = null;
+  self.stopLoadingMarkers = function () {
+    _manager.stopLoading();
   };
 
-  this.removeAllMarkers = function () {
+  self.removeAllMarkers = function () {
     // Clear the map.
-    for (var i in _markers) {
-      if (_markers.hasOwnProperty(i)) {
-        removeMarker(_markers[i]);
-      }
-    }
+    _manager.removeAll();
   };
 
-  this.addAdditionMarker = function () {
+  self.addAdditionMarker = function () {
     // Creates a draggable marker at the middle of the map.
     return _additionMarker.show();
   };
 
-  this.getAdditionMarkerGeom = function () {
+  self.getAdditionMarkerGeom = function () {
     // Return GeoJSON Point at the addition marker. Throws if
     // the marker is not set.
     return _additionMarker.getGeom();
   };
 
-  this.removeAdditionMarker = function () {
+  self.removeAdditionMarker = function () {
     // Remove addition marker from the map.
     return _additionMarker.hide();
-  };
-
-
-  // Private methods
-
-  addMarker = function (loc) {
-    // Create marker and add it to the map.
-    //
-    // Parameters:
-    //   loc
-    //     MarkerLocation
-    // Return
-    //   the created marker
-    var lng, lat, m;
-
-    lng = loc.geom.coordinates[0];
-    lat = loc.geom.coordinates[1];
-
-    m = new google.maps.Marker({
-      position: new google.maps.LatLng(lat, lng),
-      icon: icons.marker(),
-    });
-
-    // Store the MarkerLocation for _id, name, and layer info.
-    m.set('location', loc);
-
-    // Label only the important, higher markers.
-    if (loc.layer < map.getZoom() - 1) {
-      labels.ensureLabel(m, map.getMapTypeId(), true);
-    }
-
-    m.setMap(map);
-    m.addListener('click', function () {
-
-      if (labels.hasLabel(m)) {
-        self.emit('location_activated', loc);
-      } else {
-        // First click shows the label
-        labels.ensureLabel(m, map.getMapTypeId(), true);
-      }
-
-    });
-
-    m.set('id', loc._id);
-    _markers[loc._id] = m;
-
-    return m;
-  };
-
-  removeMarker = function (m) {
-    if (m) {
-      // Remove from map
-      m.setMap(null);
-
-      // Remove click listener
-      google.maps.event.clearInstanceListeners(m);
-
-      delete _markers[m.get('id')];
-    }
-  };
-
-  updateMarkers = function (locs) {
-    // Add new markers and removes the excess.
-    // To speed up things and avoid flicker,
-    // only adds those markers on the screen that are not already there.
-
-    var i, l, m, k;
-
-    // For each location candidate
-    for (i = 0; i < locs.length; i += 1) {
-      l = locs[i];
-
-      // If location already on the map
-      if (_markers.hasOwnProperty(l._id)) {
-        // Mark that it does not need to be removed.
-        _markers[l._id].set('keep', true);
-      } else {
-        // otherwise, add it to the map.
-        m = addMarker(l);
-        m.set('keep', true);
-      }
-    }
-
-    // Remove markers that were not marked to be kept.
-    // Also, reset keep for next update.
-    for (i in _markers) {
-      if (_markers.hasOwnProperty(i)) {
-        m = _markers[i];
-        k = m.get('keep');
-
-        if (k) {
-          // Reset for next update
-          m.set('keep', false);
-        } else {
-          // Remove
-          removeMarker(m);
-        }
-      }
-    }
-
   };
 
 };
