@@ -28,6 +28,10 @@ exports.getFiltered = function (params, callback) {
   //   callback
   //     function (err, markerLocations)
 
+  if (typeof params.text !== 'string') {
+    throw new Error('invalid search text:' + params.text);
+  }
+
   $.ajax({
     url: '/api/markers/search',
     method: 'GET',
