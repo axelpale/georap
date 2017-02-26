@@ -21,7 +21,7 @@ var UserView = require('../components/User');
 // Help in remembering original url if redirect to login page is required.
 var AfterLogin = require('./lib/AfterLogin');
 
-var queryString = require('query-string');
+var queryString = require('qs');
 var emitter = require('component-emitter');
 
 // Emit 'map_activated' so that map knows when to pan back to original state.
