@@ -179,7 +179,6 @@ module.exports = {
         },
         deleted: false,
         tags: ['military'],
-        text: luznaName + ' military ' + admin,
         layer: 9,
       },
       {
@@ -192,7 +191,6 @@ module.exports = {
         },
         deleted: false,
         tags: ['walk-in', 'town'],
-        text: irbeneName + ' walk-in town ' + admin + ' ' + irbeneInfo,
         layer: 1,
       },
       {
@@ -205,7 +203,6 @@ module.exports = {
         },
         deleted: true,
         tags: [],
-        text: rummuName + ' no-tags ' + admin,
         layer: 2,
       },
     ],
@@ -250,11 +247,6 @@ module.exports = {
     {
       collection: 'locations',
       spec: { layer: 1 },
-      options: {},
-    },
-    {
-      collection: 'locations',
-      spec: { text: 'text' },  // fieldName: indexType
       options: {},
     },
     {
