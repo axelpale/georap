@@ -5,10 +5,17 @@
       <img src="/assets/images/logo/32.png" />
     </div>
 
-    <div class="input-group" style="width: 22em">
-      <input type="text" class="form-control" placeholder="e.g. kalkkipetteri...">
+    <div class="input-group" style="width: 26em">
       <span class="input-group-btn">
-        <button class="btn btn-default" type="button"><%= glyphicon({ name: 'search' }) %> Search</button>
+        <button id="tresdb-mainmenu-filters" class="btn btn-default" type="button"><%= glyphicon({ name: 'filter' }) %>
+          Filter...
+          <span class="label label-danger">&nbsp;ON</span>
+          <span class="label label-default">&nbsp;OFF</span>
+        </button>
+      </span>
+      <input type="text" class="form-control" placeholder="and search...">
+      <span class="input-group-btn">
+        <button class="btn btn-default" type="button"><%= glyphicon({ name: 'search' }) %></button>
       </span>
     </div>
   </div><!-- .btn-toolbar -->

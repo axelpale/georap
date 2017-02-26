@@ -8,6 +8,7 @@ var CardView = require('../views/Card');
 var ChangePasswordView = require('../components/ChangePassword');
 var Error404View = require('../components/Error404');
 var EventsView = require('../components/Events');
+var FiltersView = require('../components/Filters');
 var InviteView = require('../components/Invite');
 var LocationView = require('../components/Location');
 var LoginView = require('../components/Login');
@@ -136,6 +137,11 @@ exports.route = function (page) {
 
   page('/locations/:id', function (ctx) {
     var view = new LocationView(ctx.params.id);
+    card.open(view);
+  });
+
+  page('/filters', function () {
+    var view = new FiltersView();
     card.open(view);
   });
 

@@ -108,6 +108,11 @@ module.exports = function (handlers) {
 
       return handlers.onAdditionCreate();
     });
+
+    r.on('click', '#tresdb-mainmenu-filters', function (ev) {
+      ev.preventDefault();
+      return go('/filters');
+    });
   };
 
   this.unbind = function () {
