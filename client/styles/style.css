@@ -65,13 +65,12 @@ html, body {
 
 /* Tag labels */
 
-.tresdb-tags .tresdb-tag {
-  font-size: 1.0em;
+.tresdb-tags {
+  font-size: 1.38em;
 }
 
 .tresdb-tags .tresdb-none {
-  font-style: italic;
-  color: #999;
+  opacity: 0.6;
 }
 
 .tresdb-coords {
