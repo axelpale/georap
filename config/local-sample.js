@@ -12,6 +12,9 @@ module.exports = {
   // Used to encrypt and decrypt passwords and tokens.
   secret: '123456789',
 
+  // Google Maps API key. CHANGE! Required for e.g. reverse geocoding.
+  googleMapsKey: '123456789012345678901234567890123456789',
+
   // Static files
   // Express/Webpack will copy the static files to be served to this directory:
   staticDir: path.resolve(__dirname, '../.tmp/public'),

@@ -179,6 +179,7 @@ module.exports = {
         },
         deleted: false,
         tags: ['military'],
+        places: ['Tārgale parish', 'Ventspils Municipality', 'Latvia'],
         layer: 9,
       },
       {
@@ -191,6 +192,7 @@ module.exports = {
         },
         deleted: false,
         tags: ['walk-in', 'town'],
+        places: ['Irbene', 'Ances pagasts', 'Ventspils Municipality', 'Latvia'],
         layer: 1,
       },
       {
@@ -203,6 +205,7 @@ module.exports = {
         },
         deleted: true,
         tags: [],
+        places: ['Rummu', 'Vasalemma Parish', 'Harju County', 'Estonia'],
         layer: 2,
       },
     ],

@@ -6,6 +6,8 @@ var template = require('./template.ejs');
 var listTemplate = require('./list.ejs');
 var emitter = require('component-emitter');
 
+var FOCUS_DELAY = 200;
+
 module.exports = function (query) {
   // Parameters
   //   query
@@ -31,7 +33,7 @@ module.exports = function (query) {
     // After page has loaded, focus to text input field
     setTimeout(function () {
       $text.focus();
-    }, 200);
+    }, FOCUS_DELAY);
 
     _submitHandler = function () {
       var text = $text.val().trim();

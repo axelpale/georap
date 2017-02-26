@@ -32,7 +32,7 @@ exports.getFiltered = function (req, res) {
     }
     // else valid
   } else {
-    tags = []
+    tags = [];
   }
 
 

@@ -1,6 +1,7 @@
 /* eslint-disable max-lines */
 
 var db = require('../../../services/db');
+var googlemaps = require('../../../services/googlemaps');
 var eventsDal = require('../../events/dal');
 
 exports.changeGeom = function (params, callback) {
@@ -18,36 +19,50 @@ exports.changeGeom = function (params, callback) {
   //       number
   //     longitude
   //       number
+  var lat = params.latitude;
+  var lng = params.longitude;
 
-  var locColl = db.get().collection('locations');
-  var q = { _id: params.locationId };
-
-  var newGeom = {
-    type: 'Point',
-    coordinates: [params.longitude, params.latitude],
-  };
-
-  var u = { $set: { geom: newGeom } };
-
-  locColl.updateOne(q, u, function (err) {
+  googlemaps.reverseGeocode([lat, lng], function (err, newPlaces) {
+    // Places is an array of strings
     if (err) {
       return callback(err);
     }
 
-    var oldGeom = params.locationGeom;
+    var locColl = db.get().collection('locations');
+    var q = { _id: params.locationId };
 
-    eventsDal.createLocationGeomChanged({
-      locationId: params.locationId,
-      locationName: params.locationName,
-      username: params.username,
-      newGeom: newGeom,
-      oldGeom: oldGeom,
-    }, function (err2) {
+    var newGeom = {
+      type: 'Point',
+      coordinates: [lng, lat],  // note different order to google
+    };
+
+    var u = {
+      $set: {
+        geom: newGeom,
+        places: newPlaces,
+      },
+    };
+
+    locColl.updateOne(q, u, function (err2) {
       if (err2) {
         return callback(err2);
       }
 
-      return callback();
+      var oldGeom = params.locationGeom;
+
+      eventsDal.createLocationGeomChanged({
+        locationId: params.locationId,
+        locationName: params.locationName,
+        username: params.username,
+        newGeom: newGeom,
+        oldGeom: oldGeom,
+      }, function (err3) {
+        if (err3) {
+          return callback(err3);
+        }
+
+        return callback();
+      });
     });
   });
 };

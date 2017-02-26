@@ -114,6 +114,11 @@ module.exports = function (raw) {
     };
   };
 
+  self.getPlaces = function () {
+    // Return array of strings
+    return raw.places;
+  };
+
   self.getTags = function () {
     // Return array of strings
     return raw.tags;

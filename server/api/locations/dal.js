@@ -1,6 +1,7 @@
 /* eslint-disable max-lines */
 
 var db = require('../../services/db');
+var googlemaps = require('../../services/googlemaps');
 var eventsDal = require('../events/dal');
 
 var shortid = require('shortid');
@@ -23,39 +24,57 @@ exports.count = function (callback) {
 
 exports.create = function (lat, lng, username, callback) {
   // Create a location to given coordinates with a code name.
+  //
+  // Parameters:
+  //   lat
+  //   lng
+  //   username
+  //   callback
+  //     function (err, rawLocation)
 
-  var newLoc = {
-    creator: username,
-    deleted: false,
-    geom: {
-      type: 'Point',
-      coordinates: [lng, lat],
-    },
-    layer: 1,
-    name: shortid.generate(),
-    tags: [],
-  };
+  googlemaps.reverseGeocode([lat, lng], function (err0, places) {
+    // Places is an array of strings
 
-  var coll = db.get().collection('locations');
-
-  coll.insertOne(newLoc, function (err, result) {
-    if (err) {
-      return callback(err);
+    if (err0) {
+      console.error(err0);
+      return callback(err0);
     }
 
-    newLoc._id = result.insertedId;
+    var newLoc = {
+      creator: username,
+      deleted: false,
+      geom: {
+        type: 'Point',
+        coordinates: [lng, lat],
+      },
+      layer: 1,
+      name: shortid.generate(),
+      places: places,
+      tags: [],
+    };
 
-    eventsDal.createLocationCreated({
-      locationId: newLoc._id,
-      locationName: newLoc.name,
-      lat: lat,
-      lng: lng,
-      username: username,
-    }, function (err2) {
-      if (err2) {
-        return callback(err2);
+    var coll = db.get().collection('locations');
+
+    coll.insertOne(newLoc, function (err, result) {
+      if (err) {
+        return callback(err);
       }
-      return callback(null, newLoc);
+
+      newLoc._id = result.insertedId;
+
+      eventsDal.createLocationCreated({
+        locationId: newLoc._id,
+        locationName: newLoc.name,
+        lat: lat,
+        lng: lng,
+        username: username,
+      }, function (err2) {
+        if (err2) {
+          return callback(err2);
+        }
+        return callback(null, newLoc);
+      });
     });
-  });
+  });  // .create
+
 };
