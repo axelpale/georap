@@ -28,6 +28,11 @@ module.exports = function (query) {
     var $text = $('#tresdb-search-text');
     var $results = $('#tresdb-search-results');
 
+    // After page has loaded, focus to text input field
+    setTimeout(function () {
+      $text.focus();
+    }, 200);
+
     _submitHandler = function () {
       var text = $text.val().trim();
 

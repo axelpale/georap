@@ -114,7 +114,7 @@ module.exports = function (handlers) {
       return go('/filters');
     });
 
-    r.on('click', '#tresdb-mainmenu-search-submit', function (ev) {
+    r.on('submit', '#tresdb-mainmenu-search-form', function (ev) {
       ev.preventDefault();
 
       var searchText = $('#tresdb-mainmenu-search-text').val().trim();
