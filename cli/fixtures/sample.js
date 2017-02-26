@@ -8,6 +8,8 @@ var id = function (k) {
   return new ObjectId(k);
 };
 
+var admin = local.admin.username;
+
 var luznaId = id('581f266110a1482dd0b7cd14');
 var rummuId = id('581f166130a1482dd0b7cd15');
 var irbeneId = id('581f166110a1482dd0b7cd13');
@@ -19,6 +21,8 @@ var irbeneBaby = 'SkdplmsFx';
 var luznaName = 'Luzna';
 var rummuName = 'Rummu';
 var irbeneName = 'Irbene';
+
+var irbeneInfo = 'It is a soviet union ghost town.';
 
 module.exports = {
   collections: {
@@ -36,9 +40,9 @@ module.exports = {
         locationId: irbeneId,
         time: '2009-09-04T23:44:21.000Z',
         type: 'location_story',
-        user: local.admin.username,
+        user: admin,
         data: {
-          markdown: 'It is a soviet union ghost town.',
+          markdown: irbeneInfo,
         },
       },
       {
@@ -47,7 +51,7 @@ module.exports = {
         locationId: irbeneId,
         type: 'location_attachment',
         time: '2009-10-05T12:23:34.000Z',
-        user: local.admin.username,
+        user: admin,
         data: {
           filepath: '2009/RxRvKSlbl/radar.jpg',
           mimetype: 'image/jpeg',
@@ -62,7 +66,7 @@ module.exports = {
         locationId: luznaId,
         locationName: luznaBaby,
         type: 'location_name_changed',
-        user: local.admin.username,
+        user: admin,
         time: '2017-02-22T22:40:30.000Z',
         data: {
           oldName: luznaBaby,
@@ -74,7 +78,7 @@ module.exports = {
         locationId: luznaId,
         locationName: luznaBaby,
         type: 'location_created',
-        user: local.admin.username,
+        user: admin,
         time: '2017-02-22T22:18:00.000Z',
         data: {
           lat: 57.59686,
@@ -86,7 +90,7 @@ module.exports = {
         locationId: rummuId,
         locationName: rummuName,
         type: 'location_removed',
-        user: local.admin.username,
+        user: admin,
         time: '2017-02-06T12:25:00.000Z',
         data: {},
       },
@@ -95,7 +99,7 @@ module.exports = {
         locationId: rummuId,
         locationName: rummuBaby,
         type: 'location_name_changed',
-        user: local.admin.username,
+        user: admin,
         time: '2017-02-06T12:24:00.000Z',
         data: {
           oldName: rummuBaby,
@@ -107,7 +111,7 @@ module.exports = {
         locationId: rummuId,
         locationName: rummuBaby,
         type: 'location_created',
-        user: local.admin.username,
+        user: admin,
         time: '2017-02-06T12:23:34.000Z',
         data: {
           lat: 59.22667,
@@ -119,7 +123,7 @@ module.exports = {
         locationId: irbeneId,
         locationName: irbeneName,
         type: 'location_attachment_created',
-        user: local.admin.username,
+        user: admin,
         time: '2009-10-05T12:23:34.000Z',
         data: {
           filepath: '2009/RxRvKSlbl/radar.jpg',
@@ -133,10 +137,10 @@ module.exports = {
         locationId: irbeneId,
         locationName: irbeneName,
         type: 'location_story_created',
-        user: local.admin.username,
+        user: admin,
         time: '2009-09-04T23:44:21.000Z',
         data: {
-          markdown: 'It is a soviet union ghost town.',
+          markdown: irbeneInfo,
         },
       },
       {
@@ -144,7 +148,7 @@ module.exports = {
         locationId: irbeneId,
         locationName: irbeneBaby,
         type: 'location_name_changed',
-        user: local.admin.username,
+        user: admin,
         time: '2009-07-30T10:45:20.000Z',
         data: {
           oldName: irbeneBaby,
@@ -156,7 +160,7 @@ module.exports = {
         locationId: irbeneId,
         locationName: irbeneBaby,
         type: 'location_created',
-        user: local.admin.username,
+        user: admin,
         time: '2009-07-30T10:44:58.000Z',
         data: {
           lat: 57.55341,
@@ -167,7 +171,7 @@ module.exports = {
     locations: [
       {
         _id: luznaId,
-        creator: local.admin.username,
+        creator: admin,
         name: luznaName,
         geom: {
           type: 'Point',
@@ -175,11 +179,12 @@ module.exports = {
         },
         deleted: false,
         tags: ['military'],
+        text: luznaName + ' military ' + admin,
         layer: 9,
       },
       {
         _id: irbeneId,
-        creator: local.admin.username,
+        creator: admin,
         name: irbeneName,
         geom: {
           type: 'Point',
@@ -187,11 +192,12 @@ module.exports = {
         },
         deleted: false,
         tags: ['walk-in', 'town'],
+        text: irbeneName + ' walk-in town ' + admin + ' ' + irbeneInfo,
         layer: 1,
       },
       {
         _id: rummuId,
-        creator: local.admin.username,
+        creator: admin,
         name: rummuName,
         geom: {
           type: 'Point',
@@ -199,13 +205,14 @@ module.exports = {
         },
         deleted: true,
         tags: [],
+        text: rummuName + ' no-tags ' + admin,
         layer: 2,
       },
     ],
     users: [
       {
         _id: id('5867bdf00a5a9e18d7755e4f'),
-        name: local.admin.username,
+        name: admin,
         email: local.admin.email,
         hash: bcrypt.hashSync(local.admin.password, local.bcrypt.rounds),
         admin: true,
@@ -243,6 +250,11 @@ module.exports = {
     {
       collection: 'locations',
       spec: { layer: 1 },
+      options: {},
+    },
+    {
+      collection: 'locations',
+      spec: { text: 'text' },  // fieldName: indexType
       options: {},
     },
     {
