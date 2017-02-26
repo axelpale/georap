@@ -145,8 +145,8 @@ exports.route = function (page) {
     card.open(view);
   });
 
-  page('/search', function () {
-    var view = new SearchView();
+  page('/search', function (ctx) {
+    var view = new SearchView(ctx.query);
     card.open(view);
   });
 

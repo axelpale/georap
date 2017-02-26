@@ -20,6 +20,31 @@ socket.on('tresdb_event', function (ev) {
 
 // Public methods
 
+exports.getFiltered = function (params, callback) {
+  // Parameters:
+  //   params
+  //     text
+  //       string
+  //   callback
+  //     function (err, markerLocations)
+
+  $.ajax({
+    url: '/api/markers/search',
+    method: 'GET',
+    data: {
+      text: params.text,
+    },
+    dataType: 'json',
+    headers: { 'Authorization': 'Bearer ' + account.getToken() },
+    success: function (rawMarkers) {
+      return callback(null, rawMarkers);
+    },
+    error: function (jqxhr, textStatus, errorThrown) {
+      return callback(errorThrown);
+    },
+  });
+};
+
 exports.getWithin = function (center, radius, zoomLevel, callback) {
   // Parameters
   //   center

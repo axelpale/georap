@@ -113,6 +113,13 @@ module.exports = function (handlers) {
       ev.preventDefault();
       return go('/filters');
     });
+
+    r.on('click', '#tresdb-mainmenu-search-submit', function (ev) {
+      ev.preventDefault();
+
+      var searchText = $('#tresdb-mainmenu-search-text').val().trim();
+      return go('/search?text=' + searchText);
+    });
   };
 
   this.unbind = function () {

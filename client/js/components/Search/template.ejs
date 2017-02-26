@@ -1,13 +1,23 @@
 <div class="container-fluid">
   <div class="row">
-    <div class="col-md-12">
 
+    <div class="col-md-12" style="margin-bottom: 1em">
       <h1>Location search</h1>
 
-      <div id="tresdb-search-form"></div>
-
-      <div id="tresdb-search-results"></div>
-
+      <form id="tresdb-search-form">
+        <label class="sr-only" for="tresdb-search-text">Search terms:</label>
+        <div class="input-group">
+          <input id="tresdb-search-text" type="text" class="form-control" placeholder="e.g. helsinki, kalkkipetteri, or military">
+          <span class="input-group-btn">
+            <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> Search</button>
+          </span>
+        </div>
+      </form>
     </div>
+
+    <div class="col-md-12">
+      <div id="tresdb-search-results"></div>
+    </div>
+
   </div>
 </div>

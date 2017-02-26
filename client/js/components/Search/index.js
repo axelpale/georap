@@ -1,22 +1,22 @@
 // Component for search form and results.
 
-//var locations = require('../../stores/locations');
-var FormView = require('./Form');
-var ResultsView = require('./Results');
+var markers = require('../../stores/markers');
+var tagsTemplate = require('../Location/Tags/tagsList.ejs');
 var template = require('./template.ejs');
+var listTemplate = require('./list.ejs');
 var emitter = require('component-emitter');
 
-module.exports = function () {
+module.exports = function (query) {
   // Parameters
-  //
+  //   query
+  //     an object parsed from querystring
 
   // Init
   var self = this;
   emitter(self);
 
-  // State
-  var _formView, _resultsView;
-
+  var _submitHandler;
+  var _responseHandler;
 
   // Public methods
 
@@ -24,22 +24,49 @@ module.exports = function () {
 
     $mount.html(template());
 
-    _formView = new FormView();
-    _resultsView = new ResultsView();
+    var $form = $('#tresdb-search-form');
+    var $text = $('#tresdb-search-text');
+    var $results = $('#tresdb-search-results');
 
-    _formView.bind($('#tresdb-search-form'));
-    _resultsView.bind($('#tresdb-search-results'));
+    _submitHandler = function () {
+      var text = $text.val().trim();
+
+      return markers.getFiltered({
+        text: text,
+      }, _responseHandler);
+    };
+
+    _responseHandler = function (err, results) {
+      // Hide progress
+      if (err) {
+        // Display error
+        console.error(err);
+        return;
+      }
+
+      $results.html(listTemplate({
+        tagsTemplate: tagsTemplate,
+        markers: results,
+      }));
+    };
+
+    $form.submit(function (ev) {
+      ev.preventDefault();
+      return _submitHandler();
+    });
+
+    // Do instant query if querystring has something useful.
+    if (query.hasOwnProperty('text')) {
+      $text.val(query.text.trim());
+      _submitHandler();
+    }
 
   };  // end bind
 
   this.unbind = function () {
+    var $form = $('#tresdb-search-form');
 
-    if (_formView) {
-      _formView.unbind();
-      _resultsView.unbind();
-      _formView = null;
-      _resultsView = null;
-    }
+    $form.off();
   };
 
 };
