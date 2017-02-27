@@ -1,17 +1,18 @@
 
 var template = require('./template.ejs');
+var emitter = require('component-emitter');
 
 module.exports = function () {
 
-  this.render = function () {
-    return template();
+  // Init
+  var self = this;
+  emitter(self);
+
+  self.bind = function ($mount) {
+    $mount.html(template());
   };
 
-  this.bind = function () {
-    // Noop
-  };
-
-  this.unbind = function () {
+  self.unbind = function () {
     // Noop
   };
 };
