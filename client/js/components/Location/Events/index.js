@@ -1,4 +1,5 @@
 
+var pointstamp = require('../../lib/pointstamp');
 var timestamp = require('../../lib/timestamp');
 var eventListTemplate = require('../../Events/list.ejs');
 
@@ -13,6 +14,7 @@ module.exports = function (events) {
 
     $mount.html(eventListTemplate({
       timestamp: timestamp,
+      pointstamp: pointstamp,
       events: events.toRawArray(),
     }));
 
@@ -20,6 +22,7 @@ module.exports = function (events) {
       // Refresh whole list
       $mount.html(eventListTemplate({
         timestamp: timestamp,
+        pointstamp: pointstamp,
         events: events.toRawArray(),
       }));
     };

@@ -2,6 +2,7 @@
 var users = require('../../stores/users');
 var eventsListTemplate = require('../Events/list.ejs');
 var timestamp = require('../lib/timestamp');
+var pointstamp = require('../lib/pointstamp');
 var template = require('./template.ejs');
 var pointsTemplate = require('./points.ejs');
 var emitter = require('component-emitter');
@@ -38,6 +39,7 @@ module.exports = function (username) {
 
       $('#tresdb-user-events').html(eventsListTemplate({
         timestamp: timestamp,
+        pointstamp: pointstamp,
         events: user.events,
       }));
     });

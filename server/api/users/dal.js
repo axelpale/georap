@@ -1,7 +1,7 @@
 var db = require('../../services/db');
 
 exports.getAll = function (callback) {
-  // Get all users
+  // Get all users, ordered by points, descending
   //
   // Parameters:
   //   callback
@@ -14,7 +14,7 @@ exports.getAll = function (callback) {
     email: false,
   };
 
-  coll.find({}, proj).toArray(function (err, users) {
+  coll.find({}, proj).sort({ points: -1 }).toArray(function (err, users) {
     if (err) {
       return callback(err);
     }

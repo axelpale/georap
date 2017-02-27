@@ -1,6 +1,7 @@
 
 var emitter = require('component-emitter');
 var events = require('../../stores/events');
+var pointstamp = require('../lib/pointstamp');
 var timestamp = require('../lib/timestamp');
 var template = require('./template.ejs');
 var listTemplate = require('./list.ejs');
@@ -36,6 +37,7 @@ module.exports = function () {
       }
 
       $list.html(listTemplate({
+        pointstamp: pointstamp,
         timestamp: timestamp,
         events: rawEvents,
       }));
@@ -50,6 +52,7 @@ module.exports = function () {
           return;
         }
         $list.html(listTemplate({
+          pointstamp: pointstamp,
           timestamp: timestamp,
           events: rawEvents,
         }));

@@ -7,46 +7,50 @@
     <% name = ev.locationName; %>
     <% name = (name === '' ? 'Untitled' : name) %>
     <li class="list-group-item">
+      <% if (typeof pointstamp !== 'undefined') { %>
+        <div class="pull-right"><%= pointstamp(ev) %></div>
+      <% } %>
+      <a href="/users/<%= ev.user %>"><%= ev.user %></a>
       <% if (t === 'location_created') { %>
-        <%= ev.user %> created <a href="/locations/<%= ev.locationId %>"><%= name %></a> <%= timestamp(ev.time) %>
+        created <a href="/locations/<%= ev.locationId %>"><%= name %></a> <%= timestamp(ev.time) %>
 
       <% } else if (t === 'location_removed') { %>
-        <%= ev.user %> deleted <a href="/locations/<%= ev.locationId %>"><%= name %></a> <%= timestamp(ev.time) %>
+        deleted <a href="/locations/<%= ev.locationId %>"><%= name %></a> <%= timestamp(ev.time) %>
 
       <% } else if (t === 'location_geom_changed') { %>
-        <%= ev.user %> edited coords of <a href="/locations/<%= ev.locationId %>"><%= name %></a> <%= timestamp(ev.time) %>
+        edited coords of <a href="/locations/<%= ev.locationId %>"><%= name %></a> <%= timestamp(ev.time) %>
 
       <% } else if (t === 'location_name_changed') { %>
         <% a = ev.data.oldName; %>
         <% if (a === '') { %>
-          <%= ev.user %> named <a href="/locations/<%= ev.locationId %>"><%= ev.data.newName %></a> <%= timestamp(ev.time) %>
+          named <a href="/locations/<%= ev.locationId %>"><%= ev.data.newName %></a> <%= timestamp(ev.time) %>
         <% } else { %>
-          <%= ev.user %> renamed <a href="/locations/<%= ev.locationId %>"><%= ev.data.oldName %></a> to <a href="/locations/<%= ev.locationId %>"><%= ev.data.newName %></a> <%= timestamp(ev.time) %>
+          renamed <a href="/locations/<%= ev.locationId %>"><%= ev.data.oldName %></a> to <a href="/locations/<%= ev.locationId %>"><%= ev.data.newName %></a> <%= timestamp(ev.time) %>
         <% } %>
 
       <% } else if (t === 'location_story_changed') { %>
-        <%= ev.user %> edited their writing in <a href="/locations/<%= ev.locationId %>"><%= name %></a> <%= timestamp(ev.time) %>
+        edited their writing in <a href="/locations/<%= ev.locationId %>"><%= name %></a> <%= timestamp(ev.time) %>
 
       <% } else if (t === 'location_story_created') { %>
-        <%= ev.user %> wrote to <a href="/locations/<%= ev.locationId %>"><%= name %></a> <%= timestamp(ev.time) %>
+        wrote to <a href="/locations/<%= ev.locationId %>"><%= name %></a> <%= timestamp(ev.time) %>
 
       <% } else if (t === 'location_story_removed') { %>
-        <%= ev.user %> deleted their writing from <a href="/locations/<%= ev.locationId %>"><%= name %></a> <%= timestamp(ev.time) %>
+        deleted their writing from <a href="/locations/<%= ev.locationId %>"><%= name %></a> <%= timestamp(ev.time) %>
 
       <% } else if (t === 'location_tags_changed') { %>
-        <%= ev.user %> tagged <a href="/locations/<%= ev.locationId %>"><%= name %></a> as <%= ev.data.newTags.join(', ') %> <%= timestamp(ev.time) %>
+        tagged <a href="/locations/<%= ev.locationId %>"><%= name %></a> as <%= ev.data.newTags.join(', ') %> <%= timestamp(ev.time) %>
 
       <% } else if (t === 'location_attachment_created') { %>
-        <%= ev.user %> uploaded a file to <a href="/locations/<%= ev.locationId %>"><%= name %></a> <%= timestamp(ev.time) %>
+        uploaded a file to <a href="/locations/<%= ev.locationId %>"><%= name %></a> <%= timestamp(ev.time) %>
 
       <% } else if (t === 'location_attachment_removed') { %>
-        <%= ev.user %> removed a file from <a href="/locations/<%= ev.locationId %>"><%= name %></a> <%= timestamp(ev.time) %>
+        removed a file from <a href="/locations/<%= ev.locationId %>"><%= name %></a> <%= timestamp(ev.time) %>
 
       <% } else if (t === 'location_visit_created') { %>
-        <%= ev.user %> visited <a href="/locations/<%= ev.locationId %>"><%= name %></a> in <%= ev.data.year %>, added <%= timestamp(ev.time) %>
+        visited <a href="/locations/<%= ev.locationId %>"><%= name %></a> in <%= ev.data.year %>, added <%= timestamp(ev.time) %>
 
       <% } else if (t === 'location_visit_removed') { %>
-        <%= ev.user %> removed their visit from <a href="/locations/<%= ev.locationId %>"><%= name %></a> <%= timestamp(ev.time) %>
+        removed their visit from <a href="/locations/<%= ev.locationId %>"><%= name %></a> <%= timestamp(ev.time) %>
 
       <% } else { %>
         <%= ev.type %>
