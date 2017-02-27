@@ -25,11 +25,10 @@ exports.getAll = function (callback) {
     dataType: 'json',
     headers: { 'Authorization': 'Bearer ' + account.getToken() },
     success: function (rawUsers) {
-
       return callback(null, rawUsers);
     },
-    error: function (jqxhr, textStatus, errorThrown) {
-      return callback(errorThrown);
+    error: function (jqxhr, statusCode, statusMessage) {
+      return callback(new Error(statusMessage));
     },
   });
 };
@@ -51,11 +50,10 @@ exports.getOne = function (username, callback) {
     dataType: 'json',
     headers: { 'Authorization': 'Bearer ' + account.getToken() },
     success: function (rawUser) {
-
       return callback(null, rawUser);
     },
-    error: function (jqxhr, textStatus, errorThrown) {
-      return callback(errorThrown);
+    error: function (jqxhr, statusCode, statusMessage) {
+      return callback(new Error(statusMessage));
     },
   });
 };

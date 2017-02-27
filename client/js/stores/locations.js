@@ -76,9 +76,8 @@ var postJSON = function (params, callback) {
     success: function (responseData) {
       return callback(null, responseData);
     },
-    error: function (jqxhr, status, err) {
-      console.error(err);
-      return callback(err);
+    error: function (jqxhr, status, statusMessage) {
+      return callback(new Error(statusMessage));
     },
   });
 };
@@ -101,9 +100,8 @@ var deleteJSON = function (params, callback) {
     success: function (responseData) {
       return callback(null, responseData);
     },
-    error: function (jqxhr, status, err) {
-      console.error(err);
-      return callback(err);
+    error: function (jqxhr, status, statusMessage) {
+      return callback(new Error(statusMessage));
     },
   });
 };
@@ -151,10 +149,8 @@ this.createAttachment = function (id, form, callback) {
     success: function () {
       return callback();
     },
-    error: function (jqxhr, status, err) {
-      console.log('Upload error');
-      console.log(status, err);
-      return callback(err);
+    error: function (jqxhr, status, statusMessage) {
+      return callback(new Error(statusMessage));
     },
   });
 };
@@ -240,8 +236,8 @@ exports.get = function (id, callback) {
 
       return callback(null, loc);
     },
-    error: function (jqxhr, textStatus, errorThrown) {
-      return callback(errorThrown);
+    error: function (jqxhr, status, statusMessage) {
+      return callback(new Error(statusMessage));
     },
   });
 };
@@ -348,8 +344,8 @@ exports.removeOne = function (id, callback) {
     success: function () {
       return callback();
     },
-    error: function (jqxhr, textStatus, errorThrown) {
-      return callback(errorThrown);
+    error: function (jqxhr, status, statusMessage) {
+      return callback(new Error(statusMessage));
     },
   });
 };

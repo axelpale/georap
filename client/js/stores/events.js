@@ -56,8 +56,8 @@ var fetch = function (n, beforeTime, callback) {
       //     array of events, most recent first
       return callback(null, data);
     },
-    error: function (jqxhr, textStatus, errorThrown) {
-      return callback(errorThrown);
+    error: function (jqxhr, statusCode, statusMessage) {
+      return callback(new Error(statusMessage));
     },
   });
 };

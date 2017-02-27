@@ -44,7 +44,7 @@ exports.getFiltered = function (params, callback) {
       return callback(null, rawMarkers);
     },
     error: function (jqxhr, textStatus, errorThrown) {
-      return callback(errorThrown);
+      return callback(new Error(errorThrown));
     },
   });
 };
@@ -75,7 +75,7 @@ exports.getWithin = function (center, radius, zoomLevel, callback) {
       return callback(null, rawMarkers);
     },
     error: function (jqxhr, textStatus, errorThrown) {
-      return callback(errorThrown);
+      return callback(new Error(errorThrown));
     },
   });
 };
