@@ -19,7 +19,19 @@ router.use('/account', accountRouter);
 // Token middleware. User can access the routes only with valid token.
 // Token contents are stored in req.user.
 // See https://github.com/auth0/express-jwt
-router.use(jwt({ secret: local.secret }));
+router.use(jwt({
+  secret: local.secret,
+  getToken: function fromHeaderOrQuerystring(req) {
+    // Copied from https://github.com/auth0/express-jwt#usage
+    var header = req.headers.authorization;
+    if (header && header.split(' ')[0] === 'Bearer') {
+      return header.split(' ')[1];
+    } else if (req.query && req.query.token) {
+      return req.query.token;
+    }
+    return null;
+  },
+}));
 
 router.use('/events', eventsRouter);
 router.use('/locations', locationsRouter);
