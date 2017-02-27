@@ -369,6 +369,18 @@ exports.createLocationVisitRemoved = function (params, callback) {
   insertAndEmit(newEvent, callback);
 };
 
+exports.getAllOfUser = function (username, callback) {
+  // Parameters
+  //   username
+  //     string
+  //   callback
+  //     function (err, events)
+
+  var coll = db.get().collection('events');
+
+  coll.find({ user: username }).toArray(callback);
+};
+
 exports.getRecent = function (n, beforeTime, callback) {
   // Parameters
   //   n

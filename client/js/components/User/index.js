@@ -3,6 +3,7 @@ var users = require('../../stores/users');
 var eventsListTemplate = require('../Events/list.ejs');
 var timestamp = require('../lib/timestamp');
 var template = require('./template.ejs');
+var pointsTemplate = require('./points.ejs');
 var emitter = require('component-emitter');
 
 module.exports = function (username) {
@@ -30,6 +31,10 @@ module.exports = function (username) {
         console.error(err);
         return;
       }
+
+      $('#tresdb-user-points').html(pointsTemplate({
+        points: user.points,
+      }));
 
       $('#tresdb-user-events').html(eventsListTemplate({
         timestamp: timestamp,
