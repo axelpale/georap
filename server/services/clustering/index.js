@@ -138,7 +138,7 @@ exports.findWithin = function (options) {
   //
   // Options:
   //   db
-  //     monk db instance
+  //     Node MongoDB instance
   //   center
   //     [lng lat]
   //   radius
@@ -156,7 +156,7 @@ exports.findWithin = function (options) {
 
   var coll = db.collection('locations');
 
-  coll.aggregate([
+  var pipeline = [
     {
       // See docs:
       // https://docs.mongodb.com/v3.2/reference/operator/aggregation/geoNear/
@@ -183,7 +183,13 @@ exports.findWithin = function (options) {
         layer: true,
       },
     },
-  ], function (err, results) {
+  ];
+
+  var opts = {
+    cursor: {},
+  };
+
+  coll.aggregate(pipeline, opts).toArray(function (err, results) {
     if (err) {
       return callback(err);
     }
