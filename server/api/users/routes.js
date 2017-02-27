@@ -1,6 +1,8 @@
 /* eslint-disable new-cap */
 
 var handlers = require('./handlers');
+var usernameParser = require('./lib/usernameParser.js');
+var userRouter = require('./user/routes');
 var express = require('express');
 var router = express.Router();
 
@@ -10,12 +12,6 @@ router.get('/', handlers.getAll);
 
 // Single user
 
-router.use('/:username', function (req, res, next) {
-  // Catches the username
-  req.username = req.params.username;
-  return next();
-});
-
-router.get('/:username', handlers.getOne);
+router.use('/:username', usernameParser, userRouter);
 
 module.exports = router;
