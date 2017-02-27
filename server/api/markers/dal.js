@@ -1,6 +1,21 @@
 var db = require('../../services/db');
 var clustering = require('../../services/clustering');
 
+exports.getAll = function (callback) {
+  // Get all non-deleted markers.
+  //
+  // Parameters:
+  //   callback
+  //     function (err, docs)
+
+  var coll = db.get().collection('locations');
+
+  // Exclude deleted
+  var q = { deleted: false };
+
+  coll.find(q).toArray(callback);
+};
+
 exports.getFiltered = function (params, callback) {
   // Parameters:
   //   params

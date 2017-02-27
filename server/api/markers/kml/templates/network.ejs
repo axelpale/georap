@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <NetworkLink>
+    <name>Subterranea Fennica</name>
+    <visibility>1</visibility>
+    <open>0</open>
+    <description>Hey man! To load most recent locations, right-click and select Refresh from the context menu.</description>
+    <refreshVisibility>0</refreshVisibility>
+    <flyToView>0</flyToView>
+    <Link>
+      <href>http://localhost:3000/api/markers/kml?token=<%= token %></href>
+    </Link>
+  </NetworkLink>
+</kml>

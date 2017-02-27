@@ -120,6 +120,11 @@ module.exports = function (handlers) {
       var searchText = $('#tresdb-mainmenu-search-text').val().trim();
       return go('/search?text=' + searchText);
     });
+
+    r.on('click', '#tresdb-mainmenu-export', function (ev) {
+      ev.preventDefault();
+      return go('/export');
+    });
   };
 
   this.unbind = function () {
