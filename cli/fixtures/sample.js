@@ -212,17 +212,19 @@ module.exports = {
     users: [
       {
         _id: id('5867bdf00a5a9e18d7755e4f'),
-        name: admin,
+        admin: true,
         email: local.admin.email,
         hash: bcrypt.hashSync(local.admin.password, local.bcrypt.rounds),
-        admin: true,
+        name: admin,
+        points: 0,  // points are updated by worker
       },
       {
         _id: id('5867bdf00b5a9e18d7755e33'),
-        name: 'johndoe',
+        admin: false,
         email: 'john.doe@subterranea.fi',
         hash: bcrypt.hashSync('foobar', local.bcrypt.rounds),
-        admin: false,
+        name: 'johndoe',
+        points: 0,
       },
     ],
   },

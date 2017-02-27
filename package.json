@@ -33,7 +33,8 @@
     "mongo": "mongo tresdb",
     "mongo:test": "mongo test",
     "mongod": "mkdir -p .data/db && mkdir -p .data/backups && mongod --auth --dbpath=.data/db",
-    "reset": "rm -rf .data"
+    "reset": "rm -rf .data",
+    "worker": "node worker/index.js"
   },
   "author": "Akseli Palén <akseli.palen@gmail.com>",
   "license": "MIT",
