@@ -6,6 +6,7 @@ var jsonParser = require('body-parser').json();
 var handlers = require('./handlers');
 
 var attachmentsRouter = require('./attachments/routes');
+var entriesRouter = require('./entries/routes');
 var storiesRouter = require('./stories/routes');
 var visitsRouter = require('./visits/routes');
 
@@ -17,6 +18,7 @@ router.post('/name', jsonParser, handlers.changeName);
 router.post('/tags', jsonParser, handlers.changeTags);
 
 router.use('/attachments', attachmentsRouter);
+router.use('/entries', entriesRouter);
 router.use('/stories', storiesRouter);
 router.use('/visits', visitsRouter);
 

@@ -149,7 +149,41 @@ this.createAttachment = function (id, form, callback) {
     success: function () {
       return callback();
     },
-    error: function (jqxhr, status, statusMessage) {
+    error: function (jqxhr, statusCode, statusMessage) {
+      return callback(new Error(statusMessage));
+    },
+  });
+};
+
+exports.createEntry = function (id, form, callback) {
+  // Parameters
+  //   id
+  //     location id
+  //   form
+  //     jQuery instance of the file upload form
+  //   callback
+  //     function (err)
+
+  var formData = new FormData(form[0]);
+
+  // Send. The contentType must be false, otherwise a Boundary header
+  // becomes missing and multer on the server side throws an error about it.
+  // The browser will attach the correct headers to the request.
+  //
+  // Official JWT auth header is used:
+  //   Authorization: Bearer mF_9.B5f-4.1JqM
+  // For details, see https://tools.ietf.org/html/rfc6750#section-2.1
+  $.ajax({
+    url: '/api/locations/' + id + '/entries',
+    type: 'POST',
+    contentType: false,
+    data: formData,
+    headers: { 'Authorization': 'Bearer ' + account.getToken() },
+    processData: false,
+    success: function () {
+      return callback();
+    },
+    error: function (jqxhr, statusCode, statusMessage) {
       return callback(new Error(statusMessage));
     },
   });

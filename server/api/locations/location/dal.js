@@ -234,8 +234,15 @@ exports.removeOne = function (id, username, callback) {
   var coll = db.get().collection('locations');
 
   // Prevent deletion of already deleted location.
-  var q = { _id: id, deleted: false };
-  var u = { $set: { deleted: true } };
+  var q = {
+    _id: id,
+    deleted: false,
+  };
+  var u = {
+    $set: {
+      deleted: true,
+    },
+  };
 
   coll.findOneAndUpdate(q, u, function (err, result) {
     if (err) {

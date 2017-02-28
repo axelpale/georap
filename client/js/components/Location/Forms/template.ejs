@@ -1,8 +1,71 @@
 <div class="form-group">
+  <button id="tresdb-entry-show" type="button" class="btn btn-default"><span class="glyphicon glyphicon-comment"></span> Add Post</button>
   <button id="tresdb-location-story-show" type="button" class="btn btn-default"><span class="glyphicon glyphicon-comment"></span> Write</button>
   <button id="tresdb-location-attachment-show" type="button" class="btn btn-default"><span class="glyphicon glyphicon-paperclip"></span> Upload</button>
   <button id="tresdb-location-visit-show" type="button" class="btn btn-default"><span class="glyphicon glyphicon-star"></span> Visit</button>
 </div>
+
+<!-- Entry form -->
+
+<div id="tresdb-entry-container" class="hidden">
+  <form id="tresdb-entry-form" class="panel panel-primary">
+    <div class="panel-heading">
+      Tell something about the location or prove your visit with a photo
+    </div>
+    <div class="panel-body">
+
+      <div class="form-group">
+        <label for="tresdb-entry-input" class="sr-only">Text content:</label>
+        <textarea id="tresdb-entry-input" class="form-control" rows="3"></textarea>
+        <div class="pull-right">
+          <a id="tresdb-entry-syntax-show" href="#">Formatting Help</a>
+        </div>
+      </div>
+
+      <div id="tresdb-entry-syntax" class="well hidden">
+        <%= markdownSyntax() %>
+      </div>
+
+      <div class="form-group">
+        <label for="tresdb-entry-file-input">(Optional) Attach a photo or any other document</label>
+        <input id="tresdb-entry-file-input" type="file" name="locfile">
+      </div>
+
+      <div class="form-group">
+        <label>(Optional) Did you visit the location? A photo is required.</label>
+        <div class="checkbox disabled">
+          <label>
+            <input type="checkbox" disabled> This was a visit. Attach a photo to enable.
+          </label>
+        </div>
+        <!--div class="checkbox disabled">
+          <label>
+            <input type="checkbox" disabled> This was infiltration! Attach a photo to enable.
+          </label>
+        </div-->
+      </div>
+
+
+      <div class="pull-right">
+        <button id="tresdb-entry-cancel" type="button" class="btn btn-default">Cancel</button>
+        <button type="submit" class="btn btn-primary">Save</button>
+      </div>
+
+    </div>
+  </form>
+
+  <div id="tresdb-entry-progress" class="progress hidden">
+    <div class="progress-bar progress-bar-striped active" role="progressbar" style="width: 100%">
+      <span class="sr-only">Waiting for server</span>
+    </div>
+  </div>
+
+  <div id="tresdb-entry-error" class="hidden">
+    <div class="alert alert-danger" role="alert">Saving the post failed. Might be a connection issue.</div>
+  </div>
+</div>
+
+<!-- Story form -->
 
 <div id="tresdb-location-story-container" class="hidden">
   <form id="tresdb-location-story-form" class="panel panel-primary">
