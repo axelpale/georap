@@ -9,22 +9,36 @@ module.exports = function (location) {
       location: location,
     }));
 
-    $('#tresdb-location-delete-ensure').click(function (ev) {
+    var $ensure = $('#tresdb-location-delete-ensure');
+    var $final = $('#tresdb-location-delete-final');
+    var $del = $('#tresdb-location-delete');
+    var $error = $('#tresdb-location-delete-error');
+    var $progress = $('#tresdb-location-delete-progress');
+
+    $ensure.click(function (ev) {
       ev.preventDefault();
-      $('#tresdb-location-delete-final').toggleClass('hidden');
+      $final.toggleClass('hidden');
     });
 
-    $('#tresdb-location-delete').click(function (ev) {
+    $del.click(function (ev) {
       ev.preventDefault();
+
+      // Prevent user clicking the deletion again
+      $final.addClass('hidden');
+      // Show progress bar
+      $progress.removeClass('hidden');
 
       location.remove(function (err) {
         if (err) {
+          // Remove progress
+          $progress.addClass('hidden');
+
           // Show deletion failed error message
-          $('#tresdb-location-delete-final').addClass('hidden');
-          $('#tresdb-location-delete-error').removeClass('hidden');
+          $error.removeClass('hidden');
           return;
         }
-        // ON successful removal the location will emit "removed" event
+        // ON successful removal the location will emit "location_removed" event
+        // and the card will close the Location component.
       });
     });
   };

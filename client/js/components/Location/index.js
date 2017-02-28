@@ -81,7 +81,7 @@ module.exports = function (id) {
       // Listen possible changes in the location.
 
       // Inform parents that view model is removed and view should be closed.
-      _location.on('removed', function () {
+      _location.on('location_removed', function () {
         self.unbind();
         self.emit('removed');
       });
