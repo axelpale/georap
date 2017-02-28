@@ -36,8 +36,15 @@ exports.create = function (req, res) {
     // console.log('req.body:');
     // console.log(req.body);
 
+    var markdown = req.body.entrytext;
+
+    // Do not allow empty strings
+    if (typeof markdown === 'string' && markdown.trim().length === 0) {
+      markdown = null;
+    }
+
     var hasFile = (typeof req.file === 'object');
-    var hasText = (typeof req.body.entrytext === 'string');
+    var hasText = (typeof markdown === 'string');
     // Visit is only regarded with a file for proof
     var hasVisit = (hasFile && req.body.entryvisit === 'visited');
 
@@ -58,7 +65,7 @@ exports.create = function (req, res) {
           locationId: locationId,
           locationName: locationName,
           username: username,
-          markdown: hasText ? req.body.entrytext : null,
+          markdown: hasText ? markdown : null,
           isVisit: hasVisit,
           filepath: uploads.getRelativePath(req.file.path),
           mimetype: req.file.mimetype,
@@ -75,7 +82,7 @@ exports.create = function (req, res) {
       locationId: locationId,
       locationName: locationName,
       username: username,
-      markdown: hasText ? req.body.entrytext : null,
+      markdown: hasText ? markdown : null,
       isVisit: hasVisit,
       filepath: null,
       mimetype: null,
