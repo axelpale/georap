@@ -4,7 +4,7 @@ var page = require('page');
 var routes = require('./routes');
 
 var MapView = require('./views/Map');
-var MainMenuView = require('./views/MainMenu');
+var MainMenuView = require('./components/MainMenu');
 
 // Authentication & Account API
 var account = require('./stores/account');
@@ -67,23 +67,14 @@ window.initMap = function () {
     },
   });
 
-  var addMainMenu = function () {
-    mapView.addControl(mainMenuView.render(), function (root) {
-      // Special bind handling: addControl cannot add content to dom instantly.
-      mainMenuView.bind(root);
-    });
-  };
-
-  var removeMainMenu = function () {
-    mapView.removeControls();
-  };
-
   // Bind menu to auth events.
   account.on('login', function () {
-    addMainMenu();
+    // Add main menu
+    mapView.addControl(mainMenuView);
   });
   account.on('logout', function () {
-    removeMainMenu();
+    // Remove main menu
+    mapView.removeControls();
   });
 
   // Bind fetching of locations and user's geolocation to auth events.
@@ -105,7 +96,7 @@ window.initMap = function () {
   if (account.isLoggedIn()) {
     mapView.startLoadingMarkers();
     mapView.showGeolocation();
-    addMainMenu();
+    mapView.addControl(mainMenuView);
   }
 
 };

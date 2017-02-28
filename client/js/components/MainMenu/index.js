@@ -1,7 +1,8 @@
+
+var account = require('../../stores/account');
+var template = require('./template.ejs');
+var glyphiconTemplate = require('./glyphicon.ejs');
 var emitter = require('component-emitter');
-var account = require('../stores/account');
-var mainmenuTemplate = require('./MainMenu.ejs');
-var glyphiconTemplate = require('./lib/glyphicon.ejs');
 
 module.exports = function (handlers) {
   // Parameters:
@@ -15,68 +16,64 @@ module.exports = function (handlers) {
   //       onAdditionCancel
 
   // Init
-  emitter(this);
+  var self = this;
+  emitter(self);
+
   var go = handlers.go;
 
   // Root element. Remember for the unbinding.
-  var r = null;
+  var _$root = null;
 
   // Public methods
 
-  this.render = function () {
-    // Return
-    //   HTML as string
-
-    // Render menu
-    return mainmenuTemplate({
-      glyphicon: glyphiconTemplate,
-      user: account.getUser(),  // might be undefined
-    });
-  };
-
-  this.bind = function (rootElement) {
+  self.bind = function ($mount) {
     // Add listeners to the rendered menu.
     //
     // Parameters:
-    //   rootElement
+    //   $mount
     //     The point where one should listen the events.
     //     The existence of this point in DOM is required even though
     //     it contents can be dynamically modified later, including
     //     the buttons to bind events to.
 
-    r = $(rootElement);
+    $mount.html(template({
+      glyphicon: glyphiconTemplate,
+      user: account.getUser(),  // might be undefined
+    }));
 
-    r.on('click', '#tresdb-mainmenu-events', function (ev) {
+    _$root = $mount;
+
+    $mount.on('click', '#tresdb-mainmenu-events', function (ev) {
       ev.preventDefault();
 
       return go('/latest');
     });
 
-    r.on('click', '#tresdb-mainmenu-change-password', function (ev) {
+    $mount.on('click', '#tresdb-mainmenu-change-password', function (ev) {
       ev.preventDefault();
 
       return go('/password');
     });
 
-    r.on('click', '#tresdb-mainmenu-users', function (ev) {
+    $mount.on('click', '#tresdb-mainmenu-users', function (ev) {
       ev.preventDefault();
 
       return go('/users');
     });
 
-    r.on('click', '#tresdb-mainmenu-invite', function (ev) {
+    $mount.on('click', '#tresdb-mainmenu-invite', function (ev) {
       ev.preventDefault();
 
       return go('/invite');
     });
 
-    r.on('click', '#tresdb-mainmenu-logout', function (ev) {
+    $mount.on('click', '#tresdb-mainmenu-logout', function (ev) {
       ev.preventDefault();
 
       return go('/login');
     });
 
-    r.on('click', '#tresdb-mainmenu-add', function (ev) {
+    $mount.on('click', '#tresdb-mainmenu-add', function (ev) {
       ev.preventDefault();
 
       // Hide other menus
@@ -87,7 +84,7 @@ module.exports = function (handlers) {
       return handlers.onAdditionStart();
     });
 
-    r.on('click', '#tresdb-addition-cancel', function (ev) {
+    $mount.on('click', '#tresdb-addition-cancel', function (ev) {
       ev.preventDefault();
 
       // Show other menus
@@ -98,7 +95,7 @@ module.exports = function (handlers) {
       return handlers.onAdditionCancel();
     });
 
-    r.on('click', '#tresdb-addition-create', function (ev) {
+    $mount.on('click', '#tresdb-addition-create', function (ev) {
       ev.preventDefault();
 
       // Show other menus
@@ -109,27 +106,27 @@ module.exports = function (handlers) {
       return handlers.onAdditionCreate();
     });
 
-    r.on('click', '#tresdb-mainmenu-filters', function (ev) {
+    $mount.on('click', '#tresdb-mainmenu-filters', function (ev) {
       ev.preventDefault();
       return go('/filters');
     });
 
-    r.on('submit', '#tresdb-mainmenu-search-form', function (ev) {
+    $mount.on('submit', '#tresdb-mainmenu-search-form', function (ev) {
       ev.preventDefault();
 
       var searchText = $('#tresdb-mainmenu-search-text').val().trim();
       return go('/search?text=' + searchText);
     });
 
-    r.on('click', '#tresdb-mainmenu-export', function (ev) {
+    $mount.on('click', '#tresdb-mainmenu-export', function (ev) {
       ev.preventDefault();
       return go('/export');
     });
   };
 
-  this.unbind = function () {
-    if (r !== null) {
-      r.off('click');
+  self.unbind = function () {
+    if (_$root !== null) {
+      _$root.off('click');
     }
   };
 };

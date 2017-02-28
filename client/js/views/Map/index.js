@@ -92,22 +92,20 @@ module.exports = function () {
 
   // Public methods
 
-  self.addControl = function (content, bind) {
+  self.addControl = function (component) {
     // Add custom content e.g. a menu on the map.
     // Bind events only after the control content is added to dom.
     // See http://stackoverflow.com/questions/17051816/
     //
     // Parameters:
-    //   content
-    //     string, contains html
-    //   bind
-    //     function (controlContainerEl)
+    //   component
+
     var el = document.createElement('div');
 
     el.className = 'tresdb-map-menu';
-    el.innerHTML = content;
     map.controls[google.maps.ControlPosition.LEFT_TOP].push(el);
-    bind(el);
+
+    component.bind($(el));
   };
 
   self.getMap = function () {
