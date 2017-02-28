@@ -81,6 +81,10 @@ html, body {
 
 /* Entries */
 
+.tresdb-disabled {
+  color: #999999;
+}
+
 .tresdb-entry .panel-body > p:last-child {
   margin-bottom: 0px;
 }

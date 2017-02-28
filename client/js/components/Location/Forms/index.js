@@ -24,9 +24,11 @@ module.exports = function (location) {
     var $error = $('#tresdb-entry-error');
     var $progress = $('#tresdb-entry-progress');
     var $text = $('#tresdb-entry-input');
+    var $file = $('#tresdb-entry-file-input');
     var $cancel = $('#tresdb-entry-cancel');
     var $syntax = $('#tresdb-entry-syntax');
     var $syntaxshow = $('#tresdb-entry-syntax-show');
+    var $visit = $('#tresdb-entry-visit');
 
     var responseHandler = function (err) {
 
@@ -88,6 +90,27 @@ module.exports = function (location) {
     $form.submit(function (ev) {
       ev.preventDefault();
       submitHandler();
+    });
+
+    $file.change(function () {
+      // If a file is selected, enable visit.
+      // If user chooses or changes a file, onchange is fired.
+      // See http://stackoverflow.com/a/5670938/638546
+
+      if ($file.val() === '') {
+        // Disable visit.
+        // Prevent user from marking the post as visit.
+        $visit.addClass('tresdb-disabled');
+        $visit.find('.checkbox').addClass('disabled');
+        $visit.find('input[type=checkbox]').prop('checked', false);
+        $visit.find('input[type=checkbox]').attr('disabled', 'disabled');
+      } else {
+        // Enable visit.
+        // Enable user to mark the post as visit.
+        $visit.removeClass('tresdb-disabled');
+        $visit.find('.checkbox').removeClass('disabled');
+        $visit.find('input[type=checkbox]').removeAttr('disabled');
+      }
     });
 
   };
