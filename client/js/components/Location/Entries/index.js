@@ -1,5 +1,5 @@
 
-var getEntryView = require('./lib/getEntryView');
+var EntryView = require('./Entry');
 
 module.exports = function (entries) {
   // Parameters:
@@ -18,7 +18,7 @@ module.exports = function (entries) {
 
     ents.forEach(function (e) {
       var id = e.getId();
-      var v = getEntryView(e);
+      var v = new EntryView(e);
 
       _entryViewsMap[id] = v;
 
@@ -31,7 +31,7 @@ module.exports = function (entries) {
 
       var newEntry = entries.getEntry(ev.data.entryId);
       var id = newEntry.getId();
-      var v = getEntryView(newEntry);
+      var v = new EntryView(newEntry);
 
       _entryViewsMap[id] = v;
 

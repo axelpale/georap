@@ -1,0 +1,52 @@
+
+<div class="panel panel-default tresdb-entry">
+
+  <div class="panel-heading">
+    <div class="pull-right">
+      <% if (entry.hasImage()) { %>
+        <a href="<%= entry.getUrl() %>" target="_blank" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-zoom-in"></span> Full original</a>
+      <% } %>
+      <% if (entry.getUserName() === account.getName()) { %>
+        <button id="<%= entry.getId() %>-edit" type="button" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-pencil"></span> Edit</button>
+      <% } %>
+    </div>
+    <%= entry.getUserName() %> posted <%= entry.isVisit() ? '<strong>a visit</strong> ' : '' %><%= timestamp(entry.getTime()) %>
+  </div>
+
+  <div id="<%= entry.getId() %>-form-container" class="panel-body hidden">
+    <div class="pull-right">
+      <button id="<%= entry.getId() %>-cancel" type="button" class="btn btn-default">Cancel</button>
+    </div>
+    <button id="<%= entry.getId() %>-delete-ensure" type="button" class="btn btn-danger">Delete...</button>
+
+    <div id="<%= entry.getId() %>-delete-final" class="hidden">
+      Are you sure?
+      <button id="<%= entry.getId() %>-delete" type="button" class="btn btn-danger">Yes, delete!</button>
+    </div>
+
+    <div id="<%= entry.getId() %>-delete-error" class="hidden panel-body">
+      <div class="alert alert-danger" role="alert">Deletion failed. Might be a connection issue.</div>
+    </div>
+  </div>
+
+  <% if (entry.hasMarkdown()) { %>
+  <div id="<%= entry.getId() %>-body" class="panel-body">
+    <%= entry.getMarkdownHTML() %>
+  </div>
+  <% } %>
+
+  <% if (entry.hasFile()) { %>
+
+    <% if (entry.hasImage()) { %>
+      <div class="panel-body tresdb-entry-image-body">
+        <img src="<%= entry.getThumbUrl() %>" title="<%= entry.getFileName() %>">
+      </div>
+    <% } else { %>
+      <div class="panel-body">
+        <a href="<%= entry.getUrl() %>" target="_blank"><%= entry.getFileName() %></a>
+      </div>
+    <% } %>
+
+  <% } %>
+
+</div>

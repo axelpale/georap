@@ -33,9 +33,7 @@ module.exports = function (raw) {
     self.emit('location_event_created', ev);
 
     // For entries model
-    if (ev.type.startsWith('location_attachment_') ||
-        ev.type.startsWith('location_story_') ||
-        ev.type.startsWith('location_visit_')) {
+    if (ev.type.startsWith('location_entry_')) {
       self.emit('location_entry_event', ev);
     }
 

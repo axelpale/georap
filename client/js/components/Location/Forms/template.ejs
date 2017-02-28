@@ -1,8 +1,5 @@
 <div class="form-group">
   <button id="tresdb-entry-show" type="button" class="btn btn-default"><span class="glyphicon glyphicon-comment"></span> Add Post</button>
-  <button id="tresdb-location-story-show" type="button" class="btn btn-default"><span class="glyphicon glyphicon-comment"></span> Write</button>
-  <button id="tresdb-location-attachment-show" type="button" class="btn btn-default"><span class="glyphicon glyphicon-paperclip"></span> Upload</button>
-  <button id="tresdb-location-visit-show" type="button" class="btn btn-default"><span class="glyphicon glyphicon-star"></span> Visit</button>
 </div>
 
 <!-- Entry form -->
@@ -16,7 +13,7 @@
 
       <div class="form-group">
         <label for="tresdb-entry-input" class="sr-only">Text content:</label>
-        <textarea id="tresdb-entry-input" class="form-control" rows="3"></textarea>
+        <textarea id="tresdb-entry-input" name="entrytext" class="form-control" rows="3"></textarea>
         <div class="pull-right">
           <a id="tresdb-entry-syntax-show" href="#">Formatting Help</a>
         </div>
@@ -28,14 +25,14 @@
 
       <div class="form-group">
         <label for="tresdb-entry-file-input">(Optional) Attach a photo or any other document</label>
-        <input id="tresdb-entry-file-input" type="file" name="locfile">
+        <input id="tresdb-entry-file-input" type="file" name="entryfile">
       </div>
 
       <div class="form-group">
         <label>(Optional) Did you visit the location? A photo is required.</label>
-        <div class="checkbox disabled">
+        <div class="checkbox">
           <label>
-            <input type="checkbox" disabled> This was a visit. Attach a photo to enable.
+            <input type="checkbox" name="entryvisit" value="visited"> This was a visit. Attach a photo to enable.
           </label>
         </div>
         <!--div class="checkbox disabled">
@@ -62,105 +59,5 @@
 
   <div id="tresdb-entry-error" class="hidden">
     <div class="alert alert-danger" role="alert">Saving the post failed. Might be a connection issue.</div>
-  </div>
-</div>
-
-<!-- Story form -->
-
-<div id="tresdb-location-story-container" class="hidden">
-  <form id="tresdb-location-story-form" class="panel panel-primary">
-    <div class="panel-heading">
-      Write a note, a comment, or any other textual piece
-    </div>
-    <div class="panel-body">
-      <div class="form-group">
-        <label for="tresdb-location-story-input">Content:</label>
-        <textarea id="tresdb-location-story-input" class="form-control" rows="3"></textarea>
-      </div>
-      <div>
-        <%= markdownSyntax() %>
-      </div>
-      <div class="pull-right">
-        <button id="tresdb-location-story-cancel" type="button" class="btn btn-default">Cancel</button>
-        <button type="submit" class="btn btn-primary">Save</button>
-      </div>
-    </div>
-  </form>
-
-  <div id="tresdb-location-story-progress" class="progress hidden">
-    <div class="progress-bar progress-bar-striped active" role="progressbar" style="width: 100%">
-      <span class="sr-only">Waiting for server</span>
-    </div>
-  </div>
-
-  <div id="tresdb-location-story-error" class="hidden">
-    <div class="alert alert-danger" role="alert">Adding the text failed. Might be a connection issue.</div>
-  </div>
-</div>
-
-<div id="tresdb-location-attachment-container" class="hidden">
-  <form id="tresdb-location-attachment-form" class="panel panel-primary">
-    <div class="panel-heading">
-      Upload a photo, a document, or any other file attachment
-    </div>
-    <div class="panel-body">
-      <div class="form-group">
-        <label class="btn btn-default btn-file">
-          Browse... <input type="file" name="locfile" style="display: none;">
-        </label>
-      </div>
-      <div class="pull-right">
-        <button id="tresdb-location-attachment-cancel" type="button" class="btn btn-default">Cancel</button>
-        <button type="submit" class="btn btn-primary">Upload</button>
-      </div>
-    </div>
-  </form>
-
-  <div id="tresdb-location-attachment-progress" class="progress hidden">
-    <div class="progress-bar progress-bar-striped active" role="progressbar" style="width: 100%">
-      <span class="sr-only">Uploading</span>
-    </div>
-  </div>
-
-  <div id="tresdb-location-attachment-error" class="hidden">
-    <div class="alert alert-danger" role="alert">Uploading failed. Might be a connection issue.</div>
-  </div>
-</div>
-
-
-<!-- Visit form -->
-
-<div id="tresdb-location-visit-container" class="hidden">
-  <form id="tresdb-location-visit-form" class="panel panel-primary">
-    <div class="panel-heading">
-      Mark you have visited the location
-    </div>
-    <div class="panel-body">
-      <div class="form-group">
-        <label for="tresdb-location-visit-input">Year:</label>
-        <select id="tresdb-location-visit-input" class="form-control">
-          <% var nowYear = (new Date()).getFullYear(); %>
-          <option selected="selected"><%= nowYear %></option>
-          <% for (var y = nowYear - 1; y >= 1960; y -= 1) { %>
-            <option><%= y %></option>
-          <% } %>
-        </select>
-      </div>
-
-      <div class="pull-right">
-        <button id="tresdb-location-visit-cancel" type="button" class="btn btn-default">Cancel</button>
-        <button type="submit" class="btn btn-primary">Save</button>
-      </div>
-    </div>
-  </form>
-
-  <div id="tresdb-location-visit-progress" class="progress hidden">
-    <div class="progress-bar progress-bar-striped active" role="progressbar" style="width: 100%">
-      <span class="sr-only">Waiting for server</span>
-    </div>
-  </div>
-
-  <div id="tresdb-location-visit-error" class="hidden">
-    <div class="alert alert-danger" role="alert">Marking the visit failed. Might be a connection issue.</div>
   </div>
 </div>

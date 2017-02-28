@@ -1,4 +1,4 @@
-/* eslint-disable max-lines */
+
 var db = require('../../services/db');
 var eventsDal = require('../events/dal');
 
@@ -45,34 +45,34 @@ var removeOne = function (entryId, callback) {
 
 // Public methods
 
-exports.changeLocationStory = function (params, callback) {
-  // Parameters:
-  //   params:
-  //     entryId
-  //     locationId
-  //     locationName
-  //     newMarkdown
-  //     username
-  //   callback
-  //     function (err)
+// exports.changeLocationEntry = function (params, callback) {
+//   // Parameters:
+//   //   params:
+//   //     entryId
+//   //     locationId
+//   //     locationName
+//   //     newMarkdown
+//   //     username
+//   //   callback
+//   //     function (err)
+//
+//   var coll = db.get().collection('entries');
+//
+//   var q = { _id: params.entryId };
+//   var u = {
+//     $set: { 'data.markdown': params.newMarkdown },
+//   };
+//
+//   coll.update(q, u, function (err) {
+//     if (err) {
+//       return callback(err);
+//     }
+//
+//     eventsDal.createLocationStoryChanged(params, callback);
+//   });
+// };
 
-  var coll = db.get().collection('entries');
-
-  var q = { _id: params.entryId };
-  var u = {
-    $set: { 'data.markdown': params.newMarkdown },
-  };
-
-  coll.update(q, u, function (err) {
-    if (err) {
-      return callback(err);
-    }
-
-    eventsDal.createLocationStoryChanged(params, callback);
-  });
-};
-
-exports.createLocationAttachment = function (params, callback) {
+exports.createLocationEntry = function (params, callback) {
   // Parameters:
   //   params:
   //     locationId
@@ -80,53 +80,26 @@ exports.createLocationAttachment = function (params, callback) {
   //     locationName
   //       string
   //     username
-  //     filePathInUploadDir
   //       string
-  //     fileMimeType
-  //       string
-  //     thumbPathInUploadDir
-  //       string
-  //     thumbMimeType
-  //       string
+  //     markdown
+  //       string or null
+  //     isVisit
+  //       boolean
+  //     filepath
+  //       string or null
+  //       The relative path of the file in the uploads dir
+  //     mimetype
+  //       string or null
+  //     thumbfilepath
+  //       string or null
+  //       The relative path of the thumbnail file in the uploads dir
+  //     thumbmimetype
+  //       string or null
   //   callback
   //     function (err, insertedId)
 
   var newEntry = {
-    type: 'location_attachment',
-    user: params.username,
-    time: timestamp(),
-    locationId: params.locationId,
-    locationName: params.locationName,
-    deleted: false,
-    data: {
-      filepath: params.filePathInUploadDir,
-      mimetype: params.fileMimeType,
-      thumbpath: params.thumbPathInUploadDir,
-      thumbmimetype: params.thumbMimeType,
-    },
-  };
-
-  insertOne(newEntry, function (err, entryId) {
-    if (err) {
-      return callback(err);
-    }
-
-    params.entryId = entryId;
-    eventsDal.createLocationAttachmentCreated(params, callback);
-  });
-};
-
-exports.createLocationStory = function (params, callback) {
-  // Parameters:
-  //   params:
-  //     locationId
-  //     username
-  //     markdown
-  //   callback
-  //     function (err)
-
-  var newEntry = {
-    type: 'location_story',
+    type: 'location_entry',
     user: params.username,
     time: timestamp(),
     locationId: params.locationId,
@@ -134,6 +107,11 @@ exports.createLocationStory = function (params, callback) {
     deleted: false,
     data: {
       markdown: params.markdown,
+      isVisit: params.isVisit,
+      filepath: params.filepath,
+      mimetype: params.mimetype,
+      thumbfilepath: params.thumbfilepath,
+      thumbmimetype: params.thumbmimetype,
     },
   };
 
@@ -143,39 +121,7 @@ exports.createLocationStory = function (params, callback) {
     }
 
     params.entryId = entryId;
-    eventsDal.createLocationStoryCreated(params, callback);
-  });
-};
-
-exports.createLocationVisit = function (params, callback) {
-  // Parameters:
-  //   params:
-  //     locationId
-  //     locationName
-  //     username
-  //     year
-  //       integer
-  //   callback
-  //     function (err, insertedId)
-
-  var newEntry = {
-    type: 'location_visit',
-    user: params.username,
-    time: timestamp(),
-    locationId: params.locationId,
-    locationName: params.locationName,
-    data: {
-      year: params.year,
-    },
-  };
-
-  insertOne(newEntry, function (err, entryId) {
-    if (err) {
-      return callback(err);
-    }
-
-    params.entryId = entryId;
-    eventsDal.createLocationVisitCreated(params, callback);
+    eventsDal.createLocationEntryCreated(params, callback);
   });
 };
 
@@ -196,27 +142,7 @@ exports.getAllOfLocation = function (locationId, callback) {
   return coll.find(q, opt).toArray(callback);
 };
 
-
-exports.removeLocationAttachment = function (params, callback) {
-  // Parameters:
-  //   params:
-  //     entryId
-  //     locationId
-  //     locationName
-  //     username
-  //   callback
-  //     function (err)
-
-  removeOne(params.entryId, function (err) {
-    if (err) {
-      return callback(err);
-    }
-
-    eventsDal.createLocationAttachmentRemoved(params, callback);
-  });
-};
-
-exports.removeLocationStory = function (params, callback) {
+exports.removeLocationEntry = function (params, callback) {
   // Parameters:
   //   params
   //     entryId
@@ -230,24 +156,6 @@ exports.removeLocationStory = function (params, callback) {
       return callback(err);
     }
 
-    eventsDal.createLocationStoryRemoved(params, callback);
-  });
-};
-
-exports.removeLocationVisit = function (params, callback) {
-  // Parameters:
-  //   params
-  //     entryId
-  //     locationId
-  //     locationName
-  //     username
-  //   callback
-  //     function (err)
-  removeOne(params.entryId, function (err) {
-    if (err) {
-      return callback(err);
-    }
-
-    eventsDal.createLocationVisitRemoved(params, callback);
+    eventsDal.createLocationEntryRemoved(params, callback);
   });
 };

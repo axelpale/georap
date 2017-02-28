@@ -107,53 +107,20 @@ var deleteJSON = function (params, callback) {
 };
 
 
+// Public methods
 
-this.changeStory = function (locationId, entryId, newMarkdown, callback) {
-  // Parameters:
-  //   locationId
-  //   entryId
-  //   newMarkdown
-  //   callback
-  //     function (err)
-  return postJSON({
-    url: '/api/locations/' + locationId + '/stories/' + entryId,
-    data: { newMarkdown: newMarkdown.trim() },
-  }, callback);
-};
-
-this.createAttachment = function (id, form, callback) {
-  // Parameters
-  //   id
-  //     location id
-  //   form
-  //     jQuery instance of the file upload form
-  //   callback
-  //     function (err)
-
-  var formData = new FormData(form[0]);
-
-  // Send. The contentType must be false, otherwise a Boundary header
-  // becomes missing and multer on the server side throws an error about it.
-  // The browser will attach the correct headers to the request.
-  //
-  // Official JWT auth header is used:
-  //   Authorization: Bearer mF_9.B5f-4.1JqM
-  // For details, see https://tools.ietf.org/html/rfc6750#section-2.1
-  $.ajax({
-    url: '/api/locations/' + id + '/attachments',
-    type: 'POST',
-    contentType: false,
-    data: formData,
-    headers: { 'Authorization': 'Bearer ' + account.getToken() },
-    processData: false,
-    success: function () {
-      return callback();
-    },
-    error: function (jqxhr, statusCode, statusMessage) {
-      return callback(new Error(statusMessage));
-    },
-  });
-};
+// exports.changeEntry = function (locationId, entryId, newMarkdown, callback) {
+//   // Parameters:
+//   //   locationId
+//   //   entryId
+//   //   newMarkdown
+//   //   callback
+//   //     function (err)
+//   return postJSON({
+//     url: '/api/locations/' + locationId + '/entries/' + entryId,
+//     data: { newMarkdown: newMarkdown.trim() },
+//   }, callback);
+// };
 
 exports.createEntry = function (id, form, callback) {
   // Parameters
@@ -187,46 +154,6 @@ exports.createEntry = function (id, form, callback) {
       return callback(new Error(statusMessage));
     },
   });
-};
-
-exports.createStory = function (id, markdown, callback) {
-  // Parameters:
-  //   id
-  //     location id
-  //   markdown
-  //     string
-  //   callback
-  //     function (err)
-
-  if (typeof markdown !== 'string') {
-    throw new Error('invalid story markdown type: ' + (typeof markdown));
-  }
-
-  return postJSON({
-    url: '/api/locations/' + id + '/stories',
-    data: {
-      markdown: markdown.trim(),
-    },
-  }, callback);
-};
-
-exports.createVisit = function (id, year, callback) {
-  // Parameters:
-  //   id
-  //     location id
-  //   year
-  //     integer or null if not given
-  //   callback
-  //     function (err)
-
-  if (typeof year !== 'number') {
-    throw new Error('invalid visit year type: ' + (typeof year));
-  }
-
-  return postJSON({
-    url: '/api/locations/' + id + '/visits',
-    data: { year: year },
-  }, callback);
 };
 
 exports.create = function (geom, callback) {
@@ -344,23 +271,9 @@ this.setTags = function (id, newTags, callback) {
   }, callback);
 };
 
-exports.removeAttachment = function (locationId, entryId, callback) {
+exports.removeEntry = function (locationId, entryId, callback) {
   return deleteJSON({
-    url: '/api/locations/' + locationId + '/attachments/' + entryId,
-    data: {},
-  }, callback);
-};
-
-exports.removeStory = function (locationId, entryId, callback) {
-  return deleteJSON({
-    url: '/api/locations/' + locationId + '/stories/' + entryId,
-    data: {},
-  }, callback);
-};
-
-exports.removeVisit = function (locationId, entryId, callback) {
-  return deleteJSON({
-    url: '/api/locations/' + locationId + '/visits/' + entryId,
+    url: '/api/locations/' + locationId + '/entries/' + entryId,
     data: {},
   }, callback);
 };

@@ -1,7 +1,7 @@
 // This model is responsible for rawLocation.entries array.
 
-var rawEntryToEntryModel = require('./lib/rawEntryToEntryModel');
 var rawEventToRawEntry = require('./lib/rawEventToRawEntry');
+var EntryModel = require('./Entry/Model');
 
 var emitter = require('component-emitter');
 
@@ -23,7 +23,7 @@ module.exports = function (rawEntries, location) {
 
   // State
   var _entryModels = rawEntries.map(function (rawEntry) {
-    return rawEntryToEntryModel(rawEntry, self);
+    return new EntryModel(rawEntry, self);
   });
 
   // Private methods
@@ -31,7 +31,7 @@ module.exports = function (rawEntries, location) {
   var _createEntry = function (rawEntry) {
     // Most recent is topmost
     rawEntries.unshift(rawEntry);
-    _entryModels.unshift(rawEntryToEntryModel(rawEntry, self));
+    _entryModels.unshift(new EntryModel(rawEntry, self));
   };
 
   var _removeEntry = function (id) {
@@ -64,18 +64,18 @@ module.exports = function (rawEntries, location) {
     if (ev.type.endsWith('_created')) {
       _createEntry(rawEventToRawEntry(ev));
       self.emit(ev.type, ev);
-      self.emit('location_entry_created', ev);
+      //because general entry//self.emit('location_entry_created', ev);
     }
 
     if (ev.type.endsWith('_removed')) {
       var en = _removeEntry(ev.data.entryId);
-      self.emit(ev.type, ev);
-      self.emit('location_entry_removed', ev, en);
+      self.emit(ev.type, ev, en);
+      //self.emit('location_entry_removed', ev, en);
     }
 
     if (ev.type.endsWith('_changed')) {
       self.emit(ev.type, ev);
-      self.emit('location_entry_changed', ev);
+      //self.emit('location_entry_changed', ev);
     }
   });
 

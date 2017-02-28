@@ -28,29 +28,17 @@
           renamed <a href="/locations/<%= ev.locationId %>"><%= ev.data.oldName %></a> to <a href="/locations/<%= ev.locationId %>"><%= ev.data.newName %></a> <%= timestamp(ev.time) %>
         <% } %>
 
-      <% } else if (t === 'location_story_changed') { %>
-        edited their writing in <a href="/locations/<%= ev.locationId %>"><%= name %></a> <%= timestamp(ev.time) %>
-
-      <% } else if (t === 'location_story_created') { %>
-        wrote to <a href="/locations/<%= ev.locationId %>"><%= name %></a> <%= timestamp(ev.time) %>
-
-      <% } else if (t === 'location_story_removed') { %>
-        deleted their writing from <a href="/locations/<%= ev.locationId %>"><%= name %></a> <%= timestamp(ev.time) %>
-
       <% } else if (t === 'location_tags_changed') { %>
         tagged <a href="/locations/<%= ev.locationId %>"><%= name %></a> as <%= ev.data.newTags.join(', ') %> <%= timestamp(ev.time) %>
 
-      <% } else if (t === 'location_attachment_created') { %>
-        uploaded a file to <a href="/locations/<%= ev.locationId %>"><%= name %></a> <%= timestamp(ev.time) %>
+      <% } else if (t === 'location_entry_created') { %>
+        posted <%= ev.data.isVisit ? 'a visit ' : '' %>to <a href="/locations/<%= ev.locationId %>"><%= name %></a> <%= timestamp(ev.time) %>
 
-      <% } else if (t === 'location_attachment_removed') { %>
-        removed a file from <a href="/locations/<%= ev.locationId %>"><%= name %></a> <%= timestamp(ev.time) %>
+      <% } else if (t === 'location_entry_changed') { %>
+        edited their post in <a href="/locations/<%= ev.locationId %>"><%= name %></a> <%= timestamp(ev.time) %>
 
-      <% } else if (t === 'location_visit_created') { %>
-        visited <a href="/locations/<%= ev.locationId %>"><%= name %></a> in <%= ev.data.year %>, added <%= timestamp(ev.time) %>
-
-      <% } else if (t === 'location_visit_removed') { %>
-        removed their visit from <a href="/locations/<%= ev.locationId %>"><%= name %></a> <%= timestamp(ev.time) %>
+      <% } else if (t === 'location_entry_removed') { %>
+        deleted their post from <a href="/locations/<%= ev.locationId %>"><%= name %></a> <%= timestamp(ev.time) %>
 
       <% } else { %>
         <%= ev.type %>

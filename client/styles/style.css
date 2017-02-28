@@ -77,23 +77,19 @@ html, body {
   font-size: 1.38em;
 }
 
-/*.tresdb-coords a {
-  color: white !important;
-}*/
-
 /* Tag labels END */
 
-/* Content Entries */
+/* Entries */
 
-.tresdb-entry-story .panel-body > p:last-child {
+.tresdb-entry .panel-body > p:last-child {
   margin-bottom: 0px;
 }
 
-.tresdb-entry-attachment-image-body {
+.tresdb-entry-image-body {
   padding: 0px;
   text-align: center;
 }
-.tresdb-entry-attachment-image-body img {
+.tresdb-entry-image-body img {
   max-width: 100%;
   /*margin: 0px auto 0px auto;*/
 }
@@ -102,4 +98,4 @@ time {
   text-decoration: underline;
 }
 
-/* Content Entries END*/
+/* Entries END*/

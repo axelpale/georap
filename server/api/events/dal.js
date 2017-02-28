@@ -1,4 +1,5 @@
 /* eslint-disable max-lines */
+
 var db = require('../../services/db');
 var io = require('../../services/io');
 
@@ -52,64 +53,6 @@ var insertAndEmit = function (ev, callback) {
 
 // Public methods
 
-exports.createLocationAttachmentCreated = function (params, callback) {
-  // Parameters:
-  //   params:
-  //     entryId
-  //     locationId
-  //     locationName
-  //     username
-  //     filePathInUploadDir
-  //       string
-  //     fileMimeType
-  //       string
-  //     thumbPathInUploadDir
-  //       string
-  //     thumbMimeType
-  //       string
-
-  var newEvent = {
-    type: 'location_attachment_created',
-    user: params.username,
-    time: timestamp(),
-    locationId: params.locationId,
-    locationName: params.locationName,
-    data: {
-      entryId: params.entryId,
-      filepath: params.filePathInUploadDir,
-      mimetype: params.fileMimeType,
-      thumbpath: params.thumbPathInUploadDir,
-      thumbmimetype: params.thumbMimeType,
-    },
-  };
-
-  insertAndEmit(newEvent, callback);
-};
-
-exports.createLocationAttachmentRemoved = function (params, callback) {
-  // Parameters:
-  //   params:
-  //     entryId
-  //     locationId
-  //     locationName
-  //     username
-  //   callback
-  //     function (err)
-
-  var newEvent = {
-    type: 'location_attachment_removed',
-    user: params.username,
-    time: timestamp(),
-    locationId: params.locationId,
-    locationName: params.locationName,
-    data: {
-      entryId: params.entryId,
-    },
-  };
-
-  insertAndEmit(newEvent, callback);
-};
-
 exports.createLocationCreated = function (params, callback) {
   // Parameters:
   //   params:
@@ -133,6 +76,102 @@ exports.createLocationCreated = function (params, callback) {
     data: {
       lat: params.lat,
       lng: params.lng,
+    },
+  };
+
+  insertAndEmit(newEvent, callback);
+};
+
+// exports.createLocationEntryChanged = function (params, callback) {
+//   // Parameters:
+//   //   params:
+//   //     locationId
+//   //     locationName
+//   //     entryId
+//   //     username
+//   //     newMarkdown
+//
+//   if (typeof params.entryId !== 'object') {
+//     throw new Error('invalid entryId type');
+//   }
+//
+//   var newEvent = {
+//     type: 'location_story_changed',
+//     user: params.username,
+//     time: timestamp(),
+//     locationId: params.locationId,
+//     locationName: params.locationName,
+//     data: {
+//       entryId: params.entryId,
+//       newMarkdown: params.newMarkdown,
+//     },
+//   };
+//
+//   insertAndEmit(newEvent, callback);
+// };
+
+exports.createLocationEntryCreated = function (params, callback) {
+  // Parameters:
+  //   params:
+  //     entryId
+  //     locationId
+  //     locationName
+  //     username
+  //     markdown
+  //       string or null
+  //     isVisit
+  //       boolean
+  //     filepath
+  //       string or null
+  //       The relative path of the file in the uploads dir
+  //     mimetype
+  //       string or null
+  //     thumbfilepath
+  //       string or null
+  //       The relative path of the thumbnail file in the uploads dir
+  //     thumbmimetype
+  //       string or null
+  //   callback
+  //     function (err)
+
+  var newEvent = {
+    type: 'location_entry_created',
+    user: params.username,
+    time: timestamp(),
+    locationId: params.locationId,
+    locationName: params.locationName,
+    data: {
+      entryId: params.entryId,
+      markdown: params.markdown,
+      isVisit: params.isVisit,
+      filepath: params.filepath,
+      mimetype: params.mimetype,
+      thumbfilepath: params.thumbfilepath,
+      thumbmimetype: params.thumbmimetype,
+    },
+  };
+
+  insertAndEmit(newEvent, callback);
+};
+
+exports.createLocationEntryRemoved = function (params, callback) {
+  // Parameters:
+  //   params:
+  //     entryId
+  //     locationId
+  //     locationName
+  //     username
+  //   callback
+  //     function (err)
+
+  var newEvent = {
+    type: 'location_entry_removed',
+    user: params.username,
+    time: timestamp(),
+    locationId: params.locationId,
+    locationName: params.locationName,
+    data: {
+      entryId: params.entryId,
     },
   };
 
@@ -191,84 +230,6 @@ exports.createLocationNameChanged = function (params, callback) {
   insertAndEmit(newEvent, callback);
 };
 
-exports.createLocationStoryChanged = function (params, callback) {
-  // Parameters:
-  //   params:
-  //     locationId
-  //     locationName
-  //     entryId
-  //     username
-  //     newMarkdown
-
-  if (typeof params.entryId !== 'object') {
-    throw new Error('invalid entryId type');
-  }
-
-  var newEvent = {
-    type: 'location_story_changed',
-    user: params.username,
-    time: timestamp(),
-    locationId: params.locationId,
-    locationName: params.locationName,
-    data: {
-      entryId: params.entryId,
-      newMarkdown: params.newMarkdown,
-    },
-  };
-
-  insertAndEmit(newEvent, callback);
-};
-
-exports.createLocationStoryCreated = function (params, callback) {
-  // Parameters:
-  //   params:
-  //     locationId
-  //     locationName
-  //     entryId
-  //     username
-  //     markdown
-
-  if (typeof params.entryId !== 'object') {
-    throw new Error('invalid entryId type');
-  }
-
-  var newEvent = {
-    type: 'location_story_created',
-    user: params.username,
-    time: timestamp(),
-    locationId: params.locationId,
-    locationName: params.locationName,
-    data: {
-      entryId: params.entryId,
-      markdown: params.markdown,
-    },
-  };
-
-  insertAndEmit(newEvent, callback);
-};
-
-exports.createLocationStoryRemoved = function (params, callback) {
-  // Parameters:
-  //   params:
-  //     entryId
-  //     locationId
-  //     locationName
-  //     username
-
-  var newEvent = {
-    type: 'location_story_removed',
-    user: params.username,
-    time: timestamp(),
-    locationId: params.locationId,
-    locationName: params.locationName,
-    data: {
-      entryId: params.entryId,
-    },
-  };
-
-  insertAndEmit(newEvent, callback);
-};
-
 exports.createLocationTagsChanged = function (params, callback) {
   // Parameters:
   //   params:
@@ -314,56 +275,6 @@ exports.createLocationRemoved = function (params, callback) {
     locationId: params.locationId,
     locationName: params.locationName,
     data: {},
-  };
-
-  insertAndEmit(newEvent, callback);
-};
-
-exports.createLocationVisitCreated = function (params, callback) {
-  // Parameters:
-  //   params:
-  //     locationId
-  //     locationName
-  //     username
-  //     year
-  //       integer
-  //   callback
-  //     function (err)
-
-  var newEvent = {
-    type: 'location_visit_created',
-    user: params.username,
-    time: timestamp(),
-    locationId: params.locationId,
-    locationName: params.locationName,
-    data: {
-      entryId: params.entryId,
-      year: params.year,
-    },
-  };
-
-  insertAndEmit(newEvent, callback);
-};
-
-exports.createLocationVisitRemoved = function (params, callback) {
-  // Parameters:
-  //   params:
-  //     entryId
-  //     locationId
-  //     locationName
-  //     username
-  //   callback
-  //     function (err)
-
-  var newEvent = {
-    type: 'location_visit_removed',
-    user: params.username,
-    time: timestamp(),
-    locationId: params.locationId,
-    locationName: params.locationName,
-    data: {
-      entryId: params.entryId,
-    },
   };
 
   insertAndEmit(newEvent, callback);

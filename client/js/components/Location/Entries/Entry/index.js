@@ -70,7 +70,8 @@ module.exports = function (entry) {
           $('#' + id + '-delete-error').removeClass('hidden');
           return;
         }
-        // ON successful removal the location will emit entry_removed event
+        // ON successful removal the location will emit
+        // location_entry_removed event
       });
     });
 
