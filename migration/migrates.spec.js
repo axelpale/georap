@@ -136,4 +136,33 @@ describe('migrates.migrate', function () {
   });
 
 
+  describe('v5 to v6', function () {
+
+    beforeEach(function (done) {
+      loadFixture('v5', done);
+    });
+
+    it('should be able to migrate from v5 to v6', function (done) {
+      var targetV = 6;
+      migrates.migrate(targetV, function (err) {
+        assert.ifError(err);
+
+        assertFixtureEqual('config', 'v6', function (err2) {
+          assert.ifError(err2);
+
+          assertFixtureEqual('users', 'v6', function (err3) {
+            assert.ifError(err3);
+
+            assertFixtureEqual('locations', 'v6', function (err3) {
+              assert.ifError(err3);
+              done();
+            });
+          });
+        });
+      });
+    });
+
+  });
+
+
 });

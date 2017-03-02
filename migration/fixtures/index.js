@@ -198,4 +198,56 @@ module.exports = {
     },
   },
 
+  'v6': {
+    collections: {
+      config: [{
+        key: 'schemaVersion',
+        value: 6,  // new
+      }],
+      users: [{
+        name: 'admin',
+        email: 'admin@example.com',
+        hash: PASSWORD,
+        admin: true,
+        points: 0,  // new
+      }],
+      locations: [{
+        creator: 'admin',  // new
+        name: 'Irbene',
+        geom: {
+          type: 'Point',
+          coordinates: [21.857705, 57.55341],
+        },
+        deleted: false,
+        tags: ['walk-in'],
+        content: [{
+          _id: 'Aebej323',
+          type: 'created',
+          user: 'admin',
+          time: '2009-07-30T10:44:58.000Z',
+          data: {},
+        }, {
+          _id: 'Aebej324',
+          type: 'story',
+          user: 'admin',
+          time: '2009-09-04T23:44:21.000Z',
+          data: {
+            markdown: 'A ghost town',
+          },
+        }, {
+          _id: 'Aebej325',
+          type: 'attachment',
+          user: 'admin',
+          time: '2009-10-02T11:11:01.000Z',
+          data: {
+            filepath: '2009/1234rghn23erfg23rtg23erg/foobar.jpg',
+            mimetype: 'image/jpeg',
+          },
+        }],
+        layer: 12,
+        places: ['Irbene', 'Ances pagasts', 'Ventspils Municipality', 'Latvia'],
+      }],
+    },
+  },
+
 };

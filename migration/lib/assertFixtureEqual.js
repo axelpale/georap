@@ -6,11 +6,14 @@ var _ = require('lodash');
 var db = require('../../server/services/db');
 
 module.exports = function (collectionName, versionTag, callback) {
+  // Compares current collection to a same collection in the fixture specified
+  // by versionTag.
+  //
   // Parameters
   //   collectionName
-  //     e.g. 'locations'
+  //     collection in the fixture e.g. 'locations'
   //   versionTag
-  //     e.g. 'v5'
+  //     version of the fixture e.g. 'v5'
   //   callback
   //     function (err)
   //       err.name === 'AssertionError'
