@@ -40,7 +40,7 @@ exports.run = function (callback) {
       loc.layer = 15;
       loc.neighborsAvgDist = 1000;
 
-      return next(loc);
+      return next(null, loc);
     }, function (err2) {
 
       if (err2) {

@@ -44,7 +44,7 @@ exports.run = function (callback) {
 
       delete loc.neighborsAvgDist;
 
-      return next(loc);
+      return next(null, loc);
     }, function (err2) {
 
       if (err2) {

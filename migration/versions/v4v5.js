@@ -87,7 +87,7 @@ exports.run = function (callback) {
         return entry;
       });
 
-      return next(loc);
+      return next(null, loc);
     }, function (err2) {
 
       if (err2) {

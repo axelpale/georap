@@ -45,7 +45,7 @@ exports.run = function (callback) {
       delete loc.lng;
       delete loc.lat;
 
-      return next(loc);
+      return next(null, loc);
     }, function (err2) {
       if (err2) {
         return callback(err2);

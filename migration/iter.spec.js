@@ -55,7 +55,7 @@ describe('iter.updateEach', function () {
   it('should add Dr. prefix', function (done) {
     iter.updateEach(collection, function (person, next) {
       person.name = 'Dr. ' + person.name;
-      return next(person);
+      return next(null, person);
     }, function (err) {
       assert.ok(!err);
 
@@ -77,7 +77,7 @@ describe('iter.updateEach', function () {
 
   it('should replace instead of extend', function (done) {
     iter.updateEach(collection, function (person, next) {
-      return next({ username: person.name });
+      return next(null, { username: person.name });
     }, function (err) {
       assert.ifError(err);
       collection.find().toArray(function (err2, users) {
@@ -88,6 +88,15 @@ describe('iter.updateEach', function () {
         assert.ok(!users[1].hasOwnProperty('name'));
         return done();
       });
+    });
+  });
+
+  it('should detect error', function (done) {
+    iter.updateEach(collection, function (person, next) {
+      return next(new Error('foobar'));
+    }, function (err) {
+      assert.equal(err.message, 'foobar');
+      return done();
     });
   });
 });
