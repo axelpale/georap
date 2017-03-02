@@ -1,10 +1,10 @@
+/* eslint-disable max-statements */
 
 // Client-side routing
 
 var account = require('../stores/account');
 
-var CardView = require('../views/Card');
-
+var CardView = require('../components/Card');
 var ChangePasswordView = require('../components/ChangePassword');
 var Error404View = require('../components/Error404');
 var EventsView = require('../components/Events');
@@ -34,11 +34,15 @@ exports.route = function (page) {
 
   // A card is used to display content.
   var card = new CardView();
+  card.bind($('#card-layer'));
+  // When card is closed, user always returns to map.
   card.on('closed', function () {
     page('/');
   });
+
   // Handle paths where to redirect after login.
   var afterLogin = new AfterLogin();
+
 
   // Public routes first.
 
