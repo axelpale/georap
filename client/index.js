@@ -8,7 +8,7 @@
 // is requested (because the further routing is done on client side).
 
 // Styles
-require('./styles/style.css');
+require('./css/style.css');
 
 // Favicon
 require('./images/logo/16.png');
