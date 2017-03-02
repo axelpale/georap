@@ -63,6 +63,23 @@ html, body {
 
 /* Card END */
 
+/* Location page */
+
+#tresdb-location-name {
+  margin-bottom: 1em;
+}
+
+#tresdb-location-tags {
+  margin-bottom: 2.68em;
+}
+
+#tresdb-location-entries,
+#tresdb-location-events {
+  margin-bottom: 2.68em;
+}
+
+/* Location page END */
+
 /* Tag labels */
 
 .tresdb-tags {
