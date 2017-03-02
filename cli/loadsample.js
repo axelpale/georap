@@ -33,7 +33,7 @@ db.init(function (dbErr) {
     return console.error('Failed to connect to MongoDB.');
   }
 
-  tools.loadFixture(db.get(), fixture, function (err) {
+  tools.loadFixture(fixture, function (err) {
     if (err) {
       console.error('Loading sample data failed.');
       console.error(err);

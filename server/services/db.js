@@ -55,6 +55,17 @@ exports.get = function () {
   throw new Error('db.init must be called and finished before db.get');
 };
 
+exports.collection = function (collName) {
+  // Return
+  //   a MongoDB collection instance
+
+  if (db !== null) {
+    return db.collection(collName);
+  }
+
+  throw new Error('db.init must be called and finished before db.collection');
+};
+
 exports.close = function () {
   if (db !== null) {
     db.close();

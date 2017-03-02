@@ -1,13 +1,12 @@
 var iter = require('../iter');
 var schema = require('../lib/schema');
+var db = require('../../server/services/db');
 
 var FROM_VERSION = 2;
 var TO_VERSION = FROM_VERSION + 1;
 
-exports.run = function (db, callback) {
+exports.run = function (callback) {
   // Parameters
-  //   db
-  //     Monk db instance
   //   callback
   //     function (err)
 
@@ -17,9 +16,7 @@ exports.run = function (db, callback) {
   // 1. Schema version tag update
   console.log('Setting schema version tag...');
 
-  var configColl = db.collection('config');
-
-  schema.setVersion(configColl, TO_VERSION, function (err) {
+  schema.setVersion(TO_VERSION, function (err) {
     if (err) {
       return callback(err);
     }  // else

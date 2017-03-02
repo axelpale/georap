@@ -28,12 +28,10 @@ var getSteps = function (currentVersion, targetVersion) {
   return steps;
 };
 
-exports.run = function (db, currentVersion, targetVersion, callback) {
+exports.run = function (currentVersion, targetVersion, callback) {
   // Executes the migration
   //
   // Parameters
-  //   db
-  //     Monk db instance
   //   currentVersion
   //     int
   //   targetVersion
@@ -52,7 +50,7 @@ exports.run = function (db, currentVersion, targetVersion, callback) {
 
   // Run steps in series
   async.eachSeries(steps, function (step, next) {
-    return step(db, next);
+    return step(next);
   }, function (err) {
     // Finally
     return callback(err);

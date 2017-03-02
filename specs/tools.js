@@ -1,15 +1,14 @@
 
+var db = require('../server/services/db');
 var async = require('async');
 
 var COLL_NOT_EXISTS_ERROR = 26;
 
-exports.loadFixture = function (db, fixture, callback) {
+exports.loadFixture = function (fixture, callback) {
   // Load fixture into the database. Existing collections in the DB
   // will be dropped.
   //
   // Parameters:
-  //   db
-  //     Monk DB instance to insert the fixture to.
   //   fixture
   //     a db fixture object with following structure:
   //       {
@@ -46,7 +45,7 @@ exports.loadFixture = function (db, fixture, callback) {
   async.eachOfSeries(colls, function (items, collName, next) {
 
     // Drop possibly existing collection before population.
-    db.dropCollection(collName, function (err) {
+    db.get().dropCollection(collName, function (err) {
       // Populate
       if (err) {
         // Continue if collection does not exist.

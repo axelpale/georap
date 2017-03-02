@@ -1,12 +1,13 @@
 var iter = require('../iter');
 var schema = require('../lib/schema');
+var db = require('../../server/services/db');
 
 var LNG_MAX = 180;
 var LNG_MIN = -180;
 var LAT_MAX = 90;
 var LAT_MIN = -90;
 
-exports.run = function (db, callback) {
+exports.run = function (callback) {
   // Parameters
   //   db
   //     Monk db instance
@@ -19,9 +20,7 @@ exports.run = function (db, callback) {
   // 1. Create schema version tag
   console.log('Creating schema version tag...');
 
-  var configColl = db.collection('config');
-
-  schema.setVersion(configColl, 2, function (err) {
+  schema.setVersion(2, function (err) {
     if (err) {
       return callback(err);
     }  // else

@@ -2,44 +2,36 @@
 var versions = require('./versions');
 var schema = require('./lib/schema');
 
-exports.migrate = function (options) {
+exports.migrate = function (targetVersion, callback) {
   // Parameters:
-  //   options
-  //     db
-  //       monk database instance
-  //     targetVersion
-  //       Optional version integer to migrate to. If not specified,
-  //       the target version is fetched from the package.json.
-  //     callback
-  //       function (err)
-  var db, targetVersion;
-
-  // Database
-  db = options.db;
+  //   targetVersion
+  //     Optional version integer to migrate to. If not specified,
+  //     the target version is fetched from the package.json.
+  //   callback
+  //     function (err)
 
   // Get desired version
-  if (options.hasOwnProperty('targetVersion')) {
-    if (typeof options.targetVersion !== 'number') {
-      throw new Error('targetVersion must be a number');
-    }
-    targetVersion = options.targetVersion;
-  } else {
+  if (typeof targetVersion === 'function') {
+    callback = targetVersion;
     targetVersion = schema.getDesiredVersion();
   }
 
-  // Do not call callback elsewhere. Call 'then' instead.
-  var then = function (err) {
-    return options.callback(err);
-  };
+  if (typeof targetVersion !== 'number') {
+    throw new Error('targetVersion must be a number');
+  }
+
+  if (typeof callback !== 'function') {
+    throw new Error('callback must be a function');
+  }
 
   console.log('##### Migration #####');
   console.log('');
 
   // Get current version.
   console.log('Checking versions...');
-  schema.getVersion(db.collection('config'), function (err, currentVersion) {
+  schema.getVersion(function (err, currentVersion) {
     if (err) {
-      return then(err);
+      return callback(err);
     }  // else
 
     console.log('  Current DB schema version:', currentVersion);
@@ -50,19 +42,19 @@ exports.migrate = function (options) {
       console.log('#### Migrating from', currentVersion, 'to',
                   targetVersion, '####');
 
-      versions.run(db, currentVersion, targetVersion, function (err2) {
+      versions.run(currentVersion, targetVersion, function (err2) {
 
         if (err2) {
           console.log();
           console.log('##### Migration FAILED #####');
 
-          return then(err2);
+          return callback(err2);
         }  // else
 
         console.log();
         console.log('##### Migration SUCCESS #####');
 
-        return then();
+        return callback();
       });
     } else {
       console.log();
@@ -70,7 +62,7 @@ exports.migrate = function (options) {
       console.log();
       console.log('##### Migration SUCCESS #####');
 
-      return then();
+      return callback();
     }
   });
 };

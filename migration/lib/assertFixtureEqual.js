@@ -3,11 +3,10 @@
 
 var fixtures = require('../fixtures');
 var _ = require('lodash');
+var db = require('../../server/services/db');
 
-module.exports = function (db, collectionName, versionTag, callback) {
+module.exports = function (collectionName, versionTag, callback) {
   // Parameters
-  //   db
-  //     mongodb instance
   //   collectionName
   //     e.g. 'locations'
   //   versionTag

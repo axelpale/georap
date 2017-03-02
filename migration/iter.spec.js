@@ -1,13 +1,13 @@
 /* global describe, it, beforeEach, afterEach, before, after */
 
+// The Unit
+var iter = require('./iter');
+var db = require('../server/services/db');
+var local = require('../config/local');
 // eslint-disable-next-line no-unused-vars
 var should = require('should');
 var assert = require('assert');
-var mongoClient = require('mongodb').MongoClient;
-var local = require('../config/local');
 
-// The Unit
-var iter = require('./iter');
 
 var TEST_COLLECTION_NAME = 'test_collection';
 
@@ -26,14 +26,13 @@ var fixture = [
 ];
 
 describe('iter.updateEach', function () {
-  var db, collection;
+  var collection;
 
   before(function (done) {
-    mongoClient.connect(local.mongo.testUrl, function (dbErr, dbConn) {
-      if (dbErr) {
+    db.init(local.mongo.testUrl, function (err) {
+      if (err) {
         return console.error('Failed to connect to MongoDB.');
       }
-      db = dbConn;
 
       return done();
     });
