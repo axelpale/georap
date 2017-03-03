@@ -99,4 +99,13 @@ describe('iter.updateEach', function () {
       return done();
     });
   });
+
+  it('should skip nulls', function (done) {
+    iter.updateEach(collection, function (person, next) {
+      return next(null, null);
+    }, function (err) {
+      assert.ifError(err);
+      return done();
+    });
+  });
 });

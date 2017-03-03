@@ -4,7 +4,8 @@ var ObjectID = require('mongodb').ObjectID;
 exports.updateEach = function (collection, iteratee, callback) {
   // Replace each document in a MongoDB collection. Iteratee is the update
   // function, takes in a document and must call the next(err, updatedDocument)
-  // callback function.
+  // callback function. If updatedDocument is null, that document is left
+  // unaltered.
   //
   // Parameters:
   //   collection
@@ -49,6 +50,11 @@ exports.updateEach = function (collection, iteratee, callback) {
       iteratee(doc, function next(iterateeError, updatedDoc) {
         if (iterateeError) {
           return eachNext(iterateeError);
+        }
+
+        // Skip null docs, no need to replace.
+        if (updatedDoc === null) {
+          return eachNext(null);
         }
 
         // Ensure _id is not replaced by an _id literal.
