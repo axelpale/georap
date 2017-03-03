@@ -80,6 +80,7 @@ exports.createThumbnail = function (file, callback) {
       .withoutEnlargement()
       .toFile(thumbpath, function (err) {
         if (err) {
+          console.log(file);
           return callback(err);
         }
 
