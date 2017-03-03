@@ -153,9 +153,17 @@ describe('migrates.migrate', function () {
           assertFixtureEqual('users', 'v6', function (err3) {
             assert.ifError(err3);
 
-            assertFixtureEqual('locations', 'v6', function (err3) {
-              assert.ifError(err3);
-              done();
+            assertFixtureEqual('locations', 'v6', function (err4) {
+              assert.ifError(err4);
+
+              assertFixtureEqual('entries', 'v6', function (err5) {
+                assert.ifError(err5);
+
+                assertFixtureEqual('events', 'v6', function (err6) {
+                  assert.ifError(err6);
+                  done();
+                });
+              });
             });
           });
         });
