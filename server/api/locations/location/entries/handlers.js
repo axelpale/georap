@@ -1,7 +1,7 @@
 
 
+var uploads = require('../../../../services/uploads');
 var dal = require('../../../entries/dal');
-var uploads = require('./lib/uploads');
 var uploadHandler = uploads.uploader.single('entryfile');
 
 var status = require('http-status-codes');

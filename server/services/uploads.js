@@ -1,6 +1,6 @@
 // File upload request parser config
 
-var local = require('../../../../../../config/local');
+var local = require('../../config/local');
 
 var sharp = require('sharp');
 var multer = require('multer');
