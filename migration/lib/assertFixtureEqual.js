@@ -33,32 +33,36 @@ module.exports = function (collectionName, versionTag, callback) {
 
     // Compare only firsts.
     // Clone because otherwise edits affect some cache and yield errs elsewhere
-    var realFirst = clone(fixColl[0]);
-    var fixFirst = clone(docs[0]);
+    var fixFirst = clone(fixColl[0]);
+    var realFirst = clone(docs[0]);
 
     // _id are generated and thus always differ
     delete realFirst._id;
     delete fixFirst._id;
 
-    // Deep compare & find differences.
+    // Deep compare & find differences both ways.
     // See http://stackoverflow.com/a/31686152/638546
-    var diffs = _.reduce(realFirst, function (result, value, key) {
+    var diffs1 = _.reduce(realFirst, function (result, value, key) {
       return _.isEqual(value, fixFirst[key]) ? result : result.concat(key);
     }, []);
 
-    if (diffs.length === 0) {
+    var diffs2 = _.reduce(fixFirst, function (result, value, key) {
+      return _.isEqual(value, realFirst[key]) ? result : result.concat(key);
+    }, []);
+
+    if (diffs1.length === 0 && diffs2.length === 0) {
       return callback();
     }
 
     // Print out so that we can see the differences.
-    console.log('Data in db:');
+    console.log('Data in db.' + collectionName + ':');
     console.log(realFirst);
-    console.log('Data in fixture:');
+    console.log('Data in fixture.' + collectionName + ':');
     console.log(fixFirst);
 
     return callback({
       name: 'AssertionError',
-      diffs: diffs,
+      diffs: diffs1.concat(diffs2),
     });
   });
 };
