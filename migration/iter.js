@@ -2,7 +2,7 @@ var async = require('async');
 var ObjectID = require('mongodb').ObjectID;
 
 exports.updateEach = function (collection, iteratee, callback) {
-  // Update each document in a MongoDB collection. Iteratee is the update
+  // Replace each document in a MongoDB collection. Iteratee is the update
   // function, takes in a document and must call the next(err, updatedDocument)
   // callback function.
   //
@@ -54,7 +54,7 @@ exports.updateEach = function (collection, iteratee, callback) {
         // Ensure _id is not replaced by an _id literal.
         delete updatedDoc._id;
 
-        collection.updateOne({ _id: id }, updatedDoc, {}, function (err2) {
+        collection.replaceOne({ _id: id }, updatedDoc, {}, function (err2) {
           if (err2) {
             return eachNext(err2);
           }
