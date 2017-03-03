@@ -27,6 +27,8 @@ module.exports = {
   // URLs of the uploaded files are prefixed with this URL root path.
   // If you change the uploadUrl, edit also client/config.js.
   uploadUrl: '/uploads',
+  // Thumbnail max width & height in pixels
+  uploadThumbSize: 568,
 
   // Log files
   // Logs about requests are stored under this directory:

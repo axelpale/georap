@@ -29,19 +29,26 @@ var storage = multer.diskStorage({
 exports.uploader = multer({ storage: storage });
 //module.exports = multer({ dest: local.uploadDir });
 
+exports.getAbsolutePath = function (relativePath) {
+  // Return absolute path for a path relative to upload dir.
+  return path.resolve(local.uploadDir, relativePath);
+};
+
 exports.getRelativePath = function (absolutePath) {
   // Return path relative to upload directory
   return path.relative(local.uploadDir, absolutePath);
 };
 
-exports.createThumbnail = function (file, size, callback) {
+exports.createThumbnail = function (file, callback) {
   // Create a thumbnail for the file.
   //
   // Parameters:
   //   file
-  //     Equals to req.file created by multer
-  //   size
-  //     max width and height of the thumbnail image in pixels
+  //     Equals to req.file created by multer. Following props are needed:
+  //       path
+  //         absolute file path
+  //       mimetype
+  //         string
   //   callback
   //     function (err, thumb)
   //
@@ -59,6 +66,9 @@ exports.createThumbnail = function (file, size, callback) {
   var fix = '_medium';
   var thumbname = base + fix + '.jpg';
   var thumbpath = path.join(dir, thumbname);
+
+  // max width and height of the thumbnail image in pixels
+  var size = local.uploadThumbSize;
 
   // eslint-disable-next-line no-magic-numbers
   if (file.mimetype.substr(0, 6) === 'image/') {

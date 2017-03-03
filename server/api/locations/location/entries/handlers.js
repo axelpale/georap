@@ -6,8 +6,6 @@ var uploadHandler = uploads.uploader.single('entryfile');
 
 var status = require('http-status-codes');
 
-var THUMB_SIZE = 568;
-
 exports.create = function (req, res) {
   // Create entry.
   //
@@ -55,7 +53,7 @@ exports.create = function (req, res) {
 
     if (hasFile) {
       // Create thumbnail. Create even for non-images.
-      uploads.createThumbnail(req.file, THUMB_SIZE, function (errt, thumb) {
+      uploads.createThumbnail(req.file, function (errt, thumb) {
         if (errt) {
           console.error(errt);
           return res.sendStatus(status.INTERNAL_SERVER_ERROR);
