@@ -40,6 +40,9 @@
       <% } else if (t === 'location_entry_removed') { %>
         deleted their post from <a href="/locations/<%= ev.locationId %>"><%= name %></a> <%= timestamp(ev.time) %>
 
+      <% } else if (t === 'location_unproved_visit_created') { %>
+        maybe visited <a href="/locations/<%= ev.locationId %>"><%= name %></a> <%= timestamp(ev.time) %> :)
+
       <% } else { %>
         <%= ev.type %>
       <% } %>
