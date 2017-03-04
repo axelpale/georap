@@ -254,7 +254,7 @@ module.exports = {
           lat: 57.55341,
         },
         locationId: irbeneId,
-        locationName: 'Aebej323',
+        locationName: 'Irbene',
         time: '2009-07-30T10:44:57.000Z',  // note -1 second shift
         type: 'location_created',
         user: 'admin',
@@ -308,6 +308,7 @@ module.exports = {
         },
         layer: 12,
         name: 'Irbene',
+        points: 0,  // new
         // places should really be:
         // ['Irbene', 'Ances pagasts', 'Ventspils Municipality', 'Latvia']
         // but we cannot run reverse geocoding for each location.

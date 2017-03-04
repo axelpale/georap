@@ -74,14 +74,24 @@ var substeps = [
   },
 
   function addPoints(next) {
-    console.log('2. Adding property \'points\' to each user...');
+    console.log('2. Adding property \'points\' to each user and location...');
 
     var coll = db.collection('users');
+    var locColl = db.collection('locations');
 
     iter.updateEach(coll, function (user, iterNext) {
       user.points = 0;
       return iterNext(null, user);
-    }, next);
+    }, function (err) {
+      if (err) {
+        return next(err);
+      }
+
+      iter.updateEach(locColl, function (loc, iterNext) {
+        loc.points = 0;
+        return iterNext(null, loc);
+      }, next);
+    });
   },
 
   function addCreator(next) {
