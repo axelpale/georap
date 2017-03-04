@@ -17,7 +17,7 @@ exports.run = function (callback) {
         return callback(err2);
       }
 
-      var msg = 'points: Points of users (' + users.length + ')' +
+      var msg = 'points: Points of users (' + users.length + ') ' +
                 'computed and stored.';
       console.log(msg);
       return callback();

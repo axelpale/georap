@@ -14,6 +14,7 @@
 
 var db = require('../server/services/db');
 var pointsJob = require('./points');
+var placesJob = require('./places');
 var async = require('async');
 
 db.init(function (dbErr) {
@@ -25,6 +26,7 @@ db.init(function (dbErr) {
 
   var jobs = [
     pointsJob,
+    placesJob,
   ];
 
   async.eachSeries(jobs, function iteratee(job, cb) {

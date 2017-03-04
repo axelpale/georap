@@ -14,6 +14,9 @@ var googleMapsClient = api.createClient({
   key: local.googleMapsKey,
 });
 
+exports.LIMIT_PER_SECOND = 50;
+exports.LIMIT_PER_DAY = 2500;
+
 exports.reverseGeocode = function (latlng, callback) {
   // Parameters:
   //   latlng
