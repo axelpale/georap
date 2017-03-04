@@ -204,7 +204,7 @@ exports.findLayerAndStore = function (loc, callback) {
 };
 
 exports.findAll = function (callback) {
-  // Find all undeleted locations.
+  // Find all undeleted locations, ordered by their points, highest first.
   //
   // Parameters:
   //   callback
@@ -212,5 +212,5 @@ exports.findAll = function (callback) {
 
   var coll = db.collection('locations');
 
-  coll.find({ deleted: false }).toArray(callback);
+  coll.find({ deleted: false }).sort({ points: -1 }).toArray(callback);
 };
