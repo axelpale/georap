@@ -13,7 +13,7 @@ exports.getClusterRadius = function (layer) {
   var R = 6371000;
 
   // Desired distance between markers in pixels, somewhat.
-  var D = 200;
+  var D = 100;
 
   // Assumed width of average view of the user in pixels.
   var W = 1000;
