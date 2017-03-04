@@ -3,10 +3,11 @@ var db = require('../../server/services/db');
 var googlemaps = require('../../server/services/googlemaps');
 var async = require('async');
 
+// For Google Maps API usage limits, see:
+// https://developers.google.com/maps/documentation/geocoding/usage-limits
 var SECOND = 1000;
-var MARGIN = 10;
-var PLACES_PER_SECOND = googlemaps.LIMIT_PER_SECOND - MARGIN;
-var PLACES_PER_JOB = 200;
+var PLACES_PER_SECOND = googlemaps.LIMIT_PER_SECOND;  // lag provides margin
+var PLACES_PER_JOB = 30;
 var INTERVAL = Math.round(SECOND / PLACES_PER_SECOND);
 
 exports.run = function (callback) {

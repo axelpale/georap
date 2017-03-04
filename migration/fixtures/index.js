@@ -307,6 +307,7 @@ module.exports = {
           coordinates: [21.857705, 57.55341],
         },
         layer: 12,
+        isLayered: true,
         name: 'Irbene',
         points: 0,  // new
         // places should really be:

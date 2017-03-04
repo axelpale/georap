@@ -1,5 +1,4 @@
 var db = require('../../services/db');
-var clustering = require('../../services/clustering');
 
 exports.getAll = function (callback) {
   // Get all non-deleted markers.
@@ -59,16 +58,70 @@ exports.getFiltered = function (params, callback) {
 };
 
 exports.getWithin = function (params, callback) {
+  // Find undeleted markers (=raw locations) near a point and on and above
+  // a certain level.
+  //
+  // Parameters:
+  //   params
+  //     lat
+  //       latitude
+  //     lng
+  //       longitude
+  //     radius
+  //       integer, meters
+  //     layer
+  //       integer. Include only locations with smaller or equal layer number.
+  //     query
+  //       a limiting query
+  //   callback
+  //     function (err, markers)
+  //
 
-  clustering.findWithin({
-    db: db.get(),
-    center: [params.lng, params.lat],
-    radius: params.radius,
-    // Only locations on the layer or higher (smaller layer number).
-    query: {
-      layer: { $lte: params.layer },
-      deleted: false,
+  var center = [params.lng, params.lat];
+  var radius = params.radius;
+  var query = params.query;
+
+  // Layer number less than equal: only the "higher" markers are included.
+  query.layer = { $lte: params.layer };
+  query.deleted = false;
+
+  // See docs:
+  // https://docs.mongodb.com/manual/reference/operator/aggregation/geoNear/
+  var pipeline = [
+    {
+      $geoNear: {
+        near: {
+          type: 'Point',
+          coordinates: center,
+        },
+        // If near is specified in GeoJSON, maxDistance takes meters.
+        // If near is specified in legacy coordinates, it takes radians.
+        // We use GeoJSON so meters it is.
+        maxDistance: radius,
+        // Limit number of results. The query and maxDistance limit already
+        // very much but ensure the limit with this.
+        limit: 1000,
+        query: query,
+        distanceField: 'dist',
+        spherical: true,
+      },
     },
-    callback: callback,
-  });
+    // Return only what is needed for displaying markers.
+    {
+      $project: {
+        name: true,
+        geom: true,
+        tags: true,
+        layer: true,
+      },
+    },
+  ];
+
+  var opts = {
+    cursor: {},
+  };
+
+  db.collection('locations')
+    .aggregate(pipeline, opts)
+    .toArray(callback);
 };

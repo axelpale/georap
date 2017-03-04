@@ -111,6 +111,7 @@ exports.getWithin = function (req, res) {
     lng: lng,
     radius: radius,
     layer: layer,
+    query: {},
   }, function (err, markers) {
     if (err) {
       console.error(err);

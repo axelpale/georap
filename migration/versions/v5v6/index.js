@@ -94,6 +94,17 @@ var substeps = [
     });
   },
 
+  function addIsLayered(next) {
+    console.log('X. Adding property \'isLayered\' to each location...');
+
+    var coll = db.collection('locations');
+
+    iter.updateEach(coll, function (loc, iterNext) {
+      loc.isLayered = true;
+      return iterNext(null, loc);
+    }, next);
+  },
+
   function addCreator(next) {
     console.log('3. Adding property \'creator\' to each location...');
 
