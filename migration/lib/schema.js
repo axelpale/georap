@@ -1,6 +1,7 @@
 // Tools to find out and update the current database schema version.
 
 var pjson = require('../../package.json');
+var db = require('../../server/services/db');
 var semver = require('semver');
 
 exports.getDesiredVersion = function () {
@@ -8,12 +9,10 @@ exports.getDesiredVersion = function () {
   return semver.major(pjson.version);
 };
 
-exports.getVersion = function (configColl, callback) {
+exports.getVersion = function (callback) {
   // Find current schema version.
   //
   // Parameters:
-  //   configColl
-  //     A MongoDB collection where the schema version is kept.
   //   callback
   //     function (err, version)
   //       Parameters:
@@ -22,20 +21,26 @@ exports.getVersion = function (configColl, callback) {
   //         version
   //           integer
 
-  configColl.findOne({ key: 'schemaVersion' }).then(function (doc) {
+  var configColl = db.collection('config');
+
+  configColl.findOne({ key: 'schemaVersion' }, function (err, doc) {
+    if (err) {
+      return callback(err, null);
+    }
+
     if (doc) {
       return callback(null, doc.value);
     }  // else
 
     // No schema found. Must be v1.
     return callback(null, 1);
-  }).catch(function (err) {
-    return callback(err, null);
   });
 };
 
-exports.setVersion = function (configColl, version, callback) {
+exports.setVersion = function (version, callback) {
   // Update database schema version.
+
+  var configColl = db.collection('config');
 
   configColl.update({ key: 'schemaVersion' }, {
     $set: { value: version },

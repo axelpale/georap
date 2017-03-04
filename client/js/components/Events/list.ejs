@@ -1,0 +1,48 @@
+
+<ul id="tresdb-events" class="list-group">
+  <% var i, ev, t, name, a, b; %>
+  <% for (i = 0; i < events.length; i += 1) { %>
+    <% ev = events[i]; %>
+    <% t = ev.type; %>
+    <% name = ev.locationName; %>
+    <% name = (name === '' ? 'Untitled' : name) %>
+    <li class="list-group-item">
+      <% if (typeof pointstamp !== 'undefined') { %>
+        <div class="pull-right"><%= pointstamp(ev) %></div>
+      <% } %>
+      <a href="/users/<%= ev.user %>"><%= ev.user %></a>
+      <% if (t === 'location_created') { %>
+        created <a href="/locations/<%= ev.locationId %>"><%= name %></a> <%= timestamp(ev.time) %>
+
+      <% } else if (t === 'location_removed') { %>
+        deleted <a href="/locations/<%= ev.locationId %>"><%= name %></a> <%= timestamp(ev.time) %>
+
+      <% } else if (t === 'location_geom_changed') { %>
+        edited coords of <a href="/locations/<%= ev.locationId %>"><%= name %></a> <%= timestamp(ev.time) %>
+
+      <% } else if (t === 'location_name_changed') { %>
+        <% a = ev.data.oldName; %>
+        <% if (a === '') { %>
+          named <a href="/locations/<%= ev.locationId %>"><%= ev.data.newName %></a> <%= timestamp(ev.time) %>
+        <% } else { %>
+          renamed <a href="/locations/<%= ev.locationId %>"><%= ev.data.oldName %></a> to <a href="/locations/<%= ev.locationId %>"><%= ev.data.newName %></a> <%= timestamp(ev.time) %>
+        <% } %>
+
+      <% } else if (t === 'location_tags_changed') { %>
+        tagged <a href="/locations/<%= ev.locationId %>"><%= name %></a> as <%= ev.data.newTags.join(', ') %> <%= timestamp(ev.time) %>
+
+      <% } else if (t === 'location_entry_created') { %>
+        posted <%= ev.data.isVisit ? 'a visit ' : '' %>to <a href="/locations/<%= ev.locationId %>"><%= name %></a> <%= timestamp(ev.time) %>
+
+      <% } else if (t === 'location_entry_changed') { %>
+        edited their post in <a href="/locations/<%= ev.locationId %>"><%= name %></a> <%= timestamp(ev.time) %>
+
+      <% } else if (t === 'location_entry_removed') { %>
+        deleted their post from <a href="/locations/<%= ev.locationId %>"><%= name %></a> <%= timestamp(ev.time) %>
+
+      <% } else { %>
+        <%= ev.type %>
+      <% } %>
+    </li>
+  <% } %>
+</ul>

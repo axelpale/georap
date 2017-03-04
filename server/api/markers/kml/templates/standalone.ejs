@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+<Folder>
+  <name>Subterranea Fennica</name>
+  <% markers.forEach(function (m) { %>
+  <Placemark>
+    <name><%= m.name %></name>
+    <description>By <%= m.creator %>. Tags: <%= m.tags.join(', ') %></description>
+    <Point>
+      <coordinates><%= m.geom.coordinates.join(',') %></coordinates>
+    </Point>
+  </Placemark>
+  <% }); %>
+</Folder>
+</kml>

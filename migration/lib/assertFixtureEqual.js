@@ -1,17 +1,20 @@
 // A tool to test if a collection is equal to a fixture.
 // Currently this can test only collections with single document.
 
+var db = require('../../server/services/db');
 var fixtures = require('../fixtures');
 var _ = require('lodash');
+var clone = require('clone');
 
-module.exports = function (db, collectionName, versionTag, callback) {
+module.exports = function (collectionName, versionTag, callback) {
+  // Compares current collection to a same collection in the fixture specified
+  // by versionTag.
+  //
   // Parameters
-  //   db
-  //     mongodb instance
   //   collectionName
-  //     e.g. 'locations'
+  //     collection in the fixture e.g. 'locations'
   //   versionTag
-  //     e.g. 'v5'
+  //     version of the fixture e.g. 'v5'
   //   callback
   //     function (err)
   //       err.name === 'AssertionError'
@@ -28,31 +31,38 @@ module.exports = function (db, collectionName, versionTag, callback) {
       return callback(err);
     }
 
-    // Compare only firsts
-    var realFirst = fixColl[0];
-    var fixFirst = docs[0];
+    // Compare only firsts.
+    // Clone because otherwise edits affect some cache and yield errs elsewhere
+    var fixFirst = clone(fixColl[0]);
+    var realFirst = clone(docs[0]);
 
     // _id are generated and thus always differ
     delete realFirst._id;
     delete fixFirst._id;
 
-    // Deep compare & find differences.
+    // Deep compare & find differences both ways.
     // See http://stackoverflow.com/a/31686152/638546
-    var diffs = _.reduce(realFirst, function (result, value, key) {
+    var diffs1 = _.reduce(realFirst, function (result, value, key) {
       return _.isEqual(value, fixFirst[key]) ? result : result.concat(key);
     }, []);
 
-    if (diffs.length === 0) {
+    var diffs2 = _.reduce(fixFirst, function (result, value, key) {
+      return _.isEqual(value, realFirst[key]) ? result : result.concat(key);
+    }, []);
+
+    if (diffs1.length === 0 && diffs2.length === 0) {
       return callback();
     }
 
     // Print out so that we can see the differences.
+    console.log('Data in db.' + collectionName + ':');
     console.log(realFirst);
+    console.log('Data in fixture.' + collectionName + ':');
     console.log(fixFirst);
 
     return callback({
       name: 'AssertionError',
-      diffs: diffs,
+      diffs: diffs1.concat(diffs2),
     });
   });
 };

@@ -12,6 +12,9 @@ module.exports = {
   // Used to encrypt and decrypt passwords and tokens.
   secret: '123456789',
 
+  // Google Maps API key. CHANGE! Required for e.g. reverse geocoding.
+  googleMapsKey: '123456789012345678901234567890123456789',
+
   // Static files
   // Express/Webpack will copy the static files to be served to this directory:
   staticDir: path.resolve(__dirname, '../.tmp/public'),
@@ -21,8 +24,11 @@ module.exports = {
   // Uploaded files
   // Express will serve uploaded files (location attachments) from this dir.
   uploadDir: path.resolve(__dirname, '../.data/uploads'),
-  // URLs of the uploaded files are prefixed with this URL root path:
+  // URLs of the uploaded files are prefixed with this URL root path.
+  // If you change the uploadUrl, edit also client/config.js.
   uploadUrl: '/uploads',
+  // Thumbnail max width & height in pixels
+  uploadThumbSize: 568,
 
   // Log files
   // Logs about requests are stored under this directory:

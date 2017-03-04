@@ -1,0 +1,38 @@
+
+var status = require('http-status-codes');
+
+var dal = require('./dal');
+
+exports.count = function (req, res) {
+
+  dal.count(function (err, numLocs) {
+    if (err) {
+      return res.sendStatus(status.INTERNAL_SERVER_ERROR);
+    }
+
+    return res.json(numLocs);
+  });
+};
+
+exports.create = function (req, res) {
+
+  var valid = (typeof req.body === 'object' &&
+               typeof req.body.lat === 'number' &&
+               typeof req.body.lng === 'number');
+
+  if (!valid) {
+    return res.sendStatus(status.BAD_REQUEST);
+  }
+
+  var lat = req.body.lat;
+  var lng = req.body.lng;
+
+  dal.create(lat, lng, req.user.name, function (err, rawLoc) {
+    if (err) {
+      console.error(err);
+      return res.sendStatus(status.INTERNAL_SERVER_ERROR);
+    }
+
+    return res.json(rawLoc);
+  });
+};

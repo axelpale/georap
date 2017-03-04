@@ -138,6 +138,11 @@ To restore a specific snapshot:
 
 The backups are stored under `.data/backups` by default. To change this, modify `mongo.backupDir` in `config/local.js`. To remove a backup, remove its directory, e.g. `$ rm -rf .data/backups/2016-12-31T23-59-59`.
 
+After restoring it is often necessary to run migrate, ensureindices, and worker:
+
+    $ npm run migrate
+    $ npm run ensureindices
+    $ npm run worker
 
 
 ## MongoDB user setup

@@ -8,13 +8,16 @@
 // is requested (because the further routing is done on client side).
 
 // Styles
-require('./styles/style.css');
+require('./css/style.css');
 
 // Favicon
 require('./images/logo/16.png');
 
 // Main menu logo
 require('./images/logo/32.png');
+
+// Login background
+require('./images/login.jpg');
 
 // Custom markers
 require('./images/mapicons/marker.png');

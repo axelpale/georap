@@ -1,0 +1,26 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-12">
+
+      <div>
+        <h1><span class="glyphicon glyphicon-export" aria-hidden="true"></span> Export Locations</h1>
+
+        Choose below to download all locations in a Google Earth compatible KML file. Note that text descriptions and file attachments such as photos are not included.
+
+        <h2>Stand-alone KML</h2>
+
+        <p>Great for offline situations such as travelling in remote places. On desktop browser, right-click the link and choose 'Save Link As...' for the best results.</p>
+
+        <a href="/api/markers/kml?token=<%= token %>" target="_blank">Download the stand-alone KML</a>
+
+        <h2>Network KML</h2>
+
+        <p>Stay always up-to-date with this automatically updating KML. However, Internet connection is required. On desktop browser, right-click the link and choose 'Save Link As...' for the best results.</p>
+
+        <a href="/api/markers/kml/network?token=<%= token %>" target="_blank">Download the network KML</a>
+
+      </div>
+
+    </div>
+  </div>
+</div>

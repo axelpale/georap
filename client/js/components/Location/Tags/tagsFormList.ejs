@@ -1,0 +1,23 @@
+<% var j, tag, isActive; %>
+<div class="container-fluid">
+  <div class="row tresdb-tags">
+    <% for (j = 0; j < allTags.length; j += 1) { %>
+      <% tag = allTags[j]; %>
+      <% isActive = (locationTags.indexOf(tag) > -1); %>
+      <% if (isActive) { %>
+
+        <label id="tresdb-location-edit-tags-<%= tag %>" class="col-sm-5">
+          <input type="checkbox" name="tags" value="<%= tag %>" checked="checked">
+          <span class="label label-primary tresdb-tag"><%= tag %></span>
+          <!--button id="tresdb-location-edit-tags-<%= tag %>-button" type="button" class="btn btn-default btn-sm">Remove</button-->
+        </label>
+      <% } else { %>
+        <label id="tresdb-location-edit-tags-<%= tag %>" class="col-sm-5">
+          <input type="checkbox" name="tags" value="<%= tag %>">
+          <span class="label label-default tresdb-tag"><%= tag %></span>
+          <!--button id="tresdb-location-edit-tags-<%= tag %>-button" type="button" class="btn btn-default btn-sm">Add</button-->
+        </label>
+      <% } %>
+    <% } %>
+  </div>
+</div>

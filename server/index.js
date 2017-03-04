@@ -7,10 +7,14 @@ var express = require('express');
 var app = express();
 
 var server = http.createServer(app);
-var io = require('socket.io')(server);
 
-var nodemailer = require('nodemailer');
-var mongoClient = require('mongodb').MongoClient;
+var io = require('./services/io');
+io.init(server);
+
+var mailer = require('./services/mailer');
+mailer.init();
+
+var db = require('./services/db');
 
 var webpack = require('webpack');
 var webpackConfig = require('../config/webpack');
@@ -18,12 +22,8 @@ var webpackConfig = require('../config/webpack');
 // Logging
 var loggers = require('./services/logs/loggers');
 
-// Run immediately after server is up.
-var bootstrap = require('../config/bootstrap');
-
 // Routes
-var httpRoutes = require('./httpRoutes');
-var socketRoutes = require('./socketRoutes');
+var apiRoutes = require('./api/routes');
 
 // Log environment
 console.log('Starting TresDB in environment:', local.env);
@@ -31,14 +31,7 @@ console.log('Starting TresDB in environment:', local.env);
 
 // Database connection first
 
-var mongoUrl;
-if (local.env === 'test') {
-  mongoUrl = local.mongo.testUrl;
-} else {
-  mongoUrl = local.mongo.url;
-}
-
-mongoClient.connect(mongoUrl, function (dbErr, db) {
+db.init(function (dbErr) {
   if (dbErr) {
     console.error('Failed to connect to MongoDB.');
     console.error(dbErr);
@@ -46,20 +39,6 @@ mongoClient.connect(mongoUrl, function (dbErr, db) {
   }
   // Success
   console.log('Connected to MongoDB...');
-
-
-  // Email transporter setup and verification.
-
-  var mailer = nodemailer.createTransport(local.smtp);
-
-  mailer.verify(function (err) {
-    if (err) {
-      console.log('Connection to mail server failed:');
-      console.log(err);
-    } else {
-      console.log('Connected to mail server...');
-    }
-  });
 
 
   // Start the server.
@@ -158,8 +137,9 @@ mongoClient.connect(mongoUrl, function (dbErr, db) {
   // --------------
   // Uploaded files END
 
+
   // HTTP API routes here
-  httpRoutes(app, db);
+  app.use('/api', apiRoutes);
 
   // Catch all to single page app.
   // Must be the final step in the app middleware chain.
@@ -169,22 +149,10 @@ mongoClient.connect(mongoUrl, function (dbErr, db) {
 
 
   // Socket.io routing
-
-  io.on('connection', function (socket) {
-
-    // Domain name is required by some handlers, for example
-    // when a link is sent via email. It does not matter if
-    // the connection is transported via polling or websockets,
-    // the host stays the same.
-    var host = socket.request.headers.host;
-
-    console.log('New connection from app hosted at', host);
-
-    return socketRoutes(socket, db, mailer, host);
+  io.get().on('connection', function () {
+    // Parameters:
+    //   socket
+    console.log('New connection');
   });
 
-
-  // Populate database
-
-  bootstrap(db);
 });

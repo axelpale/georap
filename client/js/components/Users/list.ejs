@@ -1,0 +1,11 @@
+
+<ul class="list-group">
+  <% var i, u; %>
+  <% for (i = 0; i < users.length; i += 1) { %>
+    <% u = users[i]; %>
+    <li class="list-group-item">
+      <div class="pull-right"><span class="glyphicon glyphicon-star" aria-hidden="true"></span> <%= u.points %></div>
+      <a href="/users/<%= u.name %>"><%= u.name %></a>
+    </li>
+  <% } %>
+</ul>

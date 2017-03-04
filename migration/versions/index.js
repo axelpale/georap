@@ -7,6 +7,7 @@ var v = {
   2: require('./v2v3'),
   3: require('./v3v4'),
   4: require('./v4v5'),
+  5: require('./v5v6'),
 };
 
 
@@ -21,19 +22,17 @@ var getSteps = function (currentVersion, targetVersion) {
       steps.push(v[i].run);
     } else {
       throw new Error('No migration steps available from v' + i +
-                      'to v' + (i + 1));
+                      ' to v' + (i + 1));
     }
   }
 
   return steps;
 };
 
-exports.run = function (db, currentVersion, targetVersion, callback) {
+exports.run = function (currentVersion, targetVersion, callback) {
   // Executes the migration
   //
   // Parameters
-  //   db
-  //     Monk db instance
   //   currentVersion
   //     int
   //   targetVersion
@@ -52,7 +51,7 @@ exports.run = function (db, currentVersion, targetVersion, callback) {
 
   // Run steps in series
   async.eachSeries(steps, function (step, next) {
-    return step(db, next);
+    return step(next);
   }, function (err) {
     // Finally
     return callback(err);

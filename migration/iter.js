@@ -2,9 +2,10 @@ var async = require('async');
 var ObjectID = require('mongodb').ObjectID;
 
 exports.updateEach = function (collection, iteratee, callback) {
-  // Update each document in a MongoDB collection. Iteratee is the update
-  // function, takes in a document and must call the next(updatedDocument)
-  // callback function.
+  // Replace each document in a MongoDB collection. Iteratee is the update
+  // function, takes in a document and must call the next(err, updatedDocument)
+  // callback function. If updatedDocument is null, that document is left
+  // unaltered.
   //
   // Parameters:
   //   collection
@@ -15,7 +16,7 @@ exports.updateEach = function (collection, iteratee, callback) {
   //         document
   //           collection item
   //         next
-  //           function (updatedDocument)
+  //           function (err, updatedDocument)
   //   callback
   //     function (err)
   //
@@ -25,7 +26,7 @@ exports.updateEach = function (collection, iteratee, callback) {
   //   var users = db.collection('users');
   //   iter.updateEach(users, function (doc, next) {
   //     doc.name = 'Dr. ' + doc.name;
-  //     next(doc);
+  //     next(null, doc);
   //   }, function (err) {
   //     if (err) { throw err; }
   //     // else
@@ -38,7 +39,7 @@ exports.updateEach = function (collection, iteratee, callback) {
       return callback(err);
     }
 
-    async.eachSeries(allDocuments, function (doc, next) {
+    async.eachSeries(allDocuments, function (doc, eachNext) {
       var id = doc._id;  // Take before modification
 
       // Ensure ObjectID.
@@ -46,19 +47,27 @@ exports.updateEach = function (collection, iteratee, callback) {
         id = new ObjectID(id);
       }
 
-      iteratee(doc, function (updatedDoc) {
+      iteratee(doc, function next(iterateeError, updatedDoc) {
+        if (iterateeError) {
+          return eachNext(iterateeError);
+        }
+
+        // Skip null docs, no need to replace.
+        if (updatedDoc === null) {
+          return eachNext(null);
+        }
 
         // Ensure _id is not replaced by an _id literal.
         delete updatedDoc._id;
 
-        collection.updateOne({ _id: id }, updatedDoc, {}, function (err2) {
+        collection.replaceOne({ _id: id }, updatedDoc, {}, function (err2) {
           if (err2) {
-            return next(err2);
+            return eachNext(err2);
           }
-          return next(null);
+          return eachNext(null);
         });
       });
-    }, function afterNexts(err3) {
+    }, function afterEachNexts(err3) {
       if (err3) {
         return callback(err3);
       }

@@ -1,56 +1,20 @@
 
-var io = require('socket.io-client');
-var page = require('page');
-
 var routes = require('./routes');
 
-var Api = require('./api/Api');
-var Tags = require('./models/Tags');
-var Account = require('./models/Account');
-var Locations = require('./models/Locations');
-
-var MapView = require('./views/Map');
-var MainMenuView = require('./views/MainMenu');
-
-
-
-
-// Websocket connection and connection error handling
-
-var socket = io('/');
-
-socket.on('connect-error', function () {
-  console.error('TresDB: io connect-error');
-});
-
-
-
-// Client-side storage
-var storage = window.localStorage;
-
-// Connection layer
-var api = new Api(socket, storage);
+var MapComp = require('./components/Map');
+var MainMenuComp = require('./components/MainMenu');
 
 // Authentication & Account API
-var account = new Account(api, storage);
-
-// Tags API
-var tags = new Tags();
+var account = require('./stores/account');
 
 // Locations API
-var locations = new Locations(api, account, tags);
+var locations = require('./stores/locations');
 
 
 
 // Routing
 
-routes.route(page, account, locations, tags);
-page.start();
-
-// A method to expose router to map controller and main menu.
-var go = function (path) {
-  return page.show(path);
-};
+routes.route();
 
 
 
@@ -60,19 +24,38 @@ var go = function (path) {
 // loaded. Lay the main menu immediately on the map.
 window.initMap = function () {
 
-  var mapView = new MapView(storage, locations, go);
+  var mapComp = new MapComp();
+  mapComp.bind($('#map'));
 
-  var mainMenuView = new MainMenuView(account, {
-    go: go,
+  mapComp.on('marker_activated', function (location) {
+    // Open location component. Router will emit location_routed
+    routes.show('/locations/' + location._id);
+
+    // Once user returns to map, undo the pan.
+    routes.once('map_routed', function () {
+      mapComp.panForCardUndo();
+    });
+  });
+
+  routes.on('location_routed', function (location) {
+    // Via whatever way user arrived to loc,
+    // pan map so that marker becomes visible.
+    mapComp.panForCard(location.getGeom());
+  });
+
+  var menuComp = new MainMenuComp({
+    go: function (path) {
+      return routes.show(path);
+    },
     onAdditionStart: function () {
-      mapView.addAdditionMarker();
+      mapComp.addAdditionMarker();
     },
     onAdditionCancel: function () {
-      mapView.removeAdditionMarker();
+      mapComp.removeAdditionMarker();
     },
     onAdditionCreate: function () {
-      var geom = mapView.getAdditionMarkerGeom();
-      mapView.removeAdditionMarker();
+      var geom = mapComp.getAdditionMarkerGeom();
+      mapComp.removeAdditionMarker();
 
       locations.create(geom, function (err) {
         // Parameters
@@ -87,23 +70,14 @@ window.initMap = function () {
     },
   });
 
-  var addMainMenu = function () {
-    mapView.addControl(mainMenuView.render(), function (root) {
-      // Special bind handling: addControl cannot add content to dom instantly.
-      mainMenuView.bind(root);
-    });
-  };
-
-  var removeMainMenu = function () {
-    mapView.removeControls();
-  };
-
   // Bind menu to auth events.
   account.on('login', function () {
-    addMainMenu();
+    // Add main menu
+    mapComp.addControl(menuComp);
   });
   account.on('logout', function () {
-    removeMainMenu();
+    // Remove main menu
+    mapComp.removeControls();
   });
 
   // Bind fetching of locations and user's geolocation to auth events.
@@ -111,20 +85,21 @@ window.initMap = function () {
   // lead users to disallow sharing their location because no map is
   // yet visible.
   account.on('login', function () {
-    mapView.startLoadingMarkers();
-    mapView.showGeolocation();
+    mapComp.startLoadingMarkers();
+    mapComp.showGeolocation();
   });
   account.on('logout', function () {
-    mapView.stopLoadingMarkers();
-    mapView.removeAllMarkers();  // do not expose data after log out
-    mapView.hideGeolocation();
+    mapComp.stopLoadingMarkers();
+    mapComp.removeAllMarkers();  // do not expose data after log out
+    mapComp.hideGeolocation();
   });
 
   // Init mainmenu and locations if user is already logged in,
   // because no initial login or logout events would be fired.
   if (account.isLoggedIn()) {
-    mapView.startLoadingMarkers();
-    addMainMenu();
+    mapComp.startLoadingMarkers();
+    mapComp.showGeolocation();
+    mapComp.addControl(menuComp);
   }
 
 };
