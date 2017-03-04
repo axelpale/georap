@@ -287,9 +287,17 @@ exports.getAllOfUser = function (username, callback) {
   //   callback
   //     function (err, events)
 
-  var coll = db.get().collection('events');
+  var coll = db.collection('events');
 
   coll.find({ user: username }).toArray(callback);
+};
+
+exports.getAllOfLocation = function (locationId, callback) {
+  // Parameters:
+  //   locationId
+  //   callback
+  //     function (err, events)
+  db.collection('events').find({ locationId: locationId }).toArray(callback);
 };
 
 exports.getRecent = function (n, beforeTime, callback) {

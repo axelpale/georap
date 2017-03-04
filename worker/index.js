@@ -14,6 +14,7 @@
 
 var db = require('../server/services/db');
 var pointsJob = require('./points');
+var locpointsJob = require('./locpoints');
 var placesJob = require('./places');
 var async = require('async');
 
@@ -26,6 +27,7 @@ db.init(function (dbErr) {
 
   var jobs = [
     pointsJob,
+    locpointsJob,
     placesJob,
   ];
 
