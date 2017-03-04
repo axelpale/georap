@@ -16,6 +16,9 @@ require('./images/logo/16.png');
 // Main menu logo
 require('./images/logo/32.png');
 
+// Login background
+require('./images/login.jpg');
+
 // Custom markers
 require('./images/mapicons/marker.png');
 require('./images/mapicons/geolocation.png');

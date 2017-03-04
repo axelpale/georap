@@ -8,6 +8,30 @@ html, body {
   height: 100%;
 }
 
+/* Login */
+
+.tresdb-login-container {
+  width: 100%;
+  height: 100%;
+  margin: 0px;
+  padding: 0px;
+  background: url('/assets/images/login.jpg') no-repeat center center fixed;
+  background-size: cover;
+}
+
+.tresdb-login-container h1,
+.tresdb-login-container label,
+.tresdb-login-container p,
+.tresdb-login-container a {
+  color: #EEE !important;
+}
+
+#tresdb-login-form {
+  margin-bottom: 1.68em;
+}
+
+/* Login END */
+
 /* Menu */
 
 .tresdb-map-menu {
