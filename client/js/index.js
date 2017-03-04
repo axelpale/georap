@@ -1,6 +1,4 @@
 
-var page = require('page');
-
 var routes = require('./routes');
 
 var MapComp = require('./components/Map');
@@ -16,8 +14,7 @@ var locations = require('./stores/locations');
 
 // Routing
 
-routes.route(page);
-page.start();
+routes.route();
 
 
 
@@ -30,20 +27,25 @@ window.initMap = function () {
   var mapComp = new MapComp();
   mapComp.bind($('#map'));
 
-  mapComp.on('location_activated', function (location) {
-    page.show('/locations/' + location._id);
+  mapComp.on('marker_activated', function (location) {
+    // Open location component. Router will emit location_routed
+    routes.show('/locations/' + location._id);
 
-    // Pan map so that marker becomes visible
-    mapComp.panForCard(location.geom.coordinates[1],
-                       location.geom.coordinates[0]);
-    routes.once('map_activated', function () {
+    // Once user returns to map, undo the pan.
+    routes.once('map_routed', function () {
       mapComp.panForCardUndo();
     });
   });
 
+  routes.on('location_routed', function (location) {
+    // Via whatever way user arrived to loc,
+    // pan map so that marker becomes visible.
+    mapComp.panForCard(location.getGeom());
+  });
+
   var menuComp = new MainMenuComp({
     go: function (path) {
-      return page.show(path);
+      return routes.show(path);
     },
     onAdditionStart: function () {
       mapComp.addAdditionMarker();

@@ -11,16 +11,19 @@ module.exports = function (map) {
 
   // Public methods
 
-  this.panForCard = function (lat, lng) {
+  this.panForCard = function (geom) {
     // Pan map so that target location becomes centered on
     // the visible background.
     //
     // Parameters:
-    //   latlng
-    //     Coords of the location
+    //   geom
+    //     GeoJSON Point
 
     // Store current, original center for undo.
     _panForCardUndoLatLng = map.getCenter();
+
+    var lat = geom.coordinates[1];
+    var lng = geom.coordinates[0];
 
     var cardWidthPx = $('#card-container').width();
     var mapWidthPx = $('body').width();

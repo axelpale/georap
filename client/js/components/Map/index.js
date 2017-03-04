@@ -22,7 +22,7 @@ var emitter = require('component-emitter');
 module.exports = function () {
   //
   // Emits:
-  //   location_activated, locationId
+  //   marker_activated, locationId
   //     when user clicks the marker to see the location in detail
   //
 
@@ -90,8 +90,8 @@ module.exports = function () {
 
     // Inform that user wants to open a location.
     // Leads to opening of location page.
-    _manager.on('location_activated', function (markerLocation) {
-      self.emit('location_activated', markerLocation);
+    _manager.on('marker_activated', function (markerLocation) {
+      self.emit('marker_activated', markerLocation);
     });
 
     (function defineMapStateChange() {

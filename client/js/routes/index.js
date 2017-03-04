@@ -22,13 +22,20 @@ var UserView = require('../components/User');
 // Help in remembering original url if redirect to login page is required.
 var AfterLogin = require('./lib/AfterLogin');
 
+var page = require('page');
 var queryString = require('qs');
 var emitter = require('component-emitter');
 
 // Emit 'map_activated' so that map knows when to pan back to original state.
 emitter(exports);
 
-exports.route = function (page) {
+exports.show = function (path) {
+  // For example:
+  //   routes.show('/locations/' + location._id);
+  return page.show(path);
+};
+
+exports.route = function () {
 
   // Init
 
@@ -122,7 +129,7 @@ exports.route = function (page) {
     //   Do not emit 'closed' event because it causes redirection to '/'
     var silent = true;
     card.close(silent);
-    exports.emit('map_activated');
+    exports.emit('map_routed');
   });
 
   page('/password', function () {
@@ -143,6 +150,9 @@ exports.route = function (page) {
   page('/locations/:id', function (ctx) {
     var view = new LocationView(ctx.params.id);
     card.open(view);
+    view.once('idle', function (location) {
+      exports.emit('location_routed', location);
+    });
   });
 
   page('/filters', function () {
@@ -175,4 +185,5 @@ exports.route = function (page) {
     card.open(view, 'page');
   });
 
+  page.start();
 };

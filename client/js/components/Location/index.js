@@ -28,8 +28,8 @@ module.exports = function (id) {
   //     when model emits "removed"
 
   // Init
-  emitter(this);
   var self = this;
+  emitter(self);
 
   // State
   var _location;
@@ -39,7 +39,7 @@ module.exports = function (id) {
 
   // Public methods
 
-  this.bind = function ($mount) {
+  self.bind = function ($mount) {
 
     // Loading
     $mount.html(locationTemplate());
@@ -89,10 +89,14 @@ module.exports = function (id) {
       // Enable tooltips. See http://getbootstrap.com/javascript/#tooltips
       $('[data-toggle="tooltip"]').tooltip();
 
+
+      // Inform view is ready
+      self.emit('idle', _location);
+
     });
   };  // end bind
 
-  this.unbind = function () {
+  self.unbind = function () {
 
     if (_location) {
       nameView.unbind();

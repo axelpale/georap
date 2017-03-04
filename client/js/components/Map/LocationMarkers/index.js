@@ -59,7 +59,7 @@ module.exports = function (map) {
     m.addListener('click', function () {
 
       if (labels.hasLabel(m)) {
-        self.emit('location_activated', loc);
+        self.emit('marker_activated', loc);
       } else {
         // First click shows the label
         labels.ensureLabel(m, map.getMapTypeId(), true);
