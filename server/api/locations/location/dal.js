@@ -1,5 +1,6 @@
 /* eslint-disable max-lines */
 
+var layersDal = require('../../../../worker/layers/dal');
 var db = require('../../../services/db');
 var googlemaps = require('../../../services/googlemaps');
 var eventsDal = require('../../events/dal');
@@ -28,43 +29,57 @@ exports.changeGeom = function (params, callback) {
       return callback(err);
     }
 
-    var locColl = db.get().collection('locations');
-    var q = { _id: params.locationId };
-
     var newGeom = {
       type: 'Point',
       coordinates: [lng, lat],  // note different order to google
     };
 
-    var u = {
-      $set: {
-        geom: newGeom,
-        places: newPlaces,
-      },
-    };
-
-    locColl.updateOne(q, u, function (err2) {
-      if (err2) {
-        return callback(err2);
+    layersDal.markOneAsUnlayered(locationId, function (erru) {
+      if (erru) {
+        return callback(erru);
       }
 
-      var oldGeom = params.locationGeom;
-
-      eventsDal.createLocationGeomChanged({
-        locationId: params.locationId,
-        locationName: params.locationName,
-        username: params.username,
-        newGeom: newGeom,
-        oldGeom: oldGeom,
-      }, function (err3) {
-        if (err3) {
-          return callback(err3);
+      layersDal.findLayerForPoint(geom, function (errl, layer) {
+        if (errl) {
+          console.error(errl);
+          return callback(errl);
         }
 
-        return callback();
-      });
-    });
-  });
+        var locColl = db.collection('locations');
+        var q = { _id: params.locationId };
+
+        var u = {
+          $set: {
+            geom: newGeom,
+            places: newPlaces,
+            layer: layer,
+          },
+        };
+
+        locColl.updateOne(q, u, function (err2) {
+          if (err2) {
+            return callback(err2);
+          }
+
+          var oldGeom = params.locationGeom;
+
+          eventsDal.createLocationGeomChanged({
+            locationId: params.locationId,
+            locationName: params.locationName,
+            username: params.username,
+            newGeom: newGeom,
+            oldGeom: oldGeom,
+          }, function (err3) {
+            if (err3) {
+              return callback(err3);
+            }
+
+            return callback();
+          });
+        });  // updateOne
+      });  // findLayerForPoint
+    });  // markOneAsUnlayered
+  });  // reverseGeocode
 };
 
 exports.changeName = function (params, callback) {

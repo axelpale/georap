@@ -76,6 +76,26 @@ exports.markAllAsUnlayered = function (callback) {
   });
 };
 
+exports.markOneAsUnlayered = function (locationId, callback) {
+  // Mark one location with isLayered=false. This is necessary
+  // when moving single location and then finding its layer.
+  //
+  // Parameters:
+  //   locationId
+  //   callback
+  //     function (err)
+
+  var coll = db.collection('locations');
+  var q = { _id: locationId };
+
+  coll.updateOne(q, { $set: { isLayered: false } }, function (err) {
+    if (err) {
+      return callback(err);
+    }
+    return callback();
+  });
+};
+
 exports.findDistToNearestLayered = function (geom, callback) {
   // Find distance to nearest neighbor with isLayered=true. If none found
   // the distance is null.

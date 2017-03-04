@@ -2,6 +2,7 @@
 
 var db = require('../../services/db');
 var googlemaps = require('../../services/googlemaps');
+var layersDal = require('../../../worker/layers/dal');
 var eventsDal = require('../events/dal');
 
 var shortid = require('shortid');
@@ -40,39 +41,49 @@ exports.create = function (lat, lng, username, callback) {
       return callback(err0);
     }
 
-    var newLoc = {
-      creator: username,
-      deleted: false,
-      geom: {
-        type: 'Point',
-        coordinates: [lng, lat],
-      },
-      layer: 1,
-      name: shortid.generate(),
-      places: places,
-      tags: [],
+    var geom = {
+      type: 'Point',
+      coordinates: [lng, lat],
     };
 
-    var coll = db.get().collection('locations');
-
-    coll.insertOne(newLoc, function (err, result) {
-      if (err) {
-        return callback(err);
+    layersDal.findLayerForPoint(geom, function (errl, layer) {
+      if (errl) {
+        console.error(errl);
+        return callback(errl);
       }
 
-      newLoc._id = result.insertedId;
+      var newLoc = {
+        creator: username,
+        deleted: false,
+        geom: geom,
+        isLayered: true,
+        layer: layer,
+        name: shortid.generate(),
+        places: places,
+        tags: [],
+      };
 
-      eventsDal.createLocationCreated({
-        locationId: newLoc._id,
-        locationName: newLoc.name,
-        lat: lat,
-        lng: lng,
-        username: username,
-      }, function (err2) {
-        if (err2) {
-          return callback(err2);
+      var coll = db.get().collection('locations');
+
+      coll.insertOne(newLoc, function (err, result) {
+        if (err) {
+          return callback(err);
         }
-        return callback(null, newLoc);
+
+        newLoc._id = result.insertedId;
+
+        eventsDal.createLocationCreated({
+          locationId: newLoc._id,
+          locationName: newLoc.name,
+          lat: lat,
+          lng: lng,
+          username: username,
+        }, function (err2) {
+          if (err2) {
+            return callback(err2);
+          }
+          return callback(null, newLoc);
+        });
       });
     });
   });  // .create
