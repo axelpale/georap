@@ -25,6 +25,9 @@ exports.create = function (req, res) {
 
   uploadHandler(req, res, function (err) {
     if (err) {
+      if (err.code === 'LIMIT_FILE_SIZE') {
+        return res.sendStatus(status.REQUEST_TOO_LONG);
+      }
       console.error(err);
       return res.sendStatus(status.INTERNAL_SERVER_ERROR);
     }
