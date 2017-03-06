@@ -1,3 +1,5 @@
+/* eslint-disable no-magic-numbers */
+
 var path = require('path');
 
 // First, we ensure that local.js is not accidentally included in
@@ -29,6 +31,8 @@ module.exports = {
   uploadUrl: '/uploads',
   // Thumbnail max width & height in pixels
   uploadThumbSize: 568,
+  // Upload file size limit in bytes.
+  uploadSizeLimit: 20 * 1024 * 1024,
 
   // Log files
   // Logs about requests are stored under this directory:

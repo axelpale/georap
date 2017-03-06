@@ -1,8 +1,11 @@
 
+var config = require('../../../../config');
 var locations = require('../../../stores/locations');
 var markdownSyntax = require('../lib/markdownSyntax.ejs');
 var template = require('./template.ejs');
 var emitter = require('component-emitter');
+
+var K = 1024;
 
 module.exports = function (location) {
   // Parameters:
@@ -14,14 +17,17 @@ module.exports = function (location) {
 
   self.bind = function ($mount) {
 
+
     $mount.html(template({
       markdownSyntax: markdownSyntax,
+      limit: Math.round(config.uploadSizeLimit / (K * K)),
     }));
 
     var $cont = $('#tresdb-entry-container');
     var $show = $('#tresdb-entry-show');
     var $form = $('#tresdb-entry-form');
     var $error = $('#tresdb-entry-error');
+    var $sizeerror = $('#tresdb-entry-sizeerror');
     var $progress = $('#tresdb-entry-progress');
     var $text = $('#tresdb-entry-input');
     var $file = $('#tresdb-entry-file-input');
@@ -37,6 +43,11 @@ module.exports = function (location) {
 
       // On error, show error message
       if (err) {
+        if (err.name === 'REQUEST_TOO_LONG') {
+          $form.removeClass('hidden');
+          $sizeerror.removeClass('hidden');
+          return;
+        }
         console.error(err);
         $error.removeClass('hidden');
         return;
@@ -51,6 +62,13 @@ module.exports = function (location) {
     var submitHandler = function () {
       // Trim
       $text.val($text.val().trim());
+
+      // Hide the form, errors and reveal progress bar
+      $form.addClass('hidden');
+      $error.addClass('hidden');
+      $sizeerror.addClass('hidden');
+      $progress.removeClass('hidden');
+
       // Post
       locations.createEntry(location.getId(), $form, responseHandler);
     };

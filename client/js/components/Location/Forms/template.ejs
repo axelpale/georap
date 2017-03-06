@@ -5,6 +5,15 @@
 <!-- Entry form -->
 
 <div id="tresdb-entry-container" class="hidden">
+
+  <div id="tresdb-entry-error" class="hidden">
+    <div class="alert alert-danger" role="alert">Saving the post failed. Might be a connection issue.</div>
+  </div>
+
+  <div id="tresdb-entry-sizeerror" class="hidden">
+    <div class="alert alert-danger" role="alert">The file is too large. Please choose a smaller version of the file.</div>
+  </div>
+
   <form id="tresdb-entry-form" class="panel panel-primary">
     <div class="panel-heading">
       Tell something about the location or prove your visit with a photo
@@ -24,7 +33,7 @@
       </div>
 
       <div class="form-group">
-        <label for="tresdb-entry-file-input">(Optional) Attach a photo or any other document</label>
+        <label for="tresdb-entry-file-input">(Optional) Attach a photo or any other document. Max size is <%= limit %> MiB.</label>
         <input id="tresdb-entry-file-input" type="file" name="entryfile">
       </div>
 
@@ -57,7 +66,4 @@
     </div>
   </div>
 
-  <div id="tresdb-entry-error" class="hidden">
-    <div class="alert alert-danger" role="alert">Saving the post failed. Might be a connection issue.</div>
-  </div>
 </div>

@@ -26,7 +26,12 @@ var storage = multer.diskStorage({
   },
 });
 
-exports.uploader = multer({ storage: storage });
+exports.uploader = multer({
+  storage: storage,
+  limits: {
+    fileSize: local.uploadSizeLimit,  // bytes
+  },
+});
 //module.exports = multer({ dest: local.uploadDir });
 
 exports.getAbsolutePath = function (relativePath) {

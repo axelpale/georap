@@ -151,7 +151,14 @@ exports.createEntry = function (id, form, callback) {
       return callback();
     },
     error: function (jqxhr, statusCode, statusMessage) {
-      return callback(new Error(statusMessage));
+      var err = new Error(statusMessage);
+
+      // eslint-disable-next-line no-magic-numbers
+      if (jqxhr.status === 413) {
+        err.name = 'REQUEST_TOO_LONG';
+      }
+
+      return callback(err);
     },
   });
 };
