@@ -34,12 +34,12 @@ exports.changeGeom = function (params, callback) {
       coordinates: [lng, lat],  // note different order to google
     };
 
-    layersDal.markOneAsUnlayered(locationId, function (erru) {
+    layersDal.markOneAsUnlayered(params.locationId, function (erru) {
       if (erru) {
         return callback(erru);
       }
 
-      layersDal.findLayerForPoint(geom, function (errl, layer) {
+      layersDal.findLayerForPoint(newGeom, function (errl, layer) {
         if (errl) {
           console.error(errl);
           return callback(errl);
