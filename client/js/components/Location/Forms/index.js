@@ -51,6 +51,11 @@ module.exports = function (location) {
     var submitHandler = function () {
       // Trim
       $text.val($text.val().trim());
+
+      // Hide the form and  reveal progress bar
+      $form.addClass('hidden');
+      $progress.removeClass('hidden');
+
       // Post
       locations.createEntry(location.getId(), $form, responseHandler);
     };
