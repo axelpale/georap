@@ -89,6 +89,11 @@ module.exports = function (id) {
       // Enable tooltips. See http://getbootstrap.com/javascript/#tooltips
       $('[data-toggle="tooltip"]').tooltip();
 
+      // Command all external links in entries to open a new tab.
+      // See http://stackoverflow.com/a/4425214/638546
+      $('#tresdb-location-entries a').filter(function () {
+        return this.hostname !== window.location.hostname;
+      }).attr('target', '_blank');
 
       // Inform view is ready
       self.emit('idle', _location);

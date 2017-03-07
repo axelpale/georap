@@ -41,9 +41,17 @@
       <div class="panel-body tresdb-entry-image-body">
         <img src="<%= entry.getThumbUrl() %>" title="<%= entry.getFileName() %>">
       </div>
-    <% } else { %>
+    <% } else if (entry.getMimeType() === 'application/pdf') { %>
       <div class="panel-body">
         <a href="<%= entry.getUrl() %>" target="_blank"><%= entry.getFileName() %></a>
+      </div>
+    <% } else if (entry.getMimeType() === 'text/plain') { %>
+      <div class="panel-body">
+        <a href="<%= entry.getUrl() %>" target="_blank"><%= entry.getFileName() %></a>
+      </div>
+    <% } else { %>
+      <div class="panel-body">
+        <a href="<%= entry.getUrl() %>" download="<%= entry.getFileName() %>"><%= entry.getFileName() %></a>
       </div>
     <% } %>
 
