@@ -172,5 +172,30 @@ describe('migrates.migrate', function () {
 
   });
 
+  describe('v6 to v7', function () {
+
+    beforeEach(function (done) {
+      loadFixture('v6', done);
+    });
+
+    it('should be able to migrate from v6 to v7', function (done) {
+      var targetV = 7;
+      migrates.migrate(targetV, function (err) {
+        assert.ifError(err);
+
+        assertFixtureEqual('config', 'v7', function (err2) {
+          assert.ifError(err2);
+
+          assertFixtureEqual('locations', 'v7', function (err4) {
+            assert.ifError(err4);
+
+            done();
+          });
+        });
+      });
+    });
+
+  });
+
 
 });

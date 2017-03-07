@@ -1,4 +1,4 @@
-/* eslint-disable no-magic-numbers, no-sync */
+/* eslint-disable no-magic-numbers, no-sync, max-lines */
 
 var local = require('../../config/local');
 var bcrypt = require('bcryptjs');
@@ -195,6 +195,8 @@ module.exports = {
         },
         deleted: false,
         tags: ['military'],
+        text1: '',
+        text2: '',
         places: ['Tārgale parish', 'Ventspils Municipality', 'Latvia'],
         layer: 9,
       },
@@ -208,6 +210,8 @@ module.exports = {
         },
         deleted: false,
         tags: ['walk-in', 'town'],
+        text1: '',
+        text2: '',
         places: ['Irbene', 'Ances pagasts', 'Ventspils Municipality', 'Latvia'],
         layer: 1,
       },
@@ -221,6 +225,8 @@ module.exports = {
         },
         deleted: true,
         tags: [],
+        text1: '',
+        text2: '',
         places: ['Rummu', 'Vasalemma Parish', 'Harju County', 'Estonia'],
         layer: 2,
       },
@@ -269,6 +275,21 @@ module.exports = {
       collection: 'locations',
       spec: { layer: 1 },
       options: {},
+    },
+    {
+      // Text index
+      collection: 'locations',
+      spec: {
+        text1: 'text',  // primary
+        text2: 'text',  // secondary
+      },
+      options: {
+        weights: {
+          text1: 3,
+          text2: 1,
+        },
+        name: 'TextIndex',
+      },
     },
     {
       collection: 'users',

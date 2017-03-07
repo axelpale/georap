@@ -1,17 +1,9 @@
-/* eslint-disable max-lines, camelcase, no-magic-numbers */
+/* eslint-disable camelcase, no-magic-numbers */
 
-var local = require('../../config/local');
-var bcrypt = require('bcryptjs');
-var ObjectId = require('mongodb').ObjectId;
+var c = require('./common');
 
-// eslint-disable-next-line no-sync
-var PASSWORD = bcrypt.hashSync('admin_password', local.bcrypt.rounds);
-
-var id = function (k) {
-  return new ObjectId(k);
-};
-
-var irbeneId = id('581f166110a1482dd0b7cd13');
+var v6 = require('./v6');
+var v7 = require('./v7');
 
 module.exports = {
 
@@ -21,7 +13,7 @@ module.exports = {
       users: [{
         name: 'admin',
         email: 'admin@example.com',
-        hash: PASSWORD,
+        hash: c.PASSWORD,
         admin: true,
       }],
       locations: [{
@@ -42,7 +34,7 @@ module.exports = {
       users: [{
         name: 'admin',
         email: 'admin@example.com',
-        hash: PASSWORD,
+        hash: c.PASSWORD,
         admin: true,
       }],
       locations: [{
@@ -65,7 +57,7 @@ module.exports = {
       users: [{
         name: 'admin',
         email: 'admin@example.com',
-        hash: PASSWORD,
+        hash: c.PASSWORD,
         admin: true,
       }],
       locations: [{
@@ -114,7 +106,7 @@ module.exports = {
       users: [{
         name: 'admin',
         email: 'admin@example.com',
-        hash: PASSWORD,
+        hash: c.PASSWORD,
         admin: true,
       }],
       locations: [{
@@ -167,11 +159,11 @@ module.exports = {
       users: [{
         name: 'admin',
         email: 'admin@example.com',
-        hash: PASSWORD,
+        hash: c.PASSWORD,
         admin: true,
       }],
       locations: [{
-        _id: irbeneId,
+        _id: c.irbeneId,
         name: 'Irbene',
         geom: {
           type: 'Point',
@@ -208,115 +200,7 @@ module.exports = {
     },
   },
 
-  'v6': {
-    collections: {
-
-      config: [{
-        key: 'schemaVersion',
-        value: 6,  // new
-      }],
-
-      entries: [{  // new
-        _id: id('581f166110a1482dd0b7ea01'),
-        data: {
-          isVisit: false,
-          markdown: 'A ghost town',
-          filepath: null,
-          mimetype: null,
-          thumbfilepath: null,
-          thumbmimetype: null,
-        },
-        deleted: false,
-        locationId: irbeneId,
-        time: '2009-09-04T23:44:21.000Z',
-        type: 'location_entry',
-        user: 'admin',
-      }, {
-        _id: id('581f166110a1482dd0b7ea02'),
-        data: {
-          isVisit: false,
-          markdown: null,
-          filepath: '2009/RxRvKSlbl/radar.jpg',  // the sample contains this
-          mimetype: 'image/jpeg',
-          thumbfilepath: '2009/RxRvKSlbl/radar_medium.jpg',
-          thumbmimetype: 'image/jpeg',
-        },
-        deleted: false,
-        locationId: irbeneId,
-        time: '2009-10-02T11:11:01.000Z',
-        type: 'location_entry',
-        user: 'admin',
-      }],
-
-      events: [{  // new
-        data: {
-          lng: 21.857705,
-          lat: 57.55341,
-        },
-        locationId: irbeneId,
-        locationName: 'Irbene',
-        time: '2009-07-30T10:44:57.000Z',  // note -1 second shift
-        type: 'location_created',
-        user: 'admin',
-      }, {
-        data: {
-          entryId: id('581f166110a1482dd0b7ea01'),
-          isVisit: false,
-          markdown: 'A ghost town',
-          filepath: null,
-          mimetype: null,
-          thumbfilepath: null,
-          thumbmimetype: null,
-        },
-        locationId: irbeneId,
-        locationName: 'Irbene',
-        time: '2009-09-04T23:44:21.000Z',
-        type: 'location_entry_created',
-        user: 'admin',
-      }, {
-        data: {
-          entryId: id('581f166110a1482dd0b7ea02'),
-          isVisit: false,
-          markdown: null,
-          filepath: '2009/RxRvKSlbl/radar.jpg',  // the sample contains this
-          mimetype: 'image/jpeg',
-          thumbfilepath: '2009/RxRvKSlbl/radar_medium.jpg',
-          thumbmimetype: 'image/jpeg',
-        },
-        locationId: irbeneId,
-        locationName: 'Irbene',
-        time: '2009-10-02T11:11:01.000Z',
-        type: 'location_entry_created',
-        user: 'admin',
-      }],
-
-      users: [{
-        admin: true,
-        email: 'admin@example.com',
-        hash: PASSWORD,
-        name: 'admin',
-        points: 0,  // new
-      }],
-
-      locations: [{
-        _id: irbeneId,
-        creator: 'admin',  // new
-        deleted: false,
-        geom: {
-          type: 'Point',
-          coordinates: [21.857705, 57.55341],
-        },
-        layer: 12,
-        isLayered: true,
-        name: 'Irbene',
-        points: 0,  // new
-        // places should really be:
-        // ['Irbene', 'Ances pagasts', 'Ventspils Municipality', 'Latvia']
-        // but we cannot run reverse geocoding for each location.
-        places: [],
-        tags: ['walk-in'],
-      }],
-    },
-  },
+  'v6': v6,
+  'v7': v7,
 
 };
