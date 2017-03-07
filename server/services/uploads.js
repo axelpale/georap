@@ -7,6 +7,7 @@ var multer = require('multer');
 var path = require('path');
 var fse = require('fs-extra');
 var shortid = require('shortid');
+var sanitize = require('sanitize-filename');
 
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -21,8 +22,22 @@ var storage = multer.diskStorage({
       return cb(null, absDir);
     });
   },
+
+  // Convert filename to a universally compatible one.
   filename: function (req, file, cb) {
-    return cb(null, file.originalname);
+
+    // Remove suspicious characters. Might end up with empty filename.
+    var safeButMaybeEmpty = sanitize(file.originalname);
+
+    // If empty, come up with a filename.
+    if (safeButMaybeEmpty.length < 1) {
+      return cb(null, shortid.generate());
+    }
+
+    // Convert spaces to _
+    var safe = safeButMaybeEmpty.replace(/\s+/g, '_');
+
+    return cb(null, safe);
   },
 });
 
