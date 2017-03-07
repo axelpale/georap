@@ -4,6 +4,8 @@ var convert = require('./lib/convert');
 
 module.exports = function (map) {
 
+  var self = this;
+
   // When location page opens, map pans so that location becomes visible
   // on the background. After location page is closed, this pan is being
   // undone. We only need to remember the original map center.
@@ -11,13 +13,23 @@ module.exports = function (map) {
 
   // Public methods
 
-  this.panForCard = function (geom) {
+  self.panForCard = function (geom) {
     // Pan map so that target location becomes centered on
     // the visible background.
     //
     // Parameters:
     //   geom
     //     GeoJSON Point
+
+    // Wait until map has projection.
+    // See convert.point2LatLng for details.
+    var pev = 'projection_changed';
+    if (!map.getProjection()) {
+      google.maps.event.addListenerOnce(map, pev, function () {
+        self.panForCard(geom);
+      });
+      return;
+    }
 
     // Store current, original center for undo.
     _panForCardUndoLatLng = map.getCenter();
@@ -44,7 +56,7 @@ module.exports = function (map) {
     map.panTo(targetLatLng);
   };
 
-  this.panForCardUndo = function () {
+  self.panForCardUndo = function () {
     // Undo the pan made by panForCard
     if (_panForCardUndoLatLng) {
       map.panTo(_panForCardUndoLatLng);
