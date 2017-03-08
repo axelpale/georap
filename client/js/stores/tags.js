@@ -26,6 +26,7 @@ var tags = [
   'scientific',
   'shop',
   'spiritual',
+  'sports',
   'town',
   'underground',
   'vehicle',
