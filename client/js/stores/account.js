@@ -248,6 +248,10 @@ exports.getUser = function () {
   return jwtDecode(storage.getItem(TOKEN_KEY));
 };
 
+exports.getEmail = function () {
+  return exports.getUser().email;
+};
+
 exports.getName = function () {
   // Return username as a string
   return exports.getUser().name;

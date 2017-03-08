@@ -13,6 +13,7 @@ var FiltersView = require('../components/Filters');
 var InviteView = require('../components/Invite');
 var LocationView = require('../components/Location');
 var LoginView = require('../components/Login');
+var PaymentsView = require('../components/Payments');
 var ResetPasswordView = require('../components/ResetPassword');
 var SearchView = require('../components/Search');
 var SignupView = require('../components/Signup');
@@ -130,6 +131,11 @@ exports.route = function () {
     var silent = true;
     card.close(silent);
     exports.emit('map_routed');
+  });
+
+  page('/payments', function () {
+    var view = new PaymentsView();
+    card.open(view, 'page');
   });
 
   page('/password', function () {
