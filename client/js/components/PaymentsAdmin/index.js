@@ -1,5 +1,5 @@
+// Payments Management UI
 
-var account = require('../../stores/account');
 var template = require('./template.ejs');
 var emitter = require('component-emitter');
 
@@ -14,11 +14,7 @@ module.exports = function () {
 
   self.bind = function ($mount) {
 
-    $mount.html(template({
-      email: account.getEmail(),
-      balance: 25.00,
-      username: account.getName(),
-    }));
+    $mount.html(template());
 
   };
 

@@ -55,6 +55,12 @@ module.exports = function (handlers) {
       return go('/payments');
     });
 
+    $mount.on('click', '#tresdb-mainmenu-payments-admin', function (ev) {
+      ev.preventDefault();
+
+      return go('/payments/admin');
+    });
+
     $mount.on('click', '#tresdb-mainmenu-change-password', function (ev) {
       ev.preventDefault();
 
