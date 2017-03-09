@@ -1,16 +1,17 @@
 var db = require('../../../services/db');
 var eventsDal = require('../../events/dal');
+var paymentsDal = require('../../payments/dal');
+var clone = require('clone');
 
 exports.getOne = function (username, callback) {
-  // Get single user
+  // Get single user without anything extra. The result does not have
+  // the properties hash and email.
   //
   // Parameters:
   //   username
   //     string
   //   callback
-  //     function (err, user)
-  //       err null and user null if no user found
-  //
+  //     function (err, user), user === null if no user found
 
   var usersColl = db.get().collection('users');
   var proj = {
@@ -27,7 +28,31 @@ exports.getOne = function (username, callback) {
       return callback(null, null);
     }
 
-    var num = 10;
+    return callback(null, doc);
+  });
+};
+
+exports.getOneWithEvents = function (username, callback) {
+  // Get single user
+  //
+  // Parameters:
+  //   username
+  //     string
+  //   callback
+  //     function (err, user)
+  //       err null and user null if no user found
+  //
+
+  exports.getOne(username, function (err, doc) {
+    if (err) {
+      return callback(err);
+    }
+
+    if (!doc) {
+      return callback(null, null);
+    }
+
+    var num = 20;
     var before = (new Date()).toISOString();
 
     eventsDal.getRecentOfUser(username, num, before, function (err2, docs) {
@@ -40,5 +65,39 @@ exports.getOne = function (username, callback) {
       return callback(null, doc);
     });
 
+  });
+};
+
+exports.getOneWithBalanceAndPayments = function (username, callback) {
+
+  exports.getOne(username, function (err, doc) {
+    if (err) {
+      return callback(err);
+    }
+
+    if (!doc) {
+      return callback(null, null);
+    }
+
+    // Clone to avoid cache modification
+    var user = clone(doc);
+
+    paymentsDal.getBalanceOfUser(doc._id, function (err2, balance) {
+      if (err2) {
+        return callback(err2);
+      }
+
+      user.balance = balance;
+
+      paymentsDal.getPaymentsOfUser(doc._id, function (err3, payments) {
+        if (err3) {
+          return callback(err3);
+        }
+
+        user.payments = payments;
+
+        return callback(null, user);
+      });
+    });
   });
 };
