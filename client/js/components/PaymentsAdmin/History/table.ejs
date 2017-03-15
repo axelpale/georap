@@ -1,0 +1,18 @@
+<table class="table">
+  <thead>
+    <tr>
+      <th>Date</th>
+      <th>Username</th>
+      <th>Balance Change €</th>
+    </tr>
+  </thead>
+  <tbody>
+  <% payments.forEach(function (p) { %>
+    <tr>
+      <td>2017-03-08</td>
+      <td><%= p.user %></td>
+      <td>+40.00</td>
+    </tr>
+  <% }); %>
+  </tbody>
+</table>

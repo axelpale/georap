@@ -1,6 +1,8 @@
 var db = require('../../services/db');
+var usersDal = require('../users/dal');
 var _ = require('lodash');
 var clone = require('clone');
+var async = require('async');
 
 exports.createPayment = function (params, callback) {
   // Parameters:
@@ -55,10 +57,33 @@ exports.createPayment = function (params, callback) {
   });
 };
 
-exports.getBalanceOfUser = function (userId, callback) {
+exports.createCorrection = function () {
+  // noop
+};
+
+exports.getAll = function (callback) {
+  // Get payments in time order, most recent first
+  //
   // Parameters:
-  //   userId
-  //     object id
+  //   callback
+  //     function (err, payments)
+
+  var coll = db.collection('payments');
+  var cursor = coll.find().sort({ time: -1 });
+
+  cursor.toArray(function (err, payments) {
+    if (err) {
+      return callback(err);
+    }
+
+    return callback(null, payments);
+  });
+};
+
+exports.getBalanceOfUser = function (username, callback) {
+  // Parameters:
+  //   username
+  //     string
   //   callback
   //     function (err, balance)
   //       err
@@ -68,7 +93,7 @@ exports.getBalanceOfUser = function (userId, callback) {
   var coll = db.collection('payments');
 
   // Find most recent payment and return balanceAfter value
-  var cursor = coll.find({ userId: userId }).sort({ time: 1 }).limit(1);
+  var cursor = coll.find({ name: username }).sort({ time: 1 }).limit(1);
 
   cursor.toArray(function (err, payments) {
     if (err) {
@@ -85,10 +110,46 @@ exports.getBalanceOfUser = function (userId, callback) {
   });
 };
 
+exports.getBalances = function (callback) {
+  // Get users and their balances
+  //
+  // Parameters:
+  //   callback
+  //     function (err, usersWithBalances)
+
+  usersDal.getAll(function (err, users) {
+    if (err) {
+      return callback(err);
+    }
+
+    async.map(users, function iteratee(u, done) {
+      exports.getBalanceOfUser(u.name, function (err2, balance) {
+        return done(null, {
+          _id: u._id,
+          name: u.name,
+          balance: balance,
+        });
+      });
+    }, function (err3, results) {
+      if (err3) {
+        return callback(err3);
+      }
+
+      return callback(null, results);
+    });
+  });
+};
+
 exports.getPaymentsOfUser = function (username, callback) {
+  // Get payments in time order, newest first.
+  //
+  // Parameters:
+  //   username
+  //   callback
+  //     function (err, payments)
 
   var coll = db.collection('payments');
-  var cursor = coll.find({ account: username }).sort({ time: 1 });
+  var cursor = coll.find({ account: username }).sort({ time: -1 });
 
   cursor.toArray(function (err, payments) {
     if (err) {
@@ -104,6 +165,8 @@ exports.hasActiveSubscription = function (username, callback) {
   // is passed from the previous subscription fee.
 
   //var MONTH = 30 * 24 * 60 * 60 * 1000;
+
+  return callback(new Error('not implemented'));
 };
 
 exports.ensureActiveSubscription = function (username, callback) {
@@ -111,4 +174,6 @@ exports.ensureActiveSubscription = function (username, callback) {
   // to renew the subscription by making a payment from the user's account.
   // Call back with an Insufficient Funds error if no active subscription and
   // not enough funds in account to pay the subscription.
-}
+
+  return callback(new Error('not implemented'));
+};
