@@ -3,7 +3,7 @@
   <div class="btn-toolbar">
     <div class="dropdown btn-group">
       <button id="tresdb-mainmenu-account" type="button" data-toggle="dropdown" class="dropdown-toggle btn btn-default" aria-haspopup="true" aria-expanded="false">
-        <%= glyphicon({ name: 'menu-hamburger' }) %> <%= user.name %>
+        <%= glyphicon({ name: 'menu-hamburger' }) %>
         <span class="caret"></span>
       </button>
       <ul class="dropdown-menu" aria-labelledby="tresdb-mainmenu-account">
@@ -12,10 +12,10 @@
         </li>
         <li role="separator" class="divider"></li>
         <li>
-          <a id="tresdb-mainmenu-events" href="#"><%= glyphicon({ name: 'bell' }) %> Latest activity...</a>
+          <a id="tresdb-mainmenu-events" href="#"><%= glyphicon({ name: 'bell' }) %> Latest activity</a>
         </li>
         <li>
-          <a id="tresdb-mainmenu-users" href="#"><%= glyphicon({ name: 'user' }) %> Users...</a>
+          <a id="tresdb-mainmenu-users" href="#"><%= glyphicon({ name: 'user' }) %> Users</a>
         </li>
         <li>
           <a id="tresdb-mainmenu-export" href="/export"><%= glyphicon({ name: 'export' }) %> Export...</a>
@@ -23,7 +23,10 @@
         <li role="separator" class="divider"></li>
         <li class="dropdown-header">Account</li>
         <li>
-          <a id="tresdb-mainmenu-payments" href="#"><%= glyphicon({ name: 'piggy-bank' }) %> Payments...</a>
+          <a id="tresdb-mainmenu-user" href="#"><%= glyphicon({ name: 'user' }) %> <%= user.name %></a>
+        </li>
+        <li>
+          <a id="tresdb-mainmenu-payments" href="#"><%= glyphicon({ name: 'piggy-bank' }) %> Payments</a>
         </li>
         <li>
           <a id="tresdb-mainmenu-change-password" href="#"><%= glyphicon({ name: 'asterisk' }) %> Change password...</a>
