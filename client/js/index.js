@@ -7,9 +7,6 @@ var MainMenuComp = require('./components/MainMenu');
 // Authentication & Account API
 var account = require('./stores/account');
 
-// Locations API
-var locations = require('./stores/locations');
-
 
 
 // Routing
@@ -43,31 +40,8 @@ window.initMap = function () {
     mapComp.panForCard(location.getGeom());
   });
 
-  var menuComp = new MainMenuComp({
-    go: function (path) {
-      return routes.show(path);
-    },
-    onAdditionStart: function () {
-      mapComp.addAdditionMarker();
-    },
-    onAdditionCancel: function () {
-      mapComp.removeAdditionMarker();
-    },
-    onAdditionCreate: function () {
-      var geom = mapComp.getAdditionMarkerGeom();
-      mapComp.removeAdditionMarker();
-
-      locations.create(geom, function (err) {
-        // Parameters
-        //   err
-        //   newLoc
-
-        if (err) {
-          console.error(err);
-          return;
-        }
-      });
-    },
+  var menuComp = new MainMenuComp(mapComp, function go(path) {
+    return routes.show(path);
   });
 
   // Bind menu to auth events.

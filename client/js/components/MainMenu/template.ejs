@@ -69,6 +69,20 @@
   </div>
 
   <div class="btn-group" role="group" aria-label="location tools">
-    <button id="tresdb-addition-create" type="button" class="btn btn-primary">Create</button>
+    <button id="tresdb-addition-create" type="button" class="btn btn-primary">Create here</button>
   </div>
+</div>
+
+<div id="tresdb-toolbar-progress" class="btn-toolbar hidden" role="toolbar">
+  <div class="btn-group" role="group" style="width: 30em">
+    <div class="progress">
+      <div class="progress-bar progress-bar-striped active" role="progressbar" style="width: 100%">
+        <span class="sr-only">Waiting for server</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="tresdb-toolbar-error" class="alert alert-danger hidden" role="alert">
+  Failed to create location. Try again later.
 </div>

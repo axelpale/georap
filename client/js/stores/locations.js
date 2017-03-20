@@ -12,9 +12,14 @@ var Location = require('../components/Location/Model');
 emitter(exports);
 
 socket.on('tresdb_event', function (ev) {
+  // Emit all location events. Allow hooking to all location events or
+  // specific event type e.g. location_created, needed by main menu to
+  // determine when creation is successful.
   if (ev.type.startsWith('location_')) {
     exports.emit('location_event', ev);
+    exports.emit(ev.type, ev);
   }
+
 });
 
 // To inform views (especially Map) about changes in locations,

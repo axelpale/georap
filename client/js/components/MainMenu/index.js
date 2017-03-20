@@ -1,25 +1,37 @@
 
 var account = require('../../stores/account');
+var locations = require('../../stores/locations');
 var template = require('./template.ejs');
 var glyphiconTemplate = require('./glyphicon.ejs');
 var emitter = require('component-emitter');
 
-module.exports = function (handlers) {
+// var isGeomAlmostEqual = function (geom1, geom2) {
+//   var prec = 5;
+//
+//   var lat1 = geom1.coordinates[1];
+//   var lng1 = geom1.coordinates[0];
+//   var lat2 = geom2.coordinates[1];
+//   var lng2 = geom2.coordinates[0];
+//
+//   lat1 = lat1.toString().substr(0, prec);
+//   lng1 = lng1.toString().substr(0, prec);
+//   lat2 = lat2.toString().substr(0, prec);
+//   lng2 = lng2.toString().substr(0, prec);
+//
+//   return (lat1 === lat2 && lng1 === lng2);
+// };
+
+module.exports = function (mapComp, go) {
   // Parameters:
-  //   handlers
-  //     Object with the following properties:
-  //       go
-  //         function go(path): ask router to go to path. Is a way to expose
-  //         the router for the menu.
-  //       onAdditionStart
-  //       onAdditionCreate
-  //       onAdditionCancel
+  //   mapComp
+  //     components.Map instance
+  //   go
+  //     function go(path): ask router to go to path. Is a way to expose
+  //     the router for the menu.
 
   // Init
   var self = this;
   emitter(self);
-
-  var go = handlers.go;
 
   // Root element. Remember for the unbinding.
   var _$root = null;
@@ -93,7 +105,13 @@ module.exports = function (handlers) {
       // Show addition menu
       $('#tresdb-toolbar-addition').removeClass('hidden');
 
-      return handlers.onAdditionStart();
+      // Hide possible error message from previous addition
+      $('#tresdb-toolbar-error').addClass('hidden');
+
+      // On addition start
+      mapComp.addAdditionMarker();
+
+      return;
     });
 
     $mount.on('click', '#tresdb-addition-cancel', function (ev) {
@@ -104,18 +122,63 @@ module.exports = function (handlers) {
       // Hide addition menu
       $('#tresdb-toolbar-addition').addClass('hidden');
 
-      return handlers.onAdditionCancel();
+      // On addition cancel
+      mapComp.removeAdditionMarker();
+
+      return;
     });
 
     $mount.on('click', '#tresdb-addition-create', function (ev) {
       ev.preventDefault();
 
-      // Show other menus
-      $('#tresdb-toolbar-main').removeClass('hidden');
+      // Show progress bar
+      $('#tresdb-toolbar-progress').removeClass('hidden');
       // Hide addition menu
       $('#tresdb-toolbar-addition').addClass('hidden');
 
-      return handlers.onAdditionCreate();
+      // On addition create
+      var geom = mapComp.getAdditionMarkerGeom();
+      mapComp.removeAdditionMarker();
+
+      // Listen for a sing that location was creted successfully.
+      locations.on('location_created', function thisFn(lev) {
+        // Note: another location_created could come before.
+        // Thus, off only after the same location. How to determine it?
+        // Geom must be same. Creator must be same. Let's use creator.
+
+        if (lev.user !== account.getName()) {
+          return;
+        }
+
+        // Hide progress bar
+        $('#tresdb-toolbar-progress').addClass('hidden');
+
+        // Show main menu
+        $('#tresdb-toolbar-main').removeClass('hidden');
+
+        locations.off('location_created', thisFn);
+      });
+
+      locations.create(geom, function (err) {
+        // Parameters
+        //   err
+        //   newLoc
+
+        if (err) {
+          console.error(err);
+          // Show error message
+          $('#tresdb-toolbar-error').removeClass('hidden');
+
+          // Hide progress bar
+          $('#tresdb-toolbar-progress').addClass('hidden');
+
+          // Show main menu
+          $('#tresdb-toolbar-main').removeClass('hidden');
+
+          return;
+        }
+        // Otherwise wait for location_created event
+      });
     });
 
     $mount.on('click', '#tresdb-mainmenu-filters', function (ev) {
