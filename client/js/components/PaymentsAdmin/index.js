@@ -3,6 +3,7 @@
 var template = require('./template.ejs');
 var Balances = require('./Balances');
 var PaymentsHistory = require('./History');
+var Registration = require('./Registration');
 var emitter = require('component-emitter');
 
 module.exports = function () {
@@ -12,7 +13,8 @@ module.exports = function () {
   emitter(self);
 
   var balancesComp;
-  var historyComp;
+  var paymentsHistoryComp;
+  var registrationComp;
 
 
   // Public methods
@@ -21,12 +23,15 @@ module.exports = function () {
 
     $mount.html(template());
 
+
     balancesComp = new Balances();
     balancesComp.bind($('#tresdb-balances-root'));
 
-    historyComp = new PaymentsHistory();
-    historyComp.bind($('#tresdb-history-root'));
+    paymentsHistoryComp = new PaymentsHistory();
+    paymentsHistoryComp.bind($('#tresdb-history-root'));
 
+    registrationComp = new Registration();
+    registrationComp.bind($('#tresdb-registration-root'));
   };
 
   this.unbind = function () {
@@ -35,8 +40,12 @@ module.exports = function () {
       balancesComp.unbind();
     }
 
-    if (historyComp) {
-      historyComp.unbind();
+    if (paymentsHistoryComp) {
+      paymentsHistoryComp.unbind();
+    }
+
+    if (registrationComp) {
+      registrationComp.unbind();
     }
   };
 
