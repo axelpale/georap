@@ -160,6 +160,12 @@ exports.getPaymentsOfUser = function (username, callback) {
   });
 };
 
+exports.getSecondsToExpiration = function (username, callback) {
+  // Calls back with a number of seconds to subscription expiration.
+
+  return callback(new Error('not implemented'));
+};
+
 exports.hasActiveSubscription = function (username, callback) {
   // Calls back with true if less than 30 days (or other subscription period)
   // is passed from the previous subscription fee.
