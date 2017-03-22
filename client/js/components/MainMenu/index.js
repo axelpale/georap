@@ -1,6 +1,7 @@
 
 var account = require('../../stores/account');
 var locations = require('../../stores/locations');
+var config = require('../../../config');
 var template = require('./template.ejs');
 var glyphiconTemplate = require('./glyphicon.ejs');
 var emitter = require('component-emitter');
@@ -50,6 +51,7 @@ module.exports = function (mapComp, go) {
 
     $mount.html(template({
       glyphicon: glyphiconTemplate,
+      config: config,
       user: account.getUser(),  // might be undefined
     }));
 
