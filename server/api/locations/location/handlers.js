@@ -5,6 +5,7 @@ var dal = require('./dal');
 exports.changeGeom = function (req, res) {
 
   var u, lat, lng;
+  var loc = req.location;
 
   if (typeof req.body.lat !== 'number' ||
       typeof req.body.lng !== 'number') {
@@ -16,9 +17,10 @@ exports.changeGeom = function (req, res) {
   u = req.user.name;
 
   dal.changeGeom({
-    locationId: req.location._id,
-    locationName: req.location.name,
-    locationGeom: req.location.geom,
+    locationId: loc._id,
+    locationName: loc.name,
+    locationGeom: loc.geom,
+    locationLayer: loc.layer,
     username: u,
     latitude: lat,
     longitude: lng,

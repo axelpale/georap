@@ -6,6 +6,7 @@ var account = require('../stores/account');
 
 var CardView = require('../components/Card');
 var ChangePasswordView = require('../components/ChangePassword');
+var Error401View = require('../components/Error401');
 var Error404View = require('../components/Error404');
 var EventsView = require('../components/Events');
 var ExportView = require('../components/Export');
@@ -13,6 +14,8 @@ var FiltersView = require('../components/Filters');
 var InviteView = require('../components/Invite');
 var LocationView = require('../components/Location');
 var LoginView = require('../components/Login');
+var PaymentsView = require('../components/Payments');
+var PaymentsAdminView = require('../components/PaymentsAdmin');
 var ResetPasswordView = require('../components/ResetPassword');
 var SearchView = require('../components/Search');
 var SignupView = require('../components/Signup');
@@ -25,6 +28,7 @@ var AfterLogin = require('./lib/AfterLogin');
 var page = require('page');
 var queryString = require('qs');
 var emitter = require('component-emitter');
+
 
 // Emit 'map_activated' so that map knows when to pan back to original state.
 emitter(exports);
@@ -49,6 +53,15 @@ exports.route = function () {
 
   // Handle paths where to redirect after login.
   var afterLogin = new AfterLogin();
+
+  // Middleware
+  var adminOnly = function (context, next) {
+    if (account.isAdmin()) {
+      return next();
+    }
+    var view = new Error401View();
+    card.open(view, 'page');
+  };
 
 
   // Public routes first.
@@ -111,7 +124,7 @@ exports.route = function () {
   // Routes that require login
 
   page('*', function (context, next) {
-    //   If not logged in then show login form.
+    // If not logged in then show login form.
 
     if (account.isLoggedIn()) {
       return next();
@@ -132,13 +145,13 @@ exports.route = function () {
     exports.emit('map_routed');
   });
 
-  page('/password', function () {
-    var view = new ChangePasswordView();
+  page('/payments', function () {
+    var view = new PaymentsView();
     card.open(view, 'page');
   });
 
-  page('/invite', function () {
-    var view = new InviteView();
+  page('/password', function () {
+    var view = new ChangePasswordView();
     card.open(view, 'page');
   });
 
@@ -178,6 +191,20 @@ exports.route = function () {
   page('/export', function () {
     card.open(new ExportView());
   });
+
+  // Routes that require admin
+
+  page('/invite', adminOnly, function () {
+    var view = new InviteView();
+    card.open(view, 'page');
+  });
+
+  page('/payments/admin', adminOnly, function () {
+    var view = new PaymentsAdminView();
+    card.open(view, 'page');
+  });
+
+  // Catch all
 
   page('*', function () {
     // Page not found.

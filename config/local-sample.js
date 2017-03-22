@@ -10,6 +10,13 @@ if (typeof window !== 'undefined') {
 
 module.exports = {
 
+  // Enable or disable features of the site.
+  // See also client/config.js for duplicate configs.
+  features: {
+    // Set false to hide payments page and payments admin page.
+    payments: false,
+  },
+
   // Site secret. CHANGE! DO NOT EXPOSE TO CLIENT!
   // Used to encrypt and decrypt passwords and tokens.
   secret: '123456789',

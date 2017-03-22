@@ -1,0 +1,50 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-12">
+
+      <h1><span class="glyphicon glyphicon-piggy-bank" aria-hidden="true"></span> Membership Payments</h1>
+
+      <p>For account <strong><%= email %></strong></p>
+      <p>Your balance: <strong><%= balance > 0 ? '+' : '' %><%= balance.toFixed(2) %> €</strong></p>
+      <p>Your subscription: <strong>-5.00 € per month</strong></p>
+      <p>Expiration with current balance: <strong>2017-08-08</strong></p>
+
+      <p><input type="checkbox" checked> Notify me by email when my balance drops below +10.00 €</p>
+
+      <p><button class="btn btn-primary">Make payment to increase your balance</button></p>
+
+      <div class="well">
+        <p>To increase your balance, we ask you to make the following payment. Processing the payment can take a few days. Contact the receiver if you are in hurry or need help.</p>
+
+        <h4>Payment details</h4>
+        <p>
+        Receiver: <strong>Akseli Palen</strong><br>
+        IBAN: <strong>FI96 1439 3500 2271 89</strong><br>
+        BIC: <strong>NDEAFIHH</strong><br>
+        Amount: <strong>amount of your choice</strong><br>
+        Due date: <strong>now</strong><br>
+        Message: <strong>sub <%= username %></strong>
+        </p>
+
+        <h4>Additional information:</h4>
+        <p>
+          Receiver email: <strong>akseli.palen@gmail.com</strong><br>
+          Receiver phone: <strong>+358 50 400 0078</strong><br>
+          Receiver business ID: <strong>2346724-4</strong><br>
+          VAT rate: <strong>0 %</strong> (not in Finnish VAT register)
+        </p>
+      </div>
+
+      <h2>Transaction history</h2>
+
+      <ul>
+        <li>2017-03-08 Monthly subscription fee -5.00 €</li>
+        <li>2017-02-08 Monthly subscription fee -5.00 €</li>
+        <li>2017-01-08 Monthly subscription fee -5.00 €</li>
+        <li>2017-01-06 Payment received +40.00 €</li>
+        <li>2017-01-01 Initial balance +0.00 €</li>
+      </ul>
+
+    </div>
+  </div><!-- .row -->
+</div><!-- .container-fluid -->

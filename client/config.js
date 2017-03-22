@@ -6,6 +6,13 @@
 // Downside: some values are duplicates to config/local.js
 
 module.exports = {
+
+  // Enable or disable features of the site.
+  features: {
+    // Set false to hide payments page and payments admin page.
+    payments: false,
+  },
+
   // Url prefix for uploaded files.
   // If you change this, edit also config/local.js
   uploadUrl: '/uploads',

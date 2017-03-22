@@ -6,6 +6,7 @@ var accountRouter = require('./account/routes');
 var eventsRouter = require('./events/routes');
 var locationsRouter = require('./locations/routes');
 var markersRouter = require('./markers/routes');
+var paymentsRouter = require('./payments/routes');
 var usersRouter = require('./users/routes');
 
 var jwt = require('express-jwt');
@@ -36,11 +37,13 @@ router.use(jwt({
 router.use('/events', eventsRouter);
 router.use('/locations', locationsRouter);
 router.use('/markers', markersRouter);
+router.use('/payments', paymentsRouter);
 router.use('/users', usersRouter);
 
-// Token error handling
+// API error handling
 // See http://expressjs.com/en/guide/error-handling.html
 router.use(function (err, req, res, next) {
+  // Token error handling
   if (err.name === 'UnauthorizedError') {
     return res.sendStatus(status.UNAUTHORIZED);
   }

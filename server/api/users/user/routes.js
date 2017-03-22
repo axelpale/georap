@@ -6,6 +6,7 @@ var router = express.Router();
 
 // Single user
 
-router.get('/', handlers.getOne);
+router.get('/', handlers.getOneWithEvents);
+router.get('/payments', handlers.getOneWithBalanceAndPayments);
 
 module.exports = router;

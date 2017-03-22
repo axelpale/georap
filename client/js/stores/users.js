@@ -33,7 +33,7 @@ exports.getAll = function (callback) {
   });
 };
 
-exports.getOne = function (username, callback) {
+exports.getOneWithEvents = function (username, callback) {
   // Fetch a user from server and return raw user object.
   // Will call back with error if not found.
   //

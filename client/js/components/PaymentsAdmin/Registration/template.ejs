@@ -1,0 +1,51 @@
+
+<div class="form-group">
+  <button id="tresdb-registration-open" class="btn btn-primary">Register a payment...</button>
+</div>
+
+<form id="tresdb-registration-form" class="hidden panel panel-primary">
+  <div class="panel-heading">
+    Register a new payment
+  </div>
+  <div class="panel-body">
+
+    <div class="form-group">
+      <label for="tresdb-registration-user">For user:</label>
+      <select class="form-control" id="tresdb-registration-user">
+        <option>c8h11no2</option>
+        <option>Wormwood</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="tresdb-registration-period">Time:</label>
+      <select class="form-control" id="tresdb-registration-period">
+        <option>1 year - 40 EUR</option>
+        <option>2 years - 80 EUR</option>
+        <option>3 years - 120 EUR</option>
+        <option>4 years - 160 EUR</option>
+        <option>5 years - 200 EUR</option>
+      </select>
+    </div>
+
+    <div class="pull-right">
+      <button id="tresdb-registration-cancel" type="button" class="btn btn-default">Cancel</button>
+      <button type="submit" class="btn btn-primary">Register</button>
+    </div>
+  </div>
+</form>
+
+<div id="tresdb-registration-success" class="hidden alert alert-success alert-dismissable" role="alert">
+  <button type="button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+  Payment registered successfully.
+</div>
+
+<div id="tresdb-registration-error" class="hidden alert alert-danger" role="alert">
+  Payment registration failed. Refresh the page and ensure that no payment was registered before trying again.
+</div>
+
+<div id="resdb-registration-progress" class="progress hidden">
+  <div class="progress-bar progress-bar-striped active" role="progressbar" style="width: 100%">
+    <span class="sr-only">Waiting for server</span>
+  </div>
+</div>

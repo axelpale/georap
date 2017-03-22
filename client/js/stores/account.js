@@ -223,6 +223,17 @@ exports.isLoggedIn = function () {
   return false;
 };
 
+exports.isAdmin = function () {
+  // Return
+  //   bool, true if admin, false if not admin or not logged in.
+
+  if (exports.isLoggedIn()) {
+    return exports.getUser().admin;
+  }
+
+  return false;
+};
+
 exports.getToken = function () {
   // Can be called only if isLoggedIn.
   if (!exports.isLoggedIn()) {
@@ -246,6 +257,10 @@ exports.getUser = function () {
   }
 
   return jwtDecode(storage.getItem(TOKEN_KEY));
+};
+
+exports.getEmail = function () {
+  return exports.getUser().email;
 };
 
 exports.getName = function () {

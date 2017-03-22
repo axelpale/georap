@@ -24,7 +24,7 @@ module.exports = function (username) {
     }));
 
     // Fetch user before further rendering.
-    users.getOne(username, function (err, user) {
+    users.getOneWithEvents(username, function (err, user) {
       // Hide loading bar
       $('#tresdb-user-loading').addClass('hidden');
 

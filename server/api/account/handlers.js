@@ -47,7 +47,7 @@ exports.login = function (req, res) {
     }
 
     bcrypt.compare(password, user.hash, function (err2, match) {
-      var tokenPayload, token;
+      var tokenPayload, tokenOptions, token;
 
       if (err2) {
         // Hash comparison failed. Password might still be correct, though.
@@ -63,7 +63,12 @@ exports.login = function (req, res) {
           admin: user.admin,
         };
 
-        token = jwt.sign(tokenPayload, local.secret);
+        // The following will add 'exp' property to payload.
+        tokenOptions = {
+          expiresIn: '1y',  // a year
+        };
+
+        token = jwt.sign(tokenPayload, local.secret, tokenOptions);
         return res.json(token);
       }  // else
 

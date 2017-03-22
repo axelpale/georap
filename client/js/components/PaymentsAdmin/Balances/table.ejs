@@ -1,0 +1,16 @@
+<table class="table">
+  <thead>
+    <tr>
+      <th>Username</th>
+      <th>Balance €</th>
+    </tr>
+  </thead>
+  <tbody>
+  <% users.forEach(function (p) { %>
+    <tr>
+      <td><%= p.name %></td>
+      <td><%= p.balance.toFixed(2) %></td>
+    </tr>
+  <% }); %>
+  </tbody>
+</table>

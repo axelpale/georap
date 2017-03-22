@@ -1,11 +1,12 @@
 /* eslint-disable max-lines */
 
-var layersDal = require('../../../../worker/layers/dal');
 var db = require('../../../services/db');
 var googlemaps = require('../../../services/googlemaps');
 var eventsDal = require('../../events/dal');
 
 exports.changeGeom = function (params, callback) {
+  // Change geom but do not recompute layer.
+  //
   // Parameters:
   //   params
   //     locationId
@@ -14,6 +15,8 @@ exports.changeGeom = function (params, callback) {
   //       string
   //     locationGeom
   //       GeoJSON Point
+  //     locationLayer
+  //       integer
   //     username
   //       string
   //     latitude
@@ -34,51 +37,45 @@ exports.changeGeom = function (params, callback) {
       coordinates: [lng, lat],  // note different order to google
     };
 
-    layersDal.markOneAsUnlayered(params.locationId, function (erru) {
-      if (erru) {
-        return callback(erru);
+    // Find new layer or do not find new layer?
+    // Do not. Because findLayerForPoint picks the highest layer number,
+    // i.e. the bottommost empty layer. A single move of loc with low layer
+    // number would hide it from global navigation if new layer is searched
+    // for. So we do not find new layer here but use the same layer as
+    // before.
+
+    var locColl = db.collection('locations');
+    var q = { _id: params.locationId };
+
+    var u = {
+      $set: {
+        geom: newGeom,
+        places: newPlaces,
+        layer: params.locationLayer,
+      },
+    };
+
+    locColl.updateOne(q, u, function (err2) {
+      if (err2) {
+        return callback(err2);
       }
 
-      layersDal.findLayerForPoint(newGeom, function (errl, layer) {
-        if (errl) {
-          console.error(errl);
-          return callback(errl);
+      var oldGeom = params.locationGeom;
+
+      eventsDal.createLocationGeomChanged({
+        locationId: params.locationId,
+        locationName: params.locationName,
+        username: params.username,
+        newGeom: newGeom,
+        oldGeom: oldGeom,
+      }, function (err3) {
+        if (err3) {
+          return callback(err3);
         }
 
-        var locColl = db.collection('locations');
-        var q = { _id: params.locationId };
-
-        var u = {
-          $set: {
-            geom: newGeom,
-            places: newPlaces,
-            layer: layer,
-          },
-        };
-
-        locColl.updateOne(q, u, function (err2) {
-          if (err2) {
-            return callback(err2);
-          }
-
-          var oldGeom = params.locationGeom;
-
-          eventsDal.createLocationGeomChanged({
-            locationId: params.locationId,
-            locationName: params.locationName,
-            username: params.username,
-            newGeom: newGeom,
-            oldGeom: oldGeom,
-          }, function (err3) {
-            if (err3) {
-              return callback(err3);
-            }
-
-            return callback();
-          });
-        });  // updateOne
-      });  // findLayerForPoint
-    });  // markOneAsUnlayered
+        return callback();
+      });
+    });  // updateOne
   });  // reverseGeocode
 };
 
