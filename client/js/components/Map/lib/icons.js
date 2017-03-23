@@ -16,6 +16,16 @@ exports.marker = function () {
   };
 };
 
+exports.markerVisited = function () {
+  return {
+    labelOrigin: new google.maps.Point(11, 46),
+    url: '/assets/images/mapicons/markerVisited.png',
+    size: new google.maps.Size(22, 40),
+    origin: new google.maps.Point(0, 0),
+    anchor: new google.maps.Point(11, 40),
+  };
+};
+
 exports.geolocation = function () {
   return {
     url: '/assets/images/mapicons/geolocation.png',

@@ -14,10 +14,11 @@
 //   login
 //   logout
 
-var emitter = require('component-emitter');
-var jwtDecode = require('jwt-decode');
 var storage = require('../connection/storage');
 var api = require('../connection/api');
+var users = require('./users');
+var emitter = require('component-emitter');
+var jwtDecode = require('jwt-decode');
 
 emitter(exports);
 
@@ -266,4 +267,9 @@ exports.getEmail = function () {
 exports.getName = function () {
   // Return username as a string
   return exports.getUser().name;
+};
+
+exports.getVisitedLocationIds = function (callback) {
+  // Return array of ids of locations that the user has visited.
+  return users.getVisitedLocationIds(exports.getName(), callback);
 };
