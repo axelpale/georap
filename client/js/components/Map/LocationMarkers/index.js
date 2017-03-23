@@ -1,3 +1,4 @@
+/* eslint-disable max-lines, max-statements, no-lonely-if */
 /* global google */
 
 var markerStore = require('../../../stores/markers');
@@ -33,18 +34,8 @@ module.exports = function (map) {
 
   // Private methods
 
-  var _addMarker = function (loc) {
-    // Create marker and add it to the map.
-    //
-    // Parameters:
-    //   loc
-    //     MarkerLocation
-    // Return
-    //   the created marker
-    var lng, lat, m, icon;
-
-    lng = loc.geom.coordinates[0];
-    lat = loc.geom.coordinates[1];
+  var _chooseIcon = function (loc) {
+    var icon;
 
     var isVisited = (_visitedIds.indexOf(loc._id) !== -1);
     var isDemolished = (loc.tags.indexOf('demolished') !== -1);
@@ -66,9 +57,25 @@ module.exports = function (map) {
       }
     }
 
+    return icon;
+  };
+
+  var _addMarker = function (loc) {
+    // Create marker and add it to the map.
+    //
+    // Parameters:
+    //   loc
+    //     MarkerLocation
+    // Return
+    //   the created marker
+    var lng, lat, m;
+
+    lng = loc.geom.coordinates[0];
+    lat = loc.geom.coordinates[1];
+
     m = new google.maps.Marker({
       position: new google.maps.LatLng(lat, lng),
-      icon: icon,
+      icon: _chooseIcon(loc),
     });
 
     // Store the MarkerLocation for _id, name, and layer info.
@@ -222,6 +229,32 @@ module.exports = function (map) {
     if (_markers.hasOwnProperty(ev.locationId)) {
       var mToRemove = _markers[ev.locationId];
       _removeMarker(mToRemove);
+    }
+  });
+
+  markerStore.on('location_tags_changed', function (ev) {
+    // Update icon according to new tags.
+    if (_markers.hasOwnProperty(ev.locationId)) {
+      var m = _markers[ev.locationId];
+      // First update the location
+      m.get('location').tags = ev.data.newTags;
+      // Update icon according to the new tags
+      m.setIcon(_chooseIcon(m.get('location')));
+    }
+  });
+
+  markerStore.on('location_entry_created', function (ev) {
+    if (ev.data.isVisit) {
+      // Add loc among visited locations if not visited before by this user.
+      if (_visitedIds.indexOf(ev.locationId) === -1) {
+        _visitedIds.push(ev.locationId);
+      }
+
+      // Update marker icon to visited
+      if (_markers.hasOwnProperty(ev.locationId)) {
+        var m = _markers[ev.locationId];
+        m.setIcon(_chooseIcon(m.get('location')));
+      }
     }
   });
 
