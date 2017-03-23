@@ -42,3 +42,16 @@ exports.getOneWithBalanceAndPayments = function (req, res) {
     return res.json(user);
   });
 };
+
+exports.getVisitedLocationIds = function (req, res) {
+  // Response with an array of _id:s of all locations visited by the user.
+  // If no locations or users found, responses with empty array [].
+
+  dal.getVisitedLocationIds(req.username, function (err, ids) {
+    if (err) {
+      return res.sendStatus(status.INTERNAL_SERVER_ERROR);
+    }
+
+    return res.json(ids);
+  });
+};

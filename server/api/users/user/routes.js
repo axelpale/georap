@@ -8,5 +8,6 @@ var router = express.Router();
 
 router.get('/', handlers.getOneWithEvents);
 router.get('/payments', handlers.getOneWithBalanceAndPayments);
+router.get('/visited', handlers.getVisitedLocationIds);
 
 module.exports = router;

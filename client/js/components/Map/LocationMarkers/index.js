@@ -1,10 +1,11 @@
 /* global google */
 
 var markerStore = require('../../../stores/markers');
+var account = require('../../../stores/account');
+var icons = require('../lib/icons');
 var getBoundsDiagonal = require('./lib/getBoundsDiagonal');
 var rawEventToMarkerLocation = require('./lib/rawEventToMarkerLocation');
 var labels = require('./lib/labels');
-var icons = require('../lib/icons');
 var emitter = require('component-emitter');
 
 module.exports = function (map) {
@@ -26,6 +27,9 @@ module.exports = function (map) {
   // then load the markers immediately when called, otherwise wait for idle.
   var _mapReady = false;
 
+  // Array of ids of locations that the user has visited.
+  // Fetch them as soon as possible.
+  var _visitedIds = [];
 
   // Private methods
 
@@ -37,14 +41,23 @@ module.exports = function (map) {
     //     MarkerLocation
     // Return
     //   the created marker
-    var lng, lat, m;
+    var lng, lat, m, icon;
 
     lng = loc.geom.coordinates[0];
     lat = loc.geom.coordinates[1];
 
+    // Choose icon according to the visits
+    if (_visitedIds.indexOf(loc._id) === -1) {
+      // Not found from visits
+      icon = icons.marker();
+    } else {
+      // Found from visits
+      icon = icons.markerVisited();
+    }
+
     m = new google.maps.Marker({
       position: new google.maps.LatLng(lat, lng),
-      icon: icons.marker(),
+      icon: icon,
     });
 
     // Store the MarkerLocation for _id, name, and layer info.
@@ -253,6 +266,16 @@ module.exports = function (map) {
     if (_mapReady) {
       _loadMarkers();
     }
+
+    // Fetch the list of visited locations as soon as possible.
+    account.getVisitedLocationIds(function (err, ids) {
+      if (err) {
+        console.error(err);
+        return;
+      }
+
+      _visitedIds = ids;
+    });
   };
 
   self.stopLoading = function () {

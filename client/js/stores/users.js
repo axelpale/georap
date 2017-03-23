@@ -57,3 +57,23 @@ exports.getOneWithEvents = function (username, callback) {
     },
   });
 };
+
+exports.getVisitedLocationIds = function (username, callback) {
+  // Parameters:
+  //   username
+  //   callback
+  //     function (err, arrayOfLocationIds)
+
+  $.ajax({
+    url: '/api/users/' + username + '/visited',
+    method: 'GET',
+    dataType: 'json',
+    headers: { 'Authorization': 'Bearer ' + account.getToken() },
+    success: function (ids) {
+      return callback(null, ids);
+    },
+    error: function (jqxhr, statusCode, statusMessage) {
+      return callback(new Error(statusMessage));
+    },
+  });
+};
