@@ -46,13 +46,24 @@ module.exports = function (map) {
     lng = loc.geom.coordinates[0];
     lat = loc.geom.coordinates[1];
 
+    var isVisited = (_visitedIds.indexOf(loc._id) !== -1);
+    var isDemolished = (loc.tags.indexOf('demolished') !== -1);
+
     // Choose icon according to the visits
-    if (_visitedIds.indexOf(loc._id) === -1) {
-      // Not found from visits
-      icon = icons.marker();
-    } else {
+    if (isVisited) {
       // Found from visits
-      icon = icons.markerVisited();
+      if (isDemolished) {
+        icon = icons.markerDemolishedVisited();
+      } else {
+        icon = icons.markerVisited();
+      }
+    } else {
+      // Not found from visits
+      if (isDemolished) {
+        icon = icons.markerDemolished();
+      } else {
+        icon = icons.marker();
+      }
     }
 
     m = new google.maps.Marker({

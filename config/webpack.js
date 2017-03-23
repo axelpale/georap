@@ -4,6 +4,10 @@ var webpack = require('webpack');
 var path = require('path');
 var local = require('./local');
 
+var trimSlash = function (url) {
+  return url.replace(/\/$/, '');
+};
+
 // compile js assets into a single bundle file
 module.exports = {
 
@@ -18,7 +22,9 @@ module.exports = {
     // Directory to which the compiled static files will be stored.
     path: local.staticDir,
     // Root url from which the static files are served.
-    publicPath: local.staticUrl,
+    // Add slash (and prevent doubles) so that hashed filenames
+    // have proper root path (otherwise /assets34wfewijo34).
+    publicPath: trimSlash(local.staticUrl) + '/',
     // The name of the bundle and its source maps.
     filename: './app.bundle.js',
     sourceMapFilename: '[file].map',
@@ -36,7 +42,7 @@ module.exports = {
       },
       {
         test: /\.(jpe?g|gif|png)$/i,
-        loader: 'file-loader?name=[path][name].[ext]',
+        loader: 'file-loader',
       },
     ],
   },

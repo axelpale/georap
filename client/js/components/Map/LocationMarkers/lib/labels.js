@@ -56,8 +56,10 @@ exports.updateMarkerLabels = function (markers, typeid) {
   for (k in markers) {
     if (markers.hasOwnProperty(k)) {
       label = markers[k].getLabel();
-      label.color = color;
-      markers[k].setLabel(label);
+      if (label) {
+        label.color = color;
+        markers[k].setLabel(label);
+      }
     }
   }
 };
