@@ -89,7 +89,7 @@ db.init(function (dbErr) {
     app.use(webpackMiddleware(webpack(webpackConfig), {
       // publicPath is required. Use same as in webpackConfig.
       // See https://github.com/webpack/webpack-dev-middleware
-      publicPath: local.staticUrl,
+      publicPath: webpackConfig.output.publicPath,
       noInfo: true,
       stats: { colors: true },
     }));
