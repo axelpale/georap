@@ -11,19 +11,13 @@
 require('./css/style.css');
 
 // Favicon
-require('./images/logo/16.png');
+require('file-loader?name=[path][name].[ext]!./images/logo/16.png');
 
 // Main menu logo
-require('./images/logo/32.png');
+require('file-loader?name=[path][name].[ext]!./images/logo/32.png');
 
 // Login background
-require('./images/login.jpg');
-
-// Custom markers
-require('./images/mapicons/marker.png');
-require('./images/mapicons/markerVisited.png');
-require('./images/mapicons/geolocation.png');
-require('./images/mapicons/additionMarker.png');
+require('file-loader?name=[path][name].[ext]!./images/login.jpg');
 
 // JavaScript
 require('./js/index.js');
