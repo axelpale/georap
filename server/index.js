@@ -17,7 +17,7 @@ mailer.init();
 var db = require('./services/db');
 
 var webpack = require('webpack');
-var webpackConfig = require('../config/webpack');
+var webpackConfig = require('../webpack.config');
 
 // Logging
 var loggers = require('./services/logs/loggers');
