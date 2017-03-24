@@ -1,5 +1,6 @@
 //var db = require('../../services/db');
 var pjson = require('../../../package.json');
+var locsDal = require('../locations/dal');
 var async = require('async');
 
 exports.getServerVersion = function (callback) {
@@ -16,30 +17,22 @@ exports.getAll = function (callback) {
   // Results object contains:
   //   serverVersion
   //     string
+  //   locationCount
+  //     integer
 
-  async.series([
-    function (done) {
-      exports.getServerVersion(function (err, v) {
-        if (err) {
-          return done(err);
-        }
-        return done(null, ['serverVersion', v]);
-      });
-    },
-  ], function (err, results) {
+  var steps = {
+    serverVersion: exports.getServerVersion,
+    locationCount: locsDal.count,
+  };
+
+  async.mapValues(steps, function iteratee(fn, key, done) {
+    fn(done);
+  }, function (err, results) {
     if (err) {
       return callback(err);
     }
 
-    // Convert result arrays into an object
-    var obj = results.reduce(function (acc, val) {
-      var key = val[0];
-      var value = val[1];
-      acc[key] = value;
-      return acc;
-    }, {});
-
-    return callback(null, obj);
+    return callback(null, results);
   });
 
 };

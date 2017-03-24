@@ -1,4 +1,5 @@
 
+var tresdb = window.tresdb;
 var statistics = require('../../stores/statistics');
 var ui = require('../lib/ui');
 var template = require('./template.ejs');
@@ -31,8 +32,12 @@ module.exports = function () {
         return;
       }
 
+      // Add current client version.
+      // A dev can compare this to serverVersion.
+      stats.clientVersion = tresdb.version;
+
       $table.html(tableTemplate({
-        _: _,
+        _: _,  // to loop stats
         stats: stats,
       }));
     });
