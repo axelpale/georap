@@ -56,4 +56,11 @@ router.use(function (err, req, res, next) {
   return next();
 });
 
+// Catch all to 404.
+// Must be the final step in this router.
+router.get('/*', function (req, res) {
+  console.log('404 Not Found: ' + req.originalUrl);
+  return res.sendStatus(status.NOT_FOUND);
+});
+
 module.exports = router;

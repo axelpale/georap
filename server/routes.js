@@ -5,15 +5,10 @@ var clientRouter = require('./client/routes');
 var router = require('express').Router();
 var status = require('http-status-codes');
 
-router.use('/', clientRouter);
 router.use('/api', apiRouter);
 
-// Catch all to 404.
-// Must be the final step in the app middleware chain.
-router.get('/*', function (req, res) {
-  console.log('404 Not Found: ' + req.originalUrl);
-  return res.sendStatus(status.NOT_FOUND);
-});
-
+// Catch all others and response with the client app. This enables the use of
+// client-defined routing (e.g. page.js).
+router.use('/', clientRouter);
 
 module.exports = router;
