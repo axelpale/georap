@@ -3,7 +3,7 @@
 // Usage:
 //   var en = new Entry(rawEntry, entries)
 
-var config = require('../../../../../config');
+var config = window.tresdb.config;
 var locations = require('../../../../stores/locations');
 
 var emitter = require('component-emitter');

@@ -10,6 +10,9 @@ if (typeof window !== 'undefined') {
 
 module.exports = {
 
+  // Title of the site
+  title: 'My TresDB App',
+
   // Enable or disable features of the site.
   // See also client/config.js for duplicate configs.
   features: {

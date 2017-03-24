@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Subterranea Fennica</title>
+    <title><%= tresdb.config.title %></title>
 
     <!-- Viewport mobile tag for sensible mobile support -->
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -18,8 +18,7 @@
 
   <body>
     <div id="map"></div>
-    <div id="card-layer" class="hidden">
-    </div>
+    <div id="card-layer" class="hidden"></div>
 
     <!-- jQuery 3 (required by Bootstrap 3) -->
     <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s="   crossorigin="anonymous"></script>
@@ -27,13 +26,19 @@
     <!-- Bootstrap 3 JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
+    <!-- Site config variables -->
+    <!-- See client/handlers.js for details -->
+    <script>
+      window.tresdb = <%- JSON.stringify(tresdb) %>
+    </script>
+
     <!-- Webpack bundle -->
-    <!-- See config/webpack.js for details. -->
+    <!-- See webpack.config.js for details. -->
     <script src="/assets/app.bundle.js"></script>
 
     <!-- Google Maps JS API -->
     <!-- geometry lib is needed to compute distance of LatLngBounds diagonal -->
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBMWEnkv66jJ4p-hUGlLPpzDNW808LDDlE&libraries=geometry&callback=initMap" async defer></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=<%- tresdb.config.googleMapsKey %>&libraries=geometry&callback=initMap" async defer></script>
 
 
   </body>

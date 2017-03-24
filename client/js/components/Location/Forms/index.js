@@ -1,5 +1,5 @@
 
-var config = require('../../../../config');
+var config = window.tresdb.config;
 var locations = require('../../../stores/locations');
 var markdownSyntax = require('../lib/markdownSyntax.ejs');
 var template = require('./template.ejs');
