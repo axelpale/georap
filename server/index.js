@@ -1,7 +1,6 @@
 /* eslint-disable max-statements */
 
 var local = require('../config/local');
-var path = require('path');
 var http = require('http');
 var express = require('express');
 var app = express();
@@ -17,13 +16,13 @@ mailer.init();
 var db = require('./services/db');
 
 var webpack = require('webpack');
-var webpackConfig = require('../config/webpack');
+var webpackConfig = require('../webpack.config');
 
 // Logging
 var loggers = require('./services/logs/loggers');
 
 // Routes
-var apiRoutes = require('./api/routes');
+var router = require('./routes');
 
 // Log environment
 console.log('Starting TresDB in environment:', local.env);
@@ -138,15 +137,8 @@ db.init(function (dbErr) {
   // Uploaded files END
 
 
-  // HTTP API routes here
-  app.use('/api', apiRoutes);
-
-  // Catch all to single page app.
-  // Must be the final step in the app middleware chain.
-  app.get('/*', function (req, res) {
-    res.sendFile(path.resolve(__dirname, '..', 'client', 'index.html'));
-  });
-
+  // HTTP routes here
+  app.use('/', router);
 
   // Socket.io routing
   io.get().on('connection', function () {

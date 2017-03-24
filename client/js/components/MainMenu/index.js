@@ -1,7 +1,7 @@
 
+var config = window.tresdb.config;
 var account = require('../../stores/account');
 var locations = require('../../stores/locations');
-var config = require('../../../config');
 var template = require('./template.ejs');
 var glyphiconTemplate = require('./glyphicon.ejs');
 var emitter = require('component-emitter');
@@ -97,6 +97,12 @@ module.exports = function (mapComp, go) {
       ev.preventDefault();
 
       return go('/invite');
+    });
+
+    $mount.on('click', '#tresdb-mainmenu-statistics', function (ev) {
+      ev.preventDefault();
+
+      return go('/statistics');
     });
 
     $mount.on('click', '#tresdb-mainmenu-logout', function (ev) {

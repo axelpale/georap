@@ -7,6 +7,7 @@ var eventsRouter = require('./events/routes');
 var locationsRouter = require('./locations/routes');
 var markersRouter = require('./markers/routes');
 var paymentsRouter = require('./payments/routes');
+var statisticsRouter = require('./statistics/routes');
 var usersRouter = require('./users/routes');
 
 var jwt = require('express-jwt');
@@ -38,6 +39,7 @@ router.use('/events', eventsRouter);
 router.use('/locations', locationsRouter);
 router.use('/markers', markersRouter);
 router.use('/payments', paymentsRouter);
+router.use('/statistics', statisticsRouter);
 router.use('/users', usersRouter);
 
 // API error handling
@@ -52,6 +54,13 @@ router.use(function (err, req, res, next) {
   console.error(err);
 
   return next();
+});
+
+// Catch all to 404.
+// Must be the final step in this router.
+router.get('/*', function (req, res) {
+  console.log('404 Not Found: ' + req.originalUrl);
+  return res.sendStatus(status.NOT_FOUND);
 });
 
 module.exports = router;

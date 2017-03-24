@@ -1,0 +1,10 @@
+<table class="table">
+  <tbody>
+  <% _.forOwn(stats, function (value, key) { %>
+    <tr>
+      <td><%= key %></td>
+      <td><%= value %></td>
+    </tr>
+  <% }); %>
+  </tbody>
+</table>

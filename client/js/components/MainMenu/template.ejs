@@ -33,11 +33,16 @@
         <li>
           <a id="tresdb-mainmenu-change-password" href="#"><%= glyphicon({ name: 'asterisk' }) %> Change password...</a>
         </li>
+
         <li role="separator" class="divider"></li>
+
         <% if (user.admin) { %>
           <li class="dropdown-header">Admin Only</li>
           <li>
             <a id="tresdb-mainmenu-invite" href="#"><%= glyphicon({ name: 'envelope' }) %> Invite...</a>
+          </li>
+          <li>
+            <a id="tresdb-mainmenu-statistics" href="#"><%= glyphicon({ name: 'signal' }) %> Statistics</a>
           </li>
           <% if (config.features.payments) { %>
           <li>
@@ -46,6 +51,7 @@
           <% } %>
           <li role="separator" class="divider"></li>
         <% } %>
+
         <li>
           <a id="tresdb-mainmenu-logout" href="#"><%= glyphicon({ name: 'off' }) %> Log out</a>
         </li>

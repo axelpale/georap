@@ -33,7 +33,14 @@ exports.init = function (mongoUrl, callback) {
     }
   }
 
-  mongoClient.connect(mongoUrl, function (dbErr, dbConn) {
+  // Retry connect to (almost) infinity if the connection is lost.
+  // See http://stackoverflow.com/a/39831825/638546
+  var mongoOpts = {
+    reconnectTries: Number.MAX_VALUE,
+    reconnectInterval: 2000,
+  };
+
+  mongoClient.connect(mongoUrl, mongoOpts, function (dbErr, dbConn) {
     if (dbErr) {
       return callback(dbErr);
     }
