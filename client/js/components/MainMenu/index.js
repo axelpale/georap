@@ -99,6 +99,12 @@ module.exports = function (mapComp, go) {
       return go('/invite');
     });
 
+    $mount.on('click', '#tresdb-mainmenu-statistics', function (ev) {
+      ev.preventDefault();
+
+      return go('/statistics');
+    });
+
     $mount.on('click', '#tresdb-mainmenu-logout', function (ev) {
       ev.preventDefault();
 

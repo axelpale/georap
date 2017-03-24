@@ -2,8 +2,8 @@
 //   var users = require('./stores/users');
 //
 
+var request = require('./lib/request');
 var emitter = require('component-emitter');
-var account = require('./account');
 
 // Init
 emitter(exports);
@@ -16,21 +16,9 @@ exports.getAll = function (callback) {
   //
   // Parameters:
   //   callback
-  //     function (err, user)
+  //     function (err, users)
   //
-
-  $.ajax({
-    url: '/api/users',
-    method: 'GET',
-    dataType: 'json',
-    headers: { 'Authorization': 'Bearer ' + account.getToken() },
-    success: function (rawUsers) {
-      return callback(null, rawUsers);
-    },
-    error: function (jqxhr, statusCode, statusMessage) {
-      return callback(new Error(statusMessage));
-    },
-  });
+  request.getJSON('/api/users', callback);
 };
 
 exports.getOneWithEvents = function (username, callback) {
@@ -43,19 +31,7 @@ exports.getOneWithEvents = function (username, callback) {
   //   callback
   //     function (err, user)
   //
-
-  $.ajax({
-    url: '/api/users/' + username,
-    method: 'GET',
-    dataType: 'json',
-    headers: { 'Authorization': 'Bearer ' + account.getToken() },
-    success: function (rawUser) {
-      return callback(null, rawUser);
-    },
-    error: function (jqxhr, statusCode, statusMessage) {
-      return callback(new Error(statusMessage));
-    },
-  });
+  request.getJSON('/api/users/' + username, callback);
 };
 
 exports.getVisitedLocationIds = function (username, callback) {
@@ -63,17 +39,5 @@ exports.getVisitedLocationIds = function (username, callback) {
   //   username
   //   callback
   //     function (err, arrayOfLocationIds)
-
-  $.ajax({
-    url: '/api/users/' + username + '/visited',
-    method: 'GET',
-    dataType: 'json',
-    headers: { 'Authorization': 'Bearer ' + account.getToken() },
-    success: function (ids) {
-      return callback(null, ids);
-    },
-    error: function (jqxhr, statusCode, statusMessage) {
-      return callback(new Error(statusMessage));
-    },
-  });
+  request.getJSON('/api/users/' + username + '/visited', callback);
 };

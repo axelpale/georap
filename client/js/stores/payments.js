@@ -1,20 +1,6 @@
-var emitter = require('component-emitter');
-var account = require('./account');
 
-var getJSON = function (url, callback) {
-  $.ajax({
-    url: url,
-    method: 'GET',
-    dataType: 'json',
-    headers: { 'Authorization': 'Bearer ' + account.getToken() },
-    success: function (result) {
-      return callback(null, result);
-    },
-    error: function (jqxhr, statusCode, statusMessage) {
-      return callback(new Error(statusMessage));
-    },
-  });
-};
+var request = require('./lib/request');
+var emitter = require('component-emitter');
 
 
 // Init
@@ -29,9 +15,9 @@ exports.createCorrection = function (callback) {
 };
 
 exports.getAll = function (callback) {
-  return getJSON('/api/payments', callback);
+  return request.getJSON('/api/payments', callback);
 };
 
 exports.getBalances = function (callback) {
-  return getJSON('/api/payments/balances', callback);
+  return request.getJSON('/api/payments/balances', callback);
 };

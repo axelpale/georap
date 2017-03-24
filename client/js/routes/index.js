@@ -19,6 +19,7 @@ var PaymentsAdminView = require('../components/PaymentsAdmin');
 var ResetPasswordView = require('../components/ResetPassword');
 var SearchView = require('../components/Search');
 var SignupView = require('../components/Signup');
+var StatisticsView = require('../components/Statistics');
 var UsersView = require('../components/Users');
 var UserView = require('../components/User');
 
@@ -201,6 +202,11 @@ exports.route = function () {
 
   page('/payments/admin', adminOnly, function () {
     var view = new PaymentsAdminView();
+    card.open(view, 'page');
+  });
+
+  page('/statistics', adminOnly, function () {
+    var view = new StatisticsView();
     card.open(view, 'page');
   });
 
