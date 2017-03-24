@@ -3,7 +3,6 @@
 var apiRouter = require('./api/routes');
 var clientRouter = require('./client/routes');
 var router = require('express').Router();
-var status = require('http-status-codes');
 
 router.use('/api', apiRouter);
 

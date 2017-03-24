@@ -1,7 +1,6 @@
 /* eslint-disable max-statements */
 
 var local = require('../config/local');
-var path = require('path');
 var http = require('http');
 var express = require('express');
 var app = express();
