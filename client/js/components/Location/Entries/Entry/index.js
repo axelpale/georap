@@ -1,3 +1,4 @@
+/* eslint-disable max-statements */
 
 var account = require('../../../../stores/account');
 var ui = require('../../../lib/ui');
