@@ -11,7 +11,7 @@ var timestamp = function () {
 var insertOne = function (entry, callback) {
   // Parameters:
   //   entry
-  //     entry to insert
+  //     raw entry to insert
   //   callback
   //     function (err, entryId);
   var coll = db.get().collection('entries');
@@ -45,32 +45,48 @@ var removeOne = function (entryId, callback) {
 
 // Public methods
 
-// exports.changeLocationEntry = function (params, callback) {
-//   // Parameters:
-//   //   params:
-//   //     entryId
-//   //     locationId
-//   //     locationName
-//   //     newMarkdown
-//   //     username
-//   //   callback
-//   //     function (err)
-//
-//   var coll = db.get().collection('entries');
-//
-//   var q = { _id: params.entryId };
-//   var u = {
-//     $set: { 'data.markdown': params.newMarkdown },
-//   };
-//
-//   coll.update(q, u, function (err) {
-//     if (err) {
-//       return callback(err);
-//     }
-//
-//     eventsDal.createLocationStoryChanged(params, callback);
-//   });
-// };
+exports.changeLocationEntry = function (params, callback) {
+  // Parameters:
+  //   params:
+  //     oldEntry
+  //       raw entry object
+  //     markdown
+  //     isVisit
+  //     filepath
+  //     mimetype
+  //     thumbfilepath
+  //     thumbmimetype
+  //   callback
+  //     function (err)
+
+  var coll = db.collection('entries');
+  var q = { _id: params.oldEntry._id };
+
+  var changedEntry = {
+    type: 'location_entry',
+    user: params.oldEntry.user,
+    time: params.oldEntry.time,
+    locationId: params.oldEntry.locationId,
+    locationName: params.oldEntry.locationName,
+    deleted: params.oldEntry.deleted,
+    data: {
+      markdown: params.markdown,
+      isVisit: params.isVisit,
+      filepath: params.filepath,
+      mimetype: params.mimetype,
+      thumbfilepath: params.thumbfilepath,
+      thumbmimetype: params.thumbmimetype,
+    },
+  };
+
+  coll.replaceOne(q, changedEntry, function (err) {
+    if (err) {
+      return callback(err);
+    }
+
+    eventsDal.createLocationEntryChanged(params, callback);
+  });
+};
 
 exports.createLocationEntry = function (params, callback) {
   // Parameters:
@@ -125,6 +141,30 @@ exports.createLocationEntry = function (params, callback) {
   });
 };
 
+
+exports.getOneRaw = function (entryId, callback) {
+  // Find single entry
+  //
+  var coll = db.collection('entries');
+  var q = {
+    _id: entryId,
+  };
+  var opt = {};
+
+  coll.findOne(q, opt, function (err, doc) {
+    if (err) {
+      return callback(err);
+    }
+
+    if (!doc) {
+      return callback(null, null);
+    }
+
+    return callback(null, doc);
+  });
+};
+
+
 exports.getAllOfLocation = function (locationId, callback) {
   // Parameters
   //   locationId
@@ -141,6 +181,7 @@ exports.getAllOfLocation = function (locationId, callback) {
 
   return coll.find(q, opt).toArray(callback);
 };
+
 
 exports.removeLocationEntry = function (params, callback) {
   // Parameters:

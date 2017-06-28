@@ -32,6 +32,16 @@ module.exports = function (rawEntry, entries) {
   var self = this;
   emitter(self);
 
+  self.change = function (form, callback) {
+    // Parameters:
+    //   form
+    //     jQuery instance of edit form
+
+    var lid = rawEntry.locationId;
+    var eid = rawEntry._id;
+    locations.changeEntry(lid, eid, form, callback);
+  };
+
   self.getId = function () {
     return rawEntry._id;
   };

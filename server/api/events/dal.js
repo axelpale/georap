@@ -82,33 +82,55 @@ exports.createLocationCreated = function (params, callback) {
   insertAndEmit(newEvent, callback);
 };
 
-// exports.createLocationEntryChanged = function (params, callback) {
-//   // Parameters:
-//   //   params:
-//   //     locationId
-//   //     locationName
-//   //     entryId
-//   //     username
-//   //     newMarkdown
-//
-//   if (typeof params.entryId !== 'object') {
-//     throw new Error('invalid entryId type');
-//   }
-//
-//   var newEvent = {
-//     type: 'location_story_changed',
-//     user: params.username,
-//     time: timestamp(),
-//     locationId: params.locationId,
-//     locationName: params.locationName,
-//     data: {
-//       entryId: params.entryId,
-//       newMarkdown: params.newMarkdown,
-//     },
-//   };
-//
-//   insertAndEmit(newEvent, callback);
-// };
+exports.createLocationEntryChanged = function (params, callback) {
+  // Parameters:
+  //   params:
+  //     oldEntry
+  //       raw entry object
+  //     markdown
+  //       string or null
+  //     isVisit
+  //       boolean
+  //     filepath
+  //       string or null
+  //       The relative path of the file in the uploads dir
+  //     mimetype
+  //       string or null
+  //     thumbfilepath
+  //       string or null
+  //       The relative path of the thumbnail file in the uploads dir
+  //     thumbmimetype
+  //       string or null
+
+  if (typeof params.oldEntry._id !== 'object') {
+    throw new Error('invalid entryId type');
+  }
+
+  var newEvent = {
+    type: 'location_entry_changed',
+    user: params.oldEntry.user,
+    time: timestamp(),
+    locationId: params.oldEntry.locationId,
+    locationName: params.oldEntry.locationName,
+    data: {
+      entryId: params.oldEntry._id,
+      oldMarkdown: params.oldEntry.data.markdown,
+      newMarkdown: params.markdown,
+      oldIsVisit: params.oldEntry.data.isVisit,
+      newIsVisit: params.isVisit,
+      oldFilepath: params.oldEntry.data.filepath,
+      newFilepath: params.filepath,
+      oldMimetype: params.oldEntry.data.mimetype,
+      newMimetype: params.mimetype,
+      oldThumbfilepath: params.oldEntry.data.thumbfilepath,
+      newThumbfilepath: params.thumbfilepath,
+      oldThumbmimetype: params.oldEntry.data.thumbmimetype,
+      newThumbmimetype: params.thumbmimetype,
+    },
+  };
+
+  insertAndEmit(newEvent, callback);
+};
 
 exports.createLocationEntryCreated = function (params, callback) {
   // Parameters:
