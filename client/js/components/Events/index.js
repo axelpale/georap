@@ -1,3 +1,4 @@
+// Component for a list of events.
 
 var emitter = require('component-emitter');
 var events = require('../../stores/events');

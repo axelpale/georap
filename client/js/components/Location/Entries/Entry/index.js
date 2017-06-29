@@ -9,7 +9,9 @@ var template = require('./template.ejs');
 module.exports = function (entry) {
   // Parameters:
   //   entry
-  //     Attachment, Story, or Visit model.
+  //     Entry model.
+
+  var self = this;
 
   var id = entry.getId();
 
@@ -33,11 +35,13 @@ module.exports = function (entry) {
     var $deleteFinal = $('#' + id + '-delete-final');  // Container of final
     var $edit = $('#' + id + '-edit');
     var $error = $('#' + id + '-error');
+    var $file = $('#' + id + '-file-input');
     var $form = $('#' + id + '-form');
+    var $markdown = $('#' + id + '-markdown');
     var $progress = $('#' + id + '-progress');
-    var $save = $('#' + id + '-save');
     var $syntax = $('#' + id + '-syntax');
     var $syntaxShow = $('#' + id + '-syntax-show');
+    var $visit = $('#' + id + '-entry-visit');
 
     var hideErrors = function () {
       // Hide all possible error messages
@@ -48,23 +52,28 @@ module.exports = function (entry) {
     $edit.click(function (ev) {
       ev.preventDefault();
 
-      console.log('edit-click');
-
       ui.toggleHidden($container);
       hideErrors();
     });
 
-    $save.click(function (ev) {
+    $form.submit(function (ev) {
       ev.preventDefault();
 
+      // Trim
+      $markdown.val($markdown.val().trim());
+
+      ui.hide($form);
       ui.show($progress);
       entry.change($form, function (err) {
         ui.hide($progress);
 
         if (err) {
           ui.show($error);
+          ui.show($form);
           return;
         }
+
+        // location_entry_changed from the server event will cause entry rebind
       });
     });
 
@@ -95,10 +104,39 @@ module.exports = function (entry) {
       });
     });
 
+    $file.change(function () {
+      // If a file is selected, enable visit.
+      // If user chooses or changes a file, onchange is fired.
+      // See http://stackoverflow.com/a/5670938/638546
+
+      if ($file.val() === '' && !entry.hasFile()) {
+        // Disable visit.
+        // Prevent user from marking the post as visit.
+        $visit.addClass('tresdb-disabled');
+        $visit.find('.checkbox').addClass('disabled');
+        $visit.find('input[type=checkbox]').prop('checked', false);
+        $visit.find('input[type=checkbox]').attr('disabled', 'disabled');
+      } else {
+        // Enable visit.
+        // Enable user to mark the post as visit.
+        $visit.removeClass('tresdb-disabled');
+        $visit.find('.checkbox').removeClass('disabled');
+        $visit.find('input[type=checkbox]').removeAttr('disabled');
+      }
+    });
+    // Trigger once
+    $file.change();
+
     $syntaxShow.click(function (ev) {
       ev.preventDefault();
 
       ui.toggleHidden($syntax);
+    });
+
+    entry.on('location_entry_changed', function () {
+      // Rebind
+      self.unbind();
+      self.bind($mount);
     });
   };
 
@@ -109,8 +147,9 @@ module.exports = function (entry) {
     $('#' + id + '-cancel').off();
     $('#' + id + '-delete-ensure').off();
     $('#' + id + '-delete').off();
+    $('#' + id + '-file-input').off();
     $('#' + id + '-syntax-show').off();
-
+    entry.off();
   };
 
 };

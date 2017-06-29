@@ -32,11 +32,7 @@
       <div class="form-group">
         <label for="<%= entry.getId() %>-file-input">
           <% if (entry.hasFile()) { %>
-            <% if (entry.hasImage()) { %>
-              Update the photo:
-            <% } else { %>
-              Update the document:
-            <% } %>
+            Replace <%= entry.getFileName() %>:
           <% } else { %>
             Attach a photo or other document:
           <% } %>
@@ -45,21 +41,23 @@
       </div>
 
       <div id="<%= entry.getId() %>-entry-visit" class="form-group tresdb-disabled">
-        <label>Did you visit the location? A photo is required.</label>
+        <label>Did you visit the location?</label>
         <div class="checkbox disabled">
           <label>
-            <input type="checkbox" name="entryvisit" value="visited" disabled> This was a visit.
+            <input type="checkbox" name="entryvisit" value="visited" <%= entry.isVisit() ? 'checked="checked"' : '' %> disabled> This was a visit.
           </label>
         </div>
       </div>
 
-      <div class="pull-right">
-        <button id="<%= entry.getId() %>-cancel" type="button" class="btn btn-default">Cancel</button>
-        <button id="<%= entry.getId() %>-save" type="submit" class="btn btn-primary">Save</button>
+      <div class="form-group">
+        <div class="pull-right">
+          <button id="<%= entry.getId() %>-cancel" type="button" class="btn btn-default">Cancel</button>
+          <button id="<%= entry.getId() %>-save" type="submit" class="btn btn-primary">Save</button>
+        </div>
+        <button id="<%= entry.getId() %>-delete-ensure" type="button" class="btn btn-danger">Delete post...</button>
       </div>
-      <button id="<%= entry.getId() %>-delete-ensure" type="button" class="btn btn-danger">Delete post...</button>
 
-      <div id="<%= entry.getId() %>-delete-final" class="hidden">
+      <div id="<%= entry.getId() %>-delete-final" class="form-group hidden">
         Are you sure?
         <button id="<%= entry.getId() %>-delete" type="button" class="btn btn-danger">Yes, delete!</button>
       </div>
@@ -81,17 +79,13 @@
 
     <hr>
     <h4>Original:</h4>
-  </div>
+  </div><!-- #*-form-container -->
 
-
-  <% if (entry.hasMarkdown()) { %>
-  <div id="<%= entry.getId() %>-body" class="panel-body">
+  <div id="<%= entry.getId() %>-body" class="panel-body<%= entry.hasMarkdown() ? '' : ' hidden' %>">
     <%= entry.getMarkdownHTML() %>
   </div>
-  <% } %>
 
-  <% if (entry.hasFile()) { %>
-
+  <div class="<%= entry.hasFile() ? '' : 'hidden' %>">
     <% if (entry.hasImage()) { %>
       <div class="panel-body tresdb-entry-image-body">
         <img src="<%= entry.getThumbUrl() %>" title="<%= entry.getFileName() %>">
@@ -109,7 +103,6 @@
         <a href="<%= entry.getUrl() %>" download="<%= entry.getFileName() %>"><%= entry.getFileName() %></a>
       </div>
     <% } %>
-
-  <% } %>
+  </div>
 
 </div>

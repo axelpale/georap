@@ -50,6 +50,8 @@ exports.changeLocationEntry = function (params, callback) {
   //   params:
   //     oldEntry
   //       raw entry object
+  //     locationName
+  //       because entries do not store location name but events do
   //     markdown
   //     isVisit
   //     filepath
@@ -67,7 +69,6 @@ exports.changeLocationEntry = function (params, callback) {
     user: params.oldEntry.user,
     time: params.oldEntry.time,
     locationId: params.oldEntry.locationId,
-    locationName: params.oldEntry.locationName,
     deleted: params.oldEntry.deleted,
     data: {
       markdown: params.markdown,
@@ -119,7 +120,6 @@ exports.createLocationEntry = function (params, callback) {
     user: params.username,
     time: timestamp(),
     locationId: params.locationId,
-    locationName: params.locationName,
     deleted: false,
     data: {
       markdown: params.markdown,

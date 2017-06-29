@@ -13,6 +13,7 @@ exports.change = function (req, res) {
   // File is optional.
 
   var entryId = req.entryId;
+  var location = req.location;
 
   // Editor vs creator. TODO make a difference between
   // var username = req.user.name;
@@ -81,6 +82,7 @@ exports.change = function (req, res) {
 
           dal.changeLocationEntry({
             oldEntry: oldEntry,
+            locationName: location.name,
             markdown: hasText ? newMarkdown : null,
             isVisit: hasNewVisit,
             filepath: uploads.getRelativePath(req.file.path),
@@ -96,6 +98,7 @@ exports.change = function (req, res) {
       // Use previous thumbnail
       dal.changeLocationEntry({
         oldEntry: oldEntry,
+        locationName: location.name,
         markdown: hasText ? newMarkdown : null,
         isVisit: hasNewVisit,
         filepath: oldEntry.data.filepath,

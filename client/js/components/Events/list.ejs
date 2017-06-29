@@ -35,10 +35,10 @@
         posted <%= ev.data.isVisit ? 'a visit ' : '' %>to <a href="/locations/<%= ev.locationId %>"><%= name %></a> <%= timestamp(ev.time) %>
 
       <% } else if (t === 'location_entry_changed') { %>
-        edited their post in <a href="/locations/<%= ev.locationId %>"><%= name %></a> <%= timestamp(ev.time) %>
+        edited a post in <a href="/locations/<%= ev.locationId %>"><%= name %></a> <%= timestamp(ev.time) %>
 
       <% } else if (t === 'location_entry_removed') { %>
-        deleted their post from <a href="/locations/<%= ev.locationId %>"><%= name %></a> <%= timestamp(ev.time) %>
+        deleted a post from <a href="/locations/<%= ev.locationId %>"><%= name %></a> <%= timestamp(ev.time) %>
 
       <% } else if (t === 'location_unproved_visit_created') { %>
         maybe visited <a href="/locations/<%= ev.locationId %>"><%= name %></a> <%= timestamp(ev.time) %> :)

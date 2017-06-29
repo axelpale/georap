@@ -87,6 +87,8 @@ exports.createLocationEntryChanged = function (params, callback) {
   //   params:
   //     oldEntry
   //       raw entry object
+  //     locationName
+  //       string
   //     markdown
   //       string or null
   //     isVisit
@@ -111,7 +113,7 @@ exports.createLocationEntryChanged = function (params, callback) {
     user: params.oldEntry.user,
     time: timestamp(),
     locationId: params.oldEntry.locationId,
-    locationName: params.oldEntry.locationName,
+    locationName: params.locationName,
     data: {
       entryId: params.oldEntry._id,
       oldMarkdown: params.oldEntry.data.markdown,
