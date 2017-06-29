@@ -16,12 +16,12 @@
 
   <form id="tresdb-entry-form" class="panel panel-primary">
     <div class="panel-heading">
-      Tell something about the location or prove your visit with a photo
+      New post
     </div>
     <div class="panel-body">
 
       <div class="form-group">
-        <label for="tresdb-entry-input" class="sr-only">Text content:</label>
+        <label for="tresdb-entry-input">Tell something about the location:</label>
         <textarea id="tresdb-entry-input" name="entrytext" class="form-control" rows="3"></textarea>
         <div class="pull-right">
           <a id="tresdb-entry-syntax-show" href="#">Formatting Help</a>
@@ -33,15 +33,15 @@
       </div>
 
       <div class="form-group">
-        <label for="tresdb-entry-file-input">(Optional) Attach a photo or any other document. Max size is <%= limit %> MiB.</label>
+        <label for="tresdb-entry-file-input">Attach a photo or other document. Optional. Max size is <%= limit %> MiB.</label>
         <input id="tresdb-entry-file-input" type="file" name="entryfile">
       </div>
 
       <div id="tresdb-entry-visit" class="form-group tresdb-disabled">
-        <label>(Optional) Did you visit the location? A photo is required.</label>
+        <label>Did you visit the location? A photo is required.</label>
         <div class="checkbox disabled">
           <label>
-            <input type="checkbox" name="entryvisit" value="visited" disabled> This was a visit. Attach a photo to enable.
+            <input type="checkbox" name="entryvisit" value="visited" disabled> This was a visit.
           </label>
         </div>
         <!--div class="checkbox disabled">

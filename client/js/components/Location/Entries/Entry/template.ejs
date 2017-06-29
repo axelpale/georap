@@ -14,29 +14,78 @@
   </div>
 
   <div id="<%= entry.getId() %>-form-container" class="panel-body hidden">
-    <div class="pull-right">
-      <button id="<%= entry.getId() %>-cancel" type="button" class="btn btn-default">Cancel</button>
-    </div>
-    <button id="<%= entry.getId() %>-delete-ensure" type="button" class="btn btn-danger">Delete...</button>
 
-    <div id="<%= entry.getId() %>-delete-final" class="hidden">
-      Are you sure?
-      <button id="<%= entry.getId() %>-delete" type="button" class="btn btn-danger">Yes, delete!</button>
+    <form id="<%= entry.getId() %>-form">
+
+      <div class="form-group">
+        <label for="<%= entry.getId() %>-markdown">Tell something about the location:</label>
+        <textarea id="<%= entry.getId() %>-markdown" name="entrytext" class="form-control" rows="3"><%= entry.getMarkdown() %></textarea>
+        <div class="pull-right">
+          <a id="<%= entry.getId() %>-syntax-show" href="#">Formatting Help</a>
+        </div>
+      </div>
+
+      <div id="<%= entry.getId() %>-syntax" class="well hidden">
+        <%= markdownSyntax() %>
+      </div>
+
+      <div class="form-group">
+        <label for="<%= entry.getId() %>-file-input">
+          <% if (entry.hasFile()) { %>
+            Replace <%= entry.getFileName() %>:
+          <% } else { %>
+            Attach a photo or other document:
+          <% } %>
+        </label>
+        <input id="<%= entry.getId() %>-file-input" type="file" name="entryfile">
+      </div>
+
+      <div id="<%= entry.getId() %>-entry-visit" class="form-group tresdb-disabled">
+        <label>Did you visit the location?</label>
+        <div class="checkbox disabled">
+          <label>
+            <input type="checkbox" name="entryvisit" value="visited" <%= entry.isVisit() ? 'checked="checked"' : '' %> disabled> This was a visit.
+          </label>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="pull-right">
+          <button id="<%= entry.getId() %>-cancel" type="button" class="btn btn-default">Cancel</button>
+          <button id="<%= entry.getId() %>-save" type="submit" class="btn btn-primary">Save</button>
+        </div>
+        <button id="<%= entry.getId() %>-delete-ensure" type="button" class="btn btn-danger">Delete post...</button>
+      </div>
+
+      <div id="<%= entry.getId() %>-delete-final" class="form-group hidden">
+        Are you sure?
+        <button id="<%= entry.getId() %>-delete" type="button" class="btn btn-danger">Yes, delete!</button>
+      </div>
+    </form>
+
+    <div id="<%= entry.getId() %>-progress" class="progress hidden">
+      <div class="progress-bar progress-bar-striped active" role="progressbar" style="width: 100%">
+        <span class="sr-only">Waiting for server</span>
+      </div>
+    </div>
+
+    <div id="<%= entry.getId() %>-error" class="hidden panel-body">
+      <div class="alert alert-danger" role="alert">Editing failed. Might be a connection issue.</div>
     </div>
 
     <div id="<%= entry.getId() %>-delete-error" class="hidden panel-body">
       <div class="alert alert-danger" role="alert">Deletion failed. Might be a connection issue.</div>
     </div>
-  </div>
 
-  <% if (entry.hasMarkdown()) { %>
-  <div id="<%= entry.getId() %>-body" class="panel-body">
+    <hr>
+    <h4>Original:</h4>
+  </div><!-- #*-form-container -->
+
+  <div id="<%= entry.getId() %>-body" class="panel-body<%= entry.hasMarkdown() ? '' : ' hidden' %>">
     <%= entry.getMarkdownHTML() %>
   </div>
-  <% } %>
 
-  <% if (entry.hasFile()) { %>
-
+  <div class="<%= entry.hasFile() ? '' : 'hidden' %>">
     <% if (entry.hasImage()) { %>
       <div class="panel-body tresdb-entry-image-body">
         <img src="<%= entry.getThumbUrl() %>" title="<%= entry.getFileName() %>">
@@ -54,7 +103,6 @@
         <a href="<%= entry.getUrl() %>" download="<%= entry.getFileName() %>"><%= entry.getFileName() %></a>
       </div>
     <% } %>
-
-  <% } %>
+  </div>
 
 </div>

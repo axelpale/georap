@@ -151,6 +151,7 @@ We recommend running MongoDB in auth mode to prevent free access to the database
 
 To create users, start mongod without authentication:
 
+    $ mkdir -p .data/db
     $ mongod --dbpath=.data/db
 
 Create an administrator that can add other users. Create the admin user into `admin` database with `userAdminAnyDatabase` permission like below. Replace the username and password with yours.

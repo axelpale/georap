@@ -1,4 +1,5 @@
 
+// eslint-disable-next-line no-useless-escape
 var specials = /[,\.:;_\-\/\\|\?!\*\+=\(\){}\[\]&%#"'<>~]/g;
 
 exports.heads = function (str) {

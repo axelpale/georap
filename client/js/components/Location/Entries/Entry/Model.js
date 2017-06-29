@@ -32,6 +32,37 @@ module.exports = function (rawEntry, entries) {
   var self = this;
   emitter(self);
 
+  entries.on('location_entry_changed', function (ev) {
+
+    // Skip events of other entries
+    if (ev.data.entryId !== rawEntry._id) {
+      return;
+    }
+
+    rawEntry.data.markdown = ev.data.newMarkdown;
+    rawEntry.data.isVisit = ev.data.newIsVisit;
+    rawEntry.data.filepath = ev.data.newFilepath;
+    rawEntry.data.mimetype = ev.data.newMimetype;
+    rawEntry.data.thumbfilepath = ev.data.newThumbfilepath;
+    rawEntry.data.thumbmimetype = ev.data.newThumbmimetype;
+
+    // Emit for view to react by rerendering.
+    self.emit(ev.type, ev);
+  });
+
+
+  // Public methods
+
+  self.change = function (form, callback) {
+    // Parameters:
+    //   form
+    //     jQuery instance of edit form
+
+    var lid = rawEntry.locationId;
+    var eid = rawEntry._id;
+    locations.changeEntry(lid, eid, form, callback);
+  };
+
   self.getId = function () {
     return rawEntry._id;
   };

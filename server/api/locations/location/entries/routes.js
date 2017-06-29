@@ -7,11 +7,11 @@ var handlers = require('./handlers');
 var entryIdParser = require('./lib/entryIdParser');
 var jsonParser = require('body-parser').json();
 
-router.post('/', handlers.create); // uses multer body-parser internally
+router.post('/', handlers.create); // uses multer body-parser inside
 
 router.use('/:entryId', entryIdParser);
 
-//router.post('/:entryId', jsonParser, handlers.change);
+router.post('/:entryId', handlers.change);  // uses multer body-parser inside
 router.delete('/:entryId', jsonParser, handlers.remove);
 
 module.exports = router;

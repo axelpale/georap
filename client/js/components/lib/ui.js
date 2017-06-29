@@ -10,3 +10,7 @@ exports.show = function ($el) {
 exports.hide = function ($el) {
   $el.addClass('hidden');
 };
+
+exports.toggleHidden = function ($el) {
+  $el.toggleClass('hidden');
+};
