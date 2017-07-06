@@ -3,6 +3,7 @@ var templates = require('./templates');
 var dal = require('./dal');
 var status = require('http-status-codes');
 var sanitizeFilename = require('sanitize-filename');
+var slugify = require('slugify');
 
 
 
@@ -126,8 +127,11 @@ exports.getOne = function (req, res) {
         return res.sendStatus(status.NOT_FOUND);
       }
 
-      // Name of the file to download
-      filename = sanitizeFilename(rawLoc.name) + '.' + format;
+      // Name of the file to download.
+      // Slugification is needed after sanitizeFilename because
+      // http headers do not handle non-ascii and non-alpha-numerics well.
+      // See https://stackoverflow.com/q/93551/638546
+      filename = slugify(sanitizeFilename(rawLoc.name)) + '.' + format;
 
       // Set headers
       res.set('Content-Type', mime);
