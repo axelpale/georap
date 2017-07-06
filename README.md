@@ -9,6 +9,7 @@ TresDB is also a web application and thus requires installation to a web server.
 - [Install](#install)
 - [Quick start](#quick-start)
 - [Environments](#environments)
+- [Scripts API](#scripts-api)
 - [Testing](#testing)
 - [Logging](#logging)
 - [Migration](#migration)
@@ -64,6 +65,128 @@ TresDB's Node server can be started in 3 environments: `development`, `productio
 - `test`: Same as development but a test MongoDB database is used instead of the main one. The test database is cleared and populated with fixture data before each test.
 
 You specify the environment to use by setting `NODE_ENV`. For example to run server in dev env, use `NODE_ENV=development node server/index.js`. Most `npm run` scripts of TresDB already include this env specification. See `package.json` for details.
+
+
+
+## Scripts API
+
+### npm start
+
+Alias for [npm run server:production](#npm-run-server-production)
+
+### npm run server:development
+
+Requirements: MongoDB is running
+
+Starts the server in the development env. See [Environments](#environments) for details.
+
+### npm run server:production
+
+Requirements: MongoDB is running
+
+Starts the server in the production env. See [Environments](#environments) for details.
+
+### npm run server:test
+
+Requirements: MongoDB is running
+
+Starts the server in the test env. See [Environments](#environments) for details.
+
+### npm run loadsample
+
+Requirements: MongoDB is running
+
+Warning: destroys the database content but leaves mongodb users.
+
+Replaces the database content such as locations and accounts with default content. Indices are created/recreated. You can modify the default content by editing `cli/fixtures/sample.js`.
+
+### npm run ensureindices
+
+Requirements: MongoDB is running
+
+Recreates indices listed in `cli/fixtures/sample.js` without altering content such as locations or accounts.
+
+### npm run migrate
+
+Requirements: MongoDB is running
+
+Updates the database schema. Detects automatically the current schema version and the migration steps required to match the version in `package.json`. For details about the migration steps, see under `migration/versions/`.
+
+### npm run backup
+
+Requirements: MongoDB is running
+
+Stores the content and indices as a directory under `.data/backups`. The directory will be named after the time of the backup. The content is stored in BSON format.
+
+### npm run backup list
+
+Requirements: MongoDB is running
+
+Lists the backups available for restoration.
+
+### npm run restore [backup_name]
+
+Requirements: MongoDB is running
+
+Restores a backup specified by `backup_name`. If `backup_name` is omitted then the most recent backup is used.
+
+### npm run lint
+
+Runs ESLint over the whole codebase. See `.eslintrc.js` and `client/.eslintrc.js` for configuration details.
+
+### npm run mongo
+
+Requirements: MongoDB is running
+
+Starts mongo client on tresdb database.
+
+### npm run mongo:test
+
+Requirements: MongoDB is running
+
+Starts mongo client on test database.
+
+### npm run mongod
+
+Starts MongoDB in auth mode and with the path `.data/db/`. The command creates the path if it does not exist.
+
+### npm run reset
+
+Warning: destroys all data in MongoDB, including MongoDB users.
+
+Warning: destroys all backups, logs, and uploads
+
+Clears the project.
+
+### npm run test
+
+Requirements: MongoDB is running
+
+Runs the full test suite.
+
+### npm run test:client
+
+Requirements: Server is running, MongoDB is running
+
+Runs client-side tests. Will probably be deprecated in the future.
+
+### npm run test:server
+
+Requirements: Server is running, MongoDB is running
+
+Runs a server API test suite.
+
+### npm run test:migration
+
+Requirements: MongoDB is running
+
+Runs a migration test suite.
+
+### npm run worker
+
+Requirements: MongoDB is running
+
+Executes one work cycle. A cycle includes jobs such as computing marker layers, fetching missing reverse geocodes, and building search indices. In production, the worker is meant to be invoked as a cronjob once in a while. For details, see under `worker/`.
 
 
 
