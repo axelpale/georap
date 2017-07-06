@@ -1,6 +1,10 @@
 
-var status = require('http-status-codes');
+var templates = require('./templates');
 var dal = require('./dal');
+var status = require('http-status-codes');
+var sanitizeFilename = require('sanitize-filename');
+
+
 
 exports.changeGeom = function (req, res) {
 
@@ -33,6 +37,8 @@ exports.changeGeom = function (req, res) {
   });
 };
 
+
+
 exports.changeName = function (req, res) {
 
   if (typeof req.body.newName !== 'string') {
@@ -54,6 +60,8 @@ exports.changeName = function (req, res) {
     return res.sendStatus(status.OK);
   });
 };
+
+
 
 exports.changeTags = function (req, res) {
 
@@ -77,9 +85,12 @@ exports.changeTags = function (req, res) {
   });
 };
 
+
+
 exports.getOne = function (req, res) {
   // Fetch single location with entries and events
 
+  // eslint-disable-next-line max-statements
   dal.getOne(req.location._id, function (err, rawLoc) {
     if (err) {
       return res.sendStatus(status.INTERNAL_SERVER_ERROR);
@@ -89,9 +100,47 @@ exports.getOne = function (req, res) {
       return res.sendStatus(status.NOT_FOUND);
     }
 
+    var responseStr, filename, mime;
+    var format = req.query.format;
+
+    if (typeof format === 'string') {
+      format = format.toLowerCase();
+
+      if (format === 'geojson') {
+        responseStr = templates.geojson(rawLoc, true);
+        mime = 'application/vnd.geo+json';
+      }
+
+      if (format === 'gpx') {
+        responseStr = templates.gpx(rawLoc);
+        mime = 'application/gpx+xml';
+      }
+
+      if (format === 'kml') {
+        responseStr = templates.kml(rawLoc);
+        mime = 'application/vnd.google-earth.kml+xml';
+      }
+
+      if (typeof mime !== 'string') {
+        // This mime type is not found
+        return res.sendStatus(status.NOT_FOUND);
+      }
+
+      // Name of the file to download
+      filename = sanitizeFilename(rawLoc.name) + '.' + format;
+
+      // Set headers
+      res.set('Content-Type', mime);
+      res.set('Content-Disposition', 'attachment; filename=' + filename);
+
+      return res.send(responseStr);
+    }  // else
+
     return res.json(rawLoc);
   });
 };
+
+
 
 exports.removeOne = function (req, res) {
   // Delete single location
