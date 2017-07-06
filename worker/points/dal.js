@@ -19,6 +19,13 @@ exports.computePoints = function (username, callback) {
     }
 
     var points = exports.sumPoints(evs);
+    var typerr;
+
+    // Assert
+    if (typeof points !== 'number' || isNaN(points)) {
+      typerr = new Error('Invalid scene points sum: ' + points);
+      return callback(typerr);
+    }
 
     return callback(null, points);
   });
