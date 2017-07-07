@@ -6,17 +6,21 @@
     </div>
     <div class="panel-body">
 
-      <!-- location id & token -->
       <p>
-        <a href="/api/locations/<%= id %>?format=kml&amp;token=<%= token %>" class="btn btn-default" role="button" target="_blank">Download KML</a>
+        <h4>View on</h4>
+        <a href="https://tools.wmflabs.org/geohack/geohack.php?language=en&params=<%= latitude %>;<%= longitude %>_type:landmark" class="btn btn-default" role="button" target="_blank">GeoHack</a>
+      </p>
+      <p>
+        <h4>Download</h4>
+        <a href="/api/locations/<%= id %>?format=kml&amp;token=<%= token %>" class="btn btn-default" role="button" target="_blank">KML</a>
         for Google Earth
       </p>
       <p>
-        <a href="/api/locations/<%= id %>?format=gpx&amp;token=<%= token %>" class="btn btn-default" role="button" target="_blank">Download GPX</a>
+        <a href="/api/locations/<%= id %>?format=gpx&amp;token=<%= token %>" class="btn btn-default" role="button" target="_blank">GPX</a>
         for GPS devices
       </p>
       <p>
-        <a href="/api/locations/<%= id %>?format=geojson&amp;token=<%= token %>" class="btn btn-default" role="button" target="_blank">Download GeoJSON</a>
+        <a href="/api/locations/<%= id %>?format=geojson&amp;token=<%= token %>" class="btn btn-default" role="button" target="_blank">GeoJSON</a>
         for web applications
       </p>
 

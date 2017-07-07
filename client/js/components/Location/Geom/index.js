@@ -1,4 +1,5 @@
 
+var ui = require('../../lib/ui');
 var geostamp = require('./geostamp');
 var template = require('./template.ejs');
 
@@ -10,7 +11,9 @@ module.exports = function (location) {
 
     $mount.html(template({
       location: location,
-      geostamp: geostamp,
+      decimalDegree: geostamp.geomDecimal(location.getGeom()),
+      dm: geostamp.geomDM(location.getGeom()),
+      dms: geostamp.geomDMS(location.getGeom()),
     }));
 
     // Preparation
@@ -31,10 +34,10 @@ module.exports = function (location) {
     };
 
     var openForm = function () {
-      $container.removeClass('hidden');
-      $form.removeClass('hidden');
+      ui.show($container);
+      ui.show($form);
       // Hide all possible error messages
-      $error.addClass('hidden');
+      ui.hide($error);
     };
 
     var closeForm = function () {
@@ -78,8 +81,6 @@ module.exports = function (location) {
       var lng = parseFloat(lngRaw);
       var lat = parseFloat(latRaw);
 
-
-
       // Hide form and show progress bar
       $form.addClass('hidden');
       $progress.removeClass('hidden');
@@ -96,6 +97,29 @@ module.exports = function (location) {
       });
     });
 
+    (function defineMore() {
+      var $more = $('#tresdb-location-coords-more');
+      var $moreopen = $('#tresdb-location-coords-more-open');
+      var $moreclose = $('#tresdb-location-coords-more-close');
+
+      $moreopen.click(function (ev) {
+        ev.preventDefault();
+        ui.hide($moreopen);
+        ui.show($moreclose);
+        ui.show($more);
+      });
+
+      $moreclose.click(function (ev) {
+        ev.preventDefault();
+        ui.hide($moreclose);
+        ui.show($moreopen);
+        ui.hide($more);
+      });
+
+    }());
+
+    // Event handling
+
     location.on('location_geom_changed', function () {
       var geostampHtml = geostamp(location.getGeom(), { precision: 5 });
       $geostamp.html(geostampHtml);
@@ -107,10 +131,12 @@ module.exports = function (location) {
     var $edit = $('#tresdb-location-coords-edit');
     var $form = $('#tresdb-location-coords-form');
     var $cancel = $('#tresdb-location-coords-cancel');
+    var $moreopen = $('#tresdb-location-coords-more-open');
 
     $edit.off();
     $form.off();
     $cancel.off();
+    $moreopen.off();
 
   };
 };

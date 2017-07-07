@@ -1,10 +1,18 @@
-<div class="tresdb-coords form-group">
-  <span class="glyphicon glyphicon-screenshot" aria-hidden="true"></span>
+<div class="form-group">
+  <div class="tresdb-coords">
+    <span class="glyphicon glyphicon-screenshot" aria-hidden="true"></span>
 
-  <span id="tresdb-location-coords-geostamp"><%= geostamp(location.getGeom(), { precision: 5 }) %></span>
+    <span id="tresdb-location-coords-geostamp"><%= decimalDegree %></span>
 
-  <button id="tresdb-location-coords-edit" type="button" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-pencil"></span> Edit</button>
+    <button id="tresdb-location-coords-more-open" type="button" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-chevron-down"></span> More</button>
+    <button id="tresdb-location-coords-more-close" type="button" class="btn btn-default btn-xs hidden"><span class="glyphicon glyphicon-chevron-up"></span> Less</button>
+    <button id="tresdb-location-coords-edit" type="button" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-pencil"></span> Edit</button>
+  </div>
 
+  <div id="tresdb-location-coords-more" class="form-group hidden">
+    <div><span><%= dm %></span></div>
+    <div><span><%= dms %></span></div>
+  </div>
 </div>
 
 <div id="tresdb-location-coords-container" class="hidden">
