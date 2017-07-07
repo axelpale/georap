@@ -14,6 +14,8 @@ module.exports = function (location) {
     $mount.html(template({
       id: location.getId(),
       token: account.getToken(),
+      latitude: location.getLatitude(),
+      longitude: location.getLongitude(),
     }));
 
     var $cont = $('#tresdb-export-container');
