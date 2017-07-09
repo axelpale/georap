@@ -90,7 +90,110 @@ module.exports = {
     sender: 'admin@example.com',
   },
 
-  // Bcrypt hashing
+  // Register coordinate systems to be used.
+  // These coordinate systems will be displayed on the location page.
+  // These systems are also available for exportServices.
+  //
+  // Each entry has the form:
+  //   [<cordinate system name>, <proj4 projection definition>, <template fn>]
+  // Where:
+  //   coordinate system name
+  //     String.
+  //   proj4 projection definition
+  //     See http://proj4js.org/ for projection definitions.
+  //   template
+  //     String. The pretty print of coodinates in EJS templating language.
+  //     See available template variables and functions below.
+  //
+  // Template variables:
+  //   lat
+  //     Latitude
+  //   lng
+  //     Longitude
+  //   absLat
+  //     Math.abs(lat)
+  //   absLng
+  //     Math.abs(lng)
+  //
+  // Template functions:
+  //   getLatDir(degrees)
+  //     Cardinal direction for latitude.
+  //     Returns 'N' or 'S'
+  //   getLngDir(degrees)
+  //     Cardinal direction for longitude.
+  //     Returns 'W' or 'E'
+  //   getD(degrees)
+  //     Decimal degrees
+  //     For example: 12.345678°
+  //   getDM(degrees)
+  //     Degrees minutes.
+  //     For example: 12° 34.5678"
+  //   getDMS(degrees)
+  //     Degrees minutes seconds format.
+  //     For example: 12° 34" 56.78'
+  //
+  coordinateSystems: [
+    [
+      'WGS84',
+      '+proj=longlat +ellps=WGS84 +datum=WGS84 +units=degrees',
+      '<%= getD(absLat) %> <%= getLatDir(lat) %>, ' +
+      '<%= getD(absLng) %> <%= getLngDir(lng) %>',
+    ],
+    [
+      'WGS84-DM',
+      '+proj=longlat +ellps=WGS84 +datum=WGS84 +units=degrees',
+      '<%= getDM(absLat) %> <%= getLatDir(lat) %>, ' +
+      '<%= getDM(absLng) %> <%= getLngDir(lng) %>',
+    ],
+    [
+      'WGS84-DMS',
+      '+proj=longlat +ellps=WGS84 +datum=WGS84 +units=degrees',
+      '<%= getDMS(absLat) %> <%= getLatDir(lat) %>, ' +
+      '<%= getDMS(absLng) %> <%= getLngDir(lng) %>',
+    ],
+    // For example, the official coordinate system in Finland:
+    [
+      'ETRS-TM35FIN',
+      '+proj=utm +zone=35 +ellps=GRS80 +units=m +no_defs',
+      'N <%= lat %>, E <%= lng %>',
+    ],
+  ],
+
+  // Register location export services here.
+  // With these, user can inspect the location on other online maps.
+  //
+  // Each entry has the form:
+  //   [<service name>, <url pattern>, <coordinate system name>]
+  // Where:
+  //   service name
+  //     String.
+  //   url pattern
+  //     String. URL to the service in EJS templating language.
+  //     See available template variables below.
+  //   coord system
+  //     String. Name of the coordinate system to use for variables.
+  //
+  // Variables available in URL pattern:
+  //   latitude
+  //   longitude
+  //
+  exportServices: [
+    [
+      'GeoHack',
+      'https://tools.wmflabs.org/geohack/geohack.php' +
+      '?language=en&params=<%= latitude %>;<%= longitude %>_type:landmark',
+      'WGS84',
+    ],
+    [
+      'Paikkatietoikkuna',
+      'http://www.paikkatietoikkuna.fi/web/fi/kartta' +
+      '?ver=1.17&zoomLevel=8&coord=<%= longitude %>_<%= latitude %>&' +
+      'mapLayers=base_35+100+default&showMarker=true',
+      'ETRS-TM35FIN',
+    ],
+  ],
+
+  // Bcrypt hashing strength
   bcrypt: {
     rounds: 10,
   },

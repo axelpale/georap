@@ -4,6 +4,7 @@ var routes = require('./routes');
 var MapComp = require('./components/Map');
 var MainMenuComp = require('./components/MainMenu');
 
+
 // Authentication & Account API
 var account = require('./stores/account');
 

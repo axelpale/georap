@@ -1,7 +1,13 @@
-
+var tresdb = window.tresdb;
 var ui = require('../../lib/ui');
 var geostamp = require('./geostamp');
 var template = require('./template.ejs');
+
+// Coordinate systems and their templates
+var systemNames = tresdb.config.coordinateSystems.map(function (sys) {
+  return sys[0];
+});
+
 
 module.exports = function (location) {
 
@@ -9,14 +15,40 @@ module.exports = function (location) {
 
   this.bind = function ($mount) {
 
+    // Preparation for rendering
+
+    // Render coordinates in each registered coordinate system.
+    var allCoords = systemNames.map(function (sysName) {
+      var coords = location.getAltGeom(sysName);
+
+      var tmplParams = {
+        lat: coords[1],
+        lng: coords[0],
+        absLat: Math.abs(coords[1]),
+        absLng: Math.abs(coords[0]),
+        getLatDir: geostamp.latitudeDirection,
+        getLngDir: geostamp.longitudeDirection,
+        getD: geostamp.getDecimal,
+        getDM: geostamp.getDM,
+        getDMS: geostamp.getDMS,
+      };
+
+      var systemHtml = tresdb.templates[sysName](tmplParams);
+
+      return {
+        name: sysName,
+        html: systemHtml,
+      };
+    });
+
+    // Render
+
     $mount.html(template({
       location: location,
-      decimalDegree: geostamp.geomDecimal(location.getGeom()),
-      dm: geostamp.geomDM(location.getGeom()),
-      dms: geostamp.geomDMS(location.getGeom()),
+      allCoords: allCoords,
     }));
 
-    // Preparation
+    // Preparation for binds
 
     var $edit = $('#tresdb-location-coords-edit');
     var $container = $('#tresdb-location-coords-container');

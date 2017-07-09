@@ -1,7 +1,7 @@
 {
   "name": "tresdb",
   "private": true,
-  "version": "7.8.0",
+  "version": "7.9.0",
   "description": "Geographical CMS built on Express.js",
   "keywords": [
     "GIS",
@@ -67,6 +67,7 @@
     "multer": "^1.2.1",
     "nodemailer": "^2.6.0",
     "page": "^1.7.1",
+    "proj4": "^2.4.3",
     "qs": "^6.3.1",
     "sanitize-filename": "^1.6.1",
     "semver": "^5.3.0",

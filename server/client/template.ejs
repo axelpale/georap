@@ -30,6 +30,11 @@
     <!-- See client/handlers.js for details -->
     <script>
       window.tresdb = <%- JSON.stringify(tresdb) %>
+      window.tresdb.templates = {};
+      <% templates.forEach(function (template) { %>
+      <%# Use bracket notation to allow template names with spaces and - %>
+      window.tresdb.templates['<%= template.name %>'] = <%- template.source %>;
+      <% }); %>
     </script>
 
     <!-- Webpack bundle -->
