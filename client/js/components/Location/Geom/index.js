@@ -19,7 +19,7 @@ module.exports = function (location) {
 
     // Render coordinates in each registered coordinate system.
     var allCoords = systemNames.map(function (sysName) {
-      var coords = location.getAltGeom()[sysName];
+      var coords = location.getAltGeom(sysName);
 
       var tmplParams = {
         lat: coords[1],

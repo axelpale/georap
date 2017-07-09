@@ -64,9 +64,10 @@ module.exports = function (raw) {
 
   // Public Getters
 
-  self.getAltGeom = function () {
-    // Return an array of coordinates in alternative coordinate systems.
-    return raw.altGeom;
+  self.getAltGeom = function (system) {
+    // Return coordinates in the given coordinate systems.
+    // Only systems in raw.altGeom are available.
+    return raw.altGeom[system];
   };
 
   self.getCreator = function () {

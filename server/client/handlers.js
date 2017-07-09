@@ -28,15 +28,28 @@ var indexHtml = (function precompile() {
   };
 
   // Precompile client-side templates and append their source into HTML.
-  var precompiledTemplates = local.coordinateSystems.map(function (sys) {
+  var precompiledTemplates = [];
+
+  local.coordinateSystems.forEach(function (sys) {
     var sysName = sys[0];
     var sysTemplate = sys[2];
     var sysSource = _.template(sysTemplate).source;
 
-    return {
+    precompiledTemplates.push({
       name: sysName,
       source: sysSource,
-    };
+    });
+  });
+
+  local.exportServices.forEach(function (serv) {
+    var servName = serv[0];
+    var servTemplate = serv[1];
+    var servSource = _.template(servTemplate).source;
+
+    precompiledTemplates.push({
+      name: servName,
+      source: servSource,
+    });
   });
 
   return template({

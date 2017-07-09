@@ -176,7 +176,6 @@ module.exports = {
   // Variables available in URL pattern:
   //   latitude
   //   longitude
-  //   zoom
   //
   exportServices: [
     [
