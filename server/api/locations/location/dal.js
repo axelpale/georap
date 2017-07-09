@@ -1,6 +1,7 @@
 /* eslint-disable max-lines */
 
 var db = require('../../../services/db');
+var proj = require('../../../services/proj');
 var googlemaps = require('../../../services/googlemaps');
 var eventsDal = require('../../events/dal');
 
@@ -186,7 +187,8 @@ exports.getRaw = function (id, callback) {
 };
 
 exports.getOne = function (id, callback) {
-  // Get single location with events and entries
+  // Get single location with additional cooridinate systems, events,
+  // and entries.
   //
   // Parameters:
   //   id
@@ -224,6 +226,9 @@ exports.getOne = function (id, callback) {
         }
 
         doc.entries = docs2;
+
+        // Compute additional coodinate systems
+        doc.altGeom = proj.getAltPositions(doc.geom.coordinates);
 
         return callback(null, doc);
       });

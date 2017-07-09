@@ -64,6 +64,11 @@ module.exports = function (raw) {
 
   // Public Getters
 
+  self.getAltGeom = function () {
+    // Return an array of coordinates in alternative coordinate systems.
+    return raw.altGeom;
+  };
+
   self.getCreator = function () {
     // TODO ensure creator is everywhere.
     // Return the username of the creator of the location.

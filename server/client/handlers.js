@@ -2,6 +2,7 @@
 var pjson = require('../../package.json');
 var local = require('../../config/local');
 var ejs = require('ejs');
+var _ = require('lodash');
 var fs = require('fs');
 var path = require('path');
 
@@ -21,10 +22,27 @@ var indexHtml = (function precompile() {
       googleMapsKey: local.googleMapsKey,
       uploadUrl: local.uploadUrl,
       uploadSizeLimit: local.uploadSizeLimit,
+      coordinateSystems: local.coordinateSystems,
+      exportServices: local.exportServices,
     },
   };
 
-  return template({ tresdb: tresdb });
+  // Precompile client-side templates and append their source into HTML.
+  var precompiledTemplates = local.coordinateSystems.map(function (sys) {
+    var sysName = sys[0];
+    var sysTemplate = sys[2];
+    var sysSource = _.template(sysTemplate).source;
+
+    return {
+      name: sysName,
+      source: sysSource,
+    };
+  });
+
+  return template({
+    tresdb: tresdb,
+    templates: precompiledTemplates,
+  });
 }());
 
 
