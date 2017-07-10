@@ -93,6 +93,11 @@ html, body {
 
 /* Location page */
 
+#tresdb-location-loading {
+  /* Make space between the loading bar and the top edge. Match with H1 */
+  margin-top: 20px;
+}
+
 #tresdb-location-name {
   margin-bottom: 1em;
 }
