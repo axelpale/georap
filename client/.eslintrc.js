@@ -13,4 +13,8 @@ module.exports = {
     // Disable node environment
     'node': false,
   },
+
+  'globals': {
+    'tresdb': true,
+  },
 };

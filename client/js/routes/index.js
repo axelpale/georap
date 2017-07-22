@@ -4,6 +4,8 @@
 
 var account = require('../stores/account');
 
+var AdminUsersView = require('../components/Admin/Users');
+var AdminUserView = require('../components/Admin/Users/User');
 var CardView = require('../components/Card');
 var ChangePasswordView = require('../components/ChangePassword');
 var Error401View = require('../components/Error401');
@@ -193,21 +195,31 @@ exports.route = function () {
     card.open(new ExportView());
   });
 
-  // Routes that require admin
+  // Routes that require admin. Note the adminOnly middleware.
+
+  page('/admin/users', adminOnly, function () {
+    var view = new AdminUsersView();
+    card.open(view);
+  });
+
+  page('/admin/users/:username', adminOnly, function (ctx) {
+    var view = new AdminUserView(ctx.params.username);
+    card.open(view);
+  });
 
   page('/invite', adminOnly, function () {
     var view = new InviteView();
-    card.open(view, 'page');
+    card.open(view);
   });
 
   page('/payments/admin', adminOnly, function () {
     var view = new PaymentsAdminView();
-    card.open(view, 'page');
+    card.open(view);
   });
 
   page('/statistics', adminOnly, function () {
     var view = new StatisticsView();
-    card.open(view, 'page');
+    card.open(view);
   });
 
   // Catch all

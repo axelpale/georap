@@ -2,9 +2,9 @@
 //
 // Responsible:
 // - authentication login
-// - current user data
-// - communication with the server
-// - handling tokens in browser memory
+// - data of the current user
+// - account related communication with the server
+// - handling auth tokens in browser memory
 //
 // Not responsible:
 // - validation of input values

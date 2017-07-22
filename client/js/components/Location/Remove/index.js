@@ -1,9 +1,15 @@
 
+var account = tresdb.stores.account;
 var template = require('./template.ejs');
 
 module.exports = function (location) {
 
   this.bind = function ($mount) {
+
+    // Allow only admins and creators to delete.
+    if (!account.isAdmin() && location.getCreator() !== account.getName()) {
+      return;
+    }
 
     $mount.html(template({
       location: location,

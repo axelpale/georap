@@ -87,6 +87,12 @@ module.exports = function (mapComp, go) {
       return go('/users');
     });
 
+    $mount.on('click', '#tresdb-mainmenu-users-admin', function (ev) {
+      ev.preventDefault();
+
+      return go('/admin/users');
+    });
+
     $mount.on('click', '#tresdb-mainmenu-user', function (ev) {
       ev.preventDefault();
 
