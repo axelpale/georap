@@ -3,7 +3,7 @@
     <tr>
       <th>Username</th>
       <th>Email</th>
-      <th>Membership Expires</th>
+      <th>Role</th>
     </tr>
   </thead>
   <tbody>
@@ -11,7 +11,7 @@
     <tr>
       <td><a href="/admin/users/<%= p.name %>"><%= p.name %></a></td>
       <td><%= p.email %></td>
-      <td>&infin;</td>
+      <td><%= p.admin ? 'Admin' : 'Normal' %></td>
     </tr>
   <% }); %>
   </tbody>

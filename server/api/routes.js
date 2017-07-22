@@ -3,6 +3,7 @@
 var local = require('../../config/local');
 
 var accountRouter = require('./account/routes');
+var adminRouter = require('./admin/routes');
 var eventsRouter = require('./events/routes');
 var locationsRouter = require('./locations/routes');
 var markersRouter = require('./markers/routes');
@@ -35,6 +36,7 @@ router.use(jwt({
   },
 }));
 
+router.use('/admin', adminRouter);
 router.use('/events', eventsRouter);
 router.use('/locations', locationsRouter);
 router.use('/markers', markersRouter);

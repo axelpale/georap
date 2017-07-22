@@ -7,6 +7,7 @@
 // The tresdb global is defined in index.html
 
 var account = require('./stores/account');
+var admin = require('./stores/admin');
 var events = require('./stores/events');
 var locations = require('./stores/locations');
 var mapstate = require('./stores/mapstate');
@@ -17,6 +18,7 @@ var users = require('./stores/users');
 
 tresdb.stores = {
   account: account,
+  admin: admin,
   events: events,
   locations: locations,
   mapstate: mapstate,

@@ -3,6 +3,14 @@
 var handlers = require('./handlers');
 var router = require('express').Router();
 
-router.get('/', handlers.getOneWithExtras);
+// Username parser middleware
+
+router.use(function (req, res, next) {
+  // Catches the username
+  req.username = req.params.username;
+  return next();
+});
+
+router.get('/', handlers.getOne);
 
 module.exports = router;

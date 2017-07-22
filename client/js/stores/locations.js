@@ -3,9 +3,10 @@
 var emitter = require('component-emitter');
 
 var socket = require('../connection/socket');
+var validateCoords = require('./lib/validateCoords');
+var request = require('./lib/request');
 var account = require('./account');
 var tags = require('./tags');
-var validateCoords = require('./lib/validateCoords');
 var Location = require('../components/Location/Model');
 
 // Init
@@ -63,96 +64,9 @@ var listenForChanges = (function () {
   };
 }());
 
-var postJSON = function (params, callback) {
-  // General JSON POST AJAX request.
-  //
-  // Parameters:
-  //   params
-  //     url
-  //     data
-  //   callback
-  //     function (err)
-  $.ajax({
-    url: params.url,
-    type: 'POST',
-    contentType: 'application/json',
-    data: JSON.stringify(params.data),
-    headers: { 'Authorization': 'Bearer ' + account.getToken() },
-    success: function (responseData) {
-      return callback(null, responseData);
-    },
-    error: function (jqxhr, status, statusMessage) {
-      return callback(new Error(statusMessage));
-    },
-  });
-};
-
-var postFile = function (params, callback) {
-  // Send a form with file input.
-  //
-  // Parameters:
-  //   params
-  //     url
-  //     form
-  //       jQuery instance of the file upload form.
-  //   callback
-  //     function (err)
-
-  var formData = new FormData(params.form[0]);
-
-  // Send. The contentType must be false, otherwise a Boundary header
-  // becomes missing and multer on the server side throws an error about it.
-  // The browser will attach the correct headers to the request.
-  //
-  // Official JWT auth header is used:
-  //   Authorization: Bearer mF_9.B5f-4.1JqM
-  // For details, see https://tools.ietf.org/html/rfc6750#section-2.1
-  $.ajax({
-    url: params.url,
-    type: 'POST',
-    contentType: false,
-    data: formData,
-    headers: { 'Authorization': 'Bearer ' + account.getToken() },
-    processData: false,
-    success: function () {
-      return callback();
-    },
-    error: function (jqxhr, statusCode, statusMessage) {
-      var err = new Error(statusMessage);
-
-      // eslint-disable-next-line no-magic-numbers
-      if (jqxhr.status === 413) {
-        err.name = 'REQUEST_TOO_LONG';
-      }
-
-      return callback(err);
-    },
-  });
-};
-
-var deleteJSON = function (params, callback) {
-  // General JSON DELETE AJAX request.
-  //
-  // Parameters:
-  //   params
-  //     url
-  //     data
-  //   callback
-  //     function (err, jsonResponse)
-  $.ajax({
-    url: params.url,
-    type: 'DELETE',
-    contentType: 'application/json',
-    data: JSON.stringify(params.data),
-    headers: { 'Authorization': 'Bearer ' + account.getToken() },
-    success: function (responseData) {
-      return callback(null, responseData);
-    },
-    error: function (jqxhr, status, statusMessage) {
-      return callback(new Error(statusMessage));
-    },
-  });
-};
+var postJSON = request.postJSON;
+var postFile = request.postFile;
+var deleteJSON = request.deleteJSON;
 
 
 // Public methods
