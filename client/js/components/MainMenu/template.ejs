@@ -25,11 +25,6 @@
         <li>
           <a id="tresdb-mainmenu-user" href="#"><%= glyphicon({ name: 'user' }) %> <%= user.name %></a>
         </li>
-        <% if (config.features.payments) { %>
-        <li>
-          <a id="tresdb-mainmenu-payments" href="#"><%= glyphicon({ name: 'piggy-bank' }) %> Payments</a>
-        </li>
-        <% } %>
         <li>
           <a id="tresdb-mainmenu-change-password" href="#"><%= glyphicon({ name: 'asterisk' }) %> Change password...</a>
         </li>
@@ -42,13 +37,11 @@
             <a id="tresdb-mainmenu-invite" href="#"><%= glyphicon({ name: 'envelope' }) %> Invite...</a>
           </li>
           <li>
+            <a id="tresdb-mainmenu-users-admin" href="#"><%= glyphicon({ name: 'user' }) %> Manage members...</a>
+          </li>
+          <li>
             <a id="tresdb-mainmenu-statistics" href="#"><%= glyphicon({ name: 'signal' }) %> Statistics</a>
           </li>
-          <% if (config.features.payments) { %>
-          <li>
-            <a id="tresdb-mainmenu-payments-admin" href="#"><%= glyphicon({ name: 'piggy-bank' }) %> Manage Payments...</a>
-          </li>
-          <% } %>
           <li role="separator" class="divider"></li>
         <% } %>
 

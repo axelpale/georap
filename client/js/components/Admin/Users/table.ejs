@@ -1,0 +1,18 @@
+<table class="table">
+  <thead>
+    <tr>
+      <th>Username</th>
+      <th>Email</th>
+      <th>Membership Expires</th>
+    </tr>
+  </thead>
+  <tbody>
+  <% users.forEach(function (p) { %>
+    <tr>
+      <td><a href="/admin/users/<%= p.name %>"><%= p.name %></a></td>
+      <td><%= p.email %></td>
+      <td>&infin;</td>
+    </tr>
+  <% }); %>
+  </tbody>
+</table>

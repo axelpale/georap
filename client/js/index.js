@@ -1,16 +1,47 @@
+/* globals tresdb */
 
+
+
+// Collect data access API's under tresdb global.
+// This prevents cumbersome ../../../ requires.
+// The tresdb global is defined in index.html
+
+var account = require('./stores/account');
+var events = require('./stores/events');
+var locations = require('./stores/locations');
+var mapstate = require('./stores/mapstate');
+var markers = require('./stores/markers');
+var statistics = require('./stores/statistics');
+var tags = require('./stores/tags');
+var users = require('./stores/users');
+
+tresdb.stores = {
+  account: account,
+  events: events,
+  locations: locations,
+  mapstate: mapstate,
+  markers: markers,
+  statistics: statistics,
+  tags: tags,
+  users: users,
+};
+
+
+// Collect UI helpers under tresdb global.
+
+var ui = require('./components/lib/ui');
+tresdb.ui = ui;
+
+
+
+// Routes and main components.
 var routes = require('./routes');
-
 var MapComp = require('./components/Map');
 var MainMenuComp = require('./components/MainMenu');
 
 
-// Authentication & Account API
-var account = require('./stores/account');
 
-
-
-// Routing
+// Define routes
 
 routes.route();
 
