@@ -105,7 +105,7 @@ module.exports = function (map) {
         start: function () {
           animationInterval = setInterval(function () {
             phase = !phase;
-            var imgX = -TRACKING_X - (phase ? -2 * ICON_SIZE : ICON_SIZE);
+            var imgX = -TRACKING_X - (phase ? -(2 * ICON_SIZE) : ICON_SIZE);
             secondChild.style['background-position'] = imgX + 'px 0';
           }, ANIMATION_INTERVAL);
         },
