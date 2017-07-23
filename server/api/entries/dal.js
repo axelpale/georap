@@ -172,7 +172,7 @@ exports.getAllOfLocation = function (locationId, callback) {
   //   callback
   //     function (err, entries)
 
-  var coll = db.get().collection('entries');
+  var coll = db.collection('entries');
   var q = {
     locationId: locationId,
     deleted: false,
@@ -180,6 +180,25 @@ exports.getAllOfLocation = function (locationId, callback) {
   var opt = { sort: { time: -1 } };
 
   return coll.find(q, opt).toArray(callback);
+};
+
+
+exports.getAllOfUser = function (username, callback) {
+  // Return all entries created by user, ordered from oldest to newest.
+  //
+  // Parameters
+  //   username
+  //     string
+  //   callback
+  //     function (err, entries)
+
+  var coll = db.collection('entries');
+  var q = {
+    user: username,
+    deleted: false,
+  };
+
+  coll.find(q).sort({ time: 1 }).toArray(callback);
 };
 
 

@@ -15,7 +15,9 @@ socket.on('tresdb_event', function (ev) {
       ev.type === 'location_geom_changed' ||
       ev.type === 'location_tags_changed' ||
       ev.type === 'location_name_changed' ||
-      ev.type === 'location_entry_created') {
+      ev.type === 'location_entry_created' ||
+      ev.type === 'location_entry_changed' ||
+      ev.type === 'location_entry_removed') {
     exports.emit(ev.type, ev);
   }
 });

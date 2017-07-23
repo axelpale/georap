@@ -88,25 +88,19 @@ window.initMap = function () {
     mapComp.removeControls();
   });
 
-  // Bind fetching of locations and user's geolocation to auth events.
-  // We could ask unauthenticated user for geolocation but this might
-  // lead users to disallow sharing their location because no map is
-  // yet visible.
+  // Bind fetching of locations to auth events.
   account.on('login', function () {
     mapComp.startLoadingMarkers();
-    mapComp.showGeolocation();
   });
   account.on('logout', function () {
     mapComp.stopLoadingMarkers();
     mapComp.removeAllMarkers();  // do not expose data after log out
-    mapComp.hideGeolocation();
   });
 
   // Init mainmenu and locations if user is already logged in,
   // because no initial login or logout events would be fired.
   if (account.isLoggedIn()) {
     mapComp.startLoadingMarkers();
-    mapComp.showGeolocation();
     mapComp.addControl(menuComp);
   }
 

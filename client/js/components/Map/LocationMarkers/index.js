@@ -1,12 +1,13 @@
 /* eslint-disable max-lines, max-statements, no-lonely-if */
 /* global google */
 
-var markerStore = require('../../../stores/markers');
-var account = require('../../../stores/account');
+var markerStore = tresdb.stores.markers;
+var account = tresdb.stores.account;
 var icons = require('../lib/icons');
 var getBoundsDiagonal = require('./lib/getBoundsDiagonal');
 var rawEventToMarkerLocation = require('./lib/rawEventToMarkerLocation');
 var labels = require('./lib/labels');
+var VisitedManager = require('./Visited');
 var emitter = require('component-emitter');
 
 module.exports = function (map) {
@@ -30,14 +31,14 @@ module.exports = function (map) {
 
   // Array of ids of locations that the user has visited.
   // Fetch them as soon as possible.
-  var _visitedIds = [];
+  var _visitedIds = new VisitedManager();
 
   // Private methods
 
   var _chooseIcon = function (loc) {
     var icon;
 
-    var isVisited = (_visitedIds.indexOf(loc._id) !== -1);
+    var isVisited = _visitedIds.isVisited(loc._id);
     var isDemolished = (loc.tags.indexOf('demolished') !== -1);
 
     // Choose icon according to the visits
@@ -244,16 +245,41 @@ module.exports = function (map) {
   });
 
   markerStore.on('location_entry_created', function (ev) {
-    if (ev.data.isVisit) {
+    if (ev.data.isVisit && account.isMe(ev.user)) {
       // Add loc among visited locations if not visited before by this user.
-      if (_visitedIds.indexOf(ev.locationId) === -1) {
-        _visitedIds.push(ev.locationId);
-      }
+      _visitedIds.add(ev.locationId);
 
       // Update marker icon to visited
       if (_markers.hasOwnProperty(ev.locationId)) {
         var m = _markers[ev.locationId];
         m.setIcon(_chooseIcon(m.get('location')));
+      }
+    }
+  });
+
+  markerStore.on('location_entry_changed', function (ev) {
+    var m;
+
+    // Change from non-visit to visit
+    if (ev.data.newIsVisit && !ev.data.oldIsVisit && account.isMe(ev.user)) {
+      // Add loc among visited locations if not visited before by this user.
+      _visitedIds.add(ev.locationId);
+
+      // Update marker icon to visited
+      if (_markers.hasOwnProperty(ev.locationId)) {
+        m = _markers[ev.locationId];
+        m.setIcon(_chooseIcon(m.get('location')));
+      }
+    } else {
+      // From visit to non-visit
+      if (ev.data.oldIsVisit && !ev.data.newIsVisit) {
+        _visitedIds.remove(ev.locationId);
+
+        // Update marker icon to unvisited
+        if (_markers.hasOwnProperty(ev.locationId)) {
+          m = _markers[ev.locationId];
+          m.setIcon(_chooseIcon(m.get('location')));
+        }
       }
     }
   });
@@ -318,7 +344,7 @@ module.exports = function (map) {
         return;
       }
 
-      _visitedIds = ids;
+      _visitedIds.set(ids);
     });
   };
 

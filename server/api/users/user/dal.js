@@ -1,8 +1,10 @@
+/* globals Set */
+
 var db = require('../../../services/db');
+var entriesDal = require('../../entries/dal');
 var eventsDal = require('../../events/dal');
 var paymentsDal = require('../../payments/dal');
 var clone = require('clone');
-var _ = require('lodash');
 
 exports.getOne = function (username, callback) {
   // Get single user without anything extra. The result does not have
@@ -104,47 +106,30 @@ exports.getOneWithBalanceAndPayments = function (username, callback) {
 };
 
 exports.getVisitedLocationIds = function (username, callback) {
-  // Find each location_entry_created that has a visit.
-  // Find each location_unproved_visit_created
-  // Make ids into a list, remove duplicates.
+  //
 
   if (typeof username !== 'string') {
     return callback(new Error('invalid username:' + username));
   }
 
-  var q = {
-    $or: [
-      {
-        user: username,
-        type: 'location_entry_created',
-        'data.isVisit': true,
-      },
-      {
-        user: username,
-        type: 'location_unproved_visit_created',
-      },
-    ],
-  };
+  entriesDal.getAllOfUser(username, function (err, ents) {
 
-  var proj = {
-    locationId: 1,
-  };
-
-  var evcoll = db.collection('events');
-  evcoll.find(q, proj).toArray(function (err, evs) {
     if (err) {
       return callback(err);
     }
 
-    // Convert to list of location ids
-    var locationIds = evs.map(function (ev) {
-      return ev.locationId;
+    // Mapping from location ids to the number of visits.
+    var visits = new Set();
+
+    ents.filter(function (ent) {
+      // Future proof
+      return ent.type === 'location_entry';
+    }).forEach(function (ent) {
+      if (ent.data.isVisit) {
+        visits.add(ent.locationId);
+      }
     });
 
-    // Remove duplicates
-    var uniqLocIds = _.uniq(locationIds);
-
-    // Return with array of ids
-    return callback(null, uniqLocIds);
+    return callback(null, Array.from(visits));
   });
 };
