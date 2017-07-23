@@ -88,6 +88,8 @@ module.exports = function () {
     // Manager for the location markers, their loading and refreshing.
     _manager = new LocationMarkers(_map);
 
+    _geolocationMarker.bind();
+
     // Inform that user wants to open a location.
     // Leads to opening of location page.
     _manager.on('marker_activated', function (markerLocation) {
@@ -163,18 +165,6 @@ module.exports = function () {
     });
     _map.setZoom(mapstate.zoom);
     _map.setMapTypeId(mapstate.mapTypeId);
-  };
-
-  self.hideGeolocation = function () {
-    // Hide the current location.
-    assertBound();
-    _geolocationMarker.hide();
-  };
-
-  self.showGeolocation = function () {
-    // Show the current location on the map. Does nothing if already shown.
-    assertBound();
-    _geolocationMarker.show();
   };
 
   self.startLoadingMarkers = function () {

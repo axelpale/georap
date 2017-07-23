@@ -13,5 +13,8 @@ require('!!file-loader?name=[path][name].[ext]!./images/logo/32.png');
 // Login background
 require('!!file-loader?name=[path][name].[ext]!./images/login.jpg');
 
+// My location graphics
+require('!!file-loader?name=[path][name].[ext]!./images/mylocation.png');
+
 // JavaScript
 require('./js/index.js');
