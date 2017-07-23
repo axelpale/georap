@@ -49,7 +49,13 @@ exports.getVisitedLocationIds = function (req, res) {
 
   dal.getVisitedLocationIds(req.username, function (err, ids) {
     if (err) {
+      console.error(err);
       return res.sendStatus(status.INTERNAL_SERVER_ERROR);
+    }
+
+    // Assert
+    if (!Array.isArray(ids)) {
+      throw new Error('invalid location id array');
     }
 
     return res.json(ids);

@@ -39,5 +39,12 @@ exports.getVisitedLocationIds = function (username, callback) {
   //   username
   //   callback
   //     function (err, arrayOfLocationIds)
-  request.getJSON('/api/users/' + username + '/visited', callback);
+  request.getJSON('/api/users/' + username + '/visited', function (err, ids) {
+    if (err) {
+      console.error(err);
+      return callback(err, null);
+    }
+
+    return callback(null, ids);
+  });
 };

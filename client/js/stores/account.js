@@ -128,6 +128,11 @@ exports.changePassword = function (currentPassword, newPassword, callback) {
   });
 };
 
+exports.isMe = function (username) {
+  // Test if current user has this username.
+  return username === this.getName();
+};
+
 exports.sendResetPasswordEmail = function (email, callback) {
 
   $.ajax({
