@@ -1,5 +1,6 @@
 
 var db = require('../../../../services/db');
+var blacklistDal = require('../../blacklist/dal');
 
 exports.getUserForAdmin = function (username, callback) {
   // Fetch an array of users with admin-only information such as email.
@@ -12,20 +13,40 @@ exports.getUserForAdmin = function (username, callback) {
   //         userObj
   //           null if not found
 
-  var coll = db.collection('users');
-  var q = { name: username };
-  var proj = { hash: false };
+  // Assert
+  if (typeof username !== 'string' || typeof callback !== 'function') {
+    throw new Error('invalid parameters');
+  }
 
-  coll.find(q).project(proj).toArray(function (err, users) {
-    if (err) {
-      return callback(err);
+  blacklistDal.has(username, function (errbl, isBlacklisted) {
+    if (errbl) {
+      return callback(errbl, null);
     }
 
-    if (users && users.length > 0) {
-      return callback(null, users[0]);
-    }
+    var coll = db.collection('users');
+    var q = { name: username };
+    var proj = { hash: false };
 
-    // not found
-    return callback(null, null);
+    coll.find(q).project(proj).toArray(function (err, users) {
+      var u;
+
+      if (err) {
+        return callback(err);
+      }
+
+      console.log(username, users);
+
+      if (users && users.length > 0) {
+        u = users[0];
+
+        u.isBlacklisted = isBlacklisted;
+
+        return callback(null, u);
+      }
+
+      // not found
+      return callback(null, null);
+    });
   });
+
 };

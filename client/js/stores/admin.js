@@ -47,3 +47,29 @@ exports.setRole = function (username, role, callback) {
     },
   }, callback);
 };
+
+
+exports.setBlacklisted = function (username, isBlacklisted, callback) {
+  // Parameters:
+  //   username
+  //     string
+  //   isBlacklisted
+  //     boolean
+  //   callback
+  //     function (err)
+  //
+
+  // Assert parameters
+  if (typeof username !== 'string' ||
+      typeof isBlacklisted !== 'boolean' ||
+      typeof callback !== 'function') {
+    throw new Error('invalid parameters');
+  }
+
+  request.postJSON({
+    url: '/api/admin/users/' + username + '/blacklist',
+    data: {
+      isBlacklisted: isBlacklisted,
+    },
+  }, callback);
+};
