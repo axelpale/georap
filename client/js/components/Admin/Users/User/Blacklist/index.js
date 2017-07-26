@@ -1,7 +1,9 @@
 var template = require('./template.ejs');
+var account = tresdb.stores.account;
 var admin = tresdb.stores.admin;
 
 module.exports = function (user) {
+  var self = this;
 
   this.bind = function ($mount) {
 
@@ -10,6 +12,8 @@ module.exports = function (user) {
       isBlacklisted: user.isBlacklisted,
     }));
 
+    // Prevent user trying to blacklist him/herself
+    var author = account.getName();
 
     var $box = $('#blacklist-checkbox');
     var $cancel = $('#tresdb-admin-user-blacklist-cancel');
@@ -17,7 +21,7 @@ module.exports = function (user) {
     var $error = $('#tresdb-admin-user-blacklist-error');
     var $form = $('#tresdb-admin-user-blacklist-form');
     var $success = $('#tresdb-admin-user-blacklist-success');
-
+    var $noauto = $('#tresdb-admin-user-blacklist-noauto');
 
     $cancel.click(function (ev) {
       ev.preventDefault();
@@ -28,14 +32,23 @@ module.exports = function (user) {
 
     $edit.click(function (ev) {
       ev.preventDefault();
-      tresdb.ui.toggleHidden($form);
-      tresdb.ui.hide($success);
+
+      if (author === user.name) {
+        tresdb.ui.toggleHidden($noauto);
+      } else {
+        tresdb.ui.toggleHidden($form);
+        tresdb.ui.hide($success);
+      }
     });
 
     $form.submit(function (ev) {
       ev.preventDefault();
 
       var isChecked = $box.prop('checked');
+
+      if (typeof isChecked !== 'boolean') {
+        throw new Error('Invalid bool isChecked: ' + isChecked);
+      }
 
       admin.setBlacklisted(user.name, isChecked, function (err) {
         if (err) {
@@ -46,6 +59,9 @@ module.exports = function (user) {
 
         tresdb.ui.hide($form);
         tresdb.ui.show($success);
+        user.isBlacklisted = isChecked;
+        self.unbind();
+        self.bind($mount);
       });
     });
 

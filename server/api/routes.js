@@ -11,7 +11,7 @@ var paymentsRouter = require('./payments/routes');
 var statisticsRouter = require('./statistics/routes');
 var usersRouter = require('./users/routes');
 
-var blacklistDal = require('./admin/blacklist/dal');
+var blacklistDal = require('../services/blacklist');
 
 var jwt = require('express-jwt');
 var status = require('http-status-codes');

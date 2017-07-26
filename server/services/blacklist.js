@@ -1,4 +1,4 @@
-var db = require('../../../services/db');
+var db = require('./db');
 
 // List of user ids. Null before initialization.
 var _blacklist = null;

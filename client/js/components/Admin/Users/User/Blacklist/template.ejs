@@ -1,5 +1,5 @@
 <h3>
-  Banned: <%= isBlacklisted ? 'yes' : 'no' %>
+  Locked: <%= isBlacklisted ? 'yes' : 'no' %>
   <button id="tresdb-admin-user-blacklist-edit" type="button" class="btn btn-default btn-xs">
     <span class="glyphicon glyphicon-pencil"></span> Edit
   </button>
@@ -7,15 +7,15 @@
 
 <form id="tresdb-admin-user-blacklist-form" class="hidden panel panel-primary">
   <div class="panel-heading">
-    Ban member
+    Lock/unlock member account
   </div>
   <div class="panel-body">
     <div class="checkbox">
       <label>
-        <input id="blacklist-checkbox" type="checkbox" name="isblacklisted" <%= isBlacklisted ? 'checked="checked"' : '' %> > Check to ban <%= username %>
+        <input id="blacklist-checkbox" type="checkbox" name="isblacklisted" <%= isBlacklisted ? 'checked="checked"' : '' %> > Lock account <%= username %>
       </label>
     </div>
-    <p class="help-block">Banned members are not allowed to log in and see or edit content. Only members with administrator roles can unban banned members.</p>
+    <p class="help-block">A member with a locked account is not allowed to log in and see or edit content. Only members with administrator roles can unlock locked member accounts.</p>
     <div class="pull-right">
       <button id="tresdb-admin-user-blacklist-cancel" type="button" class="btn btn-default">Cancel</button>
       <button type="submit" class="btn btn-primary">Save</button>
@@ -23,10 +23,14 @@
   </div>
 </form>
 
+<div id="tresdb-admin-user-blacklist-noauto" class="hidden">
+  <div class="alert alert-warning" role="alert">You cannot lock your own account.</div>
+</div>
+
 <div id="tresdb-admin-user-blacklist-error" class="hidden">
   <div class="alert alert-danger" role="alert">Updating blacklist failed.</div>
 </div>
 
 <div id="tresdb-admin-user-blacklist-success" class="hidden">
-  <div class="alert alert-success" role="alert">Successfully updated the blacklist.</div>
+  <div class="alert alert-success" role="alert">Successfully locked/unlocked the account <%= username %>.</div>
 </div>

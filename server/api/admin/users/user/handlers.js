@@ -1,6 +1,7 @@
 var dal = require('./dal');
-var blacklistDal = require('../../blacklist/dal');
+var blacklistDal = require('../../../../services/blacklist');
 var status = require('http-status-codes');
+
 
 exports.getOne = function (req, res) {
   // Response with JSON object of user with admin-only information
@@ -20,6 +21,7 @@ exports.getOne = function (req, res) {
   });
 };
 
+
 exports.isBlacklisted = function (req, res) {
 
   blacklistDal.has(req.username, function (err, boolResult) {
@@ -35,6 +37,15 @@ exports.isBlacklisted = function (req, res) {
 exports.setBlacklisted = function (req, res) {
 
   var isB = req.body.isBlacklisted;
+
+  var targetName = req.username;
+  var authorName = req.user.name;
+
+  // Prevent author blacklisting him/herself
+  if (authorName === targetName) {
+    return res.sendStatus(status.BAD_REQUEST);
+  }
+
   blacklistDal.set(req.username, isB, function (err) {
     if (err) {
       return res.sendStatus(status.INTERNAL_SERVER_ERROR);

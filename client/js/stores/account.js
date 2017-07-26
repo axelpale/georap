@@ -68,9 +68,10 @@ exports.login = function (email, password, callback) {
 
       return callback();
     },
-    error: function (jqxhr, status, errMsg) {
-      var err = new Error(errMsg);
-      console.error(err);
+    error: function (jqxhr) {
+      var err = new Error(jqxhr.responseText);
+      err.name = jqxhr.statusText;
+      err.code = jqxhr.status;
       return callback(err);
     },
   });

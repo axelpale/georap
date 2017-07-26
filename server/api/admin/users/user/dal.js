@@ -1,6 +1,6 @@
 
 var db = require('../../../../services/db');
-var blacklistDal = require('../../blacklist/dal');
+var blacklistDal = require('../../../../services/blacklist');
 
 exports.getUserForAdmin = function (username, callback) {
   // Fetch an array of users with admin-only information such as email.
@@ -33,8 +33,6 @@ exports.getUserForAdmin = function (username, callback) {
       if (err) {
         return callback(err);
       }
-
-      console.log(username, users);
 
       if (users && users.length > 0) {
         u = users[0];

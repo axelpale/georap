@@ -1,4 +1,6 @@
-var account = require('../../stores/account');
+
+var ui = tresdb.ui;
+var account = tresdb.stores.account;
 var loginTemplate = require('./template.ejs');
 
 var emitter = require('component-emitter');
@@ -16,27 +18,43 @@ module.exports = function (onSuccess) {
 
   var loginResponseHandler = function (err) {
 
+    var $form = $('#tresdb-login-form');
+    var $bl = $('#tresdb-login-blacklisted');
+    var $progress = $('#tresdb-login-in-progress');
+    var $incorrect = $('#tresdb-login-incorrect');
+    var $reset = $('#tresdb-password-reset');
+    var $error = $('#tresdb-login-server-error');
+
     // Hide the progress bar
-    $('#tresdb-login-in-progress').addClass('hidden');
+    ui.hide($progress);
 
     if (!err) {
       // Successful login
       return onSuccess();
     }
 
-    if (err.message === 'Unauthorized') {
+    if (err.name === 'Unauthorized') {
       // Show error
-      $('#tresdb-login-incorrect').removeClass('hidden');
+      ui.show($incorrect);
       // Show forms
-      $('#tresdb-login-form').removeClass('hidden');
-      $('#tresdb-password-reset').removeClass('hidden');
+      ui.show($form);
+      ui.show($reset);
 
       return;
     }  // else
 
+    if (err.name === 'Forbidden') {
+      // Show blacklist error. Allow user to try login again.
+      ui.show($bl);
+      ui.show($form);
+      ui.show($reset);
+
+      return;
+    }
+
     // Show mystery error message. Do not show login form because
     // the issue is probably long-lasting.
-    $('#tresdb-login-server-error').removeClass('hidden');
+    ui.show($error);
   };
 
   var loginFormSubmitHandler = function (ev) {
