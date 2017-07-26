@@ -2,15 +2,15 @@
 
 var handlers = require('./handlers');
 var router = require('express').Router();
+var jsonParser = require('body-parser').json();
 
 // Username parser middleware
 
-router.use(function (req, res, next) {
-  // Catches the username
-  req.username = req.params.username;
-  return next();
-});
-
 router.get('/', handlers.getOne);
+
+router.get('/blacklist', handlers.isBlacklisted);
+router.post('/blacklist', jsonParser, handlers.setBlacklisted);
+
+router.post('/role', jsonParser, handlers.setRole);
 
 module.exports = router;

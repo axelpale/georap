@@ -3,9 +3,10 @@
 var local = require('../../../config/local');
 var status = require('http-status-codes');
 
+var blacklist = require('../../services/blacklist');
 var db = require('../../services/db');
-var mailer = require('../../services/mailer');
 var hostname = require('../../services/hostname');
+var mailer = require('../../services/mailer');
 
 var bcrypt = require('bcryptjs');
 var jwt = require('jsonwebtoken');
@@ -56,24 +57,42 @@ exports.login = function (req, res) {
       }
 
       if (match) {
-        // Success
-        tokenPayload = {
-          name: user.name,
-          email: user.email,
-          admin: user.admin,
-        };
+        // Success, password match.
 
-        // The following will add 'exp' property to payload.
-        tokenOptions = {
-          expiresIn: '1y',  // a year
-        };
+        // Check if user is blacklisted.
+        blacklist.has(user.name, function (blerr, isBlacklisted) {
+          if (blerr) {
+            return res.sendStatus(status.INTERNAL_SERVER_ERROR);
+          }
 
-        token = jwt.sign(tokenPayload, local.secret, tokenOptions);
-        return res.json(token);
-      }  // else
+          if (isBlacklisted) {
+            res.status(status.FORBIDDEN);
+            res.send('account blacklisted');
 
-      // Authentication failure
-      return res.sendStatus(status.UNAUTHORIZED);
+            return;
+          }
+          // else, build jwt token
+
+          tokenPayload = {
+            name: user.name,
+            email: user.email,
+            admin: user.admin,
+          };
+
+          // The following will add 'exp' property to payload.
+          tokenOptions = {
+            expiresIn: '1y',  // a year
+          };
+
+          token = jwt.sign(tokenPayload, local.secret, tokenOptions);
+          return res.json(token);
+        });
+      } else {
+        // no password match
+
+        // Authentication failure
+        return res.sendStatus(status.UNAUTHORIZED);
+      }
     });
   });
 };

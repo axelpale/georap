@@ -11,6 +11,8 @@ var paymentsRouter = require('./payments/routes');
 var statisticsRouter = require('./statistics/routes');
 var usersRouter = require('./users/routes');
 
+var blacklistDal = require('../services/blacklist');
+
 var jwt = require('express-jwt');
 var status = require('http-status-codes');
 var router = require('express').Router();
@@ -20,7 +22,9 @@ var router = require('express').Router();
 router.use('/account', accountRouter);
 
 // Token middleware. User can access the routes only with valid token.
-// Token contents are stored in req.user.
+// Token contents are stored in req.user with properties
+//   name
+//   admin
 // See https://github.com/auth0/express-jwt
 router.use(jwt({
   secret: local.secret,
@@ -35,6 +39,22 @@ router.use(jwt({
     return null;
   },
 }));
+
+// Blacklist.
+// Check if user is banned by finding user id from a blacklist.
+router.use(function (req, res, next) {
+  blacklistDal.has(req.user.name, function (err, isBlacklisted) {
+    if (err) {
+      return res.sendStatus(status.INTERNAL_SERVER_ERROR);
+    }
+
+    if (isBlacklisted) {
+      return res.sendStatus(status.FORBIDDEN);
+    }
+
+    return next();
+  });
+});
 
 router.use('/admin', adminRouter);
 router.use('/events', eventsRouter);

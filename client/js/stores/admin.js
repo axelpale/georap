@@ -29,21 +29,50 @@ exports.getUser = function (username, callback) {
 };
 
 
-exports.setRole = function (username, role, callback) {
+exports.setRole = function (username, isAdmin, callback) {
   // Parameters:
   //   username
   //     string
-  //   role
-  //     string, either 'admin' or 'normal'
+  //   isAdmin
+  //     boolean
   //   callback
   //     function (err)
   //
-  var normRole = role === 'admin' ? 'admin' : 'normal';
+
+  if (typeof isAdmin !== 'boolean') {
+    throw new Error('invalid role');
+  }
 
   request.postJSON({
-    url: '/api/admin/users/' + username,
+    url: '/api/admin/users/' + username + '/role',
     data: {
-      role: normRole,
+      isAdmin: isAdmin,
+    },
+  }, callback);
+};
+
+
+exports.setBlacklisted = function (username, isBlacklisted, callback) {
+  // Parameters:
+  //   username
+  //     string
+  //   isBlacklisted
+  //     boolean
+  //   callback
+  //     function (err)
+  //
+
+  // Assert parameters
+  if (typeof username !== 'string' ||
+      typeof isBlacklisted !== 'boolean' ||
+      typeof callback !== 'function') {
+    throw new Error('invalid parameters');
+  }
+
+  request.postJSON({
+    url: '/api/admin/users/' + username + '/blacklist',
+    data: {
+      isBlacklisted: isBlacklisted,
     },
   }, callback);
 };
