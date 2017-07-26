@@ -29,21 +29,24 @@ exports.getUser = function (username, callback) {
 };
 
 
-exports.setRole = function (username, role, callback) {
+exports.setRole = function (username, isAdmin, callback) {
   // Parameters:
   //   username
   //     string
-  //   role
-  //     string, either 'admin' or 'normal'
+  //   isAdmin
+  //     boolean
   //   callback
   //     function (err)
   //
-  var normRole = role === 'admin' ? 'admin' : 'normal';
+
+  if (typeof isAdmin !== 'boolean') {
+    throw new Error('invalid role');
+  }
 
   request.postJSON({
-    url: '/api/admin/users/' + username,
+    url: '/api/admin/users/' + username + '/role',
     data: {
-      role: normRole,
+      isAdmin: isAdmin,
     },
   }, callback);
 };

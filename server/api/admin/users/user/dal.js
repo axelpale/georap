@@ -48,3 +48,29 @@ exports.getUserForAdmin = function (username, callback) {
   });
 
 };
+
+
+exports.setRole = function (username, isAdmin, callback) {
+  // Set user role
+  //
+  // Parameters:
+  //   username
+  //   isAdmin
+  //   callback
+  //     function (err)
+
+  if (typeof username !== 'string' || typeof isAdmin !== 'boolean') {
+    throw new Error('invalid parameters');
+  }
+
+  var coll = db.collection('users');
+  var q = { name: username };
+  var up = { $set: { 'admin': isAdmin } };
+
+  coll.updateOne(q, up, function (err) {
+    if (err) {
+      return callback(err);
+    }
+    return callback();
+  });
+};

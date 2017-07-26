@@ -1,6 +1,46 @@
 <h3>
-  Role: <%= isAdmin ? 'admin' : 'normal' %>
-  <!--button id="tresdb-admin-user-role-edit" type="button" class="btn btn-default btn-xs">
+  Role: <%= isAdmin ? 'admin' : 'basic' %>
+  <button id="tresdb-admin-user-role-edit" type="button" class="btn btn-default btn-xs">
     <span class="glyphicon glyphicon-pencil"></span> Edit
-  </button-->
+  </button>
 </h3>
+
+<form id="tresdb-admin-user-role-form" class="hidden panel panel-primary">
+  <div class="panel-heading">
+    Change member role
+  </div>
+  <div class="panel-body">
+
+    <div class="radio">
+      <label>
+        <input id="role-radio-admin" type="radio" name="userRole" value="admin" <%= isAdmin ? 'checked' : '' %> >
+        Administrator
+      </label>
+    </div>
+
+    <div class="radio">
+      <label>
+        <input id="role-radio-basic" type="radio" name="userRole" value="basic" <%= isAdmin ? '' : 'checked' %> >
+        Basic
+      </label>
+    </div>
+
+    <p class="help-block">Only members with administrator role can change roles of others.</p>
+    <div class="pull-right">
+      <button id="tresdb-admin-user-role-cancel" type="button" class="btn btn-default">Cancel</button>
+      <button type="submit" class="btn btn-primary">Save</button>
+    </div>
+  </div>
+</form>
+
+<div id="tresdb-admin-user-role-noauto" class="hidden">
+  <div class="alert alert-warning" role="alert">You cannot downgrade your own account.</div>
+</div>
+
+<div id="tresdb-admin-user-role-error" class="hidden">
+  <div class="alert alert-danger" role="alert">Updating the role failed.</div>
+</div>
+
+<div id="tresdb-admin-user-role-success" class="hidden">
+  <div class="alert alert-success" role="alert">Successfully changed the role of <%= username %>.</div>
+</div>

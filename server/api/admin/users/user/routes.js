@@ -11,4 +11,6 @@ router.get('/', handlers.getOne);
 router.get('/blacklist', handlers.isBlacklisted);
 router.post('/blacklist', jsonParser, handlers.setBlacklisted);
 
+router.post('/role', jsonParser, handlers.setRole);
+
 module.exports = router;
