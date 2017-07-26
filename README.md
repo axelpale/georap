@@ -1,5 +1,7 @@
 # tresdb
 
+![Example](doc/tresdb_menu.jpg)
+
 Everyone has their own secret places. TresDB was created to allow you to browse, manage, and describe those secret geographical locations in a private but easy manner. It is a geographical content management system and targeted to persons, groups, or organisations who fear revealing their precious locations to the public or to big companies like Google who offer similar map services. Whether your topic is urban exploration, traveling, berry picking, or treasure hunting, we bet you will find TresDB useful.
 
 TresDB is also a web application and thus requires installation to a web server. The web server is required to have Node.js and MongoDB available.
