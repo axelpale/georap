@@ -54,7 +54,7 @@ module.exports = {
   plugins: (local.env === 'production') ? [
     new webpack.optimize.UglifyJsPlugin(),
   ] : [
-    new webpack.NoErrorsPlugin(),
+    new webpack.NoEmitOnErrorsPlugin(),
   ],
 
   // Watch is not used because in 'development' env, webpack-dev-middleware

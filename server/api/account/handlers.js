@@ -234,6 +234,7 @@ exports.sendResetPasswordEmail = function (req, res) {
       text: templates.resetMailTemplate({
         resetUrl: url,
         email: user.email,
+        siteTitle: local.title,
       }),
     };
 
@@ -352,6 +353,11 @@ exports.sendInviteEmail = function (req, res) {
     var host = hostname.get();
     var url = local.publicProtocol + '://' + host + '/signup/' + token;
 
+    // Make first letter lowercase, so that nice after comma.
+    // ...welcome to My Site, my description.
+    var desc = local.description;
+    desc = desc.charAt(0).toLowerCase() + desc.slice(1);
+
     var mailOptions = {
       from: local.mail.sender,
       to: email,
@@ -359,6 +365,8 @@ exports.sendInviteEmail = function (req, res) {
       text: templates.inviteMailTemplate({
         url: url,
         email: email,
+        siteTitle: local.title,
+        siteDesc: desc,
       }),
     };
 

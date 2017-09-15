@@ -67,7 +67,7 @@ db.init(function (dbErr) {
   // Request logging END
 
 
-  // Static assets
+  // Webpack & Static assets
   // -------------
   if (local.env === 'development' || local.env === 'test') {
     // Webpack development middleware
@@ -89,7 +89,7 @@ db.init(function (dbErr) {
       // publicPath is required. Use same as in webpackConfig.
       // See https://github.com/webpack/webpack-dev-middleware
       publicPath: webpackConfig.output.publicPath,
-      noInfo: true,
+      noInfo: false,  // Display build info at each build.
       stats: { colors: true },
     }));
     console.log('Webpack listening for file changes...');
