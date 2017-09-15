@@ -11,7 +11,7 @@ var paymentsRouter = require('./payments/routes');
 var statisticsRouter = require('./statistics/routes');
 var usersRouter = require('./users/routes');
 
-var blacklistDal = require('../services/blacklist');
+var userDal = require('./users/user/dal');
 
 var jwt = require('express-jwt');
 var status = require('http-status-codes');
@@ -43,16 +43,20 @@ router.use(jwt({
 // Blacklist.
 // Check if user is banned by finding user id from a blacklist.
 router.use(function (req, res, next) {
-  blacklistDal.has(req.user.name, function (err, isBlacklisted) {
+
+  // Check this by querying the database, because it's SIMPLE.
+  // This effectively nulls the benefits of using jwt tokens :DD
+  // But what the hell...
+  userDal.getOne(req.user.name, function (err, storedUser) {
     if (err) {
       return res.sendStatus(status.INTERNAL_SERVER_ERROR);
     }
 
-    if (isBlacklisted) {
-      return res.sendStatus(status.FORBIDDEN);
+    if (storedUser.status === 'active') {
+      return next();
     }
 
-    return next();
+    return res.sendStatus(status.FORBIDDEN);
   });
 });
 

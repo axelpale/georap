@@ -26,9 +26,18 @@ module.exports = function () {
       }
 
       // Reveal list
-      $('#tresdb-users').html(listTemplate({
-        users: rawUsers,
+      $('#tresdb-active-users').html(listTemplate({
+        users: rawUsers.filter(function (u) {
+          return u.status === 'active';
+        }),
       }));
+
+      $('#tresdb-deactivated-users').html(listTemplate({
+        users: rawUsers.filter(function (u) {
+          return u.status === 'deactivated';
+        }),
+      }));
+
     });
   };
 

@@ -277,6 +277,7 @@ module.exports = {
         hash: bcrypt.hashSync(local.admin.password, local.bcrypt.rounds),
         name: admin,
         points: 0,  // points are updated by worker
+        status: 'active',
       },
       {
         _id: id('5867bdf00b5a9e18d7755e33'),
@@ -285,6 +286,7 @@ module.exports = {
         hash: bcrypt.hashSync('foobar', local.bcrypt.rounds),
         name: 'johndoe',
         points: 0,
+        status: 'deactivated',
       },
     ],
   },

@@ -52,11 +52,11 @@ exports.setRole = function (username, isAdmin, callback) {
 };
 
 
-exports.setBlacklisted = function (username, isBlacklisted, callback) {
+exports.setStatus = function (username, isActive, callback) {
   // Parameters:
   //   username
   //     string
-  //   isBlacklisted
+  //   isActive
   //     boolean
   //   callback
   //     function (err)
@@ -64,15 +64,15 @@ exports.setBlacklisted = function (username, isBlacklisted, callback) {
 
   // Assert parameters
   if (typeof username !== 'string' ||
-      typeof isBlacklisted !== 'boolean' ||
+      typeof isActive !== 'boolean' ||
       typeof callback !== 'function') {
     throw new Error('invalid parameters');
   }
 
   request.postJSON({
-    url: '/api/admin/users/' + username + '/blacklist',
+    url: '/api/admin/users/' + username + '/status',
     data: {
-      isBlacklisted: isBlacklisted,
+      isActive: isActive,
     },
   }, callback);
 };

@@ -71,7 +71,7 @@ module.exports = function (onSuccess) {
     $('#tresdb-login-server-error').addClass('hidden');
 
     // Validate input
-    if (!validator.validate(email)) {
+    if (email.length < 1) {
       // Display error message
       $('#tresdb-login-invalid-email').removeClass('hidden');
 

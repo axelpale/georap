@@ -8,8 +8,7 @@ var jsonParser = require('body-parser').json();
 
 router.get('/', handlers.getOne);
 
-router.get('/blacklist', handlers.isBlacklisted);
-router.post('/blacklist', jsonParser, handlers.setBlacklisted);
+router.post('/status', jsonParser, handlers.setStatus);
 
 router.post('/role', jsonParser, handlers.setRole);
 
