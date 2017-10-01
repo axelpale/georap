@@ -1,5 +1,6 @@
 var db = require('../../services/db');
 
+
 exports.getAll = function (callback) {
   // Get all non-deleted markers.
   //
@@ -15,31 +16,69 @@ exports.getAll = function (callback) {
   coll.find(q).toArray(callback);
 };
 
+
+// eslint-disable-next-line max-statements
 exports.getFiltered = function (params, callback) {
+  // Search for locations.
+  //
   // Parameters:
   //   params
-  //     username:
-  //       string
-  //     visited
-  //       string, possibilities: 'off', 'you', 'notyou', 'nobody'
-  //     tags
-  //       array, tags to allow. Include locations with any of these tags.
+  //     creator
+  //       optional string. Default is 'anyone'.
+  //       Include only locations created by this user.
+  //       Possible values are:
+  //         'anyone'
+  //         <username>
+  //     deleted
+  //       optional boolean. Include only deleted. Default is false.
+  //     limit
+  //       optional integer. Default is 50.
+  //       Number of locations to include.
+  //     order
+  //       optional string, following values are possible:
+  //         'rel', relevance, default if text is used
+  //         'az', alphabetical, default if text is not used
+  //         'za', alphabetical
+  //         'newest', newest first
+  //         'oldest', oldest first
+  //     skip
+  //       optional integer. Default is 0.
+  //       Number of locations to skip before first.
   //     text
-  //       search term, use '' to disable.
+  //       optional string. A free-form search term.
   //   callback
   //     function (err, docs)
+  //
+  // Where docs has structure similar to:
+  //   [
+  //     {
+  //       _id: <ObjectId>,
+  //       creator: <string>,
+  //       geom: <GeoJSON Point>,
+  //       deleted: <bool>,
+  //       tags: <array of strings>
+  //       text1: <string>
+  //       text2: <string>
+  //       places: <array of strings>
+  //       layer: <int>
+  //       points: <int>
+  //       isLayered: <bool>
+  //       score: <float>
+  //     },
+  //     ...
+  //   ]
+  //
 
-  var coll = db.get().collection('locations');
+  var coll = db.collection('locations');
+
+  // Build query piece by piece.
   var q = {};
-  var opts = {
-    limit: 100,
-    skip: 0,
-  };
+  var projOpts = {};
+  var sortOpts = {};
+  var skipValue = 0;  // default
+  var limitValue = 100;  // default
 
-  if (params.text.length > 0) {
-    // q.name = {
-    //   $regex: new RegExp('.*' + params.text + '.*', 'i'),
-    // };
+  if (typeof params.text === 'string' && params.text.length > 0) {
     q.$text = {
       $search: params.text,
       // See https://docs.mongodb.com/manual/reference
@@ -51,18 +90,73 @@ exports.getFiltered = function (params, callback) {
     };
   }
 
-  // Exclude deleted
-  q.deleted = false;
+  if (typeof params.creator === 'string' &&
+      params.creator.trim() !== '' &&
+      params.creator !== 'anyone') {
+    q.creator = params.creator;
+  }
 
-  // Sort by score. Same options need to appear in projection.
-  // See https://docs.mongodb.com/manual/reference/operator/
-  //     projection/meta/#proj._S_meta
-  var sortOpts = {
-    score: { $meta: 'textScore' },
-  };
+  // Include only deleted or exclude deleted.
+  if (params.deleted === true) {
+    q.deleted = true;
+  } else {
+    // Exclude deleted by default.
+    q.deleted = false;
+  }
 
-  coll.find(q, sortOpts, opts).sort(sortOpts).toArray(callback);
+  if (typeof params.skip === 'number') {
+    skipValue = params.skip;
+  }
+  if (typeof params.limit === 'number') {
+    limitValue = params.limit;
+  }
+
+  // Sorting
+  if (typeof params.order === 'string') {
+    if (['rel', 'az', 'za', 'newest', 'oldest'].indexOf(params.order) === -1) {
+      throw new Error('Invalid order argument');
+    }
+
+    if (params.order === 'rel') {
+      // We cannot order by relevance score if text search is not used.
+      // We assume the most recent to be the most relevant.
+      if (q.hasOwnProperty('$text')) {
+        // Sort by score. Same options need to appear in projection.
+        // See https://docs.mongodb.com/manual/reference/operator/
+        //     projection/meta/#proj._S_meta
+        projOpts.score = { $meta: 'textScore' };
+        sortOpts.score = { $meta: 'textScore' };
+      } else {
+        sortOpts._id = -1;
+      }
+    } else if (params.order === 'az') {
+      sortOpts.name = 1;
+    } else if (params.order === 'za') {
+      sortOpts.name = -1;
+    } else if (params.order === 'newest') {
+      sortOpts._id = -1;
+    } else if (params.order === 'oldest') {
+      sortOpts._id = 1;
+    }
+  } else if (q.hasOwnProperty('$text')) {
+    // Sort by score. Same options need to appear in projection.
+    // See https://docs.mongodb.com/manual/reference/operator/
+    //     projection/meta/#proj._S_meta
+    projOpts.score = { $meta: 'textScore' };
+    sortOpts.score = { $meta: 'textScore' };
+  } else {
+    // Default order for non-text search
+    sortOpts.name = 1;
+  }
+
+  coll.find(q)
+    .project(projOpts)
+    .sort(sortOpts)
+    .skip(skipValue)
+    .limit(limitValue)
+    .toArray(callback);
 };
+
 
 exports.getWithin = function (params, callback) {
   // Find undeleted markers (=raw locations) near a point and on and above

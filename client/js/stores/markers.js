@@ -27,21 +27,31 @@ socket.on('tresdb_event', function (ev) {
 exports.getFiltered = function (params, callback) {
   // Parameters:
   //   params
+  //     creator
+  //       optional string. Default is 'anyone'.
+  //     deleted
+  //       optional boolean. Include only deleted. Default is false.
+  //     limit
+  //       optional integer. Default is 50.
+  //       Number of locations to include.
+  //     order
+  //       optional string, following values are possible:
+  //         'rel', relevance, default if text is used
+  //         'az', alphabetical, default if text is not used
+  //         'za', alphabetical
+  //         'newest', newest first
+  //         'oldest', oldest first
+  //     skip
+  //       optional integer. Default is 0.
   //     text
-  //       string
+  //       optional string. A free-form search term.
   //   callback
   //     function (err, markerLocations)
-
-  if (typeof params.text !== 'string') {
-    throw new Error('invalid search text:' + params.text);
-  }
 
   $.ajax({
     url: '/api/markers/search',
     method: 'GET',
-    data: {
-      text: params.text,
-    },
+    data: params,
     dataType: 'json',
     headers: { 'Authorization': 'Bearer ' + account.getToken() },
     success: function (rawMarkers) {

@@ -1,7 +1,7 @@
 {
   "name": "tresdb",
   "private": true,
-  "version": "8.0.0-alpha.2",
+  "version": "8.0.0-alpha.3",
   "description": "Geographical CMS built on Express.js",
   "keywords": [
     "GIS",
@@ -23,6 +23,7 @@
     "backup": "node cli/backup.js",
     "restore": "node cli/restore.js",
     "test": "npm run test:migration",
+    "test:api:markers": "mocha server/api/markers/dal.spec.js",
     "test:migration": "mocha migration/*.spec.js",
     "test:migration:iter": "mocha migration/iter.spec.js",
     "lint": "eslint . && echo 'Lint successful.'",
@@ -66,6 +67,7 @@
     "page": "^1.7.1",
     "proj4": "^2.4.3",
     "qs": "^6.3.1",
+    "query-string": "^5.0.0",
     "sanitize-filename": "^1.6.1",
     "semver": "^5.3.0",
     "sharp": "^0.18.3",
