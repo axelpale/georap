@@ -165,7 +165,9 @@ module.exports = function (onSuccess) {
   // Public methods
 
   this.render = function () {
-    return loginTemplate();
+    return loginTemplate({
+      title: tresdb.config.title,
+    });
   };
 
   this.bind = function () {

@@ -1,7 +1,9 @@
 
+var local = require('../../../../config/local');
 var markersDal = require('../dal');
 var templates = require('./templates');
 var status = require('http-status-codes');
+var slugify = require('slugify');
 
 
 var getPrettyNow = function () {
@@ -26,11 +28,13 @@ exports.getKML = function (req, res) {
 
     // Convert to KML XML
     var xml = templates.standalone({
+      siteTitle: local.title,
       markers: docs,
     });
 
     // Name of the file to download
-    var filename = 'subterranea-standalone-' + getPrettyNow() + '.kml';
+    var filename = slugify(local.title) + '-standalone-' +
+                   getPrettyNow() + '.kml';
 
     // Set headers
     res.set('Content-Type', 'text/xml');
@@ -47,11 +51,12 @@ exports.getNetworkKML = function (req, res) {
   }
 
   var xml = templates.network({
+    siteTitle: local.title,
     token: req.query.token,
   });
 
   // Name of the file to download
-  var filename = 'subterranea-network-' + getPrettyNow() + '.kml';
+  var filename = slugify(local.title) + '-network-' + getPrettyNow() + '.kml';
 
   // Set headers
   res.set('Content-Type', 'text/xml');
