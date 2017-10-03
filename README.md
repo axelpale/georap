@@ -26,6 +26,8 @@ TresDB is also a web application and thus requires installation to a web server.
 
 ## Install
 
+We assume you have Node.js v4.5.0 or later already installed.
+
 First, clone the repository:
 
     $ git clone https://github.com/axelpale/tresdb.git
