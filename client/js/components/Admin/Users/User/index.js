@@ -1,7 +1,6 @@
 // User Management UI
 
 var admin = tresdb.stores.admin;
-var ui = tresdb.ui;
 var template = require('./template.ejs');
 var StatusComponent = require('./Status');
 var EventsComponent = require('./Events');
@@ -32,10 +31,10 @@ module.exports = function (username) {
     var $roleRoot = $('#tresdb-admin-user-role-root');
 
     // Fetch users and include to page.
-    ui.show($loading);
+    tresdb.ui.show($loading);
     admin.getUser(username, function (err, user) {
       // Hide loading bar
-      ui.hide($loading);
+      tresdb.ui.hide($loading);
 
       if (err) {
         console.error(err);

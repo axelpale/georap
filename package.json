@@ -1,11 +1,12 @@
 {
   "name": "tresdb",
   "private": true,
-  "version": "8.0.0-alpha.3",
+  "version": "8.0.0",
   "description": "Geographical CMS built on Express.js",
   "keywords": [
     "GIS",
-    "CMS"
+    "CMS",
+    "maps"
   ],
   "main": "server/index.js",
   "repository": {
@@ -37,6 +38,7 @@
   "license": "MIT",
   "dependencies": {
     "@google/maps": "^0.4.3",
+    "ajv": "^5.2.3",
     "async": "^2.1.1",
     "bcryptjs": "^2.3.0",
     "body-parser": "^1.16.0",

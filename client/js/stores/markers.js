@@ -57,8 +57,10 @@ exports.getFiltered = function (params, callback) {
     success: function (rawMarkers) {
       return callback(null, rawMarkers);
     },
-    error: function (jqxhr, textStatus, errorThrown) {
-      return callback(new Error(errorThrown));
+    error: function (jqxhr) {
+      var err = new Error(jqxhr.statusText);
+      err.code = jqxhr.status;
+      return callback(err);
     },
   });
 };

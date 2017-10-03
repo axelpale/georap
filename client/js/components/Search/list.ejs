@@ -14,8 +14,11 @@
         <%= tagsTemplate({ tags: m.tags }) %>
       </div>
       <a href="/locations/<%= m._id %>"><%= m.name %></a>
+      <span style="color: gray; font-style: italic; margin-left: 0.38em">
+        <%= m.places.length > 0 ? m.places[0] : '' %>,
+        <%= m.places.length > 1 ? m.places[m.places.length - 1] : '' %>
+      </span>
     </li>
   <% }); %>
   </ul>
-
 <% } %>

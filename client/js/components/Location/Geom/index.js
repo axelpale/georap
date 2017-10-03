@@ -1,5 +1,4 @@
-var tresdb = window.tresdb;
-var ui = require('../../lib/ui');
+
 var geostamp = require('./geostamp');
 var template = require('./template.ejs');
 
@@ -66,10 +65,10 @@ module.exports = function (location) {
     };
 
     var openForm = function () {
-      ui.show($container);
-      ui.show($form);
+      tresdb.ui.show($container);
+      tresdb.ui.show($form);
       // Hide all possible error messages
-      ui.hide($error);
+      tresdb.ui.hide($error);
     };
 
     var closeForm = function () {
@@ -136,16 +135,16 @@ module.exports = function (location) {
 
       $moreopen.click(function (ev) {
         ev.preventDefault();
-        ui.hide($moreopen);
-        ui.show($moreclose);
-        ui.show($more);
+        tresdb.ui.hide($moreopen);
+        tresdb.ui.show($moreclose);
+        tresdb.ui.show($more);
       });
 
       $moreclose.click(function (ev) {
         ev.preventDefault();
-        ui.hide($moreclose);
-        ui.show($moreopen);
-        ui.hide($more);
+        tresdb.ui.hide($moreclose);
+        tresdb.ui.show($moreopen);
+        tresdb.ui.hide($more);
       });
 
     }());
