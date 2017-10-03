@@ -2,16 +2,16 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col-md-12">
-      <h1>Subterranea Fennica</h1>
+      <h1><%= title %></h1>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-4 col-sm-6">
 
       <div id="tresdb-login-incorrect" class="hidden">
         <div class="alert alert-danger" role="alert">Incorrect email or password. Check and try again.</div>
       </div>
 
       <div id="tresdb-login-invalid-email" class="hidden">
-        <div class="alert alert-danger" role="alert">Ensure the given email address is correct and has a format similar to <em>john.doe@example.com</em> or <em>myname@example.com</em>.</div>
+        <div class="alert alert-danger" role="alert">Ensure the given username or email address is correct.</div>
       </div>
 
       <div id="tresdb-login-invalid-password" class="hidden">
@@ -36,8 +36,8 @@
 
       <form id="tresdb-login-form">
         <div class="form-group">
-          <label for="tresdb-login-email">Email address:</label>
-          <input type="email" class="form-control" id="tresdb-login-email">
+          <label for="tresdb-login-email">Email or Username:</label>
+          <input type="text" class="form-control" id="tresdb-login-email">
         </div>
         <div class="form-group">
           <label for="tresdb-login-password">Password:</label>

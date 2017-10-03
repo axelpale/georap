@@ -1,6 +1,7 @@
 /* eslint-disable no-magic-numbers, no-sync, max-lines */
 
 var local = require('../../config/local');
+var db = require('../../server/services/db');
 var bcrypt = require('bcryptjs');
 var ObjectId = require('mongodb').ObjectId;
 
@@ -277,67 +278,18 @@ module.exports = {
         hash: bcrypt.hashSync(local.admin.password, local.bcrypt.rounds),
         name: admin,
         points: 0,  // points are updated by worker
+        status: 'active',
       },
       {
         _id: id('5867bdf00b5a9e18d7755e33'),
         admin: false,
-        email: 'john.doe@subterranea.fi',
+        email: 'john.doe@tresdb.fi',
         hash: bcrypt.hashSync('foobar', local.bcrypt.rounds),
         name: 'johndoe',
         points: 0,
+        status: 'deactivated',
       },
     ],
   },
-  indices: [
-    {
-      collection: 'entries',
-      spec: { locationId: 1 },
-      options: {},
-    },
-    {
-      collection: 'events',
-      spec: { time: 1 },
-      options: {},
-    },
-    {
-      collection: 'events',
-      spec: { locationId: 1 },
-      options: {},
-    },
-    {
-      collection: 'locations',
-      spec: { geom: '2dsphere' },
-      options: {},
-    },
-    {
-      collection: 'locations',
-      spec: { layer: 1 },
-      options: {},
-    },
-    {
-      // Text index
-      collection: 'locations',
-      spec: {
-        text1: 'text',  // primary
-        text2: 'text',  // secondary
-      },
-      options: {
-        weights: {
-          text1: 3,
-          text2: 1,
-        },
-        name: 'TextIndex',
-      },
-    },
-    {
-      collection: 'users',
-      spec: { email: 1 },
-      options: { unique: true },
-    },
-    {
-      collection: 'users',
-      spec: { name: 1 },
-      options: { unique: true },
-    },
-  ],
+  indices: db.INDICES,
 };

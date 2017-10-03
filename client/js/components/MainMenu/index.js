@@ -1,5 +1,4 @@
 
-var config = window.tresdb.config;
 var account = require('../../stores/account');
 var locations = require('../../stores/locations');
 var template = require('./template.ejs');
@@ -22,13 +21,10 @@ var emitter = require('component-emitter');
 //   return (lat1 === lat2 && lng1 === lng2);
 // };
 
-module.exports = function (mapComp, go) {
+module.exports = function (mapComp) {
   // Parameters:
   //   mapComp
   //     components.Map instance
-  //   go
-  //     function go(path): ask router to go to path. Is a way to expose
-  //     the router for the menu.
 
   // Init
   var self = this;
@@ -51,71 +47,14 @@ module.exports = function (mapComp, go) {
 
     $mount.html(template({
       glyphicon: glyphiconTemplate,
-      config: config,
+      config: tresdb.config,
       user: account.getUser(),  // might be undefined
     }));
 
     _$root = $mount;
 
-    $mount.on('click', '#tresdb-mainmenu-events', function (ev) {
-      ev.preventDefault();
 
-      return go('/latest');
-    });
-
-    $mount.on('click', '#tresdb-mainmenu-payments', function (ev) {
-      ev.preventDefault();
-
-      return go('/payments');
-    });
-
-    $mount.on('click', '#tresdb-mainmenu-payments-admin', function (ev) {
-      ev.preventDefault();
-
-      return go('/payments/admin');
-    });
-
-    $mount.on('click', '#tresdb-mainmenu-change-password', function (ev) {
-      ev.preventDefault();
-
-      return go('/password');
-    });
-
-    $mount.on('click', '#tresdb-mainmenu-users', function (ev) {
-      ev.preventDefault();
-
-      return go('/users');
-    });
-
-    $mount.on('click', '#tresdb-mainmenu-users-admin', function (ev) {
-      ev.preventDefault();
-
-      return go('/admin/users');
-    });
-
-    $mount.on('click', '#tresdb-mainmenu-user', function (ev) {
-      ev.preventDefault();
-
-      return go('/users/' + account.getName());
-    });
-
-    $mount.on('click', '#tresdb-mainmenu-invite', function (ev) {
-      ev.preventDefault();
-
-      return go('/invite');
-    });
-
-    $mount.on('click', '#tresdb-mainmenu-statistics', function (ev) {
-      ev.preventDefault();
-
-      return go('/statistics');
-    });
-
-    $mount.on('click', '#tresdb-mainmenu-logout', function (ev) {
-      ev.preventDefault();
-
-      return go('/login');
-    });
+    // Location manipulation
 
     $mount.on('click', '#tresdb-mainmenu-add', function (ev) {
       ev.preventDefault();
@@ -201,22 +140,84 @@ module.exports = function (mapComp, go) {
       });
     });
 
-    $mount.on('click', '#tresdb-mainmenu-filters', function (ev) {
+
+    // Listings and resources
+
+    $mount.on('click', '#tresdb-mainmenu-events', function (ev) {
       ev.preventDefault();
-      return go('/filters');
+
+      return tresdb.go('/latest');
     });
+
+    $mount.on('click', '#tresdb-mainmenu-users', function (ev) {
+      ev.preventDefault();
+
+      return tresdb.go('/users');
+    });
+
+    $mount.on('click', '#tresdb-mainmenu-locations', function (ev) {
+      ev.preventDefault();
+      return tresdb.go('/search');
+    });
+
+    $mount.on('click', '#tresdb-mainmenu-export', function (ev) {
+      ev.preventDefault();
+      return tresdb.go('/export');
+    });
+
+
+    // Account
+
+    $mount.on('click', '#tresdb-mainmenu-user', function (ev) {
+      ev.preventDefault();
+      return tresdb.go('/users/' + account.getName());
+    });
+
+    $mount.on('click', '#tresdb-mainmenu-change-password', function (ev) {
+      ev.preventDefault();
+      return tresdb.go('/password');
+    });
+
+
+    // Admin stuff
+
+    $mount.on('click', '#tresdb-mainmenu-invite', function (ev) {
+      ev.preventDefault();
+      return tresdb.go('/invite');
+    });
+
+    $mount.on('click', '#tresdb-mainmenu-users-admin', function (ev) {
+      ev.preventDefault();
+      return tresdb.go('/admin/users');
+    });
+
+    $mount.on('click', '#tresdb-mainmenu-statistics', function (ev) {
+      ev.preventDefault();
+      return tresdb.go('/statistics');
+    });
+
+
+    // Logout
+
+    $mount.on('click', '#tresdb-mainmenu-logout', function (ev) {
+      ev.preventDefault();
+
+      return tresdb.go('/login');
+    });
+
+
+    // External tools
 
     $mount.on('submit', '#tresdb-mainmenu-search-form', function (ev) {
       ev.preventDefault();
 
       var searchText = $('#tresdb-mainmenu-search-text').val().trim();
-      return go('/search?text=' + searchText);
+      if (searchText.length > 0) {
+        return tresdb.go('/search?text=' + searchText);
+      }
+      return tresdb.go('/search');
     });
 
-    $mount.on('click', '#tresdb-mainmenu-export', function (ev) {
-      ev.preventDefault();
-      return go('/export');
-    });
   };
 
   self.unbind = function () {

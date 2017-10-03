@@ -27,7 +27,10 @@ module.exports = function (token, goLogin) {
   // Public methods
 
   this.bind = function ($mount) {
-    $mount.html(template({ email: parsedToken.email }));
+    $mount.html(template({
+      siteTitle: tresdb.config.title,
+      email: parsedToken.email,
+    }));
 
     $('#tresdb-signup-to-login-button').click(function (ev) {
       ev.preventDefault();

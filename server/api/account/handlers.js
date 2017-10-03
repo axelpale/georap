@@ -3,11 +3,11 @@
 var local = require('../../../config/local');
 var status = require('http-status-codes');
 
-var blacklist = require('../../services/blacklist');
 var db = require('../../services/db');
 var hostname = require('../../services/hostname');
 var mailer = require('../../services/mailer');
 
+var dal = require('./dal');
 var bcrypt = require('bcryptjs');
 var jwt = require('jsonwebtoken');
 var validator = require('email-validator');
@@ -27,16 +27,23 @@ exports.login = function (req, res) {
   var email = req.body.email;
   var password = req.body.password;
 
-  // If no email or password provided or injection attempted.
-  // Also, ensure nice email.
+  // If injection attempted or no email or password provided.
   if (typeof email !== 'string' || typeof password !== 'string' ||
-      !validator.validate(email) || password.length < 1) {
+      email.length < 1 || password.length < 1) {
     return res.sendStatus(status.BAD_REQUEST);
   }
 
-  var users = db.get().collection('users');
+  var users = db.collection('users');
 
-  users.findOne({ email: email }, function (err, user) {
+  // Also allow login with username.
+  var q = {
+    $or: [
+      { name: email },
+      { email: email },
+    ],
+  };
+
+  users.findOne(q, function (err, user) {
 
     if (err) {
       console.error(err);
@@ -56,43 +63,37 @@ exports.login = function (req, res) {
         return res.sendStatus(status.INTERNAL_SERVER_ERROR);
       }
 
-      if (match) {
-        // Success, password match.
-
-        // Check if user is blacklisted.
-        blacklist.has(user.name, function (blerr, isBlacklisted) {
-          if (blerr) {
-            return res.sendStatus(status.INTERNAL_SERVER_ERROR);
-          }
-
-          if (isBlacklisted) {
-            res.status(status.FORBIDDEN);
-            res.send('account blacklisted');
-
-            return;
-          }
-          // else, build jwt token
-
-          tokenPayload = {
-            name: user.name,
-            email: user.email,
-            admin: user.admin,
-          };
-
-          // The following will add 'exp' property to payload.
-          tokenOptions = {
-            expiresIn: '1y',  // a year
-          };
-
-          token = jwt.sign(tokenPayload, local.secret, tokenOptions);
-          return res.json(token);
-        });
-      } else {
-        // no password match
-
-        // Authentication failure
+      if (!match) {
+        // no password match => Authentication failure
         return res.sendStatus(status.UNAUTHORIZED);
       }
+
+      // Else, success. Passwords match.
+
+      // Check if user is deactivated
+      if (user.status !== 'active') {
+        res.status(status.FORBIDDEN);
+        res.send('Your account has been deactivated.');
+
+        return;
+      }
+
+      // else, build jwt token
+
+      tokenPayload = {
+        name: user.name,
+        email: user.email,
+        admin: user.admin,
+      };
+
+      // The following will add 'exp' property to payload.
+      // For time formatting, see https://github.com/zeit/ms
+      tokenOptions = {
+        expiresIn: '60d',  // two months,
+      };
+
+      token = jwt.sign(tokenPayload, local.secret, tokenOptions);
+      return res.json(token);
     });
   });
 };
@@ -114,7 +115,7 @@ exports.changePassword = function (req, res) {
   }
 
   // User is logged in. Good. Find if user with this email still exists.
-  var users = db.get().collection('users');
+  var users = db.collection('users');
 
   users.findOne({ email: email }, function (err, user) {
 
@@ -193,7 +194,7 @@ exports.sendResetPasswordEmail = function (req, res) {
 
   // Fetch user from database to ensure the email exists.
   // First get collection.
-  var users = db.get().collection('users');
+  var users = db.collection('users');
 
   users.findOne({ email: email }, {}, function (err, user) {
 
@@ -229,10 +230,11 @@ exports.sendResetPasswordEmail = function (req, res) {
     var mailOptions = {
       from: local.mail.sender,
       to: user.email,
-      subject: 'Subterranea.fi password reset requested for your account',
+      subject: local.title + ' password reset requested for your account',
       text: templates.resetMailTemplate({
         resetUrl: url,
         email: user.email,
+        siteTitle: local.title,
       }),
     };
 
@@ -325,7 +327,7 @@ exports.sendInviteEmail = function (req, res) {
   }
 
   // Ensure that no account with this email exists already
-  var users = db.get().collection('users');
+  var users = db.collection('users');
 
   users.findOne({ email: email }, function (err, user) {
 
@@ -351,13 +353,20 @@ exports.sendInviteEmail = function (req, res) {
     var host = hostname.get();
     var url = local.publicProtocol + '://' + host + '/signup/' + token;
 
+    // Make first letter lowercase, so that nice after comma.
+    // ...welcome to My Site, my description.
+    var desc = local.description;
+    desc = desc.charAt(0).toLowerCase() + desc.slice(1);
+
     var mailOptions = {
       from: local.mail.sender,
       to: email,
-      subject: 'Invite to Subterranea.fi',
+      subject: 'Invite to ' + local.title,
       text: templates.inviteMailTemplate({
         url: url,
         email: email,
+        siteTitle: local.title,
+        siteDesc: desc,
       }),
     };
 
@@ -412,7 +421,7 @@ exports.signup = function (req, res) {
   // username index violation and email index violation.
   // We also avoid computing password hash.
 
-  var users = db.get().collection('users');
+  var users = db.collection('users');
 
   users.findOne({
     $or: [ { name: username }, { email: email } ],
@@ -431,31 +440,13 @@ exports.signup = function (req, res) {
     // Note: there is a tiny risk that such user is created after
     // the check but before insert.
 
-    var r = local.bcrypt.rounds;
-
-    bcrypt.hash(password, r, function (err2, pwdHash) {
-
+    dal.createUser(username, email, password, function (err2) {
       if (err2) {
         console.error(err2);
         return res.sendStatus(status.INTERNAL_SERVER_ERROR);
       }
-
-      users.insert({
-        name: username,
-        email: email,
-        hash: pwdHash,
-        admin: false,
-      }, function (err3) {
-
-        if (err3) {
-          console.error(err3);
-          return res.sendStatus(status.INTERNAL_SERVER_ERROR);
-        }
-
-        // User inserted successfully
-        return res.sendStatus(status.OK);
-      });
-
+      // User inserted successfully
+      return res.sendStatus(status.OK);
     });
   });
 };

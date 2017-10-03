@@ -197,5 +197,30 @@ describe('migrates.migrate', function () {
 
   });
 
+  describe('v7 to v8', function () {
+
+    beforeEach(function (done) {
+      loadFixture('v7', done);
+    });
+
+    it('should be able to migrate from v7 to v8', function (done) {
+      var targetV = 8;
+      migrates.migrate(targetV, function (err) {
+        assert.ifError(err);
+
+        assertFixtureEqual('config', 'v8', function (err2) {
+          assert.ifError(err2);
+
+          assertFixtureEqual('users', 'v8', function (err4) {
+            assert.ifError(err4);
+
+            done();
+          });
+        });
+      });
+    });
+
+  });
+
 
 });

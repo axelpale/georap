@@ -12,13 +12,16 @@
         </li>
         <li role="separator" class="divider"></li>
         <li>
-          <a id="tresdb-mainmenu-events" href="#"><%= glyphicon({ name: 'bell' }) %> Latest activity</a>
+          <a id="tresdb-mainmenu-events" href="#"><%= glyphicon({ name: 'bell' }) %> Latest</a>
         </li>
         <li>
           <a id="tresdb-mainmenu-users" href="#"><%= glyphicon({ name: 'user' }) %> Members</a>
         </li>
         <li>
-          <a id="tresdb-mainmenu-export" href="/export"><%= glyphicon({ name: 'export' }) %> Export locations...</a>
+          <a id="tresdb-mainmenu-locations" href="#"><%= glyphicon({ name: 'th-list' }) %> Locations</a>
+        </li>
+        <li>
+          <a id="tresdb-mainmenu-export" href="/export"><%= glyphicon({ name: 'export' }) %> Export...</a>
         </li>
         <li role="separator" class="divider"></li>
         <li class="dropdown-header">Account</li>
@@ -26,7 +29,7 @@
           <a id="tresdb-mainmenu-user" href="#"><%= glyphicon({ name: 'user' }) %> <%= user.name %></a>
         </li>
         <li>
-          <a id="tresdb-mainmenu-change-password" href="#"><%= glyphicon({ name: 'asterisk' }) %> Change password...</a>
+          <a id="tresdb-mainmenu-change-password" href="#"><%= glyphicon({ name: 'asterisk' }) %> Change Password...</a>
         </li>
 
         <li role="separator" class="divider"></li>
@@ -37,7 +40,7 @@
             <a id="tresdb-mainmenu-invite" href="#"><%= glyphicon({ name: 'envelope' }) %> Invite...</a>
           </li>
           <li>
-            <a id="tresdb-mainmenu-users-admin" href="#"><%= glyphicon({ name: 'user' }) %> Manage members...</a>
+            <a id="tresdb-mainmenu-users-admin" href="#"><%= glyphicon({ name: 'user' }) %> Manage Members...</a>
           </li>
           <li>
             <a id="tresdb-mainmenu-statistics" href="#"><%= glyphicon({ name: 'signal' }) %> Statistics</a>

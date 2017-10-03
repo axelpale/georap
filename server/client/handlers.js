@@ -18,6 +18,7 @@ var indexHtml = (function precompile() {
     version: pjson.version,
     config: {
       title: local.title,
+      description: local.description,
       features: local.features,
       googleMapsKey: local.googleMapsKey,
       uploadUrl: local.uploadUrl,

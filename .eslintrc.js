@@ -68,9 +68,9 @@ module.exports = {
     // disallow function declarations and expressions inside loop statements
     'no-loop-func': 'error',
     // disallow magic numbers
-    'no-magic-numbers': ['error', { ignore: [-1, 0, 1, 2 ] } ],
+    'no-magic-numbers': ['error', { ignore: [-1, 0, 1, 2] }],
     // disallow multiple spaces
-    'no-multi-spaces': 'error',
+    'no-multi-spaces': ['error', { ignoreEOLComments: true }],
     // disallow multiline strings
     'no-multi-str': 'error',
     // disallow new operators with the Function object
@@ -173,16 +173,19 @@ module.exports = {
     'func-style': 'error',
     // enforce consistent indentation
     'indent': ['error', 2, {
+      'CallExpression': {
+        'arguments': 'first',
+      },
+      'FunctionExpression': {
+        'parameters': 'first',
+      },
       'VariableDeclarator': {
         'var': 2,
         'let': 2,
         'const': 3,
       },
-      'FunctionExpression': {
-        'parameters': 'first',
-      },
       'SwitchCase': 1,
-    } ],
+    }],
     // enforce consistent spacing between keys and values in object
     // literal properties
     'key-spacing': 'error',

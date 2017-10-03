@@ -29,18 +29,17 @@ tresdb.stores = {
 };
 
 
-// Collect UI helpers under tresdb global.
-
-var ui = require('./components/lib/ui');
-tresdb.ui = ui;
-
-
-
 // Routes and main components.
 var routes = require('./routes');
 var MapComp = require('./components/Map');
 var MainMenuComp = require('./components/MainMenu');
 
+
+// Collect helpers under tresdb global.
+
+var ui = require('./components/lib/ui');
+tresdb.ui = ui;  // show and hide needed in almost every view
+tresdb.go = routes.show;  // go to path. very general, thus exposed globally
 
 
 // Define routes
@@ -74,9 +73,7 @@ window.initMap = function () {
     mapComp.panForCard(location.getGeom());
   });
 
-  var menuComp = new MainMenuComp(mapComp, function go(path) {
-    return routes.show(path);
-  });
+  var menuComp = new MainMenuComp(mapComp);
 
   // Bind menu to auth events.
   account.on('login', function () {

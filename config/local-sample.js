@@ -10,8 +10,10 @@ if (typeof window !== 'undefined') {
 
 module.exports = {
 
-  // Title of the site
+  // Title and description of the site. Used in many places,
+  // including html and emails.
   title: 'My TresDB App',
+  description: 'A secret geographical portal',
 
   // Enable or disable features of the site.
   // See also client/config.js for duplicate configs.

@@ -1,6 +1,4 @@
 
-var tresdb = window.tresdb;
-var ui = require('../../../lib/ui');
 var account = require('../../../../stores/account');
 var template = require('./template.ejs');
 var emitter = require('component-emitter');
@@ -55,12 +53,12 @@ module.exports = function (location) {
 
     $show.click(function (ev) {
       ev.preventDefault();
-      ui.toggleHidden($cont);
+      tresdb.ui.toggleHidden($cont);
     });
 
     $cancel.click(function (ev) {
       ev.preventDefault();
-      ui.hide($cont);
+      tresdb.ui.hide($cont);
     });
   };
 

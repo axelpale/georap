@@ -210,6 +210,23 @@ Finally, open yet another terminal session and run the full test suite:
 
 See `package.json` for test suite details.
 
+To clone a collection from a remote production database for local testing, following approach can be used. First we forward a local port to the remote database. Often the remote database cannot be accessed directly and therefore a SSH tunnel is needed.
+
+    $ ssh -L 27018:localhost:27017 123.123.123.123
+
+Second, we [mongoexport](https://docs.mongodb.com/manual/reference/program/mongoexport/) a remote collection and save it as a local JSON file:
+
+    $ mongoexport --host localhost:27018 --username remoteuser --password remoteword --db tresdb --collection locations --out .tmp/locations.json
+
+Third, we [mongoimport](https://docs.mongodb.com/manual/reference/program/mongoimport/) the file to our local database:
+
+    $ mongoimport --username localfoouser --password localbarword --db tresdb --collection locations --file .tmp/locations.json
+
+Finally, a bit of cleanup remains. We close the tunnel and remove the temp file:
+
+    $ rm .tmp/locations.json
+
+As a result, our local locations collection is filled with locations from a production server.
 
 
 ## Logging

@@ -1,51 +1,65 @@
 var dal = require('./dal');
 var status = require('http-status-codes');
-var _ = require('lodash');
+var Ajv = require('ajv');
+
+// Schema validator
+var ajv = new Ajv({
+  coerceTypes: true,
+  useDefaults: true,
+});
+
+// Schema for getFiltered query
+var querySchema = {
+  type: 'object',
+  properties: {
+    creator: {
+      type: 'string',
+      minLength: 1,
+    },
+    deleted: {
+      type: 'boolean',
+      default: false,
+    },
+    limit: {
+      type: 'integer',
+      default: 100,
+    },
+    order: {
+      type: 'string',
+      enum: ['rel', 'az', 'za', 'newest', 'oldest'],
+      default: 'rel',
+    },
+    skip: {
+      type: 'integer',
+      default: 0,
+    },
+    text: {
+      type: 'string',
+      minLength: 1,
+    },
+  },
+  additionalProperties: false,
+};
+var validateQuery = ajv.compile(querySchema);
+
 
 exports.getFiltered = function (req, res) {
   // Parameters:
   //   req.query
-  //     visited
-  //       string, possibilities: 'off', 'you', 'notyou', 'nobody'
-  //       If omitted, defaults to 'off'
-  //     tags
-  //       array, tags to allow. Include locations with any of these tags.
-  //       If omitted, will include locations regardless of tags.
-  //       Special tag: '- no tags -', will match only locations without tags.
-  //     text
-  //       search term, leave out or use '' to disable.
+  //     see dal.getFiltered for params
   //
   // Response on success:
   //   JSON array of markers
 
-  var visited = req.query.visited;
-  var tags = req.query.tags;
-  var text = req.query.text;
-
-  if (!_.includes(['off', 'you', 'notyou', 'nobody'], visited)) {
-    visited = 'off';
+  // Data types are coerced, thus req.query is modified.
+  // validateQuery returns bool to inform if validation was successful
+  if (!validateQuery(req.query)) {
+    // To output validation erros.
+    // console.log('ERROR', validateQuery.errors);
+    return res.sendStatus(status.BAD_REQUEST);
   }
 
-  if (_.isArray(tags)) {
-    if (!_.every(tags, _.isString)) {
-      return res.sendStatus(status.BAD_REQUEST);
-    }
-    // else valid
-  } else {
-    tags = [];
-  }
-
-
-  if (typeof text !== 'string') {
-    text = '';
-  }
-
-  dal.getFiltered({
-    username: req.user.name,
-    visited: visited,
-    tags: tags,
-    text: text,
-  }, function (err, markers) {
+  dal.getFiltered(req.query, function (err, markers) {
     if (err) {
       console.error(err);
       return res.sendStatus(status.INTERNAL_SERVER_ERROR);

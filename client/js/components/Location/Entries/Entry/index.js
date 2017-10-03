@@ -1,7 +1,6 @@
 /* eslint-disable max-statements */
 
 var account = require('../../../../stores/account');
-var ui = require('../../../lib/ui');
 var timestamp = require('../../../lib/timestamp');
 var markdownSyntax = require('../../lib/markdownSyntax.ejs');
 var template = require('./template.ejs');
@@ -45,14 +44,14 @@ module.exports = function (entry) {
 
     var hideErrors = function () {
       // Hide all possible error messages
-      ui.hide($deleteError);
-      ui.hide($error);
+      tresdb.ui.hide($deleteError);
+      tresdb.ui.hide($error);
     };
 
     $edit.click(function (ev) {
       ev.preventDefault();
 
-      ui.toggleHidden($container);
+      tresdb.ui.toggleHidden($container);
       hideErrors();
     });
 
@@ -62,14 +61,14 @@ module.exports = function (entry) {
       // Trim
       $markdown.val($markdown.val().trim());
 
-      ui.hide($form);
-      ui.show($progress);
+      tresdb.ui.hide($form);
+      tresdb.ui.show($progress);
       entry.change($form, function (err) {
-        ui.hide($progress);
+        tresdb.ui.hide($progress);
 
         if (err) {
-          ui.show($error);
-          ui.show($form);
+          tresdb.ui.show($error);
+          tresdb.ui.show($form);
           return;
         }
 
@@ -80,23 +79,23 @@ module.exports = function (entry) {
     $cancel.click(function (ev) {
       ev.preventDefault();
 
-      ui.hide($container);
+      tresdb.ui.hide($container);
     });
 
     $deleteEnsure.click(function (ev) {
       ev.preventDefault();
-      ui.toggleHidden($deleteFinal);
+      tresdb.ui.toggleHidden($deleteFinal);
     });
 
     $deleteButton.click(function (ev) {
       ev.preventDefault();
 
       entry.remove(function (err) {
-        ui.hide($container);
+        tresdb.ui.hide($container);
 
         if (err) {
           // Show deletion failed error message
-          ui.show($deleteError);
+          tresdb.ui.show($deleteError);
           return;
         }
         // ON successful removal the location will emit
@@ -130,7 +129,7 @@ module.exports = function (entry) {
     $syntaxShow.click(function (ev) {
       ev.preventDefault();
 
-      ui.toggleHidden($syntax);
+      tresdb.ui.toggleHidden($syntax);
     });
 
     entry.on('location_entry_changed', function () {

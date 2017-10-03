@@ -1,5 +1,4 @@
 
-var ui = tresdb.ui;
 var account = tresdb.stores.account;
 var loginTemplate = require('./template.ejs');
 
@@ -26,7 +25,7 @@ module.exports = function (onSuccess) {
     var $error = $('#tresdb-login-server-error');
 
     // Hide the progress bar
-    ui.hide($progress);
+    tresdb.ui.hide($progress);
 
     if (!err) {
       // Successful login
@@ -35,26 +34,26 @@ module.exports = function (onSuccess) {
 
     if (err.name === 'Unauthorized') {
       // Show error
-      ui.show($incorrect);
+      tresdb.ui.show($incorrect);
       // Show forms
-      ui.show($form);
-      ui.show($reset);
+      tresdb.ui.show($form);
+      tresdb.ui.show($reset);
 
       return;
     }  // else
 
     if (err.name === 'Forbidden') {
       // Show blacklist error. Allow user to try login again.
-      ui.show($bl);
-      ui.show($form);
-      ui.show($reset);
+      tresdb.ui.show($bl);
+      tresdb.ui.show($form);
+      tresdb.ui.show($reset);
 
       return;
     }
 
     // Show mystery error message. Do not show login form because
     // the issue is probably long-lasting.
-    ui.show($error);
+    tresdb.ui.show($error);
   };
 
   var loginFormSubmitHandler = function (ev) {
@@ -71,7 +70,7 @@ module.exports = function (onSuccess) {
     $('#tresdb-login-server-error').addClass('hidden');
 
     // Validate input
-    if (!validator.validate(email)) {
+    if (email.length < 1) {
       // Display error message
       $('#tresdb-login-invalid-email').removeClass('hidden');
 
@@ -166,7 +165,9 @@ module.exports = function (onSuccess) {
   // Public methods
 
   this.render = function () {
-    return loginTemplate();
+    return loginTemplate({
+      title: tresdb.config.title,
+    });
   };
 
   this.bind = function () {

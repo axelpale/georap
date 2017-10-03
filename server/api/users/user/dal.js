@@ -16,7 +16,7 @@ exports.getOne = function (username, callback) {
   //   callback
   //     function (err, user), user === null if no user found
 
-  var usersColl = db.get().collection('users');
+  var usersColl = db.collection('users');
   var proj = {
     hash: false,
     email: false,
