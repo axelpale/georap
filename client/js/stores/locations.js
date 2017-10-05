@@ -147,6 +147,19 @@ exports.get = function (id, callback) {
   });
 };
 
+exports.importFile = function (form, callback) {
+  // Parameters
+  //   form
+  //     jQuery instance of the file upload form
+  //   callback
+  //     function (err)
+
+  return postFile({
+    url: '/api/locations/import',
+    form: form,
+  }, callback);
+};
+
 this.setGeom = function (id, lng, lat, callback) {
   // Parameters:
   //   id

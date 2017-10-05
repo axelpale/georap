@@ -71,11 +71,14 @@ exports.postFile = function (params, callback) {
       return callback();
     },
     error: function (jqxhr, statusCode, statusMessage) {
-      var err = new Error(statusMessage);
+      var err = new Error(jqxhr.statusText);
+      err.code = jqxhr.status;
 
       // eslint-disable-next-line no-magic-numbers
       if (jqxhr.status === 413) {
         err.name = 'REQUEST_TOO_LONG';
+      } else {
+        err.name = jqxhr.responseText;
       }
 
       return callback(err);

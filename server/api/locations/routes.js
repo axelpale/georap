@@ -11,6 +11,7 @@ var locationRouter = require('./location/routes');
 
 router.post('/', jsonParser, handlers.create);
 router.get('/count', handlers.count);
+router.post('/import', handlers.import);  // uses multer body-parser inside
 router.use('/:locationId', locationIdParser, locationRouter);
 
 module.exports = router;

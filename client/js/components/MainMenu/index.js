@@ -160,6 +160,13 @@ module.exports = function (mapComp) {
       return tresdb.go('/search');
     });
 
+    // Export / import
+
+    $mount.on('click', '#tresdb-mainmenu-import', function (ev) {
+      ev.preventDefault();
+      return tresdb.go('/import');
+    });
+
     $mount.on('click', '#tresdb-mainmenu-export', function (ev) {
       ev.preventDefault();
       return tresdb.go('/export');
