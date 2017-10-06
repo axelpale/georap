@@ -53,7 +53,7 @@ exports.tempUploader = multer({
   limits: {
     fileSize: local.uploadSizeLimit,  // bytes
   },
-})
+});
 
 exports.getAbsolutePath = function (relativePath) {
   // Return absolute path for a path relative to upload dir.

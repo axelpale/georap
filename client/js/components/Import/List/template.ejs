@@ -1,0 +1,16 @@
+<table id="tresdb-import-list" class="table table-hover">
+  <thead>
+    <tr>
+      <th><input id="tresdb-import-all" type="checkbox" title="Select all"></th>
+      <th>Name</th>
+    </tr>
+  </thead>
+  <tbody>
+  <% locs.forEach(function (loc) { %>
+    <tr>
+      <td><input type="checkbox" name="row-check" class="tresdb-import-row-check"></td>
+      <td><%= loc.name %></td>
+    </tr>
+  <% }); %>
+  </tbody>
+</table>

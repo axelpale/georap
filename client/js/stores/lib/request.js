@@ -49,7 +49,8 @@ exports.postFile = function (params, callback) {
   //     form
   //       jQuery instance of the file upload form.
   //   callback
-  //     function (err)
+  //     function (err, jsonResponse)
+
 
   var formData = new FormData(params.form[0]);
 
@@ -63,14 +64,15 @@ exports.postFile = function (params, callback) {
   $.ajax({
     url: params.url,
     type: 'POST',
+    dataType: 'json',  // response data type
     contentType: false,
     data: formData,
     headers: { 'Authorization': 'Bearer ' + account.getToken() },
     processData: false,
-    success: function () {
-      return callback();
+    success: function (jsonResp) {
+      return callback(null, jsonResp);
     },
-    error: function (jqxhr, statusCode, statusMessage) {
+    error: function (jqxhr) {
       var err = new Error(jqxhr.statusText);
       err.code = jqxhr.status;
 

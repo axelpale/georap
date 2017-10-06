@@ -1,5 +1,6 @@
 
 var template = require('./template.ejs');
+var ListComp = require('./List');
 var emitter = require('component-emitter');
 
 var K = 1024;
@@ -12,6 +13,7 @@ module.exports = function () {
   var self = this;
   emitter(self);
 
+  var listComp = new ListComp();
 
   // Public methods
 
@@ -22,11 +24,14 @@ module.exports = function () {
 
     var $form = $('#tresdb-import-form');
     var $progress = $('#tresdb-import-progress');
+    var $list = $('#tresdb-import-list');
 
     var $missingError = $('#tresdb-import-missingerror');
     var $otherError = $('#tresdb-import-othererror');
     var $sizeError = $('#tresdb-import-sizeerror');
     var $typeError = $('#tresdb-import-typeerror');
+
+    listComp.bind($list);
 
     $form.submit(function (ev) {
       ev.preventDefault();
@@ -54,7 +59,12 @@ module.exports = function () {
           }
           return;
         }
-        console.log('success?');
+
+        listComp.setState(function (oldState) {
+          return {
+            locs: oldState.locs.concat(locs),
+          };
+        });
       });
     });
   };

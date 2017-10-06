@@ -89,3 +89,50 @@ exports.create = function (lat, lng, username, callback) {
   });  // .create
 
 };
+
+exports.readKML = function (buffer, callback) {
+  // Find an array of locations from a KML file.
+  //
+  // Parameters
+  //   buffer
+  //     a Buffer that represents KML file
+  //   callback
+  //     function (err, locations)
+
+  // dummy
+  return callback(null, [
+    {
+      name: 'Fooloc',
+      lat: 62.0,
+      lng: 23.0,
+      description: 'This is a location from KML',
+    },
+  ]);
+};
+
+exports.readKMZ = function (buffer, callback) {
+  // KMZ is a zipped collection of resources and KML files.
+
+  // dummy
+  return exports.readKMZ(buffer, callback);
+};
+
+exports.readGPX = function (buffer, callback) {
+  // Find an array of locations from a GPX file.
+  //
+  // Parameters
+  //   buffer
+  //     a Buffer that represents GPX file
+  //   callback
+  //     function (err, locations)
+
+  // dummy
+  return callback(null, [
+    {
+      name: 'Fooloc',
+      lat: 62.0,
+      lng: 23.0,
+      description: 'This is a location from GPX',
+    },
+  ]);
+};
