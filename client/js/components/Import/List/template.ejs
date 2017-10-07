@@ -3,6 +3,7 @@
     <tr>
       <th><input id="tresdb-import-all" type="checkbox" title="Select all"></th>
       <th>Name</th>
+      <th>Coordinates</th>
     </tr>
   </thead>
   <tbody>
@@ -10,6 +11,7 @@
     <tr>
       <td><input type="checkbox" name="row-check" class="tresdb-import-row-check"></td>
       <td><%= loc.name %></td>
+      <td><%= loc.coordinates %></td>
     </tr>
   <% }); %>
   </tbody>
