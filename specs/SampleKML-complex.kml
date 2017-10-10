@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+  <Document>
+    <Folder>
+      <name>Portugali</name>
+      <Folder>
+        <name>Almeida</name>
+        <description><![CDATA[<a href="http://en.wikipedia.org/wiki/Castelo_de_Almeida">http://en.wikipedia.org/wiki/Castelo_de_Almeida</a>]]></description>
+        <GroundOverlay>
+          <name>Almeida, epätarkka</name>
+          <description>Tässä linkki: <![CDATA[<a href="http://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Fortress_of_Almeida.jpg/1280px-Fortress_of_Almeida.jpg">http://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Fortress_of_Almeida.jpg/1280px-Fortress_of_Almeida.jpg</a>]]></description>
+          <Icon>
+            <href>files/Fortress_of_Almeida_0.jpg</href>
+            <viewBoundScale>0.75</viewBoundScale>
+          </Icon>
+          <LatLonBox>
+            <north>40.72923907050864</north>
+            <south>40.7222409495331</south>
+            <east>-6.900777809707388</east>
+            <west>-6.912527115972863</west>
+            <rotation>11.96870611470072</rotation>
+          </LatLonBox>
+        </GroundOverlay>
+        <Placemark>
+          <name>Almeida</name>
+          <Point>
+            <coordinates>-6.906652462840105,40.72574001002088,0</coordinates>
+          </Point>
+        </Placemark>
+      </Folder>
+    </Folder>
+  </Document>
+</kml>

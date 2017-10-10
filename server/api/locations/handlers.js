@@ -1,6 +1,7 @@
 
 var uploads = require('../../services/uploads');
 var uploadHandler = uploads.tempUploader.single('importfile');
+var importers = require('./importers');
 var dal = require('./dal');
 var status = require('http-status-codes');
 var path = require('path');
@@ -75,7 +76,7 @@ exports.import = function (req, res) {
 
     if (ext2methodName.hasOwnProperty(ext)) {
       methodName = ext2methodName[ext];
-      return dal[methodName](req.file.buffer, function (errr, locs) {
+      return importers[methodName](req.file.buffer, function (errr, locs) {
         if (errr) {
           console.error(errr);
           return res.sendStatus(status.INTERNAL_SERVER_ERROR);

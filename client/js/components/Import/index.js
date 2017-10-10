@@ -47,6 +47,7 @@ module.exports = function () {
 
       tresdb.stores.locations.importFile($form, function (err, locs) {
 
+        console.log(locs);
         tresdb.ui.hide($progress);
 
         if (err) {
