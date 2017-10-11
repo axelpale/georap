@@ -44,7 +44,15 @@
         <div class="alert alert-danger" role="alert">The file is too large. Please choose a smaller file.</div>
       </div>
 
-      <div id="tresdb-import-list"></div>
+      <div id="tresdb-import-list" class="hidden"></div>
+
+      <form id="tresdb-import-submit-form" style="margin-bottom: 5em">
+        <button type="button" class="btn btn-default disabled">Cancel</button>
+        <div class="pull-right">
+          <button type="button" class="btn btn-primary disabled">Import selected (0)</button>
+          <button type="submit" class="btn btn-primary disabled">Import all (0)</button>
+        </div>
+      </form>
 
     </div>
   </div>

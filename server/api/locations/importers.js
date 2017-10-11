@@ -1,6 +1,7 @@
 /* eslint-disable max-statements,max-lines */
 
 var xmltransform = require('camaro');
+var toMarkdown = require('to-markdown');
 
 
 exports.readKML = function (buffer, callback) {
@@ -21,6 +22,8 @@ exports.readKML = function (buffer, callback) {
     name: 'name',
     description: 'description',
     coordinates: 'Point/coordinates',
+    line: 'LineString/coordinates',
+    polygon: 'Polygon//coordinates',
   };
 
   var overlayTemplate = {
@@ -78,11 +81,46 @@ exports.readKML = function (buffer, callback) {
       return desc.length > 0;
     });
 
-    // Split coordinates
-    var lonLat = loc.coordinates.split(',');
-    loc.longitude = parseFloat(lonLat[0]);
-    loc.latitude = parseFloat(lonLat[1]);
+    // Convert descriptions to markdown
+    loc.descriptions = loc.descriptions.map(function (desc) {
+      return toMarkdown(desc);
+    });
+
+    // Combine coordinates from Point, LineString, and Polygon.
+    // Parse and compute naive average.
+    var avgLonLat = (function () {
+
+      var combined = loc.coordinates;  // empty string if do coords
+      if (loc.line.length > 0) {
+        combined = combined + ' ' + loc.line;
+      }
+      if (loc.polygon.length > 0) {
+        combined = combined + ' ' + loc.polygon;
+      }
+
+      var points = combined.trim().split(' ');
+      var numPoints = points.length;
+
+      var sum = points.reduce(function (acc, p) {
+        var lonLat = p.split(',');
+        acc[0] += parseFloat(lonLat[0]);
+        acc[1] += parseFloat(lonLat[1]);
+        return acc;
+      }, [0, 0]);
+
+      return [
+        sum[0] / numPoints,
+        sum[1] / numPoints,
+      ];
+
+    }());
+
+    // Remove now unnecessary coordinates;
+    loc.longitude = avgLonLat[0];
+    loc.latitude = avgLonLat[1];
     delete loc.coordinates;
+    delete loc.line;
+    delete loc.polygon;
 
     // Always have overlays even when empty
     if (!loc.hasOwnProperty('overlays')) {

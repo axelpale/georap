@@ -1,3 +1,5 @@
+<h3>Found <%= locs.length %> locations</h3>
+
 <table id="tresdb-import-list" class="table table-hover">
   <thead>
     <tr>
@@ -21,6 +23,10 @@
         attach.push('' + loc.overlays.length + ' overlays');
       } else if (loc.overlays.length > 0) {
         attach.push('1 overlay');
+      }
+
+      if (attach.length === 0) {
+        attach.push('-');
       }
     %>
     <tr>

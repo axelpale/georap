@@ -31,6 +31,8 @@ module.exports = function () {
     var $sizeError = $('#tresdb-import-sizeerror');
     var $typeError = $('#tresdb-import-typeerror');
 
+    var $submitForm = $('#tresdb-import-submit-form');
+
     listComp.bind($list);
 
     $form.submit(function (ev) {
@@ -49,6 +51,7 @@ module.exports = function () {
 
         console.log(locs);
         tresdb.ui.hide($progress);
+        tresdb.ui.show($list);
 
         if (err) {
           if (err.name === 'unknown filetype') {
