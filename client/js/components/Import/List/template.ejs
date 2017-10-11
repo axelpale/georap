@@ -10,11 +10,17 @@
   <% locs.forEach(function (loc) { %>
     <%
       var attach = [];
-      if (loc.descriptions.length > 0) {
+
+      if (loc.descriptions.length > 1) {
         attach.push('' + loc.descriptions.length + ' posts');
+      } else if (loc.descriptions.length > 0) {
+        attach.push('1 post');
       }
-      if (loc.groundOverlays.length > 0) {
-        attach.push('' + loc.groundOverlays.length + ' overlays');
+
+      if (loc.overlays.length > 1) {
+        attach.push('' + loc.overlays.length + ' overlays');
+      } else if (loc.overlays.length > 0) {
+        attach.push('1 overlay');
       }
     %>
     <tr>
