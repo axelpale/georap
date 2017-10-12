@@ -8,41 +8,55 @@ var path = require('path');
 var fse = require('fs-extra');
 var shortid = require('shortid');
 var sanitize = require('sanitize-filename');
+var moment = require('moment');
 
-var storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    var year = (new Date()).getFullYear().toString();
-    var key = shortid.generate();
-    var absDir = path.resolve(local.uploadDir, year, key);
-
-    fse.mkdirs(absDir, function (err) {
-      if (err) {
-        return cb(err);
-      }
-      return cb(null, absDir);
-    });
-  },
-
+var sanitizedOriginal = function (req, file, cb) {
   // Convert filename to a universally compatible one.
-  filename: function (req, file, cb) {
+  // Remove suspicious characters. Might end up with empty filename.
+  var safeButMaybeEmpty = sanitize(file.originalname);
 
-    // Remove suspicious characters. Might end up with empty filename.
-    var safeButMaybeEmpty = sanitize(file.originalname);
+  // If empty, come up with a filename.
+  if (safeButMaybeEmpty.length < 1) {
+    return cb(null, shortid.generate());
+  }
 
-    // If empty, come up with a filename.
-    if (safeButMaybeEmpty.length < 1) {
-      return cb(null, shortid.generate());
+  // Convert spaces to _
+  var safe = safeButMaybeEmpty.replace(/\s+/g, '_');
+
+  return cb(null, safe);
+};
+
+var dateShortId = function (req, file, cb) {
+  var name = moment().format('YYYY-MM-DD') + '-' + shortid.generate();
+  var absDir = path.resolve(local.tempUploadDir, name);
+
+  fse.mkdirs(absDir, function (err) {
+    if (err) {
+      return cb(err);
     }
+    return cb(null, absDir);
+  });
+};
 
-    // Convert spaces to _
-    var safe = safeButMaybeEmpty.replace(/\s+/g, '_');
+var yearShortId = function (req, file, cb) {
+  var year = (new Date()).getFullYear().toString();
+  var key = shortid.generate();
+  var absDir = path.resolve(local.uploadDir, year, key);
 
-    return cb(null, safe);
-  },
-});
+  fse.mkdirs(absDir, function (err) {
+    if (err) {
+      return cb(err);
+    }
+    return cb(null, absDir);
+  });
+};
+
 
 exports.uploader = multer({
-  storage: storage,
+  storage: multer.diskStorage({
+    destination: yearShortId,
+    filename: sanitizedOriginal,
+  }),
   limits: {
     fileSize: local.uploadSizeLimit,  // bytes
   },
@@ -50,6 +64,10 @@ exports.uploader = multer({
 //module.exports = multer({ dest: local.uploadDir });
 
 exports.tempUploader = multer({
+  storage: multer.diskStorage({
+    destination: dateShortId,
+    filename: sanitizedOriginal,
+  }),
   limits: {
     fileSize: local.uploadSizeLimit,  // bytes
   },
