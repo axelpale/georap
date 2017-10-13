@@ -37,15 +37,15 @@ module.exports = function () {
 
     $mount.html(template(self.state));
 
-    var $checkAllBox = $('#tresdb-import-all');
-    var $list = $('#tresdb-import-list');
+    var $checkAllBox = $('#tresdb-batch-all');
+    var $list = $('#tresdb-batch-list');
 
     $checkAllBox.change(function () {
-      var $rows = $('#tresdb-import-list .tresdb-import-row-check');
+      var $rows = $('#tresdb-batch-list .tresdb-batch-row-check');
       $rows.prop('checked', this.checked);
     });
 
-    $list.on('click', '.tresdb-import-view-details', function (ev) {
+    $list.on('click', '.tresdb-batch-view-details', function (ev) {
       ev.preventDefault();
       // plain stopPropagation fires the event twice
       ev.stopImmediatePropagation();
@@ -66,6 +66,8 @@ module.exports = function () {
   };
 
   this.unbind = function () {
+    $('#tresdb-batch-all').off();
+    $('#tresdb-batch-list').off();
   };
 
 };

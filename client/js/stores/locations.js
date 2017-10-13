@@ -1,13 +1,12 @@
 /* eslint-disable max-lines */
 
-var emitter = require('component-emitter');
-
 var socket = require('../connection/socket');
+var Location = require('../components/Location/Model');
 var validateCoords = require('./lib/validateCoords');
 var request = require('./lib/request');
 var account = require('./account');
 var tags = require('./tags');
-var Location = require('../components/Location/Model');
+var emitter = require('component-emitter');
 
 // Init
 emitter(exports);
@@ -64,6 +63,7 @@ var listenForChanges = (function () {
   };
 }());
 
+var getJSON = request.getJSON;
 var postJSON = request.postJSON;
 var postFile = request.postFile;
 var deleteJSON = request.deleteJSON;
@@ -157,6 +157,27 @@ exports.importFile = function (form, callback) {
   return postFile({
     url: '/api/locations/import',
     form: form,
+  }, callback);
+};
+
+exports.getBatch = function (batchId, callback) {
+  return getJSON('/api/locations/import/' + batchId, callback);
+};
+
+exports.importBatch = function (data, callback) {
+  // Parameters
+  //   data
+  //     { batchId: string, indices: Array}
+  //   callback
+  //     function (err)
+  //
+  if (!data.hasOwnProperty('batchId') || !data.hasOwnProperty('indices')) {
+    throw new Error('Invalid argument: ' + JSON.stringify(data));
+  }
+
+  return postJSON({
+    url: '/api/locations/import/' + data.batchId,
+    data: data,
   }, callback);
 };
 

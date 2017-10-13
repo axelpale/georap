@@ -1,7 +1,6 @@
 /* eslint-disable max-lines */
 
 var db = require('../../services/db');
-var googlemaps = require('../../services/googlemaps');
 var layersDal = require('../../../worker/layers/dal');
 var eventsDal = require('../events/dal');
 
@@ -33,59 +32,50 @@ exports.create = function (lat, lng, username, callback) {
   //   callback
   //     function (err, rawLocation)
 
-  googlemaps.reverseGeocode([lat, lng], function (err0, places) {
-    // Places is an array of strings
+  var geom = {
+    type: 'Point',
+    coordinates: [lng, lat],
+  };
 
-    if (err0) {
-      console.error(err0);
-      return callback(err0);
+  layersDal.findLayerForPoint(geom, function (errl, layer) {
+    if (errl) {
+      console.error(errl);
+      return callback(errl);
     }
 
-    var geom = {
-      type: 'Point',
-      coordinates: [lng, lat],
+    var newLoc = {
+      creator: username,
+      deleted: false,
+      geom: geom,
+      isLayered: true,
+      layer: layer,
+      name: shortid.generate(),
+      places: [],
+      tags: [],
     };
 
-    layersDal.findLayerForPoint(geom, function (errl, layer) {
-      if (errl) {
-        console.error(errl);
-        return callback(errl);
+    var coll = db.collection('locations');
+
+    coll.insertOne(newLoc, function (err, result) {
+      if (err) {
+        return callback(err);
       }
 
-      var newLoc = {
-        creator: username,
-        deleted: false,
-        geom: geom,
-        isLayered: true,
-        layer: layer,
-        name: shortid.generate(),
-        places: places,
-        tags: [],
-      };
+      newLoc._id = result.insertedId;
 
-      var coll = db.get().collection('locations');
-
-      coll.insertOne(newLoc, function (err, result) {
-        if (err) {
-          return callback(err);
+      eventsDal.createLocationCreated({
+        locationId: newLoc._id,
+        locationName: newLoc.name,
+        lat: lat,
+        lng: lng,
+        username: username,
+      }, function (err2) {
+        if (err2) {
+          return callback(err2);
         }
-
-        newLoc._id = result.insertedId;
-
-        eventsDal.createLocationCreated({
-          locationId: newLoc._id,
-          locationName: newLoc.name,
-          lat: lat,
-          lng: lng,
-          username: username,
-        }, function (err2) {
-          if (err2) {
-            return callback(err2);
-          }
-          return callback(null, newLoc);
-        });
+        return callback(null, newLoc);
       });
     });
-  });  // .create
+  });
 
 };

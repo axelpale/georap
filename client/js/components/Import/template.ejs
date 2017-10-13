@@ -4,15 +4,15 @@
 
       <h1><span class="glyphicon glyphicon-import" aria-hidden="true"></span> Import locations</h1>
 
-      <p>Choose a file from your device, and upload. Importable locations will be listed for you. Then select wanted locations from the list and finally import.</p>
+      <p>Choose a file from your device, and upload. Importable locations will be listed for you before they are created. Then select wanted locations from the list and finally import.</p>
 
-      <form id="tresdb-import-form" class="panel panel-primary">
+      <form id="tresdb-import-upload-form" class="panel panel-primary">
         <div class="panel-heading">
           Choose a file to upload
         </div>
         <div class="panel-body">
           <div class="form-group">
-            <label for="tresdb-import-file">Supported formats are KML, KMZ, and GPX. Max size is <%= limit %> MiB.</label>
+            <label for="tresdb-import-file">Supported formats are KML and KMZ. Max size is <%= limit %> MiB.</label>
             <input id="tresdb-import-file" type="file" name="importfile">
           </div>
 
@@ -45,14 +45,6 @@
       </div>
 
       <div id="tresdb-import-list" class="hidden"></div>
-
-      <form id="tresdb-import-submit-form" style="margin-bottom: 5em">
-        <button type="button" class="btn btn-default disabled">Cancel</button>
-        <div class="pull-right">
-          <button type="button" class="btn btn-primary disabled">Import selected (0)</button>
-          <button type="submit" class="btn btn-primary disabled">Import all (0)</button>
-        </div>
-      </form>
 
     </div>
   </div>

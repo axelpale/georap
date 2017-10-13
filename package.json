@@ -1,7 +1,7 @@
 {
   "name": "tresdb",
   "private": true,
-  "version": "8.1.0-alpha.5",
+  "version": "8.1.0-alpha.6",
   "description": "Geographical CMS built on Express.js",
   "keywords": [
     "GIS",
@@ -27,7 +27,7 @@
     "test:api:markers": "mocha server/api/markers/dal.spec.js",
     "test:migration": "mocha migration/*.spec.js",
     "test:migration:iter": "mocha migration/iter.spec.js",
-    "test:importers": "mocha server/api/locations/importers.spec.js",
+    "test:parsekml": "mocha server/api/locations/importer/parsekml.spec.js",
     "lint": "eslint . && echo 'Lint successful.'",
     "mongo": "mongo tresdb",
     "mongo:test": "mongo test",
@@ -55,6 +55,7 @@
     "extract-zip": "^1.6.5",
     "file-loader": "^0.11.2",
     "fs-extra": "^4.0.2",
+    "glob": "^7.1.2",
     "http-status-codes": "^1.1.6",
     "jsonwebtoken": "^8.0.1",
     "jwt-decode": "^2.1.0",

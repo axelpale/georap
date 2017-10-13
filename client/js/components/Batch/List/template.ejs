@@ -1,9 +1,9 @@
 <h3>Found <%= locs.length %> locations</h3>
 
-<table id="tresdb-import-list" class="table table-hover">
+<table id="tresdb-batch-list" class="table table-hover">
   <thead>
     <tr>
-      <th><input id="tresdb-import-all" type="checkbox" name="all-check" title="Select all"></th>
+      <th><input id="tresdb-batch-all" type="checkbox" name="all-check" title="Select all"></th>
       <th>Name</th>
       <th>Attachments</th>
       <th></th>
@@ -27,7 +27,7 @@
       }
     %>
     <tr>
-      <td><input type="checkbox" name="row-check" value="<%= index %>" class="tresdb-import-row-check"></td>
+      <td><input type="checkbox" name="row-check" value="<%= index %>" class="tresdb-batch-row-check"></td>
       <td><%= loc.name %></td>
       <td><%
         if (attach.length === 0) {
@@ -37,7 +37,7 @@
         }
       %></td>
       <td>
-        <a href="#" class="tresdb-import-view-details" data-index="<%= index %>">Details</a>
+        <a href="#" class="tresdb-batch-view-details" data-index="<%= index %>">Details</a>
       </td>
     </tr>
   <% }); %>

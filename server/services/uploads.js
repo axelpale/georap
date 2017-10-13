@@ -61,7 +61,6 @@ exports.uploader = multer({
     fileSize: local.uploadSizeLimit,  // bytes
   },
 });
-//module.exports = multer({ dest: local.uploadDir });
 
 exports.tempUploader = multer({
   storage: multer.diskStorage({

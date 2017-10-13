@@ -1,6 +1,5 @@
 
 var template = require('./template.ejs');
-var ListComp = require('./List');
 var emitter = require('component-emitter');
 
 var K = 1024;
@@ -13,7 +12,6 @@ module.exports = function () {
   var self = this;
   emitter(self);
 
-  var listComp = new ListComp();
 
   // Public methods
 
@@ -22,20 +20,15 @@ module.exports = function () {
       limit: Math.round(tresdb.config.uploadSizeLimit / (K * K)),
     }));
 
-    var $form = $('#tresdb-import-form');
+    var $uploadForm = $('#tresdb-import-upload-form');
     var $progress = $('#tresdb-import-progress');
-    var $list = $('#tresdb-import-list');
 
     var $missingError = $('#tresdb-import-missingerror');
     var $otherError = $('#tresdb-import-othererror');
     var $sizeError = $('#tresdb-import-sizeerror');
     var $typeError = $('#tresdb-import-typeerror');
 
-    var $submitForm = $('#tresdb-import-submit-form');
-
-    listComp.bind($list);
-
-    $form.submit(function (ev) {
+    $uploadForm.submit(function (ev) {
       ev.preventDefault();
 
       // Hide shown errors.
@@ -47,11 +40,11 @@ module.exports = function () {
       // Begin progress
       tresdb.ui.show($progress);
 
-      tresdb.stores.locations.importFile($form, function (err, locs) {
+      tresdb.stores.locations.importFile($uploadForm, function (err, result) {
 
-        console.log(locs);
+        var batchId = result.batchId;
+
         tresdb.ui.hide($progress);
-        tresdb.ui.show($list);
 
         if (err) {
           if (err.name === 'unknown filetype') {
@@ -64,17 +57,15 @@ module.exports = function () {
           return;
         }
 
-        listComp.setState(function (oldState) {
-          return {
-            locs: oldState.locs.concat(locs),
-          };
-        });
+        // Import successful. Switch to batch page.
+        tresdb.go('/import/' + batchId);
       });
     });
+
   };
 
   this.unbind = function () {
-    $('#tresdb-import-form').off();
+    $('#tresdb-import-upload-form').off();
   };
 
 };
