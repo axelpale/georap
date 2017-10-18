@@ -30,6 +30,12 @@ module.exports = function (batchId) {
 
     listComp.bind($list);
 
+    $cancel.click(function (ev) {
+      ev.preventDefault();
+      // Close
+      tresdb.go('/');
+    });
+
     tresdb.stores.locations.getBatch(batchId, function (err, result) {
       if (err) {
         console.log('getBatch');

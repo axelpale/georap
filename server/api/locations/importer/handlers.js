@@ -45,22 +45,9 @@ exports.import = function (req, res) {
         }
 
         var batchId = result.batchId;
-        var locs = result.locations;
-
-        // Convert absolute file paths of possible overlays to URLs.
-        // This is most correct to do in handler because it is a REST thing.
-        // Absolute filepaths are needed internally more often.
-        locs.forEach(function (loc) {
-          loc.overlays.forEach(function (overlay) {
-            var rel = path.relative(local.tempUploadDir, overlay.href);
-            var url = urljoin(local.tempUploadUrl, rel);
-            overlay.href = url;
-          });
-        });
 
         return res.json({
           batchId: batchId,
-          locations: locs,
         });
       });
     }
@@ -80,6 +67,17 @@ exports.getBatch = function (req, res) {
       console.error(err);
       return res.sendStatus(status.INTERNAL_SERVER_ERROR);
     }
+
+    // Convert absolute file paths of possible overlays to URLs.
+    // This is most correct to do in handler because it is a REST thing.
+    // Absolute filepaths are needed internally more often.
+    locs.forEach(function (loc) {
+      loc.overlays.forEach(function (overlay) {
+        var rel = path.relative(local.tempUploadDir, overlay.href);
+        var url = urljoin(local.tempUploadUrl, rel);
+        overlay.href = url;
+      });
+    });
 
     return res.json(locs);
   });
