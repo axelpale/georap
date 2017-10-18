@@ -97,8 +97,8 @@ exports.markOneAsUnlayered = function (locationId, callback) {
 };
 
 exports.findDistToNearestLayered = function (geom, callback) {
-  // Find distance to nearest neighbor with isLayered=true. If none found
-  // the distance is null.
+  // Find distance in meters to nearest neighbor with isLayered=true.
+  // If none found the distance is null.
   //
   // Parameters:
   //   geom
@@ -147,13 +147,14 @@ exports.findLayerForPoint = function (geom, callback) {
   //   geom
   //     GeoJSON Point
   //   callback
-  //     function (err, layer)
+  //     function (err, layer, distance)
   //       Parameters:
   //         err
   //           null if no error
   //         layer
   //           integer
-  //
+  //         distance
+  //           in meters, null if no nearest one
 
   exports.findDistToNearestLayered(geom, function (err, dist) {
     if (err) {
@@ -162,12 +163,12 @@ exports.findLayerForPoint = function (geom, callback) {
 
     if (dist === null) {
       // There is no nearest one.
-      return callback(null, TOP_LAYER);
+      return callback(null, TOP_LAYER, null);
     }
 
     var layer = exports.findLayerWithClusterRadiusSmallerThan(dist);
 
-    return callback(null, layer);
+    return callback(null, layer, dist);
   });
 };
 

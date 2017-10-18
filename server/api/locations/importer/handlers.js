@@ -9,6 +9,21 @@ var path = require('path');
 var uploadHandler = uploads.tempUploader.single('importfile');
 
 
+var buildUrls = function (locs) {
+  // Modifies given locations.
+  // Convert absolute file paths of possible overlays to URLs.
+  // This is most correct to do in handler because it is a REST thing.
+  // Absolute filepaths are needed internally more often.
+  locs.forEach(function (loc) {
+    loc.overlays.forEach(function (overlay) {
+      var rel = path.relative(local.tempUploadDir, overlay.href);
+      var url = urljoin(local.tempUploadUrl, rel);
+      overlay.href = url;
+    });
+  });
+};
+
+
 exports.import = function (req, res) {
   // Import locations from KML, KMZ, or GPX file.
   // importfile is required.
@@ -68,18 +83,23 @@ exports.getBatch = function (req, res) {
       return res.sendStatus(status.INTERNAL_SERVER_ERROR);
     }
 
-    // Convert absolute file paths of possible overlays to URLs.
-    // This is most correct to do in handler because it is a REST thing.
-    // Absolute filepaths are needed internally more often.
-    locs.forEach(function (loc) {
-      loc.overlays.forEach(function (overlay) {
-        var rel = path.relative(local.tempUploadDir, overlay.href);
-        var url = urljoin(local.tempUploadUrl, rel);
-        overlay.href = url;
-      });
-    });
+    buildUrls(locs);
 
     return res.json(locs);
+  });
+};
+
+exports.getOutcome = function (req, res) {
+  var batchId = req.params.batchId;
+  dal.getOutcome(batchId, function (err, outcome) {
+    if (err) {
+      console.error(err);
+      return res.sendStatus(status.INTERNAL_SERVER_ERROR);
+    }
+
+    buildUrls(outcome.skipped);
+
+    return res.json(outcome);
   });
 };
 

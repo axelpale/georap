@@ -1,7 +1,10 @@
 
+var messageTemplate = require('./message.ejs');
 var template = require('./template.ejs');
 var ListComp = require('./List');
 var emitter = require('component-emitter');
+
+var DEC = 10;
 
 module.exports = function (batchId) {
   // Parameters
@@ -23,6 +26,8 @@ module.exports = function (batchId) {
 
     var $progress = $('#tresdb-batch-progress');
     var $list = $('#tresdb-batch-list');
+    var $error = $('#tresdb-batch-error');
+    var $message = $('#tresdb-batch-message');
 
     var $cancel = $('#tresdb-batch-cancel');
     var $submitSelected = $('#tresdb-batch-import-selected');
@@ -34,8 +39,8 @@ module.exports = function (batchId) {
     var updateCounts = function () {
       var a = listComp.countSelected();
       var b = listComp.countLocations();
-      $submitSelected.html('Import selected (' + a.toString(10) + ')');
-      $submitAllButton.html('Import all (' + b.toString(10) + ')');
+      $submitSelected.html('Import selected (' + a.toString(DEC) + ')');
+      $submitAllButton.html('Import all (' + b.toString(DEC) + ')');
     };
 
     listComp.on('changed', function () {
@@ -60,6 +65,8 @@ module.exports = function (batchId) {
       tresdb.ui.hide($progress);
       tresdb.ui.show($list);
 
+      $message.html(messageTemplate({ locs: locs }));
+
       listComp.setState({
         locs: locs,
       });
@@ -67,35 +74,42 @@ module.exports = function (batchId) {
       // Enable form buttons now when the locations have loaded.
       $submitAllForm.find('button').removeClass('disabled');
 
-      // Ready to submit
-      $submitSelected.click(function (evv) {
-        evv.preventDefault();
-
-        // Prevent double import
-        $submitSelected.off();
-
-        var indices = listComp.getSelectedIndices();
-
-        // remove jQuery methods
-        // var rawIndices = indices.filter(function (i) {
-        //   return typeof i === 'number';
-        // });
-        // console.log(rawIndices);
-        // return;
+      var handleSubmit = function (indices) {
+        // Begin import
+        tresdb.ui.show($progress);
+        tresdb.ui.hide($submitAllForm);
 
         tresdb.stores.locations.importBatch({
           batchId: batchId,
           indices: indices,
         }, function (errs) {
+          tresdb.ui.hide($progress);
+
           if (errs) {
             console.error(errs);
+            $error.children().first().text(errs.message);
+            tresdb.ui.show($error);
+            return;
           }
+
+          // Import success, go to results
+          tresdb.go('/import/' + batchId + '/outcome');
         });
+      };
+
+      // Ready to submit
+      $submitSelected.click(function (evv) {
+        evv.preventDefault();
+        // Prevent double import
+        $submitSelected.off();
+
+        var indices = listComp.getSelectedIndices();
+
+        return handleSubmit(indices);
       });
 
       $submitAllForm.submit(function (evv) {
         evv.preventDefault();
-
         // Prevent double submit
         $submitAllForm.off();
 
@@ -104,16 +118,7 @@ module.exports = function (batchId) {
           return index;
         });
 
-        tresdb.stores.locations.importBatch({
-          batchId: batchId,
-          indices: indices,
-        }, function (errs, response) {
-          if (errs) {
-            console.error(errs);
-          }
-
-          console.log('success', response);
-        });
+        return handleSubmit(indices);
       });
 
     });

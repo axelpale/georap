@@ -21,10 +21,30 @@ var cachePathFromBatchId = function (batchId) {
   return path.resolve(local.tempUploadDir, batchId, batchId + '.json');
 };
 
+var outcomePathFromBatchId = function (batchId) {
+  return path.resolve(local.tempUploadDir, batchId, batchId + '_outcome.json');
+};
+
+var writeBatchOutcome = function (outcomePath, createdLocs, skippedLocs, cb) {
+  // Write a JSON file about the outcome of an import.
+  var data = {
+    created: createdLocs,
+    skipped: skippedLocs,
+  };
+
+  fs.writeJSON(outcomePath, data, cb);
+};
+
+
 exports.getBatch = function (batchId, callback) {
   // Return batch as array of locations.
   var cachePath = cachePathFromBatchId(batchId);
   fs.readJSON(cachePath, callback);
+};
+
+exports.getOutcome = function (batchId, callback) {
+  var p = outcomePathFromBatchId(batchId);
+  fs.readJSON(p, callback);
 };
 
 
@@ -161,8 +181,15 @@ exports.importBatch = function (args, callback) {
   //       array of integers
   //     username
   //       string, who is importing
+  //   callback
+  //     function (err, data)
+  //       err
+  //       data
+  //         batchId
+  //         numLocationsCreated
+  //         locationsCreated
+  //         locationsSkipped:
   //
-  console.log('args', args);
 
   var indices = args.indices;
   var username = args.username;
@@ -176,8 +203,9 @@ exports.importBatch = function (args, callback) {
     // so it is async operation.
 
     var locsCreated = [];
+    var locsSkipped = [];
 
-    asyn.eachSeries(indices, function iteratee(index, next) {
+    asyn.mapSeries(indices, function iteratee(index, next) {
 
       var loc = locs[index];
 
@@ -186,17 +214,22 @@ exports.importBatch = function (args, callback) {
         return next();
       }
 
-      var lat = loc.latitude;
-      var lon = loc.longitude;
-
-      console.log('attempting to create location', lat, lon, username, index);
-
-      locationsDal.create(lat, lon, username, function (errc, rawLoc) {
+      locationsDal.createLocation({
+        name: loc.name,
+        latitude: loc.latitude,
+        longitude: loc.longitude,
+        username: username,
+        tags: [],
+      }, function (errc, rawLoc) {
         if (errc) {
+          if (errc.name === 'ERROR_TOO_CLOSE') {
+            locsSkipped.push(loc);
+            return next();
+          }
           return next(errc);
         }
 
-        console.log('Created location');
+        //console.log('Created location');
 
         locsCreated.push(rawLoc);
         return next();
@@ -216,9 +249,23 @@ exports.importBatch = function (args, callback) {
 
       console.log('import success');
 
-      return callback(null, {
-        numLocationsCreated: locsCreated.length,
+      var p = outcomePathFromBatchId(args.batchId);
+
+      writeBatchOutcome(p, locsCreated, locsSkipped, function (erro) {
+        if (erro) {
+          console.error(erro);
+          return callback(erro);
+        }
+
+        return callback(null, {
+          batchId: args.batchId,
+          numLocationsCreated: locsCreated.length,
+          locationsCreated: locsCreated,
+          locationsSkipped: locsSkipped,
+        });
       });
+
+
     });
 
   });

@@ -1,0 +1,4 @@
+<%= createdLocs.length %> out of <%= createdLocs.length + skippedLocs.length %> locations were created successfully.
+<% if (skippedLocs.length > 0) { %>
+The remaining <%= skippedLocs.length %> locations already exist on the map. Would you like to discard the <%= skippedLocs.length %> or merge them with the existing ones on the map?
+<% } %>

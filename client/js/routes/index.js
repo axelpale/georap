@@ -17,6 +17,7 @@ var ImportView = require('../components/Import');
 var InviteView = require('../components/Invite');
 var LocationView = require('../components/Location');
 var LoginView = require('../components/Login');
+var BatchOutcomeView = require('../components/BatchOutcome');
 var PaymentsView = require('../components/Payments');
 var PaymentsAdminView = require('../components/PaymentsAdmin');
 var ResetPasswordView = require('../components/ResetPassword');
@@ -159,6 +160,10 @@ exports.route = function () {
 
   page('/import', function () {
     card.open(new ImportView());
+  });
+
+  page('/import/:batchId/outcome', function (ctx) {
+    card.open(new BatchOutcomeView(ctx.params.batchId));
   });
 
   page('/import/:batchId', function (ctx) {

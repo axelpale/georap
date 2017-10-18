@@ -6,6 +6,9 @@ var eventsDal = require('../events/dal');
 
 var shortid = require('shortid');
 
+// Do not allow locations to be closer to each other.
+var MIN_DISTANCE_METERS = 10;
+
 exports.count = function (callback) {
   // Count non-deleted locations
   //
@@ -22,36 +25,46 @@ exports.count = function (callback) {
   });
 };
 
-exports.create = function (lat, lng, username, callback) {
-  // Create a location to given coordinates with a code name.
-  //
-  // Parameters:
-  //   lat
-  //   lng
-  //   username
+exports.createLocation = function (args, callback) {
+  // Parameters
+  //   args
+  //     name
+  //     latitude
+  //     longitude
+  //     username
+  //     tags
   //   callback
   //     function (err, rawLocation)
+  //
 
   var geom = {
     type: 'Point',
-    coordinates: [lng, lat],
+    coordinates: [args.longitude, args.latitude],
   };
 
-  layersDal.findLayerForPoint(geom, function (errl, layer) {
+  layersDal.findLayerForPoint(geom, function (errl, layer, distance) {
+    var errclose;
+
     if (errl) {
       console.error(errl);
       return callback(errl);
     }
 
+    if (distance < MIN_DISTANCE_METERS) {
+      errclose = new Error('Too close to an existing location');
+      errclose.name = 'ERROR_TOO_CLOSE';
+      return callback(errclose);
+    }
+
     var newLoc = {
-      creator: username,
+      creator: args.username,
       deleted: false,
       geom: geom,
       isLayered: true,
       layer: layer,
-      name: shortid.generate(),
+      name: args.name,
       places: [],
-      tags: [],
+      tags: args.tags,
     };
 
     var coll = db.collection('locations');
@@ -66,9 +79,9 @@ exports.create = function (lat, lng, username, callback) {
       eventsDal.createLocationCreated({
         locationId: newLoc._id,
         locationName: newLoc.name,
-        lat: lat,
-        lng: lng,
-        username: username,
+        lat: args.latitude,
+        lng: args.longitude,
+        username: newLoc.creator,
       }, function (err2) {
         if (err2) {
           return callback(err2);
@@ -77,5 +90,24 @@ exports.create = function (lat, lng, username, callback) {
       });
     });
   });
+};
 
+exports.create = function (lat, lng, username, callback) {
+  // Create a location to given coordinates with a code name.
+  //
+  // Parameters:
+  //   lat
+  //   lng
+  //   username
+  //   callback
+  //     function (err, rawLocation)
+
+
+  exports.createLocation({
+    name: 'Unnamed ' + shortid.generate(),
+    latitude: lat,
+    longitude: lng,
+    username: username,
+    tags: [],
+  }, callback);
 };
