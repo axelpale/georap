@@ -25,10 +25,22 @@ module.exports = function (batchId) {
     var $list = $('#tresdb-batch-list');
 
     var $cancel = $('#tresdb-batch-cancel');
-    var $submitSelected = $('#tresdb-batch-selected');
+    var $submitSelected = $('#tresdb-batch-import-selected');
+    var $submitAllButton = $('#tresdb-batch-import-all');
     var $submitAllForm = $('#tresdb-batch-form');
 
     listComp.bind($list);
+
+    var updateCounts = function () {
+      var a = listComp.countSelected();
+      var b = listComp.countLocations();
+      $submitSelected.html('Import selected (' + a.toString(10) + ')');
+      $submitAllButton.html('Import all (' + b.toString(10) + ')');
+    };
+
+    listComp.on('changed', function () {
+      updateCounts();
+    });
 
     $cancel.click(function (ev) {
       ev.preventDefault();
@@ -63,6 +75,13 @@ module.exports = function (batchId) {
         $submitSelected.off();
 
         var indices = listComp.getSelectedIndices();
+
+        // remove jQuery methods
+        // var rawIndices = indices.filter(function (i) {
+        //   return typeof i === 'number';
+        // });
+        // console.log(rawIndices);
+        // return;
 
         tresdb.stores.locations.importBatch({
           batchId: batchId,
@@ -104,7 +123,7 @@ module.exports = function (batchId) {
   this.unbind = function () {
     listComp.unbind();
     $('#tresdb-batch-form').off();
-    $('#tresdb-batch-selected').off();
+    $('#tresdb-batch-import-selected').off();
   };
 
 };

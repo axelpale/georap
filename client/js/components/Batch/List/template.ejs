@@ -3,7 +3,7 @@
 <table id="tresdb-batch-list" class="table table-hover">
   <thead>
     <tr>
-      <th><input id="tresdb-batch-all" type="checkbox" name="all-check" title="Select all"></th>
+      <th><input id="tresdb-batch-select-all" type="checkbox" name="all-check" title="Select all"></th>
       <th>Name</th>
       <th>Attachments</th>
       <th></th>
@@ -26,9 +26,9 @@
         attach.push('1 overlay');
       }
     %>
-    <tr>
-      <td><input type="checkbox" name="row-check" value="<%= index %>" class="tresdb-batch-row-check"></td>
-      <td><%= loc.name %></td>
+    <tr data-index="<%= index %>">
+      <td class="tresdb-batch-box"><input type="checkbox" name="row-check" value="<%= index %>" class="tresdb-batch-row-check"></td>
+      <td class="tresdb-batch-name"><%= loc.name %></td>
       <td><%
         if (attach.length === 0) {
           %>-<%

@@ -18,6 +18,23 @@ module.exports = function () {
 
   // Public methods
 
+  this.getSelectedIndices = function () {
+    var $boxes = $('#tresdb-batch-list tbody input[name="row-check"]:checked');
+    var vals = $boxes.map(function () {
+      return parseInt(this.value, 10);
+    });
+    return vals;
+  };
+
+  this.countSelected = function () {
+    var $boxes = $('#tresdb-batch-list tbody input[name="row-check"]:checked');
+    return $boxes.length;
+  };
+
+  this.countLocations = function () {
+    return this.state.locs.length;
+  };
+
   this.setState = function (newState) {
 
     if (typeof newState === 'function') {
@@ -30,6 +47,8 @@ module.exports = function () {
       self.unbind();
       self.bind(self.$mount);
     }
+
+    self.emit('changed');
   };
 
   this.bind = function ($mount) {
@@ -37,7 +56,7 @@ module.exports = function () {
 
     $mount.html(template(self.state));
 
-    var $checkAllBox = $('#tresdb-batch-all');
+    var $checkAllBox = $('#tresdb-batch-select-all');
     var $list = $('#tresdb-batch-list');
 
     $checkAllBox.change(function () {
@@ -63,10 +82,28 @@ module.exports = function () {
         ev.target.dataset.isopen = 1;
       }
     });
+
+    $list.on('click', 'td.tresdb-batch-name', function (ev) {
+      ev.preventDefault();
+      ev.stopImmediatePropagation();
+
+      //var index = parseInt($(ev.target).parent().data('input'), 10);
+      var $tr = $(ev.target).parent();
+      var $box = $tr.find('.tresdb-batch-row-check');
+      $box.prop('checked', !$box.prop('checked'));
+      $box.change(); // emit change
+    })
+
+    $list.on('change', '.tresdb-batch-row-check', function (ev) {
+      ev.preventDefault();
+      ev.stopImmediatePropagation();
+
+      self.emit('changed');
+    });
   };
 
   this.unbind = function () {
-    $('#tresdb-batch-all').off();
+    $('#tresdb-batch-select-all').off();
     $('#tresdb-batch-list').off();
   };
 
