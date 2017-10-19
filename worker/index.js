@@ -1,3 +1,4 @@
+/* eslint-disable global-require */
 // This worker is meant to be invoked as a cronjob once in a while.
 //
 // The responsibilities of the worker include:
@@ -6,18 +7,24 @@
 //
 // Each responsibility is implemented by a Job.
 // - Job is a module directly under worker/
-// - Job has job.run(callback), where callback is function (err)
+// - Job has entry at worker/jobname/index.js
+// - The entry has exports.run(callback), where callback is function (err)
 //
 // Notes for implementing a job:
+// - add require for the new job below into array 'jobs'
 // - require db where you need it. No need to pass it around.
 // - after success, do console.log('<jobname>: <human readable results>')
 
 var db = require('../server/services/db');
-var pointsJob = require('./points');
-var locpointsJob = require('./locpoints');
-var placesJob = require('./places');
-var layersJob = require('./layers');
-var searchJob = require('./search');
+
+var jobs = [
+  require('./search'),
+  require('./points'),
+  require('./locpoints'),
+  require('./layers'),
+  require('./cleartemp'),
+  require('./places'),
+];
 
 var async = require('async');
 
@@ -27,14 +34,6 @@ db.init(function (dbErr) {
     console.error(dbErr);
     return;
   }
-
-  var jobs = [
-    searchJob,
-    pointsJob,
-    locpointsJob,
-    layersJob,
-    placesJob,
-  ];
 
   async.eachSeries(jobs, function iteratee(job, cb) {
     job.run(cb);

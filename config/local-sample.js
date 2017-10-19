@@ -51,7 +51,7 @@ module.exports = {
   // URLs of the temporary files are prefixed with this URL root path.
   tempUploadUrl: '/temporary',
   // Seconds from last change, after the file or dir can be safely removed.
-  tempUploadTimeToLive: 2 * 24 * 60 * 60,
+  tempUploadTimeToLive: 2 * 24 * 60 * 60,  // two days
 
   // Log files
   // Logs about requests are stored under this directory:
