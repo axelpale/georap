@@ -53,7 +53,6 @@ module.exports = function (mapComp) {
 
     _$root = $mount;
 
-
     // Location manipulation
 
     $mount.on('click', '#tresdb-mainmenu-add', function (ev) {
@@ -90,10 +89,19 @@ module.exports = function (mapComp) {
     $mount.on('click', '#tresdb-addition-create', function (ev) {
       ev.preventDefault();
 
+      var $tooCloseError = $('#tresdb-toolbar-error-too-close');
+      $tooCloseError.find('button').click(function (ev) {
+        // Will bind multiple times but we do not care
+        ev.preventDefault();
+        tresdb.ui.hide($tooCloseError);
+      });
+
       // Show progress bar
       $('#tresdb-toolbar-progress').removeClass('hidden');
       // Hide addition menu
       $('#tresdb-toolbar-addition').addClass('hidden');
+      // Hide possible error
+      tresdb.ui.hide($tooCloseError);
 
       // On addition create
       var geom = mapComp.getAdditionMarkerGeom();
@@ -124,9 +132,13 @@ module.exports = function (mapComp) {
         //   newLoc
 
         if (err) {
-          console.error(err);
-          // Show error message
-          $('#tresdb-toolbar-error').removeClass('hidden');
+          if (err.message === 'TOO_CLOSE') {
+            tresdb.ui.show($tooCloseError);
+          } else {
+            console.error(err);
+            // Show error message
+            $('#tresdb-toolbar-error').removeClass('hidden');
+          }
 
           // Hide progress bar
           $('#tresdb-toolbar-progress').addClass('hidden');

@@ -217,7 +217,7 @@ exports.importBatch = function (args, callback) {
 
       createLocationFromImport(loc, username, function (errc) {
         if (errc) {
-          if (errc.name === 'ERROR_TOO_CLOSE') {
+          if (errc.message === 'TOO_CLOSE') {
             locsSkipped.push(loc);
             return next();
           }

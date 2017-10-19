@@ -115,7 +115,17 @@ exports.create = function (geom, callback) {
       lat: geom.coordinates[1],
       lng: geom.coordinates[0],
     },
-  }, callback);
+  }, function (err, rawLoc) {
+    if (err) {
+      return callback(err);
+    }
+
+    if (rawLoc === 'TOO_CLOSE') {
+      return callback(new Error('TOO_CLOSE'));
+    }
+
+    return callback(null, rawLoc);
+  });
 };
 
 exports.get = function (id, callback) {

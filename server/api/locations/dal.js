@@ -44,17 +44,13 @@ exports.createLocation = function (args, callback) {
 
   layersDal.findLayerForPoint(geom, function (errl, layer, distance) {
     // Gives distance to the closest point in addition to layer number.
-    var errclose;
-
     if (errl) {
       console.error(errl);
       return callback(errl);
     }
 
     if (distance < MIN_DISTANCE_METERS) {
-      errclose = new Error('Too close to an existing location');
-      errclose.name = 'ERROR_TOO_CLOSE';
-      return callback(errclose);
+      return callback(new Error('TOO_CLOSE'));
     }
 
     var newLoc = {

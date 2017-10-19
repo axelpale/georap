@@ -28,7 +28,7 @@ module.exports = function (loc, username, callback) {
   //     function (err)
   //       err
   //         if new location too close an existing one
-  //           err.name = 'ERROR_TOO_CLOSE'
+  //           err.message = 'TOO_CLOSE'
 
   locationsDal.createLocation({
     name: loc.name,
