@@ -43,6 +43,7 @@ exports.createLocation = function (args, callback) {
   };
 
   layersDal.findLayerForPoint(geom, function (errl, layer, distance) {
+    // Gives distance to the closest point in addition to layer number.
     var errclose;
 
     if (errl) {

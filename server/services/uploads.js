@@ -4,26 +4,31 @@ var local = require('../../config/local');
 
 var sharp = require('sharp');
 var multer = require('multer');
+var mime = require('mime');
 var path = require('path');
 var fse = require('fs-extra');
 var shortid = require('shortid');
 var sanitize = require('sanitize-filename');
 var moment = require('moment');
 
-var sanitizedOriginal = function (req, file, cb) {
+var sanitizeFilename = function (fname) {
   // Convert filename to a universally compatible one.
   // Remove suspicious characters. Might end up with empty filename.
-  var safeButMaybeEmpty = sanitize(file.originalname);
+  var safeButMaybeEmpty = sanitize(fname);
 
   // If empty, come up with a filename.
   if (safeButMaybeEmpty.length < 1) {
-    return cb(null, shortid.generate());
+    return shortid.generate();
   }
 
   // Convert spaces to _
   var safe = safeButMaybeEmpty.replace(/\s+/g, '_');
 
-  return cb(null, safe);
+  return safe;
+};
+
+var sanitizedOriginal = function (req, file, cb) {
+  return cb(null, sanitizeFilename(file.originalname));
 };
 
 var dateShortId = function (req, file, cb) {
@@ -39,6 +44,11 @@ var dateShortId = function (req, file, cb) {
 };
 
 var yearShortId = function (req, file, cb) {
+  // Parameters
+  //   req (not needed)
+  //   file (not needed)
+  //   cb
+  //     function (err, absoluteDirPath)
   var year = (new Date()).getFullYear().toString();
   var key = shortid.generate();
   var absDir = path.resolve(local.uploadDir, year, key);
@@ -50,7 +60,6 @@ var yearShortId = function (req, file, cb) {
     return cb(null, absDir);
   });
 };
-
 
 exports.uploader = multer({
   storage: multer.diskStorage({
@@ -82,6 +91,35 @@ exports.getRelativePath = function (absolutePath) {
   return path.relative(local.uploadDir, absolutePath);
 };
 
+exports.makePermanent = function (tempFilePath, callback) {
+  // Copy a file from temporary location to permanent upload directory.
+  //
+  // Parameters:
+  //   tempFilePath
+  //     absolute file path to source file
+  //   callback
+  //     function (err, newFilePath)
+  var fname = path.basename(tempFilePath);
+
+  yearShortId(null, null, function (err, absDirPath) {
+    if (err) {
+      return callback(err);
+    }
+
+    var sanename = sanitizeFilename(fname);
+    var newpath = path.resolve(absDirPath, sanename);
+
+    fse.copy(tempFilePath, newpath, function (errm) {
+      if (errm) {
+        return callback(errm);
+      }
+
+      return callback(null, newpath);
+    });
+  });
+};
+
+
 exports.createThumbnail = function (file, callback) {
   // Create a thumbnail for the file.
   //
@@ -91,7 +129,7 @@ exports.createThumbnail = function (file, callback) {
   //       path
   //         absolute file path
   //       mimetype
-  //         string
+  //         optional string
   //   callback
   //     function (err, thumb)
   //
@@ -110,11 +148,19 @@ exports.createThumbnail = function (file, callback) {
   var thumbname = base + fix + '.jpg';
   var thumbpath = path.join(dir, thumbname);
 
+  // Often the mimetype can be deducted from extension
+  var mimetype;
+  if (typeof file.mimetype === 'string') {
+    mimetype = file.mimetype;
+  } else {
+    mimetype = mime.getType(ext.substr(1));
+  }
+
   // max width and height of the thumbnail image in pixels
   var size = local.uploadThumbSize;
 
   // eslint-disable-next-line no-magic-numbers
-  if (file.mimetype.substr(0, 6) === 'image/') {
+  if (mimetype.substr(0, 6) === 'image/') {
 
     // Shrink with sharp.
     // For docs, see http://sharp.dimens.io/en/stable/

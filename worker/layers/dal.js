@@ -3,6 +3,8 @@ var db = require('../../server/services/db');
 var TOP_LAYER = 1;
 var BOTTOM_LAYER = 15;
 
+var EARTH_CIRCUMFERENCE = 40000000;  // metres
+
 exports.getClusterRadius = function (layer) {
   // This function defines the neighborhood size as a function of zoom level.
   // Here layer === zoom level.
@@ -154,7 +156,7 @@ exports.findLayerForPoint = function (geom, callback) {
   //         layer
   //           integer
   //         distance
-  //           in meters, null if no nearest one
+  //           in meters, earth circumference if no nearest one exist
 
   exports.findDistToNearestLayered(geom, function (err, dist) {
     if (err) {
@@ -163,7 +165,7 @@ exports.findLayerForPoint = function (geom, callback) {
 
     if (dist === null) {
       // There is no nearest one.
-      return callback(null, TOP_LAYER, null);
+      return callback(null, TOP_LAYER, EARTH_CIRCUMFERENCE);
     }
 
     var layer = exports.findLayerWithClusterRadiusSmallerThan(dist);

@@ -14,7 +14,7 @@ var insertOne = function (entry, callback) {
   //     raw entry to insert
   //   callback
   //     function (err, entryId);
-  var coll = db.get().collection('entries');
+  var coll = db.collection('entries');
 
   coll.insertOne(entry, function (err, result) {
     if (err) {

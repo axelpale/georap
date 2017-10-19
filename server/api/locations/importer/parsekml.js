@@ -56,7 +56,7 @@ module.exports = function (kmlBuffer, callback) {
 
   var result = xmltransform(kmlBuffer, template);
 
-  // Combine locations
+  // Combine locations from each folder
   var finalLocations = result.rootLocations;
   result.folders.forEach(function (folder) {
 
@@ -86,9 +86,19 @@ module.exports = function (kmlBuffer, callback) {
       return desc.length > 0;
     });
 
+    // Always have overlays even when empty
+    if (!loc.hasOwnProperty('overlays')) {
+      loc.overlays = [];
+    }
+
     // Convert descriptions to markdown
     loc.descriptions = loc.descriptions.map(function (desc) {
       return toMarkdown(desc);
+    });
+    loc.overlays.forEach(function (ol) {
+      if (ol.hasOwnProperty('description')) {
+        ol.description = toMarkdown(ol.description);
+      }
     });
 
     // Combine coordinates from Point, LineString, and Polygon.
@@ -126,11 +136,6 @@ module.exports = function (kmlBuffer, callback) {
     delete loc.coordinates;
     delete loc.line;
     delete loc.polygon;
-
-    // Always have overlays even when empty
-    if (!loc.hasOwnProperty('overlays')) {
-      loc.overlays = [];
-    }
   });
 
   return callback(null, finalLocations);

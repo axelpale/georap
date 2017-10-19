@@ -2,12 +2,13 @@
 
 var local = require('../../../../config/local');
 var parsekml = require('./parsekml');
-var locationsDal = require('../dal');
+var createLocationFromImport = require('./createLocation');
 var extract = require('extract-zip');
 var asyn = require('async');
 var glob = require('glob');
 var path = require('path');
 var fs = require('fs-extra');
+
 
 var batchIdFromPath = function (p) {
   // Handlers provide the absolute path but we need the directory name.
@@ -214,13 +215,7 @@ exports.importBatch = function (args, callback) {
         return next();
       }
 
-      locationsDal.createLocation({
-        name: loc.name,
-        latitude: loc.latitude,
-        longitude: loc.longitude,
-        username: username,
-        tags: [],
-      }, function (errc, rawLoc) {
+      createLocationFromImport(loc, username, function (errc) {
         if (errc) {
           if (errc.name === 'ERROR_TOO_CLOSE') {
             locsSkipped.push(loc);
@@ -229,9 +224,8 @@ exports.importBatch = function (args, callback) {
           return next(errc);
         }
 
-        //console.log('Created location');
+        locsCreated.push(loc);
 
-        locsCreated.push(rawLoc);
         return next();
       });
     }, function then(erra) {
@@ -244,10 +238,9 @@ exports.importBatch = function (args, callback) {
       if (indices.length !== locsCreated.length) {
         console.log('Intended to create', indices.length,
                     'locations but', locsCreated.length,
-                    'were created.');
+                    'were created. Skipped', locsSkipped.length,
+                    'locations.');
       }
-
-      console.log('import success');
 
       var p = outcomePathFromBatchId(args.batchId);
 
@@ -264,9 +257,6 @@ exports.importBatch = function (args, callback) {
           locationsSkipped: locsSkipped,
         });
       });
-
-
     });
-
   });
 };
