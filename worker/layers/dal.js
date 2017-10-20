@@ -106,11 +106,13 @@ exports.findDistToNearestLayered = function (geom, callback) {
   //   geom
   //     GeoJSON point
   //   callback
-  //     function (err, distance)
+  //     function (err, distance, nearest)
   //       err
   //       distance
   //         meters. Null if no loc found.
-
+  //       nearest
+  //         nearest location. Null if nearest does not exist.
+  //
   var coll = db.collection('locations');
 
   coll.aggregate([
@@ -133,10 +135,10 @@ exports.findDistToNearestLayered = function (geom, callback) {
     }
 
     if (result.length === 0) {
-      return callback(null, null);
+      return callback(null, null, null);
     }
 
-    return callback(null, result[0].dist);
+    return callback(null, result[0].dist, result[0]);
   });
 };
 
@@ -157,20 +159,22 @@ exports.findLayerForPoint = function (geom, callback) {
   //           integer
   //         distance
   //           in meters, earth circumference if no nearest one exist
-
-  exports.findDistToNearestLayered(geom, function (err, dist) {
+  //         nearest
+  //           nearest location, null if nearest does not exist
+  //
+  exports.findDistToNearestLayered(geom, function (err, dist, nearest) {
     if (err) {
       return callback(err);
     }
 
     if (dist === null) {
       // There is no nearest one.
-      return callback(null, TOP_LAYER, EARTH_CIRCUMFERENCE);
+      return callback(null, TOP_LAYER, EARTH_CIRCUMFERENCE, null);
     }
 
     var layer = exports.findLayerWithClusterRadiusSmallerThan(dist);
 
-    return callback(null, layer, dist);
+    return callback(null, layer, dist, nearest);
   });
 };
 

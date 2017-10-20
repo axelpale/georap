@@ -90,9 +90,9 @@ module.exports = function (mapComp) {
       ev.preventDefault();
 
       var $tooCloseError = $('#tresdb-toolbar-error-too-close');
-      $tooCloseError.find('button').click(function (ev) {
+      $tooCloseError.find('button').click(function (cev) {
         // Will bind multiple times but we do not care
-        ev.preventDefault();
+        cev.preventDefault();
         tresdb.ui.hide($tooCloseError);
       });
 

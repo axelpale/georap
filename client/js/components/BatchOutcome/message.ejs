@@ -1,4 +1,4 @@
 <%= createdLocs.length %> out of <%= createdLocs.length + skippedLocs.length %> locations were created successfully.
-<% if (skippedLocs.length > 0) { %>
-The remaining <%= skippedLocs.length %> locations already exist on the map. Would you like to discard the <%= skippedLocs.length %> or merge them with the existing ones on the map?
+<% if (modifiedLocs.length + skippedLocs.length > 0) { %>
+The remaining <%= modifiedLocs.length + skippedLocs.length %> locations <strong>already exist</strong> on the map and thus were not created. However, <%= modifiedLocs.length %> of them had attachments that were added to the existing ones. The remaining <%= skippedLocs.length %> locations had no new attachments and were completely skipped.
 <% } %>

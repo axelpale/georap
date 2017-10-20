@@ -1,8 +1,9 @@
-/* eslint-disable max-statements,max-lines */
+/* eslint-disable max-lines */
 
 var local = require('../../../../config/local');
+var entriesDal = require('../../entries/dal');
 var parsekml = require('./parsekml');
-var createLocationFromImport = require('./createLocation');
+var dallib = require('./dallib');
 var extract = require('extract-zip');
 var asyn = require('async');
 var glob = require('glob');
@@ -24,16 +25,6 @@ var cachePathFromBatchId = function (batchId) {
 
 var outcomePathFromBatchId = function (batchId) {
   return path.resolve(local.tempUploadDir, batchId, batchId + '_outcome.json');
-};
-
-var writeBatchOutcome = function (outcomePath, createdLocs, skippedLocs, cb) {
-  // Write a JSON file about the outcome of an import.
-  var data = {
-    created: createdLocs,
-    skipped: skippedLocs,
-  };
-
-  fs.writeJSON(outcomePath, data, cb);
 };
 
 
@@ -187,10 +178,10 @@ exports.importBatch = function (args, callback) {
   //       err
   //       data
   //         batchId
-  //         numLocationsCreated
   //         locationsCreated
-  //         locationsSkipped:
-  //
+  //           array of raw db locations
+  //         locationsSkipped
+  //           array of import locations
 
   var indices = args.indices;
   var username = args.username;
@@ -215,16 +206,17 @@ exports.importBatch = function (args, callback) {
         return next();
       }
 
-      createLocationFromImport(loc, username, function (errc) {
+      dallib.createLocation(loc, username, function (errc, newRawLoc) {
         if (errc) {
           if (errc.message === 'TOO_CLOSE') {
+            loc.existing = errc.data;
             locsSkipped.push(loc);
             return next();
           }
           return next(errc);
         }
 
-        locsCreated.push(loc);
+        locsCreated.push(newRawLoc);
 
         return next();
       });
@@ -235,28 +227,154 @@ exports.importBatch = function (args, callback) {
       }
 
       // Assert
-      if (indices.length !== locsCreated.length) {
-        console.log('Intended to create', indices.length,
-                    'locations but', locsCreated.length,
-                    'were created. Skipped', locsSkipped.length,
-                    'locations.');
-      }
+      // if (indices.length !== locsCreated.length) {
+      //   console.log('Intended to create', indices.length,
+      //               'locations but', locsCreated.length,
+      //               'were created. Skipped', locsSkipped.length,
+      //               'locations.');
+      // }
 
-      var p = outcomePathFromBatchId(args.batchId);
-
-      writeBatchOutcome(p, locsCreated, locsSkipped, function (erro) {
-        if (erro) {
-          console.error(erro);
-          return callback(erro);
-        }
-
-        return callback(null, {
-          batchId: args.batchId,
-          numLocationsCreated: locsCreated.length,
-          locationsCreated: locsCreated,
-          locationsSkipped: locsSkipped,
-        });
+      return callback(null, {
+        batchId: args.batchId,
+        created: locsCreated,
+        skipped: locsSkipped,
       });
     });
   });
+};
+
+
+exports.mergeAttachments = function (args, callback) {
+  // Description by algorithm:
+  // 1. For each given location with attachments,
+  //    find a nearest existing location.
+  //   1.1. Get all existing attachments of the existing location.
+  //   1.2. For each new attachment, compare it to the existing attachments.
+  //     1.2.1. If new attachment is unique, add it to the existing location.
+  //
+  // Parameters
+  //   args
+  //     locations
+  //       array of import locations:
+  //         descriptions
+  //         overlays
+  //         existing
+  //           _id
+  //           name
+  //     username
+  //       creator of the attachments
+  //   callback
+  //     function (err, result)
+  //       err
+  //       result
+  //
+  //
+
+  var numEntryCandidates = 0;
+  var numEntriesCreated = 0;
+  var locationsModified = [];
+  var locationsSkipped = [];
+
+  asyn.eachSeries(args.locations, function (loc, next) {
+
+    // Finding of unique entries requires following properties
+    //   username
+    //   markdown
+    //   filepath
+    // Therefore we map descriptions and overlays into this format
+    var entryCandidates = [];
+    loc.descriptions.forEach(function (desc, index) {
+      entryCandidates.push({
+        type: 'descriptions',
+        index: index,  // to find after filter
+        username: args.username,
+        markdown: desc,
+        filepath: null,
+      });
+    });
+    loc.overlays.forEach(function (overlay, index) {
+      entryCandidates.push({
+        type: 'overlays',
+        index: index,  // to find after filter
+        username: args.username,
+        markdown: overlay.description,
+        filepath: overlay.href,
+      });
+    });
+
+    numEntryCandidates += entryCandidates.length;
+
+    // We like to merge the entries into target location.
+    var targetId = loc.existing._id;
+
+    // We first get the unique entries...
+    entriesDal.filterUniqueLocationEntries({
+      locationId: targetId,
+      entryCandidates: entryCandidates,
+    }, function (errf, uniqueEntries) {
+      if (errf) {
+        return next(errf);
+      }
+
+      if (uniqueEntries.length > 0) {
+        numEntriesCreated += uniqueEntries.length;
+        locationsModified.push(loc.existing);
+      } else {
+        locationsSkipped.push(loc.existing);
+      }
+
+      // ...and then create them.
+      asyn.eachSeries(uniqueEntries, function (entry, next2) {
+        // Fuck this is messy.. we need to process descriptions
+        // and overlays separately, that is the reason.
+        var orig = loc[entry.type][entry.index];
+
+        if (entry.type === 'descriptions') {
+          dallib.createDescriptions({
+            locationId: loc.existing._id,
+            locationName: loc.existing.name,
+            username: args.username,
+            descriptions: [orig],
+          }, next2);
+        } else if (entry.type === 'overlays') {
+          dallib.createOverlays({
+            locationId: loc.existing._id,
+            locationName: loc.existing.name,
+            username: args.username,
+            overlays: [orig],
+          }, next2);
+        } else {
+          throw new Error('invalid entry.type');
+        }
+      }, next);
+    });
+  }, function (errs) {
+    if (errs) {
+      return callback(errs);
+    }
+
+    return callback(null, {
+      locationsModified: locationsModified,
+      locationsSkipped: locationsSkipped,
+      numEntryCandidates: numEntryCandidates,
+      numEntriesCreated: numEntriesCreated,
+    });
+  });
+};
+
+
+exports.writeBatchOutcome = function (outcome, cb) {
+  // Write a JSON file about the outcome of an import.
+  //
+  // Parameters
+  //   outcome
+  //     batchId
+  //     created
+  //     skipped
+  //   cb
+  //     function (err)
+  //
+  var outcomePath = outcomePathFromBatchId(outcome.batchId);
+
+  fs.writeJSON(outcomePath, outcome, cb);
 };

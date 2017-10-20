@@ -42,7 +42,7 @@ exports.createLocation = function (args, callback) {
     coordinates: [args.longitude, args.latitude],
   };
 
-  layersDal.findLayerForPoint(geom, function (errl, layer, distance) {
+  layersDal.findLayerForPoint(geom, function (errl, layer, distance, nearest) {
     // Gives distance to the closest point in addition to layer number.
     if (errl) {
       console.error(errl);
@@ -50,7 +50,9 @@ exports.createLocation = function (args, callback) {
     }
 
     if (distance < MIN_DISTANCE_METERS) {
-      return callback(new Error('TOO_CLOSE'));
+      var errclose = new Error('TOO_CLOSE');
+      errclose.data = nearest;
+      return callback(errclose);
     }
 
     var newLoc = {

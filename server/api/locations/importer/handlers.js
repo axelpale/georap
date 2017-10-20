@@ -97,8 +97,6 @@ exports.getOutcome = function (req, res) {
       return res.sendStatus(status.INTERNAL_SERVER_ERROR);
     }
 
-    buildUrls(outcome.skipped);
-
     return res.json(outcome);
   });
 };
@@ -113,12 +111,36 @@ exports.importBatch = function (req, res) {
     batchId: batchId,
     indices: indices,
     username: username,
-  }, function (err, resultData) {
+  }, function (err, batchResult) {
     if (err) {
       console.error(err);
       return res.sendStatus(status.INTERNAL_SERVER_ERROR);
     }
-    return res.json(resultData);
-  });
 
+    dal.mergeAttachments({
+      locations: batchResult.skipped,
+      username: username,
+    }, function (errm, mergeResult) {
+      if (errm) {
+        console.error(errm);
+        return res.sendStatus(status.INTERNAL_SERVER_ERROR);
+      }
+
+      var outcomeData = {
+        batchId: batchId,
+        created: batchResult.created,
+        skipped: mergeResult.locationsSkipped,
+        modified: mergeResult.locationsModified,
+      };
+
+      dal.writeBatchOutcome(outcomeData, function (errw) {
+        if (errw) {
+          console.error(errw);
+          return res.sendStatus(status.INTERNAL_SERVER_ERROR);
+        }
+
+        return res.json(outcomeData);
+      });
+    });
+  });
 };

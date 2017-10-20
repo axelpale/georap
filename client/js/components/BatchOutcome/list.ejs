@@ -1,0 +1,62 @@
+<h3>Created locations (<%= createdLocs.length %>)</h3>
+
+<%
+  function locurl(l) {
+    return '/locations/' + l._id;
+  }
+%>
+
+<% if (createdLocs.length > 0) { %>
+<table class="table">
+  <!--thead>
+    <tr>
+      <th>Name</th>
+    </tr>
+  </thead-->
+  <tbody>
+  <% createdLocs.forEach(function (loc, index) { %>
+    <tr data-index="<%= index %>">
+      <td><a href="<%= locurl(loc) %>"><%= loc.name %></a></td>
+    </tr>
+  <% }); %>
+  </tbody>
+</table>
+<% } %>
+
+<h3>Modified locations (<%= modifiedLocs.length %>)</h3>
+
+<% if (modifiedLocs.length > 0) { %>
+<table class="table">
+  <!--thead>
+    <tr>
+      <th>Name</th>
+    </tr>
+  </thead-->
+  <tbody>
+  <% modifiedLocs.forEach(function (loc, index) { %>
+    <tr data-index="<%= index %>">
+      <td><a href="<%= locurl(loc) %>"><%= loc.name %></a></td>
+    </tr>
+  <% }); %>
+  </tbody>
+</table>
+<% } %>
+
+<h3>Skipped locations (<%= skippedLocs.length %>)</h3>
+
+<% if (skippedLocs.length > 0) { %>
+<table class="table">
+  <!--thead>
+    <tr>
+      <th>Name</th>
+    </tr>
+  </thead-->
+  <tbody>
+  <% skippedLocs.forEach(function (loc, index) { %>
+    <tr data-index="<%= index %>">
+      <td><a href="<%= locurl(loc) %>"><%= loc.name %></a></td>
+    </tr>
+  <% }); %>
+  </tbody>
+</table>
+<% } %>

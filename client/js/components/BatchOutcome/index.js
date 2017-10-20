@@ -1,11 +1,10 @@
 // Displays outcome of a batch import.
 // - the number of imported and skipped locations
-// - list of skipped locations
-//   - reason: existing location too close
-// - list of imported locations
+// - the number of overlapping entries and number of merged entries.
+// - list of created or modified locations
 
-var ListComp = require('../Batch/List');
 var messageTemplate = require('./message.ejs');
+var listTemplate = require('./list.ejs');
 var template = require('./template.ejs');
 var emitter = require('component-emitter');
 
@@ -18,8 +17,6 @@ module.exports = function (batchId) {
   var self = this;
   emitter(self);
 
-  var listComp = new ListComp();
-
   // Public methods
 
   this.bind = function ($mount) {
@@ -31,9 +28,8 @@ module.exports = function (batchId) {
     var $list = $('#tresdb-outcome-list');
     var $msg = $('#tresdb-outcome-message');
 
-    listComp.bind($list);
-
     tresdb.stores.locations.getOutcome(batchId, function (err, result) {
+      // Progress bar is visible by default
       tresdb.ui.hide($progress);
 
       if (err) {
@@ -41,23 +37,24 @@ module.exports = function (batchId) {
         return;
       }
 
+      // Message about the results
       $msg.html(messageTemplate({
         createdLocs: result.created,
+        modifiedLocs: result.modified,
         skippedLocs: result.skipped,
       }));
 
-      if (result.skipped.length > 0) {
-        tresdb.ui.show($list);
-      }
+      $list.html(listTemplate({
+        createdLocs: result.created,
+        modifiedLocs: result.modified,
+        skippedLocs: result.skipped,
+      }));
 
-      listComp.setState({
-        locs: result.skipped,
-      });
+      tresdb.ui.show($list);
     });
   };
 
   this.unbind = function () {
-    listComp.unbind();
   };
 
 };
