@@ -2,6 +2,7 @@
 var template = require('./template.ejs');
 var detailsTemplate = require('./details.ejs');
 var emitter = require('component-emitter');
+var marked = require('marked');
 
 module.exports = function () {
   // Parameters
@@ -78,7 +79,10 @@ module.exports = function () {
         $tr.next().remove();
         ev.target.dataset.isopen = 0;
       } else {
-        $tr.after(detailsTemplate(loc));
+        $tr.after(detailsTemplate({
+          location: loc,
+          markdownToHtml: marked,
+        }));
         ev.target.dataset.isopen = 1;
       }
     });

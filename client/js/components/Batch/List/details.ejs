@@ -1,29 +1,30 @@
 <tr class="tresdb-batch-details">
   <td colspan="4">
-    <h3><%= name %></h3>
+    <h3><%= location.name %></h3>
 
     <p>
-      <strong>Latitude:</strong> <%= latitude %><br>
-      <strong>Longitude:</strong> <%= longitude %>
+      <strong>Latitude:</strong> <%= location.latitude %><br>
+      <strong>Longitude:</strong> <%= location.longitude %>
     </p>
 
-    <% descriptions.forEach(function (desc, index) { %>
+    <% location.descriptions.forEach(function (desc, index) { %>
       <div class="panel panel-default">
         <div class="panel-heading">
           Post #<%= index + 1 %>
         </div>
-        <div class="panel-body">
-          <%= desc %>
+        <div class="panel-body" style="word-break: break-all">
+          <%= markdownToHtml(desc) %>
         </div>
       </div>
     <% }); %>
 
-    <% overlays.forEach(function (overlay, index) { %>
+    <% location.overlays.forEach(function (overlay, index) { %>
       <div class="panel panel-default">
         <div class="panel-heading">
           Overlay #<%= index + 1 %>
         </div>
-        <div class="panel-body">
+        <div class="panel-body" style="word-break: break-all">
+          <%= markdownToHtml(overlay.description) %>
           <img src="<%= overlay.href %>" style="max-width: 100%">
         </div>
       </div>

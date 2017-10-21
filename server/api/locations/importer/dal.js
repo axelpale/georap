@@ -55,7 +55,7 @@ exports.readKML = function (kmlpath, callback) {
       var batchId = batchIdFromPath(kmlpath);
       var importCache = cachePathFromBatchId(batchId);
 
-      fs.writeFile(importCache, locs, function (errw) {
+      fs.writeJSON(importCache, locs, function (errw) {
         if (errw) {
           return callback(errw);
         }

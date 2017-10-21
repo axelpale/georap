@@ -23,6 +23,7 @@ var indexHtml = (function precompile() {
       googleMapsKey: local.googleMapsKey,
       uploadUrl: local.uploadUrl,
       uploadSizeLimit: local.uploadSizeLimit,
+      tempUploadSizeLimit: local.tempUploadSizeLimit,
       coordinateSystems: local.coordinateSystems,
       exportServices: local.exportServices,
     },

@@ -17,7 +17,7 @@ module.exports = function () {
 
   this.bind = function ($mount) {
     $mount.html(template({
-      limit: Math.round(tresdb.config.uploadSizeLimit / (K * K)),
+      limit: Math.round(tresdb.config.tempUploadSizeLimit / (K * K)),
     }));
 
     var $uploadForm = $('#tresdb-import-upload-form');
@@ -41,9 +41,6 @@ module.exports = function () {
       tresdb.ui.show($progress);
 
       tresdb.stores.locations.importFile($uploadForm, function (err, result) {
-
-        var batchId = result.batchId;
-
         tresdb.ui.hide($progress);
 
         if (err) {
@@ -58,6 +55,7 @@ module.exports = function () {
         }
 
         // Import successful. Switch to batch page.
+        var batchId = result.batchId;
         tresdb.go('/import/' + batchId);
       });
     });

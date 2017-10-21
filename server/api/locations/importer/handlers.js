@@ -46,6 +46,7 @@ exports.import = function (req, res) {
     var ext = path.extname(req.file.originalname);
 
     var ext2methodName = {
+      '.xml': 'readKML',
       '.kml': 'readKML',
       '.kmz': 'readKMZ',
     };
