@@ -9,29 +9,15 @@
   </thead>
   <tbody>
   <% locs.forEach(function (loc, index) { %>
-    <%
-      var attach = [];
-
-      if (loc.descriptions.length > 1) {
-        attach.push('' + loc.descriptions.length + ' posts');
-      } else if (loc.descriptions.length > 0) {
-        attach.push('1 post');
-      }
-
-      if (loc.overlays.length > 1) {
-        attach.push('' + loc.overlays.length + ' overlays');
-      } else if (loc.overlays.length > 0) {
-        attach.push('1 overlay');
-      }
-    %>
     <tr data-index="<%= index %>">
       <td class="tresdb-batch-box"><input type="checkbox" name="row-check" value="<%= index %>" class="tresdb-batch-row-check"></td>
       <td class="tresdb-batch-name"><%= loc.name %></td>
       <td><%
-        if (attach.length === 0) {
+        var l = loc.entries.length;
+        if (l === 0) {
           %>-<%
         } else {
-          %><%= attach.join(', ') %><%
+          %><%= loc.entries.length %> post<%= l > 1 ? 's' : '' %><%
         }
       %></td>
       <td>

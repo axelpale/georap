@@ -159,6 +159,9 @@ exports.filterUniqueLocationEntries = function (args, callback) {
   //           basename is compared
   //   callback
   //     function (err, uniqueEntries)
+  //       err
+  //       uniqueEntries
+  //         subset of given entryCandidates
 
   exports.getAllOfLocation(args.locationId, function (err, realEntries) {
     if (err) {

@@ -7,25 +7,16 @@
       <strong>Longitude:</strong> <%= location.longitude %>
     </p>
 
-    <% location.descriptions.forEach(function (desc, index) { %>
+    <% location.entries.forEach(function (entry, index) { %>
       <div class="panel panel-default">
         <div class="panel-heading">
           Post #<%= index + 1 %>
         </div>
         <div class="panel-body" style="word-break: break-all">
-          <%= markdownToHtml(desc) %>
-        </div>
-      </div>
-    <% }); %>
-
-    <% location.overlays.forEach(function (overlay, index) { %>
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          Overlay #<%= index + 1 %>
-        </div>
-        <div class="panel-body" style="word-break: break-all">
-          <%= markdownToHtml(overlay.description) %>
-          <img src="<%= overlay.href %>" style="max-width: 100%">
+          <%= markdownToHtml(entry.markdown) %>
+          <% if (entry.filepath) { %>
+            <img src="<%= entry.filepath %>" style="max-width: 100%">
+          <% } %>
         </div>
       </div>
     <% }); %>

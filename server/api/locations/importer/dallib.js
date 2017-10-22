@@ -7,86 +7,74 @@ var mime = require('mime');
 var path = require('path');
 
 
-var getMimetype = function (filepath) {
-  var ext = path.extname(filepath);
-  return mime.getType(ext.substr(1));
-};
-
-
-exports.transformDescription = function (args) {
-  // Parameters
-  //   args
-  //     locationId
-  //     locationName
-  //     username
-  //     description
-  return {
-    locationId: args.locationId,
-    locationName: args.locationName,
-    username: args.username,
-    markdown: args.description,
-    isVisit: false,
-    filepath: null,
-    mimetype: null,
-    thumbfilepath: null,
-    thumbmimetype: null,
-  };
-};
-
-
-exports.createDescriptions = function (args, callback) {
+exports.createEntries = function (args, callback) {
   // Parameters:
   //   args
   //     locationId
   //     locationName
   //     username
-  //     descriptions
+  //     entries
+  //       array of import entries
   //   callback
   //     function (err)
   //
-  var descs = args.descriptions;
 
-  asyn.eachSeries(descs, function (desc, next) {
-    var entryArgs = exports.transformDescription({
-      locationId: args.locationId,
-      locationName: args.locationName,
-      username: args.username,
-      description: desc,
-    });
-    entriesDal.createLocationEntry(entryArgs, next);
-  }, callback);
-};
+  asyn.eachSeries(args.entries, function (entry, next) {
+    // Null entry.filepath gives mimetype of null.
+    // If we do not know the type of the file to download,
+    // maybe it is best to not download it.
+    var mimetype = mime.getType(entry.filepath);
 
+    if (mimetype === null) {
+      entriesDal.createLocationEntry({
+        locationId: args.locationId,
+        locationName: args.locationName,
+        username: args.username,
+        markdown: entry.markdown,
+        isVisit: false,
+        filepath: null,
+        mimetype: null,
+        thumbfilepath: null,
+        thumbmimetype: null,
+      }, next);
 
-exports.createOverlays = function (args, callback) {
-  // Parameters:
-  //   args
-  //     locationId
-  //     locationName
-  //     username
-  //     overlays
-  //   callback
-  //     function (err)
-  //
-  var overlays = args.overlays;
+      return;
+    }
 
-  asyn.eachSeries(overlays, function (overlay, next) {
-
-    // copy the image files and create thumbnails
-    uploads.makePermanent(overlay.href, function (errp, newhref) {
+    // copy the image files and create thumbnails.
+    // Might require downloading of URLs.
+    uploads.makePermanent(entry.filepath, function (errp, newPath) {
       // Parameters:
       //   errp
       //   newhref
       //     string, absolute path
       //
       if (errp) {
-        return next(errp);
+        if (errp.code === 'ENOENT') {
+          var dirname = path.basename(path.dirname(errp.path));
+          console.log('NO_FILE', path.join(dirname, path.basename(errp.path)),
+                      'for location', args.locationName);
+          // console.log('file for entry does not exist:', entry);
+          return next();
+        }
+
+        if (errp.name === 'HTTPError' && errp.statusCode === 404) {
+          console.log('HTTP404', errp.url,
+                      'for location', args.locationName);
+          return next();
+        }
+        console.log('error at makePermanent');
+        console.error(errp);
+        return next();
       }
 
-      var mimetype = getMimetype(newhref);
+      if (mimetype === null) {
+        console.log('Unknown file format', path.basename(newPath));
+        return next();
+      }
 
       uploads.createThumbnail({
-        path: newhref,
+        path: newPath,
         mimetype: mimetype,
       }, function (errt, thumb) {
         if (errt) {
@@ -100,9 +88,9 @@ exports.createOverlays = function (args, callback) {
           locationId: args.locationId,
           locationName: args.locationName,
           username: args.username,
-          markdown: overlay.description,
+          markdown: entry.markdown,
           isVisit: false,
-          filepath: uploads.getRelativePath(newhref),
+          filepath: uploads.getRelativePath(newPath),
           mimetype: mimetype,
           thumbfilepath: uploads.getRelativePath(thumb.path),
           thumbmimetype: thumb.mimetype,
@@ -142,28 +130,17 @@ exports.createLocation = function (loc, username, callback) {
       return callback(errc);
     }
 
-    exports.createDescriptions({
+    exports.createEntries({
       locationId: rawLoc._id,
       locationName: rawLoc.name,
       username: rawLoc.creator,
-      descriptions: loc.descriptions,
+      entries: loc.entries,
     }, function (err1) {
       if (err1) {
         return callback(err1);
       }
 
-      exports.createOverlays({
-        locationId: rawLoc._id,
-        locationName: rawLoc.name,
-        username: rawLoc.creator,
-        overlays: loc.overlays,
-      }, function (err2) {
-        if (err2) {
-          return callback(err2);
-        }
-
-        return callback(null, rawLoc);
-      });
+      return callback(null, rawLoc);
     });
   });
 };
