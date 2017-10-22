@@ -11,14 +11,19 @@ var uploadHandler = uploads.tempUploader.single('importfile');
 
 var buildUrls = function (locs) {
   // Modifies given locations.
-  // Convert absolute file paths of possible overlays to URLs.
+  // Convert absolute file paths to URLs.
   // This is most correct to do in handler because it is a REST thing.
   // Absolute filepaths are needed internally more often.
   locs.forEach(function (loc) {
-    loc.overlays.forEach(function (overlay) {
-      var rel = path.relative(local.tempUploadDir, overlay.href);
-      var url = urljoin(local.tempUploadUrl, rel);
-      overlay.href = url;
+    loc.entries.forEach(function (entry) {
+      var rel, url;
+      if (entry.filepath !== null) {
+        if (entry.filepath.startsWith('/')) {
+          rel = path.relative(local.tempUploadDir, entry.filepath);
+          url = urljoin(local.tempUploadUrl, rel);
+          entry.filepath = url;
+        }
+      }
     });
   });
 };
@@ -56,8 +61,16 @@ exports.import = function (req, res) {
       methodName = ext2methodName[ext];
       return dal[methodName](req.file.path, function (errr, result) {
         if (errr) {
+          if (errr.message === 'INVALID_KMZ') {
+            res.status(status.BAD_REQUEST);
+            return res.send('unknown filetype');
+          }
           console.error(errr);
           return res.sendStatus(status.INTERNAL_SERVER_ERROR);
+        }
+
+        if (typeof result.batchId !== 'string') {
+          throw new Error('invalid batchId');
         }
 
         var batchId = result.batchId;
@@ -118,7 +131,7 @@ exports.importBatch = function (req, res) {
       return res.sendStatus(status.INTERNAL_SERVER_ERROR);
     }
 
-    dal.mergeAttachments({
+    dal.mergeEntries({
       locations: batchResult.skipped,
       username: username,
     }, function (errm, mergeResult) {

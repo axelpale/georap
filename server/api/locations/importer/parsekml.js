@@ -3,6 +3,12 @@ var toMarkdown = require('to-markdown');
 var striptags = require('striptags');
 var _ = require('lodash');
 
+
+// Collects paths from markdown links [name](path)
+var COLLECT_IMAGE_URLS = /(?:!\[)[^\]]*\]\(([^)]+)\)/g;
+// Coordinate comparison precision in number of characters
+var PREC = 8;
+
 var placemarkTemplate = {
   name: 'name',
   description: 'description',
@@ -39,7 +45,7 @@ var parseCoordinate = function (str) {
   //   null if not valid
   //   [lat, lng] otherwise
   var lat, lng;
-  var parts = str.split(/\s*[,;:\s]\s*/);
+  var parts = str.trim().split(/\s*[,;:\s]\s*/);
   if (parts.length === 2) {
     lat = parseFloat(parts[0]);
     lng = parseFloat(parts[1]);
@@ -57,9 +63,35 @@ var sanitizeDescription = function (desc) {
   // Convert to markdown. Remove all remaining html tags.
   // Sometimes descriptions include only adjacent anchor tags.
   // We like to add a space between them for clarity.
-  var spaced = desc.replace('/a><a', '/a> <a');
+  if (typeof desc !== 'string') {
+    return '';
+  }
+  var spaced = desc.replace('/a><a', '/a>, <a');
   var mark = toMarkdown(spaced.trim());
   return striptags(mark);
+};
+
+var findImageUrls = function (markdown) {
+  // Find paths from markdown links
+  //
+  // Return
+  //   list of path strings, relative file paths or absolute urls
+  //
+  // See https://stackoverflow.com/a/432503/638546
+  var urls = [];
+  var collector = new RegExp(COLLECT_IMAGE_URLS);
+  var match = collector.exec(markdown);
+  while (match !== null) {
+    // match[0] is the entire matched string
+    // match[1] is the first captured string
+    urls.push(match[1]);
+    match = collector.exec(markdown);
+  }
+  return urls;
+};
+
+var stripImageLinks = function (markdown) {
+  return markdown.replace(COLLECT_IMAGE_URLS, '');
 };
 
 
@@ -71,6 +103,16 @@ module.exports = function (kmlBuffer, callback) {
   //     a Buffer
   //   callback
   //     function (err, locations)
+  //       err
+  //       locations: [{
+  //         name
+  //         latitude
+  //         longitude
+  //         entries: [{
+  //           markdown
+  //           filepath
+  //         }]
+  //       }]
   //
   // Rules
   // - descriptions and GroundOverlays in a Folder are attached under
@@ -89,7 +131,7 @@ module.exports = function (kmlBuffer, callback) {
   var result = xmltransform(kmlBuffer, TEMPLATE);
 
   // Combine locations from each folder
-  var finalLocations = result.rootLocations;
+  var combinedLocations = result.rootLocations;
   result.folders.forEach(function (folder) {
 
     if (folder.locations.length > 0) {
@@ -99,11 +141,11 @@ module.exports = function (kmlBuffer, callback) {
       first.overlays = folder.overlays;
     }
 
-    finalLocations = finalLocations.concat(folder.locations);
+    combinedLocations = combinedLocations.concat(folder.locations);
   });
 
   // Format locations: remove empty properties etc
-  finalLocations.forEach(function (loc) {
+  var finalLocations = combinedLocations.map(function (loc) {
 
     // Combine coordinates from Point, LineString, and Polygon.
     // Parse and compute naive average.
@@ -131,64 +173,115 @@ module.exports = function (kmlBuffer, callback) {
         sum[0] / numPoints,
         sum[1] / numPoints,
       ];
-
     }());
 
-    // Remove now unnecessary coordinates;
-    loc.longitude = avgLonLat[0];
-    loc.latitude = avgLonLat[1];
-    delete loc.coordinates;
-    delete loc.line;
-    delete loc.polygon;
+    // Combine and filter descriptions
+    var finalDescriptions = (function processDescriptions() {
+      var combined = [];
 
-    // Combine descriptions
-    if (loc.hasOwnProperty('descriptions')) {
-      loc.descriptions.push(loc.description);
-    } else {
-      loc.descriptions = [loc.description];
-    }
-    delete loc.description;
-
-    // Remove empty descriptions
-    loc.descriptions = loc.descriptions.filter(function (desc) {
-      return desc.length > 0;
-    });
-
-    // Always have overlays even when empty
-    if (!loc.hasOwnProperty('overlays')) {
-      loc.overlays = [];
-    }
-
-    // Convert descriptions to markdown. Remove all remaining HTML.
-    loc.descriptions = loc.descriptions.map(sanitizeDescription);
-    loc.overlays.forEach(function (ol) {
-      if (ol.hasOwnProperty('description')) {
-        ol.description = sanitizeDescription(ol.description);
+      // Combine
+      if (loc.hasOwnProperty('descriptions')) {
+        combined = loc.descriptions;
       }
-    });
 
-    // Remove duplicate descriptions
-    loc.descriptions = _.uniq(loc.descriptions);
+      if (loc.hasOwnProperty('description')) {
+        combined.push(loc.description);
+      }
 
-    // Remove descriptions that only repeat the location coordinates
-    var PREC = 8;
-    loc.descriptions = loc.descriptions.filter(function (desc) {
-      var a, b, c, d;
-      var coord = parseCoordinate(desc);
-      if (coord) {
-        // Do not care about the lat, lng order
-        a = coord[0].toFixed(PREC);
-        b = coord[1].toFixed(PREC);
-        c = loc.latitude.toFixed(PREC);
-        d = loc.longitude.toFixed(PREC);
-        if ((a === c && b === d) || (a === d && b === c)) {
-          // Coordinate is just a repetition
-          return false;
+      // Remove empty descriptions
+      var nonempty = combined.filter(function (desc) {
+        return desc.length > 0;
+      });
+
+      // Convert descriptions to markdown. Remove all remaining HTML.
+      var sanitized = nonempty.map(sanitizeDescription);
+
+      // Remove duplicate descriptions
+      var unique = _.uniq(sanitized);
+
+      // Remove descriptions that only repeat the location coordinates
+      var valuable = unique.filter(function (desc) {
+        var a, b, c, d;
+        var coord = parseCoordinate(desc);
+        if (coord) {
+          // Do not care about the lat, lng order
+          a = coord[0].toFixed(PREC);
+          b = coord[1].toFixed(PREC);
+          c = avgLonLat[0].toFixed(PREC);
+          d = avgLonLat[1].toFixed(PREC);
+          if ((a === c && b === d) || (a === d && b === c)) {
+            // Coordinate is just a repetition
+            return false;
+          }
         }
-      }
-      return true;
-    });
+        return true;
+      });
 
+      return valuable;
+    }());
+
+    var finalOverlays = (function () {
+      if (!loc.hasOwnProperty('overlays')) {
+        return [];
+      }
+
+      return loc.overlays.map(function (ol) {
+        return {
+          name: ol.name,
+          description: sanitizeDescription(ol.description),
+          href: ol.href,
+        };
+      });
+    }());
+
+    // Transform descriptions and overlays to entries
+    var finalEntries = (function () {
+      var entries = [];
+
+      finalOverlays.forEach(function (ol) {
+        entries.push({
+          markdown: ol.name + ': ' + ol.description,
+          filepath: ol.href,
+        });
+      });
+
+      finalDescriptions.forEach(function (desc) {
+        var imgUrls = findImageUrls(desc);
+        var textContent = stripImageLinks(desc);
+        var i;
+
+        if (imgUrls.length === 0) {
+          // No images, single entry
+          entries.push({
+            markdown: textContent,
+            filepath: null,
+          });
+        } else {
+          // First image with the text.
+          entries.push({
+            markdown: textContent,
+            filepath: imgUrls[0],
+          });
+
+          // Next images without description
+          for (i = 1; i < imgUrls.length; i += 1) {
+            entries.push({
+              markdown: '',
+              filepath: imgUrls[i],
+            });
+          }
+        }
+      });
+
+      return entries;
+    }());
+
+    return {
+      name: loc.name,
+      longitude: avgLonLat[0],
+      latitude: avgLonLat[1],
+      entries: finalEntries,
+    };
   });
 
   return callback(null, finalLocations);

@@ -1,6 +1,6 @@
 // File upload request parser config
 
-var local = require('../../config/local');
+var local = require('../../../config/local');
 
 var sharp = require('sharp');
 var multer = require('multer');
@@ -10,6 +10,7 @@ var fse = require('fs-extra');
 var shortid = require('shortid');
 var sanitize = require('sanitize-filename');
 var moment = require('moment');
+var download = require('download');
 
 var sanitizeFilename = function (fname) {
   // Convert filename to a universally compatible one.
@@ -91,15 +92,51 @@ exports.getRelativePath = function (absolutePath) {
   return path.relative(local.uploadDir, absolutePath);
 };
 
-exports.makePermanent = function (tempFilePath, callback) {
-  // Copy a file from temporary location to permanent upload directory.
+// exports.makeLocalPermanent = function (tempFilePath, callback) {
+//   // Copy a file from a temporary local location to
+//   // the permanent upload directory.
+//   //
+//   // Parameters:
+//   //   tempFilePath
+//   //     absolute local file path to source file
+//   //   callback
+//   //     function (err, newFilePath)
+//   //
+//   var fname = path.basename(tempFilePath);
+//
+//   yearShortId(null, null, function (err, absDirPath) {
+//     if (err) {
+//       return callback(err);
+//     }
+//
+//     var sanename = sanitizeFilename(fname);
+//     var newpath = path.resolve(absDirPath, sanename);
+//
+//     fse.copy(tempFilePath, newpath, function (errm) {
+//       if (errm) {
+//         return callback(errm);
+//       }
+//
+//       return callback(null, newpath);
+//     });
+//   });
+// };
+
+exports.makePermanent = function (filePath, callback) {
+  // Copy a file to the permanent upload directory.
   //
   // Parameters:
-  //   tempFilePath
-  //     absolute file path to source file
+  //   filePath
+  //     absolute file path or URL to source file
   //   callback
   //     function (err, newFilePath)
-  var fname = path.basename(tempFilePath);
+  //
+
+  if (typeof filePath !== 'string') {
+    throw new Error('invalid filePath:' + filePath);
+  }
+
+  var fname = path.basename(filePath);
 
   yearShortId(null, null, function (err, absDirPath) {
     if (err) {
@@ -109,13 +146,25 @@ exports.makePermanent = function (tempFilePath, callback) {
     var sanename = sanitizeFilename(fname);
     var newpath = path.resolve(absDirPath, sanename);
 
-    fse.copy(tempFilePath, newpath, function (errm) {
-      if (errm) {
-        return callback(errm);
-      }
+    if (filePath.startsWith('http')) {
+      console.log('downloading', filePath);
+      console.log('saving into', newpath);
+      download(filePath, absDirPath, {
+        timeout: 5000,
+      }).then(function () {
+        return callback(null, newpath);
+      }).catch(function (errd) {
+        return callback(errd);
+      });
+    } else {
+      fse.copy(filePath, newpath, function (errm) {
+        if (errm) {
+          return callback(errm);
+        }
 
-      return callback(null, newpath);
-    });
+        return callback(null, newpath);
+      });
+    }
   });
 };
 

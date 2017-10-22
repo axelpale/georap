@@ -87,13 +87,32 @@ exports.readKMZ = function (kmzpath, callback) {
       var batchId = result.batchId;
       var locs = result.locations;
 
-      // Turn relative file paths to absolute paths
+      // Turn relative file paths to absolute paths.
+      // Detect URLs from http prefix.
+      // We will download the URLs later.
       locs.forEach(function (loc) {
-        loc.overlays.forEach(function (overlay) {
-          var abs = path.join(targetPath, overlay.href);
-          overlay.href = abs;
+        loc.entries.forEach(function (entry) {
+          var fp = entry.filepath;
+
+          // Filepath is null when entry does not have an image
+          if (fp !== null) {
+            // Leave URLs untouched
+            if (!fp.startsWith('http')) {
+              entry.filepath = path.join(targetPath, fp);
+            }
+          }
         });
       });
+
+      // Structure of loc at this point
+      // {
+      //   name: <string>
+      //   latitude: <number>
+      //   longitude: <number>
+      //   entries: [{
+      //     markdown: <string>
+      //     filepath: <string>
+      //   }]
 
       var cachePath = cachePathFromBatchId(batchId);
 
@@ -107,7 +126,6 @@ exports.readKMZ = function (kmzpath, callback) {
           locations: locs,
         });
       });
-
     });
   };
 
@@ -143,10 +161,7 @@ exports.readKMZ = function (kmzpath, callback) {
 
         if (foundFilePaths.length === 0) {
           // No locations available
-          return callback(null, {
-            name: batchIdFromPath(kmzpath),
-            locations: [],
-          });
+          return callback(new Error('INVALID_KMZ'));
         }
 
         //console.log('foundFilePaths', foundFilePaths);
@@ -244,30 +259,32 @@ exports.importBatch = function (args, callback) {
 };
 
 
-exports.mergeAttachments = function (args, callback) {
+exports.mergeEntries = function (args, callback) {
   // Description by algorithm:
-  // 1. For each given location with attachments,
+  // 1. For each given location with entries,
   //    find a nearest existing location.
-  //   1.1. Get all existing attachments of the existing location.
-  //   1.2. For each new attachment, compare it to the existing attachments.
-  //     1.2.1. If new attachment is unique, add it to the existing location.
+  //   1.1. Get all existing entries of the existing location.
+  //   1.2. For each new entry, compare it to the existing entries.
+  //     1.2.1. If the new entry is unique, add it to the existing location.
   //
   // Parameters
   //   args
   //     locations
   //       array of import locations:
-  //         descriptions
-  //         overlays
+  //         entries
   //         existing
   //           _id
   //           name
   //     username
-  //       creator of the attachments
+  //       creator for the entries
   //   callback
   //     function (err, result)
   //       err
   //       result
-  //
+  //         locationsModified
+  //         locationsSkipped
+  //         numEntryCandidates
+  //         numEntriesCreated
   //
 
   var numEntryCandidates = 0;
@@ -281,27 +298,16 @@ exports.mergeAttachments = function (args, callback) {
     //   username
     //   markdown
     //   filepath
-    // Therefore we map descriptions and overlays into this format
-    var entryCandidates = [];
-    loc.descriptions.forEach(function (desc, index) {
-      entryCandidates.push({
-        type: 'descriptions',
-        index: index,  // to find after filter
+    // Therefore we map import entries into this format
+    var entryCandidates = loc.entries.map(function (entry) {
+      return {
         username: args.username,
-        markdown: desc,
-        filepath: null,
-      });
-    });
-    loc.overlays.forEach(function (overlay, index) {
-      entryCandidates.push({
-        type: 'overlays',
-        index: index,  // to find after filter
-        username: args.username,
-        markdown: overlay.description,
-        filepath: overlay.href,
-      });
+        markdown: entry.markdown,
+        filepath: entry.filepath,
+      };
     });
 
+    // Remember: for each location
     numEntryCandidates += entryCandidates.length;
 
     // We like to merge the entries into target location.
@@ -324,28 +330,11 @@ exports.mergeAttachments = function (args, callback) {
       }
 
       // ...and then create them.
-      asyn.eachSeries(uniqueEntries, function (entry, next2) {
-        // Fuck this is messy.. we need to process descriptions
-        // and overlays separately, that is the reason.
-        var orig = loc[entry.type][entry.index];
-
-        if (entry.type === 'descriptions') {
-          dallib.createDescriptions({
-            locationId: loc.existing._id,
-            locationName: loc.existing.name,
-            username: args.username,
-            descriptions: [orig],
-          }, next2);
-        } else if (entry.type === 'overlays') {
-          dallib.createOverlays({
-            locationId: loc.existing._id,
-            locationName: loc.existing.name,
-            username: args.username,
-            overlays: [orig],
-          }, next2);
-        } else {
-          throw new Error('invalid entry.type');
-        }
+      dallib.createEntries({
+        locationId: loc.existing._id,
+        locationName: loc.existing.name,
+        username: args.username,
+        entries: uniqueEntries,
       }, next);
     });
   }, function (errs) {
