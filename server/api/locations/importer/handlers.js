@@ -93,6 +93,9 @@ exports.getBatch = function (req, res) {
 
   dal.getBatch(batchId, function (err, locs) {
     if (err) {
+      if (err.code === 'ENOENT') {
+        return res.sendStatus(status.NOT_FOUND);
+      }
       console.error(err);
       return res.sendStatus(status.INTERNAL_SERVER_ERROR);
     }

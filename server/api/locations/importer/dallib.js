@@ -6,6 +6,7 @@ var asyn = require('async');
 var mime = require('mime');
 var path = require('path');
 
+var NOT_FOUND = 404;
 
 exports.createEntries = function (args, callback) {
   // Parameters:
@@ -58,7 +59,7 @@ exports.createEntries = function (args, callback) {
           return next();
         }
 
-        if (errp.name === 'HTTPError' && errp.statusCode === 404) {
+        if (errp.name === 'HTTPError' && errp.statusCode === NOT_FOUND) {
           console.log('HTTP404', errp.url,
                       'for location', args.locationName);
           return next();

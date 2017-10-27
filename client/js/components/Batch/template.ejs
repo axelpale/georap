@@ -16,11 +16,15 @@
         </div>
       </div>
 
+      <div id="tresdb-batch-error404" class="hidden">
+        <div class="alert alert-danger" role="alert">No batch found. It has probably expired and been removed.</div>
+      </div>
+
       <div id="tresdb-batch-error" class="hidden">
         <div class="alert alert-danger" role="alert">Import failed.</div>
       </div>
 
-      <form id="tresdb-batch-form" style="margin-bottom: 5em">
+      <form id="tresdb-batch-form" class="hidden" style="margin-bottom: 5em">
         <button id="tresdb-batch-cancel" type="button" class="btn btn-default disable">Cancel</button>
         <div class="pull-right">
           <button id="tresdb-batch-import-selected" type="button" class="btn btn-primary disabled"></button>
