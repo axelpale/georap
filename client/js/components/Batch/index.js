@@ -27,6 +27,7 @@ module.exports = function (batchId) {
     var $progress = $('#tresdb-batch-progress');
     var $list = $('#tresdb-batch-list');
     var $error = $('#tresdb-batch-error');
+    var $error404 = $('#tresdb-batch-error404');
     var $message = $('#tresdb-batch-message');
 
     var $cancel = $('#tresdb-batch-cancel');
@@ -53,20 +54,23 @@ module.exports = function (batchId) {
       tresdb.go('/');
     });
 
-    tresdb.stores.locations.getBatch(batchId, function (err, result) {
+    tresdb.stores.locations.getBatch(batchId, function (err, locs) {
+      tresdb.ui.hide($progress);
+
       if (err) {
+        if (err.message === 'Not Found') {
+          tresdb.ui.show($error404);
+          return;
+        }
         console.log('getBatch');
         console.error(err);
         return;
       }
 
-      var locs = result;
-
-      tresdb.ui.hide($progress);
-      tresdb.ui.show($list);
-
       $message.html(messageTemplate({ locs: locs }));
 
+      tresdb.ui.show($list);
+      tresdb.ui.show($submitAllForm);
       listComp.setState({
         locs: locs,
       });

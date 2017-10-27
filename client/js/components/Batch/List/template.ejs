@@ -10,8 +10,8 @@
   <tbody>
   <% locs.forEach(function (loc, index) { %>
     <tr data-index="<%= index %>">
-      <td class="tresdb-batch-box"><input type="checkbox" name="row-check" value="<%= index %>" class="tresdb-batch-row-check"></td>
-      <td class="tresdb-batch-name"><%= loc.name %></td>
+      <td class="tresdb-batch-box"><label><input id="tresdb-batch-<%= index %>" type="checkbox" name="row-check" value="<%= index %>" class="tresdb-batch-row-check"> #<%= index %></label></td>
+      <td class="tresdb-batch-name"><label for="tresdb-batch-<%= index %>"><%= loc.name %></label></td>
       <td><%
         var l = loc.entries.length;
         if (l === 0) {

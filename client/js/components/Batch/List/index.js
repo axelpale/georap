@@ -87,17 +87,6 @@ module.exports = function () {
       }
     });
 
-    $list.on('click', 'td.tresdb-batch-name', function (ev) {
-      ev.preventDefault();
-      ev.stopImmediatePropagation();
-
-      //var index = parseInt($(ev.target).parent().data('input'), 10);
-      var $tr = $(ev.target).parent();
-      var $box = $tr.find('.tresdb-batch-row-check');
-      $box.prop('checked', !$box.prop('checked'));
-      $box.change(); // emit change
-    });
-
     $list.on('change', '.tresdb-batch-row-check', function (ev) {
       ev.preventDefault();
       ev.stopImmediatePropagation();
