@@ -125,7 +125,9 @@ exports.create = function (req, res) {
       console.error(err);
       return res.sendStatus(status.INTERNAL_SERVER_ERROR);
     }
-    return res.sendStatus(status.OK);
+    // Return json because client side response handlers expect json.
+    // jQuery throws error if no json.
+    return res.json({});
   };
 
   uploadHandler(req, res, function (err) {
