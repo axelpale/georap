@@ -79,7 +79,11 @@ exports.createEntries = function (args, callback) {
         mimetype: mimetype,
       }, function (errt, thumb) {
         if (errt) {
-          return next(errt);
+          // TODO what situations cause this error?
+          // Should we decide to continue somewhere else?
+          // Entry is not created because thumbnail creation has an error.
+          console.error(errt);
+          return next();
         }
 
         // Now, when thumbnail is created, is time to add the post.
