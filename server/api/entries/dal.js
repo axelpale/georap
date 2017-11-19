@@ -114,6 +114,8 @@ exports.createLocationEntry = function (params, callback) {
   //       The relative path of the thumbnail file in the uploads dir
   //     thumbmimetype
   //       string or null
+  //     overlay
+  //       overlay-import object or null
   //   callback
   //     function (err, insertedId)
 
@@ -130,6 +132,7 @@ exports.createLocationEntry = function (params, callback) {
       mimetype: params.mimetype,
       thumbfilepath: params.thumbfilepath,
       thumbmimetype: params.thumbmimetype,
+      overlay: params.overlay ? params.overlay : null,
     },
   };
 

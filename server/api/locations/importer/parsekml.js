@@ -242,6 +242,10 @@ module.exports = function (kmlBuffer, callback) {
         entries.push({
           markdown: ol.name + ': ' + ol.description,
           filepath: ol.href,
+          overlay: {
+            viewBoundScale: ol.viewBoundScale,
+            latLonBox: ol.latLonBox,
+          },
         });
       });
 

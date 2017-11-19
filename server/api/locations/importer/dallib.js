@@ -37,6 +37,7 @@ exports.createEntries = function (args, callback) {
         mimetype: null,
         thumbfilepath: null,
         thumbmimetype: null,
+        overlay: entry.overlay ? entry.overlay : null,
       }, next);
 
       return;
@@ -53,24 +54,24 @@ exports.createEntries = function (args, callback) {
       if (errp) {
         if (errp.code === 'ENOENT') {
           var dirname = path.basename(path.dirname(errp.path));
-          console.log('NO_FILE', path.join(dirname, path.basename(errp.path)),
+          console.log('Importer: NO_FILE', path.join(dirname, path.basename(errp.path)),
                       'for location', args.locationName);
           // console.log('file for entry does not exist:', entry);
           return next();
         }
 
         if (errp.name === 'HTTPError' && errp.statusCode === NOT_FOUND) {
-          console.log('HTTP404', errp.url,
+          console.log('Importer: HTTP404', errp.url,
                       'for location', args.locationName);
           return next();
         }
-        console.log('error at makePermanent');
+        console.log('Importer: ERROR at makePermanent');
         console.error(errp);
         return next();
       }
 
       if (mimetype === null) {
-        console.log('Unknown file format', path.basename(newPath));
+        console.log('Importer: Unknown file format', path.basename(newPath));
         return next();
       }
 
@@ -99,6 +100,7 @@ exports.createEntries = function (args, callback) {
           mimetype: mimetype,
           thumbfilepath: uploads.getRelativePath(thumb.path),
           thumbmimetype: thumb.mimetype,
+          overlay: entry.overlay ? entry.overlay : null,
         }, next);
       });
     });
