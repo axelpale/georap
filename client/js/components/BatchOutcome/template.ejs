@@ -1,0 +1,24 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-12">
+
+      <h1><span class="glyphicon glyphicon-import" aria-hidden="true"></span> Results</h1>
+
+      <p><strong>Batch number:</strong> <%= batchId %></p>
+
+      <p id="tresdb-outcome-message"></p>
+
+      <div id="tresdb-outcome-progress" class="progress">
+        <div class="progress-bar progress-bar-striped active" role="progressbar" style="width: 100%">
+          <span class="sr-only">Waiting for server</span>
+        </div>
+      </div>
+
+      <div id="tresdb-outcome-list" class="hidden"></div>
+
+      <div class="pull-right">
+        <a href="/" class="btn btn-primary" role="button">Finish</a>
+      </div>
+    </div>
+  </div>
+</div>

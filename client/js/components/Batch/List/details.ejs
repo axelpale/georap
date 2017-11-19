@@ -1,0 +1,24 @@
+<tr class="tresdb-batch-details">
+  <td colspan="4">
+    <h3><%= location.name %></h3>
+
+    <p>
+      <strong>Latitude:</strong> <%= location.latitude %><br>
+      <strong>Longitude:</strong> <%= location.longitude %>
+    </p>
+
+    <% location.entries.forEach(function (entry, index) { %>
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          Post #<%= index + 1 %>
+        </div>
+        <div class="panel-body" style="word-break: break-all">
+          <%= markdownToHtml(entry.markdown) %>
+          <% if (entry.filepath) { %>
+            <img src="<%= entry.filepath %>" style="max-width: 100%">
+          <% } %>
+        </div>
+      </div>
+    <% }); %>
+  </td>
+</tr>

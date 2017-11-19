@@ -1,11 +1,13 @@
 /* eslint-disable max-lines */
 
 var db = require('../../services/db');
-var googlemaps = require('../../services/googlemaps');
 var layersDal = require('../../../worker/layers/dal');
 var eventsDal = require('../events/dal');
 
 var shortid = require('shortid');
+
+// Do not allow locations to be closer to each other.
+var MIN_DISTANCE_METERS = 10;
 
 exports.count = function (callback) {
   // Count non-deleted locations
@@ -23,6 +25,72 @@ exports.count = function (callback) {
   });
 };
 
+exports.createLocation = function (args, callback) {
+  // Parameters
+  //   args
+  //     name
+  //     latitude
+  //     longitude
+  //     username
+  //     tags
+  //   callback
+  //     function (err, rawLocation)
+  //
+
+  var geom = {
+    type: 'Point',
+    coordinates: [args.longitude, args.latitude],
+  };
+
+  layersDal.findLayerForPoint(geom, function (errl, layer, distance, nearest) {
+    // Gives distance to the closest point in addition to layer number.
+    if (errl) {
+      console.error(errl);
+      return callback(errl);
+    }
+
+    if (distance < MIN_DISTANCE_METERS) {
+      var errclose = new Error('TOO_CLOSE');
+      errclose.data = nearest;
+      return callback(errclose);
+    }
+
+    var newLoc = {
+      creator: args.username,
+      deleted: false,
+      geom: geom,
+      isLayered: true,
+      layer: layer,
+      name: args.name,
+      places: [],
+      tags: args.tags,
+    };
+
+    var coll = db.collection('locations');
+
+    coll.insertOne(newLoc, function (err, result) {
+      if (err) {
+        return callback(err);
+      }
+
+      newLoc._id = result.insertedId;
+
+      eventsDal.createLocationCreated({
+        locationId: newLoc._id,
+        locationName: newLoc.name,
+        lat: args.latitude,
+        lng: args.longitude,
+        username: newLoc.creator,
+      }, function (err2) {
+        if (err2) {
+          return callback(err2);
+        }
+        return callback(null, newLoc);
+      });
+    });
+  });
+};
+
 exports.create = function (lat, lng, username, callback) {
   // Create a location to given coordinates with a code name.
   //
@@ -33,59 +101,12 @@ exports.create = function (lat, lng, username, callback) {
   //   callback
   //     function (err, rawLocation)
 
-  googlemaps.reverseGeocode([lat, lng], function (err0, places) {
-    // Places is an array of strings
 
-    if (err0) {
-      console.error(err0);
-      return callback(err0);
-    }
-
-    var geom = {
-      type: 'Point',
-      coordinates: [lng, lat],
-    };
-
-    layersDal.findLayerForPoint(geom, function (errl, layer) {
-      if (errl) {
-        console.error(errl);
-        return callback(errl);
-      }
-
-      var newLoc = {
-        creator: username,
-        deleted: false,
-        geom: geom,
-        isLayered: true,
-        layer: layer,
-        name: shortid.generate(),
-        places: places,
-        tags: [],
-      };
-
-      var coll = db.get().collection('locations');
-
-      coll.insertOne(newLoc, function (err, result) {
-        if (err) {
-          return callback(err);
-        }
-
-        newLoc._id = result.insertedId;
-
-        eventsDal.createLocationCreated({
-          locationId: newLoc._id,
-          locationName: newLoc.name,
-          lat: lat,
-          lng: lng,
-          username: username,
-        }, function (err2) {
-          if (err2) {
-            return callback(err2);
-          }
-          return callback(null, newLoc);
-        });
-      });
-    });
-  });  // .create
-
+  exports.createLocation({
+    name: 'Unnamed ' + shortid.generate(),
+    latitude: lat,
+    longitude: lng,
+    username: username,
+    tags: [],
+  }, callback);
 };

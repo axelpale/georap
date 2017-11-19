@@ -1,13 +1,12 @@
 /* eslint-disable max-lines */
 
-var emitter = require('component-emitter');
-
 var socket = require('../connection/socket');
+var Location = require('../components/Location/Model');
 var validateCoords = require('./lib/validateCoords');
 var request = require('./lib/request');
 var account = require('./account');
 var tags = require('./tags');
-var Location = require('../components/Location/Model');
+var emitter = require('component-emitter');
 
 // Init
 emitter(exports);
@@ -64,6 +63,7 @@ var listenForChanges = (function () {
   };
 }());
 
+var getJSON = request.getJSON;
 var postJSON = request.postJSON;
 var postFile = request.postFile;
 var deleteJSON = request.deleteJSON;
@@ -115,7 +115,17 @@ exports.create = function (geom, callback) {
       lat: geom.coordinates[1],
       lng: geom.coordinates[0],
     },
-  }, callback);
+  }, function (err, rawLoc) {
+    if (err) {
+      return callback(err);
+    }
+
+    if (rawLoc === 'TOO_CLOSE') {
+      return callback(new Error('TOO_CLOSE'));
+    }
+
+    return callback(null, rawLoc);
+  });
 };
 
 exports.get = function (id, callback) {
@@ -145,6 +155,44 @@ exports.get = function (id, callback) {
       return callback(new Error(statusMessage));
     },
   });
+};
+
+exports.importFile = function (form, callback) {
+  // Parameters
+  //   form
+  //     jQuery instance of the file upload form
+  //   callback
+  //     function (err)
+
+  return postFile({
+    url: '/api/locations/import',
+    form: form,
+  }, callback);
+};
+
+exports.getBatch = function (batchId, callback) {
+  return getJSON('/api/locations/import/' + batchId, callback);
+};
+
+exports.getOutcome = function (batchId, callback) {
+  return getJSON('/api/locations/import/' + batchId + '/outcome', callback);
+};
+
+exports.importBatch = function (data, callback) {
+  // Parameters
+  //   data
+  //     { batchId: string, indices: Array}
+  //   callback
+  //     function (err)
+  //
+  if (!data.hasOwnProperty('batchId') || !data.hasOwnProperty('indices')) {
+    throw new Error('Invalid argument: ' + JSON.stringify(data));
+  }
+
+  return postJSON({
+    url: '/api/locations/import/' + data.batchId,
+    data: data,
+  }, callback);
 };
 
 this.setGeom = function (id, lng, lat, callback) {

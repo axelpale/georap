@@ -1,5 +1,4 @@
 
-var config = window.tresdb.config;
 var locations = require('../../../../stores/locations');
 var markdownSyntax = require('../../lib/markdownSyntax.ejs');
 var template = require('./template.ejs');
@@ -20,7 +19,7 @@ module.exports = function (location) {
 
     $mount.html(template({
       markdownSyntax: markdownSyntax,
-      limit: Math.round(config.uploadSizeLimit / (K * K)),
+      limit: Math.round(tresdb.config.uploadSizeLimit / (K * K)),
     }));
 
     var $cancel = $('#tresdb-entry-cancel');

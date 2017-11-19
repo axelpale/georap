@@ -1,0 +1,29 @@
+<table id="tresdb-batch-table" class="table table-hover">
+  <thead>
+    <tr>
+      <th><input id="tresdb-batch-select-all" type="checkbox" name="all-check" title="Select all"></th>
+      <th>Name</th>
+      <th>Attachments</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+  <% locs.forEach(function (loc, index) { %>
+    <tr data-index="<%= index %>">
+      <td class="tresdb-batch-box"><label><input id="tresdb-batch-<%= index %>" type="checkbox" name="row-check" value="<%= index %>" class="tresdb-batch-row-check"> #<%= index %></label></td>
+      <td class="tresdb-batch-name"><label for="tresdb-batch-<%= index %>"><%= loc.name %></label></td>
+      <td><%
+        var l = loc.entries.length;
+        if (l === 0) {
+          %>-<%
+        } else {
+          %><%= loc.entries.length %> post<%= l > 1 ? 's' : '' %><%
+        }
+      %></td>
+      <td>
+        <a href="#" class="tresdb-batch-view-details" data-index="<%= index %>">Details</a>
+      </td>
+    </tr>
+  <% }); %>
+  </tbody>
+</table>

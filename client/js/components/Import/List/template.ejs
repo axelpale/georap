@@ -1,0 +1,45 @@
+<h3>Found <%= locs.length %> locations</h3>
+
+<table id="tresdb-import-list" class="table table-hover">
+  <thead>
+    <tr>
+      <th><input id="tresdb-import-all" type="checkbox" name="all-check" title="Select all"></th>
+      <th>Name</th>
+      <th>Attachments</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+  <% locs.forEach(function (loc, index) { %>
+    <%
+      var attach = [];
+
+      if (loc.descriptions.length > 1) {
+        attach.push('' + loc.descriptions.length + ' posts');
+      } else if (loc.descriptions.length > 0) {
+        attach.push('1 post');
+      }
+
+      if (loc.overlays.length > 1) {
+        attach.push('' + loc.overlays.length + ' overlays');
+      } else if (loc.overlays.length > 0) {
+        attach.push('1 overlay');
+      }
+    %>
+    <tr>
+      <td><input type="checkbox" name="row-check" value="<%= index %>" class="tresdb-import-row-check"></td>
+      <td><%= loc.name %></td>
+      <td><%
+        if (attach.length === 0) {
+          %>-<%
+        } else {
+          %><%= attach.join(', ') %><%
+        }
+      %></td>
+      <td>
+        <a href="#" class="tresdb-import-view-details" data-index="<%= index %>">Details</a>
+      </td>
+    </tr>
+  <% }); %>
+  </tbody>
+</table>

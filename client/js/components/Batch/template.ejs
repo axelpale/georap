@@ -1,0 +1,37 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-12">
+
+      <h1><span class="glyphicon glyphicon-import" aria-hidden="true"></span> Upload successful</h1>
+
+      <p><strong>Batch number:</strong> <%= batchId %></p>
+
+      <p id="tresdb-batch-message"></p>
+
+      <div id="tresdb-batch-list" class="hidden"></div>
+
+      <div id="tresdb-batch-progress" class="progress">
+        <div class="progress-bar progress-bar-striped active" role="progressbar" style="width: 100%">
+          <span class="sr-only">Waiting for server</span>
+        </div>
+      </div>
+
+      <div id="tresdb-batch-error404" class="hidden">
+        <div class="alert alert-danger" role="alert">No batch found. It has probably expired and been removed.</div>
+      </div>
+
+      <div id="tresdb-batch-error" class="hidden">
+        <div class="alert alert-danger" role="alert">Import failed.</div>
+      </div>
+
+      <form id="tresdb-batch-form" class="hidden" style="margin-bottom: 5em">
+        <button id="tresdb-batch-cancel" type="button" class="btn btn-default disable">Cancel</button>
+        <div class="pull-right">
+          <button id="tresdb-batch-import-selected" type="button" class="btn btn-primary disabled"></button>
+          <button id="tresdb-batch-import-all" type="submit" class="btn btn-primary disabled"></button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+</div>

@@ -1,0 +1,4 @@
+<%= createdLocs.length %> out of <%= createdLocs.length + skippedLocs.length %> locations were created successfully.
+<% if (modifiedLocs.length + skippedLocs.length > 0) { %>
+The remaining <%= modifiedLocs.length + skippedLocs.length %> locations <strong>already exist</strong> on the map and thus were not created. However, <%= modifiedLocs.length %> of them had attachments that were added to the existing ones. The remaining <%= skippedLocs.length %> locations had no new attachments and were completely skipped.
+<% } %>

@@ -1,4 +1,3 @@
-// Component for filters for map and search results.
 
 var account = require('../../stores/account');
 var template = require('./template.ejs');

@@ -2,6 +2,7 @@
 var dal = require('./dal');
 var status = require('http-status-codes');
 
+
 exports.count = function (req, res) {
 
   dal.count(function (err, numLocs) {
@@ -28,6 +29,9 @@ exports.create = function (req, res) {
 
   dal.create(lat, lng, req.user.name, function (err, rawLoc) {
     if (err) {
+      if (err.message === 'TOO_CLOSE') {
+        return res.json('TOO_CLOSE');
+      }
       console.error(err);
       return res.sendStatus(status.INTERNAL_SERVER_ERROR);
     }

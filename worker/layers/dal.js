@@ -3,6 +3,8 @@ var db = require('../../server/services/db');
 var TOP_LAYER = 1;
 var BOTTOM_LAYER = 15;
 
+var EARTH_CIRCUMFERENCE = 40000000;  // metres
+
 exports.getClusterRadius = function (layer) {
   // This function defines the neighborhood size as a function of zoom level.
   // Here layer === zoom level.
@@ -97,18 +99,20 @@ exports.markOneAsUnlayered = function (locationId, callback) {
 };
 
 exports.findDistToNearestLayered = function (geom, callback) {
-  // Find distance to nearest neighbor with isLayered=true. If none found
-  // the distance is null.
+  // Find distance in meters to nearest neighbor with isLayered=true.
+  // If none found the distance is null.
   //
   // Parameters:
   //   geom
   //     GeoJSON point
   //   callback
-  //     function (err, distance)
+  //     function (err, distance, nearest)
   //       err
   //       distance
   //         meters. Null if no loc found.
-
+  //       nearest
+  //         nearest location. Null if nearest does not exist.
+  //
   var coll = db.collection('locations');
 
   coll.aggregate([
@@ -131,10 +135,10 @@ exports.findDistToNearestLayered = function (geom, callback) {
     }
 
     if (result.length === 0) {
-      return callback(null, null);
+      return callback(null, null, null);
     }
 
-    return callback(null, result[0].dist);
+    return callback(null, result[0].dist, result[0]);
   });
 };
 
@@ -147,27 +151,30 @@ exports.findLayerForPoint = function (geom, callback) {
   //   geom
   //     GeoJSON Point
   //   callback
-  //     function (err, layer)
+  //     function (err, layer, distance)
   //       Parameters:
   //         err
   //           null if no error
   //         layer
   //           integer
+  //         distance
+  //           in meters, earth circumference if no nearest one exist
+  //         nearest
+  //           nearest location, null if nearest does not exist
   //
-
-  exports.findDistToNearestLayered(geom, function (err, dist) {
+  exports.findDistToNearestLayered(geom, function (err, dist, nearest) {
     if (err) {
       return callback(err);
     }
 
     if (dist === null) {
       // There is no nearest one.
-      return callback(null, TOP_LAYER);
+      return callback(null, TOP_LAYER, EARTH_CIRCUMFERENCE, null);
     }
 
     var layer = exports.findLayerWithClusterRadiusSmallerThan(dist);
 
-    return callback(null, layer);
+    return callback(null, layer, dist, nearest);
   });
 };
 

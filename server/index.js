@@ -133,6 +133,8 @@ db.init(function (dbErr) {
   // --------------
   app.use(local.uploadUrl, express.static(local.uploadDir));
   console.log('Serving uploaded files from', local.uploadUrl);
+  app.use(local.tempUploadUrl, express.static(local.tempUploadDir));
+  console.log('Serving temporary files from', local.tempUploadUrl);
   // --------------
   // Uploaded files END
 

@@ -18,7 +18,11 @@
           <a id="tresdb-mainmenu-users" href="#"><%= glyphicon({ name: 'user' }) %> Members</a>
         </li>
         <li>
-          <a id="tresdb-mainmenu-locations" href="#"><%= glyphicon({ name: 'th-list' }) %> Locations</a>
+          <a id="tresdb-mainmenu-locations" href="/search"><%= glyphicon({ name: 'th-list' }) %> Locations</a>
+        </li>
+        <li role="separator" class="divider"></li>
+        <li>
+          <a id="tresdb-mainmenu-import" href="/import"><%= glyphicon({ name: 'import' }) %> Import...</a>
         </li>
         <li>
           <a id="tresdb-mainmenu-export" href="/export"><%= glyphicon({ name: 'export' }) %> Export...</a>
@@ -94,4 +98,11 @@
 
 <div id="tresdb-toolbar-error" class="alert alert-danger hidden" role="alert">
   Failed to create location. Try again later.
+</div>
+
+<div id="tresdb-toolbar-error-too-close" class="alert alert-danger hidden" role="alert" style="font-size: 1.2em">
+  <button type="button" class="close" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+  Too close to another location. Maybe you could update the existing one instead.
 </div>

@@ -6,16 +6,18 @@ var account = require('../stores/account');
 
 var AdminUsersView = require('../components/Admin/Users');
 var AdminUserView = require('../components/Admin/Users/User');
+var BatchView = require('../components/Batch');
 var CardView = require('../components/Card');
 var ChangePasswordView = require('../components/ChangePassword');
 var Error401View = require('../components/Error401');
 var Error404View = require('../components/Error404');
 var EventsView = require('../components/Events');
 var ExportView = require('../components/Export');
-var FiltersView = require('../components/Filters');
+var ImportView = require('../components/Import');
 var InviteView = require('../components/Invite');
 var LocationView = require('../components/Location');
 var LoginView = require('../components/Login');
+var BatchOutcomeView = require('../components/BatchOutcome');
 var PaymentsView = require('../components/Payments');
 var PaymentsAdminView = require('../components/PaymentsAdmin');
 var ResetPasswordView = require('../components/ResetPassword');
@@ -67,6 +69,7 @@ exports.route = function () {
   };
 
 
+  ///////////////////////
   // Public routes first.
 
   page('*', function parseQueryString(context, next) {
@@ -124,7 +127,10 @@ exports.route = function () {
     return next();
   });
 
+
+  /////////////////////////////
   // Routes that require login
+  //
 
   page('*', function (context, next) {
     // If not logged in then show login form.
@@ -148,9 +154,35 @@ exports.route = function () {
     exports.emit('map_routed');
   });
 
-  page('/payments', function () {
-    var view = new PaymentsView();
-    card.open(view, 'page');
+  page('/export', function () {
+    card.open(new ExportView());
+  });
+
+  page('/import', function () {
+    card.open(new ImportView());
+  });
+
+  page('/import/:batchId/outcome', function (ctx) {
+    card.open(new BatchOutcomeView(ctx.params.batchId));
+  });
+
+  page('/import/:batchId', function (ctx) {
+    card.open(new BatchView(ctx.params.batchId));
+  });
+
+  page('/latest', function () {
+    card.open(new EventsView());
+  });
+
+  page('/locations/:id', function (ctx) {
+    var view = new LocationView(ctx.params.id);
+    card.open(view);
+
+    // Inform that location page has loaded. Map will pan so that
+    // the location becomes centered at the visible portion.
+    view.once('idle', function (location) {
+      exports.emit('location_routed', location);
+    });
   });
 
   page('/password', function () {
@@ -158,22 +190,9 @@ exports.route = function () {
     card.open(view, 'page');
   });
 
-  page('/latest', function () {
-    var view = new EventsView();
-    card.open(view);
-  });
-
-  page('/locations/:id', function (ctx) {
-    var view = new LocationView(ctx.params.id);
-    card.open(view);
-    view.once('idle', function (location) {
-      exports.emit('location_routed', location);
-    });
-  });
-
-  page('/filters', function () {
-    var view = new FiltersView();
-    card.open(view);
+  page('/payments', function () {
+    var view = new PaymentsView();
+    card.open(view, 'page');
   });
 
   page('/search', function (ctx) {
@@ -191,11 +210,10 @@ exports.route = function () {
     card.open(view);
   });
 
-  page('/export', function () {
-    card.open(new ExportView());
-  });
 
+  //////////////////
   // Routes that require admin. Note the adminOnly middleware.
+  //
 
   page('/admin/users', adminOnly, function () {
     var view = new AdminUsersView();

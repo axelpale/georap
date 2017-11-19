@@ -1,5 +1,8 @@
 var account = require('../account');
 
+var HTTP_OK = 200;
+var HTTP_PAYLOAD_TOO_LARGE = 413;
+
 exports.deleteJSON = function (params, callback) {
   // General JSON DELETE AJAX request.
   //
@@ -49,7 +52,8 @@ exports.postFile = function (params, callback) {
   //     form
   //       jQuery instance of the file upload form.
   //   callback
-  //     function (err)
+  //     function (err, jsonResponse)
+
 
   var formData = new FormData(params.form[0]);
 
@@ -63,19 +67,25 @@ exports.postFile = function (params, callback) {
   $.ajax({
     url: params.url,
     type: 'POST',
+    dataType: 'json',  // response data type
     contentType: false,
     data: formData,
     headers: { 'Authorization': 'Bearer ' + account.getToken() },
     processData: false,
-    success: function () {
-      return callback();
+    success: function (jsonResp) {
+      return callback(null, jsonResp);
     },
-    error: function (jqxhr, statusCode, statusMessage) {
-      var err = new Error(statusMessage);
+    error: function (jqxhr, errorName, errorMessage) {
+      var err = new Error(jqxhr.statusText);
+      err.code = jqxhr.status;
 
-      // eslint-disable-next-line no-magic-numbers
-      if (jqxhr.status === 413) {
+      if (jqxhr.status === HTTP_PAYLOAD_TOO_LARGE) {
         err.name = 'REQUEST_TOO_LONG';
+      } else if (jqxhr.status === HTTP_OK) {
+        err.name = errorName;
+        err.message = errorMessage;
+      } else {
+        err.name = jqxhr.responseText;
       }
 
       return callback(err);

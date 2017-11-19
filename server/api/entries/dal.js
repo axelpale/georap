@@ -1,6 +1,8 @@
 
 var db = require('../../services/db');
 var eventsDal = require('../events/dal');
+var path = require('path');
+var _ = require('lodash');
 
 // Private methods
 
@@ -14,7 +16,7 @@ var insertOne = function (entry, callback) {
   //     raw entry to insert
   //   callback
   //     function (err, entryId);
-  var coll = db.get().collection('entries');
+  var coll = db.collection('entries');
 
   coll.insertOne(entry, function (err, result) {
     if (err) {
@@ -112,6 +114,8 @@ exports.createLocationEntry = function (params, callback) {
   //       The relative path of the thumbnail file in the uploads dir
   //     thumbmimetype
   //       string or null
+  //     overlay
+  //       overlay-import object or null
   //   callback
   //     function (err, insertedId)
 
@@ -128,6 +132,7 @@ exports.createLocationEntry = function (params, callback) {
       mimetype: params.mimetype,
       thumbfilepath: params.thumbfilepath,
       thumbmimetype: params.thumbmimetype,
+      overlay: params.overlay ? params.overlay : null,
     },
   };
 
@@ -138,6 +143,60 @@ exports.createLocationEntry = function (params, callback) {
 
     params.entryId = entryId;
     eventsDal.createLocationEntryCreated(params, callback);
+  });
+};
+
+
+exports.filterUniqueLocationEntries = function (args, callback) {
+  // Append given entries into the given location if they do not yet exist.
+  //
+  // Parameters
+  //   args
+  //     locationId
+  //       ObjectId
+  //     entryCandidates
+  //       array of objects:
+  //         username
+  //         markdown
+  //         filepath
+  //           basename is compared
+  //   callback
+  //     function (err, uniqueEntries)
+  //       err
+  //       uniqueEntries
+  //         subset of given entryCandidates
+
+  exports.getAllOfLocation(args.locationId, function (err, realEntries) {
+    if (err) {
+      return callback(err);
+    }
+
+    var newEntries = args.entryCandidates.filter(function (ec) {
+      // Pass only those entry candidates that differ from every current
+      // entry. Entry is different if creator, text, OR file basename differs.
+      return _.every(realEntries, function isDifferent(re) {
+        // Paths are null for descriptions
+        var reBase = re.data.filepath ? path.basename(re.data.filepath) : null;
+        var ecBase = ec.filepath ? path.basename(ec.filepath) : null;
+        return (re.user !== ec.username ||
+                re.data.markdown !== ec.markdown ||
+                reBase !== ecBase);
+      });
+    });
+
+    return callback(null, newEntries);
+
+    // asyn.eachSeries(newEntries, function (ne, next) {
+    //   exports.createLocationEntry({
+    //
+    //   }, next);
+    // }, function then(errs) {
+    //   if (errs) {
+    //     return callback(errs);
+    //   }
+    //
+    //   return callback();
+    // });
   });
 };
 

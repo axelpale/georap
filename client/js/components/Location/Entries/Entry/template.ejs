@@ -92,15 +92,15 @@
       </div>
     <% } else if (entry.getMimeType() === 'application/pdf') { %>
       <div class="panel-body">
-        <a href="<%= entry.getUrl() %>" target="_blank"><%= entry.getFileName() %></a>
+        <span class="glyphicon glyphicon-paperclip"></span> <a href="<%= entry.getUrl() %>" target="_blank"><%= entry.getFileName() %></a>
       </div>
     <% } else if (entry.getMimeType() === 'text/plain') { %>
       <div class="panel-body">
-        <a href="<%= entry.getUrl() %>" target="_blank"><%= entry.getFileName() %></a>
+        <span class="glyphicon glyphicon-paperclip"></span> <a href="<%= entry.getUrl() %>" target="_blank"><%= entry.getFileName() %></a>
       </div>
     <% } else { %>
       <div class="panel-body">
-        <a href="<%= entry.getUrl() %>" download="<%= entry.getFileName() %>"><%= entry.getFileName() %></a>
+        <span class="glyphicon glyphicon-paperclip"></span> <a href="<%= entry.getUrl() %>" download="<%= entry.getFileName() %>"><%= entry.getFileName() %></a>
       </div>
     <% } %>
   </div>

@@ -39,12 +39,19 @@ module.exports = {
   // Express will serve uploaded files (location attachments) from this dir.
   uploadDir: path.resolve(__dirname, '../.data/uploads'),
   // URLs of the uploaded files are prefixed with this URL root path.
-  // If you change the uploadUrl, edit also client/config.js.
   uploadUrl: '/uploads',
   // Thumbnail max width & height in pixels
   uploadThumbSize: 568,
   // Upload file size limit in bytes.
   uploadSizeLimit: 20 * 1024 * 1024,
+
+  // Temporary uploaded files.
+  // Files under these directories are removed in regular basis.
+  tempUploadDir: path.resolve(__dirname, '../.data/tempUploads'),
+  // URLs of the temporary files are prefixed with this URL root path.
+  tempUploadUrl: '/temporary',
+  // Seconds from last change, after the file or dir can be safely removed.
+  tempUploadTimeToLive: 2 * 24 * 60 * 60,  // two days
 
   // Log files
   // Logs about requests are stored under this directory:
