@@ -52,6 +52,8 @@ module.exports = {
   tempUploadUrl: '/temporary',
   // Seconds from last change, after the file or dir can be safely removed.
   tempUploadTimeToLive: 2 * 24 * 60 * 60,  // two days
+  // Upload file size limit in bytes.
+  tempUploadSizeLimit: 200 * 1024 * 1024,
 
   // Log files
   // Logs about requests are stored under this directory:
