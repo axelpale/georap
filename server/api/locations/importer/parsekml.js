@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 var xmltransform = require('camaro');
 var toMarkdown = require('to-markdown');
 var striptags = require('striptags');
@@ -9,8 +10,14 @@ var COLLECT_IMAGE_URLS = /(?:!\[)[^\]]*\]\(([^)]+)\)/g;
 // Coordinate comparison precision in number of characters
 var PREC = 8;
 
+var extendedDataTemplate = ['ExtendedData//SimpleData', {
+  name: '@name',
+  value: '.',
+}];
+
 var placemarkTemplate = {
   name: 'name',
+  extendedData: extendedDataTemplate,
   description: 'description',
   coordinates: 'Point/coordinates',
   line: 'LineString/coordinates',
@@ -94,6 +101,17 @@ var stripImageLinks = function (markdown) {
   return markdown.replace(COLLECT_IMAGE_URLS, '');
 };
 
+var findExtendedValue = function (extendedDataArray, extendedDataName) {
+  var item = _.find(extendedDataArray, function (x) {
+    return x.name === extendedDataName;
+  });
+  // item is undefined if not found
+  if (item) {
+    return item.value;
+  }
+  return item;
+};
+
 
 module.exports = function (kmlBuffer, callback) {
   // Find an array of locations from a KML file.
@@ -147,6 +165,23 @@ module.exports = function (kmlBuffer, callback) {
   // Format locations: remove empty properties etc
   var finalLocations = combinedLocations.map(function (loc) {
 
+    // For special extended data
+    var extType, extNumber, extCounty;
+
+    // Replace empty names with something
+    if (typeof loc.name !== 'string' || loc.name.trim() === '') {
+
+      // Special parser for a historical finnish QGIS military data schema.
+      if (loc.extendedData.length > 0) {
+        extType = findExtendedValue(loc.extendedData, 'Tyyppi');
+        extNumber = findExtendedValue(loc.extendedData, 'Numero');
+        extCounty = findExtendedValue(loc.extendedData, 'Kunta');
+        if (extType && extNumber) {
+          loc.name = extType + ' ' + extNumber + ', ' + extCounty;
+        }
+      }
+    }
+
     // Combine coordinates from Point, LineString, and Polygon.
     // Parse and compute naive average.
     var avgLonLat = (function () {
@@ -179,14 +214,19 @@ module.exports = function (kmlBuffer, callback) {
     var finalDescriptions = (function processDescriptions() {
       var combined = [];
 
-      // Combine
+      // Combine descriptions
       if (loc.hasOwnProperty('descriptions')) {
         combined = loc.descriptions;
       }
-
       if (loc.hasOwnProperty('description')) {
         combined.push(loc.description);
       }
+
+      // Convert extended data to description
+      combined.push(loc.extendedData.reduce(function (acc, extItem) {
+        return acc + '<strong>' + extItem.name + ':</strong>' +
+          ' ' + extItem.value + '<br>';
+      }, ''));
 
       // Remove empty descriptions
       var nonempty = combined.filter(function (desc) {
