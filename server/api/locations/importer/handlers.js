@@ -36,6 +36,7 @@ exports.import = function (req, res) {
   uploadHandler(req, res, function (err) {
     if (err) {
       if (err.code === 'LIMIT_FILE_SIZE') {
+        console.log('TEMP UPLOAD FILE SIZE reached');
         return res.sendStatus(status.REQUEST_TOO_LONG);
       }
       console.error(err);

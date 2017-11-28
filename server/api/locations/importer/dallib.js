@@ -54,7 +54,8 @@ exports.createEntries = function (args, callback) {
       if (errp) {
         if (errp.code === 'ENOENT') {
           var dirname = path.basename(path.dirname(errp.path));
-          console.log('Importer: NO_FILE', path.join(dirname, path.basename(errp.path)),
+          console.log('Importer: NO_FILE',
+                      path.join(dirname, path.basename(errp.path)),
                       'for location', args.locationName);
           // console.log('file for entry does not exist:', entry);
           return next();
