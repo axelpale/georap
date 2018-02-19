@@ -4,7 +4,7 @@ var dal = require('./dal');
 var status = require('http-status-codes');
 var sanitizeFilename = require('sanitize-filename');
 var slugify = require('slugify');
-
+var winston = require('winston');
 
 
 exports.changeGeom = function (req, res) {
@@ -31,6 +31,7 @@ exports.changeGeom = function (req, res) {
     longitude: lng,
   }, function (err) {
     if (err) {
+      winston.error(err);
       return res.sendStatus(status.INTERNAL_SERVER_ERROR);
     }
 
@@ -55,6 +56,7 @@ exports.changeName = function (req, res) {
 
   dal.changeName(params, function (err) {
     if (err) {
+      winston.error(err);
       return res.sendStatus(status.INTERNAL_SERVER_ERROR);
     }
 
@@ -78,7 +80,7 @@ exports.changeTags = function (req, res) {
     tags: req.body.tags,
   }, function (err) {
     if (err) {
-      console.error(err);
+      winston.error(err);
       return res.sendStatus(status.INTERNAL_SERVER_ERROR);
     }
 
@@ -94,6 +96,7 @@ exports.getOne = function (req, res) {
   // eslint-disable-next-line max-statements
   dal.getOne(req.location._id, function (err, rawLoc) {
     if (err) {
+      winston.error(err);
       return res.sendStatus(status.INTERNAL_SERVER_ERROR);
     }
 
@@ -151,6 +154,7 @@ exports.removeOne = function (req, res) {
 
   dal.removeOne(req.location._id, req.user.name, function (err) {
     if (err) {
+      winston.error(err);
       return res.sendStatus(status.INTERNAL_SERVER_ERROR);
     }
 

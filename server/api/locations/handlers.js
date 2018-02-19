@@ -1,12 +1,14 @@
 
 var dal = require('./dal');
 var status = require('http-status-codes');
+var winston = require('winston');
 
 
 exports.count = function (req, res) {
 
   dal.count(function (err, numLocs) {
     if (err) {
+      winston.error(err);
       return res.sendStatus(status.INTERNAL_SERVER_ERROR);
     }
 
@@ -32,7 +34,7 @@ exports.create = function (req, res) {
       if (err.message === 'TOO_CLOSE') {
         return res.json('TOO_CLOSE');
       }
-      console.error(err);
+      winston.error(err);
       return res.sendStatus(status.INTERNAL_SERVER_ERROR);
     }
 

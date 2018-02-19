@@ -5,6 +5,7 @@ var dal = require('./dal');
 var status = require('http-status-codes');
 var urljoin = require('url-join');
 var path = require('path');
+var winston = require('winston');
 
 var uploadHandler = uploads.tempUploader.single('importfile');
 
@@ -36,10 +37,10 @@ exports.import = function (req, res) {
   uploadHandler(req, res, function (err) {
     if (err) {
       if (err.code === 'LIMIT_FILE_SIZE') {
-        console.log('TEMP UPLOAD FILE SIZE reached');
+        winston.warn('TEMP UPLOAD FILE SIZE reached');
         return res.sendStatus(status.REQUEST_TOO_LONG);
       }
-      console.error(err);
+      winston.error(err);
       return res.sendStatus(status.INTERNAL_SERVER_ERROR);
     }
 
@@ -66,7 +67,7 @@ exports.import = function (req, res) {
             res.status(status.BAD_REQUEST);
             return res.send('unknown filetype');
           }
-          console.error(errr);
+          winston.error(errr);
           return res.sendStatus(status.INTERNAL_SERVER_ERROR);
         }
 
@@ -97,7 +98,7 @@ exports.getBatch = function (req, res) {
       if (err.code === 'ENOENT') {
         return res.sendStatus(status.NOT_FOUND);
       }
-      console.error(err);
+      winston.error(err);
       return res.sendStatus(status.INTERNAL_SERVER_ERROR);
     }
 
@@ -111,7 +112,7 @@ exports.getOutcome = function (req, res) {
   var batchId = req.params.batchId;
   dal.getOutcome(batchId, function (err, outcome) {
     if (err) {
-      console.error(err);
+      winston.error(err);
       return res.sendStatus(status.INTERNAL_SERVER_ERROR);
     }
 
@@ -131,7 +132,7 @@ exports.importBatch = function (req, res) {
     username: username,
   }, function (err, batchResult) {
     if (err) {
-      console.error(err);
+      winston.error(err);
       return res.sendStatus(status.INTERNAL_SERVER_ERROR);
     }
 
@@ -140,7 +141,7 @@ exports.importBatch = function (req, res) {
       username: username,
     }, function (errm, mergeResult) {
       if (errm) {
-        console.error(errm);
+        winston.error(errm);
         return res.sendStatus(status.INTERNAL_SERVER_ERROR);
       }
 
@@ -153,7 +154,7 @@ exports.importBatch = function (req, res) {
 
       dal.writeBatchOutcome(outcomeData, function (errw) {
         if (errw) {
-          console.error(errw);
+          winston.error(errw);
           return res.sendStatus(status.INTERNAL_SERVER_ERROR);
         }
 

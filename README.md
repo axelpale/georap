@@ -233,7 +233,7 @@ As a result, our local locations collection is filled with locations from a prod
 
 ## Logging
 
-Server logs are stored under `.data/logs/` by default. To change the dir, edit `config/local.js`. See `server/services/logs/` for how logs are created. Logging is enabled only if `NODE_ENV=production`.
+Server logs are stored under `.data/logs/` by default. To change the dir, edit `config/local.js`. See `server/services/logs/` for how logs are created.
 
 
 
