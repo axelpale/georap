@@ -1,6 +1,7 @@
 var dal = require('./dal');
 var status = require('http-status-codes');
 var Ajv = require('ajv');
+var winston = require('winston');
 
 // Schema validator
 var ajv = new Ajv({
@@ -61,7 +62,7 @@ exports.getFiltered = function (req, res) {
 
   dal.getFiltered(req.query, function (err, markers) {
     if (err) {
-      console.error(err);
+      winston.error(err);
       return res.sendStatus(status.INTERNAL_SERVER_ERROR);
     }
 
@@ -128,7 +129,7 @@ exports.getWithin = function (req, res) {
     query: {},
   }, function (err, markers) {
     if (err) {
-      console.error(err);
+      winston.error(err);
       return res.sendStatus(status.INTERNAL_SERVER_ERROR);
     }
 

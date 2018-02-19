@@ -5,6 +5,7 @@ var dal = require('../../../entries/dal');
 var uploadHandler = uploads.uploader.single('entryfile');
 
 var status = require('http-status-codes');
+var winston = require('winston');
 
 
 exports.change = function (req, res) {
@@ -20,7 +21,7 @@ exports.change = function (req, res) {
 
   var then = function (err) {
     if (err) {
-      console.error(err);
+      winston.error(err);
       return res.sendStatus(status.INTERNAL_SERVER_ERROR);
     }
     return res.sendStatus(status.OK);
@@ -32,14 +33,14 @@ exports.change = function (req, res) {
       if (err.code === 'LIMIT_FILE_SIZE') {
         return res.sendStatus(status.REQUEST_TOO_LONG);
       }
-      console.error(err);
+      winston.error(err);
       return res.sendStatus(status.INTERNAL_SERVER_ERROR);
     }
 
     // Find the current entry data for comparison
     dal.getOneRaw(entryId, function (errr, oldEntry) {
       if (errr) {
-        console.error(errr);
+        winston.error(errr);
         return res.sendStatus(status.INTERNAL_SERVER_ERROR);
       }
 
@@ -76,7 +77,7 @@ exports.change = function (req, res) {
         // Create thumbnail. Create even for non-images.
         uploads.createThumbnail(req.file, function (errt, thumb) {
           if (errt) {
-            console.error(errt);
+            winston.error(errt);
             return res.sendStatus(status.INTERNAL_SERVER_ERROR);
           }
 
@@ -122,7 +123,7 @@ exports.create = function (req, res) {
 
   var then = function (err) {
     if (err) {
-      console.error(err);
+      winston.error(err);
       return res.sendStatus(status.INTERNAL_SERVER_ERROR);
     }
     // Return json because client side response handlers expect json.
@@ -135,7 +136,7 @@ exports.create = function (req, res) {
       if (err.code === 'LIMIT_FILE_SIZE') {
         return res.sendStatus(status.REQUEST_TOO_LONG);
       }
-      console.error(err);
+      winston.error(err);
       return res.sendStatus(status.INTERNAL_SERVER_ERROR);
     }
 
@@ -165,7 +166,7 @@ exports.create = function (req, res) {
       // Create thumbnail. Create even for non-images.
       uploads.createThumbnail(req.file, function (errt, thumb) {
         if (errt) {
-          console.error(errt);
+          winston.error(errt);
           return res.sendStatus(status.INTERNAL_SERVER_ERROR);
         }
 
@@ -217,7 +218,7 @@ exports.remove = function (req, res) {
     username: username,
   }, function (err) {
     if (err) {
-      console.error(err);
+      winston.error(err);
       return res.sendStatus(status.INTERNAL_SERVER_ERROR);
     }
     return res.sendStatus(status.OK);
