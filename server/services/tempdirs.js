@@ -13,7 +13,7 @@ var generateName = function () {
 
 var validateName = function (name) {
   // Ensure the name has correct syntax
-  return moment(name.substr(0, FORMAT.length)).isValid();
+  return moment(name.substr(0, FORMAT.length), FORMAT).isValid();
 };
 
 
