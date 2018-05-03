@@ -221,10 +221,15 @@ exports.signup = function (signupToken, username, password, callback) {
 };
 
 exports.isLoggedIn = function () {
-  // True if user is authenticated.
+  // True if user is authenticated. Requires the token to be valid.
+  //
+  var token = storage.getItem(TOKEN_KEY);
 
-  if (storage.getItem(TOKEN_KEY) !== null) {
-    return true;
+  if (token) {
+    var decoded = jwtDecode(token);
+    if (decoded.exp > Date.now() / 1000) {
+      return true;
+    }
   }
 
   return false;
