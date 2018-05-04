@@ -3,6 +3,7 @@
 // Client-side routing
 
 var account = require('../stores/account');
+var mapStateStore = require('../stores/mapstate');
 
 var AdminUsersView = require('../components/Admin/Users');
 var AdminUserView = require('../components/Admin/Users/User');
@@ -143,6 +144,28 @@ exports.route = function () {
     afterLogin.set(context);
 
     page.show('/login');
+  });
+
+  page('*', function (context, next) {
+    // Recenter map to possible query parameters.
+    //
+    var q = context.query;
+
+    if (q.lat || q.lng || q.zoom) {
+      var s = {};
+      if (q.lat) {
+        s.lat = parseFloat(q.lat);
+      }
+      if (q.lng) {
+        s.lng = parseFloat(q.lng);
+      }
+      if (q.zoom) {
+        s.zoom = parseInt(q.zoom, 10);
+      }
+      mapStateStore.update(s);
+    }
+
+    return next();
   });
 
   page('/', function () {

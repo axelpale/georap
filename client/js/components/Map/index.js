@@ -96,10 +96,17 @@ module.exports = function () {
       self.emit('marker_activated', markerLocation);
     });
 
+    mapStateStore.on('updated', function (newState) {
+      var targetLatLng = new google.maps.LatLng(newState.lat, newState.lng);
+      _map.panTo(targetLatLng);
+      _map.setZoom(newState.zoom);
+      _map.setMapTypeId(newState.mapTypeId);
+    });
+
     (function defineMapStateChange() {
       // Save new state to the state store when the state of the map changes.
       var handleStateChange = function () {
-        mapStateStore.update(readGoogleMapState(_map));
+        mapStateStore.update(readGoogleMapState(_map), { silent: true });
       };
       _map.addListener('idle', handleStateChange);
       _map.addListener('maptypeid_changed', handleStateChange);
