@@ -60,11 +60,6 @@ window.initMap = function () {
   mapComp.on('marker_activated', function (location) {
     // Open location component. Router will emit location_routed
     routes.show('/locations/' + location._id);
-
-    // Once user returns to map, undo the pan.
-    routes.once('map_routed', function () {
-      mapComp.panForCardUndo();
-    });
   });
 
   routes.on('location_routed', function (location) {
