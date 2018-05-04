@@ -2,14 +2,36 @@
 // to a given storage, e.g. localStorage.
 
 var GEO_KEY = 'tresdb-geo-location';
+var emitter = require('component-emitter');
 var storage = require('../connection/storage');
 
-var MapStateStore = function (defaultState) {
+var DEFAULT_STATE = {
+  // Default map state
+  lat: 61.0,
+  lng: 24.0,
+  zoom: 6,
+  // 'hybrid' is darker and more practical than 'roadmap'
+  mapTypeId: 'hybrid',
+};
 
-  this.update = function (state) {
+var MapStateStore = function (initState) {
+  emitter(this);
+
+  var _state;
+
+  var storedState = storage.getItem(GEO_KEY);
+  if (storedState) {
+    _state = JSON.parse(storedState);
+  } else if (initState) {
+    _state = initState;
+  } else {
+    _state = DEFAULT_STATE;
+  }
+
+  this.update = function (newState, opts) {
     // Parameters:
-    //   state
-    //     object with keys:
+    //   newState
+    //     object with optional keys:
     //       lat
     //         number
     //       lng
@@ -18,19 +40,45 @@ var MapStateStore = function (defaultState) {
     //         number
     //       mapTypeId
     //         string
-    if (typeof state !== 'object' ||
-        typeof state.lat !== 'number' ||
-        typeof state.lng !== 'number' ||
-        typeof state.zoom !== 'number' ||
-        typeof state.mapTypeId !== 'string') {
-      throw new Error('Invalid parameters');
-    }  // else
+    //  opts
+    //    optional object with optional keys
+    //      silent
+    //        set true to prevent 'update' event emission
+    //
+    if (typeof newState !== 'object') {
+      throw new Error('Invalid parameter newState');
+    }
+
+    if (typeof newState.lat === 'number') {
+      _state.lat = newState.lat;
+    }
+
+    if (typeof newState.lng === 'number') {
+      _state.lng = newState.lng;
+    }
+
+    if (typeof newState.zoom === 'number') {
+      _state.zoom = newState.zoom;
+    }
+
+    if (typeof newState.mapTypeId === 'string') {
+      _state.mapTypeId = newState.mapTypeId;
+    }
+
+    if (!opts) {
+      opts = {};
+    }
+    opts.silent = typeof opts.silent === 'boolean' ? opts.silent : false;
 
     // Build the string to store
-    var s = JSON.stringify(state);
+    var s = JSON.stringify(_state);
 
     // Store the string
     storage.setItem(GEO_KEY, s);
+
+    if (!opts.silent) {
+      this.emit('updated', _state);
+    }
   };
 
   this.isEmpty = function () {
@@ -55,22 +103,20 @@ var MapStateStore = function (defaultState) {
     //   zoom: <number>,
     //   mapTypeId: <string>
     // }
+    //
+    if (_state !== DEFAULT_STATE) {
+      return _state;
+    }
+
     var s = storage.getItem(GEO_KEY);
 
     if (s) {
       return JSON.parse(s);
     }  // else
 
-    return defaultState;
+    return DEFAULT_STATE;
   };
 };
 
 // Singleton
-module.exports = new MapStateStore({
-  // Default map state
-  lat: 61.0,
-  lng: 24.0,
-  zoom: 6,
-  // 'hybrid' is darker and more practical than 'roadmap'
-  mapTypeId: 'hybrid',
-});
+module.exports = new MapStateStore(DEFAULT_STATE);
