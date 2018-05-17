@@ -74,6 +74,7 @@ module.exports = function () {
       zoomControlOptions: {
         position: google.maps.ControlPosition.RIGHT_BOTTOM,
       },
+      scaleControl: true, // scale stick
     });
 
     // Marker that represents geolocation of the user
