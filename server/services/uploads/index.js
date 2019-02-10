@@ -214,6 +214,7 @@ exports.createThumbnail = function (file, callback) {
     // Shrink with sharp.
     // For docs, see http://sharp.dimens.io/en/stable/
     sharp(file.path)
+      .rotate() // No parameters indicate to use EXIF data
       .resize(size, null, { withoutEnlargement: true })
       .toFile(thumbpath, function (err) {
         if (err) {
