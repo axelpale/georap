@@ -214,8 +214,7 @@ exports.createThumbnail = function (file, callback) {
     // Shrink with sharp.
     // For docs, see http://sharp.dimens.io/en/stable/
     sharp(file.path)
-      .resize(size)
-      .withoutEnlargement()
+      .resize(size, null, { withoutEnlargement: true })
       .toFile(thumbpath, function (err) {
         if (err) {
           console.log(file);
