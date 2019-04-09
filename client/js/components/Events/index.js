@@ -7,7 +7,7 @@ var timestamp = require('../lib/timestamp');
 var template = require('./template.ejs');
 var listTemplate = require('./list.ejs');
 
-var LIST_SIZE = 100;
+var LIST_SIZE = 200;
 
 module.exports = function () {
   // Parameters:
