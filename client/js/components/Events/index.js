@@ -4,10 +4,11 @@ var emitter = require('component-emitter');
 var events = require('../../stores/events');
 var pointstamp = require('../lib/pointstamp');
 var timestamp = require('../lib/timestamp');
+var prettyEvents = require('./prettyEvents');
 var template = require('./template.ejs');
 var listTemplate = require('./list.ejs');
 
-var LIST_SIZE = 100;
+var LIST_SIZE = 200;
 
 module.exports = function () {
   // Parameters:
@@ -29,7 +30,6 @@ module.exports = function () {
 
     // Fetch events for rendering.
     events.getRecent(LIST_SIZE, function (err, rawEvents) {
-
       $loading.addClass('hidden');
 
       if (err) {
@@ -37,12 +37,14 @@ module.exports = function () {
         return;
       }
 
+      var tempEvs = prettyEvents.mergeLocationCreateRename(rawEvents);
+      var compactEvs = prettyEvents.mergeEntryCreateEdit(tempEvs);
+
       $list.html(listTemplate({
         pointstamp: pointstamp,
         timestamp: timestamp,
-        events: rawEvents,
+        events: compactEvs,
       }));
-
     });
 
     // Update rendered on change
@@ -52,10 +54,14 @@ module.exports = function () {
           console.error(err);
           return;
         }
+
+        var tempEvs = prettyEvents.mergeLocationCreateRename(rawEvents);
+        var compactEvs = prettyEvents.mergeEntryCreateEdit(tempEvs);
+
         $list.html(listTemplate({
           pointstamp: pointstamp,
           timestamp: timestamp,
-          events: rawEvents,
+          events: compactEvs,
         }));
       });
     });
