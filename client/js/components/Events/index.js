@@ -4,6 +4,7 @@ var emitter = require('component-emitter');
 var events = require('../../stores/events');
 var pointstamp = require('../lib/pointstamp');
 var timestamp = require('../lib/timestamp');
+var prettyEvents = require('./prettyEvents');
 var template = require('./template.ejs');
 var listTemplate = require('./list.ejs');
 
@@ -37,10 +38,12 @@ module.exports = function () {
         return;
       }
 
+      var compactEvents = prettyEvents.mergeCreateRename(rawEvents);
+
       $list.html(listTemplate({
         pointstamp: pointstamp,
         timestamp: timestamp,
-        events: rawEvents,
+        events: compactEvents,
       }));
 
     });
@@ -52,10 +55,13 @@ module.exports = function () {
           console.error(err);
           return;
         }
+
+        var compactEvents = prettyEvents.mergeCreateRename(rawEvents);
+
         $list.html(listTemplate({
           pointstamp: pointstamp,
           timestamp: timestamp,
-          events: rawEvents,
+          events: compactEvents,
         }));
       });
     });
