@@ -32,18 +32,22 @@ First, clone the repository:
 
     $ git clone https://github.com/axelpale/tresdb.git
 
-Second, install MongoDB by following [the instructions](https://www.mongodb.org/downloads). For example, on OS X:
-
-    $ brew install mongodb
-
-Third, create `tresdb` database and user for the database. See [MongoDB user setup](#mongodb-user-setup) below for details.
-
-Then, install dependencies:
+Second, install dependencies:
 
     $ npm install
 
-Finally, rename `config/local-sample.js` to `config/local.js` and modify it to match your setting.
+Third, install MongoDB by following [the instructions](https://www.mongodb.org/downloads). For example, on OS X:
 
+    $ brew install mongodb
+
+Fourth, create `tresdb` database and a user for the database. See [MongoDB user setup](#mongodb-user-setup) below for details.
+
+Fifth, rename `config/local-sample.js` to `config/local.js` and modify it to match your setting. There, set also the username and password for your default *TresDB* admin user.
+
+Finally, populate the database with the default admin user, data, and indices.
+
+    $ npm run loadsample
+    $ npm run ensureindices
 
 
 ## Quick start
@@ -320,6 +324,8 @@ Then in similar manner, create the test user that can access only 'test':
     > use test
     > db.createUser({ user: 'foo', pwd: 'bar', roles: ['readWrite'] })
 
+Press `ctrl + d` to quit `mongo` client.
+
 Modify `mongo.url` and `mongo.testUrl` properties in `config/local.js` to include the new credentials of the database users:
 
     ...
@@ -349,7 +355,7 @@ Here are some notes and tips for putting a TresDB instance into production.
 
 ### Run in production environment
 
-    $ npm run production
+    $ npm run server:production
 
 ### Recommendation: use pm2 for process management
 
