@@ -30,7 +30,6 @@ module.exports = function () {
 
     // Fetch events for rendering.
     events.getRecent(LIST_SIZE, function (err, rawEvents) {
-
       $loading.addClass('hidden');
 
       if (err) {
@@ -38,14 +37,14 @@ module.exports = function () {
         return;
       }
 
-      var compactEvents = prettyEvents.mergeCreateRename(rawEvents);
+      var tempEvs = prettyEvents.mergeLocationCreateRename(rawEvents);
+      var compactEvs = prettyEvents.mergeEntryCreateEdit(tempEvs);
 
       $list.html(listTemplate({
         pointstamp: pointstamp,
         timestamp: timestamp,
-        events: compactEvents,
+        events: compactEvs,
       }));
-
     });
 
     // Update rendered on change
@@ -56,12 +55,13 @@ module.exports = function () {
           return;
         }
 
-        var compactEvents = prettyEvents.mergeCreateRename(rawEvents);
+        var tempEvs = prettyEvents.mergeLocationCreateRename(rawEvents);
+        var compactEvs = prettyEvents.mergeEntryCreateEdit(tempEvs);
 
         $list.html(listTemplate({
           pointstamp: pointstamp,
           timestamp: timestamp,
-          events: compactEvents,
+          events: compactEvs,
         }));
       });
     });
