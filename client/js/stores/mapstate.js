@@ -6,10 +6,10 @@ var emitter = require('component-emitter');
 var storage = require('../connection/storage');
 
 var DEFAULT_STATE = {
-  // Default map state
-  lat: 61.0,
-  lng: 24.0,
-  zoom: 6,
+  // Default map state. At Irbene, the default samples' loc.
+  lat: 57.5727427,
+  lng: 21.8783527,
+  zoom: 13,
   // 'hybrid' is darker and more practical than 'roadmap'
   mapTypeId: 'hybrid',
 };
