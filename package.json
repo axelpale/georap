@@ -43,7 +43,7 @@
     "async": "^2.1.1",
     "bcryptjs": "^2.3.0",
     "body-parser": "^1.16.0",
-    "camaro": "^2.0.4",
+    "camaro": "^3.0.16",
     "commander": "^2.9.0",
     "component-emitter": "^1.2.1",
     "css-loader": "^0.28.7",
