@@ -398,6 +398,8 @@ For production, we recommend:
 
 We have a single `master` branch. New features are developed in `feature-somefeatname` like branches and then merged to the master via a pull request.
 
+Small updates to documentation are allowed to be done directly to `master`.
+
 ## Versioning
 
 On the master branch, we use the [semantic versioning](http://semver.org/) scheme. The semantic version increments are bound to the operations you need to do when upgrading your TresDB instance:
