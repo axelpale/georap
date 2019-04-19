@@ -86,7 +86,7 @@
     "socket.io-client": "^2.0.3",
     "striptags": "^3.1.0",
     "style-loader": "^0.18.2",
-    "to-markdown": "^3.1.0",
+    "turndown": "^5.0.3",
     "url-join": "^2.0.2",
     "webpack": "^3.5.6",
     "winston": "^2.4.0",
