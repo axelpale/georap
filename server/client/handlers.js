@@ -19,6 +19,7 @@ var indexHtml = (function precompile() {
     config: {
       title: local.title,
       description: local.description,
+      defaultMapState: local.defaultMapState,
       features: local.features,
       googleMapsKey: local.googleMapsKey,
       uploadUrl: local.uploadUrl,

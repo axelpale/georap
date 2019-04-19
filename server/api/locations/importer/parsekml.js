@@ -1,9 +1,10 @@
 /* eslint-disable max-lines */
 var xmltransform = require('camaro');
-var toMarkdown = require('to-markdown');
+var TurndownService = require('turndown');
 var striptags = require('striptags');
 var _ = require('lodash');
 
+// Setup
 
 // Collects paths from markdown links [name](path)
 var COLLECT_IMAGE_URLS = /(?:!\[)[^\]]*\]\(([^)]+)\)/g;
@@ -47,6 +48,9 @@ var TEMPLATE = {
   }],
 };
 
+// Markdown parsing.
+var turndownService = new TurndownService();
+
 var parseCoordinate = function (str) {
   // Return
   //   null if not valid
@@ -74,7 +78,8 @@ var sanitizeDescription = function (desc) {
     return '';
   }
   var spaced = desc.replace('/a><a', '/a>, <a');
-  var mark = toMarkdown(spaced.trim());
+  var mark = turndownService.turndown(spaced.trim());
+
   return striptags(mark);
 };
 
@@ -112,6 +117,7 @@ var findExtendedValue = function (extendedDataArray, extendedDataName) {
   return item;
 };
 
+// Interface
 
 module.exports = function (kmlBuffer, callback) {
   // Find an array of locations from a KML file.
@@ -163,7 +169,7 @@ module.exports = function (kmlBuffer, callback) {
   });
 
   // Format locations: remove empty properties etc
-  var finalLocations = combinedLocations.map(function (loc) {
+  var formattedLocations = combinedLocations.map(function (loc) {
 
     // For special extended data
     var extType, extNumber, extCounty;
@@ -328,5 +334,18 @@ module.exports = function (kmlBuffer, callback) {
     };
   });
 
-  return callback(null, finalLocations);
+  // Filter out locations with no valid coordinates:
+  var validatedLocations = formattedLocations.filter(function (loc) {
+    if (typeof loc.name === 'string') {
+      if (typeof loc.longitude === 'number' && !isNaN(loc.longitude)) {
+        if (typeof loc.latitude === 'number' && !isNaN(loc.latitude)) {
+          return true;
+        }
+      }
+    }
+
+    return false;
+  });
+
+  return callback(null, validatedLocations);
 };

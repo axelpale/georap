@@ -63,19 +63,19 @@ module.exports = function (rawEntries, location) {
 
     if (ev.type.endsWith('_created')) {
       _createEntry(rawEventToRawEntry(ev));
+      // E.g. self.emit('location_entry_created', ev);
       self.emit(ev.type, ev);
-      //because general entry//self.emit('location_entry_created', ev);
     }
 
     if (ev.type.endsWith('_removed')) {
       var en = _removeEntry(ev.data.entryId);
+      // E.g. self.emit('location_entry_removed', ev, en);
       self.emit(ev.type, ev, en);
-      //self.emit('location_entry_removed', ev, en);
     }
 
     if (ev.type.endsWith('_changed')) {
+      // E.g. self.emit('location_entry_changed', ev);
       self.emit(ev.type, ev);
-      //self.emit('location_entry_changed', ev);
     }
   });
 
