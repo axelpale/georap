@@ -1,6 +1,6 @@
 
 var ExportComponent = require('./Export');
-var PostComponent = require('./Post');
+var EntryCreationComponent = require('../Entries/Creation');
 var template = require('./template.ejs');
 var emitter = require('component-emitter');
 
@@ -14,22 +14,22 @@ module.exports = function (location) {
   emitter(self);
 
   // Child components
-  var _postCom = new PostComponent(location);
+  var _entryCom = new EntryCreationComponent(location);
   var _exportCom = new ExportComponent(location);
 
   self.bind = function ($mount) {
     $mount.html(template({}));
 
-    var $postCont = $('#tresdb-entry-container-outer');
+    var $entryCont = $('#tresdb-entry-container-outer');
     var $exportCont = $('#tresdb-export-container-outer');
 
     // Bind child components
-    _postCom.bind($postCont);
+    _entryCom.bind($entryCont);
     _exportCom.bind($exportCont);
   };
 
   self.unbind = function () {
-    _postCom.unbind();
+    _entryCom.unbind();
     _exportCom.unbind();
   };
 };

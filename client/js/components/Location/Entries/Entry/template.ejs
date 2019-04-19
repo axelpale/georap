@@ -17,6 +17,7 @@
 
     <form id="<%= entry.getId() %>-form">
 
+      <!-- Modifiable entry description -->
       <div class="form-group">
         <label for="<%= entry.getId() %>-markdown">Tell something about the location:</label>
         <textarea id="<%= entry.getId() %>-markdown" name="entrytext" class="form-control" rows="3"><%= entry.getMarkdown() %></textarea>
@@ -25,10 +26,12 @@
         </div>
       </div>
 
+      <!-- Markdown tips -->
       <div id="<%= entry.getId() %>-syntax" class="well hidden">
         <%= markdownSyntax() %>
       </div>
 
+      <!-- Entry document upload -->
       <div class="form-group">
         <label for="<%= entry.getId() %>-file-input">
           <% if (entry.hasFile()) { %>
@@ -40,6 +43,7 @@
         <input id="<%= entry.getId() %>-file-input" type="file" name="entryfile">
       </div>
 
+      <!-- Is entry a visit -->
       <div id="<%= entry.getId() %>-entry-visit" class="form-group tresdb-disabled">
         <label>Did you visit the location?</label>
         <div class="checkbox disabled">
@@ -49,6 +53,7 @@
         </div>
       </div>
 
+      <!-- Save buttons -->
       <div class="form-group">
         <div class="pull-right">
           <button id="<%= entry.getId() %>-cancel" type="button" class="btn btn-default">Cancel</button>
@@ -57,6 +62,7 @@
         <button id="<%= entry.getId() %>-delete-ensure" type="button" class="btn btn-danger">Delete post...</button>
       </div>
 
+      <!-- Delete confirmation -->
       <div id="<%= entry.getId() %>-delete-final" class="form-group hidden">
         Are you sure?
         <button id="<%= entry.getId() %>-delete" type="button" class="btn btn-danger">Yes, delete!</button>
