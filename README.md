@@ -394,6 +394,10 @@ For production, we recommend:
 - [Let's Encrypt](https://letsencrypt.org/): TLS certificates
 
 
+# Branching strategy
+
+We have a single `master` branch. New features are developed in `feature-somefeatname` like branches and then merged to the master via a pull request.
+
 ## Versioning
 
 On the master branch, we use the [semantic versioning](http://semver.org/) scheme. The semantic version increments are bound to the operations you need to do when upgrading your TresDB instance:
