@@ -15,6 +15,17 @@ module.exports = {
   title: 'My TresDB App',
   description: 'A secret geographical portal',
 
+  // Initial viewport location. Initial sample locations are here.
+  // Default map state. At Irbene, the default samples' loc.
+  // @57.5727427,21.8783527,13z
+  defaultMapState: {
+    lat: 57.5727427,
+    lng: 21.8783527,
+    zoom: 13,
+    // 'hybrid' is darker and more practical than 'roadmap'
+    mapTypeId: 'hybrid',
+  },
+
   // Enable or disable features of the site.
   // See also client/config.js for duplicate configs.
   features: {
