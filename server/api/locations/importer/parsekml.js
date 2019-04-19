@@ -78,7 +78,7 @@ var sanitizeDescription = function (desc) {
     return '';
   }
   var spaced = desc.replace('/a><a', '/a>, <a');
-  var mark = turndownService.turndown(spaced.trim())
+  var mark = turndownService.turndown(spaced.trim());
 
   return striptags(mark);
 };
@@ -169,7 +169,7 @@ module.exports = function (kmlBuffer, callback) {
   });
 
   // Format locations: remove empty properties etc
-  var finalLocations = combinedLocations.map(function (loc) {
+  var formattedLocations = combinedLocations.map(function (loc) {
 
     // For special extended data
     var extType, extNumber, extCounty;
@@ -334,5 +334,18 @@ module.exports = function (kmlBuffer, callback) {
     };
   });
 
-  return callback(null, finalLocations);
+  // Filter out locations with no valid coordinates:
+  var validatedLocations = formattedLocations.filter(function (loc) {
+    if (typeof loc.name === 'string') {
+      if (typeof loc.longitude === 'number' && !isNaN(loc.longitude)) {
+        if (typeof loc.latitude === 'number' && !isNaN(loc.latitude)) {
+          return true;
+        }
+      }
+    }
+
+    return false;
+  });
+
+  return callback(null, validatedLocations);
 };
