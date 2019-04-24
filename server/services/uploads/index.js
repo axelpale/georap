@@ -212,8 +212,11 @@ exports.createThumbnail = function (file, callback) {
   if (mimetype.substr(0, 6) === 'image/') {
 
     // Shrink with sharp.
-    // For docs, see http://sharp.dimens.io/en/stable/
-    sharp(file.path)
+    // For docs, see https://github.com/lovell/sharp
+    // Note, failOnError is set to false for Samsung
+    //   JPEGs to work correctly.
+    //   See https://github.com/lovell/sharp/issues/1578
+    sharp(file.path, { failOnError: false })
       .rotate() // No parameters indicate to use EXIF data
       .resize(size, null, { withoutEnlargement: true })
       .toFile(thumbpath, function (err) {
