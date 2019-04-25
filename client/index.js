@@ -11,7 +11,8 @@ require('!!file-loader?name=[path][name].[ext]!./images/logo/16.png');
 require('!!file-loader?name=[path][name].[ext]!./images/logo/32.png');
 
 // Login background
-require('!!file-loader?name=[path][name].[ext]!./images/login.jpg');
+// eslint-disable-next-line max-len
+require('!!file-loader?name=images/login.jpg!../config/images/login-background.jpg');
 
 // My location graphics
 require('!!file-loader?name=[path][name].[ext]!./images/mylocation.png');
