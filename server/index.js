@@ -2,9 +2,11 @@
 
 var local = require('../config/local');
 var http = require('http');
+var path = require('path');
+var fse = require('fs-extra');
 var express = require('express');
-var app = express();
 
+var app = express();
 var server = http.createServer(app);
 
 var io = require('./services/io');
@@ -125,6 +127,16 @@ db.init(function (dbErr) {
     app.use(local.staticUrl, express.static(local.staticDir));
     console.log('Serving static files from', local.staticUrl);
   }
+
+  // Instance-specific static files are best copied without webpack
+  // because webpack does not support dynamic paths well.
+  (function copyCustomStatic(copyPaths) {
+    copyPaths.forEach(function (pp) {
+      fse.copy(pp[0], pp[1]);
+    });
+  }([
+    [local.loginBackground, path.join(local.staticDir, 'images/login.jpg')],
+  ]));
   // -------------
   // Static assets END
 

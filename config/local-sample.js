@@ -26,6 +26,11 @@ module.exports = {
     mapTypeId: 'hybrid',
   },
 
+  // Login screen background image. The first thing the user experiences.
+  // The image will be copied to a public location on start up.
+  // Use only an absolute path.
+  loginBackground: path.join(__dirname, 'images/login-background.jpg'),
+
   // Site secret. CHANGE! DO NOT EXPOSE TO CLIENT!
   // Used to encrypt and decrypt passwords and tokens.
   secret: '123456789',
