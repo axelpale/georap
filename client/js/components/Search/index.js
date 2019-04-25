@@ -42,6 +42,7 @@ module.exports = function (query) {
     }));
 
     var $form = $('#tresdb-search-form');
+    var $progress = $('#tresdb-search-progress');
     var $text = $('#tresdb-search-text');
     var $creator = $('#tresdb-search-creator');
     var $order = $('#tresdb-search-order');
@@ -180,60 +181,66 @@ module.exports = function (query) {
     }(query));
 
     // Do instant query.
-    // Fetch search results.
-    // Fetch one more than the limit to see if there is next page.
-    // Note that this artificially changes the query.
-    query.limit = parseInt(query.limit, 10) + 1;
-    markers.getFiltered(query, function responseHandler(err, results) {
-      // Hide progress
-      if (err) {
-        // Display error
-        console.error(err);
-        if (err.code === BAD_REQUEST) {
-          tresdb.ui.show($error400);
-        } else {
-          tresdb.ui.show($error500);
+    (function doQuery(q) {
+      // Show progress bar
+      $progress.removeClass('hidden');
+      // Fetch search results.
+      // Fetch one more than the limit to see if there is next page.
+      // Note that this artificially changes the query.
+      q.limit = parseInt(q.limit, 10) + 1;
+      markers.getFiltered(q, function responseHandler(err, results) {
+        // Hide progress if visible
+        $progress.addClass('hidden');
+
+        if (err) {
+          // Display error
+          console.error(err);
+          if (err.code === BAD_REQUEST) {
+            tresdb.ui.show($error400);
+          } else {
+            tresdb.ui.show($error500);
+          }
+          return;
         }
-        return;
-      }
 
-      // We must determine is there a next page.
-      // We did that by fetching one additional item.
-      // We do not want to render that item.
+        // We must determine is there a next page.
+        // We did that by fetching one additional item.
+        // We do not want to render that item.
 
-      // Hide prev and next buttons.
-      // No results => hide both
-      // One page or less => hide both
-      // More than one page, first page => hide prev
-      // More than one page, not first => show both
-      var l = results.length;
-      var skip = $skip.val();
-      var limit = $limit.val();
+        // Hide prev and next buttons.
+        // No results => hide both
+        // One page or less => hide both
+        // More than one page, first page => hide prev
+        // More than one page, not first => show both
+        var l = results.length;
+        var skip = $skip.val();
+        var limit = $limit.val();
 
-      if (skip > 0) {
-        // Not first page
-        tresdb.ui.show($prevPage);
-      } else {
-        tresdb.ui.hide($prevPage);
-      }
+        if (skip > 0) {
+          // Not first page
+          tresdb.ui.show($prevPage);
+        } else {
+          tresdb.ui.hide($prevPage);
+        }
 
-      if (l > limit) {
-        // Not last page
-        tresdb.ui.show($nextPage);
-      } else {
-        tresdb.ui.hide($nextPage);
-      }
+        if (l > limit) {
+          // Not last page
+          tresdb.ui.show($nextPage);
+        } else {
+          tresdb.ui.hide($nextPage);
+        }
 
-      // Render results. If there is extra item, remove it.
-      // The extra item was used to determine if there is an additional
-      // page or not.
-      $results.html(listTemplate({
-        tagsTemplate: tagsTemplate,
-        markers: l > limit ? results.slice(0, -1) : results,
-      }));
-    });
+        // Render results. If there is extra item, remove it.
+        // The extra item was used to determine if there is an additional
+        // page or not.
+        $results.html(listTemplate({
+          tagsTemplate: tagsTemplate,
+          markers: l > limit ? results.slice(0, -1) : results,
+        }));
+      });
+    }(query));
 
-    // Is query is empty focus to the search input field
+    // If query is empty focus to the search input field
     // because user probably did arrive here manually and not by
     // submitting the form.
     // Test this against order because it is always attached.
