@@ -44,12 +44,14 @@ module.exports = function () {
       var bestUsersAllTime = activeUsers.sort(function (ua, ub) {
         return ub.points - ua.points;
       });
-      var bestUsersOf30days = activeUsers.sort(function (ua, ub) {
+      var VIEW_TOP = 5;
+      // Slice to copy because sort manipulates the original.
+      var bestUsersOf30days = activeUsers.slice().sort(function (ua, ub) {
         return ub.points30days - ua.points30days;
-      }).slice(0, 5);
-      var bestUsersOf7days = activeUsers.sort(function (ua, ub) {
+      }).slice(0, VIEW_TOP);
+      var bestUsersOf7days = activeUsers.slice().sort(function (ua, ub) {
         return ub.points7days - ua.points7days;
-      }).slice(0, 5);
+      }).slice(0, VIEW_TOP);
 
       // Reveal list
       $('#tresdb-users-alltime').html(listTemplate({
