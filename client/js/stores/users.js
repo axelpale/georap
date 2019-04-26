@@ -14,6 +14,9 @@ exports.getAll = function (callback) {
   // Fetch a users from server and return array of raw user objects.
   // Will call back with error if not found.
   //
+  // DEV NOTE
+  // If you need to order the users, then order them on the client side.
+  //
   // Parameters:
   //   callback
   //     function (err, users)
