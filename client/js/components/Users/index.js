@@ -53,6 +53,11 @@ module.exports = function () {
         return ub.points7days - ua.points7days;
       }).slice(0, VIEW_TOP);
 
+      // Hide zero-point users from top lists
+      var hasPoints = function (u) {
+        return u.points > 0;
+      };
+
       // Reveal list
       $('#tresdb-users-alltime').html(listTemplate({
         users: bestUsersAllTime,
@@ -62,7 +67,7 @@ module.exports = function () {
         users: bestUsersOf30days.map(function (u) {
           // Template uses u.points
           return Object.assign({}, u, { points: u.points30days });
-        }),
+        }).filter(hasPoints),
         prefix: '+',
       }));
 
@@ -70,7 +75,7 @@ module.exports = function () {
         users: bestUsersOf7days.map(function (u) {
           // Template uses u.points
           return Object.assign({}, u, { points: u.points7days });
-        }),
+        }).filter(hasPoints),
         prefix: '+',
       }));
 
