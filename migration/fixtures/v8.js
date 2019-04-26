@@ -1,4 +1,5 @@
 /* eslint-disable no-magic-numbers */
+// NOTE This file is an important documentation of the data structure of v8.
 
 var c = require('./common');
 
@@ -90,6 +91,8 @@ module.exports = {
       hash: c.PASSWORD,
       name: 'admin',
       points: 0,
+      // points7days: created by worker
+      // points30days: created by worker
       status: 'active',
     }],
 

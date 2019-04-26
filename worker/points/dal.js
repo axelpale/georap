@@ -18,25 +18,57 @@ exports.computePoints = function (username, callback) {
       return callback(err);
     }
 
-    var points = exports.sumPoints(evs);
-    var typerr;
+    // Compute UNIX timestamp and ensure order.
+    var evsTimeUnix = evs.map(function (ev) {
+      return Object.assign({}, ev, {
+        timeUnix: new Date(ev.time),
+      });
+    }).sort(function (eva, evb) {
+      return eva.timeUnix - evb.timeUnix;
+    });
+
+    // Event time frames
+    var d30 = 30 * 24 * 60 * 60 * 1000; // eslint-disable-line no-magic-numbers
+    var d7 = 7 * 24 * 60 * 60 * 1000; // eslint-disable-line no-magic-numbers
+    var unix30daysAgo = Date.now() - d30;
+    var unix7daysAgo = Date.now() - d7;
+    var evs30days = evsTimeUnix.filter(function (ev) {
+      return ev.timeUnix > unix30daysAgo;
+    });
+    var evs7days = evsTimeUnix.filter(function (ev) {
+      return ev.timeUnix > unix7daysAgo;
+    });
+
+    // Point Categories
+    var ps = {
+      allTime: exports.sumPoints(evs),
+      days30: exports.sumPoints(evs30days),
+      days7: exports.sumPoints(evs7days),
+    };
+
+    var isOk = function (num) {
+      return typeof num === 'number' && !isNaN(num);
+    };
 
     // Assert
-    if (typeof points !== 'number' || isNaN(points)) {
-      typerr = new Error('Invalid scene points sum: ' + points);
+    var typerr;
+    if (!isOk(ps.allTime) || !isOk(ps.days30) || !isOk(ps.days7)) {
+      typerr = new Error('Invalid scene points sum: ' + JSON.stringify(ps));
       return callback(typerr);
     }
 
-    return callback(null, points);
+    return callback(null, ps);
   });
 };
 
 exports.computePointsAndStore = function (username, callback) {
+  //
   // Parameters:
   //   username
   //   callback
-  //     function (err, points)
-  exports.computePoints(username, function (err, points) {
+  //     function (err)
+  //
+  exports.computePoints(username, function (err, pointCategories) {
     if (err) {
       return callback(err);
     }
@@ -46,7 +78,9 @@ exports.computePointsAndStore = function (username, callback) {
     var q = { name: username };
     var u = {
       $set: {
-        points: points,
+        points: pointCategories.allTime,
+        points30days: pointCategories.days30,
+        points7days: pointCategories.days7,
       },
     };
 
@@ -55,7 +89,7 @@ exports.computePointsAndStore = function (username, callback) {
         return callback(err2);
       }
 
-      return callback(null, points);
+      return callback(null);
     });
   });
 };
