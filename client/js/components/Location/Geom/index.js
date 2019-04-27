@@ -82,7 +82,7 @@ module.exports = function (location) {
       var mapState = mapStateStore.get();
 
       var options = {
-        zoom: mapState.zoom + 1,
+        zoom: mapState.zoom,
         center: {
           lat: location.getLatitude(),
           lng: location.getLongitude(),
