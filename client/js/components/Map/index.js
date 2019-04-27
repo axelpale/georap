@@ -141,7 +141,7 @@ module.exports = function () {
     component.bind($(el));
   };
 
-  self.panForCard = function (lat, lng) {
+  self.panForCard = function (geom) {
     // Pan map so that target location becomes centered on
     // the visible background.
     //
@@ -149,7 +149,7 @@ module.exports = function () {
     //   lat, lng
     //     Coords of the location
     assertBound();
-    return _panner.panForCard(lat, lng);
+    return _panner.panForCard(geom);
   };
 
   self.panForCardUndo = function () {
