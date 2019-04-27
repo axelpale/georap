@@ -4,6 +4,7 @@ var geostamp = require('./geostamp');
 var template = require('./template.ejs');
 var AdditionMarker = require('../../Map/AdditionMarker');
 var locations = require('../../../stores/locations');
+var mapStateStore = require('../../../stores/mapstate');
 
 // Reuse the map instance after first use to avoid memory leaks.
 // Google Maps does not handle garbage collecting well.
@@ -78,13 +79,15 @@ module.exports = function (location) {
     var initMap = function () {
       var $map = $('#tresdb-location-coords-map');
 
+      var mapState = mapStateStore.get();
+
       var options = {
-        zoom: 10,
+        zoom: mapState.zoom + 1,
         center: {
           lat: location.getLatitude(),
           lng: location.getLongitude(),
         },
-        mapTypeId: google.maps.MapTypeId.ROADMAP,
+        mapTypeId: mapState.mapTypeId,
         disableDefaultUI: true,
         zoomControl: true,
         mapTypeControl: true,
@@ -97,6 +100,7 @@ module.exports = function (location) {
       } else {
         // Already initialised
         $map.replaceWith(gmap.elem);
+        gmap.map.setZoom(options.zoom);
         gmap.map.setCenter(options.center);
         gmap.map.setMapTypeId(options.mapTypeId);
       }
