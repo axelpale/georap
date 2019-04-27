@@ -3,11 +3,7 @@
 var geostamp = require('./geostamp');
 var template = require('./template.ejs');
 var AdditionMarker = require('../../Map/AdditionMarker');
-
-// Coordinate systems and their templates
-var systemNames = tresdb.config.coordinateSystems.map(function (sys) {
-  return sys[0];
-});
+var locations = require('../../../stores/locations');
 
 // Reuse the map instance after first use to avoid memory leaks.
 // Google Maps does not handle garbage collecting well.
@@ -18,43 +14,53 @@ var gmap = {
   listener: null,
 };
 
+var getAllCoords = function (loc) {
+  // coordinates in each registered coordinate system.
+
+  // Coordinate systems and their templates
+  var systemNames = tresdb.config.coordinateSystems.map(function (sys) {
+    return sys[0];
+  });
+
+  var allCoords = systemNames.map(function (sysName) {
+    var coords = loc.getAltGeom(sysName);
+
+    var tmplParams = {
+      lat: coords[1],
+      lng: coords[0],
+      absLat: Math.abs(coords[1]),
+      absLng: Math.abs(coords[0]),
+      getLatDir: geostamp.latitudeDirection,
+      getLngDir: geostamp.longitudeDirection,
+      getD: geostamp.getDecimal,
+      getDM: geostamp.getDM,
+      getDMS: geostamp.getDMS,
+    };
+
+    var systemHtml = tresdb.templates[sysName](tmplParams);
+
+    return {
+      name: sysName,
+      html: systemHtml,
+    };
+  });
+
+  return allCoords;
+};
+
 module.exports = function (location) {
+
+  // For unbinding to prevent memory leaks.
+  var locationListeners = {};
 
   // Public methods
 
   this.bind = function ($mount) {
 
-    // Preparation for rendering
-
-    // Render coordinates in each registered coordinate system.
-    var allCoords = systemNames.map(function (sysName) {
-      var coords = location.getAltGeom(sysName);
-
-      var tmplParams = {
-        lat: coords[1],
-        lng: coords[0],
-        absLat: Math.abs(coords[1]),
-        absLng: Math.abs(coords[0]),
-        getLatDir: geostamp.latitudeDirection,
-        getLngDir: geostamp.longitudeDirection,
-        getD: geostamp.getDecimal,
-        getDM: geostamp.getDM,
-        getDMS: geostamp.getDMS,
-      };
-
-      var systemHtml = tresdb.templates[sysName](tmplParams);
-
-      return {
-        name: sysName,
-        html: systemHtml,
-      };
-    });
-
     // Render
-
     $mount.html(template({
       location: location,
-      allCoords: allCoords,
+      allCoords: getAllCoords(location),
     }));
 
     // Preparation for binds
@@ -210,11 +216,34 @@ module.exports = function (location) {
 
     // Event handling
 
-    location.on('location_geom_changed', function () {
-      var geostampHtml = geostamp(location.getGeom(), { precision: 5 });
-      $geostamp.html(geostampHtml);
-    });
+    var geomChangedHandler = function () {
+      // Update coords on geom change.
 
+      // Fetch the location again because alternative geoms are computed
+      // server-side. HACK
+      locations.get(location.getId(), function (err, newloc) {
+        if (err) {
+          console.error(err);
+          return;
+        }
+
+        // Get coords in each coord system.
+        var allCoords = getAllCoords(newloc);
+        // WGS84
+        $geostamp.html(allCoords[0].html);
+        // Other systems
+        var $more = $('#tresdb-location-coords-more');
+        var moreHtml = allCoords.reduce(function (acc, c) {
+          var content = c.html + ' (' + c.name + ')';
+          return acc + '<div><span>' + content + '</span></div>';
+        }, '');
+        $more.html(moreHtml);
+      });
+    };
+
+    location.on('location_geom_changed', geomChangedHandler);
+    // eslint-disable-next-line dot-notation
+    locationListeners['location_geom_changed'] = geomChangedHandler;
   };
 
   this.unbind = function () {
@@ -227,5 +256,12 @@ module.exports = function (location) {
     $form.off();
     $cancel.off();
     $moreopen.off();
+
+    var k;
+    for (k in locationListeners) {
+      if (locationListeners.hasOwnProperty(k)) {
+        location.off(k, locationListeners[k]);
+      }
+    }
   };
 };
