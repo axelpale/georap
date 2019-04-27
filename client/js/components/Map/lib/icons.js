@@ -65,8 +65,8 @@ exports.geolocation = function () {
 exports.additionMarker = function () {
   return {
     url: additionMarkerUrl,
-    size: new google.maps.Size(60, 107),
+    size: new google.maps.Size(38, 66),
     origin: new google.maps.Point(0, 0),
-    anchor: new google.maps.Point(30, 107),
+    anchor: new google.maps.Point(19, 65),
   };
 };
