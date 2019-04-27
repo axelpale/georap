@@ -62,10 +62,16 @@ window.initMap = function () {
     routes.show('/locations/' + location._id);
   });
 
+  // Map should react to location position and also to a change
+  // of the position.
   routes.on('location_routed', function (location) {
     // Via whatever way user arrived to loc,
     // pan map so that marker becomes visible.
     mapComp.panForCard(location.getGeom());
+    location.on('location_geom_changed', function () {
+      mapComp.panForCard(location.getGeom());
+    });
+    // The Location view will call location.off() when unbound.
   });
 
   var menuComp = new MainMenuComp(mapComp);

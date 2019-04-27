@@ -8,14 +8,23 @@ module.exports = function (map) {
   // the new location is to be created.
   var additionMarker = null;
 
+  // Keep track if the marker is dragged or not.
+  // This helps to determine should map pan change the marker position or not.
+  // Dragging marker near the edge will pan the view,
+  // which would cause the marker to flick between pointer and center,
+  // if we do not care if marker is dragged or not.
+  var dragged = false;
+
   // Bind
 
-  // Make addition marker to follow map center.
-  map.addListener('center_changed', function () {
-    if (additionMarker) {
+  // Make addition marker to follow map center except when marker is dragged.
+  // See comment next to var dragged for details.
+  var setMarkerPosition = function () {
+    if (additionMarker && !dragged) {
       additionMarker.setPosition(map.getCenter());
     }
-  });
+  };
+  var centerListener = map.addListener('center_changed', setMarkerPosition);
 
   // Public methods
 
@@ -28,9 +37,16 @@ module.exports = function (map) {
       draggable: true,
     });
 
+    // See comment next to var dragged for details.
+    additionMarker.addListener('dragstart', function () {
+      dragged = true;
+    });
+
     additionMarker.addListener('dragend', function () {
       // Move the map so that the marker is at the middle.
       map.panTo(additionMarker.getPosition());
+      // See comment next to var dragged for details.
+      dragged = false;
     });
   };
 
@@ -52,6 +68,8 @@ module.exports = function (map) {
 
   this.hide = function () {
     // Remove addition marker from the map.
+    centerListener.remove();
+    google.maps.event.clearListeners(additionMarker, 'dragend');
     additionMarker.setMap(null);
     additionMarker = null;
   };
