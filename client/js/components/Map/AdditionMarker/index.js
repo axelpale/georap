@@ -11,11 +11,12 @@ module.exports = function (map) {
   // Bind
 
   // Make addition marker to follow map center.
-  map.addListener('center_changed', function () {
+  var setMarkerPosition = function () {
     if (additionMarker) {
       additionMarker.setPosition(map.getCenter());
     }
-  });
+  };
+  var centerListener = map.addListener('center_changed', setMarkerPosition);
 
   // Public methods
 
@@ -52,6 +53,8 @@ module.exports = function (map) {
 
   this.hide = function () {
     // Remove addition marker from the map.
+    centerListener.remove();
+    google.maps.event.clearListeners(additionMarker, 'dragend');
     additionMarker.setMap(null);
     additionMarker = null;
   };
