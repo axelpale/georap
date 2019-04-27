@@ -1,4 +1,5 @@
-
+/* global google */
+/* eslint-disable max-statements */
 var geostamp = require('./geostamp');
 var template = require('./template.ejs');
 
@@ -7,6 +8,10 @@ var systemNames = tresdb.config.coordinateSystems.map(function (sys) {
   return sys[0];
 });
 
+// Reuse the map instance after first use to avoid memory leaks.
+// Google Maps does not handle garbage collecting well.
+var gmapElem = null;
+var gmapEditor = null;
 
 module.exports = function (location) {
 
@@ -59,6 +64,32 @@ module.exports = function (location) {
     var $lng = $('#tresdb-location-coords-longitude');
     var $lat = $('#tresdb-location-coords-latitude');
 
+    var initMap = function () {
+      var $map = $('#tresdb-location-coords-map');
+
+      var options = {
+        zoom: 10,
+        center: {
+          lat: location.getLatitude(),
+          lng: location.getLongitude(),
+        },
+        mapTypeId: google.maps.MapTypeId.ROADMAP,
+        disableDefaultUI: true,
+        zoomControl: true,
+        mapTypeControl: true,
+      };
+
+      if (gmapEditor === null && gmapElem === null) {
+        gmapElem = $map[0];
+        gmapEditor = new google.maps.Map(gmapElem, options);
+      } else {
+        // Already initialised
+        $map.replaceWith(gmapElem);
+        gmapEditor.setCenter(options.center);
+        gmapEditor.setMapTypeId(options.mapTypeId);
+      }
+    };
+
     var isFormOpen = function () {
       var isHidden = $container.hasClass('hidden');
       return !isHidden;
@@ -69,6 +100,8 @@ module.exports = function (location) {
       tresdb.ui.show($form);
       // Hide all possible error messages
       tresdb.ui.hide($error);
+      // Load map
+      initMap();
     };
 
     var closeForm = function () {
@@ -168,6 +201,5 @@ module.exports = function (location) {
     $form.off();
     $cancel.off();
     $moreopen.off();
-
   };
 };
