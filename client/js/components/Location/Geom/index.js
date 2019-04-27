@@ -2,6 +2,7 @@
 /* eslint-disable max-statements */
 var geostamp = require('./geostamp');
 var template = require('./template.ejs');
+var AdditionMarker = require('../../Map/AdditionMarker');
 
 // Coordinate systems and their templates
 var systemNames = tresdb.config.coordinateSystems.map(function (sys) {
@@ -10,8 +11,12 @@ var systemNames = tresdb.config.coordinateSystems.map(function (sys) {
 
 // Reuse the map instance after first use to avoid memory leaks.
 // Google Maps does not handle garbage collecting well.
-var gmapElem = null;
-var gmapEditor = null;
+var gmap = {
+  elem: null,
+  map: null,
+  marker: null,
+  listener: null,
+};
 
 module.exports = function (location) {
 
@@ -77,17 +82,36 @@ module.exports = function (location) {
         disableDefaultUI: true,
         zoomControl: true,
         mapTypeControl: true,
+        scaleControl: true, // scale stick
       };
 
-      if (gmapEditor === null && gmapElem === null) {
-        gmapElem = $map[0];
-        gmapEditor = new google.maps.Map(gmapElem, options);
+      if (gmap.map === null && gmap.elem === null) {
+        gmap.elem = $map[0];
+        gmap.map = new google.maps.Map(gmap.elem, options);
       } else {
         // Already initialised
-        $map.replaceWith(gmapElem);
-        gmapEditor.setCenter(options.center);
-        gmapEditor.setMapTypeId(options.mapTypeId);
+        $map.replaceWith(gmap.elem);
+        gmap.map.setCenter(options.center);
+        gmap.map.setMapTypeId(options.mapTypeId);
       }
+
+      // Reuse the marker class of location creation.
+      // Familiar affordance for the user.
+      gmap.marker = new AdditionMarker(gmap.map);
+      gmap.marker.show();
+      gmap.listener = gmap.map.addListener('center_changed', function () {
+        var latlng = gmap.map.getCenter();
+        $lng.val(latlng.lng());
+        $lat.val(latlng.lat());
+      });
+    };
+
+    var closeMap = function () {
+      // Avoid memory leaks.
+      gmap.marker.hide();
+      gmap.marker = null;
+      gmap.listener.remove();
+      gmap.listener = null;
     };
 
     var isFormOpen = function () {
@@ -108,6 +132,8 @@ module.exports = function (location) {
       $container.addClass('hidden');
       // Hide all possible error messages
       $error.addClass('hidden');
+      // Destroy map (partially)
+      closeMap();
     };
 
     var prefill = function () {
