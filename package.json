@@ -38,7 +38,7 @@
   "author": "Akseli Palén <akseli.palen@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "@google/maps": "^0.4.3",
+    "@google/maps": "^0.5.5",
     "ajv": "^5.2.3",
     "async": "^2.1.1",
     "bcryptjs": "^2.3.0",
