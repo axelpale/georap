@@ -150,7 +150,7 @@ exports.makePermanent = function (filePath, callback) {
       console.log('downloading', filePath);
       console.log('saving into', newpath);
       download(filePath, absDirPath, {
-        timeout: 5000,
+        timeout: 5000, // ms
       }).then(function () {
         return callback(null, newpath);
       }).catch(function (errd) {
