@@ -95,7 +95,7 @@
   "devDependencies": {
     "assert": "^1.4.1",
     "clone": "^2.1.0",
-    "eslint": "^4.6.1",
+    "eslint": "^5.16.0",
     "mocha": "^3.1.0",
     "should": "^11.1.0",
     "webpack-dev-middleware": "^1.6.1",
