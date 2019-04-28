@@ -276,6 +276,8 @@ module.exports = function (kmlBuffer, callback) {
           name: ol.name,
           description: sanitizeDescription(ol.description),
           href: ol.href,
+          viewBoundScale: ol.viewBoundScale,
+          latLonBox: ol.latLonBox,
         };
       });
     }());
