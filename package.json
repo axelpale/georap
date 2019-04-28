@@ -47,7 +47,7 @@
     "commander": "^2.9.0",
     "component-emitter": "^1.2.1",
     "css-loader": "^0.28.7",
-    "download": "^6.2.5",
+    "download": "^7.1.0",
     "ejs": "^2.5.2",
     "ejs-loader": "^0.3.0",
     "email-validator": "^1.0.7",
