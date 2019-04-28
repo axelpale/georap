@@ -373,7 +373,7 @@ Here are some notes and tips for putting a TresDB instance into production.
 ## Technology stack
 
 - [Google Maps JavaScript API](https://developers.google.com/maps/documentation/javascript/): maps and markers
-- [Marked](https://github.com/chjj/marked): markdown parser
+- [Marked](https://github.com/markedjs/marked): markdown parser
 - [Bootstrap](http://getbootstrap.com/): styles
 - [jQuery](https://jquery.com/): DOM manipulation
 - [Lodash](https://lodash.com/): utility functions

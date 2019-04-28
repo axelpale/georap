@@ -29,5 +29,37 @@
         </Placemark>
       </Folder>
     </Folder>
+    <Folder>
+      <name>Germany</name>
+      <Folder>
+        <name>Ulm, Bundesfestung</name>
+        <description><![CDATA[<a href="http://de.wikipedia.org/wiki/Ulm">http://de.wikipedia.org/wiki/Ulm</a>]]></description>
+        <GroundOverlay>
+          <name>Ulm 1910</name>
+          <description><![CDATA[<a href="http://www.atarimuseum.de/festung/fr1910.png">fr1910.png</a>]]></description>
+          <Icon>
+            <href>http://www.atarimuseum.de/festung/fr1910.png</href>
+            <viewBoundScale>0.75</viewBoundScale>
+          </Icon>
+          <LatLonBox>
+            <north>48.43835116263472</north>
+            <south>48.37774662529429</south>
+            <east>10.04840165111799</east>
+            <west>9.941379658205511</west>
+            <rotation>-0.04678851003198646</rotation>
+          </LatLonBox>
+        </GroundOverlay>
+        <Placemark>
+          <name>IV Mittelbastion</name>
+          <description><![CDATA[<a href="http://de.wikipedia.org/wiki/Bundesfestung_Ulm#IV_.E2.80.93_Mittelbastion">Ulm Mittelbastion</a><p><img src="files/1280px-Mittelbastion.JPG"/><p>]]></description>
+          <LineString>
+            <tessellate>1</tessellate>
+            <coordinates>
+              9.979343637704099,48.39602444687264,0 9.978682252153114,48.39603657747436,0 9.977401375691258,48.39672377582053,0 9.977718888630758,48.39780404549538,0 9.978209805284866,48.39807010452975,0
+            </coordinates>
+          </LineString>
+        </Placemark>
+      </Folder>
+    </Folder>
   </Document>
 </kml>

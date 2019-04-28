@@ -27,8 +27,7 @@ describe('parsekml', function () {
           name: 'Portland',
           longitude: -122.681944,
           latitude: 45.52,
-          descriptions: [],
-          overlays: [],
+          entries: [],
         },
       ]);
 
@@ -51,18 +50,18 @@ describe('parsekml', function () {
           '<Folder>' +
             '<GroundOverlay>' +
               '<name>Almeida</name>' +
-                '<description><![CDATA[<a>Source</a>]]></description>' +
-                '<Icon>' +
-                  '<href>files/Almeida.jpg</href>' +
-                  '<viewBoundScale>0.75</viewBoundScale>' +
-                '</Icon>' +
-                '<LatLonBox>' +
-                  '<north>40.729</north>' +
-                  '<south>40.722</south>' +
-                  '<east>-6.900</east>' +
-                  '<west>-6.912</west>' +
-                  '<rotation>11.968</rotation>' +
-                '</LatLonBox>' +
+              '<description><![CDATA[<a>Source</a>]]></description>' +
+              '<Icon>' +
+                '<href>files/Almeida.jpg</href>' +
+                '<viewBoundScale>0.75</viewBoundScale>' +
+              '</Icon>' +
+              '<LatLonBox>' +
+                '<north>40.729</north>' +
+                '<south>40.722</south>' +
+                '<east>-6.900</east>' +
+                '<west>-6.912</west>' +
+                '<rotation>11.968</rotation>' +
+              '</LatLonBox>' +
             '</GroundOverlay>' +
             '<Placemark>' +
               '<name>Portland</name>' +
@@ -81,26 +80,28 @@ describe('parsekml', function () {
           name: 'Rio de Janeiro',
           latitude: -22.908,
           longitude: -43.196,
-          descriptions: [],
-          overlays: [],
+          entries: [],
         },
         {
           name: 'Portland',
           latitude: 45.52,
           longitude: -122.681,
-          descriptions: ['1234'],
-          overlays: [{
-            name: 'Almeida',
-            description: '<a>Source</a>',
-            href: 'files/Almeida.jpg',
-            viewBoundScale: 0.75,
-            latLonBox: {
-              north: 40.729,
-              south: 40.722,
-              east: -6.900,
-              west: -6.912,
-              rotation: 11.968,
+          entries: [{
+            markdown: 'Almeida: Source',
+            filepath: 'files/Almeida.jpg',
+            overlay: {
+              viewBoundScale: 0.75,
+              latLonBox: {
+                north: 40.729,
+                south: 40.722,
+                east: -6.900,
+                west: -6.912,
+                rotation: 11.968,
+              },
             },
+          }, {
+            markdown: '1234',
+            filepath: null,
           }],
         },
       ]);
