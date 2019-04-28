@@ -44,10 +44,17 @@ Fourth, create `tresdb` database and a user for the database. See [MongoDB user 
 
 Fifth, rename `config/local-sample.js` to `config/local.js` and modify it to match your setting. There, set also the username and password for your default *TresDB* admin user.
 
-Finally, populate the database with the default admin user, data, and indices.
+Sixth, populate the database with the default admin user and some sample data:
 
     $ npm run loadsample
+
+Seventh, create the indices:
+
     $ npm run ensureindices
+
+Finally, run a worker to compute keywords and other data for search:
+
+    $ npm run worker
 
 
 ## Quick start
