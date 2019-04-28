@@ -79,7 +79,7 @@
     "sanitize-filename": "^1.6.1",
     "sax": "^1.2.4",
     "semver": "^6.0.0",
-    "sharp": "^0.22.0",
+    "sharp": "^0.22.1",
     "shortid": "^2.2.6",
     "slugify": "^1.1.0",
     "socket.io": "^2.0.3",
