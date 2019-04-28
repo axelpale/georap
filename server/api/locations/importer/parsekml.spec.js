@@ -51,18 +51,18 @@ describe('parsekml', function () {
           '<Folder>' +
             '<GroundOverlay>' +
               '<name>Almeida</name>' +
-                '<description><![CDATA[<a>Source</a>]]></description>' +
-                '<Icon>' +
-                  '<href>files/Almeida.jpg</href>' +
-                  '<viewBoundScale>0.75</viewBoundScale>' +
-                '</Icon>' +
-                '<LatLonBox>' +
-                  '<north>40.729</north>' +
-                  '<south>40.722</south>' +
-                  '<east>-6.900</east>' +
-                  '<west>-6.912</west>' +
-                  '<rotation>11.968</rotation>' +
-                '</LatLonBox>' +
+              '<description><![CDATA[<a>Source</a>]]></description>' +
+              '<Icon>' +
+                '<href>files/Almeida.jpg</href>' +
+                '<viewBoundScale>0.75</viewBoundScale>' +
+              '</Icon>' +
+              '<LatLonBox>' +
+                '<north>40.729</north>' +
+                '<south>40.722</south>' +
+                '<east>-6.900</east>' +
+                '<west>-6.912</west>' +
+                '<rotation>11.968</rotation>' +
+              '</LatLonBox>' +
             '</GroundOverlay>' +
             '<Placemark>' +
               '<name>Portland</name>' +
