@@ -23,7 +23,7 @@
     "migrate": "node cli/migrate.js",
     "backup": "node cli/backup.js",
     "restore": "node cli/restore.js",
-    "test": "npm run lint && npm run test:migration:iter && npm run test:parsekml",
+    "test": "npm run lint && npm run test:parsekml",
     "test:api:markers": "mocha server/api/markers/dal.spec.js",
     "test:migration": "mocha migration/*.spec.js",
     "test:migration:iter": "mocha migration/iter.spec.js",
