@@ -57,6 +57,10 @@ window.initMap = function () {
   var mapComp = new MapComp();
   mapComp.bind($('#map'));
 
+  // To view cards in full screen mode. See issue #94
+  var $fullscreenDiv = $('#map').children('div:first');
+  $('#card-layer').appendTo($fullscreenDiv);
+
   mapComp.on('marker_activated', function (location) {
     // Open location component. Router will emit location_routed
     routes.show('/locations/' + location._id);
