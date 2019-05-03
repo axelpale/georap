@@ -130,7 +130,7 @@ exports.route = function () {
 
 
   /////////////////////////////
-  // Routes that require login
+  // Private routes i.e. routes that require login
   //
 
   page('*', function (context, next) {
