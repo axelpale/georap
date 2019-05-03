@@ -65,3 +65,30 @@ var indexHtml = (function precompile() {
 exports.get = function (req, res) {
   return res.send(indexHtml);
 };
+
+exports.getManifest = function (req, res) {
+  return res.json({
+    'background_color': 'black',
+    'description': local.description,
+    'display': 'standalone',
+    'icons': [
+      {
+        'src': 'assets/images/logo/64.png',
+        'sizes': '64x64',
+        'type': 'image/png',
+      },
+      {
+        'src': 'assets/images/logo/128.png',
+        'sizes': '128x128',
+        'type': 'image/png',
+      },
+      {
+        'src': 'assets/images/logo/256.png',
+        'sizes': '256x256',
+        'type': 'image/png',
+      },
+    ],
+    'name': local.title,
+    'start_url': '.',
+  });
+};
