@@ -5,7 +5,6 @@ var dal = require('./dal');
 var status = require('http-status-codes');
 var urljoin = require('url-join');
 var path = require('path');
-var winston = require('winston');
 
 var uploadHandler = uploads.tempUploader.single('importfile');
 
@@ -37,7 +36,6 @@ exports.import = function (req, res, next) {
   uploadHandler(req, res, function (err) {
     if (err) {
       if (err.code === 'LIMIT_FILE_SIZE') {
-        winston.warn('TEMP UPLOAD FILE SIZE reached');
         return res.sendStatus(status.REQUEST_TOO_LONG);
       }
       return next(err);
