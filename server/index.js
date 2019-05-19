@@ -161,4 +161,18 @@ db.init(function (dbErr) {
     console.log('New connection');
   });
 
+  // Override default error handler with a custom one to include date time.
+  app.use(function (err, req, res, next) {
+    // Fall back to Express default error handler if error occurs during
+    // streaming. https://expressjs.com/en/guide/error-handling.html
+    if (res.headersSent) {
+      return next(err);
+    }
+
+    var datetime = (new Date()).toISOString();
+    var logEntry = datetime + ': ' + err.stack;
+
+    console.error(logEntry);
+    res.status(500).send('Error: ' + err.message);
+  });
 });
