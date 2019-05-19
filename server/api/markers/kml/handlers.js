@@ -17,13 +17,12 @@ var getPrettyNow = function () {
   return sss;
 };
 
-exports.getKML = function (req, res) {
+exports.getKML = function (req, res, next) {
   // Stand-alone KML
 
   markersDal.getAll(function (err, docs) {
     if (err) {
-      console.error(err);
-      return res.sendStatus(status.INTERNAL_SERVER_ERROR);
+      return next(err);
     }
 
     // Convert to KML XML

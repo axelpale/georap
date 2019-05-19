@@ -1,14 +1,11 @@
-
-var status = require('http-status-codes');
-
 var dal = require('./dal');
 
-exports.getAll = function (req, res) {
+exports.getAll = function (req, res, next) {
   // Fetch all users
 
   dal.getAll(function (err, users) {
     if (err) {
-      return res.sendStatus(status.INTERNAL_SERVER_ERROR);
+      return next(err);
     }
 
     return res.json(users);

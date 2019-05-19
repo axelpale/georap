@@ -173,6 +173,7 @@ db.init(function (dbErr) {
     var logEntry = datetime + ': ' + err.stack;
 
     console.error(logEntry);
-    res.status(500).send('Error: ' + err.message);
+    var INTERNAL_SERVER_ERROR = 500;
+    res.status(INTERNAL_SERVER_ERROR).send('Error: ' + err.message);
   });
 });

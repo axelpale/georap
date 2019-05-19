@@ -19,7 +19,7 @@ module.exports = function (req, res, next) {
 
   dal.getRaw(objId, function (err, loc) {
     if (err) {
-      return res.sendStatus(status.INTERNAL_SERVER_ERROR);
+      return next(err);
     }
 
     if (!loc) {

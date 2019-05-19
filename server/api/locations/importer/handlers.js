@@ -30,7 +30,7 @@ var buildUrls = function (locs) {
 };
 
 
-exports.import = function (req, res) {
+exports.import = function (req, res, next) {
   // Import locations from KML, KMZ, or GPX file.
   // importfile is required.
 
@@ -40,8 +40,7 @@ exports.import = function (req, res) {
         winston.warn('TEMP UPLOAD FILE SIZE reached');
         return res.sendStatus(status.REQUEST_TOO_LONG);
       }
-      winston.error(err);
-      return res.sendStatus(status.INTERNAL_SERVER_ERROR);
+      return next(err);
     }
 
     if (typeof req.file !== 'object') {
@@ -67,8 +66,7 @@ exports.import = function (req, res) {
             res.status(status.BAD_REQUEST);
             return res.send('unknown filetype');
           }
-          winston.error(errr);
-          return res.sendStatus(status.INTERNAL_SERVER_ERROR);
+          return next(errr);
         }
 
         if (typeof result.batchId !== 'string') {
@@ -89,7 +87,7 @@ exports.import = function (req, res) {
 };
 
 
-exports.getBatch = function (req, res) {
+exports.getBatch = function (req, res, next) {
 
   var batchId = req.params.batchId;
 
@@ -98,8 +96,7 @@ exports.getBatch = function (req, res) {
       if (err.code === 'ENOENT') {
         return res.sendStatus(status.NOT_FOUND);
       }
-      winston.error(err);
-      return res.sendStatus(status.INTERNAL_SERVER_ERROR);
+      return next(err);
     }
 
     buildUrls(locs);
@@ -108,12 +105,11 @@ exports.getBatch = function (req, res) {
   });
 };
 
-exports.getOutcome = function (req, res) {
+exports.getOutcome = function (req, res, next) {
   var batchId = req.params.batchId;
   dal.getOutcome(batchId, function (err, outcome) {
     if (err) {
-      winston.error(err);
-      return res.sendStatus(status.INTERNAL_SERVER_ERROR);
+      return next(err);
     }
 
     return res.json(outcome);
@@ -121,7 +117,7 @@ exports.getOutcome = function (req, res) {
 };
 
 
-exports.importBatch = function (req, res) {
+exports.importBatch = function (req, res, next) {
   var batchId = req.params.batchId;
   var indices = req.body.indices;
   var username = req.user.name;
@@ -132,8 +128,7 @@ exports.importBatch = function (req, res) {
     username: username,
   }, function (err, batchResult) {
     if (err) {
-      winston.error(err);
-      return res.sendStatus(status.INTERNAL_SERVER_ERROR);
+      return next(err);
     }
 
     dal.mergeEntries({
@@ -141,8 +136,7 @@ exports.importBatch = function (req, res) {
       username: username,
     }, function (errm, mergeResult) {
       if (errm) {
-        winston.error(errm);
-        return res.sendStatus(status.INTERNAL_SERVER_ERROR);
+        return next(errm);
       }
 
       var outcomeData = {
@@ -154,8 +148,7 @@ exports.importBatch = function (req, res) {
 
       dal.writeBatchOutcome(outcomeData, function (errw) {
         if (errw) {
-          winston.error(errw);
-          return res.sendStatus(status.INTERNAL_SERVER_ERROR);
+          return next(errw);
         }
 
         return res.json(outcomeData);

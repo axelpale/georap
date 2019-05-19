@@ -5,10 +5,9 @@ var dal = require('../../../entries/dal');
 var uploadHandler = uploads.uploader.single('entryfile');
 
 var status = require('http-status-codes');
-var winston = require('winston');
 
 
-exports.change = function (req, res) {
+exports.change = function (req, res, next) {
   // Update entry.
   //
   // File is optional.
@@ -21,8 +20,7 @@ exports.change = function (req, res) {
 
   var then = function (err) {
     if (err) {
-      winston.error(err);
-      return res.sendStatus(status.INTERNAL_SERVER_ERROR);
+      return next(err);
     }
     return res.sendStatus(status.OK);
   };
@@ -33,15 +31,13 @@ exports.change = function (req, res) {
       if (err.code === 'LIMIT_FILE_SIZE') {
         return res.sendStatus(status.REQUEST_TOO_LONG);
       }
-      winston.error(err);
-      return res.sendStatus(status.INTERNAL_SERVER_ERROR);
+      return next(err);
     }
 
     // Find the current entry data for comparison
     dal.getOneRaw(entryId, function (errr, oldEntry) {
       if (errr) {
-        winston.error(errr);
-        return res.sendStatus(status.INTERNAL_SERVER_ERROR);
+        return next(errr);
       }
 
       // Allow only creator or admin to edit.
@@ -77,8 +73,7 @@ exports.change = function (req, res) {
         // Create thumbnail. Create even for non-images.
         uploads.createThumbnail(req.file, function (errt, thumb) {
           if (errt) {
-            winston.error(errt);
-            return res.sendStatus(status.INTERNAL_SERVER_ERROR);
+            return next(errt);
           }
 
           dal.changeLocationEntry({
@@ -112,7 +107,7 @@ exports.change = function (req, res) {
 };
 
 
-exports.create = function (req, res) {
+exports.create = function (req, res, next) {
   // Create entry.
   //
   // File is optional
@@ -123,8 +118,7 @@ exports.create = function (req, res) {
 
   var then = function (err) {
     if (err) {
-      winston.error(err);
-      return res.sendStatus(status.INTERNAL_SERVER_ERROR);
+      return next(err);
     }
     // Return json because client side response handlers expect json.
     // jQuery throws error if no json.
@@ -136,8 +130,7 @@ exports.create = function (req, res) {
       if (err.code === 'LIMIT_FILE_SIZE') {
         return res.sendStatus(status.REQUEST_TOO_LONG);
       }
-      winston.error(err);
-      return res.sendStatus(status.INTERNAL_SERVER_ERROR);
+      return next(err);
     }
 
     // console.log('req.file:');
@@ -166,8 +159,7 @@ exports.create = function (req, res) {
       // Create thumbnail. Create even for non-images.
       uploads.createThumbnail(req.file, function (errt, thumb) {
         if (errt) {
-          winston.error(errt);
-          return res.sendStatus(status.INTERNAL_SERVER_ERROR);
+          return next(errt);
         }
 
         dal.createLocationEntry({
@@ -203,7 +195,7 @@ exports.create = function (req, res) {
 };
 
 
-exports.remove = function (req, res) {
+exports.remove = function (req, res, next) {
   // Remove entry from db
 
   var locationId = req.location._id;
@@ -218,8 +210,7 @@ exports.remove = function (req, res) {
     username: username,
   }, function (err) {
     if (err) {
-      winston.error(err);
-      return res.sendStatus(status.INTERNAL_SERVER_ERROR);
+      return next(err);
     }
     return res.sendStatus(status.OK);
   });

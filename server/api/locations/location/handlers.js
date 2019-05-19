@@ -4,10 +4,9 @@ var dal = require('./dal');
 var status = require('http-status-codes');
 var sanitizeFilename = require('sanitize-filename');
 var slugify = require('slugify');
-var winston = require('winston');
 
 
-exports.changeGeom = function (req, res) {
+exports.changeGeom = function (req, res, next) {
 
   var u, lat, lng;
   var loc = req.location;
@@ -31,8 +30,7 @@ exports.changeGeom = function (req, res) {
     longitude: lng,
   }, function (err) {
     if (err) {
-      winston.error(err);
-      return res.sendStatus(status.INTERNAL_SERVER_ERROR);
+      return next(err);
     }
 
     return res.sendStatus(status.OK);
@@ -41,7 +39,7 @@ exports.changeGeom = function (req, res) {
 
 
 
-exports.changeName = function (req, res) {
+exports.changeName = function (req, res, next) {
 
   if (typeof req.body.newName !== 'string') {
     return res.sendStatus(status.BAD_REQUEST);
@@ -56,8 +54,7 @@ exports.changeName = function (req, res) {
 
   dal.changeName(params, function (err) {
     if (err) {
-      winston.error(err);
-      return res.sendStatus(status.INTERNAL_SERVER_ERROR);
+      return next(err);
     }
 
     return res.sendStatus(status.OK);
@@ -66,7 +63,7 @@ exports.changeName = function (req, res) {
 
 
 
-exports.changeTags = function (req, res) {
+exports.changeTags = function (req, res, next) {
 
   if (typeof req.body.tags !== 'object') {
     return res.sendStatus(status.BAD_REQUEST);
@@ -80,8 +77,7 @@ exports.changeTags = function (req, res) {
     tags: req.body.tags,
   }, function (err) {
     if (err) {
-      winston.error(err);
-      return res.sendStatus(status.INTERNAL_SERVER_ERROR);
+      return next(err);
     }
 
     return res.sendStatus(status.OK);
@@ -90,14 +86,13 @@ exports.changeTags = function (req, res) {
 
 
 
-exports.getOne = function (req, res) {
+exports.getOne = function (req, res, next) {
   // Fetch single location with entries and events
 
   // eslint-disable-next-line max-statements
   dal.getOne(req.location._id, function (err, rawLoc) {
     if (err) {
-      winston.error(err);
-      return res.sendStatus(status.INTERNAL_SERVER_ERROR);
+      return next(err);
     }
 
     if (!rawLoc) {
@@ -149,13 +144,12 @@ exports.getOne = function (req, res) {
 
 
 
-exports.removeOne = function (req, res) {
+exports.removeOne = function (req, res, next) {
   // Delete single location
 
   dal.removeOne(req.location._id, req.user.name, function (err) {
     if (err) {
-      winston.error(err);
-      return res.sendStatus(status.INTERNAL_SERVER_ERROR);
+      return next(err);
     }
 
     return res.sendStatus(status.OK);

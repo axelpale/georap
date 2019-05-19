@@ -3,7 +3,7 @@ var dal = require('./dal');
 var status = require('http-status-codes');
 
 
-exports.getOne = function (req, res) {
+exports.getOne = function (req, res, next) {
   // Response with JSON object of user with admin-only information
   //
   // Response:
@@ -19,7 +19,7 @@ exports.getOne = function (req, res) {
 
   dal.getUserForAdmin(username, function (err, user) {
     if (err) {
-      return res.sendStatus(status.INTERNAL_SERVER_ERROR);
+      return next(err);
     }
 
     if (user === null) {
@@ -31,7 +31,7 @@ exports.getOne = function (req, res) {
 };
 
 
-exports.setStatus = function (req, res) {
+exports.setStatus = function (req, res, next) {
 
   var isActive = req.body.isActive;
 
@@ -47,7 +47,7 @@ exports.setStatus = function (req, res) {
 
   dal.setStatus(targetName, newStatus, function (err) {
     if (err) {
-      return res.sendStatus(status.INTERNAL_SERVER_ERROR);
+      return next(err);
     }
 
     return res.sendStatus(status.OK);
@@ -55,7 +55,7 @@ exports.setStatus = function (req, res) {
 };
 
 
-exports.setRole = function (req, res) {
+exports.setRole = function (req, res, next) {
 
   var isAdmin = req.body.isAdmin;
 
@@ -69,7 +69,7 @@ exports.setRole = function (req, res) {
 
   dal.setRole(targetName, isAdmin, function (err) {
     if (err) {
-      return res.sendStatus(status.INTERNAL_SERVER_ERROR);
+      return next(err);
     }
 
     return res.sendStatus(status.OK);

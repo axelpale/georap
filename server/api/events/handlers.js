@@ -3,9 +3,8 @@
 var dal = require('./dal');
 
 var status = require('http-status-codes');
-var winston = require('winston');
 
-exports.getRecent = function (req, res) {
+exports.getRecent = function (req, res, next) {
   // HTTP request handler
 
   var n = req.query.n;
@@ -33,8 +32,7 @@ exports.getRecent = function (req, res) {
 
   dal.getRecent(n, beforeTime, function (err, events) {
     if (err) {
-      winston.error(err);
-      return res.sendStatus(status.INTERNAL_SERVER_ERROR);
+      return next(err);
     }
     return res.json(events);
   });

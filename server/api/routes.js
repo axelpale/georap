@@ -49,7 +49,7 @@ router.use(function (req, res, next) {
   // But what the hell...
   userDal.getOne(req.user.name, function (err, storedUser) {
     if (err) {
-      return res.sendStatus(status.INTERNAL_SERVER_ERROR);
+      return next(err);
     }
 
     if (storedUser.status === 'active') {
@@ -76,13 +76,11 @@ router.use(function (err, req, res, next) {
     return res.sendStatus(status.UNAUTHORIZED);
   }
 
-  // Log other API errors to ease debugging.
-  console.error(err);
-
-  return next();
+  // Default error handler
+  return next(err);
 });
 
-// Catch all to 404.
+// Catch all other non-errored API calls to 404.
 // Must be the final step in this router.
 router.get('/*', function (req, res) {
   console.log('404 Not Found: ' + req.originalUrl);

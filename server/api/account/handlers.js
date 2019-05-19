@@ -16,7 +16,7 @@ var validator = require('email-validator');
 var templates = require('./templates');
 
 
-exports.login = function (req, res) {
+exports.login = function (req, res, next) {
   // Parameters:
   //   req.body
   //     Required keys:
@@ -46,8 +46,7 @@ exports.login = function (req, res) {
   users.findOne(q, function (err, user) {
 
     if (err) {
-      console.error(err);
-      return res.sendStatus(status.INTERNAL_SERVER_ERROR);
+      return next(err);
     }
 
     if (user === null) {
@@ -59,8 +58,7 @@ exports.login = function (req, res) {
 
       if (err2) {
         // Hash comparison failed. Password might still be correct, though.
-        console.error(err2);
-        return res.sendStatus(status.INTERNAL_SERVER_ERROR);
+        return next(err2);
       }
 
       if (!match) {
@@ -98,7 +96,7 @@ exports.login = function (req, res) {
   });
 };
 
-exports.changePassword = function (req, res) {
+exports.changePassword = function (req, res, next) {
   // Parameters:
   //   req.body
   //     Required keys:
@@ -122,8 +120,7 @@ exports.changePassword = function (req, res) {
     if (err) {
       // User fetch for email and password check failed.
       // Connection to database was lost or something.
-      console.error(err);
-      return res.sendStatus(status.INTERNAL_SERVER_ERROR);
+      return next(err);
     }
 
     // If no correct email found.
@@ -135,8 +132,7 @@ exports.changePassword = function (req, res) {
     bcrypt.compare(currentPassword, user.hash, function (err2, match) {
 
       if (err2) {
-        console.error(err2);
-        return res.sendStatus(status.INTERNAL_SERVER_ERROR);
+        return next(err2);
       }  // else
 
       if (!match) {
@@ -150,8 +146,7 @@ exports.changePassword = function (req, res) {
       bcrypt.hash(newPassword, r, function (err3, newHash) {
 
         if (err3) {
-          console.error(err3);
-          return res.sendStatus(status.INTERNAL_SERVER_ERROR);
+          return next(err3);
         }  // else
 
         var q = { email: email };
@@ -161,8 +156,7 @@ exports.changePassword = function (req, res) {
         users.findOneAndUpdate(q, u, function (err4, updatedUser) {
 
           if (err4) {
-            console.error(err4);
-            return res.sendStatus(status.INTERNAL_SERVER_ERROR);
+            return next(err4);
           }
 
           // Check if user still exists
@@ -178,7 +172,7 @@ exports.changePassword = function (req, res) {
   });
 };
 
-exports.sendResetPasswordEmail = function (req, res) {
+exports.sendResetPasswordEmail = function (req, res, next) {
   // Parameters:
   //   req.body
   //     Properties:
@@ -199,8 +193,7 @@ exports.sendResetPasswordEmail = function (req, res) {
   users.findOne({ email: email }, {}, function (err, user) {
 
     if (err) {
-      console.error(err);
-      return res.sendStatus(status.INTERNAL_SERVER_ERROR);
+      return next(err);
     }
 
     if (!user) {
@@ -241,8 +234,7 @@ exports.sendResetPasswordEmail = function (req, res) {
     // Send the mail
     mailer.get().sendMail(mailOptions, function (err2, info) {
       if (err2) {
-        console.error(err2);
-        return res.sendStatus(status.INTERNAL_SERVER_ERROR);
+        return next(err2);
       }  // else
 
       // Mail sent successfully
@@ -254,7 +246,7 @@ exports.sendResetPasswordEmail = function (req, res) {
 };
 
 
-exports.resetPassword = function (req, res) {
+exports.resetPassword = function (req, res, next) {
   // Parameters:
   //   req.body
   //     Properties:
@@ -271,8 +263,7 @@ exports.resetPassword = function (req, res) {
   bcrypt.hash(password, local.bcrypt.rounds, function (err, newHash) {
 
     if (err) {
-      console.error(err);
-      return res.sendStatus(status.INTERNAL_SERVER_ERROR);
+      return next(err);
     }
 
     // Construct the query.
@@ -285,8 +276,7 @@ exports.resetPassword = function (req, res) {
     users.findOneAndUpdate(q, u, function (err2, user) {
 
       if (err2) {
-        console.error(err2);
-        return res.sendStatus(status.INTERNAL_SERVER_ERROR);
+        return next(err2);
       }
 
       // If no user found.
@@ -300,7 +290,7 @@ exports.resetPassword = function (req, res) {
   });
 };
 
-exports.sendInviteEmail = function (req, res) {
+exports.sendInviteEmail = function (req, res, next) {
   // Invite a user by sending an email with a link that includes a token.
   // With that token the user is allowed to create a single account within
   // a time limit.
@@ -332,8 +322,7 @@ exports.sendInviteEmail = function (req, res) {
   users.findOne({ email: email }, function (err, user) {
 
     if (err) {
-      console.error(err);
-      return res.sendStatus(status.INTERNAL_SERVER_ERROR);
+      return next(err);
     }
 
     if (user) {
@@ -373,8 +362,7 @@ exports.sendInviteEmail = function (req, res) {
     // Send the mail.
     mailer.get().sendMail(mailOptions, function (err2, info) {
       if (err2) {
-        console.error(err2);
-        return res.sendStatus(status.INTERNAL_SERVER_ERROR);
+        return next(err2);
       }  // else
 
       // Mail sent successfully
@@ -385,7 +373,7 @@ exports.sendInviteEmail = function (req, res) {
   });
 };
 
-exports.signup = function (req, res) {
+exports.signup = function (req, res, next) {
   // After invite, a user signs up. The client must send the token that was
   // associated with the invite email.
   //
@@ -428,8 +416,7 @@ exports.signup = function (req, res) {
   }, function (err, user) {
 
     if (err) {
-      console.error(err);
-      return res.sendStatus(status.INTERNAL_SERVER_ERROR);
+      return next(err);
     }
 
     if (user) {
@@ -442,8 +429,7 @@ exports.signup = function (req, res) {
 
     dal.createUser(username, email, password, function (err2) {
       if (err2) {
-        console.error(err2);
-        return res.sendStatus(status.INTERNAL_SERVER_ERROR);
+        return next(err2);
       }
       // User inserted successfully
       return res.sendStatus(status.OK);

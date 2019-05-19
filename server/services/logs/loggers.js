@@ -1,14 +1,16 @@
-
 var local = require('../../../config/local');
 
 var morgan = require('morgan');
-var winston = require('winston');
 var mkdirp = require('mkdirp');
 var path = require('path');
 var fs = require('fs');
 
-// Ensure directory for logs exist.
+// Setup
+
+// Ensure directory for access logs exist.
 mkdirp.sync(local.logDir);
+
+// Interface
 
 exports.http = function () {
   // HTTP request will be written in a file.
@@ -27,13 +29,3 @@ exports.http = function () {
     stream: accessLogStream,
   });
 };
-
-// Setup Winston default logger to log into a file
-//
-// Usage:
-//   var winston = require('winston')
-//   winston.error(err)
-//
-var p = path.join(local.logDir, 'error.log');
-winston.add(winston.transports.File, { filename: p });
-winston.level = 'info';

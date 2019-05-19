@@ -1,11 +1,10 @@
 var dal = require('./dal');
-var status = require('http-status-codes');
 
-exports.getAll = function (req, res) {
+exports.getAll = function (req, res, next) {
 
   dal.getAll(function (err, data) {
     if (err) {
-      return res.sendStatus(status.INTERNAL_SERVER_ERROR);
+      return next(err);
     }
 
     return res.json(data);

@@ -1,7 +1,6 @@
 var dal = require('./dal');
 var status = require('http-status-codes');
 var Ajv = require('ajv');
-var winston = require('winston');
 
 // Schema validator
 var ajv = new Ajv({
@@ -44,7 +43,7 @@ var querySchema = {
 var validateQuery = ajv.compile(querySchema);
 
 
-exports.getFiltered = function (req, res) {
+exports.getFiltered = function (req, res, next) {
   // Parameters:
   //   req.query
   //     see dal.getFiltered for params
@@ -62,15 +61,14 @@ exports.getFiltered = function (req, res) {
 
   dal.getFiltered(req.query, function (err, markers) {
     if (err) {
-      winston.error(err);
-      return res.sendStatus(status.INTERNAL_SERVER_ERROR);
+      return next(err);
     }
 
     return res.json(markers);
   });
 };
 
-exports.getWithin = function (req, res) {
+exports.getWithin = function (req, res, next) {
   // Parameters:
   //   req.query.
   //     lat
@@ -129,8 +127,7 @@ exports.getWithin = function (req, res) {
     query: {},
   }, function (err, markers) {
     if (err) {
-      winston.error(err);
-      return res.sendStatus(status.INTERNAL_SERVER_ERROR);
+      return next(err);
     }
 
     return res.json(markers);

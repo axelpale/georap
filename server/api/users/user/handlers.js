@@ -3,7 +3,7 @@ var status = require('http-status-codes');
 
 var dal = require('./dal');
 
-exports.getOneWithEvents = function (req, res) {
+exports.getOneWithEvents = function (req, res, next) {
   // Fetch single user
   //
   // Parameters:
@@ -12,7 +12,7 @@ exports.getOneWithEvents = function (req, res) {
 
   dal.getOneWithEvents(req.username, function (err, user) {
     if (err) {
-      return res.sendStatus(status.INTERNAL_SERVER_ERROR);
+      return next(err);
     }
 
     if (!user) {
@@ -23,7 +23,7 @@ exports.getOneWithEvents = function (req, res) {
   });
 };
 
-exports.getOneWithBalanceAndPayments = function (req, res) {
+exports.getOneWithBalanceAndPayments = function (req, res, next) {
   // Fetch single user and patch it with balance and payments properties.
   //
   // Parameters:
@@ -32,7 +32,7 @@ exports.getOneWithBalanceAndPayments = function (req, res) {
 
   dal.getOneWithBalanceAndPayments(req.username, function (err, user) {
     if (err) {
-      return res.sendStatus(status.INTERNAL_SERVER_ERROR);
+      return next(err);
     }
 
     if (!user) {
@@ -43,14 +43,13 @@ exports.getOneWithBalanceAndPayments = function (req, res) {
   });
 };
 
-exports.getVisitedLocationIds = function (req, res) {
+exports.getVisitedLocationIds = function (req, res, next) {
   // Response with an array of _id:s of all locations visited by the user.
   // If no locations or users found, responses with empty array [].
 
   dal.getVisitedLocationIds(req.username, function (err, ids) {
     if (err) {
-      console.error(err);
-      return res.sendStatus(status.INTERNAL_SERVER_ERROR);
+      return next(err);
     }
 
     // Assert
