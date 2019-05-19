@@ -2,6 +2,7 @@
 var status = require('http-status-codes');
 
 var dal = require('./dal');
+var loggers = require('../../../services/logs/loggers');
 
 exports.getOneWithEvents = function (req, res, next) {
   // Fetch single user
@@ -18,6 +19,8 @@ exports.getOneWithEvents = function (req, res, next) {
     if (!user) {
       return res.sendStatus(status.NOT_FOUND);
     }
+
+    loggers.log(req.user.name + ' viewed user ' + req.username + '.');
 
     return res.json(user);
   });

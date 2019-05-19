@@ -1,6 +1,6 @@
 
-// Data access layer
-var dal = require('./dal');
+var dal = require('./dal'); // Data access layer
+var loggers = require('../../services/logs/loggers');
 
 var status = require('http-status-codes');
 
@@ -34,6 +34,10 @@ exports.getRecent = function (req, res, next) {
     if (err) {
       return next(err);
     }
+
+    // Success
+    loggers.log(req.user.name + ' viewed latest events.');
+
     return res.json(events);
   });
 };

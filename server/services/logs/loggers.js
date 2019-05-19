@@ -29,3 +29,8 @@ exports.http = function () {
     stream: accessLogStream,
   });
 };
+
+exports.log = function (msg) {
+  var datetime = (new Date()).toISOString();
+  console.log(datetime + ': ' + msg);
+};

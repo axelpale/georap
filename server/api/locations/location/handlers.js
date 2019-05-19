@@ -1,6 +1,7 @@
 
 var templates = require('./templates');
 var dal = require('./dal');
+var loggers = require('../../../services/logs/loggers');
 var status = require('http-status-codes');
 var sanitizeFilename = require('sanitize-filename');
 var slugify = require('slugify');
@@ -137,6 +138,9 @@ exports.getOne = function (req, res, next) {
 
       return res.send(responseStr);
     }  // else
+
+    // Log that user has viewed a location.
+    loggers.log(req.user.name + ' viewed location ' + rawLoc.name + '.');
 
     return res.json(rawLoc);
   });

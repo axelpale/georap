@@ -155,15 +155,10 @@ db.init(function (dbErr) {
   app.use('/', router);
 
   // Socket.io routing
-  io.get().on('connection', function (socket) {
+  io.get().on('connection', function () {
     // Parameters:
     //   socket
-    var datetime = (new Date()).toISOString();
-    var clientIp = socket.client.conn.remoteAddress;
-    var connIp = socket.conn.remoteAddress;
-    var shakeIp = socket.handshake.address;
-    var s = clientIp + ' ' + connIp + ' ' + shakeIp;
-    console.log(datetime + ': New connection from ' + s);
+    loggers.log('New connection.');
   });
 
   // Override default error handler with a custom one to include date time.

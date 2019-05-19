@@ -1,6 +1,7 @@
 var dal = require('./dal');
 var status = require('http-status-codes');
 var Ajv = require('ajv');
+var loggers = require('../../services/logs/loggers');
 
 // Schema validator
 var ajv = new Ajv({
@@ -62,6 +63,13 @@ exports.getFiltered = function (req, res, next) {
   dal.getFiltered(req.query, function (err, markers) {
     if (err) {
       return next(err);
+    }
+
+    // Search successful
+    if (req.query.text) {
+      loggers.log(req.user.name + ' searched for "' + req.query.text + '".');
+    } else {
+      loggers.log(req.user.name + ' searched without keywords.');
     }
 
     return res.json(markers);

@@ -6,6 +6,7 @@ var status = require('http-status-codes');
 var db = require('../../services/db');
 var hostname = require('../../services/hostname');
 var mailer = require('../../services/mailer');
+var loggers = require('../../services/logs/loggers');
 
 var dal = require('./dal');
 var bcrypt = require('bcryptjs');
@@ -91,6 +92,10 @@ exports.login = function (req, res, next) {
       };
 
       token = jwt.sign(tokenPayload, local.secret, tokenOptions);
+
+      // Successful login.
+      loggers.log(user.name + ' logged in.');
+
       return res.json(token);
     });
   });
@@ -165,6 +170,8 @@ exports.changePassword = function (req, res, next) {
           }  // else
           // Password changed successfully
 
+          loggers.log(req.user.name + ' changed password.');
+
           return res.sendStatus(status.OK);
         });
       });
@@ -232,13 +239,15 @@ exports.sendResetPasswordEmail = function (req, res, next) {
     };
 
     // Send the mail
-    mailer.get().sendMail(mailOptions, function (err2, info) {
+    mailer.get().sendMail(mailOptions, function (err2) {
+      // Params: err2, info
+      //
       if (err2) {
         return next(err2);
       }  // else
 
       // Mail sent successfully
-      console.log('Mail sent: ' + info.response);
+      loggers.log('Password reset mail sent to ' + user.email);
 
       return res.sendStatus(status.OK);
     });
@@ -285,6 +294,8 @@ exports.resetPassword = function (req, res, next) {
       }
 
       // Password changed successfully
+      loggers.log(req.user.name + ' reset password.');
+
       return res.sendStatus(status.OK);
     });
   });
@@ -360,13 +371,17 @@ exports.sendInviteEmail = function (req, res, next) {
     };
 
     // Send the mail.
-    mailer.get().sendMail(mailOptions, function (err2, info) {
+    mailer.get().sendMail(mailOptions, function (err2) {
+      // Params:
+      //   err2
+      //   info
+      //
       if (err2) {
         return next(err2);
       }  // else
 
       // Mail sent successfully
-      console.log('Mail sent: ' + info.response);
+      loggers.log(req.user.name + ' sent invite to ' + email);
 
       return res.sendStatus(status.OK);
     });
@@ -431,7 +446,10 @@ exports.signup = function (req, res, next) {
       if (err2) {
         return next(err2);
       }
+
       // User inserted successfully
+      loggers.log(username + ' signed up (' + email + ').');
+
       return res.sendStatus(status.OK);
     });
   });
