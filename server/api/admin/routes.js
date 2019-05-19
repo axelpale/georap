@@ -3,6 +3,7 @@
 var router = require('express').Router();
 var status = require('http-status-codes');
 var usersRouter = require('./users/routes');
+var testsRouter = require('./tests/routes');
 
 // Allow requests only by admin users.
 router.use(function (req, res, next) {
@@ -15,5 +16,6 @@ router.use(function (req, res, next) {
 });
 
 router.use('/users', usersRouter);
+router.use('/tests', testsRouter);
 
 module.exports = router;

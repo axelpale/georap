@@ -205,43 +205,6 @@ Executes one work cycle. A cycle includes jobs such as computing marker layers, 
 
 
 
-## Testing
-
-First, we need to create a database `test` for tests and a database user. See [MongoDB user setup](#mongodb-user-setup) instructions below.
-
-After initial setup, fire up mongod:
-
-    $ npm run mongod
-
-Then, open a new terminal session and fire up the server in the test environment:
-
-    $ npm run server:test
-
-Finally, open yet another terminal session and run the full test suite:
-
-    $ npm test
-
-See `package.json` for test suite details.
-
-To clone a collection from a remote production database for local testing, following approach can be used. First we forward a local port to the remote database. Often the remote database cannot be accessed directly and therefore a SSH tunnel is needed.
-
-    $ ssh -L 27018:localhost:27017 123.123.123.123
-
-Second, we [mongoexport](https://docs.mongodb.com/manual/reference/program/mongoexport/) a remote collection and save it as a local JSON file:
-
-    $ mongoexport --host localhost:27018 --username remoteuser --password remoteword --db tresdb --collection locations --out .tmp/locations.json
-
-Third, we [mongoimport](https://docs.mongodb.com/manual/reference/program/mongoimport/) the file to our local database:
-
-    $ mongoimport --username localfoouser --password localbarword --db tresdb --collection locations --file .tmp/locations.json
-
-Finally, a bit of cleanup remains. We close the tunnel and remove the temp file:
-
-    $ rm .tmp/locations.json
-
-As a result, our local locations collection is filled with locations from a production server.
-
-
 ## Logging
 
 Server logs are stored under `.data/logs/` by default. To change the dir, edit `config/local.js`. See `server/services/logs/` for how logs are created.
@@ -298,6 +261,7 @@ After restoring it is often necessary to run migrate, ensureindices, and worker:
     $ npm run migrate
     $ npm run ensureindices
     $ npm run worker
+
 
 
 ## MongoDB user setup
@@ -399,6 +363,52 @@ For production, we recommend:
 - [DigitalOcean](https://m.do.co/c/3e63e3de8e31): cloud servers
 - [Nginx](https://www.nginx.com/): reverse proxy
 - [Let's Encrypt](https://letsencrypt.org/): TLS certificates
+
+
+
+# Testing
+
+First, we need to create a database `test` for tests and a database user. See [MongoDB user setup](#mongodb-user-setup) instructions below.
+
+After initial setup, fire up mongod:
+
+    $ npm run mongod
+
+Then, open a new terminal session and fire up the server in the test environment:
+
+    $ npm run server:test
+
+Finally, open yet another terminal session and run the full test suite:
+
+    $ npm test
+
+See `package.json` for test suite details.
+
+To clone a collection from a remote production database for local testing, following approach can be used. First we forward a local port to the remote database. Often the remote database cannot be accessed directly and therefore a SSH tunnel is needed.
+
+    $ ssh -L 27018:localhost:27017 123.123.123.123
+
+Second, we [mongoexport](https://docs.mongodb.com/manual/reference/program/mongoexport/) a remote collection and save it as a local JSON file:
+
+    $ mongoexport --host localhost:27018 --username remoteuser --password remoteword --db tresdb --collection locations --out .tmp/locations.json
+
+Third, we [mongoimport](https://docs.mongodb.com/manual/reference/program/mongoimport/) the file to our local database:
+
+    $ mongoimport --username localfoouser --password localbarword --db tresdb --collection locations --file .tmp/locations.json
+
+Finally, a bit of cleanup remains. We close the tunnel and remove the temp file:
+
+    $ rm .tmp/locations.json
+
+As a result, our local locations collection is filled with locations from a production server.
+
+## Testing error handling
+
+There is two hidden URLs that cause an internal server error. The URLs are available for admin user only and thus require token authorisation. For now, you can find your token from the download URLs of Export feature.
+
+    /api/admin/tests/throw-error?token=<jwt>
+    /api/admin/tests/next-error?token=<jwt>
+
 
 
 # Branching strategy
