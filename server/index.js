@@ -161,7 +161,9 @@ db.init(function (dbErr) {
     var datetime = (new Date()).toISOString();
     var clientIp = socket.client.conn.remoteAddress;
     var connIp = socket.conn.remoteAddress;
-    console.log(datetime + ': New connection from ' + clientIp + ' ' + connIp);
+    var shakeIp = socket.handshake.address;
+    var s = clientIp + ' ' + connIp + ' ' + shakeIp;
+    console.log(datetime + ': New connection from ' + s);
   });
 
   // Override default error handler with a custom one to include date time.
