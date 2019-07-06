@@ -45,13 +45,18 @@ exports.show = function (path) {
   return page.show(path);
 };
 
-exports.route = function () {
+exports.getCurrentPath = function () {
+  // Return current path string.
+  return page.current;
+};
 
-  // Init
+exports.route = function () {
+  // Init. Called once at startup.
 
   // A card is used to display content.
   var card = new CardView();
   card.bind($('#card-layer'));
+
   // When card is closed, user always returns to map.
   card.on('closed', function () {
     page('/');
