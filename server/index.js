@@ -124,9 +124,10 @@ db.init(function (dbErr) {
       }));
       // See https://webpack.github.io/docs/node.js-api.html#error-handling
     });
-    app.use(local.staticUrl, express.static(local.staticDir));
-    console.log('Serving static files from', local.staticUrl);
   }
+
+  app.use(local.staticUrl, express.static(local.staticDir));
+  console.log('Serving static files from', local.staticUrl);
 
   // Instance-specific static files are best copied without webpack
   // because webpack does not support dynamic paths well.
@@ -137,6 +138,7 @@ db.init(function (dbErr) {
   }([
     [local.loginBackground, path.join(local.staticDir, 'images/login.jpg')],
   ]));
+  console.log('Copying custom static files to', local.staticDir);
   // -------------
   // Static assets END
 
