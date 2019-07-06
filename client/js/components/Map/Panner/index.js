@@ -42,7 +42,8 @@ module.exports = function (map) {
     var bgWidthPx = (mapWidthPx - cardWidthPx);
     var bgHeightPx = $('body').height();
     var bgXPx = Math.round(bgWidthPx / 2);
-    var bgYPx = Math.round(bgHeightPx / 2);
+    // eslint-disable-next-line no-magic-numbers
+    var bgYPx = Math.round(bgHeightPx / 2.1);
 
     var bgPx = new google.maps.Point(bgXPx, bgYPx);
     var bgLatLng = convert.point2LatLng(bgPx, map);
