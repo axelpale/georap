@@ -37,7 +37,7 @@ module.exports = function (map) {
     var lat = geom.coordinates[1];
     var lng = geom.coordinates[0];
 
-    var cardWidthPx = $('#card-container').width();
+    var cardWidthPx = $('#card-layer').width();
     var mapWidthPx = $('body').width();
     var bgWidthPx = (mapWidthPx - cardWidthPx);
     var bgHeightPx = $('body').height();

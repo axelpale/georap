@@ -61,9 +61,34 @@ window.initMap = function () {
   var $fullscreenDiv = $('#map').children('div:first');
   $('#card-layer').appendTo($fullscreenDiv);
 
+  // To prevent double clicks and programmatic pans from closing the card
+  // immediately after opening, we use a cooldown timeout.
+  var cardCooldown = false;
+
   mapComp.on('marker_activated', function (location) {
-    // Open location component. Router will emit location_routed
-    routes.show('/locations/' + location._id);
+    // Open location component.
+    // If the marker is the current location, close the current location.
+    // To prevent double-clicks from opening and closing the location,
+    // close only after cardCooldown period.
+    var locPath = '/locations/' + location._id;
+
+    if (!cardCooldown) {
+      if (locPath === routes.getCurrentPath()) {
+        routes.show('/');
+      } else {
+        routes.show(locPath);
+      }
+    }
+    // NOTE Router will emit location_routed.
+  });
+
+  // Touching the map will close the card.
+  mapComp.on('map_focused', function () {
+    // console.log('map_state_change');
+    // console.log('routes.path()', routes.getCurrentPath())
+    if (routes.getCurrentPath() !== '/' && !cardCooldown) {
+      routes.show('/');
+    }
   });
 
   // Map should react to location position and also to a change
@@ -71,7 +96,15 @@ window.initMap = function () {
   routes.on('location_routed', function (location) {
     // Via whatever way user arrived to loc,
     // pan map so that marker becomes visible.
+
+    cardCooldown = true;
+    var COOLDOWN_MSEC = 500;
+    setTimeout(function () {
+      cardCooldown = false;
+    }, COOLDOWN_MSEC);
+
     mapComp.panForCard(location.getGeom());
+
     location.on('location_geom_changed', function () {
       mapComp.panForCard(location.getGeom());
     });

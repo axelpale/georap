@@ -113,6 +113,13 @@ module.exports = function () {
       _map.addListener('maptypeid_changed', handleStateChange);
     }());
 
+    (function defineMapFocused() {
+      var handle = function () {
+        self.emit('map_focused');
+      };
+      _map.addListener('click', handle);
+    }());
+
   };  // bind end
 
   self.unbind = function () {

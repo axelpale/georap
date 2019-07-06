@@ -22,7 +22,6 @@
 //   card.close()
 //
 
-var template = require('./template.ejs');
 var emitter = require('component-emitter');
 
 module.exports = function () {
@@ -34,29 +33,16 @@ module.exports = function () {
   // State
   var _activeView = null;
   var _$mount = null;
-  var _$cont = null;
 
 
   // Public methods
 
   self.bind = function ($mount) {
-
-    $mount.html(template());
-
     // Update state
     _$mount = $mount;
-    _$cont = $('#card-container');
-
-    // Init close mechanism
-    $('#card-background').click(function () {
-      self.close();
-    });
-
   };
 
   self.unbind = function () {
-    $('#card-background').off();
-
     if (_activeView) {
       _activeView.off();
       _activeView.unbind();
@@ -64,7 +50,6 @@ module.exports = function () {
     }
 
     _$mount = null;
-    _$cont = null;
   };
 
   self.open = function (view, cardClass) {
@@ -103,13 +88,17 @@ module.exports = function () {
     // Activate view.
     // Backwards compatibility: call render method if available.
     if ('render' in view) {
-      _$cont.html(view.render());
+      _$mount.html(view.render());
     } else {
-      _$cont.empty();
+      _$mount.empty();
     }
-    _$cont.removeClass();  // removes previous tresdb-card-* classes
-    _$cont.addClass('tresdb-card-' + cardType);
-    _activeView.bind(_$cont);
+
+    // removes previous tresdb-card-* classes
+    _$mount.removeClass('tresdb-card-full');
+    _$mount.removeClass('tresdb-card-page');
+
+    _$mount.addClass('tresdb-card-' + cardType);
+    _activeView.bind(_$mount);
 
     // Reveal if hidden
     _$mount.removeClass('hidden');
@@ -143,7 +132,7 @@ module.exports = function () {
     }
 
     _$mount.addClass('hidden');
-    _$cont.empty();
+    _$mount.empty();
 
     if (!silent) {
       self.emit('closed');
