@@ -1,28 +1,43 @@
-/* eslint-disable no-lonely-if */
+/* eslint-disable max-statements */
 var icons = require('../lib/icons');
 
 module.exports = function (loc, visitedManager) {
-  var icon;
+  var template = 'default';
+  var symbol = 'default';
+
+  // Choose template
 
   var isVisited = visitedManager.isVisited(loc._id);
   var isDemolished = (loc.tags.indexOf('demolished') !== -1);
 
-  // Choose icon according to the visits
   if (isVisited) {
-    // Found from visits
     if (isDemolished) {
-      icon = icons.markerDemolishedVisited();
+      template = 'demolishedvisited';
     } else {
-      icon = icons.markerVisited();
+      template = 'visited';
     }
-  } else {
-    // Not found from visits
-    if (isDemolished) {
-      icon = icons.markerDemolished();
-    } else {
-      icon = icons.marker();
-    }
+  } else if (isDemolished) {
+    template = 'demolished';
   }
 
-  return icon;
+  // Choose symbol
+
+  if (loc.tags.indexOf('residental') !== -1) {
+    symbol = 'house';
+  }
+  if (loc.tags.indexOf('mining') !== -1) {
+    symbol = 'mining';
+  }
+  if (loc.tags.indexOf('factory') !== -1) {
+    symbol = 'factory';
+  }
+
+  // Build URL
+
+  var iconName = template + '-' + symbol + '.png';
+  var iconUrl = '/api/icons/' + iconName;
+
+  var iconObj = icons.marker(iconUrl);
+
+  return iconObj;
 };
