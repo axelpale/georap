@@ -131,12 +131,15 @@ db.init(function (dbErr) {
 
   // Instance-specific static files are best copied without webpack
   // because webpack does not support dynamic paths well.
+  var configDir = path.resolve(__dirname, '..', 'config');
+  var markersDir = path.join(configDir, 'images', 'markers');
   (function copyCustomStatic(copyPaths) {
     copyPaths.forEach(function (pp) {
       fse.copy(pp[0], pp[1]);
     });
   }([
-    [local.loginBackground, path.join(local.staticDir, 'images/login.jpg')],
+    [local.loginBackground, path.join(local.staticDir, 'images', 'login.jpg')],
+    [markersDir, path.join(local.staticDir, 'images', 'markers')],
   ]));
   console.log('Copying custom static files to', local.staticDir);
   // -------------
