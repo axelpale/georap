@@ -7,7 +7,7 @@ var icons = require('../lib/icons');
 var getBoundsDiagonal = require('./lib/getBoundsDiagonal');
 var rawEventToMarkerLocation = require('./lib/rawEventToMarkerLocation');
 var labels = require('./lib/labels');
-var VisitedManager = require('./Visited');
+var VisitedManager = require('./VisitedManager');
 var emitter = require('component-emitter');
 
 module.exports = function (map) {
