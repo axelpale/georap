@@ -5,6 +5,7 @@ var local = require('../../config/local');
 var accountRouter = require('./account/routes');
 var adminRouter = require('./admin/routes');
 var eventsRouter = require('./events/routes');
+var iconsRouter = require('./icons/routes');
 var locationsRouter = require('./locations/routes');
 var markersRouter = require('./markers/routes');
 var paymentsRouter = require('./payments/routes');
@@ -16,6 +17,9 @@ var userDal = require('./users/user/dal');
 var jwt = require('express-jwt');
 var status = require('http-status-codes');
 var router = require('express').Router();
+
+// Icon routes do not require authentication. Thus before jwt middleware.
+router.use('/icons', iconsRouter);
 
 // Account routes only partially require JWT authentication. Thus
 // the router is used before the jwt middleware.
