@@ -3,10 +3,10 @@
 
 var markerStore = tresdb.stores.markers;
 var account = tresdb.stores.account;
-var icons = require('../lib/icons');
 var getBoundsDiagonal = require('./lib/getBoundsDiagonal');
 var rawEventToMarkerLocation = require('./lib/rawEventToMarkerLocation');
 var labels = require('./lib/labels');
+var chooseIcon = require('./chooseIcon');
 var VisitedManager = require('./VisitedManager');
 var emitter = require('component-emitter');
 
@@ -35,32 +35,6 @@ module.exports = function (map) {
 
   // Private methods
 
-  var _chooseIcon = function (loc) {
-    var icon;
-
-    var isVisited = _visitedIds.isVisited(loc._id);
-    var isDemolished = (loc.tags.indexOf('demolished') !== -1);
-
-    // Choose icon according to the visits
-    if (isVisited) {
-      // Found from visits
-      if (isDemolished) {
-        icon = icons.markerDemolishedVisited();
-      } else {
-        icon = icons.markerVisited();
-      }
-    } else {
-      // Not found from visits
-      if (isDemolished) {
-        icon = icons.markerDemolished();
-      } else {
-        icon = icons.marker();
-      }
-    }
-
-    return icon;
-  };
-
   var _addMarker = function (loc) {
     // Create marker and add it to the map.
     //
@@ -76,7 +50,7 @@ module.exports = function (map) {
 
     m = new google.maps.Marker({
       position: new google.maps.LatLng(lat, lng),
-      icon: _chooseIcon(loc),
+      icon: chooseIcon(loc, _visitedIds),
     });
 
     // Store the MarkerLocation for _id, name, and layer info.
@@ -237,10 +211,11 @@ module.exports = function (map) {
     // Update icon according to new tags.
     if (_markers.hasOwnProperty(ev.locationId)) {
       var m = _markers[ev.locationId];
+      var mloc = m.get('location');
       // First update the location
-      m.get('location').tags = ev.data.newTags;
+      mloc.tags = ev.data.newTags;
       // Update icon according to the new tags
-      m.setIcon(_chooseIcon(m.get('location')));
+      m.setIcon(chooseIcon(mloc, _visitedIds));
     }
   });
 
@@ -252,13 +227,14 @@ module.exports = function (map) {
       // Update marker icon to visited
       if (_markers.hasOwnProperty(ev.locationId)) {
         var m = _markers[ev.locationId];
-        m.setIcon(_chooseIcon(m.get('location')));
+        var mloc = m.get('location');
+        m.setIcon(chooseIcon(mloc, _visitedIds));
       }
     }
   });
 
   markerStore.on('location_entry_changed', function (ev) {
-    var m;
+    var m, mloc;
 
     // Change from non-visit to visit
     if (ev.data.newIsVisit && !ev.data.oldIsVisit && account.isMe(ev.user)) {
@@ -268,7 +244,8 @@ module.exports = function (map) {
       // Update marker icon to visited
       if (_markers.hasOwnProperty(ev.locationId)) {
         m = _markers[ev.locationId];
-        m.setIcon(_chooseIcon(m.get('location')));
+        mloc = m.get('location');
+        m.setIcon(chooseIcon(mloc, _visitedIds));
       }
     } else {
       // From visit to non-visit
@@ -278,7 +255,8 @@ module.exports = function (map) {
         // Update marker icon to unvisited
         if (_markers.hasOwnProperty(ev.locationId)) {
           m = _markers[ev.locationId];
-          m.setIcon(_chooseIcon(m.get('location')));
+          mloc = m.get('location');
+          m.setIcon(chooseIcon(mloc, _visitedIds));
         }
       }
     }
