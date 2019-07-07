@@ -25,11 +25,20 @@ module.exports = function (loc, visitedManager) {
   if (loc.tags.indexOf('residental') !== -1) {
     symbol = 'house';
   }
+  if (loc.tags.indexOf('factory') !== -1) {
+    symbol = 'factory';
+  }
   if (loc.tags.indexOf('mining') !== -1) {
     symbol = 'mining';
   }
-  if (loc.tags.indexOf('factory') !== -1) {
-    symbol = 'factory';
+  if (loc.tags.indexOf('marine') !== -1) {
+    symbol = 'marine';
+  }
+  if (loc.tags.indexOf('railway') !== -1) {
+    symbol = 'railway';
+  }
+  if (loc.tags.indexOf('military') !== -1) {
+    symbol = 'military';
   }
 
   // Build URL
