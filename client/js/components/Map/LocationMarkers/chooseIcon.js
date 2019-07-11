@@ -40,6 +40,18 @@ module.exports = function (loc, visitedManager) {
   if (loc.tags.indexOf('military') !== -1) {
     symbol = 'military';
   }
+  if (loc.tags.indexOf('sawmill') !== -1) {
+    symbol = 'sawmill';
+  }
+  if (loc.tags.indexOf('tree') !== -1) {
+    symbol = 'tree';
+  }
+  if (loc.tags.indexOf('grave') !== -1) {
+    symbol = 'grave';
+  }
+  if (loc.tags.indexOf('campfire') !== -1) {
+    symbol = 'camp';
+  }
 
   // Build URL
 
