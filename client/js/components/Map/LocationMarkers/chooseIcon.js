@@ -23,7 +23,7 @@ module.exports = function (loc, visitedManager) {
   // Choose symbol
 
   if (loc.tags.indexOf('residental') !== -1) {
-    symbol = 'house';
+    symbol = 'residental';
   }
   if (loc.tags.indexOf('factory') !== -1) {
     symbol = 'factory';
@@ -50,13 +50,13 @@ module.exports = function (loc, visitedManager) {
     symbol = 'grave';
   }
   if (loc.tags.indexOf('campfire') !== -1) {
-    symbol = 'camp';
+    symbol = 'campfire';
   }
   if (loc.tags.indexOf('leisure') !== -1) {
-    symbol = 'sports';
+    symbol = 'leisure';
   }
   if (loc.tags.indexOf('agricultural') !== -1) {
-    symbol = 'agriculture';
+    symbol = 'agricultural';
   }
 
   // Build URL
