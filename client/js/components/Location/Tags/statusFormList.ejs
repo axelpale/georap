@@ -1,0 +1,38 @@
+<%
+  var j, tag;
+
+  var cap = (s) => {
+    if (typeof s !== 'string') return '';
+    return s.charAt(0).toUpperCase() + s.slice(1);
+  };
+
+  var isTagActive = function (tag) {
+    if (tag === 'unknown') {
+      return (statusTags.length === 0);
+    } else {
+      return (statusTags.indexOf(tag) !== -1);
+    }
+  };
+
+  var tagButtonClass = function (tag) {
+    return isTagActive(tag) ? 'tresdb-tag-active' : '';
+  };
+
+  var translateTag = function (tag) {
+    if (tag === 'walk-in') {
+      return 'abandoned';
+    } else {
+      return tag;
+    }
+  };
+%>
+
+<button id="tresdb-tag-unknown" class="<%= tagButtonClass('unknown') %>">
+  Unknown
+</button>
+
+<% allStatusTags.forEach(function (tag) { %>
+  <button id="tresdb-tag-<%= tag %>" class="<%= tagButtonClass(tag) %>">
+    <%= cap(translateTag(tag)) %>
+  </button>
+<% }) %>

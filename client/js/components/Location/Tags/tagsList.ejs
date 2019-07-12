@@ -1,7 +1,33 @@
-<% var j; %>
-<% for (j = 0; j < tags.length; j += 1) { %>
-  <span class="label label-default tresdb-tag"><%= tags[j] %></span>
-<% } %>
-<% if (tags.length === 0) { %>
-  <span class="label label-default tresdb-tag tresdb-none">- no tags -</span>
-<% } %>
+<%
+  var cap = (s) => {
+    if (typeof s !== 'string') return '';
+    return s.charAt(0).toUpperCase() + s.slice(1);
+  };
+
+  var translateTag = function (tag) {
+    if (tag === 'walk-in') {
+      return 'abandoned';
+    } else {
+      return tag;
+    }
+  };
+
+  var status = (statusTags.length > 0) ? statusTags[0] : 'unknown';
+  var type = (typeTags.length > 0) ? typeTags[0] : 'default';
+
+  %><span class="tresdb-tag"><%
+    %><img src="<%= tagToSymbolUrl(type) %>" title="<%= type %>" width="22" height="40"><%
+  %></span> <%
+
+  var j;
+  for (j = 0; j < statusTags.length; j += 1) {
+    %><span><%= cap(translateTag(statusTags[j])) %></span> <%
+  }
+  if (statusTags.length === 0) {
+    %><span>Unknown</span> <%
+  }
+
+  for (j = 0; j < typeTags.length; j += 1) {
+    %><span class="tresdb-tag"><%= cap(typeTags[j]) %></span><%
+  }
+%>

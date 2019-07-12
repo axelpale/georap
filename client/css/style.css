@@ -105,6 +105,39 @@ html, body {
   opacity: 0.6;
 }
 
+.tresdb-tags-form {
+  margin-bottom: 1.6rem;
+}
+
+.tresdb-tags .tresdb-tag img {
+  margin-top: -4px;
+  margin-bottom: -18px;
+}
+
+.tresdb-tags-form button {
+  width: 3rem;
+  height: 3rem;
+  margin: 0.16rem;
+  padding: 0.38rem;
+  border: 0px solid gray;
+  border-radius: 0.5rem;
+  background-color: transparent;
+  overflow: hidden;
+}
+.tresdb-tags-form button.tresdb-tag-active {
+  border: 1px solid black;
+}
+.tresdb-location-edit-status button {
+  margin: 0.16rem;
+  padding: 0.38rem;
+  border: 0px solid gray;
+  border-radius: 0.5rem;
+  background-color: transparent;
+}
+.tresdb-location-edit-status button.tresdb-tag-active {
+  border: 1px solid black;
+}
+
 .tresdb-coords {
   font-size: 1.38em;
 }
