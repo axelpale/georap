@@ -55,6 +55,9 @@ module.exports = function (loc, visitedManager) {
   if (loc.tags.indexOf('leisure') !== -1) {
     symbol = 'leisure';
   }
+  if (loc.tags.indexOf('sports') !== -1) {
+    symbol = 'sports';
+  }
   if (loc.tags.indexOf('agricultural') !== -1) {
     symbol = 'agricultural';
   }
