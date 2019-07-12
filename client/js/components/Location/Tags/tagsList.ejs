@@ -5,10 +5,13 @@
   };
 
   var translateTag = function (tag) {
-    if (tag === 'walk-in') {
-      return 'abandoned';
-    } else {
-      return tag;
+    switch (tag) {
+      case 'walk-in':
+        return 'abandoned';
+      case 'campfire':
+        return 'camp';
+      default:
+        return tag;
     }
   };
 
@@ -28,6 +31,6 @@
   }
 
   for (j = 0; j < typeTags.length; j += 1) {
-    %><span class="tresdb-tag"><%= cap(typeTags[j]) %></span> <%
+    %><span class="tresdb-tag"><%= cap(translateTag(typeTags[j])) %></span> <%
   }
 %>
