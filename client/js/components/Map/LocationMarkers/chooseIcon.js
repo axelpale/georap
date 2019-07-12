@@ -1,6 +1,19 @@
 /* eslint-disable max-statements */
 var icons = require('../lib/icons');
 
+var allStatusTags = [
+  'walk-in',
+  'active',
+  'buried',
+  'demolished',
+  'guarded',
+  'locked',
+];
+
+var isTypeTag = function (t) {
+  return allStatusTags.indexOf(t) === -1;
+};
+
 module.exports = function (loc, visitedManager) {
   var template = 'default';
   var symbol = 'default';
@@ -22,44 +35,11 @@ module.exports = function (loc, visitedManager) {
 
   // Choose symbol
 
-  if (loc.tags.indexOf('residental') !== -1) {
-    symbol = 'residental';
-  }
-  if (loc.tags.indexOf('factory') !== -1) {
-    symbol = 'factory';
-  }
-  if (loc.tags.indexOf('mining') !== -1) {
-    symbol = 'mining';
-  }
-  if (loc.tags.indexOf('marine') !== -1) {
-    symbol = 'marine';
-  }
-  if (loc.tags.indexOf('railway') !== -1) {
-    symbol = 'railway';
-  }
-  if (loc.tags.indexOf('military') !== -1) {
-    symbol = 'military';
-  }
-  if (loc.tags.indexOf('sawmill') !== -1) {
-    symbol = 'sawmill';
-  }
-  if (loc.tags.indexOf('tree') !== -1) {
-    symbol = 'tree';
-  }
-  if (loc.tags.indexOf('grave') !== -1) {
-    symbol = 'grave';
-  }
-  if (loc.tags.indexOf('campfire') !== -1) {
-    symbol = 'campfire';
-  }
-  if (loc.tags.indexOf('leisure') !== -1) {
-    symbol = 'leisure';
-  }
-  if (loc.tags.indexOf('sports') !== -1) {
-    symbol = 'sports';
-  }
-  if (loc.tags.indexOf('agricultural') !== -1) {
-    symbol = 'agricultural';
+  var typeTag = loc.tags.find(isTypeTag);
+  if (typeTag) {
+    symbol = typeTag;
+  } else {
+    symbol = 'default';
   }
 
   // Build URL
