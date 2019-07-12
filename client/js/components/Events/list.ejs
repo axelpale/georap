@@ -1,3 +1,15 @@
+<%
+  var translateTag = function (tag) {
+    switch (tag) {
+      case 'walk-in':
+        return 'abandoned';
+      case 'campfire':
+        return 'camp';
+      default:
+        return tag;
+    }
+  };
+%>
 
 <ul id="tresdb-events" class="list-group">
   <% var i, ev, t, name, a, b; %>
@@ -29,7 +41,7 @@
         <% } %>
 
       <% } else if (t === 'location_tags_changed') { %>
-        tagged <a href="/locations/<%= ev.locationId %>?zoom=11"><%= name %></a> as <%= ev.data.newTags.join(', ') %> <%= timestamp(ev.time) %>
+        tagged <a href="/locations/<%= ev.locationId %>?zoom=11"><%= name %></a> as <%= ev.data.newTags.map(translateTag).join(', ') %> <%= timestamp(ev.time) %>
 
       <% } else if (t === 'location_entry_created') { %>
         posted <%= ev.data.isVisit ? 'a visit ' : '' %>to <a href="/locations/<%= ev.locationId %>?zoom=11"><%= name %></a> <%= timestamp(ev.time) %>
