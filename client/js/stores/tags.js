@@ -48,6 +48,11 @@ var notIn = function (list) {
 
 // Public methods
 
+exports.tagToSymbolUrl = function (tag) {
+  var baseUrl = '/assets/images/markers/symbols/';
+  return baseUrl + tag + '.png';
+};
+
 exports.getAllTags = function () {
   return tags;
 };
