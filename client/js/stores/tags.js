@@ -57,6 +57,12 @@ exports.getAllTags = function () {
   return tags;
 };
 
+exports.getTagsIn = function (whitelist) {
+  return tags.filter(function (t) {
+    return whitelist.indexOf(t) !== -1;
+  });
+};
+
 exports.getTagsNotIn = function (blacklist) {
   // Get all tags, except the ones on the blacklist.
   return tags.filter(notIn(blacklist));
