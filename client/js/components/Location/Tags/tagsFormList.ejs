@@ -9,13 +9,11 @@
         <label id="tresdb-location-edit-tags-<%= tag %>" class="col-sm-5">
           <input type="checkbox" name="tags" value="<%= tag %>" checked="checked">
           <span class="label label-primary tresdb-tag"><%= tag %></span>
-          <!--button id="tresdb-location-edit-tags-<%= tag %>-button" type="button" class="btn btn-default btn-sm">Remove</button-->
         </label>
       <% } else { %>
         <label id="tresdb-location-edit-tags-<%= tag %>" class="col-sm-5">
           <input type="checkbox" name="tags" value="<%= tag %>">
           <span class="label label-default tresdb-tag"><%= tag %></span>
-          <!--button id="tresdb-location-edit-tags-<%= tag %>-button" type="button" class="btn btn-default btn-sm">Add</button-->
         </label>
       <% } %>
     <% } %>
