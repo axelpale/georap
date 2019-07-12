@@ -1,7 +1,6 @@
 // Component for search form and results.
 
 var markers = require('../../stores/markers');
-var tagsTemplate = require('../Location/Tags/tagsList.ejs');
 var template = require('./template.ejs');
 var listTemplate = require('./list.ejs');
 var emitter = require('component-emitter');
@@ -234,7 +233,6 @@ module.exports = function (query) {
         // The extra item was used to determine if there is an additional
         // page or not.
         $results.html(listTemplate({
-          tagsTemplate: tagsTemplate,
           markers: l > limit ? results.slice(0, -1) : results,
         }));
       });
