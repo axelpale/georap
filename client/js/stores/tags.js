@@ -4,6 +4,7 @@ var tags = [
   'active',
   'agricultural',
   'aviation',
+  'bridge',
   'buried',
   'campfire',
   'demolished',
