@@ -33,6 +33,7 @@ var tags = [
   'residental',
   'sawmill',
   'scientific',
+  'school',
   'shop',
   'spiritual',
   'sports',
