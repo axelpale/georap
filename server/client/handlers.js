@@ -6,6 +6,44 @@ var _ = require('lodash');
 var fs = require('fs');
 var path = require('path');
 
+var tags = [
+  'active',
+  'agricultural',
+  'aviation',
+  'bridge',
+  'buried',
+  'campfire',
+  'demolished',
+  'electricity',
+  'freak',
+  'factory',
+  'grave',
+  'guarded',
+  'hospital',
+  'infrastructure',
+  'lighthouse',
+  'leisure',
+  'locked',
+  'marine',
+  'military',
+  'mining',
+  'museum',
+  'natural',
+  'railway',
+  'residental',
+  'sawmill',
+  'scientific',
+  'shop',
+  'spiritual',
+  'sports',
+  'town',
+  'tree',
+  'tunnel',
+  'underground',
+  'vehicle',
+  'walk-in',
+];
+
 // Precompile template and prerender index.html.
 // Include config and other variables for the client.
 var indexHtml = (function precompile() {
@@ -22,6 +60,7 @@ var indexHtml = (function precompile() {
       defaultMapState: local.defaultMapState,
       features: local.features,
       googleMapsKey: local.googleMapsKey,
+      tags: tags,
       uploadUrl: local.uploadUrl,
       uploadSizeLimit: local.uploadSizeLimit,
       tempUploadSizeLimit: local.tempUploadSizeLimit,

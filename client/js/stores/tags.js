@@ -1,42 +1,6 @@
 // Model for all tags. Maybe data comes from server in the future.
 
-var tags = [
-  'active',
-  'agricultural',
-  'aviation',
-  'bridge',
-  'buried',
-  'campfire',
-  'demolished',
-  'electricity',
-  'freak',
-  'factory',
-  'grave',
-  'guarded',
-  'hospital',
-  'infrastructure',
-  'lighthouse',
-  'leisure',
-  'locked',
-  'marine',
-  'military',
-  'mining',
-  'museum',
-  'natural',
-  'railway',
-  'residental',
-  'sawmill',
-  'scientific',
-  'shop',
-  'spiritual',
-  'sports',
-  'town',
-  'tree',
-  'tunnel',
-  'underground',
-  'vehicle',
-  'walk-in',
-];
+var tags = window.tresdb.config.tags;
 
 var notIn = function (list) {
   // Create a function to test if an item is not in the list.
