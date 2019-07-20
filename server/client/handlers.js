@@ -14,6 +14,7 @@ var tags = [
   'buried',
   'campfire',
   'castle',
+  'church',
   'demolished',
   'electricity',
   'freak',
@@ -45,6 +46,7 @@ var tags = [
   'underground',
   'vehicle',
   'walk-in',
+  'watermanagement',
 ];
 
 // Precompile template and prerender index.html.
