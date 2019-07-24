@@ -12,6 +12,7 @@ var tags = [
   'residental',
   'town',
   'agricultural',
+  'farm',
   'campfire',
   'natural',
   'tree',
