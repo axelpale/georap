@@ -36,6 +36,7 @@ var tags = [
   'vehicle',
   'infrastructure',
   'electricity',
+  'communications',
   'watermanagement',
   'lighthouse',
   'bridge',
