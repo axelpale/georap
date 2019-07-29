@@ -250,8 +250,8 @@ this.setStars = function (id, starred, callback) {
 
   return postJSON({
     url: '/api/locations/' + id + '/stars',
-    data: { starred: starred }
-  })
+    data: { starred: starred },
+  }, callback);
 };
 
 this.setTags = function (id, newTags, callback) {

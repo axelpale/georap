@@ -180,7 +180,7 @@ module.exports = function (raw) {
     //     function (err)
     //
     // Server will emit location_stars_changed event
-    locations.setStars(raw._id, starred, callback)
+    locations.setStars(raw._id, starred, callback);
   };
 
   self.setTags = function (newTags, callback) {
