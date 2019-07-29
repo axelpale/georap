@@ -47,6 +47,11 @@ module.exports = function (raw) {
       self.emit(ev.type);
     }
 
+    if (ev.type === 'location_stars_changed') {
+      raw.stars = ev.data.newStars;
+      self.emit(ev.type);
+    }
+
     if (ev.type === 'location_tags_changed') {
       raw.tags = ev.data.newTags;
       self.emit(ev.type);
@@ -123,6 +128,10 @@ module.exports = function (raw) {
     return raw.places;
   };
 
+  self.getStars = function () {
+    return [];
+  };
+
   self.getTags = function () {
     // Return array of strings
     return raw.tags;
@@ -159,6 +168,19 @@ module.exports = function (raw) {
     //
     // Server will emit location_name_changed event
     locations.setName(raw._id, newName, callback);
+  };
+
+  self.setStars = function (starred, callback) {
+    // Give or take a given star to the location. Saves the changes to server.
+    //
+    // Parameters:
+    //   starred
+    //     boolean
+    //   callback
+    //     function (err)
+    //
+    // Server will emit location_stars_changed event
+    locations.setStars(raw._id, starred, callback)
   };
 
   self.setTags = function (newTags, callback) {

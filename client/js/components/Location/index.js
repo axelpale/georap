@@ -9,6 +9,7 @@ var locations = require('../../stores/locations');
 var NameView = require('./Name');
 var PlacesView = require('./Places');
 var GeomView = require('./Geom');
+var StarsView = require('./Stars');
 var TagsView = require('./Tags');
 var FormsView = require('./Forms');
 var RemoveView = require('./Remove');
@@ -35,7 +36,7 @@ module.exports = function (id) {
 
   // State
   var _location;
-  var nameView, placesView, geomView, tagsView, formsView;
+  var nameView, placesView, geomView, starsView, tagsView, formsView;
   var entriesView, eventsView, removeView;
 
 
@@ -64,6 +65,7 @@ module.exports = function (id) {
       nameView = new NameView(_location);
       placesView = new PlacesView(_location);
       geomView = new GeomView(_location);
+      starsView = new StarsView(_location);
       tagsView = new TagsView(_location);
       formsView = new FormsView(_location);
       entriesView = new EntriesView(_location.getEntries());
@@ -73,6 +75,7 @@ module.exports = function (id) {
       nameView.bind($('#tresdb-location-name'));
       placesView.bind($('#tresdb-location-places'));
       geomView.bind($('#tresdb-location-geom'));
+      starsView.bind($('#tresdb-location-stars'));
       tagsView.bind($('#tresdb-location-tags'));
       formsView.bind($('#tresdb-location-forms'));
       entriesView.bind($('#tresdb-location-entries'));
@@ -109,6 +112,7 @@ module.exports = function (id) {
       nameView.unbind();
       placesView.unbind();
       geomView.unbind();
+      starsView.unbind();
       tagsView.unbind();
       formsView.unbind();
       entriesView.unbind();

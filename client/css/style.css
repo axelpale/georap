@@ -138,8 +138,12 @@ html, body {
   border: 1px solid black;
 }
 
-.tresdb-coords {
+.tresdb-coords, .tresdb-stars {
   font-size: 1.38em;
+}
+
+.tresdb-stars.form-group {
+  margin-bottom: 0;
 }
 
 /* Tag labels END */

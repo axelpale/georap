@@ -1,0 +1,26 @@
+
+<div class="tresdb-stars form-group">
+
+  <span id="tresdb-location-stars-list">
+    <% for (var i = 0; i < stars.length; i += 1) { %>
+    <span class="glyphicon glyphicon-star" title="<%= stars[i] %>"></span>
+    <% } %>
+
+    <% if (i === 0) { %>
+    <span class="glyphicon glyphicon-star-empty"></span>
+    <% } %>
+  </span>
+
+  <button id="tresdb-location-give-star" type="button" class="btn btn-default btn-xs">Give <span class="glyphicon glyphicon-star"></span></button>
+
+</div>
+
+<div id="tresdb-location-stars-progress" class="progress hidden">
+  <div class="progress-bar progress-bar-striped active" role="progressbar" style="width: 100%">
+    <span class="sr-only">Waiting for server</span>
+  </div>
+</div>
+
+<div id="tresdb-location-stars-error" class="hidden">
+  <div class="alert alert-danger" role="alert">Sorry, updating stars failed. Try again later.</div>
+</div>

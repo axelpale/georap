@@ -237,6 +237,23 @@ exports.setName = function (id, newName, callback) {
   }, callback);
 };
 
+this.setStars = function (id, starred, callback) {
+  // Add or remove yourself from the list of users who gave a star.
+  //
+  // Parameters:
+  //   id
+  //     location id
+  //   starred
+  //     bool
+  //   callback
+  //     function (err)
+
+  return postJSON({
+    url: '/api/locations/' + id + '/stars',
+    data: { starred: starred }
+  })
+};
+
 this.setTags = function (id, newTags, callback) {
   // Replaces the current taglist with the new one and saves to server.
   //
