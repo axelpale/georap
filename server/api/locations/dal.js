@@ -26,12 +26,16 @@ exports.count = function (callback) {
 };
 
 exports.createLocation = function (args, callback) {
+  // Generalized way to create location. See fn create below for
+  // a simplified interface.
+  //
   // Parameters
   //   args
   //     name
   //     latitude
   //     longitude
   //     username
+  //     stars
   //     tags
   //   callback
   //     function (err, rawLocation)
@@ -63,6 +67,7 @@ exports.createLocation = function (args, callback) {
       layer: layer,
       name: args.name,
       places: [],
+      stars: args.stars,
       tags: args.tags,
     };
 
@@ -81,6 +86,8 @@ exports.createLocation = function (args, callback) {
         lat: args.latitude,
         lng: args.longitude,
         username: newLoc.creator,
+        stars: args.stars,
+        tags: args.tags,
       }, function (err2) {
         if (err2) {
           return callback(err2);
@@ -107,6 +114,7 @@ exports.create = function (lat, lng, username, callback) {
     latitude: lat,
     longitude: lng,
     username: username,
+    stars: [],
     tags: [],
   }, callback);
 };

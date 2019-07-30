@@ -254,6 +254,32 @@ exports.createLocationNameChanged = function (params, callback) {
   insertAndEmit(newEvent, callback);
 };
 
+exports.createLocationStarsChanged = function (params, callback) {
+  // Parameters:
+  //   params:
+  //     locationId
+  //     locationName
+  //     username
+  //     newStars
+  //       array of strings
+  //     oldStars
+  //       array of string
+
+  var newEvent = {
+    type: 'location_stars_changed',
+    user: params.username,
+    time: timestamp(),
+    locationId: params.locationId,
+    locationName: params.locationName,
+    data: {
+      newStars: params.newStars,
+      oldStars: params.oldStars,
+    },
+  };
+
+  insertAndEmit(newEvent, callback);
+};
+
 exports.createLocationTagsChanged = function (params, callback) {
   // Parameters:
   //   params:

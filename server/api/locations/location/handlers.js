@@ -64,6 +64,27 @@ exports.changeName = function (req, res, next) {
 
 
 
+exports.changeStars = function (req, res, next) {
+  if (typeof req.body.starred !== 'boolean') {
+    return res.sendStatus(status.BAD_REQUEST);
+  }
+
+  dal.changeStars({
+    locationId: req.location._id,
+    locationName: req.location.name,
+    username: req.user.name,
+    starred: req.body.starred,
+  }, function (err) {
+    if (err) {
+      return next(err);
+    }
+
+    return res.sendStatus(status.OK);
+  });
+};
+
+
+
 exports.changeTags = function (req, res, next) {
 
   if (typeof req.body.tags !== 'object') {

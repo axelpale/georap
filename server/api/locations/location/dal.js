@@ -117,6 +117,85 @@ exports.changeName = function (params, callback) {
   });
 };
 
+exports.changeStars = function (params, callback) {
+  // Parameters:
+  //   params
+  //     locationId
+  //     locationName
+  //     username
+  //       string
+  //     starred
+  //       boolean
+  //   callback
+  //     function (err)
+
+  var locColl = db.get().collection('locations');
+
+  if (typeof params.starred !== 'boolean') {
+    throw new Error('Invalid or missing value for params.starred');
+  }
+
+  exports.getRaw(params.locationId, function (err, rawLoc) {
+    if (err) {
+      return callback(err);
+    }
+
+    if (!rawLoc) {
+      var errn = new Error('Location does not exist');
+      return callback(errn);
+    }
+
+    var alreadyStarred = rawLoc.stars.indexOf(params.username) !== -1;
+
+    // If no changes, no update is needed.
+    if (alreadyStarred && params.starred) {
+      return callback(null);
+    }
+    if (!alreadyStarred && !params.starred) {
+      return callback(null);
+    }
+
+    // Construct new stars
+    var newStars;
+    if (params.starred) {
+      // Add star
+      newStars = rawLoc.stars.slice();
+      newStars.push(params.username);
+    } else {
+      // Remove star by filtering out the username.
+      newStars = rawLoc.stars.filter(function (name) {
+        return name !== params.username;
+      });
+    }
+
+    // Update query
+    var q = { _id: params.locationId };
+    var u = { $set: { stars: newStars } };
+
+    locColl.updateOne(q, u, function (errup) {
+      if (errup) {
+        return callback(errup);
+      }
+
+      var oldStars = rawLoc.stars;
+
+      eventsDal.createLocationStarsChanged({
+        locationId: params.locationId,
+        locationName: params.locationName,
+        username: params.username,
+        newStars: newStars,
+        oldStars: oldStars,
+      }, function (err2) {
+        if (err2) {
+          return callback(err2);
+        }
+
+        return callback();
+      });
+    });
+  });
+};
+
 exports.changeTags = function (params, callback) {
   // Parameters:
   //   params
@@ -182,6 +261,12 @@ exports.getRaw = function (id, callback) {
       return callback(null, null);
     }
 
+    // Backward compatibility:
+    // - some locations might not have stars-property.
+    if (!doc.hasOwnProperty('stars')) {
+      doc.stars = [];
+    }
+
     return callback(null, doc);
   });
 };
@@ -198,11 +283,10 @@ exports.getOne = function (id, callback) {
   //       err null and loc null if no loc found
   //
 
-  var locColl = db.get().collection('locations');
-  var evColl = db.get().collection('events');
-  var enColl = db.get().collection('entries');
+  var eventsColl = db.get().collection('events');
+  var entriesColl = db.get().collection('entries');
 
-  locColl.findOne({ _id: id }, {}, function (err, doc) {
+  exports.getRaw(id, function (err, doc) {
     if (err) {
       return callback(err);
     }
@@ -213,14 +297,14 @@ exports.getOne = function (id, callback) {
 
     var q = { locationId: id };
     var opt = { sort: { time: -1 } };
-    evColl.find(q, opt).toArray(function (err2, docs) {
+    eventsColl.find(q, opt).toArray(function (err2, docs) {
       if (err2) {
         return callback(err2);
       }
 
       doc.events = docs;
 
-      enColl.find(q, opt).toArray(function (err3, docs2) {
+      entriesColl.find(q, opt).toArray(function (err3, docs2) {
         if (err3) {
           return callback(err3);
         }
