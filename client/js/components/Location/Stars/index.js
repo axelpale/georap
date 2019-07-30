@@ -1,4 +1,6 @@
 var template = require('./template.ejs');
+var ui = require('../../lib/ui');
+var account = require('../../../stores/account');
 // var tagsListTemplate = require('./tagsList.ejs');
 // var statusFormListTemplate = require('./statusFormList.ejs');
 // var tagsFormListTemplate = require('./tagsFormList.ejs');
@@ -9,92 +11,66 @@ module.exports = function (location) {
   this.bind = function ($mount) {
     $mount.html(template({
       stars: location.getStars(),
+      starred: (location.getStars().indexOf(account.getName()) > -1),
     }));
 
-    // var $show = $('#tresdb-location-edit-tags-show');
-    // var $form = $('#tresdb-location-edit-tags-form');
-    // var $cancel = $('#tresdb-location-edit-tags-cancel');
-    // var $progress = $('#tresdb-location-edit-tags-progress');
-    // var $error = $('#tresdb-location-edit-tags-error');
-    //
+    var $give = $('#tresdb-location-stars-give');
+    var $undo = $('#tresdb-location-stars-undo');
+    var $progress = $('#tresdb-location-stars-progress');
+    var $error = $('#tresdb-location-stars-error');
+
     location.on('location_stars_changed', function () {
       // Refresh
       $mount.empty();
       self.bind($mount);
     });
-    //
-    // $show.click(function (ev) {
-    //   ev.preventDefault();
-    //
-    //   // Remove possible error messages
-    //   $error.addClass('hidden');
-    //
-    //   if ($form.hasClass('hidden')) {
-    //     // Show
-    //     $form.removeClass('hidden');
-    //   } else {
-    //     // Hide
-    //     $form.addClass('hidden');
-    //   }
-    // });
-    //
-    // $cancel.click(function (ev) {
-    //   ev.preventDefault();
-    //   $form.addClass('hidden');
-    // });
-    //
-    // var formSubmit = function (newTags) {
-    //   $progress.removeClass('hidden');
-    //   $form.addClass('hidden');
-    //
-    //   location.setTags(newTags, function (err) {
-    //     $progress.addClass('hidden');
-    //
-    //     if (err) {
-    //       console.error(err);
-    //       // Show error message
-    //       $error.removeClass('hidden');
-    //       return;
-    //     }
-    //     // Everything ok
-    //   });
-    // };
-    //
-    // $('#tresdb-tag-default').click(function (ev) {
-    //   ev.preventDefault();
-    //   var newTags = locStatusTags.slice();
-    //   formSubmit(newTags);
-    // });
-    //
-    // allTypeTags.forEach(function (tag) {
-    //   $('#tresdb-tag-' + tag).click(function (ev) {
-    //     ev.preventDefault();
-    //     var newTags = locStatusTags.slice();
-    //     newTags.push(tag);
-    //     formSubmit(newTags);
-    //   });
-    // });
-    //
-    // $('#tresdb-tag-unknown').click(function (ev) {
-    //   ev.preventDefault();
-    //   var newTags = locTypeTags.slice();
-    //   formSubmit(newTags);
-    // });
-    //
-    // allStatusTags.forEach(function (tag) {
-    //   $('#tresdb-tag-' + tag).click(function (ev) {
-    //     ev.preventDefault();
-    //     var newTags = locTypeTags.slice();
-    //     newTags.push(tag);
-    //     formSubmit(newTags);
-    //   });
-    // });
+
+    $give.click(function (ev) {
+      ev.preventDefault();
+
+      // Remove possible error messages
+      ui.hide($error);
+
+      ui.show($progress);
+      ui.hide($give);
+
+      location.setStars(true, function (errset) {
+        ui.hide($progress);
+
+        if (errset) {
+          console.error(errset);
+          ui.show($error);
+          return;
+        }
+        // Everything ok
+      });
+    });
+
+    $undo.click(function (ev) {
+      ev.preventDefault();
+
+      // Remove possible error messages
+      ui.hide($error);
+
+      ui.show($progress);
+      ui.hide($undo);
+
+      location.setStars(false, function (errset) {
+        ui.hide($progress);
+
+        if (errset) {
+          console.error(errset);
+          ui.show($error);
+          return;
+        }
+        // Everything ok
+      });
+    });
   };
 
   this.unbind = function () {
     location.off('location_stars_changed');
-    // $('#tresdb-location-edit-tags-show').off();
-    // $('#tresdb-location-edit-tags-cancel').off();
-    // $('#tresdb-location-edit-tags-form').off();
+    $('#tresdb-location-stars-give').off();
+    $('#tresdb-location-stars-undo').off();
   };
 };

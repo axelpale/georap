@@ -35,26 +35,31 @@ module.exports = function (raw) {
     // For entries model
     if (ev.type.startsWith('location_entry_')) {
       self.emit('location_entry_event', ev);
+      return;
     }
 
     if (ev.type === 'location_name_changed') {
       raw.name = ev.data.newName;
       self.emit(ev.type);
+      return;
     }
 
     if (ev.type === 'location_geom_changed') {
       raw.geom = ev.data.newGeom;
       self.emit(ev.type);
+      return;
     }
 
     if (ev.type === 'location_stars_changed') {
       raw.stars = ev.data.newStars;
       self.emit(ev.type);
+      return;
     }
 
     if (ev.type === 'location_tags_changed') {
       raw.tags = ev.data.newTags;
       self.emit(ev.type);
+      return;
     }
 
     // Emit removed so that view can unbind.
@@ -129,7 +134,7 @@ module.exports = function (raw) {
   };
 
   self.getStars = function () {
-    return [];
+    return raw.stars;
   };
 
   self.getTags = function () {

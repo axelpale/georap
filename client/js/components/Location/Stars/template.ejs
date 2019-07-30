@@ -11,7 +11,9 @@
     <% } %>
   </span>
 
-  <button id="tresdb-location-give-star" type="button" class="btn btn-default btn-xs">Give <span class="glyphicon glyphicon-star"></span></button>
+  <button id="tresdb-location-stars-give" type="button" class="btn btn-default btn-xs <%= starred ? 'hidden' : '' %>">Give <span class="glyphicon glyphicon-star"></span></button>
+
+  <button id="tresdb-location-stars-undo" type="button" class="btn btn-default btn-xs <%= starred ? '' : 'hidden' %>">Undo <span class="glyphicon glyphicon-star-empty"></span></button>
 
 </div>
 
