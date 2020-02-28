@@ -92,7 +92,9 @@
     <% if (entry.hasImage()) { %>
       <div class="panel-body tresdb-entry-image-body">
         <a href="<%= entry.getUrl() %>" target="_blank">
-          <span class="glyphicon glyphicon-zoom-in entry-image-zoom-icon"></span>
+          <div class="entry-image-zoom-icon">
+            <span class="glyphicon glyphicon-zoom-in"></span>
+          </div>
           <img src="<%= entry.getThumbUrl() %>" title="<%= entry.getFileName() %>">
         </a>
       </div>
