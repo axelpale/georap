@@ -118,6 +118,10 @@ module.exports = function (rawEntry, entries) {
     return false;
   };
 
+  self.getComments = function () {
+    return rawEntry.comments;
+  };
+
   self.getFileName = function () {
     // Get filename part of attachment file path.
     // Null if no file.

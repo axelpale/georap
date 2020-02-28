@@ -202,6 +202,32 @@ exports.createLocationEntryRemoved = function (params, callback) {
   insertAndEmit(newEvent, callback);
 };
 
+exports.createLocationEntryCommented = function (params, callback) {
+  // Parameters:
+  //   params:
+  //     entryId
+  //     locationId
+  //     locationName
+  //     username
+  //     comment
+  //   callback
+  //     function (err)
+
+  var newEvent = {
+    type: 'location_post_commented',
+    user: params.username,
+    time: timestamp(),
+    locationId: params.locationId,
+    locationName: params.locationName,
+    data: {
+      entryId: params.entryId,
+      comment: params.comment,
+    },
+  };
+
+  insertAndEmit(newEvent, callback);
+};
+
 exports.createLocationGeomChanged = function (params, callback) {
   // Parameters:
   //   params:

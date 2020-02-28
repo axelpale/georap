@@ -215,3 +215,27 @@ exports.remove = function (req, res, next) {
     return res.sendStatus(status.OK);
   });
 };
+
+
+exports.comment = function (req, res, next) {
+  // Comment an entry
+
+  var locationId = req.location._id;
+  var locationName = req.location.name;
+  var entryId = req.entryId;
+  var username = req.user.name;
+  var message = req.message;
+
+  dal.createLocationEntryComment({
+    locationId: locationId,
+    locationName: locationName,
+    entryId: entryId,
+    username: username,
+    message: message,
+  }, function (err) {
+    if (err) {
+      return next(err);
+    }
+    return res.sendStatus(status.OK);
+  });
+};

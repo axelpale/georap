@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 
 var db = require('../../services/db');
 var eventsDal = require('../events/dal');
@@ -80,6 +81,7 @@ exports.changeLocationEntry = function (params, callback) {
       thumbfilepath: params.thumbfilepath,
       thumbmimetype: params.thumbmimetype,
     },
+    comments: params.oldEntry.comments,
   };
 
   coll.replaceOne(q, changedEntry, function (err) {
@@ -276,5 +278,40 @@ exports.removeLocationEntry = function (params, callback) {
     }
 
     eventsDal.createLocationEntryRemoved(params, callback);
+  });
+};
+
+
+exports.createLocationEntryComment = function (params, callback) {
+  // Parameters:
+  //   params
+  //     commentId
+  //     locationId
+  //     entryId
+  //     locationName
+  //     username
+  //     comment: UTF8 string TODO prevent script attack
+  //   callback
+  //     function (err)
+
+  var coll = db.collection('entries');
+  var filter = { _id: params.oldEntry._id };
+
+  var update = {
+    $push: {
+      comments: {
+        time: timestamp(),
+        user: params.username,
+        comment: params.comment,
+      },
+    },
+  };
+
+  coll.updateOne(filter, update, function (err) {
+    if (err) {
+      return callback(err);
+    }
+
+    eventsDal.createLocationEntryCommented(params, callback);
   });
 };

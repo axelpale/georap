@@ -28,6 +28,13 @@ module.exports = {
       user: 'admin',
     }, {
       _id: c.id('581f166110a1482dd0b7ea02'),
+      comments: [
+        {
+          time: '2009-10-04T19:55:01.000Z',
+          user: 'admin',
+          message: 'Hello world',
+        },
+      ],
       data: {
         isVisit: false,
         markdown: null,
@@ -82,6 +89,16 @@ module.exports = {
       locationName: 'Irbene',
       time: '2009-10-02T11:11:01.000Z',
       type: 'location_entry_created',
+      user: 'admin',
+    }, {
+      data: {
+        entryId: c.id('581f166110a1482dd0b7ea02'),
+        message: 'Dang radar, dude',
+      },
+      locationId: c.irbeneId,
+      locationName: 'Irbene',
+      time: '2009-10-04T19:55:01.000Z',
+      type: 'location_entry_comment_created',
       user: 'admin',
     }],
 

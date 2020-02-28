@@ -12,11 +12,12 @@
 %>
 
 <ul id="tresdb-events" class="list-group">
-  <% var i, ev, t, name, a, b; %>
+  <% var i, ev, t, name, locUrl, a, b; %>
   <% for (i = 0; i < events.length; i += 1) { %>
     <% ev = events[i]; %>
     <% t = ev.type; %>
     <% name = ev.locationName; %>
+    <% locUrl = '/locations/' + ev.locationId + '?zoom=11' %>
     <% name = (name === '' ? 'Untitled' : name) %>
     <li class="list-group-item">
       <% if (typeof pointstamp !== 'undefined') { %>
@@ -24,36 +25,39 @@
       <% } %>
       <a href="/users/<%= ev.user %>"><%= ev.user %></a>
       <% if (t === 'location_created') { %>
-        created <a href="/locations/<%= ev.locationId %>?zoom=11"><%= name %></a> <%= timestamp(ev.time) %>
+        created <a href="<%= locUrl %>"><%= name %></a> <%= timestamp(ev.time) %>
 
       <% } else if (t === 'location_removed') { %>
         deleted <a href="/locations/<%= ev.locationId %>"><%= name %></a> <%= timestamp(ev.time) %>
 
       <% } else if (t === 'location_geom_changed') { %>
-        edited coords of <a href="/locations/<%= ev.locationId %>?zoom=11"><%= name %></a> <%= timestamp(ev.time) %>
+        edited coords of <a href="<%= locUrl %>"><%= name %></a> <%= timestamp(ev.time) %>
 
       <% } else if (t === 'location_name_changed') { %>
         <% a = ev.data.oldName; %>
         <% if (a === '') { %>
-          named <a href="/locations/<%= ev.locationId %>?zoom=11"><%= ev.data.newName %></a> <%= timestamp(ev.time) %>
+          named <a href="<%= locUrl %>"><%= ev.data.newName %></a> <%= timestamp(ev.time) %>
         <% } else { %>
-          renamed <a href="/locations/<%= ev.locationId %>?zoom=11"><%= ev.data.oldName %></a> to <a href="/locations/<%= ev.locationId %>?zoom=11"><%= ev.data.newName %></a> <%= timestamp(ev.time) %>
+          renamed <a href="<%= locUrl %>"><%= ev.data.oldName %></a> to <a href="<%= locUrl %>"><%= ev.data.newName %></a> <%= timestamp(ev.time) %>
         <% } %>
 
       <% } else if (t === 'location_tags_changed') { %>
-        tagged <a href="/locations/<%= ev.locationId %>?zoom=11"><%= name %></a> as <%= ev.data.newTags.map(translateTag).join(', ') %> <%= timestamp(ev.time) %>
+        tagged <a href="<%= locUrl %>"><%= name %></a> as <%= ev.data.newTags.map(translateTag).join(', ') %> <%= timestamp(ev.time) %>
 
       <% } else if (t === 'location_entry_created') { %>
-        posted <%= ev.data.isVisit ? 'a visit ' : '' %>to <a href="/locations/<%= ev.locationId %>?zoom=11"><%= name %></a> <%= timestamp(ev.time) %>
+        posted <%= ev.data.isVisit ? 'a visit ' : '' %>to <a href="<%= locUrl %>"><%= name %></a> <%= timestamp(ev.time) %>
 
       <% } else if (t === 'location_entry_changed') { %>
-        edited a post in <a href="/locations/<%= ev.locationId %>?zoom=11"><%= name %></a> <%= timestamp(ev.time) %>
+        edited a post in <a href="<%= locUrl %>"><%= name %></a> <%= timestamp(ev.time) %>
 
       <% } else if (t === 'location_entry_removed') { %>
-        deleted a post from <a href="/locations/<%= ev.locationId %>?zoom=11"><%= name %></a> <%= timestamp(ev.time) %>
+        deleted a post from <a href="<%= locUrl %>"><%= name %></a> <%= timestamp(ev.time) %>
 
       <% } else if (t === 'location_unproved_visit_created') { %>
-        maybe visited <a href="/locations/<%= ev.locationId %>?zoom=11"><%= name %></a> <%= timestamp(ev.time) %> :)
+        maybe visited <a href="<%= locUrl %>"><%= name %></a> <%= timestamp(ev.time) %> :)
+
+      <% } else if (t === 'location_entry_comment_created') { %>
+        commented a post in <a href="<%= locUrl %>"><%= name %></a> <%= timestamp(ev.time) %>
 
       <% } else { %>
         <%= ev.type %>
