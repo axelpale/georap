@@ -1,6 +1,7 @@
 
 var pointstamp = require('../../lib/pointstamp');
 var timestamp = require('../../lib/timestamp');
+var template = require('./template.ejs');
 var eventListTemplate = require('../../Events/list.ejs');
 
 module.exports = function (events) {
@@ -12,10 +13,12 @@ module.exports = function (events) {
 
   this.bind = function ($mount) {
 
-    $mount.html(eventListTemplate({
-      timestamp: timestamp,
-      pointstamp: pointstamp,
-      events: events.toRawArray(),
+    $mount.html(template({
+      eventList: eventListTemplate({
+        timestamp: timestamp,
+        pointstamp: pointstamp,
+        events: events.toRawArray(),
+      }),
     }));
 
     _handleCreated = function () {
