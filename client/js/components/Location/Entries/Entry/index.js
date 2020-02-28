@@ -1,5 +1,5 @@
 /* eslint-disable max-statements */
-
+require('./style.css');
 var account = require('../../../../stores/account');
 var timestamp = require('../../../lib/timestamp');
 var markdownSyntax = require('../../lib/markdownSyntax.ejs');

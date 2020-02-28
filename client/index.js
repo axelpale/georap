@@ -1,7 +1,7 @@
 // Webpack entry point.
 // The client build is described here.
 
-// Styles
+// Root styles TODO spread to components
 require('./css/style.css');
 
 // Favicon

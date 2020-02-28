@@ -1,11 +1,9 @@
 
 <div class="panel panel-default tresdb-entry">
 
+  <!-- Head line -->
   <div class="panel-heading">
     <div class="pull-right">
-      <% if (entry.hasImage()) { %>
-        <a href="<%= entry.getUrl() %>" target="_blank" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-zoom-in"></span> Full original</a>
-      <% } %>
       <% if (entry.getUserName() === account.getName()) { %>
         <button id="<%= entry.getId() %>-edit" type="button" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-pencil"></span> Edit</button>
       <% } %>
@@ -14,7 +12,6 @@
   </div>
 
   <div id="<%= entry.getId() %>-form-container" class="panel-body hidden">
-
     <form id="<%= entry.getId() %>-form">
 
       <!-- Modifiable entry description -->
@@ -94,7 +91,10 @@
   <div class="<%= entry.hasFile() ? '' : 'hidden' %>">
     <% if (entry.hasImage()) { %>
       <div class="panel-body tresdb-entry-image-body">
-        <img src="<%= entry.getThumbUrl() %>" title="<%= entry.getFileName() %>">
+        <a href="<%= entry.getUrl() %>" target="_blank">
+          <span class="glyphicon glyphicon-zoom-in entry-image-zoom-icon"></span>
+          <img src="<%= entry.getThumbUrl() %>" title="<%= entry.getFileName() %>">
+        </a>
       </div>
     <% } else if (entry.getMimeType() === 'application/pdf') { %>
       <div class="panel-body">

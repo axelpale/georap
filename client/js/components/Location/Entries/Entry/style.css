@@ -1,0 +1,26 @@
+.tresdb-entry-image-body {
+  position: relative;
+  padding: 0px;
+  text-align: center;
+}
+
+.tresdb-entry-image-body img {
+  max-width: 100%;
+  /*margin: 0px auto 0px auto;*/
+}
+
+.entry-image-zoom-icon {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 32px;
+  height: 32px;
+  margin-right: -32px;
+  margin-bottom: -32px;
+  padding-top: 8px;
+  background-color: rgba(255, 255, 255, 0.8);
+  color: black;
+  border-right: 1px solid rgba(190, 190, 190, 0.9);
+  border-bottom: 1px solid rgba(190, 190, 190, 0.9);
+  border-radius: 14px;
+}

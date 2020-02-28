@@ -154,15 +154,6 @@ html, body {
   margin-bottom: 0px;
 }
 
-.tresdb-entry-image-body {
-  padding: 0px;
-  text-align: center;
-}
-.tresdb-entry-image-body img {
-  max-width: 100%;
-  /*margin: 0px auto 0px auto;*/
-}
-
 time {
   text-decoration: underline;
 }
