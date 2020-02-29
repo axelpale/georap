@@ -13,6 +13,6 @@ router.use('/:entryId', entryIdParser);
 
 router.post('/:entryId', handlers.change);  // uses multer body-parser inside
 router.delete('/:entryId', jsonParser, handlers.remove);
-router.post('/:entryId/comments', handlers.comment);
+router.post('/:entryId/comments', jsonParser, handlers.createComment);
 
 module.exports = router;

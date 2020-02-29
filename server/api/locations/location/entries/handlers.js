@@ -217,14 +217,14 @@ exports.remove = function (req, res, next) {
 };
 
 
-exports.comment = function (req, res, next) {
+exports.createComment = function (req, res, next) {
   // Comment an entry
 
   var locationId = req.location._id;
   var locationName = req.location.name;
   var entryId = req.entryId;
   var username = req.user.name;
-  var message = req.message;
+  var message = req.body.message;
 
   dal.createLocationEntryComment({
     locationId: locationId,

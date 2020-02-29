@@ -295,14 +295,14 @@ exports.createLocationEntryComment = function (params, callback) {
   //     function (err)
 
   var coll = db.collection('entries');
-  var filter = { _id: params.oldEntry._id };
+  var filter = { _id: params.entryId };
 
   var update = {
     $push: {
       comments: {
         time: timestamp(),
         user: params.username,
-        comment: params.comment,
+        message: params.message,
       },
     },
   };

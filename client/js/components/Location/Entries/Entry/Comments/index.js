@@ -51,12 +51,29 @@ module.exports = function (entry) {
       $entryFooter.removeClass('hidden');
     });
 
-    var $submit = $mount.find('#' + entryId + '-comment-submit-btn');
+    $commentForm.submit(function (ev) {
+      ev.preventDefault();
+
+      var textInput = $commentForm.find('#' + entryId + '-comment-text-input');
+      var message = textInput.val();
+      entry.createComment(message, function (err) {
+        if (err) {
+          // Display error message
+          console.error(err);
+          var $error = $commentForm.find('#' + entryId + '-comment-error');
+          $error.removeClass('hidden');
+        } else {
+          // Display success message
+          var $success = $commentForm.find('#' + entryId + '-comment-success');
+          $success.removeClass('hidden');
+        }
+      });
+    });
 
     $els = [
       $openCommentForm,
       $cancel,
-      $submit,
+      $commentForm,
     ];
   };
 

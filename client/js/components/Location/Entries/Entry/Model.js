@@ -169,4 +169,10 @@ module.exports = function (rawEntry, entries) {
     var eid = rawEntry._id;
     locations.removeEntry(lid, eid, callback);
   };
+
+  self.createComment = function (message, callback) {
+    var lid = rawEntry.locationId;
+    var eid = rawEntry._id;
+    locations.createComment(lid, eid, message, callback);
+  };
 };

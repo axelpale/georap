@@ -142,7 +142,7 @@ module.exports = function (entry) {
 
     _commentsView = new CommentsView(entry);
 
-    _commentsView.bind($mount.find('.entry-comments-container').first())
+    _commentsView.bind($mount.find('.entry-comments-container').first());
   };
 
   this.unbind = function () {

@@ -9,9 +9,12 @@
 
     <div class="form-group pull-right">
       <button id="<%= entryId %>-comment-cancel-btn" type="button" class="btn btn-default">Cancel</button>
-      <button id="<%= entryId %>-comment-submit-btn" type="button" class="btn btn-primary">Comment</button>
+      <button id="<%= entryId %>-comment-submit-btn" type="submit" class="btn btn-primary">Comment</button>
     </div>
 
     <div class="clearfix"></div>
   </form>
+
+  <div id="<%= entryId %>-comment-error" class="hidden">Error</div>
+  <div id="<%= entryId %>-comment-success" class="hidden">Comment created</div>
 </li>
