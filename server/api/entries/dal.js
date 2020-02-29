@@ -297,10 +297,13 @@ exports.createLocationEntryComment = function (params, callback) {
   var coll = db.collection('entries');
   var filter = { _id: params.entryId };
 
+  var time = timestamp()
+
   var update = {
     $push: {
       comments: {
-        time: timestamp(),
+        id: time + params.username,
+        time: time,
         user: params.username,
         message: params.message,
       },
@@ -312,6 +315,6 @@ exports.createLocationEntryComment = function (params, callback) {
       return callback(err);
     }
 
-    eventsDal.createLocationEntryCommented(params, callback);
+    eventsDal.createLocationEntryCommentCreated(params, callback);
   });
 };

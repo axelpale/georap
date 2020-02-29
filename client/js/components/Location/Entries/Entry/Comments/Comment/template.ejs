@@ -1,8 +1,15 @@
-<%= comment.username %>: <%= comment.message %> <%= timestamp(comment.timestamp) %> [edit]
+<li class="list-group-item">
+  <div class="pull-right">
+    <%= timestamp(comment.time) %>
+    <button type="button" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-pencil"></span> Edit</button>
+  </div>
 
-<form>
-  <input type="text">
-  <button>Delete</button>
-  <button>Cancel</button>
-  <button>Edit<button>
-</form>
+  <strong><%= comment.user %>:</strong> <%= comment.message %>
+
+  <form class="hidden">
+    <input type="text">
+    <button>Delete</button>
+    <button>Cancel</button>
+    <button>Save<button>
+  </form>
+</li>

@@ -202,7 +202,7 @@ exports.createLocationEntryRemoved = function (params, callback) {
   insertAndEmit(newEvent, callback);
 };
 
-exports.createLocationEntryCommented = function (params, callback) {
+exports.createLocationEntryCommentCreated = function (params, callback) {
   // Parameters:
   //   params:
   //     entryId
@@ -214,7 +214,7 @@ exports.createLocationEntryCommented = function (params, callback) {
   //     function (err)
 
   var newEvent = {
-    type: 'location_post_commented',
+    type: 'location_entry_comment_created',
     user: params.username,
     time: timestamp(),
     locationId: params.locationId,

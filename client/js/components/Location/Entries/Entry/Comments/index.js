@@ -19,9 +19,14 @@ module.exports = function (entry) {
       entryId: entryId,
     }));
 
-    var $commentsEl = $mount.children().first();
-    var $commentForm = $mount.find('.entry-comment-form-container').first();
+    var $commentsEl = $mount.find('#' + entryId + '-entry-comments');
+    var $container = $mount.find('.entry-comment-form-container');
+    var $commentForm = $mount.find('.entry-comment-form');
+    var $commentProgress = $mount.find('#entry-comment-progress');
     var $entryFooter = $('#' + entryId + '-footer');
+    var $error = $mount.find('#' + entryId + '-comment-error');
+    var $messageInput = $mount.find('#' + entryId + '-comment-text-input');
+    var $success = $mount.find('#' + entryId + '-comment-success');
 
     comments.forEach(function (comment) {
       var commentId = comment.id;
@@ -29,43 +34,70 @@ module.exports = function (entry) {
 
       _commentViewsMap[commentId] = v;
 
-      $commentsEl.append('<div id="comment-' + commentId + '"></div>');
-      v.bind($('#comment-' + commentId));
+      var commentEl = document.createElement('div');
+      commentEl.id = 'comment-' + commentId;
+
+      $commentsEl.append(commentEl);
+      v.bind($(commentEl));
     });
 
     var $openCommentForm = $('#' + entryId + '-open-comment-form');
     $openCommentForm.click(function (ev) {
       ev.preventDefault();
 
-      // Show the form; Hide the footer
-      $commentForm.removeClass('hidden');
+      // Show the form container; Hide the footer
+      $container.removeClass('hidden');
       $entryFooter.addClass('hidden');
+
+      // Ensure visibility of the form inside the container.
+      // Maybe hidden by previous success.
+      $commentForm.removeClass('hidden');
+
+      // Focus to message input
+      $messageInput.focus();
+
+      // Hide possible previous messages
+      $success.addClass('hidden');
     });
 
     var $cancel = $mount.find('#' + entryId + '-comment-cancel-btn');
     $cancel.click(function (ev) {
       ev.preventDefault();
 
-      // Hide the form; Show the footer
-      $commentForm.addClass('hidden');
+      // Hide the form container; Show the footer
+      $container.addClass('hidden');
       $entryFooter.removeClass('hidden');
     });
 
     $commentForm.submit(function (ev) {
       ev.preventDefault();
 
-      var textInput = $commentForm.find('#' + entryId + '-comment-text-input');
-      var message = textInput.val();
+      var message = $messageInput.val();
+
+      // Hide form but not container.
+      $commentForm.addClass('hidden');
+      $commentProgress.removeClass('hidden');
+      // Hide possible previous messages
+      $error.addClass('hidden');
+
       entry.createComment(message, function (err) {
         if (err) {
+          // Show form
+          $commentForm.removeClass('hidden');
+          // Hide progress
+          $commentProgress.addClass('hidden');
           // Display error message
-          console.error(err);
-          var $error = $commentForm.find('#' + entryId + '-comment-error');
           $error.removeClass('hidden');
+          $error.html(err.message);
         } else {
+          // Hide progress
+          $commentProgress.addClass('hidden');
           // Display success message
-          var $success = $commentForm.find('#' + entryId + '-comment-success');
           $success.removeClass('hidden');
+          // Show entry footer
+          $entryFooter.removeClass('hidden');
+          // Empty the successfully posted message
+          $messageInput.val('');
         }
       });
     });
