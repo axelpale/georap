@@ -1,12 +1,9 @@
 /* eslint-disable max-statements */
-require('./style.css');
-var account = require('../../../../stores/account');
-var timestamp = require('../../../lib/timestamp');
-var markdownSyntax = require('../../lib/markdownSyntax.ejs');
+var timestamp = require('timestamp');
 var template = require('./template.ejs');
-var locations = require('../../../../stores/locations');
+var locations = require('../../../../../../stores/locations');
 
-module.exports = function (location, entry, comment) {
+module.exports = function (entry, comment) {
   // Parameters:
   //   entry
   //     Entry model.
@@ -20,9 +17,7 @@ module.exports = function (location, entry, comment) {
 
     $mount.html(template({
       comment: comment,
-      account: account,
       timestamp: timestamp,
-      markdownSyntax: markdownSyntax,
     }));
     var $markdown = $('#' + id + '-comment-markdown');
     var $editContainer = $('#' + id + '-comment-edit-form-container');

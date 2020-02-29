@@ -140,7 +140,9 @@ module.exports = function (entry) {
       self.bind($mount);
     });
 
-    _commentsView = new CommentsView(location, entry);
+    _commentsView = new CommentsView(entry);
+
+    _commentsView.bind($mount.find('.entry-comments-container').first())
   };
 
   this.unbind = function () {
@@ -153,7 +155,7 @@ module.exports = function (entry) {
     $('#' + id + '-file-input').off();
     $('#' + id + '-syntax-show').off();
     entry.off();
-    _commentsView.off();
+    _commentsView.unbind();
   };
 
 };

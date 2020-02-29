@@ -119,7 +119,10 @@ module.exports = function (rawEntry, entries) {
   };
 
   self.getComments = function () {
-    return rawEntry.comments;
+    if (rawEntry.comments) {
+      return rawEntry.comments;
+    }
+    return [];
   };
 
   self.getFileName = function () {

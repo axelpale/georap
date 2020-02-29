@@ -1,8 +1,17 @@
-<div class="comments"></div>
+<div class="entry-comments"></div>
 
-<form>
-  <input type="text" placeholder="message...">
+<li class="list-group-item entry-comment-form-container hidden">
+  <form class="form entry-comment-form">
+    <div class="form-group">
+      <label for="<%= entryId %>-comment-text-input" class="control-label"><span class="glyphicon glyphicon-comment"></span> Message:</label>
+      <input id="<%= entryId %>-comment-text-input" class="form-control" type="text" placeholder="">
+    </div>
 
-  <button>Cancel</button>
-  <button>Comment</button>
-</form>
+    <div class="form-group pull-right">
+      <button id="<%= entryId %>-comment-cancel-btn" type="button" class="btn btn-default">Cancel</button>
+      <button id="<%= entryId %>-comment-submit-btn" type="button" class="btn btn-primary">Comment</button>
+    </div>
+
+    <div class="clearfix"></div>
+  </form>
+</li>
