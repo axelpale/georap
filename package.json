@@ -28,7 +28,7 @@
     "test:migration": "mocha migration/*.spec.js",
     "test:migration:iter": "mocha migration/iter.spec.js",
     "test:parsekml": "mocha server/api/locations/importer/parsekml.spec.js",
-    "lint": "eslint . && echo 'Lint successful.'",
+    "lint": "eslint \"cli/**/*.js\" \"client/**/*.js\" \"server/**/*.js\" \"worker/**/*.js\" && echo 'Lint successful.'",
     "mongo": "mongo tresdb",
     "mongo:test": "mongo test",
     "mongod": "mkdir -p .data/db && mkdir -p .data/backups && mongod --auth --dbpath=.data/db",
