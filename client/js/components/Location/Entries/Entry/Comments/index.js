@@ -42,22 +42,23 @@ module.exports = function (entry) {
       entryId: entryId,
     }));
 
-    var $commentsEl = $mount.find('#' + entryId + '-entry-comments');
+    var $commentsEl = $mount.find('#entry-' + entryId + '-comments');
     var $container = $mount.find('.entry-comment-form-container');
     var $commentForm = $mount.find('.entry-comment-form');
     var $commentProgress = $mount.find('#entry-comment-progress');
-    var $entryFooter = $('#' + entryId + '-footer');
-    var $error = $mount.find('#' + entryId + '-comment-error');
-    var $messageInput = $mount.find('#' + entryId + '-comment-text-input');
-    var $success = $mount.find('#' + entryId + '-comment-success');
-    var $messageHint = $mount.find('#' + entryId + '-comment-hint');
+    var $entryFooter = $('#entry-' + entryId + '-footer');
+    var $error = $mount.find('#entry-' + entryId + '-comment-error');
+    var $messageInput = $mount.find('#entry-' + entryId + '-comment-input');
+    var $success = $mount.find('#entry-' + entryId + '-comment-success');
+    var $messageHint = $mount.find('#entry-' + entryId + '-comment-hint');
+    var $openCommentForm = $('#entry-' + entryId + '-open-comment-form');
+    var $cancel = $mount.find('#entry-' + entryId + '-comment-cancel-btn');
 
     comments.forEach(function (comment) {
       var $commentEl = generateComment(comment);
       $commentsEl.append($commentEl);
     });
 
-    var $openCommentForm = $('#' + entryId + '-open-comment-form');
     $openCommentForm.click(function (ev) {
       ev.preventDefault();
 
@@ -76,7 +77,6 @@ module.exports = function (entry) {
       $success.addClass('hidden');
     });
 
-    var $cancel = $mount.find('#' + entryId + '-comment-cancel-btn');
     $cancel.click(function (ev) {
       ev.preventDefault();
 
@@ -217,7 +217,7 @@ module.exports = function (entry) {
         var DURATION = 2;
         var DELAY = 2;
         var SECOND = 1000;
-        var $listItem = $commentEl.find('.list-group-item')
+        var $listItem = $commentEl.find('.list-group-item');
         $listItem.css('background-color', '#dff0d8');
         $listItem.css('transition', 'background-color ' + DURATION + 's');
         window.setTimeout(function () {
@@ -233,6 +233,7 @@ module.exports = function (entry) {
       $openCommentForm,
       $cancel,
       $commentForm,
+      $messageInput,
     ];
   };
 
@@ -256,5 +257,7 @@ module.exports = function (entry) {
       $el.off();
     });
     $els = [];
+
+    entry.off('location_entry_comment_created');
   };
 };

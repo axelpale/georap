@@ -1,4 +1,4 @@
-/* eslint-disable max-lines */
+/* eslint-disable max-lines,no-magic-numbers */
 
 var db = require('../../services/db');
 var eventsDal = require('../events/dal');
@@ -297,7 +297,7 @@ exports.createLocationEntryComment = function (params, callback) {
   var filter = { _id: params.entryId };
 
   var time = timestamp();
-  var commentId = time + params.username;
+  var commentId = time.substr(0, 4) + Math.random().toString().substr(2);
 
   var update = {
     $push: {

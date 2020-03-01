@@ -1,23 +1,23 @@
-<div id="<%= entryId %>-entry-comments" class="entry-comments"></div>
+<div id="entry-<%= entryId %>-comments" class="entry-comments"></div>
 
 <li class="list-group-item entry-comment-form-container hidden">
   <form class="form entry-comment-form">
     <div class="form-group">
-      <label for="<%= entryId %>-comment-text-input" class="control-label"><span class="glyphicon glyphicon-comment"></span> Add Comment:</label>
-      <input id="<%= entryId %>-comment-text-input" class="form-control" type="text" placeholder="message...">
+      <label for="entry-<%= entryId %>-comment-input" class="control-label"><span class="glyphicon glyphicon-comment"></span> Add Comment:</label>
+      <input id="entry-<%= entryId %>-comment-input" class="form-control" type="text" placeholder="message...">
     </div>
 
-    <div id="<%= entryId %>-comment-hint" class="text-info pull-left">enter at least 10 characters</div>
+    <div id="entry-<%= entryId %>-comment-hint" class="text-info pull-left">enter at least 10 characters</div>
 
     <div class="form-group pull-right">
-      <button id="<%= entryId %>-comment-cancel-btn" type="button" class="btn btn-default">Cancel</button>
-      <button id="<%= entryId %>-comment-submit-btn" type="submit" class="btn btn-primary">Comment</button>
+      <button id="entry-<%= entryId %>-comment-cancel-btn" type="button" class="btn btn-default">Cancel</button>
+      <button id="entry-<%= entryId %>-comment-submit-btn" type="submit" class="btn btn-primary">Comment</button>
     </div>
 
     <div class="clearfix"></div>
   </form>
 
-  <div id="<%= entryId %>-comment-error" class="hidden">Error</div>
+  <div id="entry-<%= entryId %>-comment-error" class="hidden">Error</div>
 
   <div id="entry-comment-progress" class="progress hidden">
     <div class="progress-bar progress-bar-striped active" role="progressbar" style="width: 100%">

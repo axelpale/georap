@@ -16,31 +16,29 @@ module.exports = function (entry, comment) {
   this.bind = function ($mount) {
 
     $mount.html(template({
+      id: id,
       comment: comment,
       timestamp: timestamp,
     }));
-    var $editContainer = $('#' + id + '-comment-edit-form-container');
-    var $editButton = $('#' + id + '-comment-open-edit');
-    var $editForm = $('#' + id + '-comment-edit-form');
-    var $editCancel = $('#' + id + '-comment-edit-cancel');
-    var $editError = $('#' + id + '-comment-edit-error');
-    var $deleteButton = $('#' + id + '-comment-delete');  // Final del button
-    var $deleteError = $('#' + id + '-comment-delete-error');
-    var $deleteEnsure = $('#' + id + '-comment-delete-ensure');  // Button
-    var $deleteFinal = $('#' + id + '-comment-delete-final');
-    var $progress = $('#' + id + '-progress');
+    var $openButton = $mount.find('.comment-edit-open');
+    var $editContainer = $mount.find('.comment-edit-form-container');
+    var $editForm = $mount.find('#comment-' + id + '-edit-form');
+    var $editCancel = $mount.find('#comment-' + id + '-cancel');
+    var $editError = $mount.find('#comment-' + id + '-edit-error');
+    var $deleteButton = $mount.find('#comment-' + id + '-delete');
+    var $deleteError = $mount.find('#comment-' + id + '-delete-error');
+    var $deleteEnsure = $mount.find('#comment-' + id + '-delete-ensure');
+    var $deleteFinal = $mount.find('#comment-' + id + '-delete-final');
+    var $progress = $mount.find('#comment-' + id + '-progress');
 
-    var hideErrors = function () {
-      // Hide all possible error messages
-      tresdb.ui.hide($deleteError);
-      tresdb.ui.hide($editError);
-    };
-
-    $editButton.click(function (ev) {
+    $openButton.click(function (ev) {
       ev.preventDefault();
+      $editContainer.toggleClass('hidden');
+    });
 
-      tresdb.ui.toggleHidden($editContainer);
-      hideErrors();
+    $editCancel.click(function (ev) {
+      ev.preventDefault();
+      $editContainer.addClass('hidden');
     });
 
     $editForm.submit(function (ev) {

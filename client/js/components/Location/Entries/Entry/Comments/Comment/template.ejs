@@ -1,15 +1,23 @@
 <li class="list-group-item">
-  <div class="pull-right">
+  <div class="pull-right comment-meta">
     <%= timestamp(comment.time) %>
-    <button type="button" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-pencil"></span> Edit</button>
+    <button type="button" class="btn btn-default btn-xs comment-edit-open"><span class="glyphicon glyphicon-pencil"></span> Edit</button>
   </div>
 
   <strong><%= comment.user %>:</strong> <%= comment.message %>
+</li>
+<li class="list-group-item hidden comment-edit-form-container">
+  <form id="comment-<%= id %>-edit-form">
+    <div class="form-group">
+      <label for="comment-<%= id %>-input" class="control-label">Edit Comment:</label>
+      <input id="comment-<%= id %>-input" class="form-control" type="text" value="<%= comment.message %>">
+    </div>
 
-  <form class="hidden">
-    <input class="comment-edit" type="text">
-    <button>Delete</button>
-    <button>Cancel</button>
-    <button>Save<button>
+    <button id="comment-<%= id %>-delete" type="button" class="btn btn-danger">Delete</button>
+
+    <div class="form-group pull-right">
+      <button id="comment-<%= id %>-cancel" type="button" class="btn btn-default">Cancel</button>
+      <button id="comment-<%= id %>-submit" type="submit" class="btn btn-primary">Save</button>
+    </div>
   </form>
 </li>
