@@ -61,20 +61,25 @@ module.exports = function (rawEntries, location) {
 
   location.on('location_entry_event', function (ev) {
 
-    if (ev.type.endsWith('_created')) {
+    if (ev.type.endsWith('entry_created')) {
       _createEntry(rawEventToRawEntry(ev));
       // E.g. self.emit('location_entry_created', ev);
       self.emit(ev.type, ev);
     }
 
-    if (ev.type.endsWith('_removed')) {
+    if (ev.type.endsWith('entry_removed')) {
       var en = _removeEntry(ev.data.entryId);
       // E.g. self.emit('location_entry_removed', ev, en);
       self.emit(ev.type, ev, en);
     }
 
-    if (ev.type.endsWith('_changed')) {
+    if (ev.type.endsWith('entry_changed')) {
       // E.g. self.emit('location_entry_changed', ev);
+      self.emit(ev.type, ev);
+    }
+
+    if (ev.type.endsWith('comment_created')) {
+      // E.g. self.emit('location_entry_comment_created', ev);
       self.emit(ev.type, ev);
     }
   });

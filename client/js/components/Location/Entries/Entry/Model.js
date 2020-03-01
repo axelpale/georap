@@ -50,6 +50,27 @@ module.exports = function (rawEntry, entries) {
     self.emit(ev.type, ev);
   });
 
+  entries.on('location_entry_comment_created', function (ev) {
+    // Skip events of other entries
+    if (ev.data.entryId !== rawEntry._id) {
+      return;
+    }
+
+    if (!rawEntry.comments) {
+      rawEntry.comments = [];
+    }
+
+    rawEntry.comments.push({
+      id: ev.data.commentId,
+      time: ev.time,
+      user: ev.user,
+      message: ev.data.message,
+    });
+
+    // Emit for the view to react
+    self.emit(ev.type, ev);
+  });
+
 
   // Public methods
 

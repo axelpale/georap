@@ -209,19 +209,22 @@ exports.createLocationEntryCommentCreated = function (params, callback) {
   //     locationId
   //     locationName
   //     username
-  //     comment
+  //     commentId
+  //     time
+  //     message
   //   callback
   //     function (err)
 
   var newEvent = {
     type: 'location_entry_comment_created',
     user: params.username,
-    time: timestamp(),
+    time: params.time,
     locationId: params.locationId,
     locationName: params.locationName,
     data: {
       entryId: params.entryId,
-      comment: params.comment,
+      commentId: params.commentId,
+      message: params.message,
     },
   };
 

@@ -285,12 +285,11 @@ exports.removeLocationEntry = function (params, callback) {
 exports.createLocationEntryComment = function (params, callback) {
   // Parameters:
   //   params
-  //     commentId
   //     locationId
   //     entryId
   //     locationName
   //     username
-  //     comment: UTF8 string TODO prevent script attack
+  //     message: UTF8 string TODO prevent script attack
   //   callback
   //     function (err)
 
@@ -298,11 +297,12 @@ exports.createLocationEntryComment = function (params, callback) {
   var filter = { _id: params.entryId };
 
   var time = timestamp();
+  var commentId = time + params.username;
 
   var update = {
     $push: {
       comments: {
-        id: time + params.username,
+        id: commentId,
         time: time,
         user: params.username,
         message: params.message,
@@ -315,6 +315,11 @@ exports.createLocationEntryComment = function (params, callback) {
       return callback(err);
     }
 
-    eventsDal.createLocationEntryCommentCreated(params, callback);
+    var eventParams = Object.assign({}, params, {
+      commentId: commentId,
+      time: time,
+    });
+
+    eventsDal.createLocationEntryCommentCreated(eventParams, callback);
   });
 };

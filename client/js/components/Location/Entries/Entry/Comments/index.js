@@ -1,5 +1,10 @@
 var template = require('./template.ejs');
+var account = require('../../../../../stores/account');
 var CommentView = require('./Comment');
+var PendingCommentView = require('./PendingComment');
+
+var MIN_MESSAGE_LEN = 10;
+var MAX_MESSAGE_LEN = 600;
 
 module.exports = function (entry) {
   // Parameters:
@@ -7,8 +12,26 @@ module.exports = function (entry) {
   //     Entry model.
 
   var _commentViewsMap = {};
+  var _pendingCommentViews = {};
   var $els = [];
   var entryId = entry.getId();
+
+  // Helper methods
+
+  var generateComment = function (comment) {
+    var commentId = comment.id;
+    var v = new CommentView(entry, comment);
+
+    _commentViewsMap[commentId] = v;
+
+    var commentEl = document.createElement('div');
+    commentEl.id = 'comment-' + commentId;
+
+    var $commentEl = $(commentEl);
+    v.bind($commentEl);
+
+    return $commentEl;
+  };
 
   // Public methods
 
@@ -30,16 +53,8 @@ module.exports = function (entry) {
     var $messageHint = $mount.find('#' + entryId + '-comment-hint');
 
     comments.forEach(function (comment) {
-      var commentId = comment.id;
-      var v = new CommentView(entry, comment);
-
-      _commentViewsMap[commentId] = v;
-
-      var commentEl = document.createElement('div');
-      commentEl.id = 'comment-' + commentId;
-
-      $commentsEl.append(commentEl);
-      v.bind($(commentEl));
+      var $commentEl = generateComment(comment);
+      $commentsEl.append($commentEl);
     });
 
     var $openCommentForm = $('#' + entryId + '-open-comment-form');
@@ -72,8 +87,6 @@ module.exports = function (entry) {
 
     // Message hint
     // Validate message on comment input. Max length etc.
-    var MIN_MESSAGE_LEN = 10;
-    var MAX_MESSAGE_LEN = 600;
     $messageInput.on('input', function () {
       var msg = $messageInput.val();
       var len = msg.length;
@@ -127,16 +140,93 @@ module.exports = function (entry) {
           $error.removeClass('hidden');
           $error.html(err.message);
         } else {
+          // Success //
           // Hide progress
           $commentProgress.addClass('hidden');
-          // Display success message
-          $success.removeClass('hidden');
           // Show entry footer
           $entryFooter.removeClass('hidden');
-          // Empty the successfully posted message
+          // Hide form container but reveal the form for next comment.
+          $container.addClass('hidden');
+          $commentForm.removeClass('hidden');
+          // Empty the successfully posted message input
           $messageInput.val('');
+          // Generate a pending comment
+          var tempId = Math.random().toString().substr(2);
+          var tempComment = {
+            tempId: tempId,
+            user: account.getName(),
+            message: message,
+          };
+          // Check if the comment has been created via events already.
+          // This can happen when server emits the event before response.
+          var foundComment = entry.getComments().find(function (comment) {
+            var sameUser = tempComment.user === comment.user;
+            var sameContent = tempComment.message === comment.message;
+            var commentTime = new Date(comment.time);
+            var ageMs = Date.now() - commentTime.getTime();
+            var minute = 60000;
+            return sameUser && sameContent && ageMs < minute;
+          });
+          // If the comment is not already received, create a pending comment.
+          if (typeof foundComment === 'undefined') {
+            var pcv = new PendingCommentView(entry, tempComment);
+            _pendingCommentViews[tempId] = pcv;
+            var pendingCommentEl = document.createElement('div');
+            pendingCommentEl.id = 'pending-comment-' + tempId;
+            $commentsEl.append(pendingCommentEl);
+            pcv.bind($(pendingCommentEl));
+          }
         }
       });
+    });
+
+    entry.on('location_entry_comment_created', function (ev) {
+      // Construct comment struct
+      var comment = {
+        id: ev.data.commentId,
+        user: ev.user,
+        time: ev.time,
+        message: ev.data.message,
+      };
+      // Find if there is replaceable comment elements
+      var replaceKey = Object.keys(_pendingCommentViews).find(function (key) {
+        var pcv = _pendingCommentViews[key];
+        var sameUser = pcv.comment.user === comment.user;
+        var sameContent = pcv.comment.message === comment.message;
+        return sameUser && sameContent;
+      });
+      if (replaceKey) {
+        // Replace the pending comment with the real thing.
+        var replaceable = _pendingCommentViews[replaceKey];
+        var tempId = replaceable.comment.tempId;
+        var $tempEl = $commentsEl.find('#pending-comment-' + tempId);
+        // Create the real thing.
+        var $newCommentEl = generateComment(comment);
+        $tempEl.replaceWith($newCommentEl);
+        // Clean up
+        _pendingCommentViews[tempId].unbind();
+        delete _pendingCommentViews[tempId];
+      } else {
+        // There is no replaceable element.
+        // Either the comment is made by another user or
+        // from another client or the pending comment has not yet been created.
+        // Append to the list of comments.
+        var $commentEl = generateComment(comment);
+        $commentsEl.append($commentEl);
+        // Flash in green; Override list item styles.
+        var DURATION = 2;
+        var DELAY = 2;
+        var SECOND = 1000;
+        var $listItem = $commentEl.find('.list-group-item')
+        $listItem.css('background-color', '#dff0d8');
+        $listItem.css('transition', 'background-color ' + DURATION + 's');
+        window.setTimeout(function () {
+          $listItem.css('background-color', 'white');
+        }, DELAY * SECOND);
+        window.setTimeout(function () {
+          $listItem.css('transition', 'unset');
+        }, (DURATION + DELAY) * SECOND);
+      }
     });
 
     $els = [
@@ -153,6 +243,12 @@ module.exports = function (entry) {
       if (_commentViewsMap.hasOwnProperty(k)) {
         v = _commentViewsMap[k];
         v.unbind();
+      }
+    }
+
+    for (k in _pendingCommentViews) {
+      if (_pendingCommentViews.hasOwnProperty(k)) {
+        _pendingCommentViews[k].unbind();
       }
     }
 

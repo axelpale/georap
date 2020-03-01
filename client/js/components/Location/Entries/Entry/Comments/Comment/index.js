@@ -19,7 +19,6 @@ module.exports = function (entry, comment) {
       comment: comment,
       timestamp: timestamp,
     }));
-    var $markdown = $('#' + id + '-comment-markdown');
     var $editContainer = $('#' + id + '-comment-edit-form-container');
     var $editButton = $('#' + id + '-comment-open-edit');
     var $editForm = $('#' + id + '-comment-edit-form');
@@ -48,12 +47,13 @@ module.exports = function (entry, comment) {
       ev.preventDefault();
 
       // Trim
-      $markdown.val($markdown.val().trim());
+      var $messageInput = $editForm.find('input.comment-edit');
+      $messageInput.val($messageInput.val().trim());
 
       var newComment = {
         locationId: location.getId(),
         entryId: entry.getId(),
-        message: $markdown.val(),
+        message: $messageInput.val(),
       };
 
       tresdb.ui.hide($editForm);
