@@ -27,6 +27,7 @@ module.exports = function (entry) {
     var $error = $mount.find('#' + entryId + '-comment-error');
     var $messageInput = $mount.find('#' + entryId + '-comment-text-input');
     var $success = $mount.find('#' + entryId + '-comment-success');
+    var $messageHint = $mount.find('#' + entryId + '-comment-hint');
 
     comments.forEach(function (comment) {
       var commentId = comment.id;
@@ -69,10 +70,46 @@ module.exports = function (entry) {
       $entryFooter.removeClass('hidden');
     });
 
+    // Message hint
+    // Validate message on comment input. Max length etc.
+    var MIN_MESSAGE_LEN = 10;
+    var MAX_MESSAGE_LEN = 600;
+    $messageInput.on('input', function () {
+      var msg = $messageInput.val();
+      var len = msg.length;
+
+      if (len === 0) {
+        $messageHint.removeClass('text-danger');
+        $messageHint.addClass('text-info');
+        $messageHint.html('enter at least ' + MIN_MESSAGE_LEN + ' characters');
+      } else if (len < MIN_MESSAGE_LEN) {
+        $messageHint.removeClass('text-danger');
+        $messageHint.addClass('text-info');
+        $messageHint.html((MIN_MESSAGE_LEN - len) + ' more to go...');
+      } else {
+        $messageHint.html((MAX_MESSAGE_LEN - len) + ' characters left');
+        if (len > MAX_MESSAGE_LEN) {
+          $messageHint.addClass('text-danger');
+          $messageHint.removeClass('text-info');
+        } else {
+          $messageHint.removeClass('text-danger');
+          $messageHint.addClass('text-info');
+        }
+      }
+    });
+
     $commentForm.submit(function (ev) {
       ev.preventDefault();
 
       var message = $messageInput.val();
+      var len = message.length;
+
+      if (len < MIN_MESSAGE_LEN || len > MAX_MESSAGE_LEN) {
+        // Do not submit. Emphasize message hint.
+        $messageHint.addClass('text-danger');
+        $messageHint.removeClass('text-info');
+        return;
+      }
 
       // Hide form but not container.
       $commentForm.addClass('hidden');

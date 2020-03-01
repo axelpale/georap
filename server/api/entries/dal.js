@@ -297,7 +297,7 @@ exports.createLocationEntryComment = function (params, callback) {
   var coll = db.collection('entries');
   var filter = { _id: params.entryId };
 
-  var time = timestamp()
+  var time = timestamp();
 
   var update = {
     $push: {
