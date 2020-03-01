@@ -1,3 +1,4 @@
+/* eslint-disable max-statements */
 var template = require('./template.ejs');
 var account = require('../../../../../stores/account');
 var CommentView = require('./Comment');
@@ -226,6 +227,39 @@ module.exports = function (entry) {
         window.setTimeout(function () {
           $listItem.css('transition', 'unset');
         }, (DURATION + DELAY) * SECOND);
+      }
+    });
+
+    entry.on('location_entry_comment_changed', function (ev) {
+      // Shortcut id
+      var commentId = ev.data.commentId;
+      // Find comment in the _commentViewsMap
+      var cv = _commentViewsMap[commentId];
+      // Update message
+      cv.comment.message = ev.data.newMessage;
+      // Find element
+      var elemId = 'comment-' + commentId;
+      var $messageEl = $mount.find('#' + elemId + ' span.comment-message');
+      // Update message element (if exists)
+      $messageEl.html(ev.data.newMessage);
+    });
+
+    entry.on('location_entry_comment_removed', function (ev) {
+      // Shortcut id
+      var commentId = ev.data.commentId;
+      // Find comment in the _commentViewsMap
+      var cv = _commentViewsMap[commentId];
+      if (cv) {
+        // Remove comment view component.
+        cv.unbind();
+        delete _commentViewsMap[commentId];
+      }
+      // Find element
+      var elemId = 'comment-' + commentId;
+      var $commentEl = $mount.find('#' + elemId);
+      if ($commentEl.length === 0) {
+        // Remove element if exists.
+        $commentEl.remove();
       }
     });
 

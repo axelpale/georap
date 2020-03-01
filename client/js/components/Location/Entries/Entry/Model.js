@@ -33,7 +33,6 @@ module.exports = function (rawEntry, entries) {
   emitter(self);
 
   entries.on('location_entry_changed', function (ev) {
-
     // Skip events of other entries
     if (ev.data.entryId !== rawEntry._id) {
       return;
@@ -65,6 +64,51 @@ module.exports = function (rawEntry, entries) {
       time: ev.time,
       user: ev.user,
       message: ev.data.message,
+    });
+
+    // Emit for the view to react
+    self.emit(ev.type, ev);
+  });
+
+  entries.on('location_entry_comment_changed', function (ev) {
+    // Skip events of other entries
+    if (ev.data.entryId !== rawEntry._id) {
+      return;
+    }
+
+    if (!rawEntry.comments) {
+      // Weird state. But let us be sure.
+      rawEntry.comments = [];
+    }
+
+    // Update a comment.
+    rawEntry.comments = rawEntry.comments.map(function (comm) {
+      if (ev.data.commentId === comm.id) {
+        return Object.assign({}, comm, {
+          message: ev.data.newMessage,
+        });
+      }
+      return comm;
+    });
+
+    // Emit for the view to react
+    self.emit(ev.type, ev);
+  });
+
+  entries.on('location_entry_comment_removed', function (ev) {
+    // Skip events of other entries
+    if (ev.data.entryId !== rawEntry._id) {
+      return;
+    }
+
+    if (!rawEntry.comments) {
+      // No need to update anything
+      return;
+    }
+
+    // Filter out the removed comment.
+    rawEntry.comments = rawEntry.comments.filter(function (comm) {
+      return ev.data.commentId !== comm.id;
     });
 
     // Emit for the view to react
@@ -103,6 +147,10 @@ module.exports = function (rawEntry, entries) {
   self.getLocation = function () {
     // Return Location.Model instance
     return entries.getLocation();
+  };
+
+  self.getLocationId = function () {
+    return String(rawEntry.locationId);
   };
 
   self.hasMarkdown = function () {

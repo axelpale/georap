@@ -297,7 +297,9 @@ exports.createLocationEntryComment = function (params, callback) {
   var filter = { _id: params.entryId };
 
   var time = timestamp();
-  var commentId = time.substr(0, 4) + Math.random().toString().substr(2);
+  var rand1 = Math.random().toString().substr(2, 10);
+  var rand2 = Math.random().toString().substr(2, 10);
+  var commentId = time.substr(0, 4) + rand1 + rand2; // 24 chars
 
   var update = {
     $push: {
@@ -321,5 +323,80 @@ exports.createLocationEntryComment = function (params, callback) {
     });
 
     eventsDal.createLocationEntryCommentCreated(eventParams, callback);
+  });
+};
+
+exports.changeLocationEntryComment = function (params, callback) {
+  // Parameters:
+  //   params
+  //     locationId
+  //     locationName
+  //     entryId
+  //     commentId
+  //     username
+  //     newMessage: UTF8 string TODO prevent script attack
+  //   callback
+  //     function (err)
+
+  var coll = db.collection('entries');
+  var filter = { _id: params.entryId };
+
+  var update = {
+    $set: {
+      'comments.$[comment].message': params.newMessage,
+    },
+  };
+
+  var config = {
+    arrayFilters: [
+      {
+        comment: {
+          id: params.commentId,
+        },
+      },
+    ],
+  };
+
+  coll.updateOne(filter, update, config, function (err) {
+    if (err) {
+      return callback(err);
+    }
+
+    var eventParams = params;
+    eventsDal.createLocationEntryCommentChanged(eventParams, callback);
+  });
+};
+
+exports.removeLocationEntryComment = function (params, callback) {
+  // Parameters:
+  //   params
+  //     username
+  //     locationId
+  //     locationName
+  //     entryId
+  //     commentId
+  //   callback
+  //     function (err)
+
+  var coll = db.collection('entries');
+  var filter = { _id: params.entryId };
+
+  var commentId = params.commentId;
+
+  var update = {
+    $pull: {
+      comments: {
+        id: commentId,
+      },
+    },
+  };
+
+  coll.updateOne(filter, update, function (err) {
+    if (err) {
+      return callback(err);
+    }
+
+    var eventParams = params;
+    eventsDal.createLocationEntryCommentRemoved(eventParams, callback);
   });
 };

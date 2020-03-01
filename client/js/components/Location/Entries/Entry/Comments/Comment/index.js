@@ -9,7 +9,7 @@ module.exports = function (entry, comment) {
   //     Entry model.
 
   var id = comment.id;
-
+  this.comment = comment;
 
   // Public methods
 
@@ -27,6 +27,7 @@ module.exports = function (entry, comment) {
     var $editError = $mount.find('#comment-' + id + '-edit-error');
     var $deleteButton = $mount.find('#comment-' + id + '-delete');
     var $deleteError = $mount.find('#comment-' + id + '-delete-error');
+    var $deleteSuccess = $mount.find('#comment-' + id + '-delete-success');
     var $deleteEnsure = $mount.find('#comment-' + id + '-delete-ensure');
     var $deleteFinal = $mount.find('#comment-' + id + '-delete-final');
     var $progress = $mount.find('#comment-' + id + '-progress');
@@ -54,15 +55,15 @@ module.exports = function (entry, comment) {
         message: $messageInput.val(),
       };
 
-      tresdb.ui.hide($editForm);
-      tresdb.ui.show($progress);
+      $editForm.addClass('hidden');
+      $progress.removeClass('hidden');
 
-      locations.comment(newComment, function (err) {
-        tresdb.ui.hide($progress);
+      locations.changeComment(newComment, function (err) {
+        $progress.addClass('hidden');
 
         if (err) {
-          tresdb.ui.show($editError);
-          tresdb.ui.show($editForm);
+          $editError.removeClass('hidden');
+          $editForm.removeClass('hidden');
           return;
         }
       });
@@ -70,33 +71,35 @@ module.exports = function (entry, comment) {
 
     $editCancel.click(function (ev) {
       ev.preventDefault();
-
-      tresdb.ui.hide($editContainer);
-    });
-
-    $deleteEnsure.click(function (ev) {
-      ev.preventDefault();
-      tresdb.ui.toggleHidden($deleteFinal);
+      $editContainer.addClass('hidden');
     });
 
     $deleteButton.click(function (ev) {
       ev.preventDefault();
 
-      var params = {
-        locationId: 'foo',
-        entryId: 'bar',
-        commentId: 'baz',
-      };
-      locations.removeComment(params, function (err) {
-        tresdb.ui.hide($editContainer);
+      $deleteEnsure.toggleClass('hidden');
+    });
 
+    $deleteFinal.click(function (ev) {
+      ev.preventDefault();
+
+      var locationId = entry.getLocationId();
+      var entryId = entry.getId();
+      var commentId = comment.id;
+
+      // Hide form
+      $editForm.addClass('hidden');
+
+      locations.removeComment(locationId, entryId, commentId, function (err) {
         if (err) {
+          console.log(err);
           // Show deletion failed error message
-          tresdb.ui.show($deleteError);
-          return;
+          $deleteError.removeClass('hidden');
+        } else {
+          $deleteSuccess.removeClass('hidden');
+          // ON successful removal the location will emit
+          // location_entry_removed event
         }
-        // ON successful removal the location will emit
-        // location_entry_removed event
       });
     });
   };

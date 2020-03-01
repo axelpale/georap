@@ -4,20 +4,33 @@
     <button type="button" class="btn btn-default btn-xs comment-edit-open"><span class="glyphicon glyphicon-pencil"></span> Edit</button>
   </div>
 
-  <strong><%= comment.user %>:</strong> <%= comment.message %>
+  <strong><%= comment.user %>:</strong> <span class="comment-message"><%= comment.message %></span>
 </li>
 <li class="list-group-item hidden comment-edit-form-container">
-  <form id="comment-<%= id %>-edit-form">
+  <form id="comment-<%= id %>-edit-form" style="margin-bottom: 0.5em">
     <div class="form-group">
       <label for="comment-<%= id %>-input" class="control-label">Edit Comment:</label>
       <input id="comment-<%= id %>-input" class="form-control" type="text" value="<%= comment.message %>">
     </div>
 
-    <button id="comment-<%= id %>-delete" type="button" class="btn btn-danger">Delete</button>
-
     <div class="form-group pull-right">
       <button id="comment-<%= id %>-cancel" type="button" class="btn btn-default">Cancel</button>
       <button id="comment-<%= id %>-submit" type="submit" class="btn btn-primary">Save</button>
     </div>
+
+    <button id="comment-<%= id %>-delete" type="button" class="btn btn-danger">Delete...</button>
+
+    <div id="comment-<%= id %>-delete-ensure" class="form-group hidden">
+      Are you sure? <button id="comment-<%= id %>-delete-final" type="button" class="btn btn-danger">Yes, delete!</button>
+    </div>
   </form>
+
+  <div id="comment-<%= id %>-progress" class="progress hidden">
+    <div class="progress-bar progress-bar-striped active" role="progressbar" style="width: 100%">
+      <span class="sr-only">Waiting for server</span>
+    </div>
+  </div>
+
+  <p id="comment-<%= id %>-delete-error" class="hidden text-danger">Error. Deletion was not possible.</p>
+  <p id="comment-<%= id %>-delete-success" class="hidden text-muted">The comment was deleted successfully.</p>
 </li>
