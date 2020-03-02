@@ -20,12 +20,16 @@ module.exports = function (entry, comment) {
     var isMe = account.isMe(comment.user);
     var isAdmin = account.isAdmin();
     var isOwnerOrAdmin = (isMe || isAdmin);
+    var ageMs = Date.now() - (new Date(comment.time)).getTime();
+    var maxAgeMs = 3600000;
+    var isFresh = ageMs < maxAgeMs;
 
     $mount.html(template({
       id: id,
       comment: comment,
       timestamp: timestamp,
       isOwner: isMe,
+      isFresh: isFresh,
       isOwnerOrAdmin: isOwnerOrAdmin,
     }));
 

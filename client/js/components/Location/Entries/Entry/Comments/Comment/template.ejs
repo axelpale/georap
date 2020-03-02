@@ -10,16 +10,19 @@
 </li>
 <li class="list-group-item hidden comment-edit-form-container">
   <form id="comment-<%= id %>-edit-form" style="margin-bottom: 0.5em">
-    <% if (isOwner) { %>
+    <% if (isOwner && isFresh) { %>
     <div class="form-group">
       <label for="comment-<%= id %>-input" class="control-label">Edit Comment:</label>
       <input id="comment-<%= id %>-input" class="form-control" type="text" value="<%= comment.message %>">
     </div>
     <% } %>
+    <% if (isOwner && !isFresh) { %>
+    <p class="text-muted">Comments older than 1 hour cannot be edited.</p>
+    <% } %>
 
     <div class="form-group pull-right">
       <button id="comment-<%= id %>-cancel" type="button" class="btn btn-default">Cancel</button>
-      <% if (isOwner) { %><button id="comment-<%= id %>-submit" type="submit" class="btn btn-primary">Save</button><% } %>
+      <% if (isOwner && isFresh) { %><button id="comment-<%= id %>-submit" type="submit" class="btn btn-primary">Save</button><% } %>
     </div>
 
     <button id="comment-<%= id %>-delete" type="button" class="btn btn-danger">Delete...</button>
