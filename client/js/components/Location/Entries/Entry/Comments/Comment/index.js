@@ -4,6 +4,9 @@ var timestamp = require('timestamp');
 var template = require('./template.ejs');
 var account = require('../../../../../../stores/account');
 var locations = require('../../../../../../stores/locations');
+var commentsConfig = require('../config');
+var MIN_LEN = commentsConfig.MIN_MESSAGE_LEN;
+var MAX_LEN = commentsConfig.MAX_MESSAGE_LEN;
 
 module.exports = function (entry, comment) {
   // Parameters:
@@ -66,12 +69,19 @@ module.exports = function (entry, comment) {
 
       // Trim message field
       $messageInput.val($messageInput.val().trim());
+      var newMessage = $messageInput.val();
+
+      // Validate
+      if (newMessage.length < MIN_LEN || newMessage.length > MAX_LEN) {
+        // Not a valid message.
+        return;
+      }
 
       var newComment = {
         locationId: entry.getLocationId(),
         entryId: entry.getId(),
         commentId: comment.id,
-        newMessage: $messageInput.val(),
+        newMessage: newMessage,
       };
 
       // Hide form but keep the container visible

@@ -7,7 +7,7 @@
       <input id="entry-<%= entryId %>-comment-input" class="form-control" type="text" placeholder="message...">
     </div>
 
-    <div id="entry-<%= entryId %>-comment-hint" class="text-info pull-left">enter at least 10 characters</div>
+    <div id="entry-<%= entryId %>-comment-hint" class="text-info pull-left">enter at least <%= MIN_LEN %> characters</div>
 
     <div class="form-group pull-right">
       <button id="entry-<%= entryId %>-comment-cancel-btn" type="button" class="btn btn-default">Cancel</button>

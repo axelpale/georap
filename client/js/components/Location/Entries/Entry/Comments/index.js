@@ -3,9 +3,11 @@ var template = require('./template.ejs');
 var account = require('../../../../../stores/account');
 var CommentView = require('./Comment');
 var PendingCommentView = require('./PendingComment');
+var updateHint = require('./updateHint');
 
-var MIN_MESSAGE_LEN = 2;
-var MAX_MESSAGE_LEN = 600;
+var commentsConfig = require('./config');
+var MIN_MESSAGE_LEN = commentsConfig.MIN_MESSAGE_LEN;
+var MAX_MESSAGE_LEN = commentsConfig.MAX_MESSAGE_LEN;
 
 module.exports = function (entry) {
   // Parameters:
@@ -41,6 +43,7 @@ module.exports = function (entry) {
 
     $mount.html(template({
       entryId: entryId,
+      MIN_LEN: MIN_MESSAGE_LEN,
     }));
 
     var $commentsEl = $mount.find('#entry-' + entryId + '-comments');
@@ -74,8 +77,12 @@ module.exports = function (entry) {
       // Focus to message input
       $messageInput.focus();
 
-      // Hide possible previous messages
+      // Hide possible previous infos
       $success.addClass('hidden');
+
+      // Update possibly previously changed hint
+      var len = $messageInput.val().length;
+      updateHint($messageHint, len);
     });
 
     $cancel.click(function (ev) {
@@ -92,24 +99,7 @@ module.exports = function (entry) {
       var msg = $messageInput.val();
       var len = msg.length;
 
-      if (len === 0) {
-        $messageHint.removeClass('text-danger');
-        $messageHint.addClass('text-info');
-        $messageHint.html('enter at least ' + MIN_MESSAGE_LEN + ' characters');
-      } else if (len < MIN_MESSAGE_LEN) {
-        $messageHint.removeClass('text-danger');
-        $messageHint.addClass('text-info');
-        $messageHint.html((MIN_MESSAGE_LEN - len) + ' more to go...');
-      } else {
-        $messageHint.html((MAX_MESSAGE_LEN - len) + ' characters left');
-        if (len > MAX_MESSAGE_LEN) {
-          $messageHint.addClass('text-danger');
-          $messageHint.removeClass('text-info');
-        } else {
-          $messageHint.removeClass('text-danger');
-          $messageHint.addClass('text-info');
-        }
-      }
+      updateHint($messageHint, len);
     });
 
     $commentForm.submit(function (ev) {
