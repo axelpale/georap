@@ -9,9 +9,21 @@ module.exports = function (req, res, next) {
 
   if (validPattern.test(stringId)) {
     req.commentId = stringId;
-    return next();
+  } else {
+    return res.sendStatus(status.NOT_FOUND);
   }
 
-  // Else
+  var comments = req.entry.comments;
+
+  if (comments) {
+    var comment = comments.find(function (co) {
+      return co.id === req.commentId;
+    });
+    if (comment) {
+      req.comment = comment;
+      return next();
+    }
+  }
+
   return res.sendStatus(status.NOT_FOUND);
 };
