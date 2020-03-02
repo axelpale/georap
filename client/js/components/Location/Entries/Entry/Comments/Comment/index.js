@@ -46,7 +46,7 @@ module.exports = function (entry, comment) {
     $editForm.submit(function (ev) {
       ev.preventDefault();
 
-      // Trim
+      // Trim message field
       $messageInput.val($messageInput.val().trim());
 
       var newComment = {
@@ -56,6 +56,7 @@ module.exports = function (entry, comment) {
         newMessage: $messageInput.val(),
       };
 
+      // Hide form but keep the container visible
       $editForm.addClass('hidden');
       $progress.removeClass('hidden');
 
@@ -65,7 +66,11 @@ module.exports = function (entry, comment) {
         if (err) {
           $editError.removeClass('hidden');
           $editForm.removeClass('hidden');
-          return;
+        } else {
+          // All good, hide the edit container.
+          // Make the form visible for possible future edits.
+          $editContainer.addClass('hidden');
+          $editForm.removeClass('hidden');
         }
       });
     });
