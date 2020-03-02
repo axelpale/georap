@@ -10,14 +10,16 @@
 </li>
 <li class="list-group-item hidden comment-edit-form-container">
   <form id="comment-<%= id %>-edit-form" style="margin-bottom: 0.5em">
+    <% if (isOwner) { %>
     <div class="form-group">
       <label for="comment-<%= id %>-input" class="control-label">Edit Comment:</label>
       <input id="comment-<%= id %>-input" class="form-control" type="text" value="<%= comment.message %>">
     </div>
+    <% } %>
 
     <div class="form-group pull-right">
       <button id="comment-<%= id %>-cancel" type="button" class="btn btn-default">Cancel</button>
-      <button id="comment-<%= id %>-submit" type="submit" class="btn btn-primary">Save</button>
+      <% if (isOwner) { %><button id="comment-<%= id %>-submit" type="submit" class="btn btn-primary">Save</button><% } %>
     </div>
 
     <button id="comment-<%= id %>-delete" type="button" class="btn btn-danger">Delete...</button>
@@ -33,6 +35,7 @@
     </div>
   </div>
 
+  <p id="comment-<%= id %>-edit-error" class="hidden text-danger">Error. Editing was not possible.</p>
   <p id="comment-<%= id %>-delete-error" class="hidden text-danger">Error. Deletion was not possible.</p>
   <p id="comment-<%= id %>-delete-success" class="hidden text-muted">The comment was deleted successfully.</p>
 </li>

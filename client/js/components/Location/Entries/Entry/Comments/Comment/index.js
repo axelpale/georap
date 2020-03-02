@@ -25,6 +25,7 @@ module.exports = function (entry, comment) {
       id: id,
       comment: comment,
       timestamp: timestamp,
+      isOwner: isMe,
       isOwnerOrAdmin: isOwnerOrAdmin,
     }));
 
@@ -78,6 +79,7 @@ module.exports = function (entry, comment) {
 
         if (err) {
           $editError.removeClass('hidden');
+          $editError.html(err.message);
           $editForm.removeClass('hidden');
         } else {
           // All good, hide the edit container.
@@ -114,6 +116,7 @@ module.exports = function (entry, comment) {
           console.log(err);
           // Show deletion failed error message
           $deleteError.removeClass('hidden');
+          $deleteError.html(err.message);
         } else {
           $deleteSuccess.removeClass('hidden');
           // ON successful removal the location will emit

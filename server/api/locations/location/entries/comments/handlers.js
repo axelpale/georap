@@ -28,13 +28,19 @@ exports.change = function (req, res, next) {
   // Update comment
   var locationId = req.location._id;
   var locationName = req.location.name;
-  var entryId = req.entryId;
-  var username = req.user.name;
-  var commentId = req.commentId;
+  var entryId = req.entry._id;
+  var currentUsername = req.user.name;
+  var commentId = req.comment.id;
   var newMessage = req.body.newMessage;
 
+  // Allow only owners edit.
+  if (currentUsername !== req.comment.user) {
+    var info = 'Only owners can edit their comments.';
+    return res.status(status.FORBIDDEN).send(info);
+  }
+
   entriesDal.changeLocationEntryComment({
-    username: username,
+    username: currentUsername,
     locationId: locationId,
     locationName: locationName,
     entryId: entryId,
@@ -55,16 +61,25 @@ exports.remove = function (req, res, next) {
   var username = req.user.name;
   var commentId = req.commentId;
 
-  entriesDal.removeLocationEntryComment({
-    locationId: locationId,
-    locationName: locationName,
-    entryId: entryId,
-    username: username,
-    commentId: commentId,
-  }, function (err) {
-    if (err) {
-      return next(err);
-    }
-    return res.sendStatus(status.OK);
-  });
+  // Allow only owners and admins to delete
+  var isAdmin = req.user.admin;
+  var isOwner = req.user.name === req.comment.user;
+
+  if (isAdmin || isOwner) {
+    entriesDal.removeLocationEntryComment({
+      locationId: locationId,
+      locationName: locationName,
+      entryId: entryId,
+      username: username,
+      commentId: commentId,
+    }, function (err) {
+      if (err) {
+        return next(err);
+      }
+      return res.sendStatus(status.OK);
+    });
+  } else {
+    var info = 'Only admins and comment author can edit the comment.';
+    return res.status(status.FORBIDDEN).send(info);
+  }
 };

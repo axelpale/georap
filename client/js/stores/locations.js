@@ -70,27 +70,6 @@ var deleteJSON = request.deleteJSON;
 
 // Public methods
 
-exports.createComment = function (locationId, entryId, message, callback) {
-  // Parameters:
-  //   locationId
-  //   entryId
-  //   message
-  //     comment content string
-  //   callback
-  //     function (err)
-
-  if (typeof message !== 'string' || message.length === 0) {
-    return callback(new Error('Invalid message'));
-  }
-
-  return postJSON({
-    url: '/api/locations/' + locationId + '/entries/' + entryId + '/comments',
-    data: {
-      message: message,
-    },
-  }, callback);
-};
-
 exports.changeEntry = function (locationId, entryId, form, callback) {
   // Parameters:
   //   locationId
@@ -280,6 +259,27 @@ this.setTags = function (id, newTags, callback) {
   return postJSON({
     url: '/api/locations/' + id + '/tags',
     data: { tags: newTags },
+  }, callback);
+};
+
+exports.createComment = function (locationId, entryId, message, callback) {
+  // Parameters:
+  //   locationId
+  //   entryId
+  //   message
+  //     comment content string
+  //   callback
+  //     function (err)
+
+  if (typeof message !== 'string' || message.length === 0) {
+    return callback(new Error('Invalid message'));
+  }
+
+  return postJSON({
+    url: '/api/locations/' + locationId + '/entries/' + entryId + '/comments',
+    data: {
+      message: message,
+    },
   }, callback);
 };
 
