@@ -69,6 +69,7 @@ var indexHtml = (function precompile() {
       features: local.features,
       googleMapsKey: local.googleMapsKey,
       tags: tags,
+      staticUrl: local.staticUrl,
       uploadUrl: local.uploadUrl,
       uploadSizeLimit: local.uploadSizeLimit,
       tempUploadSizeLimit: local.tempUploadSizeLimit,

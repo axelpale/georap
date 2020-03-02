@@ -4,8 +4,9 @@
 // Map marker icon definitions. The icons can be used only after google maps
 // api has been loaded. Therefore, call the methods after initMap.
 
-var geolocationUrl = require('./mapicons/geolocation.png');
-var additionMarkerUrl = require('./mapicons/additionMarker.png');
+var staticUrl = tresdb.config.staticUrl;
+var geolocationUrl = staticUrl + '/images/mapicons/geolocation.png';
+var additionMarkerUrl = staticUrl + '/images/mapicons/additionMarker.png';
 
 var SIZE = 32;
 
