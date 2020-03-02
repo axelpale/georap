@@ -1,7 +1,7 @@
 {
   "name": "tresdb",
   "private": true,
-  "version": "8.6.8",
+  "version": "8.7.0",
   "description": "Geographical CMS built on Express.js",
   "keywords": [
     "GIS",
