@@ -339,25 +339,18 @@ exports.changeLocationEntryComment = function (params, callback) {
   //     function (err)
 
   var coll = db.collection('entries');
-  var filter = { _id: params.entryId };
+  var filter = {
+    _id: params.entryId,
+    'comments.id': params.commentId,
+  };
 
   var update = {
     $set: {
-      'comments.$[comment].message': params.newMessage,
+      'comments.$.message': params.newMessage,
     },
   };
 
-  var config = {
-    arrayFilters: [
-      {
-        comment: {
-          id: params.commentId,
-        },
-      },
-    ],
-  };
-
-  coll.updateOne(filter, update, config, function (err) {
+  coll.updateOne(filter, update, function (err) {
     if (err) {
       return callback(err);
     }

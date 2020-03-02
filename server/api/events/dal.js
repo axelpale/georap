@@ -244,7 +244,7 @@ exports.createLocationEntryCommentChanged = function (params, callback) {
   //     function (err)
 
   var newEvent = {
-    type: 'location_entry_comment_created',
+    type: 'location_entry_comment_changed',
     user: params.username,
     time: timestamp(),
     locationId: params.locationId,

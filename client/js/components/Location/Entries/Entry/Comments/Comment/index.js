@@ -23,6 +23,7 @@ module.exports = function (entry, comment) {
     var $openButton = $mount.find('.comment-edit-open');
     var $editContainer = $mount.find('.comment-edit-form-container');
     var $editForm = $mount.find('#comment-' + id + '-edit-form');
+    var $messageInput = $mount.find('#comment-' + id + '-input');
     var $editCancel = $mount.find('#comment-' + id + '-cancel');
     var $editError = $mount.find('#comment-' + id + '-edit-error');
     var $deleteButton = $mount.find('#comment-' + id + '-delete');
@@ -46,13 +47,13 @@ module.exports = function (entry, comment) {
       ev.preventDefault();
 
       // Trim
-      var $messageInput = $editForm.find('input.comment-edit');
       $messageInput.val($messageInput.val().trim());
 
       var newComment = {
-        locationId: location.getId(),
+        locationId: entry.getLocationId(),
         entryId: entry.getId(),
-        message: $messageInput.val(),
+        commentId: comment.id,
+        newMessage: $messageInput.val(),
       };
 
       $editForm.addClass('hidden');

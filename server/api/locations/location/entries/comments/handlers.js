@@ -30,7 +30,7 @@ exports.change = function (req, res, next) {
   var locationName = req.location.name;
   var entryId = req.entryId;
   var username = req.user.name;
-  var commentId = req.body.commentId;
+  var commentId = req.commentId;
   var newMessage = req.body.newMessage;
 
   entriesDal.changeLocationEntryComment({
