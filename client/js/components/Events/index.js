@@ -38,12 +38,14 @@ module.exports = function () {
       }
 
       var tempEvs = prettyEvents.mergeLocationCreateRename(rawEvents);
-      var compactEvs = prettyEvents.mergeEntryCreateEdit(tempEvs);
+      tempEvs = prettyEvents.mergeEntryCreateEdit(tempEvs);
+      tempEvs = prettyEvents.dropEntryCommentDeleteGroups(tempEvs);
+      tempEvs = prettyEvents.dropEntryCommentChanged(tempEvs);
 
       $list.html(listTemplate({
         pointstamp: pointstamp,
         timestamp: timestamp,
-        events: compactEvs,
+        events: tempEvs,
       }));
     });
 

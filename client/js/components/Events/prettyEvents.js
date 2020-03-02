@@ -84,3 +84,35 @@ exports.mergeEntryCreateEdit = function (evs) {
 
   return newEvs;
 };
+
+exports.dropEntryCommentDeleteGroups = function (evs) {
+  // Comment delete hides n edits and the create event.
+  var commentRemovedEvs = evs.filter(function (ev) {
+    return ev.type === 'location_entry_comment_removed';
+  });
+  var commentIdsToAvoid = commentRemovedEvs.map(function (ev) {
+    return ev.data.commentId;
+  });
+
+  var clearedEvs = evs.filter(function (ev) {
+    if (ev.type.startsWith('location_entry_comment_')) {
+      // Event is bad if it carries a commentId that has been removed.
+      var isBad = commentIdsToAvoid.some(function (badId) {
+        return badId === ev.data.commentId;
+      });
+      if (isBad) {
+        return false;
+      }
+      return true;
+    }
+    return true;
+  });
+
+  return clearedEvs;
+};
+
+exports.dropEntryCommentChanged = function (evs) {
+  return evs.filter(function (ev) {
+    return ev.type !== 'location_entry_comment_changed';
+  });
+};
