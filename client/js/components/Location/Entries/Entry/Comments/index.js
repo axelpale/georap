@@ -4,7 +4,7 @@ var account = require('../../../../../stores/account');
 var CommentView = require('./Comment');
 var PendingCommentView = require('./PendingComment');
 
-var MIN_MESSAGE_LEN = 10;
+var MIN_MESSAGE_LEN = 2;
 var MAX_MESSAGE_LEN = 600;
 
 module.exports = function (entry) {
