@@ -15,7 +15,6 @@ socket.on('tresdb_event', function (ev) {
   // Emit all location events. Allow hooking to all location events or
   // specific event type e.g. location_created, needed by main menu to
   // determine when creation is successful.
-  console.log(ev);
   if (ev.type.startsWith('location_')) {
     exports.emit('location_event', ev);
     exports.emit(ev.type, ev);
