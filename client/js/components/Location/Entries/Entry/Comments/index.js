@@ -257,7 +257,7 @@ module.exports = function (entry) {
       // Find element
       var elemId = 'comment-' + commentId;
       var $commentEl = $mount.find('#' + elemId);
-      if ($commentEl.length === 0) {
+      if ($commentEl.length !== 0) {
         // Remove element if exists.
         $commentEl.remove();
       }

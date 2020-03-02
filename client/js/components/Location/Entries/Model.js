@@ -78,7 +78,9 @@ module.exports = function (rawEntries, location) {
       self.emit(ev.type, ev);
     }
 
-    if (ev.type.endsWith('comment_created')) {
+    if (ev.type.endsWith('comment_created') ||
+        ev.type.endsWith('comment_changed') ||
+        ev.type.endsWith('comment_removed')) {
       // E.g. self.emit('location_entry_comment_created', ev);
       self.emit(ev.type, ev);
     }
