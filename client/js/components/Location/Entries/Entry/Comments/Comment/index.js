@@ -1,6 +1,8 @@
 /* eslint-disable max-statements */
+require('./style.css');
 var timestamp = require('timestamp');
 var template = require('./template.ejs');
+var account = require('../../../../../../stores/account');
 var locations = require('../../../../../../stores/locations');
 
 module.exports = function (entry, comment) {
@@ -15,11 +17,22 @@ module.exports = function (entry, comment) {
 
   this.bind = function ($mount) {
 
+    var isMe = account.isMe(comment.user);
+    var isAdmin = account.isAdmin();
+    var isOwnerOrAdmin = (isMe || isAdmin);
+
     $mount.html(template({
       id: id,
       comment: comment,
       timestamp: timestamp,
+      isOwnerOrAdmin: isOwnerOrAdmin,
     }));
+
+    if (!isOwnerOrAdmin) {
+      // Edit form is not shown for non-owners.
+      return;
+    }
+
     var $openButton = $mount.find('.comment-edit-open');
     var $editContainer = $mount.find('.comment-edit-form-container');
     var $editForm = $mount.find('#comment-' + id + '-edit-form');

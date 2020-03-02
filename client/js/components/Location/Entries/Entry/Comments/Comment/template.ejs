@@ -1,7 +1,9 @@
 <li class="list-group-item">
   <div class="pull-right comment-meta">
     <%= timestamp(comment.time) %>
-    <button type="button" class="btn btn-default btn-xs comment-edit-open"><span class="glyphicon glyphicon-pencil"></span> Edit</button>
+    <% if (isOwnerOrAdmin) { %>
+    <button type="button" class="btn btn-default btn-xs comment-edit-open">&hellip;</button>
+    <% } %>
   </div>
 
   <strong><%= comment.user %>:</strong> <span class="comment-message"><%= comment.message %></span>
