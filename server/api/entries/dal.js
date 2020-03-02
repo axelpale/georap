@@ -1,3 +1,4 @@
+/* eslint-disable max-lines,no-magic-numbers */
 
 var db = require('../../services/db');
 var eventsDal = require('../events/dal');
@@ -80,6 +81,7 @@ exports.changeLocationEntry = function (params, callback) {
       thumbfilepath: params.thumbfilepath,
       thumbmimetype: params.thumbmimetype,
     },
+    comments: params.oldEntry.comments,
   };
 
   coll.replaceOne(q, changedEntry, function (err) {
@@ -204,6 +206,11 @@ exports.filterUniqueLocationEntries = function (args, callback) {
 exports.getOneRaw = function (entryId, callback) {
   // Find single entry
   //
+  // Parameters:
+  //   entryId
+  //   callback
+  //     function (err, entryDoc)
+  //
   var coll = db.collection('entries');
   var q = {
     _id: entryId,
@@ -276,5 +283,118 @@ exports.removeLocationEntry = function (params, callback) {
     }
 
     eventsDal.createLocationEntryRemoved(params, callback);
+  });
+};
+
+
+exports.createLocationEntryComment = function (params, callback) {
+  // Parameters:
+  //   params
+  //     locationId
+  //     entryId
+  //     locationName
+  //     username
+  //     message: UTF8 string TODO prevent script attack
+  //   callback
+  //     function (err)
+
+  var coll = db.collection('entries');
+  var filter = { _id: params.entryId };
+
+  var time = timestamp();
+  var rand1 = Math.random().toString().substr(2, 10);
+  var rand2 = Math.random().toString().substr(2, 10);
+  var commentId = time.substr(0, 4) + rand1 + rand2; // 24 chars
+
+  var update = {
+    $push: {
+      comments: {
+        id: commentId,
+        time: time,
+        user: params.username,
+        message: params.message,
+      },
+    },
+  };
+
+  coll.updateOne(filter, update, function (err) {
+    if (err) {
+      return callback(err);
+    }
+
+    var eventParams = Object.assign({}, params, {
+      commentId: commentId,
+      time: time,
+    });
+
+    eventsDal.createLocationEntryCommentCreated(eventParams, callback);
+  });
+};
+
+exports.changeLocationEntryComment = function (params, callback) {
+  // Parameters:
+  //   params
+  //     locationId
+  //     locationName
+  //     entryId
+  //     commentId
+  //     username
+  //     newMessage: UTF8 string TODO prevent script attack
+  //   callback
+  //     function (err)
+
+  var coll = db.collection('entries');
+  var filter = {
+    _id: params.entryId,
+    'comments.id': params.commentId,
+  };
+
+  var update = {
+    $set: {
+      'comments.$.message': params.newMessage,
+    },
+  };
+
+  coll.updateOne(filter, update, function (err) {
+    if (err) {
+      return callback(err);
+    }
+
+    var eventParams = params;
+    eventsDal.createLocationEntryCommentChanged(eventParams, callback);
+  });
+};
+
+exports.removeLocationEntryComment = function (params, callback) {
+  // Parameters:
+  //   params
+  //     username
+  //     locationId
+  //     locationName
+  //     entryId
+  //     commentId
+  //   callback
+  //     function (err)
+
+  var coll = db.collection('entries');
+  var filter = { _id: params.entryId };
+
+  var commentId = params.commentId;
+
+  var update = {
+    $pull: {
+      comments: {
+        id: commentId,
+      },
+    },
+  };
+
+  coll.updateOne(filter, update, function (err) {
+    if (err) {
+      return callback(err);
+    }
+
+    var eventParams = params;
+    eventsDal.createLocationEntryCommentRemoved(eventParams, callback);
   });
 };

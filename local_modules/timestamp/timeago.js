@@ -7,16 +7,16 @@
 var templates = {
   prefix: '',
   suffix: ' ago',
-  seconds: 'less than a minute',
-  minute: 'about a minute',
+  seconds: 'a few seconds',
+  minute: 'a minute',
   minutes: '%d minutes',
-  hour: 'about an hour',
-  hours: 'about %d hours',
+  hour: 'an hour',
+  hours: '%d hours',
   day: 'a day',
   days: '%d days',
-  month: 'about a month',
+  month: 'a month',
   months: '%d months',
-  year: 'about a year',
+  year: 'a year',
   years: '%d years',
 };
 

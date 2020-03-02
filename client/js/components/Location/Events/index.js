@@ -3,6 +3,11 @@ var pointstamp = require('../../lib/pointstamp');
 var timestamp = require('../../lib/timestamp');
 var template = require('./template.ejs');
 var eventListTemplate = require('../../Events/list.ejs');
+var filters = require('../../Events/prettyEvents');
+
+var eventFilter = function (evs) {
+  return filters.dropEntryCommentDeleteGroups(evs);
+};
 
 module.exports = function (events) {
   // Parameters:
@@ -17,7 +22,7 @@ module.exports = function (events) {
       eventList: eventListTemplate({
         timestamp: timestamp,
         pointstamp: pointstamp,
-        events: events.toRawArray(),
+        events: eventFilter(events.toRawArray()),
       }),
     }));
 
@@ -26,7 +31,7 @@ module.exports = function (events) {
       $mount.html(eventListTemplate({
         timestamp: timestamp,
         pointstamp: pointstamp,
-        events: events.toRawArray(),
+        events: eventFilter(events.toRawArray()),
       }));
     };
 

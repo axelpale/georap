@@ -26,9 +26,13 @@ router.use('/icons', iconsRouter);
 router.use('/account', accountRouter);
 
 // Token middleware. User can access the routes only with valid token.
-// Token contents are stored in req.user with properties
+// Token contents are stored in req.user with properties:
+//
+// req.user = {
 //   name
 //   admin
+// }
+//
 // See https://github.com/auth0/express-jwt
 router.use(jwt({
   secret: local.secret,

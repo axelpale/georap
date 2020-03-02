@@ -33,7 +33,6 @@ module.exports = function (rawEntry, entries) {
   emitter(self);
 
   entries.on('location_entry_changed', function (ev) {
-
     // Skip events of other entries
     if (ev.data.entryId !== rawEntry._id) {
       return;
@@ -47,6 +46,72 @@ module.exports = function (rawEntry, entries) {
     rawEntry.data.thumbmimetype = ev.data.newThumbmimetype;
 
     // Emit for view to react by rerendering.
+    self.emit(ev.type, ev);
+  });
+
+  entries.on('location_entry_comment_created', function (ev) {
+    // Skip events of other entries
+    if (ev.data.entryId !== rawEntry._id) {
+      return;
+    }
+
+    if (!rawEntry.comments) {
+      rawEntry.comments = [];
+    }
+
+    rawEntry.comments.push({
+      id: ev.data.commentId,
+      time: ev.time,
+      user: ev.user,
+      message: ev.data.message,
+    });
+
+    // Emit for the view to react
+    self.emit(ev.type, ev);
+  });
+
+  entries.on('location_entry_comment_changed', function (ev) {
+    // Skip events of other entries
+    if (ev.data.entryId !== rawEntry._id) {
+      return;
+    }
+
+    if (!rawEntry.comments) {
+      // Weird state. But let us be sure.
+      rawEntry.comments = [];
+    }
+
+    // Update a comment.
+    rawEntry.comments = rawEntry.comments.map(function (comm) {
+      if (ev.data.commentId === comm.id) {
+        return Object.assign({}, comm, {
+          message: ev.data.newMessage,
+        });
+      }
+      return comm;
+    });
+
+    // Emit for the view to react
+    self.emit(ev.type, ev);
+  });
+
+  entries.on('location_entry_comment_removed', function (ev) {
+    // Skip events of other entries
+    if (ev.data.entryId !== rawEntry._id) {
+      return;
+    }
+
+    if (!rawEntry.comments) {
+      // No need to update anything
+      return;
+    }
+
+    // Filter out the removed comment.
+    rawEntry.comments = rawEntry.comments.filter(function (comm) {
+      return ev.data.commentId !== comm.id;
+    });
+
+    // Emit for the view to react
     self.emit(ev.type, ev);
   });
 
@@ -84,6 +149,10 @@ module.exports = function (rawEntry, entries) {
     return entries.getLocation();
   };
 
+  self.getLocationId = function () {
+    return String(rawEntry.locationId);
+  };
+
   self.hasMarkdown = function () {
     return (typeof rawEntry.data.markdown === 'string');
   };
@@ -116,6 +185,13 @@ module.exports = function (rawEntry, entries) {
       return (rawEntry.data.mimetype.substr(0, HEAD) === 'image/');
     }
     return false;
+  };
+
+  self.getComments = function () {
+    if (rawEntry.comments) {
+      return rawEntry.comments;
+    }
+    return [];
   };
 
   self.getFileName = function () {
@@ -161,5 +237,11 @@ module.exports = function (rawEntry, entries) {
     var lid = rawEntry.locationId;
     var eid = rawEntry._id;
     locations.removeEntry(lid, eid, callback);
+  };
+
+  self.createComment = function (message, callback) {
+    var lid = rawEntry.locationId;
+    var eid = rawEntry._id;
+    locations.createComment(lid, eid, message, callback);
   };
 };

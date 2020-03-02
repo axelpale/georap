@@ -19,7 +19,6 @@ socket.on('tresdb_event', function (ev) {
     exports.emit('location_event', ev);
     exports.emit(ev.type, ev);
   }
-
 });
 
 // To inform views (especially Map) about changes in locations,
@@ -260,6 +259,50 @@ this.setTags = function (id, newTags, callback) {
   return postJSON({
     url: '/api/locations/' + id + '/tags',
     data: { tags: newTags },
+  }, callback);
+};
+
+exports.createComment = function (locationId, entryId, message, callback) {
+  // Parameters:
+  //   locationId
+  //   entryId
+  //   message
+  //     comment content string
+  //   callback
+  //     function (err)
+
+  if (typeof message !== 'string' || message.length === 0) {
+    return callback(new Error('Invalid message'));
+  }
+
+  return postJSON({
+    url: '/api/locations/' + locationId + '/entries/' + entryId + '/comments',
+    data: {
+      message: message,
+    },
+  }, callback);
+};
+
+exports.changeComment = function (params, callback) {
+  var locationId = params.locationId;
+  var entryId = params.entryId;
+  var commentId = params.commentId;
+  var newMessage = params.newMessage;
+
+  var entryUrl = '/api/locations/' + locationId + '/entries/' + entryId;
+  return postJSON({
+    url: entryUrl + '/comments/' + commentId,
+    data: {
+      newMessage: newMessage,
+    },
+  }, callback);
+};
+
+exports.removeComment = function (locationId, entryId, commentId, callback) {
+  var entryUrl = '/api/locations/' + locationId + '/entries/' + entryId;
+  return deleteJSON({
+    url: entryUrl + '/comments/' + commentId,
+    data: {},
   }, callback);
 };
 

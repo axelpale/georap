@@ -4,6 +4,7 @@ var account = require('../../../../stores/account');
 var timestamp = require('../../../lib/timestamp');
 var markdownSyntax = require('../../lib/markdownSyntax.ejs');
 var template = require('./template.ejs');
+var CommentsView = require('./Comments');
 
 module.exports = function (entry) {
   // Parameters:
@@ -14,6 +15,7 @@ module.exports = function (entry) {
 
   var id = entry.getId();
 
+  var _commentsView;
 
   // Public methods
 
@@ -137,6 +139,9 @@ module.exports = function (entry) {
       self.unbind();
       self.bind($mount);
     });
+
+    _commentsView = new CommentsView(entry);
+    _commentsView.bind($mount.find('.entry-comments-container'));
   };
 
   this.unbind = function () {
@@ -149,6 +154,7 @@ module.exports = function (entry) {
     $('#' + id + '-file-input').off();
     $('#' + id + '-syntax-show').off();
     entry.off();
+    _commentsView.unbind();
   };
 
 };

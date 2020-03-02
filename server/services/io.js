@@ -10,7 +10,9 @@ exports.init = function (server) {
   //   server
   //     created with http.createServer(app), where app = express()
   if (io === null) {
-    io = socketio(server);
+    io = socketio(server, {
+      pingTimeout: 60000,
+    });
 
     // Middleware to find hostname.
     // Domain name is required by some handlers, for example

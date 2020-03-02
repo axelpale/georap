@@ -202,6 +202,90 @@ exports.createLocationEntryRemoved = function (params, callback) {
   insertAndEmit(newEvent, callback);
 };
 
+exports.createLocationEntryCommentCreated = function (params, callback) {
+  // Parameters:
+  //   params:
+  //     entryId
+  //     locationId
+  //     locationName
+  //     username
+  //     commentId
+  //     time
+  //     message
+  //   callback
+  //     function (err)
+
+  var newEvent = {
+    type: 'location_entry_comment_created',
+    user: params.username,
+    time: params.time,
+    locationId: params.locationId,
+    locationName: params.locationName,
+    data: {
+      entryId: params.entryId,
+      commentId: params.commentId,
+      message: params.message,
+    },
+  };
+
+  insertAndEmit(newEvent, callback);
+};
+
+exports.createLocationEntryCommentChanged = function (params, callback) {
+  // Parameters:
+  //   params:
+  //     username
+  //     locationId
+  //     locationName
+  //     entryId
+  //     commentId
+  //     newMessage
+  //   callback
+  //     function (err)
+
+  var newEvent = {
+    type: 'location_entry_comment_changed',
+    user: params.username,
+    time: timestamp(),
+    locationId: params.locationId,
+    locationName: params.locationName,
+    data: {
+      entryId: params.entryId,
+      commentId: params.commentId,
+      newMessage: params.newMessage,
+    },
+  };
+
+  insertAndEmit(newEvent, callback);
+};
+
+exports.createLocationEntryCommentRemoved = function (params, callback) {
+  // Parameters:
+  //   params:
+  //     username
+  //     locationId
+  //     locationName
+  //     entryId
+  //     commentId
+  //     commentUsername
+  //   callback
+  //     function (err)
+
+  var newEvent = {
+    type: 'location_entry_comment_removed',
+    user: params.username,
+    time: timestamp(),
+    locationId: params.locationId,
+    locationName: params.locationName,
+    data: {
+      entryId: params.entryId,
+      commentId: params.commentId,
+    },
+  };
+
+  insertAndEmit(newEvent, callback);
+};
+
 exports.createLocationGeomChanged = function (params, callback) {
   // Parameters:
   //   params:
