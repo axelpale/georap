@@ -206,6 +206,11 @@ exports.filterUniqueLocationEntries = function (args, callback) {
 exports.getOneRaw = function (entryId, callback) {
   // Find single entry
   //
+  // Parameters:
+  //   entryId
+  //   callback
+  //     function (err, entryDoc)
+  //
   var coll = db.collection('entries');
   var q = {
     _id: entryId,
