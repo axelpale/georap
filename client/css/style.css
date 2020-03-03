@@ -46,34 +46,6 @@ html, body {
 /* Menu END */
 
 
-/* Card BEGIN */
-
-#card-layer {
-  position: absolute;
-  top: 0%;
-  right: 0%;
-  width: 80%;
-  height: 100%;
-  max-width: 600px;
-  box-shadow: 0px 0px 2.62em black;
-  z-index: 3;
-  background: white;
-  overflow-y: scroll;
-}
-
-#card-layer.tresdb-card-full {
-  top: 0%;
-  left: 0%;
-  height: 100%;
-  width: 100%;
-  max-width: 100%;
-}
-
-#card-layer.tresdb-card-page {
-}
-
-/* Card END */
-
 /* Location page */
 
 #tresdb-location-loading {

@@ -21,8 +21,10 @@
 //   card.open(new Login());
 //   card.close()
 //
-
+require('./style.css');
 var emitter = require('component-emitter');
+var closeButton = require('./closeButton');
+var contentView = require('./contentView');
 
 module.exports = function () {
 
@@ -33,6 +35,9 @@ module.exports = function () {
   // State
   var _activeView = null;
   var _$mount = null;
+
+  // Elements known to exist;
+  var $content = $('#card-layer-content');
 
 
   // Public methods
@@ -86,22 +91,22 @@ module.exports = function () {
     _activeView = view;
 
     // Activate view.
-    // Backwards compatibility: call render method if available.
-    if ('render' in view) {
-      _$mount.html(view.render());
-    } else {
-      _$mount.empty();
-    }
+    contentView.bind($content, view);
 
     // removes previous tresdb-card-* classes
     _$mount.removeClass('tresdb-card-full');
     _$mount.removeClass('tresdb-card-page');
 
     _$mount.addClass('tresdb-card-' + cardType);
-    _activeView.bind(_$mount);
+    _activeView.bind($content);
 
     // Reveal if hidden
     _$mount.removeClass('hidden');
+
+    // Create close button (not created if not sidebar)
+    closeButton(_$mount, cardType, function () {
+      self.close();
+    });
 
     // Listen & close if the model of the view becomes removed.
     _activeView.once('removed', function () {
@@ -132,7 +137,7 @@ module.exports = function () {
     }
 
     _$mount.addClass('hidden');
-    _$mount.empty();
+    contentView.unbind($content);
 
     if (!silent) {
       self.emit('closed');
