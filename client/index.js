@@ -2,7 +2,7 @@
 // The client build is described here.
 
 // Root styles TODO spread to components
-require('./css/style.css');
+require('./style.css');
 
 // JavaScript
 require('./js/index.js');
