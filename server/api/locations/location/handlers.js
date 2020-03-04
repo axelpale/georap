@@ -73,10 +73,10 @@ exports.changeTags = function (req, res, next) {
   // If no change, everything ok already
   var oldTags = req.location.tags;
   var newTags = req.body.tags;
-  var areTagsEqual = oldTags.every(function (ot, i) {
+  var everyTagEqual = oldTags.every(function (ot, i) {
     return newTags[i] === ot;
   });
-  if (areTagsEqual) {
+  if (oldTags.length === newTags.length && everyTagEqual) {
     return res.status(status.OK).send('Tags already equal');
   }
 
