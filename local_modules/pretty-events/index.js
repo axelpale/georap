@@ -23,7 +23,7 @@ exports.mergeLocationCreateRename = function (evs) {
     modEv = ev
     nextEv = evs[i + 1]
 
-    if (ev.locationId === nextEv.locationId) {
+    if (ev.locationId.toString() === nextEv.locationId.toString()) {
       if (ev.type === 'location_name_changed') {
         if (nextEv.type === 'location_created') {
           // Merge to single location_created
@@ -65,7 +65,8 @@ exports.mergeEntryCreateEdit = function (evs) {
     skip = false
     nextEv = evs[i + 1]
 
-    if (ev.locationId === nextEv.locationId && ev.user === nextEv.user &&
+    if (ev.locationId.toString() === nextEv.locationId.toString() &&
+        ev.user === nextEv.user &&
         ev.type === 'location_entry_changed') {
       if (nextEv.type === 'location_entry_changed' ||
           nextEv.type === 'location_entry_created') {
@@ -133,7 +134,7 @@ exports.mergeTagged = function (evs) {
         // Both current and next are from same user.
         if (nextEv.type === tagType && ev.type === tagType) {
           // Both current and next are tagging events.
-          if (nextEv.locationId === ev.locationId) {
+          if (nextEv.locationId.toString() === ev.locationId.toString()) {
             // Both are from same location.
             return false
           }
