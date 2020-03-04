@@ -1,10 +1,16 @@
 var db = require('../../server/services/db');
 var eventsDal = require('../../server/api/events/dal');
 var getPoints = require('../../client/js/components/lib/getPoints');
+var eventFilters = require('pretty-events');
 
 exports.sumPoints = function (evs) {
   // Return sum of points of given events.
-  return evs.reduce(function (acc, ev) {
+
+  // Filter events. For example, prevent subsequent taggings
+  // from accumulating points.
+  var filteredEvs = eventFilters.mergeTagged(evs);
+
+  return filteredEvs.reduce(function (acc, ev) {
     return acc + getPoints(ev);
   }, 0);
 };
@@ -18,13 +24,13 @@ exports.computePoints = function (username, callback) {
       return callback(err);
     }
 
-    // Compute UNIX timestamp and ensure order.
+    // Compute UNIX timestamp and ensure order most recent first.
     var evsTimeUnix = evs.map(function (ev) {
       return Object.assign({}, ev, {
-        timeUnix: new Date(ev.time),
+        timeUnix: (new Date(ev.time)).getTime(),
       });
     }).sort(function (eva, evb) {
-      return eva.timeUnix - evb.timeUnix;
+      return evb.timeUnix - eva.timeUnix;
     });
 
     // Event time frames
@@ -41,7 +47,7 @@ exports.computePoints = function (username, callback) {
 
     // Point Categories
     var ps = {
-      allTime: exports.sumPoints(evs),
+      allTime: exports.sumPoints(evsTimeUnix),
       days30: exports.sumPoints(evs30days),
       days7: exports.sumPoints(evs7days),
     };
