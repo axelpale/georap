@@ -63,7 +63,11 @@ First, after installation, start MongoDB (if it ever refuses to stop, try `killa
 
     $ npm run mongod
 
-Second, start the TresDB Node.js server:
+Second, build and minify the TresDB client code:
+
+    $ npm run build
+
+Third, start the TresDB Node.js server:
 
     $ npm start
 
@@ -75,8 +79,8 @@ Finally, browse to [localhost:3000](http://localhost:3000). You can change the p
 
 TresDB's Node server can be started in 3 environments: `development`, `production`, and `test`. The effects of each env is listed below:
 
-- `development`: Client-side JS is bundled but not minified. Webpack server static assets from memory and recompiles the changes automatically without need to restart the server.
-- `production`: Client-side JS is bundled and minified once on server start. Static files are served by Express.
+- `production`: Default.
+- `development`: Same as production. Possible differences in future.
 - `test`: Same as development but a test MongoDB database is used instead of the main one. The test database is cleared and populated with fixture data before each test.
 
 You specify the environment to use by setting `NODE_ENV`. For example to run server in dev env, use `NODE_ENV=development node server/index.js`. Most `npm run` scripts of TresDB already include this env specification. See `package.json` for details.
@@ -88,6 +92,18 @@ You specify the environment to use by setting `NODE_ENV`. For example to run ser
 ### npm start
 
 Alias for [npm run server:production](#npm-run-server-production)
+
+### npm run watchstart
+
+For development. Lint and re-run the server each time server code is modified.
+
+### npm run build
+
+Builds the client with webpack.
+
+### npm run watchbuild
+
+For development. Lint and rebuild the client code bundle each time client code is modified.
 
 ### npm run server:development
 
@@ -354,7 +370,6 @@ Here are some notes and tips for putting a TresDB instance into production.
 Development tools:
 
 - [ESLint](http://eslint.org/): linting
-- [CasperJS](http://casperjs.org/): headless testing
 - [Mocha](https://mochajs.org/): test runner
 - [Should](http://shouldjs.github.io/): assertions
 
