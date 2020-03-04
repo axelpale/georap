@@ -41,6 +41,7 @@ module.exports = function () {
       tempEvs = prettyEvents.mergeEntryCreateEdit(tempEvs);
       tempEvs = prettyEvents.dropEntryCommentDeleteGroups(tempEvs);
       tempEvs = prettyEvents.dropEntryCommentChanged(tempEvs);
+      tempEvs = prettyEvents.mergeTagged(tempEvs);
 
       $list.html(listTemplate({
         pointstamp: pointstamp,

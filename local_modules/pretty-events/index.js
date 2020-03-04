@@ -116,3 +116,30 @@ exports.dropEntryCommentChanged = function (evs) {
     return ev.type !== 'location_entry_comment_changed'
   })
 }
+
+exports.mergeTagged = function (evs) {
+  // Params:
+  //   evs: most recent first
+  //
+  // If next (newer) event is a tagging event from same user and same location
+  // then hide the current premature tag event.
+  //
+  var tagType = 'location_tags_changed'
+  return evs.filter(function (ev, i) {
+    var nextEv = evs[i - 1]
+    if (nextEv) {
+      // Current ev has an adjacent event that is newer
+      if (nextEv.user === ev.user) {
+        // Both current and next are from same user.
+        if (nextEv.type === tagType && ev.type === tagType) {
+          // Both current and next are tagging events.
+          if (nextEv.locationId === ev.locationId) {
+            // Both are from same location.
+            return false
+          }
+        }
+      }
+    }
+    return true
+  })
+}
