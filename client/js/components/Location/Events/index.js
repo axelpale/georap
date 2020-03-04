@@ -3,7 +3,7 @@ var pointstamp = require('../../lib/pointstamp');
 var timestamp = require('../../lib/timestamp');
 var template = require('./template.ejs');
 var eventListTemplate = require('../../Events/list.ejs');
-var filters = require('../../Events/prettyEvents');
+var filters = require('pretty-events');
 
 var eventFilter = function (evs) {
   return filters.dropEntryCommentDeleteGroups(evs);

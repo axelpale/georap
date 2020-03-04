@@ -4,7 +4,7 @@ var emitter = require('component-emitter');
 var events = require('../../stores/events');
 var pointstamp = require('../lib/pointstamp');
 var timestamp = require('../lib/timestamp');
-var prettyEvents = require('./prettyEvents');
+var prettyEvents = require('pretty-events');
 var template = require('./template.ejs');
 var listTemplate = require('./list.ejs');
 

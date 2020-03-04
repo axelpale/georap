@@ -1,6 +1,6 @@
 // Max hiding time frame. E.g. if two similar entries are created within
 // this duration, the first might be hidden.
-var MAX_DIFF_MSEC = 300000; // 5 * 60 * 1000
+var MAX_DIFF_MSEC = 300000 // 5 * 60 * 1000
 
 exports.mergeLocationCreateRename = function (evs) {
   //
@@ -9,38 +9,38 @@ exports.mergeLocationCreateRename = function (evs) {
   //
   // Return a transformed list of events for viewing.
   //
-  var newEvs = [];
-  var i, ev, modEv, nextEv;
+  var newEvs = []
+  var i, ev, modEv, nextEv
   for (i = 0; i < evs.length; i += 1) {
-    ev = evs[i];
+    ev = evs[i]
 
     if (evs.length === i + 1) {
       // At last event.
-      newEvs.push(ev);
-      break;
+      newEvs.push(ev)
+      break
     }
 
-    modEv = ev;
-    nextEv = evs[i + 1];
+    modEv = ev
+    nextEv = evs[i + 1]
 
     if (ev.locationId === nextEv.locationId) {
       if (ev.type === 'location_name_changed') {
         if (nextEv.type === 'location_created') {
           // Merge to single location_created
           modEv = Object.assign({}, nextEv, {
-            locationName: ev.data.newName,
-          });
+            locationName: ev.data.newName
+          })
           // Skip the original location_created event.
-          i += 1;
+          i += 1
         }
       }
     }
 
-    newEvs.push(modEv);
+    newEvs.push(modEv)
   }
 
-  return newEvs;
-};
+  return newEvs
+}
 
 exports.mergeEntryCreateEdit = function (evs) {
   // Merges location_entry_created and location_entry_changed events
@@ -51,19 +51,19 @@ exports.mergeEntryCreateEdit = function (evs) {
   //
   // Return a transformed list of events for viewing.
   //
-  var newEvs = [];
-  var i, ev, skip, nextEv;
+  var newEvs = []
+  var i, ev, skip, nextEv
   for (i = 0; i < evs.length; i += 1) {
-    ev = evs[i];
+    ev = evs[i]
 
     if (evs.length === i + 1) {
       // At last event; we cannot look forward.
-      newEvs.push(ev);
-      break;
+      newEvs.push(ev)
+      break
     }
 
-    skip = false;
-    nextEv = evs[i + 1];
+    skip = false
+    nextEv = evs[i + 1]
 
     if (ev.locationId === nextEv.locationId && ev.user === nextEv.user &&
         ev.type === 'location_entry_changed') {
@@ -72,47 +72,47 @@ exports.mergeEntryCreateEdit = function (evs) {
         // Compare ISO 8601 time.
         if (Date.parse(ev.time) - Date.parse(nextEv.time) < MAX_DIFF_MSEC) {
           // Skip the edit event.
-          skip = true;
+          skip = true
         }
       }
     }
 
     if (!skip) {
-      newEvs.push(ev);
+      newEvs.push(ev)
     }
   } // endfor
 
-  return newEvs;
-};
+  return newEvs
+}
 
 exports.dropEntryCommentDeleteGroups = function (evs) {
   // Comment delete hides n edits and the create event.
   var commentRemovedEvs = evs.filter(function (ev) {
-    return ev.type === 'location_entry_comment_removed';
-  });
+    return ev.type === 'location_entry_comment_removed'
+  })
   var commentIdsToAvoid = commentRemovedEvs.map(function (ev) {
-    return ev.data.commentId;
-  });
+    return ev.data.commentId
+  })
 
   var clearedEvs = evs.filter(function (ev) {
     if (ev.type.startsWith('location_entry_comment_')) {
       // Event is bad if it carries a commentId that has been removed.
       var isBad = commentIdsToAvoid.some(function (badId) {
-        return badId === ev.data.commentId;
-      });
+        return badId === ev.data.commentId
+      })
       if (isBad) {
-        return false;
+        return false
       }
-      return true;
+      return true
     }
-    return true;
-  });
+    return true
+  })
 
-  return clearedEvs;
-};
+  return clearedEvs
+}
 
 exports.dropEntryCommentChanged = function (evs) {
   return evs.filter(function (ev) {
-    return ev.type !== 'location_entry_comment_changed';
-  });
-};
+    return ev.type !== 'location_entry_comment_changed'
+  })
+}

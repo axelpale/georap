@@ -1,0 +1,21 @@
+{
+  "name": "pretty-events",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Loc event list filters and decorators",
+  "keywords": [],
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/axelpale/tresdb.git"
+  },
+  "scripts": {
+    "lint": "standard"
+  },
+  "author": "Akseli Palén <akseli.palen@gmail.com>",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {
+    "standard": "^14.3.1"
+  }
+}
