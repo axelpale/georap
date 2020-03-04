@@ -70,12 +70,22 @@ exports.changeTags = function (req, res, next) {
     return res.sendStatus(status.BAD_REQUEST);
   }
 
+  // If no change, everything ok already
+  var oldTags = req.location.tags;
+  var newTags = req.body.tags;
+  var areTagsEqual = oldTags.every(function (ot, i) {
+    return newTags[i] === ot;
+  });
+  if (areTagsEqual) {
+    return res.status(status.OK).send('Tags already equal');
+  }
+
   dal.changeTags({
     locationId: req.location._id,
     locationName: req.location.name,
-    locationTags: req.location.tags,
+    locationTags: oldTags,
     username: req.user.name,
-    tags: req.body.tags,
+    tags: newTags,
   }, function (err) {
     if (err) {
       return next(err);
