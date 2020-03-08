@@ -67,6 +67,10 @@ exports.changeLocationEntry = function (params, callback) {
   var coll = db.collection('entries');
   var q = { _id: params.oldEntry._id };
 
+  // Backward compatibility for comments. Reset to [].
+  var oldComments = params.oldEntry.comments;
+  var nextComments = oldComments ? oldComments : [];
+
   var changedEntry = {
     type: 'location_entry',
     user: params.oldEntry.user,
@@ -81,7 +85,7 @@ exports.changeLocationEntry = function (params, callback) {
       thumbfilepath: params.thumbfilepath,
       thumbmimetype: params.thumbmimetype,
     },
-    comments: params.oldEntry.comments,
+    comments: nextComments,
   };
 
   coll.replaceOne(q, changedEntry, function (err) {
@@ -136,6 +140,7 @@ exports.createLocationEntry = function (params, callback) {
       thumbmimetype: params.thumbmimetype,
       overlay: params.overlay ? params.overlay : null,
     },
+    comments: [],
   };
 
   insertOne(newEntry, function (err, entryId) {
