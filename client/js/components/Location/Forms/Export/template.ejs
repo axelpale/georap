@@ -2,18 +2,11 @@
 
   <div class="panel panel-primary">
     <div class="panel-heading">
-      Export
+      Download
     </div>
     <div class="panel-body">
 
       <p>
-        <h4>View on</h4>
-        <% services.forEach(function (serv) { %>
-        <a href="<%= serv.url %>" class="btn btn-default" role="button" target="_blank"><%= serv.name %></a>
-        <% }); %>
-      </p>
-      <p>
-        <h4>Download</h4>
         <a href="/api/locations/<%= id %>?format=kml&amp;token=<%= token %>" class="btn btn-default" role="button" target="_blank">KML</a>
         for Google Earth
       </p>
