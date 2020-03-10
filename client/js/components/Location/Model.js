@@ -86,7 +86,7 @@ module.exports = function (raw) {
   };
 
   self.getGeom = function () {
-    // Return GeoJSON
+    // Return GeoJSON { coordinates: [<lng>, <lat>] }
     return raw.geom;
   };
 
