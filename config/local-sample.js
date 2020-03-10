@@ -118,9 +118,10 @@ module.exports = {
   //   [<cordinate system name>, <proj4 projection definition>, <template fn>]
   // Where:
   //   coordinate system name
-  //     String.
+  //     String. Visible to user.
   //   proj4 projection definition
-  //     See http://proj4js.org/ for projection definitions.
+  //     See https://epsg.io/ and for proj4js projection definitions
+  //     and http://proj4js.org/ for syntax details.
   //   template
   //     String. The pretty print of coodinates in EJS templating language.
   //     See available template variables and functions below.
@@ -177,13 +178,18 @@ module.exports = {
       '+proj=utm +zone=35 +ellps=GRS80 +units=m +no_defs',
       'N <%= lat %>, E <%= lng %>',
     ],
+    [
+      'SWEREF99-TM',
+      '+proj=utm +zone=33 +ellps=GRS80 +units=m +no_defs',
+      'N <%= Math.round(lat) %>, E <%= Math.round(lng) %>',
+    ],
   ],
 
   // Register location export services here.
   // With these, user can inspect the location on other online maps.
   //
   // Each entry has the form:
-  //   [<service name>, <url pattern>, <coordinate system name>]
+  //   [<service name>, <url pattern>, <coordinate system name>, <bounds>]
   // Where:
   //   service name
   //     String.
@@ -192,6 +198,10 @@ module.exports = {
   //     See available template variables below.
   //   coord system
   //     String. Name of the coordinate system to use for variables.
+  //   bounds
+  //     Array of LatLngBoundsLiteral, areas where the service is available.
+  //     Is an array of objects with properties east, north, south, west.
+  //     Elements are equivalent to LatLngBoundsLiteral of Google Maps JS API.
   //
   // Variables available in URL pattern:
   //   latitude
@@ -203,6 +213,12 @@ module.exports = {
       'https://tools.wmflabs.org/geohack/geohack.php' +
       '?language=en&params=<%= latitude %>;<%= longitude %>_type:landmark',
       'WGS84',
+      [{
+        east: 180,
+        north: 90,
+        south: -90,
+        west: -180,
+      }],
     ],
     [
       'Paikkatietoikkuna',
@@ -210,6 +226,25 @@ module.exports = {
       '?ver=1.17&zoomLevel=8&coord=<%= longitude %>_<%= latitude %>&' +
       'mapLayers=base_35+100+default&showMarker=true',
       'ETRS-TM35FIN',
+      [{
+        east: 32.14,
+        north: 70.166,
+        south: 59.56,
+        west: 18.86,
+      }],
+    ],
+    [
+      'Lantmäteriet',
+      'https://minkarta.lantmateriet.se/' +
+      '?e=<%= longitude %>&n=<%= latitude %>&' +
+      'z=8&background=1&boundaries=true',
+      'SWEREF99-TM',
+      [{
+        east: 54.96,
+        north: 69.07,
+        south: 24.17,
+        west: 10.03,
+      }],
     ],
   ],
 
