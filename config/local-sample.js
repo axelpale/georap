@@ -239,12 +239,20 @@ module.exports = {
       '?e=<%= longitude %>&n=<%= latitude %>&' +
       'z=8&background=1&boundaries=true',
       'SWEREF99-TM',
-      [{
-        east: 54.96,
-        north: 69.07,
-        south: 24.17,
-        west: 10.03,
-      }],
+      [
+        { // Northern Sweden
+          east: 24.17,
+          north: 69.07,
+          south: 63.07,
+          west: 11.74,
+        },
+        { // Southern Sweden
+          east: 19.89,
+          north: 63.07,
+          south: 54.96,
+          west: 10.03,
+        },
+      ],
     ],
   ],
 
