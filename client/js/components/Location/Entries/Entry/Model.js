@@ -9,6 +9,7 @@ var locations = require('../../../../stores/locations');
 var emitter = require('component-emitter');
 var urljoin = require('url-join');
 var marked = require('marked');
+var dompurify = require('dompurify');
 
 module.exports = function (rawEntry, entries) {
   // Parameters:
@@ -167,7 +168,8 @@ module.exports = function (rawEntry, entries) {
       return null;
     }
 
-    return marked(rawEntry.data.markdown, { sanitize: true });
+    var dangerousHTML = marked(rawEntry.data.markdown);
+    return dompurify.sanitize(dangerousHTML);
   };
 
   self.isVisit = function () {
