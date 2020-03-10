@@ -1,5 +1,6 @@
 /* eslint-disable no-magic-numbers */
 var template = require('./template.ejs');
+var preprocessMessage = require('../Comment/preprocessMessage');
 
 module.exports = function (entry, tempComment) {
   // Parameters:
@@ -15,6 +16,7 @@ module.exports = function (entry, tempComment) {
   this.bind = function ($mount) {
     $mount.html(template({
       comment: tempComment,
+      safeHtmlMessage: preprocessMessage(tempComment.message),
     }));
 
     var $listItem = $mount.find('.list-group-item');

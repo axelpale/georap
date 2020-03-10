@@ -5,6 +5,7 @@ var template = require('./template.ejs');
 var account = require('../../../../../../stores/account');
 var locations = require('../../../../../../stores/locations');
 var commentsConfig = require('../config');
+var preprocessMessage = require('./preprocessMessage');
 var MIN_LEN = commentsConfig.MIN_MESSAGE_LEN;
 var MAX_LEN = commentsConfig.MAX_MESSAGE_LEN;
 
@@ -27,9 +28,12 @@ module.exports = function (entry, comment) {
     var maxAgeMs = 3600000;
     var isFresh = ageMs < maxAgeMs;
 
+    var safeHtmlMessage = preprocessMessage(comment.message);
+
     $mount.html(template({
       id: id,
       comment: comment,
+      safeHtmlMessage: safeHtmlMessage,
       timestamp: timestamp,
       isOwner: isMe,
       isFresh: isFresh,

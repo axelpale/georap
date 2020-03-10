@@ -4,6 +4,7 @@ var account = require('../../../../../stores/account');
 var CommentView = require('./Comment');
 var PendingCommentView = require('./PendingComment');
 var updateHint = require('./updateHint');
+var preprocessMessage = require('./Comment/preprocessMessage');
 
 var commentsConfig = require('./config');
 var MIN_MESSAGE_LEN = commentsConfig.MIN_MESSAGE_LEN;
@@ -231,7 +232,7 @@ module.exports = function (entry) {
       var elemId = 'comment-' + commentId;
       var $messageEl = $mount.find('#' + elemId + ' span.comment-message');
       // Update message element (if exists)
-      $messageEl.html(ev.data.newMessage);
+      $messageEl.html(preprocessMessage(ev.data.newMessage));
     });
 
     entry.on('location_entry_comment_removed', function (ev) {
