@@ -6,16 +6,12 @@ Everyone has their own secret places. TresDB, a geographical content managing sy
 
 ## Features
 
-![](doc/10-full-map-view.jpg)
+![](doc/10-full-map-view.jpg)<br>1/9. TresDB can handle practically unlimited number of locations. Hierarchical grouping of map markers keeps things smooth and fast.
 
-1/9. TresDB can handle practically unlimited number of locations. Hierarchical grouping of map markers keeps things smooth and fast.
-
-![](doc/20-location-and-images.jpg)
-
+![](doc/20-location-and-images.jpg)<br>
 2/9. Users create and import new locations for the community to discuss and remember. Each location receives own page.
 
-![](doc/30-posting.jpg)
-
+![](doc/30-posting.jpg)<br/>
 3/9. Posts can include text, links, and optional image or other document.
 
 ![](doc/40-commenting.jpg)
