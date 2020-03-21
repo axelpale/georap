@@ -6,36 +6,31 @@ Everyone has their own secret places. TresDB, a geographical content managing sy
 
 ## Features
 
-![](doc/10-full-map-view.jpg)<br>1/9. TresDB can handle practically unlimited number of locations. Hierarchical grouping of map markers keeps things smooth and fast.
+![](doc/10-full-map-view.jpg)<br>
+1/9. TresDB can handle practically unlimited number of locations. Hierarchical grouping of map markers keeps things smooth and fast.
 
 ![](doc/20-location-and-images.jpg)<br>
 2/9. Users create and import new locations for the community to discuss and remember. Each location receives own page.
 
-![](doc/30-posting.jpg)<br/>
+![](doc/30-posting.jpg)<br>
 3/9. Posts can include text, links, and optional image or other document.
 
-![](doc/40-commenting.jpg)
-
+![](doc/40-commenting.jpg)<br>
 4/9. Users can comment posts for targeted discussion and reactions.
 
-![](doc/50-tags-and-icons.jpg)
-
+![](doc/50-tags-and-icons.jpg)<br>
 5/9. Marker icons can be configured to suit the needs of the community.
 
-![](doc/60-coordinate-edit.jpg)
-
+![](doc/60-coordinate-edit.jpg)<br>
 6/9. All information of the location can be edited in an intuitive and responsive way.
 
-![](doc/70-maps-and-coordinates.jpg)
-
+![](doc/70-maps-and-coordinates.jpg)<br>
 7/9. Location coordinates can be exported into external map services. The list of available services is configurable and extendable as well as the list of alternative coordinate systems.
 
-![](doc/80-download.jpg)
-
+![](doc/80-download.jpg)<br>
 8/9. Each location can be downloaded as a file and exported to other map software and devices.
 
-![](doc/90-menu.jpg)
-
+![](doc/90-menu.jpg)<br>
 9/9. And lots of else, like full text search, full export, required administration tools and gamification features.
 
 Read on for technical details and installation instructions.
