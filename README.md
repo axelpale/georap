@@ -2,9 +2,38 @@
 
 ![Example](doc/tresdb_menu.jpg)
 
-Everyone has their own secret places. TresDB was created to allow you to browse, manage, and describe those secret geographical locations in a private but easy manner. It is a geographical content management system and targeted to persons, groups, or organisations who fear revealing their precious locations to the public or to big companies like Google who offer similar map services. Whether your topic is urban exploration, traveling, berry picking, or treasure hunting, we bet you will find TresDB useful.
+Everyone has their own secret places. TresDB, a geographical content managing system, was created to allow you to browse, manage, and describe geolocations in a fun, easy and social manner. It is for persons, groups, or organisations who want to share, document, and discuss locations. It for them who want to keep all data in their own hands. Whether your topic is nature, constructions, urban exploration, traveling, berry picking, or treasure hunting, we bet you will find TresDB useful.
 
-TresDB is also a web application and thus requires installation to a web server. The web server is required to have Node.js and MongoDB available.
+## Features
+
+![](doc/10-full-map-view.jpg)
+1/9. TresDB can handle practically unlimited number of locations. Hierarchical grouping of map markers keeps things smooth and fast.
+
+![](doc/20-location-and-images.jpg)
+2/9. Users create and import new locations for the community to discuss and remember. Each location receives own page.
+
+![](doc/30-posting.jpg)
+3/9. Posts can include text, links, and optional image or other document.
+
+![](doc/40-commenting.jpg)
+4/9. Users can comment posts for targeted discussion and reactions.
+
+![](doc/50-tags-and-icons.jpg)
+5/9. Marker icons can be configured to suit the needs of the community.
+
+![](doc/60-coordinate-edit.jpg)
+6/9. All information of the location can be edited in an intuitive and responsive way.
+
+![](doc/70-maps-and-coordinates.jpg)
+7/9. Location coordinates can be exported into external map services. The list of available services is configurable and extendable as well as the list of alternative coordinate systems.
+
+![](doc/80-download.jpg)
+8/9. Each location can be downloaded as a file and exported to other map software and devices.
+
+![](doc/90-menu.jpg)
+9/9. And lots of else, like full text search, full export, required administration tools and gamification features.
+
+Read on for technical details and installation instructions.
 
 **Table of Contents**
 
@@ -25,6 +54,8 @@ TresDB is also a web application and thus requires installation to a web server.
 
 
 ## Install
+
+TresDB is a web application and thus requires installation to a web server. The web server is required to have Node.js and MongoDB available.
 
 We assume you have Node.js v4.5.0 or later already installed.
 
