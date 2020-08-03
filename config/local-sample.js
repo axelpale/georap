@@ -237,7 +237,7 @@ module.exports = {
       'Lantmäteriet',
       'https://minkarta.lantmateriet.se/' +
       '?e=<%= longitude %>&n=<%= latitude %>&' +
-      'z=8&background=1&boundaries=true',
+      'z=12&background=1&boundaries=true',
       'SWEREF99-TM',
       [
         { // Northern Sweden
@@ -251,6 +251,72 @@ module.exports = {
           north: 63.07,
           south: 54.96,
           west: 10.03,
+        },
+      ],
+    ],
+    [
+      'Finn.no',
+      'https://kart.finn.no/' +
+      '?lng=<%= longitude %>&lat=<%= latitude %>' +
+      '&zoom=12&mapType=normaphd',
+      'WGS84',
+      [
+        { // Northern Norway
+          east: 31.84,
+          north: 71.40,
+          south: 68.30,
+          west: 16.30,
+        },
+        { // Mid North Norway
+          west: 12.08,
+          south: 67.31,
+          east: 20.92,
+          north: 69.70,
+        },
+        { // Mid South Norway
+          west: 10.28,
+          south: 63.55,
+          east: 16.875,
+          north: 67.44,
+        },
+        { // Southern Norway
+          west: 3.03,
+          south: 57.63,
+          east: 13.45,
+          north: 64.26,
+        },
+      ],
+    ],
+    [
+      'Gule Sider',
+      'https://kart.gulesider.no/' +
+      '?c=<%= latitude %>,<%= longitude %>&' +
+      'z=14&l=aerial',
+      'WGS84',
+      [
+        { // Northern Norway
+          east: 31.84,
+          north: 71.40,
+          south: 68.30,
+          west: 16.30,
+        },
+        { // Mid North Norway
+          west: 12.08,
+          south: 67.31,
+          east: 20.92,
+          north: 69.70,
+        },
+        { // Mid South Norway
+          west: 10.28,
+          south: 63.55,
+          east: 16.875,
+          north: 67.44,
+        },
+        { // Southern Norway
+          west: 3.03,
+          south: 57.63,
+          east: 13.45,
+          north: 64.26,
         },
       ],
     ],
