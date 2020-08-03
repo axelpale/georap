@@ -261,7 +261,7 @@ module.exports = {
     rounds: 10,
   },
 
-  // Node environment.
+  // Set node environment.
   // Defaults to 'development' like app.get('env') in Express.
   // Access process.env only in one place, here.
   // See https://github.com/eslint/eslint/issues/657
