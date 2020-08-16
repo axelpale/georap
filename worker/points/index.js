@@ -1,7 +1,7 @@
 
 var dal = require('./dal');
 var usersDal = require('../../server/api/users/dal');
-var async = require('async');
+var asyn = require('async');
 
 exports.run = function (callback) {
 
@@ -10,7 +10,7 @@ exports.run = function (callback) {
       return callback(err);
     }
 
-    async.eachSeries(users, function iteratee(u, cb) {
+    asyn.eachSeries(users, function iteratee(u, cb) {
       dal.computePointsAndStore(u.name, cb);
     }, function (err2) {
       if (err2) {
