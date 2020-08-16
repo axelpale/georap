@@ -16,18 +16,21 @@ exports.sumPoints = function (evs) {
 exports.sumVisits = function (evs) {
   return evs.reduce(function (acc, ev) {
     if (ev.type === 'location_entry_changed') {
-      if (ev.data.oldIsVisit && !ev.data.newIsVisit) {
+      if (ev.data.oldIsVisit === true && ev.data.newIsVisit === false) {
         return acc - 1;
       }
-      if (!ev.data.oldIsVisit && ev.data.newIsVisit) {
+      if (ev.data.oldIsVisit === false && ev.data.newIsVisit === true) {
         return acc + 1;
       }
       return acc;
     }
     if (ev.type === 'location_entry_created') {
-      return acc + 1;
+      if (ev.data.isVisit === true) {
+        return acc + 1;
+      }
     }
     if (ev.type === 'location_entry_removed') {
+      // No good way to determine if visit or not. Punish the remover.
       return acc - 1;
     }
     return acc;
