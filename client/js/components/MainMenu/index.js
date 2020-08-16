@@ -55,7 +55,7 @@ module.exports = function (mapComp) {
 
     // Menu opening
 
-    $mount.on('click', '#tresdb-mainmenu-account', function (ev) {
+    $mount.on('click', '#tresdb-mainmenu-account', function () {
       // Close the sidebar whenever user opens the menu.
       return tresdb.go('/');
     });
