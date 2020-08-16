@@ -34,6 +34,10 @@ module.exports = function (username) {
       }
 
       $('#tresdb-user-points').html(pointsTemplate({
+        visits: user.locationsVisited,
+        adds: user.locationsCreated,
+        posts: user.postsCreated,
+        comments: user.commentsCreated,
         points: user.points,
       }));
 

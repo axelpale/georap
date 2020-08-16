@@ -1,7 +1,7 @@
 
 var db = require('../../server/services/db');
 var eventsDal = require('../../server/api/events/dal');
-var pointsDal = require('../points/dal');
+var pointSums = require('../points/sums');
 
 exports.computePoints = function (locationId, callback) {
   // Compute scenepoints for single location. Scenepoints are computed
@@ -12,7 +12,7 @@ exports.computePoints = function (locationId, callback) {
       return callback(err);
     }
 
-    var points = pointsDal.sumPoints(evs);
+    var points = pointSums.sumPoints(evs);
 
     return callback(null, points);
   });

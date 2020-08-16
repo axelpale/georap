@@ -1,19 +1,6 @@
 var db = require('../../server/services/db');
 var eventsDal = require('../../server/api/events/dal');
-var getPoints = require('../../client/js/components/lib/getPoints');
-var eventFilters = require('pretty-events');
-
-exports.sumPoints = function (evs) {
-  // Return sum of points of given events.
-
-  // Filter events. For example, prevent subsequent taggings
-  // from accumulating points.
-  var filteredEvs = eventFilters.mergeTagged(evs);
-
-  return filteredEvs.reduce(function (acc, ev) {
-    return acc + getPoints(ev);
-  }, 0);
-};
+var sums = require('./sums');
 
 exports.computePoints = function (username, callback) {
   // Compute scenepoints for single user. Scenepoints are computed
@@ -47,9 +34,15 @@ exports.computePoints = function (username, callback) {
 
     // Point Categories
     var ps = {
-      allTime: exports.sumPoints(evsTimeUnix),
-      days30: exports.sumPoints(evs30days),
-      days7: exports.sumPoints(evs7days),
+      // Scene points
+      allTime: sums.sumPoints(evsTimeUnix),
+      days30: sums.sumPoints(evs30days),
+      days7: sums.sumPoints(evs7days),
+      // Statistics
+      locationsVisited: sums.sumVisits(evsTimeUnix),
+      locationsCreated: sums.sumCreations(evsTimeUnix),
+      postsCreated: sums.sumPosts(evsTimeUnix),
+      commentsCreated: sums.sumComments(evsTimeUnix),
     };
 
     var isOk = function (num) {
@@ -84,6 +77,10 @@ exports.computePointsAndStore = function (username, callback) {
     var q = { name: username };
     var u = {
       $set: {
+        locationsVisited: pointCategories.locationsVisited,
+        locationsCreated: pointCategories.locationsCreated,
+        postsCreated: pointCategories.postsCreated,
+        commentsCreated: pointCategories.commentsCreated,
         points: pointCategories.allTime,
         points30days: pointCategories.days30,
         points7days: pointCategories.days7,
