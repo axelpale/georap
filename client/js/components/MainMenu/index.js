@@ -53,6 +53,13 @@ module.exports = function (mapComp) {
 
     _$root = $mount;
 
+    // Menu opening
+
+    $mount.on('click', '#tresdb-mainmenu-account', function (ev) {
+      // Close the sidebar whenever user opens the menu.
+      return tresdb.go('/');
+    });
+
     // Location manipulation
 
     $mount.on('click', '#tresdb-mainmenu-add', function (ev) {
