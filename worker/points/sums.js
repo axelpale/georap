@@ -77,4 +77,4 @@ exports.sumTags = function (evs) {
     }
     return acc;
   }, 0);
-}
+};

@@ -73,7 +73,7 @@ exports.markAllAsUnlayered = function (callback) {
     $set: {
       isLayered: false,
       childLayer: 0,
-    }
+    },
   };
 
   coll.updateMany({}, u, function (err) {
