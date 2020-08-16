@@ -347,7 +347,7 @@ exports.createLocationTagsChanged = function (params, callback) {
   //     newTags
   //       array of strings
   //     oldTags
-  //       array of string
+  //       array of strings
 
   var newEvent = {
     type: 'location_tags_changed',

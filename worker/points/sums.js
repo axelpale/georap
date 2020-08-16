@@ -69,3 +69,12 @@ exports.sumComments = function (evs) {
     return acc;
   }, 0);
 };
+
+exports.sumTags = function (evs) {
+  return evs.reduce(function (acc, ev) {
+    if (ev.type === 'location_tags_changed') {
+      return acc + ev.data.newTags.length - ev.data.oldTags.length;
+    }
+    return acc;
+  }, 0);
+}

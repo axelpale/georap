@@ -37,6 +37,7 @@ module.exports = function (username) {
         visits: user.locationsVisited,
         adds: user.locationsCreated,
         posts: user.postsCreated,
+        tags: user.tagsCreated,
         comments: user.commentsCreated,
         points: user.points,
       }));
