@@ -3,10 +3,11 @@
 // The algorithm works like this:
 // - mark each location as unlayered
 // - order locations by points, locs with highest points first
-// - starting from the first, find the closest layered neighbor
+// - starting from the first location, find the closest layered neighbor
 //   - if no neighbor, set layer=1
-//   - if neighbor, set layer based on the distance, so that locs'
-//     markers do not visually overlap
+//   - if a neighbor, set the layer of the location based on the distance,
+//     so that locs' markers do not visually overlap.
+//   - mark the neighbors parenthood level by increasing childLayer.
 //   - mark loc as layered.
 //
 // Physical analogy:

@@ -63,6 +63,7 @@ exports.getFiltered = function (params, callback) {
   //       layer: <int>
   //       points: <int>
   //       isLayered: <bool>
+  //       childLayer: <int>
   //       score: <float>
   //     },
   //     ...
@@ -214,6 +215,7 @@ exports.getWithin = function (params, callback) {
         geom: true,
         tags: true,
         layer: true,
+        childLayer: true,
       },
     },
   ];

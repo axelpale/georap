@@ -14,23 +14,29 @@ var isTypeTag = function (t) {
   return allStatusTags.indexOf(t) === -1;
 };
 
-module.exports = function (loc, visitedManager) {
-  var template = 'default';
+module.exports = function (loc, zoomLevel, visitedManager) {
+  var templateName = 'default';
   var symbol = 'default';
 
   // Choose template
 
   var isVisited = visitedManager.isVisited(loc._id);
   var isDemolished = (loc.tags.indexOf('demolished') !== -1);
+  var isParent = loc.childLayer > zoomLevel;
 
+  var templateSuffix = '';
+  if (isDemolished) {
+    templateSuffix += 'demolished';
+  }
   if (isVisited) {
-    if (isDemolished) {
-      template = 'demolishedvisited';
-    } else {
-      template = 'visited';
-    }
-  } else if (isDemolished) {
-    template = 'demolished';
+    templateSuffix += 'visited';
+  }
+  if (isParent) {
+    templateSuffix += 'parent';
+  }
+
+  if (templateSuffix.length > 0) {
+    templateName = templateSuffix;
   }
 
   // Choose symbol
@@ -44,7 +50,7 @@ module.exports = function (loc, visitedManager) {
 
   // Build URL
 
-  var iconName = template + '-' + symbol + '.png';
+  var iconName = templateName + '-' + symbol + '.png';
   var iconUrl = '/api/icons/' + iconName;
 
   var iconObj = icons.marker(iconUrl);

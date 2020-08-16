@@ -35,6 +35,11 @@ module.exports = function (map) {
 
   // Private methods
 
+  var _chooseIcon = function (mloc) {
+    var zoomLevel = map.getZoom();
+    return chooseIcon(mloc, zoomLevel, _visitedIds);
+  };
+
   var _addMarker = function (loc) {
     // Create marker and add it to the map.
     //
@@ -50,7 +55,7 @@ module.exports = function (map) {
 
     m = new google.maps.Marker({
       position: new google.maps.LatLng(lat, lng),
-      icon: chooseIcon(loc, _visitedIds),
+      icon: _chooseIcon(loc),
     });
 
     // Store the MarkerLocation for _id, name, and layer info.
@@ -215,7 +220,7 @@ module.exports = function (map) {
       // First update the location
       mloc.tags = ev.data.newTags;
       // Update icon according to the new tags
-      m.setIcon(chooseIcon(mloc, _visitedIds));
+      m.setIcon(_chooseIcon(mloc));
     }
   });
 
@@ -228,7 +233,7 @@ module.exports = function (map) {
       if (_markers.hasOwnProperty(ev.locationId)) {
         var m = _markers[ev.locationId];
         var mloc = m.get('location');
-        m.setIcon(chooseIcon(mloc, _visitedIds));
+        m.setIcon(_chooseIcon(mloc));
       }
     }
   });
@@ -245,7 +250,7 @@ module.exports = function (map) {
       if (_markers.hasOwnProperty(ev.locationId)) {
         m = _markers[ev.locationId];
         mloc = m.get('location');
-        m.setIcon(chooseIcon(mloc, _visitedIds));
+        m.setIcon(_chooseIcon(mloc));
       }
     } else {
       // From visit to non-visit
@@ -256,7 +261,7 @@ module.exports = function (map) {
         if (_markers.hasOwnProperty(ev.locationId)) {
           m = _markers[ev.locationId];
           mloc = m.get('location');
-          m.setIcon(chooseIcon(mloc, _visitedIds));
+          m.setIcon(_chooseIcon(mloc));
         }
       }
     }
@@ -267,13 +272,13 @@ module.exports = function (map) {
     labels.updateMarkerLabels(_markers, map.getMapTypeId());
   });
 
-  // Listen zoom level change to only show labels of locations
-  // with higher level than current zoom level.
   map.addListener('zoom_changed', function () {
     var z, k, m, loc;
 
     z = map.getZoom();
 
+    // Listen zoom level change to only show labels of locations
+    // with higher level than current zoom level.
     for (k in _markers) {
       if (_markers.hasOwnProperty(k)) {
         m = _markers[k];
@@ -283,6 +288,21 @@ module.exports = function (map) {
           labels.ensureLabel(m, map.getMapTypeId());
         } else {
           labels.hideLabel(m);
+        }
+      }
+    }
+
+    // Listen zoom level change to update symbols of locations
+    // with all children visible.
+    for (k in _markers) {
+      if (_markers.hasOwnProperty(k)) {
+        m = _markers[k];
+        loc = m.get('location');
+
+        if (loc.childLayer === z || loc.childLayer - 1 === z) {
+          // Ensure that the correct marker icon is used.
+          // DEBUG console.log(loc.childLayer, z);
+          m.setIcon(_chooseIcon(loc));
         }
       }
     }

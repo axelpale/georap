@@ -104,6 +104,8 @@ exports.getWithin = function (req, res, next) {
   //     array of strings
   //   layer
   //     integer
+  //   childLayer
+  //     integer, the zoom level after there is no child hidden
   var lat, lng, radius, layer;
 
   // Validate the request to prevent injection

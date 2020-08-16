@@ -65,12 +65,18 @@ exports.findLayerWithClusterRadiusSmallerThan = function (distance) {
 };
 
 exports.markAllAsUnlayered = function (callback) {
-  // Mark each location with isLayered=false. This is usually necessary
-  // when starting to refresh the layer numbers.
+  // Mark each location with isLayered=false and childLayer=0.
+  // This is usually necessary when starting to refresh the layer numbers.
 
   var coll = db.collection('locations');
+  var u = {
+    $set: {
+      isLayered: false,
+      childLayer: 0,
+    }
+  };
 
-  coll.updateMany({}, { $set: { isLayered: false } }, function (err) {
+  coll.updateMany({}, u, function (err) {
     if (err) {
       return callback(err);
     }
@@ -151,7 +157,7 @@ exports.findLayerForPoint = function (geom, callback) {
   //   geom
   //     GeoJSON Point
   //   callback
-  //     function (err, layer, distance)
+  //     function (err, layer, distance, nearest)
   //       Parameters:
   //         err
   //           null if no error
@@ -188,10 +194,12 @@ exports.findLayerAndStore = function (loc, callback) {
 
   var coll = db.collection('locations');
 
-  exports.findLayerForPoint(loc.geom, function (err, layer) {
+  exports.findLayerForPoint(loc.geom, function (err, layer, dist, nearest) {
     if (err) {
       return callback(err);
     }
+
+    // Update layer of the location.
 
     var q = { _id: loc._id };
     var u = {
@@ -205,6 +213,24 @@ exports.findLayerAndStore = function (loc, callback) {
       if (err2) {
         return callback(err2);
       }
+
+      // The nearest location prevented this location being viewed on
+      // an upper layer. Mark the nearest location as parent.
+
+      if (nearest) {
+        if (layer > nearest.childLayer) {
+          var qNeighbor = { _id: nearest._id };
+          var uNeighbor = {
+            $set: {
+              childLayer: layer,
+            },
+          };
+
+          coll.updateOne(qNeighbor, uNeighbor, callback);
+          return;
+        }
+      }
+
       return callback();
     });
   });

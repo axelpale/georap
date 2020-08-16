@@ -12,6 +12,7 @@ module.exports = function (ev) {
       coordinates: [ev.data.lng, ev.data.lat],
     },
     tags: [],
-    layer: 1,  // TODO Have ev.data.layer
+    layer: 1,  // TODO Have ev.data.layer,
+    childLayer: 0,
   };
 };
