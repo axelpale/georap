@@ -66,6 +66,8 @@ var indexHtml = (function precompile() {
       title: local.title,
       description: local.description,
       defaultMapState: local.defaultMapState,
+      supportButtonTitle: local.supportButtonTitle,
+      supportPageContent: local.supportPageContent,
       features: local.features,
       googleMapsKey: local.googleMapsKey,
       tags: tags,

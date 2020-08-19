@@ -49,6 +49,7 @@ module.exports = function (mapComp) {
       glyphicon: glyphiconTemplate,
       config: tresdb.config,
       user: account.getUser(),  // might be undefined
+      supportButtonTitle: tresdb.config.supportButtonTitle,
     }));
 
     _$root = $mount;

@@ -26,6 +26,9 @@ module.exports = {
     mapTypeId: 'hybrid',
   },
 
+  supportButtonTitle: 'Support us',
+  supportPageContent: 'Support us by <insert support method here>',
+
   // Login screen background image. The first thing the user experiences.
   // The image will be copied to a public location on start up.
   // Use only an absolute path.
