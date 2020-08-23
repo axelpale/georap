@@ -205,6 +205,12 @@ module.exports = function (mapComp) {
       return tresdb.go('/password');
     });
 
+    // Support
+
+    $mount.on('click', '#tresdb-mainmenu-support', function (ev) {
+      ev.preventDefault();
+      return tresdb.go('/fund');
+    });
 
     // Admin stuff
 

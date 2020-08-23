@@ -25,6 +25,7 @@ var ResetPasswordView = require('../components/ResetPassword');
 var SearchView = require('../components/Search');
 var SignupView = require('../components/Signup');
 var StatisticsView = require('../components/Statistics');
+var SupportFundView = require('../components/SupportFund');
 var UsersView = require('../components/Users');
 var UserView = require('../components/User');
 
@@ -225,6 +226,11 @@ exports.route = function () {
 
   page('/search', function (ctx) {
     var view = new SearchView(ctx.query);
+    card.open(view);
+  });
+
+  page('/fund', function () {
+    var view = new SupportFundView();
     card.open(view);
   });
 
