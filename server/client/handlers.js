@@ -6,51 +6,11 @@ var _ = require('lodash');
 var fs = require('fs');
 var path = require('path');
 
-var tags = [
-  'castle',
-  'military',
-  'residental',
-  'town',
-  'agricultural',
-  'farm',
-  'campfire',
-  'natural',
-  'tree',
-  'rock',
-  'grave',
-  'church',
-  'spiritual',
-  'scientific',
-  'museum',
-  'shop',
-  'leisure',
-  'sports',
-  'school',
-  'hospital',
-  'sawmill',
-  'mining',
-  'factory',
-  'railway',
-  'marine',
-  'vehicle',
-  'aviation',
-  'helicopter',
-  'infrastructure',
-  'electricity',
-  'communications',
-  'watermanagement',
-  'lighthouse',
-  'bridge',
-  'tunnel',
-  'underground',
-  'freak',
-  'buried', // status tags
-  'active',
-  'demolished',
-  'guarded',
-  'locked',
-  'walk-in',
-];
+// Backward compatibility for tresdb v8 to prevent major version bump.
+if (!local.tags) {
+  console.warn('No tags configured.');
+  local.tags = [];
+}
 
 // Precompile template and prerender index.html.
 // Include config and other variables for the client.
@@ -70,7 +30,7 @@ var indexHtml = (function precompile() {
       supportPageContent: local.supportPageContent,
       features: local.features,
       googleMapsKey: local.googleMapsKey,
-      tags: tags,
+      tags: local.tags,
       staticUrl: local.staticUrl,
       uploadUrl: local.uploadUrl,
       uploadSizeLimit: local.uploadSizeLimit,

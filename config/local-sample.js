@@ -113,6 +113,57 @@ module.exports = {
     sender: 'admin@example.com',
   },
 
+  // Location tags.
+  // They need to have matching png symbols available
+  // under config/images/markers/symbols
+  // The order defines the button order in palettes.
+  tags: [
+    'castle',
+    'military',
+    'residental',
+    'town',
+    'agricultural',
+    'farm',
+    'campfire',
+    'natural',
+    'tree',
+    'rock',
+    'crater',
+    'grave',
+    'church',
+    'spiritual',
+    'scientific',
+    'museum',
+    'shop',
+    'leisure',
+    'sports',
+    'school',
+    'hospital',
+    'sawmill',
+    'mining',
+    'factory',
+    'railway',
+    'marine',
+    'vehicle',
+    'aviation',
+    'helicopter',
+    'infrastructure',
+    'electricity',
+    'communications',
+    'watermanagement',
+    'lighthouse',
+    'bridge',
+    'tunnel',
+    'underground',
+    'freak',
+    'buried', // status tags
+    'active',
+    'demolished',
+    'guarded',
+    'locked',
+    'walk-in',
+  ],
+
   // Register coordinate systems to be used.
   // These coordinate systems will be displayed on the location page.
   // These systems are also available for exportServices.
