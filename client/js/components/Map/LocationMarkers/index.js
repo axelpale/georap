@@ -1,6 +1,8 @@
 /* eslint-disable max-lines, max-statements, no-lonely-if */
 /* global google */
 
+// LocationMarkers is a marker manager.
+
 var markerStore = tresdb.stores.markers;
 var account = tresdb.stores.account;
 var getBoundsDiagonal = require('./lib/getBoundsDiagonal');
