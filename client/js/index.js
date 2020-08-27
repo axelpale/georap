@@ -15,7 +15,11 @@ var markers = require('./stores/markers');
 var statistics = require('./stores/statistics');
 var tags = require('./stores/tags');
 var users = require('./stores/users');
+var minibus = require('minibus');
 
+// The html contains tresdb object,
+// preset with some config.
+// Let us append the stores to the global namespace.
 tresdb.stores = {
   account: account,
   admin: admin,
@@ -27,6 +31,12 @@ tresdb.stores = {
   tags: tags,
   users: users,
 };
+// Create also a global bus. Spaghetti or not?
+tresdb.bus = minibus.create();
+// DEBUG Bus is easy to listen:
+// tresdb.bus.on(function (ev) {
+//   console.log(ev);
+// });
 
 
 // Routes and main components.
