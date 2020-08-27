@@ -34,9 +34,12 @@ module.exports = function (map) {
     // Store current, original center for undo.
     _panForCardUndoLatLng = map.getCenter();
 
+    // Latent params
     var lat = geom.coordinates[1];
     var lng = geom.coordinates[0];
 
+
+    // Pan location
     var cardWidthPx = $('#card-layer').width();
     var mapWidthPx = $('body').width();
     var bgWidthPx = (mapWidthPx - cardWidthPx);

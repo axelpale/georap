@@ -97,7 +97,7 @@ module.exports = function (id) {
         return this.hostname !== window.location.hostname;
       }).attr('target', '_blank');
 
-      // Inform view is ready
+      // Inform the view for the location is ready.
       self.emit('idle', _location);
 
     });
