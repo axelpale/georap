@@ -148,21 +148,22 @@ module.exports = function () {
     component.bind($(el));
   };
 
-  self.panForCard = function (geom) {
+  self.panForLocation = function (location) {
     // Pan map so that target location becomes centered on
     // the visible background.
     //
     // Parameters:
-    //   lat, lng
-    //     Coords of the location
+    //   location, so that location.getGeom() returns lat, lng
+    //
     assertBound();
-    return _panner.panForCard(geom);
+    return _panner.panForLocation(location);
   };
 
-  self.panForCardUndo = function () {
+  self.panUndo = function () {
+    // DEAD CODE
     // Undo the pan made by panForCard
     assertBound();
-    return _panner.panForCardUndo();
+    return _panner.panUndo();
   };
 
   self.removeControls = function () {

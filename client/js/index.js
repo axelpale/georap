@@ -113,11 +113,11 @@ window.initMap = function () {
       cardCooldown = false;
     }, COOLDOWN_MSEC);
 
-    mapComp.panForCard(location.getGeom());
+    mapComp.panForLocation(location);
 
     location.on('location_geom_changed', function () {
       // Center on the location.
-      mapComp.panForCard(location.getGeom());
+      mapComp.panForLocation(location);
     });
     // The Location view will call location.off() when unbound.
   });

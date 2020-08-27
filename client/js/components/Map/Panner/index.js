@@ -9,16 +9,16 @@ module.exports = function (map) {
   // When location page opens, map pans so that location becomes visible
   // on the background. After location page is closed, this pan is being
   // undone. We only need to remember the original map center.
-  var _panForCardUndoLatLng = null;
+  var _panUndoLatLng = null;
 
   // Public methods
 
-  self.panForCard = function (geom) {
+  self.panForLocation = function (location) {
     // Pan map so that target location becomes centered on
     // the visible background.
     //
     // Parameters:
-    //   geom
+    //   location, where location.getGeom() is a
     //     GeoJSON Point
 
     // Wait until map has projection.
@@ -26,7 +26,7 @@ module.exports = function (map) {
     var pev = 'projection_changed';
     if (!map.getProjection()) {
       google.maps.event.addListenerOnce(map, pev, function () {
-        self.panForCard(geom);
+        self.panForLocation(location);
       });
       return;
     }
@@ -60,10 +60,10 @@ module.exports = function (map) {
     map.panTo(targetLatLng);
   };
 
-  self.panForCardUndo = function () {
-    // Undo the pan made by panForCard
-    if (_panForCardUndoLatLng) {
-      map.panTo(_panForCardUndoLatLng);
+  self.panUndo = function () {
+    // Undo the pan
+    if (_panUndoLatLng) {
+      map.panTo(_panUndoLatLng);
     }
   };
 };
