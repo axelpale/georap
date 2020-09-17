@@ -1,5 +1,5 @@
 {
-  "name": "gridbin",
+  "name": "gridfilter",
   "private": true,
   "version": "1.0.0",
   "description": "A tool to group markers spatially",
