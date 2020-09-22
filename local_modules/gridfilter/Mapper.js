@@ -23,4 +23,10 @@ proto.map = function (x) {
   return n * this.rw + this.r0
 }
 
+proto.inverse = function (y) {
+  // Map y in range to x in domain.
+  const n = (y - this.r0) / this.rw
+  return n * this.dw + this.d0
+}
+
 module.exports = Mapper

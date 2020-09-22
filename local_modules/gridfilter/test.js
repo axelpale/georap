@@ -23,3 +23,9 @@ test('Mapper zero-width range', (t) => {
   t.strictEqual(m.map(-123), 1)
   t.end()
 })
+
+test('Mapper inverse', (t) => {
+  var m = new Mapper(-4, 0, 4, 6)
+  t.strictEqual(m.inverse(8), 4)
+  t.end()
+})
