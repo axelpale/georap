@@ -228,3 +228,5 @@ exports.getWithin = function (params, callback) {
     .aggregate(pipeline, opts)
     .toArray(callback);
 };
+
+exports.getFilteredWithin = require('./getFilteredWithin');
