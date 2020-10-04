@@ -1,5 +1,6 @@
 const Mapper = require('./Mapper')
 const MarkerGrid = require('./MarkerGrid')
+const times = require('./times')
 const test = require('tape')
 
 test('Mapper basic usage', (t) => {
@@ -32,6 +33,31 @@ test('Mapper inverse', (t) => {
 })
 
 test('MarkerGrid test run', (t) => {
-  t.ok(true)
+  // Build a MarkerGrid
+  const latLngBounds = {
+    east: 10,
+    north: 10,
+    south: 0,
+    west: 0
+  }
+  const gridSize = {
+    width: 10,
+    height: 10
+  }
+  const grid = new MarkerGrid(latLngBounds, gridSize)
+  // Generate points
+  times(25, () => {
+    const lng = 20 * Math.random() - 5
+    const lat = 20 * Math.random() - 5
+    grid.add({
+      geom: {
+        coordinates: [lng, lat]
+      }
+    })
+  })
+  console.log(grid.toString())
+  const filteredMarkers = grid.getMarkers()
+  console.log('Filtered: ', filteredMarkers.length)
+  t.ok(filteredMarkers.length > 0)
   t.end()
 })
