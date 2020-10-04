@@ -25,6 +25,7 @@ module.exports = function (id) {
   //
   // Emits
   //   idle
+  //     with a Location
   //     when view is rendered and bound
   //   removed
   //     when model emits "removed"
