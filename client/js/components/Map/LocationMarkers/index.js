@@ -58,6 +58,8 @@ module.exports = function (map) {
     m = new google.maps.Marker({
       position: new google.maps.LatLng(lat, lng),
       icon: _chooseIcon(mloc),
+      // Order markers so that northern markers are always behind.
+      zIndex: Math.floor((100 - lat) * 1048576),
     });
 
     // Store the MarkerLocation for _id, name, and layer info.
