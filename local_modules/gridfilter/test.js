@@ -1,4 +1,5 @@
 const Mapper = require('./Mapper')
+const MarkerGrid = require('./MarkerGrid')
 const test = require('tape')
 
 test('Mapper basic usage', (t) => {
@@ -27,5 +28,10 @@ test('Mapper zero-width range', (t) => {
 test('Mapper inverse', (t) => {
   var m = new Mapper(-4, 0, 4, 6)
   t.strictEqual(m.inverse(8), 4)
+  t.end()
+})
+
+test('MarkerGrid test run', (t) => {
+  t.ok(true)
   t.end()
 })
