@@ -75,12 +75,12 @@ window.initMap = function () {
   // immediately after opening, we use a cooldown timeout.
   var cardCooldown = false;
 
-  mapComp.on('marker_activated', function (location) {
+  mapComp.on('marker_activated', function (mloc) {
     // Open location component.
     // If the marker is the current location, close the current location.
     // To prevent double-clicks from opening and closing the location,
     // close only after cardCooldown period.
-    var locPath = '/locations/' + location._id;
+    var locPath = '/locations/' + mloc._id;
 
     if (!cardCooldown) {
       if (locPath === routes.getCurrentPath()) {
