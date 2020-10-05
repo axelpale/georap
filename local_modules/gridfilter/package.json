@@ -1,0 +1,23 @@
+{
+  "name": "gridfilter",
+  "private": true,
+  "version": "1.0.0",
+  "description": "A tool to group markers spatially",
+  "keywords": [],
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/axelpale/tresdb.git"
+  },
+  "scripts": {
+    "lint": "standard",
+    "test": "tape test.js"
+  },
+  "author": "Akseli Palén <akseli.palen@gmail.com>",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {
+    "tape": "^4.13.3",
+    "standard": "*"
+  }
+}

@@ -15,7 +15,11 @@ var markers = require('./stores/markers');
 var statistics = require('./stores/statistics');
 var tags = require('./stores/tags');
 var users = require('./stores/users');
+var minibus = require('minibus');
 
+// The html contains tresdb object,
+// preset with some config.
+// Let us append the stores to the global namespace.
 tresdb.stores = {
   account: account,
   admin: admin,
@@ -27,6 +31,12 @@ tresdb.stores = {
   tags: tags,
   users: users,
 };
+// Create also a global bus. Spaghetti or not?
+tresdb.bus = minibus.create();
+// DEBUG Bus is easy to listen:
+// tresdb.bus.on(function (ev) {
+//   console.log(ev);
+// });
 
 
 // Routes and main components.
@@ -65,12 +75,12 @@ window.initMap = function () {
   // immediately after opening, we use a cooldown timeout.
   var cardCooldown = false;
 
-  mapComp.on('marker_activated', function (location) {
+  mapComp.on('marker_activated', function (mloc) {
     // Open location component.
     // If the marker is the current location, close the current location.
     // To prevent double-clicks from opening and closing the location,
     // close only after cardCooldown period.
-    var locPath = '/locations/' + location._id;
+    var locPath = '/locations/' + mloc._id;
 
     if (!cardCooldown) {
       if (locPath === routes.getCurrentPath()) {
@@ -103,10 +113,11 @@ window.initMap = function () {
       cardCooldown = false;
     }, COOLDOWN_MSEC);
 
-    mapComp.panForCard(location.getGeom());
+    mapComp.panForLocation(location);
 
     location.on('location_geom_changed', function () {
-      mapComp.panForCard(location.getGeom());
+      // Center on the location.
+      mapComp.panForLocation(location);
     });
     // The Location view will call location.off() when unbound.
   });

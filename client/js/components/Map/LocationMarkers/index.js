@@ -1,6 +1,8 @@
 /* eslint-disable max-lines, max-statements, no-lonely-if */
 /* global google */
 
+// LocationMarkers is a marker manager.
+
 var markerStore = tresdb.stores.markers;
 var account = tresdb.stores.account;
 var getBoundsDiagonal = require('./lib/getBoundsDiagonal');
@@ -40,29 +42,32 @@ module.exports = function (map) {
     return chooseIcon(mloc, zoomLevel, _visitedIds);
   };
 
-  var _addMarker = function (loc) {
+  var _addMarker = function (mloc) {
     // Create marker and add it to the map.
     //
     // Parameters:
-    //   loc
-    //     MarkerLocation
+    //   mloc
+    //     a MarkerLocation.
     // Return
     //   the created marker
     var lng, lat, m;
 
-    lng = loc.geom.coordinates[0];
-    lat = loc.geom.coordinates[1];
+    lng = mloc.geom.coordinates[0];
+    lat = mloc.geom.coordinates[1];
 
     m = new google.maps.Marker({
       position: new google.maps.LatLng(lat, lng),
-      icon: _chooseIcon(loc),
+      icon: _chooseIcon(mloc),
+      // Order markers so that northern markers are always behind.
+      // eslint-disable-next-line no-magic-numbers
+      zIndex: Math.floor((100 - lat) * 1048576),
     });
 
     // Store the MarkerLocation for _id, name, and layer info.
-    m.set('location', loc);
+    m.set('location', mloc);
 
     // Label only the important, higher markers.
-    if (loc.layer < map.getZoom() - 1) {
+    if (mloc.layer < map.getZoom() - 1) {
       labels.ensureLabel(m, map.getMapTypeId(), true);
     }
 
@@ -70,7 +75,7 @@ module.exports = function (map) {
     m.addListener('click', function () {
 
       if (labels.hasLabel(m)) {
-        self.emit('marker_activated', loc);
+        self.emit('marker_activated', mloc);
       } else {
         // First click shows the label
         labels.ensureLabel(m, map.getMapTypeId(), true);
@@ -78,8 +83,8 @@ module.exports = function (map) {
 
     });
 
-    m.set('id', loc._id);
-    _markers[loc._id] = m;
+    m.set('id', mloc._id);
+    _markers[mloc._id] = m;
 
     return m;
   };
@@ -273,7 +278,7 @@ module.exports = function (map) {
   });
 
   map.addListener('zoom_changed', function () {
-    var z, k, m, loc;
+    var z, k, m, mloc;
 
     z = map.getZoom();
 
@@ -282,8 +287,8 @@ module.exports = function (map) {
     for (k in _markers) {
       if (_markers.hasOwnProperty(k)) {
         m = _markers[k];
-        loc = m.get('location');
-        if (loc.layer < z - 1) {
+        mloc = m.get('location');
+        if (mloc.layer < z - 1) {
           // Ensure that label is visible.
           labels.ensureLabel(m, map.getMapTypeId());
         } else {
@@ -293,17 +298,15 @@ module.exports = function (map) {
     }
 
     // Listen zoom level change to update symbols of locations
-    // with all children visible.
+    // when all their children become visible or hidden.
     for (k in _markers) {
       if (_markers.hasOwnProperty(k)) {
         m = _markers[k];
-        loc = m.get('location');
+        mloc = m.get('location');
 
-        if (loc.childLayer === z || loc.childLayer - 1 === z) {
-          // Ensure that the correct marker icon is used.
-          // DEBUG console.log(loc.childLayer, z);
-          m.setIcon(_chooseIcon(loc));
-        }
+        // Ensure that the correct marker icon is used.
+        // They are zoom-sensitive.
+        m.setIcon(_chooseIcon(mloc));
       }
     }
   });

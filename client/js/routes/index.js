@@ -211,6 +211,7 @@ exports.route = function () {
     // the location becomes centered at the visible portion.
     view.once('idle', function (location) {
       exports.emit('location_routed', location);
+      tresdb.bus.emit('location_routed', location);
     });
   });
 

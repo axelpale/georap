@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Circle on canvas</title>
+  <style>
+    canvas {
+      border: 1px solid black;
+    }
+  </style>
+</head>
+
+<body>
+  <div>
+    <canvas id="canvas" width="100" height="100"></canvas>
+  </div>
+  <button id="left">left</button>
+  <button id="right">right</button>
+  <button id="up">up</button>
+  <button id="down">down</button>
+  <button id="larger">larger</button>
+  <button id="smaller">smaller</button>
+  <div id="state"></div>
+<script>
+
+  const getCircle = (x, y, r) => {
+    // List of indices intersecting with the circle when
+    // x, y and r are floats.
+
+    const indices = []
+    const R = Math.ceil(r) + 1
+    const X = Math.floor(x)
+    const Y = Math.floor(y)
+
+    // Go through a quarter, and copy the points within radius
+    // to the other quarters.
+    let i, j, dx, dy
+    for (i = X - R; i < X + R; i += 1) {
+      for (j = Y - R; j < Y + R; j += 1) {
+        // Pixel distance from (x, y).
+        // Pixel midpoint at 0.5 0.5
+        dx = i + 0.5 - x
+        dy = j + 0.5 - y
+        if (dx * dx + dy * dy <= r * r + 1) {
+          indices.push([i, j])
+        }
+      }
+    }
+
+    // For very small circles, ensure there is at least one pixel.
+    indices.push([X, Y])
+
+    return indices
+  }
+
+  const drawPixel = (ctx, x, y) => {
+    const pixel = ctx.createImageData(1, 1)
+    const d = pixel.data
+    d[0] = 0
+    d[1] = 0
+    d[2] = 0
+    d[3] = 255
+    ctx.putImageData(pixel, x, y)
+  }
+
+  const drawCircle = (ctx, x, y, r) => {
+    const indices = getCircle(x, y, r)
+    indices.forEach(pair => {
+      drawPixel(ctx, pair[0], pair[1])
+    })
+  }
+
+  // Canvas setup
+  const canvas = document.getElementById('canvas')
+  const ctx = canvas.getContext('2d')
+
+  // State
+  var state = {
+    x: 50,
+    y: 50,
+    r: 2
+  }
+
+  // Draw
+  const update = () => {
+    ctx.fillStyle = 'white'
+    ctx.fillRect(0, 0, 100, 100)
+    drawCircle(ctx, state.x, state.y, state.r)
+    document.getElementById('state').innerHTML = JSON.stringify(state)
+  }
+
+  const onclick = (id, effect) => {
+    document.getElementById(id).addEventListener('click', (ev) => {
+      effect()
+      update()
+    })
+  }
+
+  onclick('left', () => state.x -= 0.1)
+  onclick('right', () => state.x += 0.1)
+  onclick('up', () => state.y -= 0.1)
+  onclick('down', () => state.y += 0.1)
+  onclick('larger', () => state.r += 0.1)
+  onclick('smaller', () => state.r -= 0.1)
+
+  update()
+
+</script>
+</body>
+</html>

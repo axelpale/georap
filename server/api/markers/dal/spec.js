@@ -1,11 +1,11 @@
 /* global describe, it, beforeEach, before, after */
 /* eslint-disable handle-callback-err */
 
-var db = require('../../services/db');
-var local = require('../../../config/local');
-var tools = require('../../../specs/tools');
+var db = require('../../../services/db');
+var local = require('../../../../config/local');
+var tools = require('../../../../specs/tools');
 var fixture = require('./dal.spec.fixture');
-var unit = require('./dal');
+var unit = require('./index');
 var assert = require('assert');
 
 describe('server.api.markers.dal', function () {

@@ -9,6 +9,7 @@ var markersBase = path.join(local.staticDir, 'images', 'markers');
 var templatesBase = path.join(markersBase, 'templates');
 var symbolsBase = path.join(markersBase, 'symbols');
 
+// Ask client to cache the retrieved icon.
 var sendFileOptions = {
   maxAge: 60000, // ms
 };
@@ -30,7 +31,7 @@ exports.getOrGenerate = function (req, res, next) {
 
   var iconPath = path.join(markersBase, iconName);
 
-  // Serve from cache if the icon already exists.
+  // Serve from cache if the icon file already exists.
   fse.pathExists(iconPath, function (errx, iconExists) {
     if (errx) {
       return next(errx);

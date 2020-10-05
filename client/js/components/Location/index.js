@@ -25,6 +25,7 @@ module.exports = function (id) {
   //
   // Emits
   //   idle
+  //     with a Location
   //     when view is rendered and bound
   //   removed
   //     when model emits "removed"
@@ -97,7 +98,7 @@ module.exports = function (id) {
         return this.hostname !== window.location.hostname;
       }).attr('target', '_blank');
 
-      // Inform view is ready
+      // Inform the view for the location is ready.
       self.emit('idle', _location);
 
     });
