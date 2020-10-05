@@ -1,8 +1,10 @@
 /* eslint-disable max-lines */
 
 // In this version increase:
-// 1. set schema version to 7
-// 2. add text1 and text2 properties for each location
+// 1. set schema version to 8
+// 2. read blacklist
+// 3. write a status property for each user according to the blacklist
+// 4. remove the blacklist
 
 var db = require('../../../server/services/db');
 var schema = require('../../lib/schema');
