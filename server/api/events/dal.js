@@ -338,26 +338,52 @@ exports.createLocationNameChanged = function (params, callback) {
   insertAndEmit(newEvent, callback);
 };
 
-exports.createLocationTagsChanged = function (params, callback) {
+exports.createLocationStatusChanged = function (params, callback) {
   // Parameters:
   //   params:
   //     locationId
   //     locationName
   //     username
-  //     newTags
-  //       array of strings
-  //     oldTags
-  //       array of strings
+  //     newStatus
+  //       string
+  //     oldStatus
+  //       string
 
   var newEvent = {
-    type: 'location_tags_changed',
+    type: 'location_status_changed',
     user: params.username,
     time: timestamp(),
     locationId: params.locationId,
     locationName: params.locationName,
     data: {
-      newTags: params.newTags,
-      oldTags: params.oldTags,
+      newStatus: params.newStatus,
+      oldStatus: params.oldStatus,
+    },
+  };
+
+  insertAndEmit(newEvent, callback);
+};
+
+exports.createLocationTypeChanged = function (params, callback) {
+  // Parameters:
+  //   params:
+  //     locationId
+  //     locationName
+  //     username
+  //     newType
+  //       string
+  //     oldType
+  //       string
+
+  var newEvent = {
+    type: 'location_type_changed',
+    user: params.username,
+    time: timestamp(),
+    locationId: params.locationId,
+    locationName: params.locationName,
+    data: {
+      newType: params.newType,
+      oldType: params.oldType,
     },
   };
 

@@ -34,7 +34,8 @@ module.exports = function (params, callback) {
   //       _id: <ObjectId>,
   //       name: <string>,
   //       geom: <GeoJSON Point>,
-  //       tags: <array of strings>,
+  //       status: <string>,
+  //       type: <string>,
   //       match: <bool>, true if filter matched
   //       hid: <int>, the number of hidden markers under it
   //       hidMatched: <int>, a number of matches in those hidden markers.

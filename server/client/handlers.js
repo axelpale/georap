@@ -6,12 +6,6 @@ var _ = require('lodash');
 var fs = require('fs');
 var path = require('path');
 
-// Backward compatibility for tresdb v8 to prevent major version bump.
-if (!local.tags) {
-  console.warn('No tags configured.');
-  local.tags = [];
-}
-
 // Precompile template and prerender index.html.
 // Include config and other variables for the client.
 var indexHtml = (function precompile() {
@@ -30,7 +24,8 @@ var indexHtml = (function precompile() {
       supportPageContent: local.supportPageContent,
       features: local.features,
       googleMapsKey: local.googleMapsKey,
-      tags: local.tags,
+      locationStatuses: local.locationStatuses,
+      locationTypes: local.locationTypes,
       staticUrl: local.staticUrl,
       uploadUrl: local.uploadUrl,
       uploadSizeLimit: local.uploadSizeLimit,

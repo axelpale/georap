@@ -132,7 +132,6 @@ exports.createLocation = function (loc, username, callback) {
     latitude: loc.latitude,
     longitude: loc.longitude,
     username: username,
-    tags: [],
   }, function (errc, rawLoc) {
     if (errc) {
       return callback(errc);

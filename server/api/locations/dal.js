@@ -3,6 +3,7 @@
 var db = require('../../services/db');
 var layersDal = require('../../../worker/layers/dal');
 var eventsDal = require('../events/dal');
+var config = require('tresdb-config');
 
 var shortid = require('shortid');
 
@@ -32,7 +33,6 @@ exports.createLocation = function (args, callback) {
   //     latitude
   //     longitude
   //     username
-  //     tags
   //   callback
   //     function (err, rawLocation)
   //
@@ -63,7 +63,8 @@ exports.createLocation = function (args, callback) {
       layer: layer,
       name: args.name,
       places: [],
-      tags: args.tags,
+      status: config.locationStatuses[0],
+      type: config.locationTypes[0],
     };
 
     var coll = db.collection('locations');
@@ -107,6 +108,7 @@ exports.create = function (lat, lng, username, callback) {
     latitude: lat,
     longitude: lng,
     username: username,
-    tags: [],
+    status: config.locationStatuses[0],
+    type: config.locationTypes[0],
   }, callback);
 };
