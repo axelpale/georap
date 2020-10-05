@@ -59,6 +59,7 @@ module.exports = function (map) {
       position: new google.maps.LatLng(lat, lng),
       icon: _chooseIcon(mloc),
       // Order markers so that northern markers are always behind.
+      // eslint-disable-next-line no-magic-numbers
       zIndex: Math.floor((100 - lat) * 1048576),
     });
 
