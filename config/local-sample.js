@@ -113,11 +113,25 @@ module.exports = {
     sender: 'admin@example.com',
   },
 
-  // Location tags.
+  // Location classification: status.
+  // The first in the list is used as the default.
+  // The list order defines the button order on the location page.
+  locationStatuses: [
+    'unknown'
+    'buried',
+    'active',
+    'demolished',
+    'guarded',
+    'locked',
+    'walk-in',
+  ],
+
+  // Location classification: type
   // They need to have matching png symbols available
   // under config/images/markers/symbols
-  // The order defines the button order in palettes.
-  tags: [
+  // The list order defines the button order on the location page.
+  locationTypes: [
+    'default',
     'castle',
     'military',
     'residental',
@@ -156,12 +170,6 @@ module.exports = {
     'tunnel',
     'underground',
     'freak',
-    'buried', // status tags
-    'active',
-    'demolished',
-    'guarded',
-    'locked',
-    'walk-in',
   ],
 
   // Register coordinate systems to be used.
