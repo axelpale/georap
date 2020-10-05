@@ -32,7 +32,7 @@ test('Mapper inverse', (t) => {
   t.end()
 })
 
-test('MarkerGrid test run', (t) => {
+test('MarkerGrid smoke test', (t) => {
   // Build a MarkerGrid
   const latLngBounds = {
     east: 10,
@@ -46,7 +46,7 @@ test('MarkerGrid test run', (t) => {
   }
   const grid = new MarkerGrid(latLngBounds, gridSize)
   // Generate points
-  times(25, () => {
+  times(100, () => {
     const lng = 20 * Math.random() - 5
     const lat = 20 * Math.random() - 5
     grid.add({
@@ -55,9 +55,9 @@ test('MarkerGrid test run', (t) => {
       }
     })
   })
-  console.log(grid.toString())
+  // DEBUG console.log(grid.toString())
   const filteredMarkers = grid.getMarkers()
-  console.log('Filtered: ', filteredMarkers.length)
-  t.ok(filteredMarkers.length > 0)
+  const len = filteredMarkers.length
+  t.ok(len > 0 && len < 100, 'Some markers were dropped')
   t.end()
 })

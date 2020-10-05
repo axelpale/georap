@@ -78,7 +78,6 @@ proto.add = function (marker) {
     // The marker reserves a circular area.
     // Determine circle indices. Attach marker to each index.
     const circleIndices = circle.getIndices(x, y, r)
-    console.log(key, ':', JSON.stringify(circleIndices))
     circleIndices.forEach(index => {
       const ci = index[0]
       const cj = index[1]
