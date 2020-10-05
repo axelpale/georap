@@ -93,6 +93,7 @@
     "socket.io-client": "^2.3.0",
     "striptags": "^3.1.0",
     "timestamp": "file:local_modules/timestamp",
+    "tresdb-config": "file:local_modules/tresdb-config",
     "turndown": "^5.0.3",
     "url-join": "^4.0.0",
     "zpad": "^0.5.0"
