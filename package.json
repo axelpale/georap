@@ -34,6 +34,7 @@
     "lint": "npm run lint:client && npm run lint:server && npm run lint:others",
     "lint:client": "eslint \"client/**/*.js\" && echo 'OK'",
     "lint:server": "eslint \"server/**/*.js\" \"worker/**/*.js\" && echo 'OK'",
+    "lint:migration": "eslint \"migration/**/*.js\" && echo 'OK'",
     "lint:others": "eslint \"cli/**/*.js\" && echo 'OK'",
     "mongo": "mongo tresdb",
     "mongo:test": "mongo test",
