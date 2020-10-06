@@ -117,7 +117,7 @@ module.exports = {
   // The first in the list is used as the default.
   // The list order defines the button order on the location page.
   locationStatuses: [
-    'unknown'
+    'unknown',
     'buried',
     'active',
     'demolished',
