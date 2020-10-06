@@ -2,11 +2,12 @@
 
 var c = require('./common');
 
-var v6 = require('./v6');
-var v7 = require('./v7');
-var v8 = require('./v8');
-
 module.exports = {
+
+  'v6': require('./v6'),
+  'v7': require('./v7'),
+  'v8': require('./v8'),
+  'v9': require('./v9'),
 
   'v1': {
     collections: {
@@ -200,9 +201,4 @@ module.exports = {
       }],
     },
   },
-
-  'v6': v6,
-  'v7': v7,
-  'v8': v8,
-
 };

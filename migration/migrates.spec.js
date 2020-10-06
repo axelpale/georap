@@ -222,5 +222,29 @@ describe('migrates.migrate', function () {
 
   });
 
+  describe('v8 to v9', function () {
+
+    beforeEach(function (done) {
+      loadFixture('v8', done);
+    });
+
+    it('should be able to migrate from v8 to v9', function (done) {
+      var targetV = 9;
+      migrates.migrate(targetV, function (err) {
+        assert.ifError(err);
+
+        assertFixtureEqual('config', 'v9', function (err2) {
+          assert.ifError(err2);
+
+          assertFixtureEqual('locations', 'v9', function (err4) {
+            assert.ifError(err4);
+
+            done();
+          });
+        });
+      });
+    });
+
+  });
 
 });
