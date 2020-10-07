@@ -6,26 +6,26 @@ var locations = require('../../stores/locations');
 var EventsModel = require('./Events/Model');
 var EntriesModel = require('./Entries/Model');
 
-module.exports = function (raw) {
+module.exports = function (rawLoc) {
   // Usage:
   //   var l = new Location(fullLocFromServer);
   //
   // Parameters:
-  //   raw
+  //   rawLoc
   //     Optional location properties that override the default.
 
   // Init
   var self = this;
   emitter(self);
 
-  var _events = new EventsModel(raw.events, self);
-  var _entries = new EntriesModel(raw.entries, self);
+  var _events = new EventsModel(rawLoc.events, self);
+  var _entries = new EntriesModel(rawLoc.entries, self);
 
   // Bind
 
   locations.on('location_event', function (ev) {
     // Forget events of other locations
-    if (ev.locationId !== raw._id) {
+    if (ev.locationId !== rawLoc._id) {
       return;
     }
 
@@ -38,17 +38,22 @@ module.exports = function (raw) {
     }
 
     if (ev.type === 'location_name_changed') {
-      raw.name = ev.data.newName;
+      rawLoc.name = ev.data.newName;
       self.emit(ev.type);
     }
 
     if (ev.type === 'location_geom_changed') {
-      raw.geom = ev.data.newGeom;
+      rawLoc.geom = ev.data.newGeom;
       self.emit(ev.type);
     }
 
-    if (ev.type === 'location_tags_changed') {
-      raw.tags = ev.data.newTags;
+    if (ev.type === 'location_status_changed') {
+      rawLoc.status = ev.data.newStatus;
+      self.emit(ev.type);
+    }
+
+    if (ev.type === 'location_type_changed') {
+      rawLoc.type = ev.data.newType;
       self.emit(ev.type);
     }
 
@@ -66,36 +71,36 @@ module.exports = function (raw) {
 
   self.getAltGeom = function (system) {
     // Return coordinates in the given coordinate systems.
-    // Only systems in raw.altGeom are available.
-    return raw.altGeom[system];
+    // Only systems in rawLoc.altGeom are available.
+    return rawLoc.altGeom[system];
   };
 
   self.getCreator = function () {
     // TODO ensure creator is everywhere.
     // Return the username of the creator of the location.
     // Return '' if not known.
-    return raw.creator;
+    return rawLoc.creator;
   };
 
   self.getId = function () {
-    return raw._id;
+    return rawLoc._id;
   };
 
   self.getName = function () {
-    return raw.name;
+    return rawLoc.name;
   };
 
   self.getGeom = function () {
     // Return GeoJSON { coordinates: [<lng>, <lat>] }
-    return raw.geom;
+    return rawLoc.geom;
   };
 
   self.getLongitude = function () {
-    return raw.geom.coordinates[0];
+    return rawLoc.geom.coordinates[0];
   };
 
   self.getLatitude = function () {
-    return raw.geom.coordinates[1];
+    return rawLoc.geom.coordinates[1];
   };
 
   self.getEntries = function () {
@@ -110,27 +115,29 @@ module.exports = function (raw) {
 
   self.getMarkerLocation = function () {
     return {
-      _id: raw._id,
-      name: raw.name,
-      geom: raw.geom,
-      tags: raw.tags,
-      layer: raw.layer,
+      _id: rawLoc._id,
+      name: rawLoc.name,
+      geom: rawLoc.geom,
+      status: rawLoc.status,
+      type: rawLoc.type,
+      layer: rawLoc.layer,
     };
   };
 
   self.getPlaces = function () {
     // Return array of strings
-    return raw.places;
+    return rawLoc.places;
   };
 
-  self.getTags = function () {
-    // Return array of strings
-    return raw.tags;
+  self.getStatus = function () {
+    // Return string
+    return rawLoc.status;
   };
 
-  self.hasTag = function (tag) {
-    return (raw.tags.indexOf(tag) > -1);
-  };
+  self.getType = function () {
+    // Return string
+    return rawLoc.type;
+  }
 
 
   // Public Mutators
@@ -145,7 +152,7 @@ module.exports = function (raw) {
     //     function (err)
     //
     // Server will emit location_geom_changed event
-    locations.setGeom(raw._id, lng, lat, callback);
+    locations.setGeom(rawLoc._id, lng, lat, callback);
   };
 
   self.setName = function (newName, callback) {
@@ -158,23 +165,36 @@ module.exports = function (raw) {
     //     function (err)
     //
     // Server will emit location_name_changed event
-    locations.setName(raw._id, newName, callback);
+    locations.setName(rawLoc._id, newName, callback);
   };
 
-  self.setTags = function (newTags, callback) {
-    // Replaces the current taglist with the new one and saves to server.
+  self.setStatus = function (newStatus, callback) {
+    // Replaces the current status and saves to server.
     //
     // Parameters
-    //   newTags
-    //     array of strings
+    //   newStatus
+    //     string
     //   callback
     //     function (err)
     //
-    // Server will emit location_tags_changed
-    locations.setTags(raw._id, newTags, callback);
+    // Server will emit location_status_changed
+    locations.setStatus(rawLoc._id, newStatus, callback);
+  };
+
+  self.setType = function (newType, callback) {
+    // Replaces the current type and saves to server.
+    //
+    // Parameters
+    //   newType
+    //     string
+    //   callback
+    //     function (err)
+    //
+    // Server will emit location_type_changed
+    locations.setType(rawLoc._id, newType, callback);
   };
 
   self.remove = function (callback) {
-    locations.removeOne(raw._id, callback);
+    locations.removeOne(rawLoc._id, callback);
   };
 };
