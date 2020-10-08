@@ -118,24 +118,25 @@ exports.dropEntryCommentChanged = function (evs) {
   })
 }
 
-exports.mergeTagged = function (evs) {
+exports.mergeSimilar = function (evs) {
   // Params:
   //   evs: most recent first
   //
-  // If next (newer) event is a tagging event from same user and same location
-  // then hide the current premature tag event.
+  // If next (newer) event has same type, from same user, and
+  // same location then show only the last.
+  // Used for example to hide embarrassing repetition of
+  // location status and typing attempts.
   //
-  var tagType = 'location_tags_changed'
   return evs.filter(function (ev, i) {
     var nextEv = evs[i - 1]
     if (nextEv) {
       // Current ev has an adjacent event that is newer
       if (nextEv.user === ev.user) {
         // Both current and next are from same user.
-        if (nextEv.type === tagType && ev.type === tagType) {
-          // Both current and next are tagging events.
+        if (nextEv.type === ev.type) {
+          // Both current and next are similar events.
           if (nextEv.locationId.toString() === ev.locationId.toString()) {
-            // Both are from same location.
+            // Both are on same location.
             return false
           }
         }
