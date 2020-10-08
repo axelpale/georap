@@ -1,27 +1,15 @@
 /* eslint-disable max-statements */
 var icons = require('../lib/icons');
-
-var allStatusTags = [
-  'walk-in',
-  'active',
-  'buried',
-  'demolished',
-  'guarded',
-  'locked',
-];
-
-var isTypeTag = function (t) {
-  return allStatusTags.indexOf(t) === -1;
-};
+var urls = require('tresdb-urls');
 
 module.exports = function (loc, zoomLevel, visitedManager) {
-  var templateName = 'default';
-  var symbol = 'default';
+  // Return an icon specification compatible with Google Maps Markers
 
   // Choose template
+  var templateName = 'default';
 
   var isVisited = visitedManager.isVisited(loc._id);
-  var isDemolished = (loc.tags.indexOf('demolished') !== -1);
+  var isDemolished = loc.status === 'demolished'; // TODO rm inst specificity
   var isParent = loc.childLayer > zoomLevel;
 
   var templateSuffix = '';
@@ -40,18 +28,10 @@ module.exports = function (loc, zoomLevel, visitedManager) {
   }
 
   // Choose symbol
-
-  var typeTag = loc.tags.find(isTypeTag);
-  if (typeTag) {
-    symbol = typeTag;
-  } else {
-    symbol = 'default';
-  }
+  var symbol = loc.type
 
   // Build URL
-
-  var iconName = templateName + '-' + symbol + '.png';
-  var iconUrl = '/api/icons/' + iconName;
+  var iconUrl = urls.iconUrl(templateName, symbol);
 
   var iconObj = icons.marker(iconUrl);
 
