@@ -126,7 +126,7 @@ module.exports = {
       name: 'Irbene',
       points: 0,
       places: [],
-      status: 'walk-in', // new, replaced tags
+      status: 'abandoned', // new, replaced tags
       type: 'default', // new
       text1: '',
       text2: '',

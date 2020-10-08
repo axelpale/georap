@@ -44,6 +44,15 @@ var substeps = [
       loc.status = statusType.status;
       loc.type = statusType.type;
       delete loc.tags;
+
+      // Convert legacy tags
+      if (loc.status === 'walk-in') {
+        loc.status = 'abandoned';
+      }
+      if (loc.type === 'campfire') {
+        loc.type = 'camp';
+      }
+
       return iterNext(null, loc);
     }, next);
   },
