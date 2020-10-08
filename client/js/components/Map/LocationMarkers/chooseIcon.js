@@ -28,7 +28,7 @@ module.exports = function (loc, zoomLevel, visitedManager) {
   }
 
   // Choose symbol
-  var symbol = loc.type
+  var symbol = loc.type;
 
   // Build URL
   var iconUrl = urls.iconUrl(templateName, symbol);

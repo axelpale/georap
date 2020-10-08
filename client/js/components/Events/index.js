@@ -37,16 +37,16 @@ module.exports = function () {
         return;
       }
 
-      var tempEvs = prettyEvents.mergeLocationCreateRename(rawEvents);
-      tempEvs = prettyEvents.mergeEntryCreateEdit(tempEvs);
-      tempEvs = prettyEvents.dropEntryCommentDeleteGroups(tempEvs);
-      tempEvs = prettyEvents.dropEntryCommentChanged(tempEvs);
-      tempEvs = prettyEvents.mergeTagged(tempEvs);
+      var compactEvs = prettyEvents.mergeLocationCreateRename(rawEvents);
+      compactEvs = prettyEvents.mergeEntryCreateEdit(compactEvs);
+      compactEvs = prettyEvents.dropEntryCommentDeleteGroups(compactEvs);
+      compactEvs = prettyEvents.dropEntryCommentChanged(compactEvs);
+      compactEvs = prettyEvents.mergeSimilar(compactEvs);
 
       $list.html(listTemplate({
         pointstamp: pointstamp,
         timestamp: timestamp,
-        events: tempEvs,
+        events: compactEvs,
       }));
     });
 
@@ -58,8 +58,11 @@ module.exports = function () {
           return;
         }
 
-        var tempEvs = prettyEvents.mergeLocationCreateRename(rawEvents);
-        var compactEvs = prettyEvents.mergeEntryCreateEdit(tempEvs);
+        var compactEvs = prettyEvents.mergeLocationCreateRename(rawEvents);
+        compactEvs = prettyEvents.mergeEntryCreateEdit(compactEvs);
+        compactEvs = prettyEvents.dropEntryCommentDeleteGroups(compactEvs);
+        compactEvs = prettyEvents.dropEntryCommentChanged(compactEvs);
+        compactEvs = prettyEvents.mergeSimilar(compactEvs);
 
         $list.html(listTemplate({
           pointstamp: pointstamp,

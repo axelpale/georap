@@ -13,7 +13,8 @@ socket.on('tresdb_event', function (ev) {
   if (ev.type === 'location_created' ||
       ev.type === 'location_removed' ||
       ev.type === 'location_geom_changed' ||
-      ev.type === 'location_tags_changed' ||
+      ev.type === 'location_status_changed' ||
+      ev.type === 'location_type_changed' ||
       ev.type === 'location_name_changed' ||
       ev.type === 'location_entry_created' ||
       ev.type === 'location_entry_changed' ||

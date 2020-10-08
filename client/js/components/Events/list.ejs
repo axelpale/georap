@@ -1,16 +1,3 @@
-<%
-  var translateTag = function (tag) {
-    switch (tag) {
-      case 'walk-in':
-        return 'abandoned';
-      case 'campfire':
-        return 'camp';
-      default:
-        return tag;
-    }
-  };
-%>
-
 <ul id="tresdb-events" class="list-group">
   <% var i, ev, t, name, locUrl, a, b; %>
   <% for (i = 0; i < events.length; i += 1) { %>
@@ -41,8 +28,14 @@
           renamed <a href="<%= locUrl %>"><%= ev.data.oldName %></a> to <a href="<%= locUrl %>"><%= ev.data.newName %></a> <%= timestamp(ev.time) %>
         <% } %>
 
+      <% } else if (t === 'location_status_changed') { %>
+        marked <a href="<%= locUrl %>"><%= name %></a> as <%= ev.data.newStatus %> <%= timestamp(ev.time) %>
+
+      <% } else if (t === 'location_type_changed') { %>
+        marked <a href="<%= locUrl %>"><%= name %></a> as <%= ev.data.newType %> <%= timestamp(ev.time) %>
+
       <% } else if (t === 'location_tags_changed') { %>
-        tagged <a href="<%= locUrl %>"><%= name %></a> as <%= ev.data.newTags.map(translateTag).join(', ') %> <%= timestamp(ev.time) %>
+        tagged <a href="<%= locUrl %>"><%= name %></a> as <%= ev.data.newTags.join(', ') %> <%= timestamp(ev.time) %>
 
       <% } else if (t === 'location_entry_created') { %>
         posted <%= ev.data.isVisit ? 'a visit ' : '' %>to <a href="<%= locUrl %>"><%= name %></a> <%= timestamp(ev.time) %>

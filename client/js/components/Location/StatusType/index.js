@@ -5,7 +5,7 @@ var cap = require('./cap');
 var template = require('./template.ejs');
 var statusTypeTemplate = require('./statusType.ejs');
 var statusFormListTemplate = require('./statusFormList.ejs');
-var tagsFormListTemplate = require('./tagsFormList.ejs');
+var typeFormListTemplate = require('./typeFormList.ejs');
 // Config
 var locationStatuses = tresdb.config.locationStatuses;
 var locationTypes = tresdb.config.locationTypes;
@@ -114,7 +114,7 @@ module.exports = function (location) {
     // Click on a status button
     $statusList.click(function (ev) {
       ev.preventDefault(); // Avoid page reload.
-      var btnValue = ev.target.dataset.status
+      var btnValue = ev.target.dataset.status;
       if (typeof btnValue === 'string' && btnValue.length > 0) {
         submitStatus(btnValue);
       }
@@ -123,7 +123,7 @@ module.exports = function (location) {
     // Click on a type button
     $typeList.click(function (ev) {
       ev.preventDefault(); // Avoid page reload.
-      var btnValue = ev.target.dataset.type
+      var btnValue = ev.target.dataset.type;
       if (typeof btnValue === 'string' && btnValue.length > 0) {
         submitType(btnValue);
       }

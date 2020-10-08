@@ -1,6 +1,6 @@
 <span><img src="<%= toSymbolUrl(currentType) %>" title="<%= currentType %>" width="22" height="40"></span>
-<span><%= cap(currentStatus) %></span> <%
+<span class="tresdb-location-status"><%= cap(currentStatus) %></span> <%
   if (type !== defaultType) {
-    %><span><%= cap(currentType) %></span><%
+    %><span class="tresdb-location-type"><%= cap(currentType) %></span><%
   }
 %>

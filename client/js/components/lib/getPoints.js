@@ -12,7 +12,9 @@ var pointMap = {
   'location_unproved_visit_created': 2,
   'location_name_changed': 0,
   'location_geom_changed': 1,
-  'location_tags_changed': 2,
+  'location_status_changed': 1,
+  'location_type_changed': 1,
+  'location_tags_changed': 2, // legacy
 };
 
 var knownEntryEventTypes = [

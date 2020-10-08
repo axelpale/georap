@@ -137,7 +137,7 @@ module.exports = function (rawLoc) {
   self.getType = function () {
     // Return string
     return rawLoc.type;
-  }
+  };
 
 
   // Public Mutators

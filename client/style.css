@@ -57,7 +57,7 @@ html, body {
   margin-bottom: 1em;
 }
 
-#tresdb-location-tags {
+#tresdb-location-statustype-container {
   margin-bottom: 2.68em;
 }
 
@@ -68,26 +68,24 @@ html, body {
 
 /* Location page END */
 
-/* Tag labels */
+/* Status & Type */
 
-.tresdb-tags {
+.tresdb-location-status,
+.tresdb-location-type {
   font-size: 1.38em;
 }
 
-.tresdb-tags .tresdb-none {
-  opacity: 0.6;
-}
-
-.tresdb-tags-form {
+.tresdb-location-statustype-form {
   margin-bottom: 1.6rem;
 }
 
-.tresdb-tags .tresdb-tag img {
+.tresdb-location-statustype-viewer img {
   margin-top: -4px;
   margin-bottom: -18px;
 }
 
-.tresdb-tags-form button {
+.tresdb-location-status-list button,
+.tresdb-location-type-list button {
   width: 3rem;
   height: 3rem;
   margin: 0.16rem;
@@ -97,17 +95,17 @@ html, body {
   background-color: transparent;
   overflow: hidden;
 }
-.tresdb-tags-form button.tresdb-tag-active {
+.tresdb-location-type-list button.tresdb-type-active {
   border: 1px solid black;
 }
-.tresdb-location-edit-status button {
+.tresdb-location-status-list button {
   margin: 0.16rem;
   padding: 0.38rem;
   border: 0px solid gray;
   border-radius: 0.5rem;
   background-color: transparent;
 }
-.tresdb-location-edit-status button.tresdb-tag-active {
+.tresdb-location-status-list button.tresdb-status-active {
   border: 1px solid black;
 }
 
@@ -115,7 +113,7 @@ html, body {
   font-size: 1.38em;
 }
 
-/* Tag labels END */
+/* Status & Type END */
 
 /* Entries */
 
