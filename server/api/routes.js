@@ -36,6 +36,7 @@ router.use('/account', accountRouter);
 // See https://github.com/auth0/express-jwt
 router.use(jwt({
   secret: local.secret,
+  algorithms: ['HS256'],
   getToken: function fromHeaderOrQuerystring(req) {
     // Copied from https://github.com/auth0/express-jwt#usage
     var header = req.headers.authorization;
