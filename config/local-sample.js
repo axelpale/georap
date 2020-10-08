@@ -118,12 +118,12 @@ module.exports = {
   // The list order defines the button order on the location page.
   locationStatuses: [
     'unknown',
-    'buried',
+    'abandoned',
     'active',
+    'buried',
     'demolished',
     'guarded',
     'locked',
-    'walk-in',
   ],
 
   // Location classification: type
@@ -138,7 +138,7 @@ module.exports = {
     'town',
     'agricultural',
     'farm',
-    'campfire',
+    'camp',
     'natural',
     'tree',
     'rock',
