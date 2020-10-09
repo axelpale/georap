@@ -1,4 +1,4 @@
-/* eslint-disable camelcase, no-magic-numbers */
+/* eslint-disable camelcase, no-magic-numbers, global-require */
 
 var c = require('./common');
 
