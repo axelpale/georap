@@ -5,8 +5,8 @@ var mongodbBackup = require('mongodb-backup');
 var mongodbRestore = require('mongodb-restore');
 var moment = require('moment');
 var path = require('path');
-var local = require('../config/local');
 var fse = require('fs-extra');
+var local = require('tresdb-config');
 
 // Dir name format
 var FORMAT = 'YYYY-MM-DDTHH-mm-ss';
