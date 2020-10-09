@@ -174,3 +174,18 @@ exports.restore = function (name, callback) {
     return exports.restoreFrom(root, cb);
   }
 };
+
+exports.discardFrom = function (dirPath, callback) {
+  // Remove the backup stored at the given directory.
+  // Will ensure that the directory is a real backup directory.
+
+  fse.readdir(dirPath, function (err, files) {
+    if (err) {
+      return callback(err);
+    }
+
+    if (files.length === 1 && files[0] === 'tresdb') {
+      fse.remove(dirPath, callback);
+    }
+  });
+};
