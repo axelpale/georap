@@ -1,5 +1,5 @@
 /* eslint-disable global-require */
-var async = require('async');
+var asyn = require('async');
 
 var v = {
   0: require('./v0v1'),
@@ -53,7 +53,7 @@ exports.run = function (currentVersion, targetVersion, callback) {
   }
 
   // Run steps in series
-  async.eachSeries(steps, function (step, next) {
+  asyn.eachSeries(steps, function (step, next) {
     return step(next);
   }, function (err) {
     // Finally
