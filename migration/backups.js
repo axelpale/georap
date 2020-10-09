@@ -50,7 +50,15 @@ exports.list = function (callback) {
 };
 
 exports.backupTo = function (dirPath, callback) {
-
+  // Stores the database under a directory.
+  // The directory must be dedicated for this backup instance only.
+  //
+  // Parameters:
+  //   dirPath
+  //     absolute path to existing directory
+  //   callback
+  //     function (err)
+  //
   mongodbBackup({
     uri: local.mongo.url,
     root: dirPath,
@@ -84,6 +92,14 @@ exports.backup = function (callback) {
 };
 
 exports.restoreFrom = function (dirPath, callback) {
+  // Reset database state to the backup at the given directory.
+  //
+  // Parameters:
+  //   dirPath
+  //     an absolute path to directory used in backupTo
+  //   callback
+  //     function (err)
+  //
   var root = path.resolve(dirPath, 'tresdb');
 
   fse.exists(root, function (rootDirExists) {
