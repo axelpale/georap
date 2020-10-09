@@ -9,7 +9,10 @@ var jsonParser = require('body-parser').json();
 // Token contents are stored in req.user.
 // See https://github.com/auth0/express-jwt
 var jwt = require('express-jwt');
-var jwtParser = jwt({ secret: local.secret, algorithms: ['HS256'] });
+var jwtParser = jwt({
+  secret: local.secret,
+  algorithms: ['HS256'],
+});
 
 var router = require('express').Router();
 
