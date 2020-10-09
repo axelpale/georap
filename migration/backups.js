@@ -33,6 +33,12 @@ var findLatest = function (callback) {
   });
 };
 
+exports.getBackupDirPathForName = function (name) {
+  // Builds an absolute dir path for a named backup.
+  // The resulting path can be used as backupTo(result, ...)
+  return path.join(local.mongo.backupDir, name);
+};
+
 exports.list = function (callback) {
   // List available backups.
   //
