@@ -100,6 +100,15 @@ describe('iter.updateEach', function () {
     });
   });
 
+  it('should detect thrown error', function (done) {
+    iter.updateEach(collection, function (person, next) {
+      throw new Error('foobar');
+    }, function (err) {
+      assert.equal(err.message, 'foobar');
+      return done();
+    });
+  });
+
   it('should skip nulls', function (done) {
     iter.updateEach(collection, function (person, next) {
       return next(null, null);

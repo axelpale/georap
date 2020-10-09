@@ -47,26 +47,30 @@ exports.updateEach = function (collection, iteratee, callback) {
         id = new ObjectID(id);
       }
 
-      iteratee(doc, function next(iterateeError, updatedDoc) {
-        if (iterateeError) {
-          return eachNext(iterateeError);
-        }
-
-        // Skip null docs, no need to replace.
-        if (updatedDoc === null) {
-          return eachNext(null);
-        }
-
-        // Ensure _id is not replaced by an _id literal.
-        delete updatedDoc._id;
-
-        collection.replaceOne({ _id: id }, updatedDoc, {}, function (err2) {
-          if (err2) {
-            return eachNext(err2);
+      try {
+        iteratee(doc, function next(iterateeError, updatedDoc) {
+          if (iterateeError) {
+            return eachNext(iterateeError);
           }
-          return eachNext(null);
+
+          // Skip null docs, no need to replace.
+          if (updatedDoc === null) {
+            return eachNext(null);
+          }
+
+          // Ensure _id is not replaced by an _id literal.
+          delete updatedDoc._id;
+
+          collection.replaceOne({ _id: id }, updatedDoc, {}, function (err2) {
+            if (err2) {
+              return eachNext(err2);
+            }
+            return eachNext(null);
+          });
         });
-      });
+      } catch (e) {
+        return eachNext(e);
+      }
     }, function afterEachNexts(err3) {
       if (err3) {
         return callback(err3);
