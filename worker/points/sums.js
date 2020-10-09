@@ -6,7 +6,9 @@ exports.sumPoints = function (evs) {
 
   // Filter events. For example, prevent subsequent taggings
   // from accumulating points.
-  var filteredEvs = eventFilters.mergeTagged(evs);
+  // TODO aggregate actions per location and give points based on the aggregate
+  // instead of independent events.
+  var filteredEvs = eventFilters.mergeSimilar(evs);
 
   return filteredEvs.reduce(function (acc, ev) {
     return acc + getPoints(ev);
