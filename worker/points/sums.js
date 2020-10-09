@@ -73,10 +73,16 @@ exports.sumComments = function (evs) {
   }, 0);
 };
 
-exports.sumTags = function (evs) {
+exports.sumClassifications = function (evs) {
   return evs.reduce(function (acc, ev) {
-    if (ev.type === 'location_tags_changed') {
+    if (ev.type === 'location_tags_changed') { // legacy
       return acc + ev.data.newTags.length - ev.data.oldTags.length;
+    }
+    if (ev.type === 'location_status_changed') {
+      return acc + 1;
+    }
+    if (ev.type === 'location_type_changed') {
+      return acc + 1;
     }
     return acc;
   }, 0);
