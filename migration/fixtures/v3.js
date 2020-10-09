@@ -1,4 +1,5 @@
 /* eslint-disable no-magic-numbers */
+// NOTE This file documents the data structure of v3.
 
 var c = require('./common');
 
