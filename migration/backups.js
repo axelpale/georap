@@ -5,8 +5,8 @@ var mongodbBackup = require('mongodb-backup');
 var mongodbRestore = require('mongodb-restore');
 var moment = require('moment');
 var path = require('path');
-var fs = require('fs');
 var local = require('../config/local');
+var fse = require('fs-extra');
 
 // Dir name format
 var FORMAT = 'YYYY-MM-DDTHH-mm-ss';
@@ -18,7 +18,7 @@ var findLatest = function (callback) {
   //   callback
   //     function (err, latestName)
 
-  fs.readdir(local.mongo.backupDir, function (err, items) {
+  fse.readdir(local.mongo.backupDir, function (err, items) {
     if (err) {
       return callback(err);
     }
@@ -40,7 +40,7 @@ exports.list = function (callback) {
   //   callback
   //     function (err, namelist)
 
-  fs.readdir(local.mongo.backupDir, callback);
+  fse.readdir(local.mongo.backupDir, callback);
 };
 
 exports.backupTo = function (dirPath, callback) {
@@ -80,7 +80,7 @@ exports.backup = function (callback) {
 exports.restoreFrom = function (dirPath, callback) {
   var root = path.resolve(dirPath, 'tresdb');
 
-  fs.exists(root, function (rootDirExists) {
+  fse.exists(root, function (rootDirExists) {
     var err2;
 
     if (!rootDirExists) {
