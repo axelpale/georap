@@ -8,7 +8,7 @@ module.exports = {
 
     config: [{
       key: 'schemaVersion',
-      value: 9,  // new
+      value: 9, // new
     }],
 
     entries: [{
@@ -38,7 +38,7 @@ module.exports = {
       data: {
         isVisit: false,
         markdown: null,
-        filepath: '2009/RxRvKSlbl/radar.jpg',  // the sample contains this
+        filepath: '2009/RxRvKSlbl/radar.jpg', // the sample contains this
         mimetype: 'image/jpeg',
         thumbfilepath: '2009/RxRvKSlbl/radar_medium.jpg',
         thumbmimetype: 'image/jpeg',
@@ -80,7 +80,7 @@ module.exports = {
         entryId: c.id('581f166110a1482dd0b7ea02'),
         isVisit: false,
         markdown: null,
-        filepath: '2009/RxRvKSlbl/radar.jpg',  // the sample contains this
+        filepath: '2009/RxRvKSlbl/radar.jpg', // the sample contains this
         mimetype: 'image/jpeg',
         thumbfilepath: '2009/RxRvKSlbl/radar_medium.jpg',
         thumbmimetype: 'image/jpeg',
