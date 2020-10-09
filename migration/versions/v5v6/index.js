@@ -25,13 +25,13 @@ var schema = require('../../lib/schema');
 var iter = require('../../iter');
 var entryToEvent = require('./entryToEvent');
 var getShortId = require('./getShortId');
-var async = require('async');
+var asyn = require('async');
 var clone = require('clone');
 
 var FROM_VERSION = 5;
 var TO_VERSION = FROM_VERSION + 1;
 
-// Steps to be executed with async.eachSeries in the given order.
+// Steps to be executed with asyn.eachSeries in the given order.
 // The parameter 'next' is function (err) that must be called in the end of
 // each step.
 var substeps = [
@@ -404,7 +404,7 @@ exports.run = function (callback) {
   console.log();
   console.log('### Step v' + FROM_VERSION + ' to v' + TO_VERSION + ' ###');
 
-  async.series(substeps, function (err) {
+  asyn.series(substeps, function (err) {
     if (err) {
       console.error(err);
       return callback(err);

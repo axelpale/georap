@@ -1,4 +1,4 @@
-var async = require('async');
+var asyn = require('async');
 var ObjectID = require('mongodb').ObjectID;
 
 exports.updateEach = function (collection, iteratee, callback) {
@@ -39,7 +39,7 @@ exports.updateEach = function (collection, iteratee, callback) {
       return callback(err);
     }
 
-    async.eachSeries(allDocuments, function (doc, eachNext) {
+    asyn.eachSeries(allDocuments, function (doc, eachNext) {
       var id = doc._id;  // Take before modification
 
       // Ensure ObjectID.
