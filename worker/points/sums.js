@@ -1,5 +1,5 @@
 var eventFilters = require('pretty-events');
-var getPoints = require('../../client/js/components/lib/getPoints');
+var getPoints = require('tresdb-points');
 
 exports.sumPoints = function (evs) {
   // Return sum of points of given events.
