@@ -101,7 +101,7 @@ describe('iter.updateEach', function () {
   });
 
   it('should detect thrown error', function (done) {
-    iter.updateEach(collection, function (person, next) {
+    iter.updateEach(collection, function () {
       throw new Error('foobar');
     }, function (err) {
       assert.equal(err.message, 'foobar');
