@@ -1,6 +1,22 @@
 
 var versions = require('./versions');
 var schema = require('./lib/schema');
+var backups = require('./backups');
+
+var BACKUP_DIR = backups.getBackupDirPathForName('migration');
+
+var cleanup = function (callback) {
+  console.log('Discarding the backup files...');
+  backups.discardFrom(BACKUP_DIR, function (errdi) {
+    if (errdi) {
+      console.log('FAILED to discard backup files.');
+      console.error(errdi);
+    } else {
+      console.log('Backup files discarded successfully.');
+    }
+    return callback();
+  });
+};
 
 exports.migrate = function (targetVersion, callback) {
   // Parameters:
@@ -39,22 +55,52 @@ exports.migrate = function (targetVersion, callback) {
 
     if (currentVersion < targetVersion) {
       console.log();
-      console.log('#### Migrating from', currentVersion, 'to',
-                  targetVersion, '####');
+      console.log('#### Backing up the database ####');
+      console.log('If migration fails, the original db state is restored.');
 
-      versions.run(currentVersion, targetVersion, function (err2) {
-
-        if (err2) {
+      backups.backupTo(BACKUP_DIR, function (errb) {
+        if (errb) {
           console.log();
-          console.log('##### Migration FAILED #####');
+          console.log('FAILED to back up the database. Stopping...');
+          return callback(errb);
+        }
 
-          return callback(err2);
-        }  // else
-
+        console.log('Database stored to', BACKUP_DIR);
+        console.log('Ready for migration.');
         console.log();
-        console.log('##### Migration SUCCESS #####');
+        console.log('#### Migrating from', currentVersion, 'to',
+                    targetVersion, '####');
 
-        return callback();
+        versions.run(currentVersion, targetVersion, function (err2) {
+          if (err2) {
+            console.log();
+            console.log('##### Migration FAILED #####');
+
+            console.log('##### Restoring the database #####');
+            backups.restoreFrom(BACKUP_DIR, function (erres) {
+              if (erres) {
+                console.log('FAILED to restore the backup.');
+                console.log('Please inspect the backup files.');
+                console.error(erres);
+                return callback(err2);
+              } // else
+
+              console.log('Database restored successfully.');
+
+              cleanup(function () {
+                return callback(err2); // propagate the original error
+              });
+            });
+            return;
+          } // else
+
+          console.log();
+          console.log('##### Migration SUCCESS #####');
+
+          cleanup(function () {
+            return callback();
+          });
+        });
       });
     } else {
       console.log();
