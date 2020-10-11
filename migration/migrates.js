@@ -6,6 +6,7 @@ var backups = require('./backups');
 var BACKUP_DIR = backups.getBackupDirPathForName('migration');
 
 var cleanup = function (callback) {
+  // Clean up after a migration process.
   console.log('Discarding the backup files...');
   backups.discardFrom(BACKUP_DIR, function (errdi) {
     if (errdi) {
