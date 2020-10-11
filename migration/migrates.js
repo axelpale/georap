@@ -45,7 +45,7 @@ exports.migrate = function (targetVersion, callback) {
   console.log('');
 
   // Get current version.
-  console.log('Checking versions...');
+  console.log('Checking schema version...');
   schema.getVersion(function (err, currentVersion) {
     if (err) {
       return callback(err);
@@ -77,7 +77,7 @@ exports.migrate = function (targetVersion, callback) {
             console.log();
             console.log('##### Migration FAILED #####');
 
-            console.log('##### Restoring the database #####');
+            console.log('Restoring the database...');
             backups.restoreFrom(BACKUP_DIR, function (erres) {
               if (erres) {
                 console.log('FAILED to restore the backup.');
