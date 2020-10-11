@@ -1,6 +1,6 @@
 
 var db = require('../server/services/db');
-var async = require('async');
+var asyn = require('async');
 
 var COLL_NOT_EXISTS_ERROR = 26;
 
@@ -42,7 +42,7 @@ exports.loadFixture = function (fixture, callback) {
     indices = [];
   }
 
-  async.eachOfSeries(colls, function (items, collName, next) {
+  asyn.eachOfSeries(colls, function (items, collName, next) {
 
     // Drop possibly existing collection before population.
     db.get().dropCollection(collName, function (err) {
@@ -79,7 +79,7 @@ exports.loadFixture = function (fixture, callback) {
     }
 
     // Create indices
-    async.eachSeries(indices, function (index, next) {
+    asyn.eachSeries(indices, function (index, next) {
 
       var coll = db.collection(index.collection);
 
