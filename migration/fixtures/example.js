@@ -1,6 +1,6 @@
 /* eslint-disable no-magic-numbers, no-sync, max-lines */
 
-var local = require('../../config/local');
+var config = require('tresdb-config');
 var db = require('../../server/services/db');
 var bcrypt = require('bcryptjs');
 var ObjectId = require('mongodb').ObjectId;
@@ -9,7 +9,7 @@ var id = function (k) {
   return new ObjectId(k);
 };
 
-var admin = local.admin.username;
+var admin = config.admin.username;
 
 var luznaId = id('581f266110a1482dd0b7cd14');
 var rummuId = id('581f166130a1482dd0b7cd15');
@@ -274,8 +274,8 @@ module.exports = {
       {
         _id: id('5867bdf00a5a9e18d7755e4f'),
         admin: true,
-        email: local.admin.email,
-        hash: bcrypt.hashSync(local.admin.password, local.bcrypt.rounds),
+        email: config.admin.email,
+        hash: bcrypt.hashSync(config.admin.password, config.bcrypt.rounds),
         name: admin,
         points: 0,  // points are updated by worker
         status: 'active',
@@ -284,7 +284,7 @@ module.exports = {
         _id: id('5867bdf00b5a9e18d7755e33'),
         admin: false,
         email: 'john.doe@tresdb.fi',
-        hash: bcrypt.hashSync('foobar', local.bcrypt.rounds),
+        hash: bcrypt.hashSync('foobar', config.bcrypt.rounds),
         name: 'johndoe',
         points: 0,
         status: 'deactivated',
