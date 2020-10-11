@@ -38,7 +38,8 @@
     "lint:others": "eslint \"cli/**/*.js\" && echo 'OK'",
     "mongo": "mongo tresdb",
     "mongo:test": "mongo test",
-    "mongod": "mkdir -p .data/db && mkdir -p .data/backups && mongod --auth --dbpath=.data/db",
+    "mongod:init": "mkdir -p .data/db && mkdir -p .data/backups && mongod --dbpath=.data/db",
+    "mongod": "mongod --auth --dbpath=.data/db",
     "reset": "rm -rf .data",
     "worker": "node worker/index.js"
   },
