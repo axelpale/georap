@@ -31,7 +31,7 @@ Everyone has their own secret places. TresDB, a geographical content managing sy
 8/9. Each location can be downloaded as a file and exported to other map software and devices.
 
 ![](doc/90-menu.jpg)<br>
-9/9. And lots of else, like full text search, full export, required administration tools and gamification features.
+9/9. And lots of else, like full text search, full export, member administration tools and gamification features.
 
 Read on for technical details and installation instructions.
 
@@ -57,9 +57,11 @@ Read on for technical details and installation instructions.
 
 TresDB is a web application and thus requires installation to a web server. The web server is required to have Node.js and MongoDB available.
 
-We assume you have Node.js v4.5.0 or later already installed.
+We assume you have Node.js v10 or later and MongoDB v4 or later already installed. See [mongodb.org/downloads](https://www.mongodb.org/downloads) for instructions. For example on macOS:
 
-First, clone the repository:
+    $ brew install mongodb
+
+To install TresDB, first clone the repository:
 
     $ git clone https://github.com/axelpale/tresdb.git
 
@@ -67,58 +69,63 @@ Second, install dependencies:
 
     $ npm install
 
-Third, install MongoDB by following [the instructions](https://www.mongodb.org/downloads). For example, on OS X:
+Fourth, create a MongoDB database named `tresdb` and create necessary database users. For a demo setup or development purposes, just install the defaults:
 
-    $ brew install mongodb
+    $ npm run mongod:init
 
-Fourth, create `tresdb` database and a user for the database. See [MongoDB user setup](#mongodb-user-setup) below for details.
+Do not use the defaults in production. For production, see detailed [MongoDB user setup](#mongodb-user-setup).
 
-Fifth, rename `config/local-sample.js` to `config/local.js` and modify it to match your setting. There, set also the username and password for your default *TresDB* admin user.
+Fifth, rename `config/local-sample.js` to `config/local.js`. The file contains the main configuration for your TresDB app, including the title of the app, Google Maps API key, sender email address, and multiple others. Modify it to match your setting.
 
-Sixth, populate the database with the default admin user and some sample data:
+After successful configuration, the final installation step is to populate the database with initial data. This will install also the user account you just configured.
 
-    $ npm run loadsample
+    $ npm run migrate
 
-Seventh, create the indices:
+Now your TresDB instance is successfully installed and ready to be started.
 
-    $ npm run ensureindices
+## Start up
 
-Finally, run a worker to compute keywords and other data for search:
-
-    $ npm run worker
-
-
-## Quick start
-
-First, after installation, start MongoDB (if it ever refuses to stop, try `killall mongod`):
+First, after installation, start MongoDB in auth mode by running:
 
     $ npm run mongod
 
-Second, build and minify the TresDB client code:
+If it ever refuses to stop, try `killall mongod`. Happens sometimes.
+
+Second, build the TresDB client app code. A bundle will be placed in the static file directory specified in the configuration.
 
     $ npm run build
 
-Third, start the TresDB Node.js server:
+Third, run a worker to compute search keywords and other cached data. Single run is enough for demo and development. In production, you would like to run the worker hourly or so.
+
+    $ npm run worker
+
+Finally, start the TresDB Node.js server on port `3000`. If you need another port, see the configuration file.
 
     $ npm start
 
-Finally, browse to [localhost:3000](http://localhost:3000). You can change the port by editing `config/local.js`.
+Congratulations, all set up! Browse to [localhost:3000](http://localhost:3000) and enjoy.
 
 
 
 ## Environments
 
-TresDB's Node server can be started in 3 environments: `development`, `production`, and `test`. The effects of each env is listed below:
+TresDB's Node server can be started in 3 environments: `development`, `production`, and `test`. Specify the environment to use by setting the `NODE_ENV` environment variable. The effects of each env is listed below:
 
 - `production`: Default.
-- `development`: Same as production. Possible differences in future.
-- `test`: Same as development but a test MongoDB database is used instead of the main one. The test database is cleared and populated with fixture data before each test.
+- `development`: Client app bundles are not minified.
+- `test`: A `test` database is used instead of the main one. The test database is cleared and populated with fixture data before each test.
 
-You specify the environment to use by setting `NODE_ENV`. For example to run server in dev env, use `NODE_ENV=development node server/index.js`. Most `npm run` scripts of TresDB already include this env specification. See `package.json` for details.
+To run the server in the `development` env:
+
+    $ npm run server:development
+
+For other commands, see the scripts below.
 
 
 
 ## Scripts API
+
+These helpful scripts are defined in `package.json`. See it for details.
 
 ### npm start
 
@@ -154,31 +161,17 @@ Requirements: MongoDB is running
 
 Starts the server in the test env. See [Environments](#environments) for details.
 
-### npm run loadsample
-
-Requirements: MongoDB is running
-
-Warning: destroys the database content but leaves mongodb users.
-
-Replaces the database content such as locations and accounts with default content. Indices are created/recreated. You can modify the default content by editing `cli/fixtures/sample.js`.
-
-### npm run ensureindices
-
-Requirements: MongoDB is running
-
-Recreates indices listed in `cli/fixtures/sample.js` without altering content such as locations or accounts.
-
 ### npm run migrate
 
 Requirements: MongoDB is running
 
-Updates the database schema. Detects automatically the current schema version and the migration steps required to match the version in `package.json`. For details about the migration steps, see under `migration/versions/`.
+Cretes or updates the database schema. It detects the current schema version and the migration steps required to match the version in `package.json`. For details about the migration steps, see under `migration/versions/`.
 
 ### npm run backup
 
 Requirements: MongoDB is running
 
-Stores the content and indices as a directory under `.data/backups`. The directory will be named after the time of the backup. The content is stored in BSON format.
+Stores the content and indices as a directory under `.data/backups`. The directory will be named after the timestamp of the backup. The content is stored in BSON format.
 
 ### npm run backup list
 
@@ -210,13 +203,27 @@ Starts mongo client on test database.
 
 ### npm run mongod
 
-Starts MongoDB in auth mode and with the path `.data/db/`. The command creates the path if it does not exist.
+Requirements: `mongod:init` and `mongod:init:users` have been run.
+
+Starts MongoDB in auth mode and with the path `.data/db/`.
+
+### npm run mongod:init
+
+Starts MongoDB first time and without authentication.
+
+### npm run mongod:init:users
+
+Requirements: MongoDB without authentication is running.
+
+Warning: use only for a demo or development. The default passwords are not secure for production.
+
+Creates default MongoDB users for development.
 
 ### npm run reset
 
 Warning: destroys all data in MongoDB, including MongoDB users.
 
-Warning: destroys all backups, logs, and uploads
+Warning: destroys all backups, logs, and uploads.
 
 Clears the project.
 
@@ -258,9 +265,9 @@ Server logs are stored under `.data/logs/` by default. To change the dir, edit `
 
 
 
-## Migration
+## Update and migration
 
-During development, the database schema can and will evolve. For each schema evolution step, the major package version is increased (e.g. from 1.2.3 to 2.0.0). To update old TresDB instances and their databases, we provice programmatic migration steps for each version increment and a script to execute them.
+During development, the database schema can and will evolve. For each schema evolution step, the major package version is increased (e.g. from 1.2.3 to 2.0.0). To update old TresDB instances and their databases, we provide programmatic migration steps for each version increment and a script to execute them.
 
 First, pull the desired TresDB version from git:
 
@@ -278,6 +285,11 @@ Under the hood, the migration script does the following:
 - figures out the required database schema version
 - deduces required migration steps, specified under `migration/versions/`
 - updates the database by executing the steps.
+
+To update the client and server, rebuild and restart:
+
+    $ npm run build
+    $ npm run start
 
 
 
@@ -303,10 +315,9 @@ To restore a specific snapshot:
 
 The backups are stored under `.data/backups` by default. To change this, modify `mongo.backupDir` in `config/local.js`. To remove a backup, remove its directory, e.g. `$ rm -rf .data/backups/2016-12-31T23-59-59`.
 
-After restoring it is often necessary to run migrate, ensureindices, and worker:
+After restoring it is often necessary to run migrate and worker:
 
     $ npm run migrate
-    $ npm run ensureindices
     $ npm run worker
 
 
@@ -363,7 +374,7 @@ or alternatively just `$ npm run mongod`.
 
 ## Production
 
-Here are some notes and tips for putting a TresDB instance into production.
+Here are some notes and tips for putting your TresDB app into production.
 
 
 ### Check dependencies for vulnerabilities
@@ -395,7 +406,6 @@ Here are some notes and tips for putting a TresDB instance into production.
 - [Morgan](https://github.com/expressjs/morgan): request logging
 - [Express](https://expressjs.com/): server framework
 - [Node.js](https://nodejs.org/en/): runtime environment
-- [Monk](https://github.com/Automattic/monk): database connection layer
 - [MongoDB](https://docs.mongodb.com/manual/): document database
 
 Development tools:
@@ -414,9 +424,9 @@ For production, we recommend:
 
 # Testing
 
-First, we need to create a database `test` for tests and a database user. See [MongoDB user setup](#mongodb-user-setup) instructions below.
+First, we need to create a database `test` for tests and a database user. See [MongoDB user setup](#mongodb-user-setup) for instructions.
 
-After initial setup, fire up mongod:
+After creation, fire up mongod:
 
     $ npm run mongod
 
@@ -429,6 +439,9 @@ Finally, open yet another terminal session and run the full test suite:
     $ npm test
 
 See `package.json` for test suite details.
+
+
+## Populate from a remote database
 
 To clone a collection from a remote production database for local testing, following approach can be used. First we forward a local port to the remote database. Often the remote database cannot be accessed directly and therefore a SSH tunnel is needed.
 
@@ -448,6 +461,7 @@ Finally, a bit of cleanup remains. We close the tunnel and remove the temp file:
 
 As a result, our local locations collection is filled with locations from a production server.
 
+
 ## Testing error handling
 
 There is two hidden URLs that cause an internal server error. The URLs are available for admin user only and thus require token authorisation. For now, you can find your token from the download URLs of Export feature.
@@ -457,11 +471,12 @@ There is two hidden URLs that cause an internal server error. The URLs are avail
 
 
 
-# Branching strategy
+# Git branching strategy
 
 We have a single `master` branch. New features are developed in `feature-somefeatname` like branches and then merged to the master via a pull request.
 
 Small updates to documentation are allowed to be done directly to `master`.
+
 
 ## Versioning
 
@@ -481,4 +496,4 @@ The issue labels follow [Drupal's issue priority levels](https://www.drupal.org/
 
 ## License
 
-MIT
+[MIT](LICENSE)
