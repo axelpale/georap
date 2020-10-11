@@ -19,7 +19,7 @@ exports.getVersion = function (callback) {
   //         err
   //           null if no errors
   //         version
-  //           integer
+  //           integer, -1 if no schema found.
 
   var configColl = db.collection('config');
 
@@ -32,8 +32,20 @@ exports.getVersion = function (callback) {
       return callback(null, doc.value);
     }  // else
 
-    // No schema found. Must be v1.
-    return callback(null, 1);
+    // No schema found. Schema v1 had no config. Test for v1 by users.
+    db.collection('users').findOne({}, function (errr, userdoc) {
+      if (errr) {
+        return callback(errr);
+      }
+
+      if (userdoc) {
+        return callback(null, 1);
+      }
+
+      // No schema found and no user found. We must conclude that
+      // the db is empty.
+      return callback(null, -1);
+    });
   });
 };
 
