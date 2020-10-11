@@ -15,7 +15,7 @@ tresdb.createUser({
   roles: ['readWrite']
 });
 testdb = admin.getSiblingDB('test');
-tresdb.createUser({
+testdb.createUser({
   user: 'testuser',
   pwd: 'testuserpwd',
   roles: ['readWrite']
