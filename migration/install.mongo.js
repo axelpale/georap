@@ -1,20 +1,19 @@
-conf = require('../config/local'); // does not work, at least with old shell
 conn = new Mongo();
 admin = conn.getDB('admin');
 admin.createUser({
-  user: 'foodmin',
-  pwd: 'barword',
+  user: 'mongoadmin',
+  pwd: 'mongoadminpwd',
   roles: ['userAdminAnyDatabase']
 });
 tresdb = admin.getSiblingDB('tresdb');
 tresdb.createUser({
-  user: 'fooser',
-  pwd: 'barword',
+  user: 'mongouser',
+  pwd: 'mongouserpwd',
   roles: ['readWrite']
 });
 testdb = admin.getSiblingDB('test');
 tresdb.createUser({
-  user: 'tester',
-  pwd: 'barword',
+  user: 'testuser',
+  pwd: 'testuserpwd',
   roles: ['readWrite']
 });
