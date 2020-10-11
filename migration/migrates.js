@@ -2,6 +2,8 @@
 var versions = require('./versions');
 var schema = require('./lib/schema');
 var backups = require('./backups');
+var loadFixture = require('./lib/loadFixture');
+var initialStateFixture = require('./fixtures/initial');
 
 var BACKUP_DIR = backups.getBackupDirPathForName('migration');
 
@@ -15,6 +17,19 @@ var cleanup = function (callback) {
     } else {
       console.log('Backup files discarded successfully.');
     }
+    return callback();
+  });
+};
+
+var initEmptyDatabase = function (callback) {
+  console.log('Resetting database...');
+  loadFixture(initialStateFixture, function (err) {
+    if (err) {
+      console.error('Loading initial data failed.');
+      return callback(err)
+    }
+
+    console.log('Database reset successfully.');
     return callback();
   });
 };
@@ -49,7 +64,20 @@ exports.migrate = function (targetVersion, callback) {
   schema.getVersion(function (err, currentVersion) {
     if (err) {
       return callback(err);
-    }  // else
+    } // else
+
+    if (currentVersion === -1) {
+      // Database empty. Init the database.
+      console.log('  No schema found. Database is empty.');
+      return initEmptyDatabase(function (errin) {
+        if (errin) {
+          console.log('#### Migration FAILED ####');
+          return callback(errin);
+        }
+        console.log('#### Migration SUCCESS ####');
+        return callback();
+      });
+    }
 
     console.log('  Current DB schema version:', currentVersion);
     console.log('  Desired DB schema version:', targetVersion);
