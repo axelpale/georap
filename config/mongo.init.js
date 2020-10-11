@@ -1,3 +1,6 @@
+// WARNING This script creates MongoDB users and their permissions
+// as required by TresDB development. Do not use this script in production
+// without careful modification of all the credentials below.
 conn = new Mongo();
 admin = conn.getDB('admin');
 admin.createUser({
