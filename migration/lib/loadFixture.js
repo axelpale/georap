@@ -1,10 +1,10 @@
 
-var db = require('../server/services/db');
+var db = require('../../server/services/db');
 var asyn = require('async');
 
 var COLL_NOT_EXISTS_ERROR = 26;
 
-exports.loadFixture = function (fixture, callback) {
+module.exports = function (fixture, callback) {
   // Load fixture into the database. Existing collections in the DB
   // will be dropped.
   //

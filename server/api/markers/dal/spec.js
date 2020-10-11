@@ -3,7 +3,7 @@
 
 var db = require('../../../services/db');
 var local = require('../../../../config/local');
-var tools = require('../../../../specs/tools');
+var loadFixture = require('../../../../migration/lib/loadFixture');
 var fixture = require('./dal.spec.fixture');
 var unit = require('./index');
 var assert = require('assert');
@@ -28,7 +28,7 @@ describe('server.api.markers.dal', function () {
   describe('.getFiltered', function () {
 
     beforeEach(function (done) {
-      tools.loadFixture(fixture, done);
+      loadFixture(fixture, done);
     });
 
     it('should find non-deleted in az order by default', function (done) {
