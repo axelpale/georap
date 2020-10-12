@@ -26,7 +26,7 @@ var initEmptyDatabase = function (callback) {
   loadFixture(initialStateFixture, function (err) {
     if (err) {
       console.error('Loading initial data failed.');
-      return callback(err)
+      return callback(err);
     }
 
     console.log('Database reset successfully.');

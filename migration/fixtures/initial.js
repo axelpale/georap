@@ -32,7 +32,7 @@ module.exports = {
         name: admin,
         points: 0, // points are updated by worker
         status: 'active',
-      }
+      },
     ],
   },
   indices: db.INDICES,
