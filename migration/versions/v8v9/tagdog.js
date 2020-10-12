@@ -50,3 +50,13 @@ exports.tagsDiffForEvent = function () {
   // Let it be. Just begin to use location_status_changed and type_changed
   // from now on. Do not mess with the history if not absolutely necessary.
 };
+
+exports.upgradeLegacyTag = function (tag) {
+  if (tag === 'walk-in') {
+    return 'abandoned';
+  }
+  if (tag === 'campfire') {
+    return 'camp';
+  }
+  return tag;
+};
