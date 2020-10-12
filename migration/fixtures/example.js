@@ -3,17 +3,12 @@
 var config = require('tresdb-config');
 var db = require('../../server/services/db');
 var bcrypt = require('bcryptjs');
-var ObjectId = require('mongodb').ObjectId;
-
-var id = function (k) {
-  return new ObjectId(k);
-};
 
 var admin = config.admin.username;
 
-var luznaId = id('581f266110a1482dd0b7cd14');
-var rummuId = id('581f166130a1482dd0b7cd15');
-var irbeneId = id('581f166110a1482dd0b7cd13');
+var luznaId = db.id('581f266110a1482dd0b7cd14');
+var rummuId = db.id('581f166130a1482dd0b7cd15');
+var irbeneId = db.id('581f166110a1482dd0b7cd13');
 
 var luznaBaby = 'rkVdAtjYg';
 var rummuBaby = 'ByX6eQoYe';
@@ -29,14 +24,14 @@ module.exports = {
   collections: {
     config: [
       {
-        _id: id('58092312bbba430a35fb4139'),
+        _id: db.id('58092312bbba430a35fb4139'),
         key: 'schemaVersion',
         value: 5,
       },
     ],
     entries: [
       {
-        _id: id('58092312bbba420a35fb4201'),
+        _id: db.id('58092312bbba420a35fb4201'),
         deleted: false,
         locationId: irbeneId,
         time: '2009-09-04T23:44:21.000Z',
@@ -52,7 +47,7 @@ module.exports = {
         },
       },
       {
-        _id: id('58092312bebc430a35fb4102'),
+        _id: db.id('58092312bebc430a35fb4102'),
         deleted: false,
         locationId: irbeneId,
         type: 'location_entry',
@@ -70,7 +65,7 @@ module.exports = {
     ],
     events: [
       {
-        _id: id('58092332bcba430a35fb2345'),
+        _id: db.id('58092332bcba430a35fb2345'),
         locationId: luznaId,
         locationName: luznaBaby,
         type: 'location_name_changed',
@@ -82,7 +77,7 @@ module.exports = {
         },
       },
       {
-        _id: id('58092332bcba430a35fb3423'),
+        _id: db.id('58092332bcba430a35fb3423'),
         locationId: luznaId,
         locationName: luznaBaby,
         type: 'location_created',
@@ -94,7 +89,7 @@ module.exports = {
         },
       },
       {
-        _id: id('58092332bcba430a35fb4105'),
+        _id: db.id('58092332bcba430a35fb4105'),
         locationId: rummuId,
         locationName: rummuName,
         type: 'location_removed',
@@ -103,7 +98,7 @@ module.exports = {
         data: {},
       },
       {
-        _id: id('58092312bcba430a35fb4104'),
+        _id: db.id('58092312bcba430a35fb4104'),
         locationId: rummuId,
         locationName: rummuBaby,
         type: 'location_name_changed',
@@ -115,7 +110,7 @@ module.exports = {
         },
       },
       {
-        _id: id('58092312bbba430a35fb4103'),
+        _id: db.id('58092312bbba430a35fb4103'),
         locationId: rummuId,
         locationName: rummuBaby,
         type: 'location_created',
@@ -127,14 +122,14 @@ module.exports = {
         },
       },
       {
-        _id: id('58092312bbba430a35fb4102'),
+        _id: db.id('58092312bbba430a35fb4102'),
         locationId: irbeneId,
         locationName: irbeneName,
         type: 'location_entry_created',
         user: admin,
         time: '2009-10-05T12:23:34.000Z',
         data: {
-          entryId: id('58092312bebc430a35fb4102'),
+          entryId: db.id('58092312bebc430a35fb4102'),
           isVisit: true,
           markdown: null,
           filepath: '2009/RxRvKSlbl/radar.jpg',
@@ -144,14 +139,14 @@ module.exports = {
         },
       },
       {
-        _id: id('58092312bbba430a35fb4101'),
+        _id: db.id('58092312bbba430a35fb4101'),
         locationId: irbeneId,
         locationName: irbeneName,
         type: 'location_entry_created',
         user: admin,
         time: '2009-09-04T23:44:21.000Z',
         data: {
-          entryId: id('58092312bbba420a35fb4201'),
+          entryId: db.id('58092312bbba420a35fb4201'),
           isVisit: false,
           markdown: irbeneInfo,
           filepath: null,
@@ -161,7 +156,7 @@ module.exports = {
         },
       },
       {
-        _id: id('58092312bcba430a35fb3106'),
+        _id: db.id('58092312bcba430a35fb3106'),
         locationId: irbeneId,
         locationName: irbeneBaby,
         type: 'location_name_changed',
@@ -173,7 +168,7 @@ module.exports = {
         },
       },
       {
-        _id: id('58092312bbba430a35fb4100'),
+        _id: db.id('58092312bbba430a35fb4100'),
         locationId: irbeneId,
         locationName: irbeneBaby,
         type: 'location_created',
@@ -272,7 +267,7 @@ module.exports = {
     ],
     users: [
       {
-        _id: id('5867bdf00a5a9e18d7755e4f'),
+        _id: db.id('5867bdf00a5a9e18d7755e4f'),
         admin: true,
         email: config.admin.email,
         hash: bcrypt.hashSync(config.admin.password, config.bcrypt.rounds),
@@ -281,7 +276,7 @@ module.exports = {
         status: 'active',
       },
       {
-        _id: id('5867bdf00b5a9e18d7755e33'),
+        _id: db.id('5867bdf00b5a9e18d7755e33'),
         admin: false,
         email: 'john.doe@tresdb.fi',
         hash: bcrypt.hashSync('foobar', config.bcrypt.rounds),
