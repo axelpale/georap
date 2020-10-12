@@ -1,5 +1,8 @@
 /* eslint-disable no-magic-numbers, no-sync, max-lines */
 
+// This fixture is aimed to be used as a demo and for experimenting
+// in development.
+
 var config = require('tresdb-config');
 var db = require('../../server/services/db');
 var bcrypt = require('bcryptjs');
@@ -18,15 +21,13 @@ var luznaName = 'Luzna';
 var rummuName = 'Rummu';
 var irbeneName = 'Irbene';
 
-var irbeneInfo = 'It is a soviet union ghost town.';
-
 module.exports = {
   collections: {
     config: [
       {
         _id: db.id('58092312bbba430a35fb4139'),
         key: 'schemaVersion',
-        value: 5,
+        value: 9,
       },
     ],
     entries: [
@@ -39,7 +40,7 @@ module.exports = {
         user: admin,
         data: {
           isVisit: false,
-          markdown: irbeneInfo,
+          markdown: 'It is a soviet union ghost town.',
           filepath: null,
           mimetype: null,
           thumbfilepath: null,
@@ -190,7 +191,8 @@ module.exports = {
           coordinates: [21.89747, 57.59686],
         },
         deleted: false,
-        tags: ['military'],
+        status: 'unknown',
+        type: 'military',
         text1: '',
         text2: '',
         places: ['Tārgale parish', 'Ventspils Municipality', 'Latvia'],
@@ -205,7 +207,8 @@ module.exports = {
           coordinates: [21.857705, 57.55341],
         },
         deleted: false,
-        tags: ['walk-in', 'town'],
+        status: 'abandoned',
+        type: 'town',
         text1: '',
         text2: '',
         places: ['Irbene', 'Ances pagasts', 'Ventspils Municipality', 'Latvia'],
@@ -220,7 +223,8 @@ module.exports = {
           coordinates: [24.19462, 59.22667],
         },
         deleted: true,
-        tags: [],
+        status: 'unknown',
+        type: 'default',
         text1: '',
         text2: '',
         places: ['Rummu', 'Vasalemma Parish', 'Harju County', 'Estonia'],
