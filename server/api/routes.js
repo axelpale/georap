@@ -49,8 +49,7 @@ router.use(jwt({
   },
 }));
 
-// Blacklist.
-// Check if user is banned by finding user id from a blacklist.
+// Check if user is banned.
 router.use(function (req, res, next) {
 
   // Check this by querying the database, because it's SIMPLE.
@@ -61,10 +60,13 @@ router.use(function (req, res, next) {
       return next(err);
     }
 
-    if (storedUser.status === 'active') {
-      return next();
+    if (storedUser) {
+      if (storedUser.status === 'active') {
+        return next();
+      }
     }
 
+    // User does not exist or is banned
     return res.sendStatus(status.FORBIDDEN);
   });
 });
