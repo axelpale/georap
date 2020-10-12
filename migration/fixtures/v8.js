@@ -77,6 +77,16 @@ module.exports = {
       user: 'admin',
     }, {
       data: {
+        newTags: ['walk-in'],
+        oldTags: [],
+      },
+      locationId: c.irbeneId,
+      locationName: 'Irbene',
+      time: '2009-09-04T23:45:20.000Z',
+      type: 'location_tags_changed',
+      user: 'admin',
+    }, {
+      data: {
         entryId: c.id('581f166110a1482dd0b7ea02'),
         isVisit: false,
         markdown: null,

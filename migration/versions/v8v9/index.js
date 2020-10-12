@@ -46,14 +46,28 @@ var substeps = [
       delete loc.tags;
 
       // Convert legacy tags
-      if (loc.status === 'walk-in') {
-        loc.status = 'abandoned';
-      }
-      if (loc.type === 'campfire') {
-        loc.type = 'camp';
-      }
+      loc.status = tagdog.upgradeLegacyTag(loc.status);
+      loc.type = tagdog.upgradeLegacyTag(loc.type);
 
       return iterNext(null, loc);
+    }, next);
+  },
+
+  function replaceLegacyTags(next) {
+    console.log('3. Replace legacy tags');
+
+    var coll = db.collection('events');
+
+    iter.updateEach(coll, function (origEv, iterNext) {
+      if (origEv.type === 'location_tags_changed') {
+        var newEv = clone(origEv);
+        newEv.data.newTags = newEv.data.newTags.map(tagdog.upgradeLegacyTag);
+        newEv.data.oldTags = newEv.data.oldTags.map(tagdog.upgradeLegacyTag);
+        return iterNext(null, newEv);
+      } // else
+
+      // Skip this doc
+      return iterNext(null, null);
     }, next);
   },
 

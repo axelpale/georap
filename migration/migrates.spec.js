@@ -258,7 +258,11 @@ describe('migrates.migrate', function () {
           assertFixtureEqual('locations', 'v9', function (err4) {
             assert.ifError(err4);
 
-            done();
+            assertFixtureEqual('events', 'v9', function (err5) {
+              assert.ifError(err5);
+
+              done();
+            });
           });
         });
       });
