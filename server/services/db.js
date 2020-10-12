@@ -1,7 +1,9 @@
 // Singleton wrapper around mongodb
 
 var local = require('../../config/local');
-var mongoClient = require('mongodb').MongoClient;
+var mongodb = require('mongodb');
+var mongoClient = mongodb.MongoClient;
+var ObjectId = mongodb.ObjectId;
 
 var db = null;
 
@@ -57,6 +59,10 @@ exports.INDICES = [
     options: { unique: true },
   },
 ];
+
+exports.id = function (k) {
+  return new ObjectId(k);
+};
 
 exports.init = function (mongoUrl, callback) {
   // Usage:
