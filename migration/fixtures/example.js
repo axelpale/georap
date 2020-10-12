@@ -227,44 +227,6 @@ module.exports = {
         layer: 2,
       },
     ],
-    payments: [
-      // Oldest first
-      {
-        // Deposit of 100.00 euros
-        _id: id('5867bdf00a5a9e18d6655e3e'),
-        account: admin,
-        author: admin,
-        balanceAfter: 10000,
-        balanceBefore: 0,
-        time: '2009-07-29T15:01:55.000Z',
-        type: 'deposit',
-        data: {},
-      },
-      {
-        // Monthly fee, e.g. 5.00. Taken from the account automatically.
-        account: admin,
-        author: admin,
-        balanceAfter: 9500,
-        balanceBefore: 10000,
-        time: '2009-07-29T15:01:57.000Z',
-        type: 'monthly_fee',
-        data: {},
-      },
-      {
-        // Correction, 100.00 should have been 10.00
-        account: admin,
-        author: admin,
-        balanceAfter: 500,
-        balanceBefore: 9500,
-        time: '2009-07-29T15:13:25.000Z',
-        type: 'correction',
-        data: {
-          description: 'Oops',
-          // Refers to the deposit
-          paymentId: id('5867bdf00a5a9e18d6655e3e'),
-        },
-      },
-    ],
     users: [
       {
         _id: db.id('5867bdf00a5a9e18d7755e4f'),
