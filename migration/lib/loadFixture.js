@@ -6,7 +6,7 @@ var COLL_NOT_EXISTS_ERROR = 26;
 
 module.exports = function (fixture, callback) {
   // Load fixture into the database. Existing collections in the DB
-  // will be dropped.
+  // will be dropped. Documents are added in the order they are defined.
   //
   // Parameters:
   //   fixture
