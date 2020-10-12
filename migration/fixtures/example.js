@@ -21,6 +21,8 @@ var irbeneBaby = 'SkdplmsFx';
 var luznaName = 'Luzna';
 var rummuName = 'Rummu';
 var irbeneName = 'Irbene';
+// Duplicated content
+var irbeneInfo = 'It is a soviet union ghost town.';
 
 module.exports = {
   collections: {
@@ -42,7 +44,7 @@ module.exports = {
         user: admin,
         data: {
           isVisit: false,
-          markdown: 'It is a soviet union ghost town.',
+          markdown: irbeneInfo,
           filepath: null,
           mimetype: null,
           thumbfilepath: null,
