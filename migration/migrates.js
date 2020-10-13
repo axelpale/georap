@@ -104,23 +104,10 @@ exports.migrate = function (targetVersion, callback) {
           if (err2) {
             console.log();
             console.log('##### Migration FAILED #####');
-
-            console.log('Restoring the database...');
-            backups.restoreFrom(BACKUP_DIR, function (erres) {
-              if (erres) {
-                console.log('FAILED to restore the backup.');
-                console.log('Please inspect the backup files.');
-                console.error(erres);
-                return callback(err2);
-              } // else
-
-              console.log('Database restored successfully.');
-
-              cleanup(function () {
-                return callback(err2); // propagate the original error
-              });
-            });
-            return;
+            console.log('Data might be in a corrupted state.');
+            console.log('Restore the database by:');
+            console.log('  npm run migrate:rollback');
+            return callback(err2);
           } // else
 
           console.log();
