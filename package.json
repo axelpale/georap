@@ -24,6 +24,7 @@
     "ensureindices": "node cli/ensureindices.js",
     "migrate": "node cli/migrate.js",
     "migrate:example": "node migration/loadExample.js",
+    "migrate:rollback": "node migration/rollback.js",
     "backup": "node cli/backup.js",
     "restore": "node cli/restore.js",
     "test": "npm run lint && npm run test:parsekml",
