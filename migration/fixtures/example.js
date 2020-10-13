@@ -212,7 +212,11 @@ module.exports = {
         text1: '',
         text2: '',
         places: ['Irbene', 'Ances pagasts', 'Ventspils Municipality', 'Latvia'],
+        // Latent properties, updated by worker:
+        points: 18,
         layer: 1,
+        isLayered: true,
+        childLayer: 9,
       },
       {
         // A location close to the first one.
@@ -229,7 +233,11 @@ module.exports = {
         text1: '',
         text2: '',
         places: ['Tārgale parish', 'Ventspils Municipality', 'Latvia'],
+        // Latent properties, updated by worker:
+        points: 11,
         layer: 9,
+        isLayered: true,
+        childLayer: 0,
       },
       {
         // A deleted location
@@ -246,7 +254,10 @@ module.exports = {
         text1: '',
         text2: '',
         places: ['Rummu', 'Vasalemma Parish', 'Harju County', 'Estonia'],
+        // Latent properties, updated by worker:
         layer: 2,
+        childLayer: 0,
+        isLayered: false,
       },
     ],
     users: [
