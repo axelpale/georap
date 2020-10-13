@@ -40,14 +40,14 @@ var substeps = [
     iter.updateEach(coll, function (origLoc, iterNext) {
       var loc = clone(origLoc);
       var tags = loc.tags;
+
+      // Upgrade old tags before tagdog, to match valid tags in config.
+      var tags = loc.tags.map(tagdog.upgradeLegacyTag);
+
       var statusType = tagdog.tagsToStatusType(tags);
       loc.status = statusType.status;
       loc.type = statusType.type;
       delete loc.tags;
-
-      // Convert legacy tags
-      loc.status = tagdog.upgradeLegacyTag(loc.status);
-      loc.type = tagdog.upgradeLegacyTag(loc.type);
 
       return iterNext(null, loc);
     }, next);
