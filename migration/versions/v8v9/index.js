@@ -42,7 +42,7 @@ var substeps = [
       var tags = loc.tags;
 
       // Upgrade old tags before tagdog, to match valid tags in config.
-      var tags = loc.tags.map(tagdog.upgradeLegacyTag);
+      tags = loc.tags.map(tagdog.upgradeLegacyTag);
 
       var statusType = tagdog.tagsToStatusType(tags);
       loc.status = statusType.status;

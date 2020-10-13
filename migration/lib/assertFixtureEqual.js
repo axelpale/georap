@@ -1,4 +1,4 @@
-/* eslint-disable no-loop-func */
+/* eslint-disable no-loop-func, max-statements */
 // A tool to test if a collection is equal to a fixture.
 // Currently this can test only collections with single document.
 
