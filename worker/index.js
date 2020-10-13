@@ -1,7 +1,7 @@
 /* eslint-disable global-require */
 // This worker is meant to be invoked as a cronjob once in a while.
 //
-// The responsibilities of the worker include:
+// The responsibilities of the worker include but are not limited to:
 // - updating scene points
 // - updating text fields for search
 //
