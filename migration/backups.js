@@ -1,8 +1,5 @@
 // Backup or restore the database to/from .data/backups/ or specified path
 //
-
-var mongodbBackup = require('mongodb-backup');
-var mongodbRestore = require('mongodb-restore');
 var moment = require('moment');
 var path = require('path');
 var fse = require('fs-extra');
@@ -53,23 +50,23 @@ exports.backupTo = function (dirPath, callback) {
   // Stores the database under a directory.
   // The directory must be dedicated for this backup instance only.
   //
+  // WARNING You must stop mongod (mongo server).
+  //   If mongod is running while backing up
+  //   the backup might become corrupted.
+  //
   // Parameters:
   //   dirPath
   //     absolute path to existing directory
   //   callback
   //     function (err)
   //
-  mongodbBackup({
-    uri: local.mongo.url,
-    root: dirPath,
-    parser: 'bson',
-    callback: function (err) {
-      if (err) {
-        return callback(err);
-      }  // else
 
-      return callback(null, dirPath);
-    },
+  fse.copy(local.mongo.dbDir, dirPath, function (err) {
+    if (err) {
+      return callback(err);
+    }  // else
+
+    return callback(null, dirPath);
   });
 };
 
@@ -100,30 +97,25 @@ exports.restoreFrom = function (dirPath, callback) {
   //   callback
   //     function (err)
   //
-  var root = path.resolve(dirPath, 'tresdb');
 
-  fse.exists(root, function (rootDirExists) {
-    var err2;
+  fse.pathExists(dirPath, function (err, dirExists) {
+    if (err) {
+      return callback(err);
+    }
 
-    if (!rootDirExists) {
-      err2 = new Error('No backups found with the path "' + root + '"');
+    if (!dirExists) {
+      var err2 = new Error('No backups found at the path "' + dirExists + '"');
       err2.name = 'InvalidBackupName';
 
       return callback(err2);
     }  // else
 
-    mongodbRestore({
-      uri: local.mongo.url,
-      root: root,
-      parser: 'bson',
-      dropCollections: true,
-      callback: function (err3) {
-        if (err3) {
-          return callback(err3);
-        }  // else
+    fse.copy(dirPath, local.mongo.dbDir, function (err3) {
+      if (err3) {
+        return callback(err3);
+      }  // else
 
-        return callback(null, root);
-      },
+      return callback(null, dirPath);
     });
   });
 };
@@ -184,7 +176,7 @@ exports.discardFrom = function (dirPath, callback) {
       return callback(err);
     }
 
-    if (files.length === 1 && files[0] === 'tresdb') {
+    if (files.indexOf('journal') >= 0) {
       fse.remove(dirPath, callback);
     }
   });
