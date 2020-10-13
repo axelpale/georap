@@ -48,10 +48,12 @@ module.exports = function (location) {
     // Update if status or type is changed externally.
     location.on('location_status_changed', function () {
       $mount.empty();
+      self.unbind(); // without unbind, exponential growth in num of calls
       self.bind($mount);
     });
     location.on('location_type_changed', function () {
       $mount.empty();
+      self.unbind(); // without unbind, exponential growth in num of calls
       self.bind($mount);
     });
 
