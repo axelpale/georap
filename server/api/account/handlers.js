@@ -197,7 +197,7 @@ exports.sendResetPasswordEmail = function (req, res, next) {
   // First get collection.
   var users = db.collection('users');
 
-  users.findOne({ email: email }, {}, function (err, user) {
+  users.findOne({ email: email }, function (err, user) {
 
     if (err) {
       return next(err);

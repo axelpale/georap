@@ -216,7 +216,7 @@ exports.getRaw = function (id, callback) {
 
   var locColl = db.get().collection('locations');
 
-  locColl.findOne({ _id: id }, {}, function (err, doc) {
+  locColl.findOne({ _id: id }, function (err, doc) {
     if (err) {
       return callback(err);
     }
@@ -245,7 +245,7 @@ exports.getOne = function (id, callback) {
   var evColl = db.get().collection('events');
   var enColl = db.get().collection('entries');
 
-  locColl.findOne({ _id: id }, {}, function (err, doc) {
+  locColl.findOne({ _id: id }, function (err, doc) {
     if (err) {
       return callback(err);
     }

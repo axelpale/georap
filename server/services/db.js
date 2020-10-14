@@ -5,7 +5,7 @@ var mongodb = require('mongodb');
 var mongoClient = mongodb.MongoClient;
 var ObjectId = mongodb.ObjectId;
 
-var db = null;
+var dbClient = null;
 
 exports.INDICES = [
   {
@@ -78,7 +78,7 @@ exports.init = function (mongoUrl, callback) {
   //   callback
   //     function (err)
 
-  if (db !== null) {
+  if (dbClient !== null) {
     return;
   }
 
@@ -92,19 +92,18 @@ exports.init = function (mongoUrl, callback) {
     }
   }
 
-  // Retry connect to (almost) infinity if the connection is lost.
-  // See http://stackoverflow.com/a/39831825/638546
   var mongoOpts = {
-    reconnectTries: Number.MAX_VALUE,
-    reconnectInterval: 2000,
+    // Use new server discovery and monitoring engine
+    // instead of the deprecated one. Becomes the default in the future.
+    useUnifiedTopology: true,
   };
 
-  mongoClient.connect(mongoUrl, mongoOpts, function (dbErr, dbConn) {
+  mongoClient.connect(mongoUrl, mongoOpts, function (dbErr, connectedClient) {
     if (dbErr) {
       return callback(dbErr);
     }
 
-    db = dbConn;
+    dbClient = connectedClient;
     return callback();
   });
 
@@ -112,10 +111,10 @@ exports.init = function (mongoUrl, callback) {
 
 exports.get = function () {
   // Return
-  //   connected mongodb instance
+  //   connected mongodb database instance
 
-  if (db !== null) {
-    return db;
+  if (dbClient !== null) {
+    return dbClient.db();
   }
 
   throw new Error('db.init must be called and finished before db.get');
@@ -125,16 +124,16 @@ exports.collection = function (collName) {
   // Return
   //   a MongoDB collection instance
 
-  if (db !== null) {
-    return db.collection(collName);
+  if (dbClient !== null) {
+    return dbClient.db().collection(collName);
   }
 
   throw new Error('db.init must be called and finished before db.collection');
 };
 
 exports.close = function () {
-  if (db !== null) {
-    db.close();
-    db = null;
+  if (dbClient !== null) {
+    dbClient.close();
+    dbClient = null;
   }
 };

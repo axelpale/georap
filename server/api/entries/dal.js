@@ -220,9 +220,8 @@ exports.getOneRaw = function (entryId, callback) {
   var q = {
     _id: entryId,
   };
-  var opt = {};
 
-  coll.findOne(q, opt, function (err, doc) {
+  coll.findOne(q, function (err, doc) {
     if (err) {
       return callback(err);
     }

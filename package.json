@@ -75,7 +75,7 @@
     "minibus": "^3.1.0",
     "mkdirp": "^0.5.1",
     "moment": "^2.15.1",
-    "mongodb": "^2.2.24",
+    "mongodb": "^3.6.2",
     "morgan": "^1.7.0",
     "multer": "^1.2.1",
     "nodemailer": "^4.1.0",

@@ -22,17 +22,17 @@ exports.getOne = function (username, callback) {
     email: false,
   };
 
-  usersColl.findOne({ name: username }, proj, function (err, doc) {
-    if (err) {
+  usersColl
+    .findOne({ name: username }, { projection: proj })
+    .then(function (doc) {
+      if (!doc) {
+        return callback(null, null);
+      }
+      return callback(null, doc);
+    })
+    .catch(function (err) {
       return callback(err);
-    }
-
-    if (!doc) {
-      return callback(null, null);
-    }
-
-    return callback(null, doc);
-  });
+    });
 };
 
 exports.getOneWithEvents = function (username, callback) {

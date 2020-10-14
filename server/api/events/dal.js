@@ -499,12 +499,10 @@ exports.getRecentFiltered = function (filter, n, beforeTime, callback) {
     //   // Change the location array to the single location (the first item).
     //   $unwind: '$location',
     // },
-  ], function (err, docs) {
+  ]).toArray(function (err, docs) {
     if (err) {
-      console.error(err);
       return callback(err);
     }
-
     return callback(null, docs);
   });
 };
