@@ -1,10 +1,10 @@
-var local = require('../../config/local');
+var config = require('tresdb-config');
 var tempdirs = require('../../server/services/tempdirs');
 
 exports.run = function (callback) {
 
-  var tempRoot = local.tempUploadDir;
-  var ttlSeconds = local.tempUploadTimeToLive;
+  var tempRoot = config.tempUploadDir;
+  var ttlSeconds = config.tempUploadTimeToLive;
 
   tempdirs.removeOlderThan(tempRoot, ttlSeconds, function (err, names) {
     if (err) {

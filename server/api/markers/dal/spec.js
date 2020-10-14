@@ -2,7 +2,7 @@
 /* eslint-disable handle-callback-err */
 
 var db = require('tresdb-db');
-var local = require('../../../../config/local');
+var config = require('tresdb-config');
 var loadFixture = require('../../../../migration/lib/loadFixture');
 var fixture = require('./dal.spec.fixture');
 var unit = require('./index');
@@ -11,7 +11,7 @@ var assert = require('assert');
 describe('server.api.markers.dal', function () {
 
   before(function (done) {
-    db.init(local.mongo.testUrl, function (err) {
+    db.init(config.mongo.testUrl, function (err) {
       if (err) {
         return console.error('Failed to connect to MongoDB.');
       }

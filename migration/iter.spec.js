@@ -1,9 +1,10 @@
-/* global describe, it, beforeEach, afterEach, before, after */
+config/* global describe, it, beforeEach, afterEach, before, after */
 
 // The Unit
 var iter = require('./iter');
 var db = require('tresdb-db');
-var local = require('../config/local');
+var config = require('tresdb-config');
+// Enable should api
 // eslint-disable-next-line no-unused-vars
 var should = require('should');
 var assert = require('assert');
@@ -29,7 +30,7 @@ describe('iter.updateEach', function () {
   var collection;
 
   before(function (done) {
-    db.init(local.mongo.testUrl, function (err) {
+    db.init(config.mongo.testUrl, function (err) {
       if (err) {
         return console.error('Failed to connect to MongoDB.');
       }

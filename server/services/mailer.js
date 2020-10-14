@@ -1,7 +1,7 @@
 // Singleton wrapper around nodemailer
 
 var nodemailer = require('nodemailer');
-var local = require('../../config/local');
+var config = require('tresdb-config');
 
 var mailer = null;
 
@@ -10,7 +10,7 @@ exports.init = function () {
 
   if (mailer === null) {
 
-    mailer = nodemailer.createTransport(local.smtp);
+    mailer = nodemailer.createTransport(config.smtp);
 
     mailer.verify(function (err) {
       if (err) {

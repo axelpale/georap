@@ -1,6 +1,6 @@
 /* eslint-disable max-lines */
 
-var local = require('../../../../config/local');
+var config = require('tresdb-config');
 var entriesDal = require('../../entries/dal');
 var parsekml = require('./parsekml');
 var dallib = require('./dallib');
@@ -20,11 +20,11 @@ var cachePathFromBatchId = function (batchId) {
   // For example
   //   '2017-10-13-weivd32'
   //   => '/home/...../tempUploads/2017-10-13-weivd32/2017-10-13-weivd32.json
-  return path.resolve(local.tempUploadDir, batchId, batchId + '.json');
+  return path.resolve(config.tempUploadDir, batchId, batchId + '.json');
 };
 
 var outcomePathFromBatchId = function (batchId) {
-  return path.resolve(local.tempUploadDir, batchId, batchId + '_outcome.json');
+  return path.resolve(config.tempUploadDir, batchId, batchId + '_outcome.json');
 };
 
 

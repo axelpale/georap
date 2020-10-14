@@ -1,6 +1,6 @@
 // Singleton wrapper around mongodb
 
-var local = require('tresdb-config');
+var config = require('tresdb-config');
 var mongodb = require('mongodb');
 var mongoClient = mongodb.MongoClient;
 var ObjectId = mongodb.ObjectId;
@@ -73,7 +73,7 @@ exports.init = function (mongoUrl, callback) {
   //
   // Parameters:
   //   mongoUrl
-  //     optional connection url. If not given, local.env is used to determine
+  //     optional connection url. If not given, config.env is used to determine
   //     which url to use.
   //   callback
   //     function (err)
@@ -85,10 +85,10 @@ exports.init = function (mongoUrl, callback) {
   if (typeof mongoUrl === 'function') {
     callback = mongoUrl;
 
-    if (local.env === 'test') {
-      mongoUrl = local.mongo.testUrl;
+    if (config.env === 'test') {
+      mongoUrl = config.mongo.testUrl;
     } else {
-      mongoUrl = local.mongo.url;
+      mongoUrl = config.mongo.url;
     }
   }
 

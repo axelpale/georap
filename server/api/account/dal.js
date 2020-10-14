@@ -1,5 +1,5 @@
 
-var local = require('../../../config/local');
+var config = require('tresdb-config');
 var db = require('tresdb-db');
 var bcrypt = require('bcryptjs');
 
@@ -18,7 +18,7 @@ exports.createUser = function (username, email, password, callback) {
 
   var users = db.collection('users');
 
-  var r = local.bcrypt.rounds;
+  var r = config.bcrypt.rounds;
 
   bcrypt.hash(password, r, function (berr, pwdHash) {
 

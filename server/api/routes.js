@@ -1,6 +1,6 @@
 /* eslint-disable new-cap */
 
-var local = require('../../config/local');
+var config = require('tresdb-config');
 
 var accountRouter = require('./account/routes');
 var adminRouter = require('./admin/routes');
@@ -35,7 +35,7 @@ router.use('/account', accountRouter);
 //
 // See https://github.com/auth0/express-jwt
 router.use(jwt({
-  secret: local.secret,
+  secret: config.secret,
   algorithms: ['HS256'],
   getToken: function fromHeaderOrQuerystring(req) {
     // Copied from https://github.com/auth0/express-jwt#usage

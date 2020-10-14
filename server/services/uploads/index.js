@@ -1,7 +1,6 @@
-// File upload request parser config
+// File upload request parser
 
-var local = require('../../../config/local');
-
+var config = require('tresdb-config');
 var sharp = require('sharp');
 var multer = require('multer');
 var mime = require('mime');
@@ -34,7 +33,7 @@ var sanitizedOriginal = function (req, file, cb) {
 
 var dateShortId = function (req, file, cb) {
   var name = moment().format('YYYY-MM-DD') + '-' + shortid.generate();
-  var absDir = path.resolve(local.tempUploadDir, name);
+  var absDir = path.resolve(config.tempUploadDir, name);
 
   fse.mkdirs(absDir, function (err) {
     if (err) {
@@ -52,7 +51,7 @@ var yearShortId = function (req, file, cb) {
   //     function (err, absoluteDirPath)
   var year = (new Date()).getFullYear().toString();
   var key = shortid.generate();
-  var absDir = path.resolve(local.uploadDir, year, key);
+  var absDir = path.resolve(config.uploadDir, year, key);
 
   fse.mkdirs(absDir, function (err) {
     if (err) {
@@ -68,7 +67,7 @@ exports.uploader = multer({
     filename: sanitizedOriginal,
   }),
   limits: {
-    fileSize: local.uploadSizeLimit,  // bytes
+    fileSize: config.uploadSizeLimit,  // bytes
   },
 });
 
@@ -78,18 +77,18 @@ exports.tempUploader = multer({
     filename: sanitizedOriginal,
   }),
   limits: {
-    fileSize: local.tempUploadSizeLimit,  // bytes
+    fileSize: config.tempUploadSizeLimit,  // bytes
   },
 });
 
 exports.getAbsolutePath = function (relativePath) {
   // Return absolute path for a path relative to upload dir.
-  return path.resolve(local.uploadDir, relativePath);
+  return path.resolve(config.uploadDir, relativePath);
 };
 
 exports.getRelativePath = function (absolutePath) {
   // Return path relative to upload directory
-  return path.relative(local.uploadDir, absolutePath);
+  return path.relative(config.uploadDir, absolutePath);
 };
 
 // exports.makeLocalPermanent = function (tempFilePath, callback) {
@@ -206,7 +205,7 @@ exports.createThumbnail = function (file, callback) {
   }
 
   // max width and height of the thumbnail image in pixels
-  var size = local.uploadThumbSize;
+  var size = config.uploadThumbSize;
 
   // eslint-disable-next-line no-magic-numbers
   if (mimetype.substr(0, 6) === 'image/') {

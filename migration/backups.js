@@ -3,7 +3,7 @@
 var moment = require('moment');
 var path = require('path');
 var fse = require('fs-extra');
-var local = require('tresdb-config');
+var config = require('tresdb-config');
 
 // Dir name format
 var FORMAT = 'YYYY-MM-DDTHH-mm-ss';
@@ -15,7 +15,7 @@ var findLatest = function (callback) {
   //   callback
   //     function (err, latestName)
 
-  fse.readdir(local.mongo.backupDir, function (err, items) {
+  fse.readdir(config.mongo.backupDir, function (err, items) {
     if (err) {
       return callback(err);
     }
@@ -33,7 +33,7 @@ var findLatest = function (callback) {
 exports.getBackupDirPathForName = function (name) {
   // Builds an absolute dir path for a named backup.
   // The resulting path can be used as backupTo(result, ...)
-  return path.join(local.mongo.backupDir, name);
+  return path.join(config.mongo.backupDir, name);
 };
 
 exports.list = function (callback) {
@@ -43,7 +43,7 @@ exports.list = function (callback) {
   //   callback
   //     function (err, namelist)
 
-  fse.readdir(local.mongo.backupDir, callback);
+  fse.readdir(config.mongo.backupDir, callback);
 };
 
 exports.backupTo = function (dirPath, callback) {
@@ -61,7 +61,7 @@ exports.backupTo = function (dirPath, callback) {
   //     function (err)
   //
 
-  fse.copy(local.mongo.dbDir, dirPath, function (err) {
+  fse.copy(config.mongo.dbDir, dirPath, function (err) {
     if (err) {
       return callback(err);
     }  // else
@@ -81,7 +81,7 @@ exports.backup = function (callback) {
 
   // Root dir name is derived from current time
   var dirname = moment().format(FORMAT);
-  var root = path.resolve(local.mongo.backupDir, dirname);
+  var root = path.resolve(config.mongo.backupDir, dirname);
 
   exports.backupTo(root, function (err) {
     return callback(err, dirname);
@@ -110,7 +110,7 @@ exports.restoreFrom = function (dirPath, callback) {
       return callback(err2);
     }  // else
 
-    fse.copy(dirPath, local.mongo.dbDir, function (err3) {
+    fse.copy(dirPath, config.mongo.dbDir, function (err3) {
       if (err3) {
         return callback(err3);
       }  // else
@@ -123,7 +123,7 @@ exports.restoreFrom = function (dirPath, callback) {
 exports.restore = function (name, callback) {
   // Parameters
   //   name
-  //     optional, name of the dir under local.mongo.backupDir.
+  //     optional, name of the dir under config.mongo.backupDir.
   //     If omitted, defaults to latest backup.
   //   callback
   //     function (err, restoredName)
@@ -154,14 +154,14 @@ exports.restore = function (name, callback) {
         return cb(err);
       }
 
-      root = path.resolve(local.mongo.backupDir, latestDirName);
+      root = path.resolve(config.mongo.backupDir, latestDirName);
 
       return exports.restoreFrom(root, cb);
     });
 
   } else {
 
-    root = path.resolve(local.mongo.backupDir, p);
+    root = path.resolve(config.mongo.backupDir, p);
 
     return exports.restoreFrom(root, cb);
   }

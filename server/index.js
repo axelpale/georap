@@ -1,6 +1,6 @@
 /* eslint-disable max-statements */
 
-var local = require('../config/local');
+var config = require('tresdb-config');
 var http = require('http');
 var path = require('path');
 var fse = require('fs-extra');
@@ -24,7 +24,7 @@ var loggers = require('./services/logs/loggers');
 var router = require('./routes');
 
 // Log environment
-console.log('Starting TresDB in environment:', local.env);
+console.log('Starting TresDB in environment:', config.env);
 
 
 // Database connection first
@@ -41,8 +41,8 @@ db.init(function (dbErr) {
 
   // Start the server.
 
-  server.listen(local.port, function () {
-    console.log('Express listening on port ' + local.port + '...');
+  server.listen(config.port, function () {
+    console.log('Express listening on port ' + config.port + '...');
   });
 
 
@@ -59,40 +59,41 @@ db.init(function (dbErr) {
 
   // Request logging
   // ---------------
-  if (local.env === 'production') {
+  if (config.env === 'production') {
     app.use(loggers.http());
   }
   // ---------------
   // Request logging END
 
-  app.use(local.staticUrl, express.static(local.staticDir));
-  console.log('Serving static files from', local.staticUrl);
+  app.use(config.staticUrl, express.static(config.staticDir));
+  console.log('Serving static files from', config.staticUrl);
 
   // Instance-specific static files are best copied without webpack
   // because webpack does not support dynamic paths well.
   var imagesDir = path.resolve(__dirname, '..', 'client', 'images');
   var configDir = path.resolve(__dirname, '..', 'config');
   var markersDir = path.join(configDir, 'images', 'markers');
+  var loginBgPath = path.join(config.staticDir, 'images', 'login.jpg');
   (function copyCustomStatic(copyPaths) {
     copyPaths.forEach(function (pp) {
       fse.copy(pp[0], pp[1]);
     });
   }([
-    [local.loginBackground, path.join(local.staticDir, 'images', 'login.jpg')],
-    [imagesDir, path.join(local.staticDir, 'images')],
-    [markersDir, path.join(local.staticDir, 'images', 'markers')],
+    [config.loginBackground, loginBgPath],
+    [imagesDir, path.join(config.staticDir, 'images')],
+    [markersDir, path.join(config.staticDir, 'images', 'markers')],
   ]));
-  console.log('Copying custom static files to', local.staticDir);
+  console.log('Copying custom static files to', config.staticDir);
   // -------------
   // Static assets END
 
 
   // Uploaded files
   // --------------
-  app.use(local.uploadUrl, express.static(local.uploadDir));
-  console.log('Serving uploaded files from', local.uploadUrl);
-  app.use(local.tempUploadUrl, express.static(local.tempUploadDir));
-  console.log('Serving temporary files from', local.tempUploadUrl);
+  app.use(config.uploadUrl, express.static(config.uploadDir));
+  console.log('Serving uploaded files from', config.uploadUrl);
+  app.use(config.tempUploadUrl, express.static(config.tempUploadDir));
+  console.log('Serving temporary files from', config.tempUploadUrl);
   // --------------
   // Uploaded files END
 

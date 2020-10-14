@@ -1,6 +1,6 @@
 
 var pjson = require('../../package.json');
-var local = require('../../config/local');
+var config = require('tresdb-config');
 var ejs = require('ejs');
 var _ = require('lodash');
 var fs = require('fs');
@@ -17,28 +17,28 @@ var indexHtml = (function precompile() {
   var tresdb = {
     version: pjson.version,
     config: {
-      title: local.title,
-      description: local.description,
-      defaultMapState: local.defaultMapState,
-      supportButtonTitle: local.supportButtonTitle,
-      supportPageContent: local.supportPageContent,
-      features: local.features,
-      googleMapsKey: local.googleMapsKey,
-      locationStatuses: local.locationStatuses,
-      locationTypes: local.locationTypes,
-      staticUrl: local.staticUrl,
-      uploadUrl: local.uploadUrl,
-      uploadSizeLimit: local.uploadSizeLimit,
-      tempUploadSizeLimit: local.tempUploadSizeLimit,
-      coordinateSystems: local.coordinateSystems,
-      exportServices: local.exportServices,
+      title: config.title,
+      description: config.description,
+      defaultMapState: config.defaultMapState,
+      supportButtonTitle: config.supportButtonTitle,
+      supportPageContent: config.supportPageContent,
+      features: config.features,
+      googleMapsKey: config.googleMapsKey,
+      locationStatuses: config.locationStatuses,
+      locationTypes: config.locationTypes,
+      staticUrl: config.staticUrl,
+      uploadUrl: config.uploadUrl,
+      uploadSizeLimit: config.uploadSizeLimit,
+      tempUploadSizeLimit: config.tempUploadSizeLimit,
+      coordinateSystems: config.coordinateSystems,
+      exportServices: config.exportServices,
     },
   };
 
   // Precompile client-side templates and append their source into HTML.
   var precompiledTemplates = [];
 
-  local.coordinateSystems.forEach(function (sys) {
+  config.coordinateSystems.forEach(function (sys) {
     var sysName = sys[0];
     var sysTemplate = sys[2];
     var sysSource = _.template(sysTemplate).source;
@@ -49,7 +49,7 @@ var indexHtml = (function precompile() {
     });
   });
 
-  local.exportServices.forEach(function (serv) {
+  config.exportServices.forEach(function (serv) {
     var servName = serv[0];
     var servTemplate = serv[1];
     var servSource = _.template(servTemplate).source;
@@ -74,7 +74,7 @@ exports.get = function (req, res) {
 exports.getManifest = function (req, res) {
   return res.json({
     'background_color': 'black',
-    'description': local.description,
+    'description': config.description,
     'display': 'standalone',
     'icons': [
       {
@@ -93,7 +93,7 @@ exports.getManifest = function (req, res) {
         'type': 'image/png',
       },
     ],
-    'name': local.title,
+    'name': config.title,
     'start_url': '.',
   });
 };

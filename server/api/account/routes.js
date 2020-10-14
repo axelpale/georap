@@ -1,6 +1,6 @@
 /* eslint-disable new-cap */
 
-var local = require('../../../config/local');
+var config = require('tresdb-config');
 var handlers = require('./handlers');
 
 var jsonParser = require('body-parser').json();
@@ -10,7 +10,7 @@ var jsonParser = require('body-parser').json();
 // See https://github.com/auth0/express-jwt
 var jwt = require('express-jwt');
 var jwtParser = jwt({
-  secret: local.secret,
+  secret: config.secret,
   algorithms: ['HS256'],
 });
 

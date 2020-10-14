@@ -8,7 +8,7 @@
 //  OR
 //   node migration/loadExample.js
 
-var local = require('../config/local');
+var config = require('tresdb-config');
 var fixture = require('./fixtures/example');
 var loadFixture = require('./lib/loadFixture');
 
@@ -18,15 +18,15 @@ var path = require('path');
 
 // Files.
 // Clear uploadDir before new files.
-fse.emptyDirSync(local.uploadDir);
+fse.emptyDirSync(config.uploadDir);
 // Copy in uploaded-like files.
 var from = path.join(__dirname, 'fixtures', 'uploads', 'radar.jpg');
-var to = path.join(local.uploadDir, '2009', 'RxRvKSlbl', 'radar.jpg');
+var to = path.join(config.uploadDir, '2009', 'RxRvKSlbl', 'radar.jpg');
 // eslint-disable-next-line no-sync
 fse.copySync(from, to);
 // Thumbnail
 var from2 = path.join(__dirname, 'fixtures', 'uploads', 'radar_medium.jpg');
-var to2 = path.join(local.uploadDir, '2009', 'RxRvKSlbl', 'radar_medium.jpg');
+var to2 = path.join(config.uploadDir, '2009', 'RxRvKSlbl', 'radar_medium.jpg');
 // eslint-disable-next-line no-sync
 fse.copySync(from2, to2);
 
