@@ -2,7 +2,7 @@
 // NOTE This file is an important documentation of the data structure of v6.
 
 var c = require('./common');
-var db = require('tresd-db');
+var db = require('tresdb-db');
 
 module.exports = {
   collections: {
