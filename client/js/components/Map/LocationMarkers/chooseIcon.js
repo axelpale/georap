@@ -13,25 +13,27 @@ module.exports = function (loc, zoomLevel, visitedManager) {
   var isParent = loc.childLayer > zoomLevel;
 
   var templateSuffix = '';
-  if (isDemolished) {
-    templateSuffix += 'demolished';
-  }
+  // Set suffix. Visited takes priority.
   if (isVisited) {
-    templateSuffix += 'visited';
+    templateSuffix = 'visited';
+  } else if (isDemolished) {
+    templateSuffix = 'demolished';
   }
+
+  // Suffix
   if (isParent) {
     templateSuffix += 'parent';
   }
 
   if (templateSuffix.length > 0) {
     templateName = templateSuffix;
-  }
+  } // else use templateName as is
 
   // Choose symbol
   var symbol = loc.type;
 
   // Build URL
-  var iconUrl = urls.iconUrl(templateName, symbol);
+  var iconUrl = urls.markerIconUrl(templateName, symbol);
 
   var iconObj = icons.marker(iconUrl);
 
