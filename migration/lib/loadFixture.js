@@ -1,5 +1,5 @@
 
-var db = require('../../server/services/db');
+var db = require('tresdb-db');
 var asyn = require('async');
 
 var COLL_NOT_EXISTS_ERROR = 26;

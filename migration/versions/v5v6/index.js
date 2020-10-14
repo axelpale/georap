@@ -18,7 +18,7 @@
 // 8. remove deprecated entries
 // 9. normalize entries: combine entry types to single location_entry
 
-var db = require('../../../server/services/db');
+var db = require('tresdb-db');
 var uploads = require('../../../server/services/uploads');
 //var googlemaps = require('../../../server/services/googlemaps');
 var schema = require('../../lib/schema');

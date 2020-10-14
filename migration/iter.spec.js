@@ -2,7 +2,7 @@
 
 // The Unit
 var iter = require('./iter');
-var db = require('../server/services/db');
+var db = require('tresdb-db');
 var local = require('../config/local');
 // eslint-disable-next-line no-unused-vars
 var should = require('should');

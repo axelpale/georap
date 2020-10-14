@@ -1,7 +1,7 @@
 // Tools to find out and update the current database schema version.
 
 var pjson = require('../../package.json');
-var db = require('../../server/services/db');
+var db = require('tresdb-db');
 var semver = require('semver');
 
 exports.getDesiredVersion = function () {

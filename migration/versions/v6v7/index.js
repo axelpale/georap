@@ -4,7 +4,7 @@
 // 1. set schema version to 7
 // 2. add text1 and text2 properties for each location
 
-var db = require('../../../server/services/db');
+var db = require('tresdb-db');
 var schema = require('../../lib/schema');
 var iter = require('../../iter');
 var async = require('async');

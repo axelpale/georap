@@ -1,5 +1,5 @@
 
-var db = require('../../server/services/db');
+var db = require('tresdb-db');
 var dal = require('./dal');
 var lib = require('./lib');
 

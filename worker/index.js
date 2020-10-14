@@ -15,7 +15,7 @@
 // - require db where you need it. No need to pass it around.
 // - after success, do console.log('<jobname>: <human readable results>')
 
-var db = require('../server/services/db');
+var db = require('tresdb-db');
 
 var jobs = [
   require('./search'),

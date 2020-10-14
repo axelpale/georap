@@ -4,7 +4,7 @@
 // 1. set schema version to 9
 // 2. replace tags property with status and type for each location
 
-var db = require('../../../server/services/db');
+var db = require('tresdb-db');
 var schema = require('../../lib/schema');
 var iter = require('../../iter');
 var tagdog = require('./tagdog');

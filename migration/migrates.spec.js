@@ -1,7 +1,7 @@
 /* global describe, it, beforeEach, before, after */
 /* eslint-disable no-magic-numbers */
 
-var db = require('../server/services/db');
+var db = require('tresdb-db');
 var assert = require('assert');
 
 var config = require('tresdb-config');

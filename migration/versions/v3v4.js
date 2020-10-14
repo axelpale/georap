@@ -6,7 +6,7 @@
 var iter = require('../iter');
 var schema = require('../lib/schema');
 var shortid = require('shortid');
-var db = require('../../server/services/db');
+var db = require('tresdb-db');
 
 var FROM_VERSION = 3;
 var TO_VERSION = FROM_VERSION + 1;

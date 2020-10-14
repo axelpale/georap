@@ -1,4 +1,4 @@
-var db = require('../../server/services/db');
+var db = require('tresdb-db');
 
 var TOP_LAYER = 1;
 var BOTTOM_LAYER = 15;

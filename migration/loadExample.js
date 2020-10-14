@@ -12,7 +12,7 @@ var local = require('../config/local');
 var fixture = require('./fixtures/example');
 var loadFixture = require('./lib/loadFixture');
 
-var db = require('../server/services/db');
+var db = require('tresdb-db');
 var fse = require('fs-extra');
 var path = require('path');
 

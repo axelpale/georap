@@ -1,4 +1,4 @@
-var db = require('../../server/services/db');
+var db = require('tresdb-db');
 var eventsDal = require('../../server/api/events/dal');
 var sums = require('./sums');
 

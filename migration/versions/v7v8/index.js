@@ -6,7 +6,7 @@
 // 3. write a status property for each user according to the blacklist
 // 4. remove the blacklist
 
-var db = require('../../../server/services/db');
+var db = require('tresdb-db');
 var schema = require('../../lib/schema');
 var iter = require('../../iter');
 var async = require('async');

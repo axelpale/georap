@@ -4,7 +4,7 @@
 // in development.
 
 var config = require('tresdb-config');
-var db = require('../../server/services/db');
+var db = require('tresdb-db');
 var bcrypt = require('bcryptjs');
 
 var admin = config.admin.username;

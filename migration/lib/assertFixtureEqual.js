@@ -2,7 +2,7 @@
 // A tool to test if a collection is equal to a fixture.
 // Currently this can test only collections with single document.
 
-var db = require('../../server/services/db');
+var db = require('tresdb-db');
 var fixtures = require('../fixtures');
 var _ = require('lodash');
 var clone = require('clone');
