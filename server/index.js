@@ -15,7 +15,7 @@ io.init(server);
 var mailer = require('./services/mailer');
 mailer.init();
 
-var db = require('./services/db');
+var db = require('tresdb-db');
 
 // Logging
 var loggers = require('./services/logs/loggers');

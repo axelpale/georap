@@ -3,7 +3,7 @@
 var dal = require('../location/dal');
 
 var status = require('http-status-codes');
-var ObjectId = require('mongodb').ObjectId;
+var db = require('tresdb-db');
 
 module.exports = function (req, res, next) {
   // Converts string object id to ObjectId and fetches the location.
@@ -12,7 +12,7 @@ module.exports = function (req, res, next) {
   var objId;
 
   try {
-    objId = new ObjectId(stringId);
+    objId = db.id(stringId);
   } catch (e) {
     return res.sendStatus(status.NOT_FOUND);
   }

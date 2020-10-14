@@ -1,5 +1,5 @@
 
-var db = require('../../../services/db');
+var db = require('tresdb-db');
 
 exports.getUsersForAdmin = function (callback) {
   // Fetch an array of users with admin-only information such as email.

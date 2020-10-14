@@ -1,4 +1,4 @@
-var db = require('../../../services/db');
+var db = require('tresdb-db');
 
 
 exports.getAll = function (callback) {

@@ -1,4 +1,4 @@
-//var db = require('../../services/db');
+//var db = require('tresdb-db');
 var pjson = require('../../../package.json');
 var locsDal = require('../locations/dal');
 var async = require('async');

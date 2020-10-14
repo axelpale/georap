@@ -1,6 +1,6 @@
 /* eslint-disable max-lines */
 
-var db = require('../../services/db');
+var db = require('tresdb-db');
 var layersDal = require('../../../worker/layers/dal');
 var eventsDal = require('../events/dal');
 var config = require('tresdb-config');

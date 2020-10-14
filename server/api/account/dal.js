@@ -1,6 +1,6 @@
 
 var local = require('../../../config/local');
-var db = require('../../services/db');
+var db = require('tresdb-db');
 var bcrypt = require('bcryptjs');
 
 exports.createUser = function (username, email, password, callback) {

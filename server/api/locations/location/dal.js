@@ -1,6 +1,6 @@
 /* eslint-disable max-lines */
 
-var db = require('../../../services/db');
+var db = require('tresdb-db');
 var proj = require('../../../services/proj');
 var googlemaps = require('../../../services/googlemaps');
 var eventsDal = require('../../events/dal');

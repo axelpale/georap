@@ -3,7 +3,7 @@
 var local = require('../../../config/local');
 var status = require('http-status-codes');
 
-var db = require('../../services/db');
+var db = require('tresdb-db');
 var hostname = require('../../services/hostname');
 var mailer = require('../../services/mailer');
 var loggers = require('../../services/logs/loggers');

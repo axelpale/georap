@@ -1,4 +1,4 @@
-// var db = require('../../../services/db');
+// var db = require('tresdb-db');
 
 module.exports = function (params, callback) {
   // Get grid-filtered markers within bounds.

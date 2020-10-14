@@ -1,5 +1,5 @@
 var asyn = require('async');
-var ObjectID = require('mongodb').ObjectID;
+var db = require('tresdb-db');
 
 exports.updateEach = function (collection, iteratee, callback) {
   // Replace each document in a MongoDB collection. Iteratee is the update
@@ -44,7 +44,7 @@ exports.updateEach = function (collection, iteratee, callback) {
 
       // Ensure ObjectID.
       if (typeof id === 'string') {
-        id = new ObjectID(id);
+        id = db.id(id);
       }
 
       try {

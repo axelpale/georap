@@ -96,6 +96,7 @@
     "striptags": "^3.1.0",
     "timestamp": "file:local_modules/timestamp",
     "tresdb-config": "file:local_modules/tresdb-config",
+    "tresdb-db": "file:local_modules/tresdb-db",
     "tresdb-points": "file:local_modules/tresdb-points",
     "tresdb-urls": "file:local_modules/tresdb-urls",
     "turndown": "^5.0.3",

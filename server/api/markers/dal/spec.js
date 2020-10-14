@@ -1,7 +1,7 @@
 /* global describe, it, beforeEach, before, after */
 /* eslint-disable handle-callback-err */
 
-var db = require('../../../services/db');
+var db = require('tresdb-db');
 var local = require('../../../../config/local');
 var loadFixture = require('../../../../migration/lib/loadFixture');
 var fixture = require('./dal.spec.fixture');

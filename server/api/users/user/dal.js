@@ -1,6 +1,6 @@
 /* globals Set */
 
-var db = require('../../../services/db');
+var db = require('tresdb-db');
 var entriesDal = require('../../entries/dal');
 var eventsDal = require('../../events/dal');
 var paymentsDal = require('../../payments/dal');

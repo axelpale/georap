@@ -1,13 +1,12 @@
 /* eslint-disable no-magic-numbers */
 
-var db = require('../../services/db');
-var ObjectId = require('mongodb').ObjectId;
+var db = require('tresdb-db');
 
 module.exports = {
   collections: {
     locations: [
       {
-        _id: new ObjectId('581f166110a1482dd0b7cd13'),
+        _id: db.id('581f166110a1482dd0b7cd13'),
         creator: 'admin',
         deleted: false,
         geom: {
@@ -25,7 +24,7 @@ module.exports = {
         text2: '',
       },
       {
-        _id: new ObjectId('581f166110a1482dd0b7cd14'),
+        _id: db.id('581f166110a1482dd0b7cd14'),
         creator: 'johndoe',
         deleted: false,
         geom: {
@@ -43,7 +42,7 @@ module.exports = {
         text2: '',
       },
       {
-        _id: new ObjectId('581f166110a1482dd0b7cd15'),
+        _id: db.id('581f166110a1482dd0b7cd15'),
         creator: 'johndoe',
         deleted: true,
         geom: {

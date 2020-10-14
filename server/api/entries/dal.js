@@ -1,6 +1,6 @@
 /* eslint-disable max-lines,no-magic-numbers */
 
-var db = require('../../services/db');
+var db = require('tresdb-db');
 var eventsDal = require('../events/dal');
 var path = require('path');
 var _ = require('lodash');

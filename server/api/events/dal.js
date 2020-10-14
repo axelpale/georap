@@ -1,6 +1,6 @@
 /* eslint-disable max-lines */
 
-var db = require('../../services/db');
+var db = require('tresdb-db');
 var io = require('../../services/io');
 
 // Private methods
