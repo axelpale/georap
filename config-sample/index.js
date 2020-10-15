@@ -55,7 +55,7 @@ module.exports = {
   // Thumbnail max width & height in pixels
   uploadThumbSize: 568,
   // Upload file size limit in bytes.
-  uploadSizeLimit: 20 * 1024 * 1024,
+  uploadSizeLimit: 20 * 1024 * 1024, // 20 MiB
 
   // Temporary uploaded files.
   // Files under these directories are removed in regular basis.
@@ -63,9 +63,9 @@ module.exports = {
   // URLs of the temporary files are prefixed with this URL root path.
   tempUploadUrl: '/temporary',
   // Seconds from last change, after the file or dir can be safely removed.
-  tempUploadTimeToLive: 2 * 24 * 60 * 60,  // two days
+  tempUploadTimeToLive: 2 * 24 * 60 * 60, // two days
   // Upload file size limit in bytes.
-  tempUploadSizeLimit: 200 * 1024 * 1024,
+  tempUploadSizeLimit: 200 * 1024 * 1024, // 200 MiB
 
   // Log files
   // Logs about requests are stored under this directory:

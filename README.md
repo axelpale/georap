@@ -67,6 +67,7 @@ To install TresDB, first clone the repository:
 
 Second, install dependencies:
 
+    $ cd tresdb
     $ npm install
 
 Fourth, create a MongoDB database named `tresdb` and create necessary database users. For a demo setup or development purposes, just install the default users:
@@ -76,6 +77,8 @@ Fourth, create a MongoDB database named `tresdb` and create necessary database u
 Do not use the defaults in production. For production, see detailed [MongoDB user setup](#mongodb-user-setup).
 
 Fifth, rename or copy `config-sample/` to `config/`. The directory contains the main configuration for your TresDB app, including the title of the app, Google Maps API key, marker icons, and multiple other settings. Modify it to match your needs.
+
+    $ cp -R config-sample config
 
 After successful configuration, the final installation step is to populate the database with initial data. This will also install the user account you just configured.
 
