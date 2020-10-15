@@ -31,7 +31,7 @@
     "test:api:markers": "mocha server/api/markers/dal.spec.js",
     "test:migration": "mocha migration/*.spec.js",
     "test:migration:iter": "mocha migration/iter.spec.js",
-    "test:parsekml": "mocha server/api/locations/importer/parsekml.spec.js",
+    "test:parsekml": "mocha server/api/locations/importer/parsekml/parsekml.spec.js",
     "lint": "npm run lint:client && npm run lint:server && npm run lint:others",
     "lint:client": "eslint \"client/**/*.js\" && echo 'OK'",
     "lint:server": "eslint \"server/**/*.js\" \"worker/**/*.js\" && echo 'OK'",
