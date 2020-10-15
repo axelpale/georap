@@ -1,5 +1,5 @@
-var async = require('async');
-var ObjectID = require('mongodb').ObjectID;
+var asyn = require('async');
+var db = require('tresdb-db');
 
 exports.updateEach = function (collection, iteratee, callback) {
   // Replace each document in a MongoDB collection. Iteratee is the update
@@ -39,34 +39,38 @@ exports.updateEach = function (collection, iteratee, callback) {
       return callback(err);
     }
 
-    async.eachSeries(allDocuments, function (doc, eachNext) {
+    asyn.eachSeries(allDocuments, function (doc, eachNext) {
       var id = doc._id;  // Take before modification
 
       // Ensure ObjectID.
       if (typeof id === 'string') {
-        id = new ObjectID(id);
+        id = db.id(id);
       }
 
-      iteratee(doc, function next(iterateeError, updatedDoc) {
-        if (iterateeError) {
-          return eachNext(iterateeError);
-        }
-
-        // Skip null docs, no need to replace.
-        if (updatedDoc === null) {
-          return eachNext(null);
-        }
-
-        // Ensure _id is not replaced by an _id literal.
-        delete updatedDoc._id;
-
-        collection.replaceOne({ _id: id }, updatedDoc, {}, function (err2) {
-          if (err2) {
-            return eachNext(err2);
+      try {
+        iteratee(doc, function next(iterateeError, updatedDoc) {
+          if (iterateeError) {
+            return eachNext(iterateeError);
           }
-          return eachNext(null);
+
+          // Skip null docs, no need to replace.
+          if (updatedDoc === null) {
+            return eachNext(null);
+          }
+
+          // Ensure _id is not replaced by an _id literal.
+          delete updatedDoc._id;
+
+          collection.replaceOne({ _id: id }, updatedDoc, {}, function (err2) {
+            if (err2) {
+              return eachNext(err2);
+            }
+            return eachNext(null);
+          });
         });
-      });
+      } catch (e) {
+        return eachNext(e);
+      }
     }, function afterEachNexts(err3) {
       if (err3) {
         return callback(err3);

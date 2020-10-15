@@ -1,21 +1,26 @@
-var local = require('../../config/local');
+var config = require('tresdb-config');
 var tempdirs = require('../../server/services/tempdirs');
 
 exports.run = function (callback) {
 
-  var tempRoot = local.tempUploadDir;
-  var ttlSeconds = local.tempUploadTimeToLive;
+  var tempRoot = config.tempUploadDir;
+  var ttlSeconds = config.tempUploadTimeToLive;
 
   tempdirs.removeOlderThan(tempRoot, ttlSeconds, function (err, names) {
     if (err) {
-      console.log('cleartemp: ERROR in removeOlderThan');
-      return callback(err);
+      if (err.code === 'ENOENT') {
+        // Temporary dir does not exist.
+        names = [];
+      } else {
+        console.log('cleartemp: ERROR in removeOlderThan');
+        return callback(err);
+      }
     }
 
     var n = names.length;
-    console.log('cleartemp: removed ' + n + ' temporary directories:');
+    console.log('cleartemp: removed ' + n + ' temporary directories.');
     names.forEach(function (name, index) {
-      console.log('cleartemp: (' + index + ') ' + name);
+      console.log('  (' + index + ') ' + name);
     });
 
     return callback(); // success

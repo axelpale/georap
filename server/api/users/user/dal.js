@@ -1,6 +1,6 @@
 /* globals Set */
 
-var db = require('../../../services/db');
+var db = require('tresdb-db');
 var entriesDal = require('../../entries/dal');
 var eventsDal = require('../../events/dal');
 var paymentsDal = require('../../payments/dal');
@@ -22,17 +22,17 @@ exports.getOne = function (username, callback) {
     email: false,
   };
 
-  usersColl.findOne({ name: username }, proj, function (err, doc) {
-    if (err) {
+  usersColl
+    .findOne({ name: username }, { projection: proj })
+    .then(function (doc) {
+      if (!doc) {
+        return callback(null, null);
+      }
+      return callback(null, doc);
+    })
+    .catch(function (err) {
       return callback(err);
-    }
-
-    if (!doc) {
-      return callback(null, null);
-    }
-
-    return callback(null, doc);
-  });
+    });
 };
 
 exports.getOneWithEvents = function (username, callback) {

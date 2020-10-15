@@ -1,5 +1,5 @@
 
-var db = require('../../server/services/db');
+var db = require('tresdb-db');
 var googlemaps = require('../../server/services/googlemaps');
 var async = require('async');
 

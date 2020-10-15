@@ -1,18 +1,19 @@
 
-var db = require('../../server/services/db');
+var db = require('tresdb-db');
 var dal = require('./dal');
 var lib = require('./lib');
 
 exports.run = function (callback) {
   // Create text field for each location. This field is indexed with
-  // mongo's full text search.
+  // mongo's full text search and used for search.
   //
   // Collect together:
   //   location names and parts
   //   entries
   //     text content
   //     filename
-  //   tags
+  //   status
+  //   type
   //   creators
 
   var loColl = db.collection('locations');
@@ -45,14 +46,14 @@ exports.run = function (callback) {
         return r;
       });
 
-      var tags = loc.tags;
+      var classification = [loc.status, loc.type];
       var places = loc.places;
 
       var names = lib.wordheads(lib.normalize(loc.name));
 
       // Divide to primary and secondary text data
       // Matches to primary have greater weight in the sorting of results.
-      var parts1 = names.concat(tags);
+      var parts1 = names.concat(classification);
       var parts2 = creator.concat(places, entryTexts);
 
       var dump1 = parts1.join(' ');

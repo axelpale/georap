@@ -1,5 +1,5 @@
 
-var local = require('../../../../config/local');
+var config = require('tresdb-config');
 var markersDal = require('../dal');
 var templates = require('./templates');
 var status = require('http-status-codes');
@@ -27,12 +27,12 @@ exports.getKML = function (req, res, next) {
 
     // Convert to KML XML
     var xml = templates.standalone({
-      siteTitle: local.title,
+      siteTitle: config.title,
       markers: docs,
     });
 
     // Name of the file to download
-    var filename = slugify(local.title) + '-standalone-' +
+    var filename = slugify(config.title) + '-standalone-' +
                    getPrettyNow() + '.kml';
 
     // Set headers
@@ -50,12 +50,12 @@ exports.getNetworkKML = function (req, res) {
   }
 
   var xml = templates.network({
-    siteTitle: local.title,
+    siteTitle: config.title,
     token: req.query.token,
   });
 
   // Name of the file to download
-  var filename = slugify(local.title) + '-network-' + getPrettyNow() + '.kml';
+  var filename = slugify(config.title) + '-network-' + getPrettyNow() + '.kml';
 
   // Set headers
   res.set('Content-Type', 'text/xml');

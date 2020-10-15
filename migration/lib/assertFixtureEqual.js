@@ -1,7 +1,8 @@
+/* eslint-disable no-loop-func, max-statements */
 // A tool to test if a collection is equal to a fixture.
 // Currently this can test only collections with single document.
 
-var db = require('../../server/services/db');
+var db = require('tresdb-db');
 var fixtures = require('../fixtures');
 var _ = require('lodash');
 var clone = require('clone');
@@ -31,38 +32,56 @@ module.exports = function (collectionName, versionTag, callback) {
       return callback(err);
     }
 
-    // Compare only firsts.
-    // Clone because otherwise edits affect some cache and yield errs elsewhere
-    var fixFirst = clone(fixColl[0]);
-    var realFirst = clone(docs[0]);
+    // Possible assertion error here
+    var assertionError = null;
 
-    // _id are generated and thus always differ
-    delete realFirst._id;
-    delete fixFirst._id;
+    // Compare all docs.
+    for (var i = 0; i < fixColl.length; i += 1) {
+      // Clone because otherwise edits affect some cache and
+      // may yield errors elsewhere
+      var fixDoc = clone(fixColl[i]);
+      var realDoc = clone(docs[i]);
 
-    // Deep compare & find differences both ways.
-    // See http://stackoverflow.com/a/31686152/638546
-    var diffs1 = _.reduce(realFirst, function (result, value, key) {
-      return _.isEqual(value, fixFirst[key]) ? result : result.concat(key);
-    }, []);
+      // _id are generated and thus always differ
+      delete realDoc._id;
+      delete fixDoc._id;
+      if (realDoc.data) {
+        delete realDoc.data.entryId;
+      }
+      if (fixDoc.data) {
+        delete fixDoc.data.entryId;
+      }
 
-    var diffs2 = _.reduce(fixFirst, function (result, value, key) {
-      return _.isEqual(value, realFirst[key]) ? result : result.concat(key);
-    }, []);
+      // Deep compare & find differences both ways.
+      // See http://stackoverflow.com/a/31686152/638546
+      var diffs1 = _.reduce(realDoc, function (result, value, key) {
+        return _.isEqual(value, fixDoc[key]) ? result : result.concat(key);
+      }, []);
 
-    if (diffs1.length === 0 && diffs2.length === 0) {
-      return callback();
+      var diffs2 = _.reduce(fixDoc, function (result, value, key) {
+        return _.isEqual(value, realDoc[key]) ? result : result.concat(key);
+      }, []);
+
+      if (diffs1.length !== 0 || diffs2.length !== 0) {
+        // Print out so that we can see the differences.
+        console.log('Data in db.' + collectionName + ':');
+        console.log(realDoc);
+        console.log('Data in fixture.' + collectionName + ':');
+        console.log(fixDoc);
+
+        assertionError = {
+          name: 'AssertionError',
+          diffs: diffs1.concat(diffs2),
+        };
+        // Do not search more
+        break;
+      }
     }
 
-    // Print out so that we can see the differences.
-    console.log('Data in db.' + collectionName + ':');
-    console.log(realFirst);
-    console.log('Data in fixture.' + collectionName + ':');
-    console.log(fixFirst);
-
-    return callback({
-      name: 'AssertionError',
-      diffs: diffs1.concat(diffs2),
-    });
+    if (assertionError) {
+      return callback(assertionError);
+    }
+    // Else all OK
+    return callback();
   });
 };

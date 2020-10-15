@@ -1,6 +1,6 @@
 /* eslint-disable max-lines,no-magic-numbers */
 
-var db = require('../../services/db');
+var db = require('tresdb-db');
 var eventsDal = require('../events/dal');
 var path = require('path');
 var _ = require('lodash');
@@ -220,9 +220,8 @@ exports.getOneRaw = function (entryId, callback) {
   var q = {
     _id: entryId,
   };
-  var opt = {};
 
-  coll.findOne(q, opt, function (err, doc) {
+  coll.findOne(q, function (err, doc) {
     if (err) {
       return callback(err);
     }

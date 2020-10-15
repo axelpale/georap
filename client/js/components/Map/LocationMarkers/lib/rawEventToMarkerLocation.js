@@ -1,3 +1,5 @@
+var statuses = tresdb.config.locationStatuses;
+var types = tresdb.config.locationTypes;
 
 module.exports = function (ev) {
   if (ev.type !== 'location_created') {
@@ -11,7 +13,8 @@ module.exports = function (ev) {
       type: 'Point',
       coordinates: [ev.data.lng, ev.data.lat],
     },
-    tags: [],
+    status: statuses[0],
+    type: types[0],
     layer: 1,  // TODO Have ev.data.layer,
     childLayer: 0,
   };

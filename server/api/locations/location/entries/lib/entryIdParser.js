@@ -2,13 +2,13 @@
 
 var entriesDal = require('../../../../entries/dal');
 var status = require('http-status-codes');
-var ObjectId = require('mongodb').ObjectId;
+var db = require('tresdb-db');
 
 module.exports = function (req, res, next) {
   var stringId = req.params.entryId;
 
   try {
-    req.entryId = new ObjectId(stringId);
+    req.entryId = db.id(stringId);
   } catch (e) {
     return res.sendStatus(status.NOT_FOUND);
   }

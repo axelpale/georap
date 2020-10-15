@@ -1,4 +1,4 @@
-var db = require('../../server/services/db');
+var db = require('tresdb-db');
 var eventsDal = require('../../server/api/events/dal');
 var sums = require('./sums');
 
@@ -42,7 +42,7 @@ exports.computePoints = function (username, callback) {
       locationsVisited: sums.sumVisits(evsTimeUnix),
       locationsCreated: sums.sumCreations(evsTimeUnix),
       postsCreated: sums.sumPosts(evsTimeUnix),
-      tagsCreated: sums.sumTags(evsTimeUnix),
+      locationsClassified: sums.sumClassifications(evsTimeUnix),
       commentsCreated: sums.sumComments(evsTimeUnix),
     };
 
@@ -81,7 +81,7 @@ exports.computePointsAndStore = function (username, callback) {
         locationsVisited: pointCategories.locationsVisited,
         locationsCreated: pointCategories.locationsCreated,
         postsCreated: pointCategories.postsCreated,
-        tagsCreated: pointCategories.tagsCreated,
+        locationsClassified: pointCategories.locationsClassified,
         commentsCreated: pointCategories.commentsCreated,
         points: pointCategories.allTime,
         points30days: pointCategories.days30,

@@ -1,6 +1,6 @@
 var iter = require('../iter');
 var schema = require('../lib/schema');
-var db = require('../../server/services/db');
+var db = require('tresdb-db');
 
 var LNG_MAX = 180;
 var LNG_MIN = -180;

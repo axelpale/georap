@@ -3,9 +3,9 @@ var path = require('path');
 var fse = require('fs-extra');
 var sharp = require('sharp');
 var status = require('http-status-codes');
-var local = require('../../../config/local');
+var config = require('tresdb-config');
 
-var markersBase = path.join(local.staticDir, 'images', 'markers');
+var markersBase = path.join(config.staticDir, 'images', 'markers');
 var templatesBase = path.join(markersBase, 'templates');
 var symbolsBase = path.join(markersBase, 'symbols');
 

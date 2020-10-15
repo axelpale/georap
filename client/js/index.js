@@ -13,7 +13,6 @@ var locations = require('./stores/locations');
 var mapstate = require('./stores/mapstate');
 var markers = require('./stores/markers');
 var statistics = require('./stores/statistics');
-var tags = require('./stores/tags');
 var users = require('./stores/users');
 var minibus = require('minibus');
 
@@ -28,7 +27,6 @@ tresdb.stores = {
   mapstate: mapstate,
   markers: markers,
   statistics: statistics,
-  tags: tags,
   users: users,
 };
 // Create also a global bus. Spaghetti or not?

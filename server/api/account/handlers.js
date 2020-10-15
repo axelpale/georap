@@ -1,9 +1,9 @@
 /* eslint max-lines: 'off' */
 
-var local = require('../../../config/local');
 var status = require('http-status-codes');
+var config = require('tresdb-config');
+var db = require('tresdb-db');
 
-var db = require('../../services/db');
 var hostname = require('../../services/hostname');
 var mailer = require('../../services/mailer');
 var loggers = require('../../services/logs/loggers');
@@ -91,7 +91,7 @@ exports.login = function (req, res, next) {
         expiresIn: '60d',  // two months,
       };
 
-      token = jwt.sign(tokenPayload, local.secret, tokenOptions);
+      token = jwt.sign(tokenPayload, config.secret, tokenOptions);
 
       // Successful login.
       loggers.log(user.name + ' logged in.');
@@ -146,7 +146,7 @@ exports.changePassword = function (req, res, next) {
 
       // Success, current passwords match
       // Hash the new password before storing it to database.
-      var r = local.bcrypt.rounds;
+      var r = config.bcrypt.rounds;
 
       bcrypt.hash(newPassword, r, function (err3, newHash) {
 
@@ -197,7 +197,7 @@ exports.sendResetPasswordEmail = function (req, res, next) {
   // First get collection.
   var users = db.collection('users');
 
-  users.findOne({ email: email }, {}, function (err, user) {
+  users.findOne({ email: email }, function (err, user) {
 
     if (err) {
       return next(err);
@@ -221,20 +221,20 @@ exports.sendResetPasswordEmail = function (req, res, next) {
       admin: user.admin,
       passwordReset: true,
     };
-    var token = jwt.sign(tokenPayload, local.secret, {
+    var token = jwt.sign(tokenPayload, config.secret, {
       expiresIn: '30m',
     });
     var host = hostname.get();
-    var url = local.publicProtocol + '://' + host + '/reset/' + token;
+    var url = config.publicProtocol + '://' + host + '/reset/' + token;
 
     var mailOptions = {
-      from: local.mail.sender,
+      from: config.mail.sender,
       to: user.email,
-      subject: local.title + ' password reset requested for your account',
+      subject: config.title + ' password reset requested for your account',
       text: templates.resetMailTemplate({
         resetUrl: url,
         email: user.email,
-        siteTitle: local.title,
+        siteTitle: config.title,
       }),
     };
 
@@ -269,7 +269,7 @@ exports.resetPassword = function (req, res, next) {
   }
 
   // Hash the new password before storing it to database.
-  bcrypt.hash(password, local.bcrypt.rounds, function (err, newHash) {
+  bcrypt.hash(password, config.bcrypt.rounds, function (err, newHash) {
 
     if (err) {
       return next(err);
@@ -347,25 +347,25 @@ exports.sendInviteEmail = function (req, res, next) {
       email: email,
       invite: true,
     };
-    var token = jwt.sign(tokenPayload, local.secret, {
+    var token = jwt.sign(tokenPayload, config.secret, {
       expiresIn: '7d',
     });
     var host = hostname.get();
-    var url = local.publicProtocol + '://' + host + '/signup/' + token;
+    var url = config.publicProtocol + '://' + host + '/signup/' + token;
 
     // Make first letter lowercase, so that nice after comma.
     // ...welcome to My Site, my description.
-    var desc = local.description;
+    var desc = config.description;
     desc = desc.charAt(0).toLowerCase() + desc.slice(1);
 
     var mailOptions = {
-      from: local.mail.sender,
+      from: config.mail.sender,
       to: email,
-      subject: 'Invite to ' + local.title,
+      subject: 'Invite to ' + config.title,
       text: templates.inviteMailTemplate({
         url: url,
         email: email,
-        siteTitle: local.title,
+        siteTitle: config.title,
         siteDesc: desc,
       }),
     };

@@ -5,8 +5,9 @@ var Location = require('../components/Location/Model');
 var validateCoords = require('./lib/validateCoords');
 var request = require('./lib/request');
 var account = require('./account');
-var tags = require('./tags');
 var emitter = require('component-emitter');
+var locationStatuses = tresdb.config.locationStatuses;
+var locationTypes = tresdb.config.locationTypes;
 
 // Init
 emitter(exports);
@@ -236,29 +237,47 @@ exports.setName = function (id, newName, callback) {
   }, callback);
 };
 
-this.setTags = function (id, newTags, callback) {
-  // Replaces the current taglist with the new one and saves to server.
+this.setStatus = function (id, newStatus, callback) {
+  // Replaces the current status and saves to server.
   //
   // Parameters
   //   id
   //     location id
-  //   newTags
-  //     array of strings
+  //   newStatus
+  //     string
   //   callback
   //     function (err)
 
-  // Validate
-  var i, t;
-  for (i = 0; i < newTags.length; i += 1) {
-    t = newTags[i];
-    if (!tags.isValidTag(t)) {
-      throw new Error('unknown tag: ' + t);
-    }
+  // Validate to catch bugs.
+  if (locationStatuses.indexOf(newStatus) < 0) {
+    throw new Error('Invalid location status string: ' + newStatus);
   }
 
   return postJSON({
-    url: '/api/locations/' + id + '/tags',
-    data: { tags: newTags },
+    url: '/api/locations/' + id + '/status',
+    data: { status: newStatus },
+  }, callback);
+};
+
+this.setType = function (id, newType, callback) {
+  // Replaces the current type and saves to server.
+  //
+  // Parameters
+  //   id
+  //     location id
+  //   newType
+  //     string
+  //   callback
+  //     function (err)
+
+  // Validate to catch bugs.
+  if (locationTypes.indexOf(newType) < 0) {
+    throw new Error('Invalid location type string: ' + newType);
+  }
+
+  return postJSON({
+    url: '/api/locations/' + id + '/type',
+    data: { type: newType },
   }, callback);
 };
 

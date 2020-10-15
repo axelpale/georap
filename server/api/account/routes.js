@@ -1,6 +1,6 @@
 /* eslint-disable new-cap */
 
-var local = require('../../../config/local');
+var config = require('tresdb-config');
 var handlers = require('./handlers');
 
 var jsonParser = require('body-parser').json();
@@ -9,7 +9,10 @@ var jsonParser = require('body-parser').json();
 // Token contents are stored in req.user.
 // See https://github.com/auth0/express-jwt
 var jwt = require('express-jwt');
-var jwtParser = jwt({ secret: local.secret });
+var jwtParser = jwt({
+  secret: config.secret,
+  algorithms: ['HS256'],
+});
 
 var router = require('express').Router();
 

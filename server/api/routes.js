@@ -1,6 +1,6 @@
 /* eslint-disable new-cap */
 
-var local = require('../../config/local');
+var config = require('tresdb-config');
 
 var accountRouter = require('./account/routes');
 var adminRouter = require('./admin/routes');
@@ -35,7 +35,8 @@ router.use('/account', accountRouter);
 //
 // See https://github.com/auth0/express-jwt
 router.use(jwt({
-  secret: local.secret,
+  secret: config.secret,
+  algorithms: ['HS256'],
   getToken: function fromHeaderOrQuerystring(req) {
     // Copied from https://github.com/auth0/express-jwt#usage
     var header = req.headers.authorization;
@@ -48,8 +49,7 @@ router.use(jwt({
   },
 }));
 
-// Blacklist.
-// Check if user is banned by finding user id from a blacklist.
+// Check if user is banned.
 router.use(function (req, res, next) {
 
   // Check this by querying the database, because it's SIMPLE.
@@ -60,10 +60,13 @@ router.use(function (req, res, next) {
       return next(err);
     }
 
-    if (storedUser.status === 'active') {
-      return next();
+    if (storedUser) {
+      if (storedUser.status === 'active') {
+        return next();
+      }
     }
 
+    // User does not exist or is banned
     return res.sendStatus(status.FORBIDDEN);
   });
 });

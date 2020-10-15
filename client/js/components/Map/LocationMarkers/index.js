@@ -217,14 +217,28 @@ module.exports = function (map) {
     }
   });
 
-  markerStore.on('location_tags_changed', function (ev) {
-    // Update icon according to new tags.
+  markerStore.on('location_status_changed', function (ev) {
+    // Update icon according to new status.
+    // Do this only if the marker has reached the map.
     if (_markers.hasOwnProperty(ev.locationId)) {
       var m = _markers[ev.locationId];
       var mloc = m.get('location');
-      // First update the location
-      mloc.tags = ev.data.newTags;
-      // Update icon according to the new tags
+      // First update the stored MarkerLocation
+      mloc.status = ev.data.newStatus;
+      // Update icon accordingly
+      m.setIcon(_chooseIcon(mloc));
+    }
+  });
+
+  markerStore.on('location_type_changed', function (ev) {
+    // Update icon according to new type.
+    // Do this only if the marker has reached the map.
+    if (_markers.hasOwnProperty(ev.locationId)) {
+      var m = _markers[ev.locationId];
+      var mloc = m.get('location');
+      // First update the stored MarkerLocation
+      mloc.type = ev.data.newType;
+      // Update icon accordingly
       m.setIcon(_chooseIcon(mloc));
     }
   });

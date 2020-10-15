@@ -1,4 +1,4 @@
-var getPoints = require('./getPoints');
+var getPoints = require('tresdb-points');
 
 module.exports = function (ev) {
   var p, h;

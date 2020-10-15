@@ -1,17 +1,19 @@
 /* global describe, it, beforeEach, before, after */
 /* eslint-disable no-magic-numbers */
 
-var db = require('../server/services/db');
+var db = require('tresdb-db');
 var assert = require('assert');
 
-var local = require('../config/local');
+var config = require('tresdb-config');
 var migrates = require('./migrates');
 var schema = require('./lib/schema');
 var assertFixtureEqual = require('./lib/assertFixtureEqual');
 var fixtures = require('./fixtures');
-var tools = require('../specs/tools');
+var loadFixture = require('./lib/loadFixture');
+var fse = require('fs-extra');
+var path = require('path');
 
-var loadFixture = function (versionTag, callback) {
+var loadFixtureByTag = function (versionTag, callback) {
   // Load fixture into the database.
   //
   // Parameters:
@@ -25,14 +27,14 @@ var loadFixture = function (versionTag, callback) {
     throw new Error('invalid version tag:' + versionTag);
   }
 
-  tools.loadFixture(fixtures[versionTag], callback);
+  loadFixture(fixtures[versionTag], callback);
 };
 
 
 describe('migrates.migrate', function () {
 
   before(function (done) {
-    db.init(local.mongo.testUrl, function (err) {
+    db.init(config.mongo.testUrl, function (err) {
       if (err) {
         return console.error('Failed to connect to MongoDB.');
       }
@@ -49,7 +51,7 @@ describe('migrates.migrate', function () {
   describe('v1 to v2', function () {
 
     beforeEach(function (done) {
-      loadFixture('v1', done);
+      loadFixtureByTag('v1', done);
     });
 
     it('should be able to migrate from v1 to v2', function (done) {
@@ -71,7 +73,7 @@ describe('migrates.migrate', function () {
   describe('v2 to v3', function () {
 
     beforeEach(function (done) {
-      loadFixture('v2', done);
+      loadFixtureByTag('v2', done);
     });
 
     it('should be able to migrate from v2 to v3', function (done) {
@@ -93,7 +95,7 @@ describe('migrates.migrate', function () {
   describe('v3 to v4', function () {
 
     beforeEach(function (done) {
-      loadFixture('v3', done);
+      loadFixtureByTag('v3', done);
     });
 
     it('should be able to migrate from v3 to v4', function (done) {
@@ -114,7 +116,7 @@ describe('migrates.migrate', function () {
   describe('v4 to v5', function () {
 
     beforeEach(function (done) {
-      loadFixture('v4', done);
+      loadFixtureByTag('v4', done);
     });
 
     it('should be able to migrate from v4 to v5', function (done) {
@@ -139,11 +141,26 @@ describe('migrates.migrate', function () {
   describe('v5 to v6', function () {
 
     beforeEach(function (done) {
-      loadFixture('v5', done);
+      loadFixtureByTag('v5', done);
     });
 
     it('should be able to migrate from v5 to v6', function (done) {
       var targetV = 6;
+
+      // Upload attachment temporarily.
+      var from = path.join(__dirname, 'fixtures', 'uploads', 'radar.jpg');
+      var to = path.join(config.uploadDir, '2009', 'RxRvKSlbl', 'radar.jpg');
+      // eslint-disable-next-line no-sync
+      fse.copySync(from, to);
+
+      // Upload attachment thumbnail.
+      var from2 = path.join(__dirname, 'fixtures', 'uploads',
+                            'radar_medium.jpg');
+      var to2 = path.join(config.uploadDir, '2009', 'RxRvKSlbl',
+                          'radar_medium.jpg');
+      // eslint-disable-next-line no-sync
+      fse.copySync(from2, to2);
+
       migrates.migrate(targetV, function (err) {
         assert.ifError(err);
 
@@ -161,6 +178,8 @@ describe('migrates.migrate', function () {
 
                 assertFixtureEqual('events', 'v6', function (err6) {
                   assert.ifError(err6);
+                  // NOTE we decided not to remove the uploaded files
+                  // because the complexity in removing the empty directories.
                   done();
                 });
               });
@@ -175,7 +194,7 @@ describe('migrates.migrate', function () {
   describe('v6 to v7', function () {
 
     beforeEach(function (done) {
-      loadFixture('v6', done);
+      loadFixtureByTag('v6', done);
     });
 
     it('should be able to migrate from v6 to v7', function (done) {
@@ -200,7 +219,7 @@ describe('migrates.migrate', function () {
   describe('v7 to v8', function () {
 
     beforeEach(function (done) {
-      loadFixture('v7', done);
+      loadFixtureByTag('v7', done);
     });
 
     it('should be able to migrate from v7 to v8', function (done) {
@@ -222,5 +241,33 @@ describe('migrates.migrate', function () {
 
   });
 
+  describe('v8 to v9', function () {
+
+    beforeEach(function (done) {
+      loadFixtureByTag('v8', done);
+    });
+
+    it('should be able to migrate from v8 to v9', function (done) {
+      var targetV = 9;
+      migrates.migrate(targetV, function (err) {
+        assert.ifError(err);
+
+        assertFixtureEqual('config', 'v9', function (err2) {
+          assert.ifError(err2);
+
+          assertFixtureEqual('locations', 'v9', function (err4) {
+            assert.ifError(err4);
+
+            assertFixtureEqual('events', 'v9', function (err5) {
+              assert.ifError(err5);
+
+              done();
+            });
+          });
+        });
+      });
+    });
+
+  });
 
 });

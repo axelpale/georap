@@ -1,9 +1,9 @@
 /* global describe, it, beforeEach, before, after */
 /* eslint-disable handle-callback-err */
 
-var db = require('../../../services/db');
-var local = require('../../../../config/local');
-var tools = require('../../../../specs/tools');
+var db = require('tresdb-db');
+var config = require('tresdb-config');
+var loadFixture = require('../../../../migration/lib/loadFixture');
 var fixture = require('./dal.spec.fixture');
 var unit = require('./index');
 var assert = require('assert');
@@ -11,7 +11,7 @@ var assert = require('assert');
 describe('server.api.markers.dal', function () {
 
   before(function (done) {
-    db.init(local.mongo.testUrl, function (err) {
+    db.init(config.mongo.testUrl, function (err) {
       if (err) {
         return console.error('Failed to connect to MongoDB.');
       }
@@ -28,7 +28,7 @@ describe('server.api.markers.dal', function () {
   describe('.getFiltered', function () {
 
     beforeEach(function (done) {
-      tools.loadFixture(fixture, done);
+      loadFixture(fixture, done);
     });
 
     it('should find non-deleted in az order by default', function (done) {

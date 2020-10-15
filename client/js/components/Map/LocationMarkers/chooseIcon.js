@@ -1,57 +1,39 @@
 /* eslint-disable max-statements */
 var icons = require('../lib/icons');
-
-var allStatusTags = [
-  'walk-in',
-  'active',
-  'buried',
-  'demolished',
-  'guarded',
-  'locked',
-];
-
-var isTypeTag = function (t) {
-  return allStatusTags.indexOf(t) === -1;
-};
+var urls = require('tresdb-urls');
 
 module.exports = function (loc, zoomLevel, visitedManager) {
-  var templateName = 'default';
-  var symbol = 'default';
+  // Return an icon specification compatible with Google Maps Markers
 
   // Choose template
+  var templateName = 'default';
 
   var isVisited = visitedManager.isVisited(loc._id);
-  var isDemolished = (loc.tags.indexOf('demolished') !== -1);
+  var isDemolished = loc.status === 'demolished'; // TODO rm inst specificity
   var isParent = loc.childLayer > zoomLevel;
 
   var templateSuffix = '';
-  if (isDemolished) {
-    templateSuffix += 'demolished';
-  }
+  // Set suffix. Visited takes priority.
   if (isVisited) {
-    templateSuffix += 'visited';
+    templateSuffix = 'visited';
+  } else if (isDemolished) {
+    templateSuffix = 'demolished';
   }
+
+  // Suffix
   if (isParent) {
     templateSuffix += 'parent';
   }
 
   if (templateSuffix.length > 0) {
     templateName = templateSuffix;
-  }
+  } // else use templateName as is
 
   // Choose symbol
-
-  var typeTag = loc.tags.find(isTypeTag);
-  if (typeTag) {
-    symbol = typeTag;
-  } else {
-    symbol = 'default';
-  }
+  var symbol = loc.type;
 
   // Build URL
-
-  var iconName = templateName + '-' + symbol + '.png';
-  var iconUrl = '/api/icons/' + iconName;
+  var iconUrl = urls.markerIconUrl(templateName, symbol);
 
   var iconObj = icons.marker(iconUrl);
 

@@ -1,4 +1,4 @@
-var db = require('../../../services/db');
+var db = require('tresdb-db');
 
 
 exports.getAll = function (callback) {
@@ -52,11 +52,12 @@ exports.getFiltered = function (params, callback) {
   // Where docs has structure similar to:
   //   [
   //     {
-  //       _id: <ObjectId>,
-  //       creator: <string>,
-  //       geom: <GeoJSON Point>,
-  //       deleted: <bool>,
-  //       tags: <array of strings>
+  //       _id: <ObjectId>
+  //       creator: <string>
+  //       geom: <GeoJSON Point>
+  //       deleted: <bool>
+  //       status: <string>
+  //       type: <string>
   //       text1: <string>
   //       text2: <string>
   //       places: <array of strings>
@@ -213,7 +214,8 @@ exports.getWithin = function (params, callback) {
       $project: {
         name: true,
         geom: true,
-        tags: true,
+        status: true,
+        type: true,
         layer: true,
         childLayer: true,
       },

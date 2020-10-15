@@ -1,0 +1,38 @@
+
+<div class="tresdb-location-statustype form-group">
+
+  <span id="tresdb-location-statustype-viewer">
+    <%= statusTypeHtml %>
+  </span>
+
+  <button id="tresdb-location-statustype-form-show" type="button" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-pencil"></span> Edit</button>
+
+</div>
+
+<form id="tresdb-location-statustype-form" class="hidden panel panel-primary">
+  <div class="panel-body">
+
+    <div id="tresdb-location-status-list">
+      <%= statusFormListHtml %>
+    </div>
+
+    <div id="tresdb-location-type-list">
+      <%= typeFormListHtml %>
+    </div>
+
+    <div class="pull-right">
+      <button id="tresdb-location-statustype-form-cancel" type="button" class="btn btn-default">Close</button>
+    </div>
+
+  </div>
+</form>
+
+<div id="tresdb-location-statustype-form-progress" class="progress hidden">
+  <div class="progress-bar progress-bar-striped active" role="progressbar" style="width: 100%">
+    <span class="sr-only">Waiting for server</span>
+  </div>
+</div>
+
+<div id="tresdb-location-statustype-form-error" class="hidden">
+  <div class="alert alert-danger" role="alert">Sorry, updating status or type failed. Try again later.</div>
+</div>

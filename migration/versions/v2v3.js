@@ -1,6 +1,6 @@
 var iter = require('../iter');
 var schema = require('../lib/schema');
-var db = require('../../server/services/db');
+var db = require('tresdb-db');
 
 var FROM_VERSION = 2;
 var TO_VERSION = FROM_VERSION + 1;

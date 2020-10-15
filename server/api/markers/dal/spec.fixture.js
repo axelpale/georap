@@ -1,13 +1,12 @@
 /* eslint-disable no-magic-numbers */
 
-var db = require('../../services/db');
-var ObjectId = require('mongodb').ObjectId;
+var db = require('tresdb-db');
 
 module.exports = {
   collections: {
     locations: [
       {
-        _id: new ObjectId('581f166110a1482dd0b7cd13'),
+        _id: db.id('581f166110a1482dd0b7cd13'),
         creator: 'admin',
         deleted: false,
         geom: {
@@ -19,12 +18,13 @@ module.exports = {
         name: 'Irbene',
         points: 0,
         places: [],
-        tags: ['walk-in', 'town'],
+        status: 'abandoned',
+        type: 'town',
         text1: 'irb irbene admin walk-in',
         text2: '',
       },
       {
-        _id: new ObjectId('581f166110a1482dd0b7cd14'),
+        _id: db.id('581f166110a1482dd0b7cd14'),
         creator: 'johndoe',
         deleted: false,
         geom: {
@@ -36,12 +36,13 @@ module.exports = {
         name: 'Mill',
         points: 0,
         places: [],
-        tags: ['factory', 'walk-in'],
+        status: 'abandoned',
+        type: 'factory',
         text1: 'mill factory johndoe walk-in',
         text2: '',
       },
       {
-        _id: new ObjectId('581f166110a1482dd0b7cd15'),
+        _id: db.id('581f166110a1482dd0b7cd15'),
         creator: 'johndoe',
         deleted: true,
         geom: {
@@ -53,7 +54,8 @@ module.exports = {
         name: 'Kolkos',
         points: 0,
         places: [],
-        tags: ['factory'],
+        status: 'unknown',
+        type: 'factory',
         text1: 'kolkos factory johndoe',
         text2: '',
       },

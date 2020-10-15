@@ -1,6 +1,6 @@
 /* eslint-disable max-lines */
 
-var db = require('../../../services/db');
+var db = require('tresdb-db');
 var proj = require('../../../services/proj');
 var googlemaps = require('../../../services/googlemaps');
 var eventsDal = require('../../events/dal');
@@ -117,39 +117,82 @@ exports.changeName = function (params, callback) {
   });
 };
 
-exports.changeTags = function (params, callback) {
+exports.changeStatus = function (params, callback) {
   // Parameters:
   //   params
   //     locationId
   //     locationName
-  //     locationTags
-  //       array, old tags
+  //     locationStatus
+  //       string, old status
   //     username
   //       string
-  //     tags
-  //       array of strings
+  //     status
+  //       string, new status
   //   callback
   //     function (err)
 
   var locColl = db.get().collection('locations');
 
   var q = { _id: params.locationId };
-  var newTags = params.tags;
-  var u = { $set: { tags: newTags } };
+  var newStatus = params.status;
+  var u = { $set: { status: newStatus } };
 
   locColl.updateOne(q, u, function (err) {
     if (err) {
       return callback(err);
     }
 
-    var oldTags = params.locationTags;
+    var oldStatus = params.locationStatus;
 
-    eventsDal.createLocationTagsChanged({
+    eventsDal.createLocationStatusChanged({
       locationId: params.locationId,
       locationName: params.locationName,
       username: params.username,
-      newTags: newTags,
-      oldTags: oldTags,
+      newStatus: newStatus,
+      oldStatus: oldStatus,
+    }, function (err2) {
+      if (err2) {
+        return callback(err2);
+      }
+
+      return callback();
+    });
+  });
+};
+
+exports.changeType = function (params, callback) {
+  // Parameters:
+  //   params
+  //     locationId
+  //     locationName
+  //     locationType
+  //       string, old type
+  //     username
+  //       string
+  //     type
+  //       string, new type
+  //   callback
+  //     function (err)
+
+  var locColl = db.get().collection('locations');
+
+  var q = { _id: params.locationId };
+  var newType = params.type;
+  var u = { $set: { type: newType } };
+
+  locColl.updateOne(q, u, function (err) {
+    if (err) {
+      return callback(err);
+    }
+
+    var oldType = params.locationType;
+
+    eventsDal.createLocationTypeChanged({
+      locationId: params.locationId,
+      locationName: params.locationName,
+      username: params.username,
+      newType: newType,
+      oldType: oldType,
     }, function (err2) {
       if (err2) {
         return callback(err2);
@@ -173,7 +216,7 @@ exports.getRaw = function (id, callback) {
 
   var locColl = db.get().collection('locations');
 
-  locColl.findOne({ _id: id }, {}, function (err, doc) {
+  locColl.findOne({ _id: id }, function (err, doc) {
     if (err) {
       return callback(err);
     }
@@ -202,7 +245,7 @@ exports.getOne = function (id, callback) {
   var evColl = db.get().collection('events');
   var enColl = db.get().collection('entries');
 
-  locColl.findOne({ _id: id }, {}, function (err, doc) {
+  locColl.findOne({ _id: id }, function (err, doc) {
     if (err) {
       return callback(err);
     }

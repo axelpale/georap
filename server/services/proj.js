@@ -1,10 +1,10 @@
 // Provides service for coordinate projections.
 
 var proj4 = require('proj4');
-var local = require('../../config/local');
+var config = require('tresdb-config');
 
 // Init
-local.coordinateSystems.forEach(function (cordsys) {
+config.coordinateSystems.forEach(function (cordsys) {
   var name = cordsys[0];
   var projection = cordsys[1];  // Proj4 projection definition string.
 
@@ -24,7 +24,7 @@ exports.getAltPositions = function (position) {
   //
   var result = {};
 
-  local.coordinateSystems.forEach(function (cordsys) {
+  config.coordinateSystems.forEach(function (cordsys) {
     var name = cordsys[0];
 
     result[name] = proj4(name, position);

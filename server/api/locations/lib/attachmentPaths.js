@@ -1,5 +1,5 @@
 
-var local = require('../../../../config/local');
+var config = require('tresdb-config');
 var path = require('path');
 var urljoin = require('url-join');
 
@@ -15,11 +15,11 @@ exports.getRelativeUrl = function (fileEntry) {
 exports.getAbsoluteFilePath = function (fileEntry) {
   var relPath = exports.getRelativeFilePath(fileEntry);
 
-  return path.resolve(local.uploadDir, relPath);
+  return path.resolve(config.uploadDir, relPath);
 };
 
 exports.getAbsoluteUrl = function (fileEntry) {
   var relUrl = exports.getRelativeUrl(fileEntry);
 
-  return urljoin(local.uploadUrl, relUrl);
+  return urljoin(config.uploadUrl, relUrl);
 };

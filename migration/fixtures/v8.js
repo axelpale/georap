@@ -2,6 +2,7 @@
 // NOTE This file is an important documentation of the data structure of v8.
 
 var c = require('./common');
+var db = require('tresdb-db');
 
 module.exports = {
   collections: {
@@ -12,7 +13,7 @@ module.exports = {
     }],
 
     entries: [{
-      _id: c.id('581f166110a1482dd0b7ea01'),
+      _id: db.id('581f166110a1482dd0b7ea01'),
       data: {
         isVisit: false,
         markdown: 'A ghost town',
@@ -27,7 +28,7 @@ module.exports = {
       type: 'location_entry',
       user: 'admin',
     }, {
-      _id: c.id('581f166110a1482dd0b7ea02'),
+      _id: db.id('581f166110a1482dd0b7ea02'),
       comments: [
         {
           time: '2009-10-04T19:55:01.000Z',
@@ -62,7 +63,7 @@ module.exports = {
       user: 'admin',
     }, {
       data: {
-        entryId: c.id('581f166110a1482dd0b7ea01'),
+        entryId: db.id('581f166110a1482dd0b7ea01'),
         isVisit: false,
         markdown: 'A ghost town',
         filepath: null,
@@ -77,7 +78,17 @@ module.exports = {
       user: 'admin',
     }, {
       data: {
-        entryId: c.id('581f166110a1482dd0b7ea02'),
+        newTags: ['walk-in'],
+        oldTags: [],
+      },
+      locationId: c.irbeneId,
+      locationName: 'Irbene',
+      time: '2009-09-04T23:45:20.000Z',
+      type: 'location_tags_changed',
+      user: 'admin',
+    }, {
+      data: {
+        entryId: db.id('581f166110a1482dd0b7ea02'),
         isVisit: false,
         markdown: null,
         filepath: '2009/RxRvKSlbl/radar.jpg',  // the sample contains this
@@ -92,7 +103,7 @@ module.exports = {
       user: 'admin',
     }, {
       data: {
-        entryId: c.id('581f166110a1482dd0b7ea02'),
+        entryId: db.id('581f166110a1482dd0b7ea02'),
         message: 'Dang radar, dude',
       },
       locationId: c.irbeneId,

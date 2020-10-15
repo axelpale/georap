@@ -1,7 +1,7 @@
 /* eslint-disable global-require */
 // This worker is meant to be invoked as a cronjob once in a while.
 //
-// The responsibilities of the worker include:
+// The responsibilities of the worker include but are not limited to:
 // - updating scene points
 // - updating text fields for search
 //
@@ -15,7 +15,7 @@
 // - require db where you need it. No need to pass it around.
 // - after success, do console.log('<jobname>: <human readable results>')
 
-var db = require('../server/services/db');
+var db = require('tresdb-db');
 
 var jobs = [
   require('./search'),

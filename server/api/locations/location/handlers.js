@@ -2,6 +2,7 @@
 var templates = require('./templates');
 var dal = require('./dal');
 var loggers = require('../../../services/logs/loggers');
+var config = require('tresdb-config');
 var status = require('http-status-codes');
 var sanitizeFilename = require('sanitize-filename');
 var slugify = require('slugify');
@@ -64,28 +65,73 @@ exports.changeName = function (req, res, next) {
 
 
 
-exports.changeTags = function (req, res, next) {
+exports.changeTags = function (req, res) {
+  // TODO Remove at some point
+  var msg = 'Tags API is not available anymore. Update your client.';
+  return res.status(status.GONE).send(msg);
+};
 
-  if (typeof req.body.tags !== 'object') {
+
+
+exports.changeStatus = function (req, res, next) {
+  // Validate status
+  if (typeof req.body.status === 'string') {
+    if (config.locationStatuses.indexOf(req.body.status) < 0) {
+      var msg = 'Invalid location status: ' + req.body.status;
+      return res.status(status.BAD_REQUEST).send(msg);
+    }
+  } else {
     return res.sendStatus(status.BAD_REQUEST);
   }
 
   // If no change, everything ok already
-  var oldTags = req.location.tags;
-  var newTags = req.body.tags;
-  var everyTagEqual = oldTags.every(function (ot, i) {
-    return newTags[i] === ot;
-  });
-  if (oldTags.length === newTags.length && everyTagEqual) {
-    return res.status(status.OK).send('Tags already equal');
+  var oldStatus = req.location.status;
+  var newStatus = req.body.status;
+  if (oldStatus === newStatus) {
+    return res.status(status.OK).send('Status not changed. Same already.');
   }
 
-  dal.changeTags({
+  dal.changeStatus({
     locationId: req.location._id,
     locationName: req.location.name,
-    locationTags: oldTags,
+    locationStatus: oldStatus,
     username: req.user.name,
-    tags: newTags,
+    status: newStatus,
+  }, function (err) {
+    if (err) {
+      return next(err);
+    }
+
+    return res.sendStatus(status.OK);
+  });
+};
+
+
+
+exports.changeType = function (req, res, next) {
+  // Validate type
+  if (typeof req.body.type === 'string') {
+    if (config.locationTypes.indexOf(req.body.type) < 0) {
+      var msg = 'Invalid location type: ' + req.body.type;
+      return res.status(status.BAD_REQUEST).send(msg);
+    }
+  } else {
+    return res.status(status.BAD_REQUEST).send('Invalid location type');
+  }
+
+  // If no change, everything ok already
+  var oldType = req.location.type;
+  var newType = req.body.type;
+  if (oldType === newType) {
+    return res.status(status.OK).send('Type not changed. Same already.');
+  }
+
+  dal.changeType({
+    locationId: req.location._id,
+    locationName: req.location.name,
+    locationType: oldType,
+    username: req.user.name,
+    type: newType,
   }, function (err) {
     if (err) {
       return next(err);

@@ -1,9 +1,10 @@
-/* global describe, it, beforeEach, afterEach, before, after */
+config/* global describe, it, beforeEach, afterEach, before, after */
 
 // The Unit
 var iter = require('./iter');
-var db = require('../server/services/db');
-var local = require('../config/local');
+var db = require('tresdb-db');
+var config = require('tresdb-config');
+// Enable should api
 // eslint-disable-next-line no-unused-vars
 var should = require('should');
 var assert = require('assert');
@@ -29,7 +30,7 @@ describe('iter.updateEach', function () {
   var collection;
 
   before(function (done) {
-    db.init(local.mongo.testUrl, function (err) {
+    db.init(config.mongo.testUrl, function (err) {
       if (err) {
         return console.error('Failed to connect to MongoDB.');
       }
@@ -94,6 +95,15 @@ describe('iter.updateEach', function () {
   it('should detect error', function (done) {
     iter.updateEach(collection, function (person, next) {
       return next(new Error('foobar'));
+    }, function (err) {
+      assert.equal(err.message, 'foobar');
+      return done();
+    });
+  });
+
+  it('should detect thrown error', function (done) {
+    iter.updateEach(collection, function () {
+      throw new Error('foobar');
     }, function (err) {
       assert.equal(err.message, 'foobar');
       return done();

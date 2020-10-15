@@ -100,8 +100,10 @@ exports.getWithin = function (req, res, next) {
   //     string
   //   geom
   //     GeoJSON point
-  //   tags
-  //     array of strings
+  //   status
+  //     string, location status
+  //   type
+  //     string, location type
   //   layer
   //     integer
   //   childLayer

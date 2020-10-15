@@ -1,4 +1,4 @@
-var db = require('../../services/db');
+var db = require('tresdb-db');
 
 exports.getAll = function (callback) {
   // Get all users, ordered by points, descending
@@ -14,11 +14,15 @@ exports.getAll = function (callback) {
     email: false,
   };
 
-  coll.find({}, proj).sort({ points: -1 }).toArray(function (err, users) {
-    if (err) {
-      return callback(err);
-    }
+  coll
+    .find({})
+    .project(proj)
+    .sort({ points: -1 })
+    .toArray(function (err, users) {
+      if (err) {
+        return callback(err);
+      }
 
-    return callback(null, users);
-  });
+      return callback(null, users);
+    });
 };

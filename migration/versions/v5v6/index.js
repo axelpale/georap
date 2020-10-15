@@ -18,20 +18,20 @@
 // 8. remove deprecated entries
 // 9. normalize entries: combine entry types to single location_entry
 
-var db = require('../../../server/services/db');
+var db = require('tresdb-db');
 var uploads = require('../../../server/services/uploads');
 //var googlemaps = require('../../../server/services/googlemaps');
 var schema = require('../../lib/schema');
 var iter = require('../../iter');
 var entryToEvent = require('./entryToEvent');
 var getShortId = require('./getShortId');
-var async = require('async');
+var asyn = require('async');
 var clone = require('clone');
 
 var FROM_VERSION = 5;
 var TO_VERSION = FROM_VERSION + 1;
 
-// Steps to be executed with async.eachSeries in the given order.
+// Steps to be executed with asyn.eachSeries in the given order.
 // The parameter 'next' is function (err) that must be called in the end of
 // each step.
 var substeps = [
@@ -47,30 +47,6 @@ var substeps = [
       console.log('Schema version tag created:', TO_VERSION);
       return next(null);
     });
-  },
-
-  function updateNames(next) {
-    console.log('X. Update usernames. Dirty.');
-    // Dirty hack. Instance related step to update some usernames.
-
-    var nameMap = {
-      'Rgs': 'rgs',
-      'Brynkka': 'brynkka',
-    };
-
-    var coll = db.collection('locations');
-
-    iter.updateEach(coll, function (origLoc, iterNext) {
-      var loc = clone(origLoc);
-
-      loc.content.forEach(function (entry) {
-        if (entry.user in nameMap) {
-          entry.user = nameMap[entry.user];
-        }
-      });
-
-      return iterNext(null, loc);
-    }, next);
   },
 
   function addPoints(next) {
@@ -95,7 +71,7 @@ var substeps = [
   },
 
   function addIsLayered(next) {
-    console.log('X. Adding property \'isLayered\' to each location...');
+    console.log('3. Adding property \'isLayered\' to each location...');
 
     var coll = db.collection('locations');
 
@@ -106,7 +82,7 @@ var substeps = [
   },
 
   function addCreator(next) {
-    console.log('3. Adding property \'creator\' to each location...');
+    console.log('4. Adding property \'creator\' to each location...');
 
     var coll = db.collection('locations');
 
@@ -141,27 +117,8 @@ var substeps = [
     }, next);
   },
 
-  // function addPlaces(next) {
-  //   console.log('4. Adding \'places\' to each location...');
-  //
-  //   var coll = db.collection('locations');
-  //
-  //   iter.updateEach(coll, function (loc, iterNext) {
-  //     var latlng = [loc.geom.coordinates[1], loc.geom.coordinates[0]];
-  //     googlemaps.reverseGeocode(latlng, function (err, places) {
-  //       if (err) {
-  //         return iterNext(err);
-  //       }
-  //
-  //       loc.places = places;
-  //
-  //       return iterNext(null, loc);
-  //     });
-  //   }, next);
-  // },
-
   function addTempPlaces(next) {
-    console.log('4. Adding \'places\' to each location...');
+    console.log('5. Adding \'places\' to each location...');
 
     var coll = db.collection('locations');
 
@@ -173,7 +130,7 @@ var substeps = [
   },
 
   function moveEntries(next) {
-    console.log('5. Move content entries to separate entries collection ' +
+    console.log('6. Move content entries to separate entries collection ' +
                 'and remove content prop from locations...');
 
     var coll = db.collection('locations');
@@ -237,7 +194,7 @@ var substeps = [
   },
 
   function createThumbnails(next) {
-    console.log('6. Create thumbnail for each attachment...');
+    console.log('7. Create thumbnail for each attachment...');
 
     var coll = db.collection('entries');
 
@@ -270,7 +227,7 @@ var substeps = [
   },
 
   function createEvents(next) {
-    console.log('7. Create events from entries...');
+    console.log('8. Create events from entries...');
 
     var enColl = db.collection('entries');
     var evColl = db.collection('events');
@@ -292,7 +249,7 @@ var substeps = [
   },
 
   function advanceCreatedBySecond(next) {
-    console.log('X. Advance location_created events to correct the order.');
+    console.log('9. Advance location_created events to correct the order.');
     // Created event should be the earliest.
 
     var evColl = db.collection('events');
@@ -318,7 +275,7 @@ var substeps = [
   },
 
   function removeDeprecatedEntries(next) {
-    console.log('8. Remove deprecated entries...');
+    console.log('10. Remove deprecated entries...');
 
     // Deprecated entry types:
     // - visit
@@ -344,7 +301,7 @@ var substeps = [
   },
 
   function normalizeEntries(next) {
-    console.log('9. Normalize remaining entries...');
+    console.log('11. Normalize remaining entries...');
     // Remaining v5 entry types are:
     // - attachment
     // - story
@@ -404,7 +361,7 @@ exports.run = function (callback) {
   console.log();
   console.log('### Step v' + FROM_VERSION + ' to v' + TO_VERSION + ' ###');
 
-  async.series(substeps, function (err) {
+  asyn.series(substeps, function (err) {
     if (err) {
       console.error(err);
       return callback(err);

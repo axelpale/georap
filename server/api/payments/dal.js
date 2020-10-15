@@ -1,4 +1,4 @@
-var db = require('../../services/db');
+var db = require('tresdb-db');
 var usersDal = require('../users/dal');
 var _ = require('lodash');
 var clone = require('clone');

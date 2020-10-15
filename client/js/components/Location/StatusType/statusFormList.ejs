@@ -1,0 +1,14 @@
+<%
+  var activityClass = function (status) {
+    if (status === currentStatus) {
+      return 'tresdb-status-active';
+    }
+    return '';
+  };
+%>
+
+<% locationStatuses.forEach(function (status) { %>
+  <button id="tresdb-status-<%= status %>" data-status="<%= status %>" class="<%= activityClass(status) %>">
+    <%= cap(status) %>
+  </button>
+<% }) %>

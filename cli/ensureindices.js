@@ -1,6 +1,6 @@
 // Ensures that the db has all the needed indices
 
-var db = require('../server/services/db');
+var db = require('tresdb-db');
 var tools = require('../specs/tools');
 var fixture = require('./fixtures/sample');
 var clone = require('clone');

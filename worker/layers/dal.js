@@ -1,4 +1,4 @@
-var db = require('../../server/services/db');
+var db = require('tresdb-db');
 
 var TOP_LAYER = 1;
 var BOTTOM_LAYER = 15;
@@ -67,6 +67,7 @@ exports.findLayerWithClusterRadiusSmallerThan = function (distance) {
 exports.markAllAsUnlayered = function (callback) {
   // Mark each location with isLayered=false and childLayer=0.
   // This is usually necessary when starting to refresh the layer numbers.
+  // TODO what about deleted locations?
 
   var coll = db.collection('locations');
   var u = {
@@ -134,7 +135,7 @@ exports.findDistToNearestLayered = function (geom, callback) {
         },
       },
     },
-  ], function (err, result) {
+  ]).toArray(function (err, result) {
 
     if (err) {
       return callback(err);

@@ -1,4 +1,4 @@
-var local = require('../../../config/local');
+var config = require('tresdb-config');
 
 var morgan = require('morgan');
 var mkdirp = require('mkdirp');
@@ -8,7 +8,7 @@ var fs = require('fs');
 // Setup
 
 // Ensure directory for access logs exist.
-mkdirp.sync(local.logDir);
+mkdirp.sync(config.logDir);
 
 // Interface
 
@@ -22,7 +22,7 @@ exports.http = function () {
   //
 
   // Log requests to a file. For that, create a write stream (in append mode)
-  var p = path.join(local.logDir, 'access.log');
+  var p = path.join(config.logDir, 'access.log');
   var accessLogStream = fs.createWriteStream(p, { flags: 'a' });
 
   return morgan('common', {

@@ -1,12 +1,14 @@
 var eventFilters = require('pretty-events');
-var getPoints = require('../../client/js/components/lib/getPoints');
+var getPoints = require('tresdb-points');
 
 exports.sumPoints = function (evs) {
   // Return sum of points of given events.
 
   // Filter events. For example, prevent subsequent taggings
   // from accumulating points.
-  var filteredEvs = eventFilters.mergeTagged(evs);
+  // TODO aggregate actions per location and give points based on the aggregate
+  // instead of independent events.
+  var filteredEvs = eventFilters.mergeSimilar(evs);
 
   return filteredEvs.reduce(function (acc, ev) {
     return acc + getPoints(ev);
@@ -73,10 +75,16 @@ exports.sumComments = function (evs) {
   }, 0);
 };
 
-exports.sumTags = function (evs) {
+exports.sumClassifications = function (evs) {
   return evs.reduce(function (acc, ev) {
-    if (ev.type === 'location_tags_changed') {
+    if (ev.type === 'location_tags_changed') { // legacy
       return acc + ev.data.newTags.length - ev.data.oldTags.length;
+    }
+    if (ev.type === 'location_status_changed') {
+      return acc + 1;
+    }
+    if (ev.type === 'location_type_changed') {
+      return acc + 1;
     }
     return acc;
   }, 0);

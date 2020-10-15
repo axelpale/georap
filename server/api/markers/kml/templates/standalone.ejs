@@ -5,7 +5,7 @@
   <% markers.forEach(function (m) { %>
   <Placemark>
     <name><%= m.name %></name>
-    <description>By <%= m.creator %>. Tags: <%= m.tags.join(', ') %></description>
+    <description><%= m.status %> <%= m.type %> by <%= m.creator %></description>
     <Point>
       <coordinates><%= m.geom.coordinates.join(',') %></coordinates>
     </Point>

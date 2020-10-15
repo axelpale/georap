@@ -6,9 +6,8 @@ var eventListTemplate = require('../../Events/list.ejs');
 var filters = require('pretty-events');
 
 var eventFilter = function (evs) {
-  var filteredEvs = filters.dropEntryCommentDeleteGroups(evs);
-  filteredEvs = filters.mergeTagged(evs);
-  return filteredEvs;
+  var compactEvs = filters.dropEntryCommentDeleteGroups(evs);
+  return compactEvs;
 };
 
 module.exports = function (events) {

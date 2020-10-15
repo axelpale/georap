@@ -1,4 +1,4 @@
-var local = require('../../../../config/local');
+var config = require('tresdb-config');
 var uploads = require('../../../services/uploads');
 var dal = require('./dal');
 
@@ -19,8 +19,8 @@ var buildUrls = function (locs) {
       var rel, url;
       if (entry.filepath !== null) {
         if (entry.filepath.startsWith('/')) {
-          rel = path.relative(local.tempUploadDir, entry.filepath);
-          url = urljoin(local.tempUploadUrl, rel);
+          rel = path.relative(config.tempUploadDir, entry.filepath);
+          url = urljoin(config.tempUploadUrl, rel);
           entry.filepath = url;
         }
       }

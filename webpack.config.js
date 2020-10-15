@@ -1,4 +1,4 @@
-var local = require('./config/local');
+var config = require('tresdb-config');
 
 // compile js assets into a single bundle file
 module.exports = {
@@ -8,7 +8,7 @@ module.exports = {
   // Output: where to store the generated files.
   output: {
     // Directory to which the compiled static files will be stored.
-    path: local.staticDir,
+    path: config.staticDir,
     // The name of the bundle and its source maps.
     filename: 'app.bundle.js',
   },
