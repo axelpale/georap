@@ -54,7 +54,7 @@ exports.setVersion = function (version, callback) {
 
   var configColl = db.collection('config');
 
-  configColl.update({ key: 'schemaVersion' }, {
+  configColl.updateOne({ key: 'schemaVersion' }, {
     $set: { value: version },
   }, { upsert: true }).then(function () {
     return callback(null);
