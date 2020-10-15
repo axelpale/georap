@@ -69,15 +69,15 @@ Second, install dependencies:
 
     $ npm install
 
-Fourth, create a MongoDB database named `tresdb` and create necessary database users. For a demo setup or development purposes, just install the defaults:
+Fourth, create a MongoDB database named `tresdb` and create necessary database users. For a demo setup or development purposes, just install the default users:
 
     $ npm run mongod:init
 
 Do not use the defaults in production. For production, see detailed [MongoDB user setup](#mongodb-user-setup).
 
-Fifth, rename `config/local-sample.js` to `config/local.js`. The file contains the main configuration for your TresDB app, including the title of the app, Google Maps API key, sender email address, and multiple others. Modify it to match your setting.
+Fifth, rename or copy `config-sample/` to `config/`. The directory contains the main configuration for your TresDB app, including the title of the app, Google Maps API key, marker icons, and multiple other settings. Modify it to match your needs.
 
-After successful configuration, the final installation step is to populate the database with initial data. This will install also the user account you just configured.
+After successful configuration, the final installation step is to populate the database with initial data. This will also install the user account you just configured.
 
     $ npm run migrate
 
@@ -261,7 +261,7 @@ Executes one work cycle. A cycle includes jobs such as computing marker layers, 
 
 ## Logging
 
-Server logs are stored under `.data/logs/` by default. To change the dir, edit `config/local.js`. See `server/services/logs/` for how logs are created.
+Server logs are stored under `.data/logs/` by default. To change the dir, edit `config/index.js`. See `server/services/logs/` for how logs are created.
 
 
 
@@ -313,7 +313,7 @@ To restore a specific snapshot:
 
     $ npm run restore 2016-12-31T23-59-59
 
-The backups are stored under `.data/backups` by default. To change this, modify `mongo.backupDir` in `config/local.js`. To remove a backup, remove its directory, e.g. `$ rm -rf .data/backups/2016-12-31T23-59-59`.
+The backups are stored under `.data/backups` by default. To change this, modify `mongo.backupDir` in `config/index.js`. To remove a backup, remove its directory, e.g. `$ rm -rf .data/backups/2016-12-31T23-59-59`.
 
 After restoring it is often necessary to run migrate and worker:
 
@@ -355,7 +355,7 @@ Then in similar manner, create the test user that can access only 'test':
 
 Press `ctrl + d` to quit `mongo` client.
 
-Modify `mongo.url` and `mongo.testUrl` properties in `config/local.js` to include the new credentials of the database users:
+Modify `mongo.url` and `mongo.testUrl` properties in `config/index.js` to include the new credentials of the database users:
 
     ...
     mongo: {
