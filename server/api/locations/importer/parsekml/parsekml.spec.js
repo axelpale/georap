@@ -1,7 +1,7 @@
 /* global describe, it, */
 /* eslint-disable handle-callback-err */
 
-var unit = require('./parsekml');
+var unit = require('./index');
 var should = require('should');  // eslint-disable-line no-unused-vars
 
 
