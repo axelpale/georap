@@ -142,6 +142,7 @@ module.exports = {
     'farm',
     'camp',
     'natural',
+    'water',
     'tree',
     'rock',
     'crater',
