@@ -94,7 +94,6 @@ module.exports = {
   mongo: {
     url: 'mongodb://mongouser:mongouserpwd@localhost:27017/tresdb',
     testUrl: 'mongodb://testuser:testuserpwd@localhost:27017/test',
-    backupDir: path.resolve(__dirname, '../.data/backups/'),
   },
 
   // Email server connection

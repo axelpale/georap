@@ -1,25 +1,8 @@
 
 var versions = require('./versions');
 var schema = require('./lib/schema');
-var backups = require('./backups');
 var loadFixture = require('./lib/loadFixture');
 var initialStateFixture = require('./fixtures/initial');
-
-var BACKUP_DIR = backups.getBackupDirPathForName('migration');
-
-var cleanup = function (callback) {
-  // Clean up after a migration process.
-  console.log('Discarding the backup files...');
-  backups.discardFrom(BACKUP_DIR, function (errdi) {
-    if (errdi) {
-      console.log('FAILED to discard backup files.');
-      console.error(errdi);
-    } else {
-      console.log('Backup files discarded successfully.');
-    }
-    return callback();
-  });
-};
 
 var initEmptyDatabase = function (callback) {
   console.log('Resetting database...');
@@ -84,39 +67,21 @@ exports.migrate = function (targetVersion, callback) {
 
     if (currentVersion < targetVersion) {
       console.log();
-      console.log('#### Backing up the database ####');
-      console.log('If migration fails, the original db state is restored.');
+      console.log('#### Migrating from', currentVersion, 'to',
+                  targetVersion, '####');
 
-      backups.backupTo(BACKUP_DIR, function (errb) {
-        if (errb) {
+      versions.run(currentVersion, targetVersion, function (err2) {
+        if (err2) {
           console.log();
-          console.log('FAILED to back up the database. Stopping...');
-          return callback(errb);
-        }
+          console.log('##### Migration FAILED #####');
+          console.log('Data might be in a corrupted state.');
+          return callback(err2);
+        } // else
 
-        console.log('Database stored to', BACKUP_DIR);
-        console.log('Ready for migration.');
         console.log();
-        console.log('#### Migrating from', currentVersion, 'to',
-                    targetVersion, '####');
+        console.log('##### Migration SUCCESS #####');
 
-        versions.run(currentVersion, targetVersion, function (err2) {
-          if (err2) {
-            console.log();
-            console.log('##### Migration FAILED #####');
-            console.log('Data might be in a corrupted state.');
-            console.log('Restore the database by:');
-            console.log('  npm run migrate:rollback');
-            return callback(err2);
-          } // else
-
-          console.log();
-          console.log('##### Migration SUCCESS #####');
-
-          cleanup(function () {
-            return callback();
-          });
-        });
+        return callback();
       });
     } else {
       console.log();

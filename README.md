@@ -168,25 +168,7 @@ Starts the server in the test env. See [Environments](#environments) for details
 
 Requirements: MongoDB is running
 
-Cretes or updates the database schema. It detects the current schema version and the migration steps required to match the version in `package.json`. For details about the migration steps, see under `migration/versions/`.
-
-### npm run backup
-
-Requirements: MongoDB is running
-
-Stores the content and indices as a directory under `.data/backups`. The directory will be named after the timestamp of the backup. The content is stored in BSON format.
-
-### npm run backup list
-
-Requirements: MongoDB is running
-
-Lists the backups available for restoration.
-
-### npm run restore [backup_name]
-
-Requirements: MongoDB is running
-
-Restores a backup specified by `backup_name`. If `backup_name` is omitted then the most recent backup is used.
+Creates or updates the database schema. It detects the current schema version and the migration steps required to match the version in `package.json`. For details about the migration steps, see under `migration/versions/`.
 
 ### npm run lint
 
@@ -206,23 +188,29 @@ Starts mongo client on test database.
 
 ### npm run mongod
 
+Warning: use only for a demo or development.
+
 Requirements: `mongod:init` and `mongod:init:users` have been run.
 
 Starts MongoDB in auth mode and with the path `.data/db/`.
 
 ### npm run mongod:init
 
+Warning: use only for a demo or development.
+
 Starts MongoDB first time and without authentication.
 
 ### npm run mongod:init:users
 
-Requirements: MongoDB without authentication is running.
-
 Warning: use only for a demo or development. The default passwords are not secure for production.
+
+Requirements: MongoDB without authentication is running.
 
 Creates default MongoDB users for development.
 
 ### npm run reset
+
+Warning: use only for a demo or development.
 
 Warning: destroys all data in MongoDB, including MongoDB users.
 
@@ -270,6 +258,8 @@ Server logs are stored under `.data/logs/` by default. To change the dir, edit `
 
 ## Update and migration
 
+Warning: always back up before attempting to migrate. See [Database backups](#database-backups).
+
 During development, the database schema can and will evolve. For each schema evolution step, the major package version is increased (e.g. from 1.2.3 to 2.0.0). To update old TresDB instances and their databases, we provide programmatic migration steps for each version increment and a script to execute them.
 
 First, pull the desired TresDB version from git:
@@ -298,27 +288,15 @@ To update the client and server, rebuild and restart:
 
 ## Database backups
 
-To take a snapshot of the database:
+To take a snapshot of the database with [mongodump](https://docs.mongodb.com/v3.6/reference/program/mongodump/):
 
-    $ npm run backup
+    $ mongodump --username <admin> --password <adminpwd>
 
-To restore the latest snapshot:
+To restore the snapshot with [mongorestore](https://docs.mongodb.com/v3.6/reference/program/mongorestore/):
 
-    $ npm run restore
+    $ mongorestore --username <admin> --password <adminpwd> dump/
 
-The snapshots are named after their creation time.
-
-To list available snapshots:
-
-    $ npm run backup list
-
-To restore a specific snapshot:
-
-    $ npm run restore 2016-12-31T23-59-59
-
-The backups are stored under `.data/backups` by default. To change this, modify `mongo.backupDir` in `config/index.js`. To remove a backup, remove its directory, e.g. `$ rm -rf .data/backups/2016-12-31T23-59-59`.
-
-After restoring it is often necessary to run migrate and worker:
+After restoring it might be necessary to run migrate and worker:
 
     $ npm run migrate
     $ npm run worker
@@ -334,14 +312,14 @@ To create users, start mongod without authentication:
     $ mkdir -p .data/db
     $ mongod --dbpath=.data/db
 
-Create an administrator that can add other users. Create the admin user into `admin` database with `userAdminAnyDatabase` permission like below. Replace the username and password with yours.
+Create an administrator that can add other users. Create the admin user into `admin` database with `userAdminAnyDatabase` and `backup` permissions like below. Replace the username and password with yours.
 
     $ mongo
     > use admin
     > db.createUser({
       user: 'foodmin',
       pwd: 'barword',
-      roles: ['userAdminAnyDatabase']
+      roles: ['userAdminAnyDatabase', 'backup']
     })
 
 Next, create a user with permission to access only `tresdb`. Note that this user needs to be created into `tresdb` database instead of `admin`. Thus, authenticate first on `admin`, and then switch to `tresdb` to create.
