@@ -21,7 +21,6 @@
     "server:development": "NODE_ENV=development node server/index.js",
     "server:production": "NODE_ENV=production node server/index.js",
     "server:test": "NODE_ENV=test node server/index.js",
-    "ensureindices": "node cli/ensureindices.js",
     "migrate": "node cli/migrate.js",
     "migrate:example": "node migration/loadExample.js",
     "migrate:rollback": "node migration/rollback.js",
