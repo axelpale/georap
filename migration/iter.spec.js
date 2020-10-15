@@ -1,4 +1,4 @@
-config/* global describe, it, beforeEach, afterEach, before, after */
+/* global describe, it, beforeEach, afterEach, before, after */
 
 // The Unit
 var iter = require('./iter');
