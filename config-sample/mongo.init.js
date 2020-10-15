@@ -8,7 +8,7 @@ admin = conn.getDB('admin');
 admin.createUser({
   user: 'mongoadmin',
   pwd: 'mongoadminpwd',
-  roles: ['userAdminAnyDatabase']
+  roles: ['userAdminAnyDatabase', 'backup']
 });
 tresdb = admin.getSiblingDB('tresdb');
 tresdb.createUser({
