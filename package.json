@@ -32,6 +32,7 @@
     "test:migration:iter": "mocha migration/iter.spec.js",
     "test:parsekml": "mocha server/api/locations/importer/parsekml/parsekml.spec.js",
     "lint": "npm run lint:client && npm run lint:server && npm run lint:others",
+    "lint:config": "eslint \"config/**/*.js\" && echo 'OK'",
     "lint:client": "eslint \"client/**/*.js\" && echo 'OK'",
     "lint:server": "eslint \"server/**/*.js\" \"worker/**/*.js\" && echo 'OK'",
     "lint:migration": "eslint \"migration/**/*.js\" && echo 'OK'",
