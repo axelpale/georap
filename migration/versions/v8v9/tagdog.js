@@ -15,6 +15,8 @@ exports.splitTags = function (tags) {
     if (has(config.locationTypes, tag)) {
       types.push(tag);
     }
+    // NOTE the legacy type 'natural' exists in both statuses and types
+    // and therefore will cause both status and type to become 'natural'.
   });
   return {
     statuses: statuses,
