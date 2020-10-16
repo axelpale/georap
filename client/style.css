@@ -36,7 +36,7 @@ html, body {
 
 .tresdb-map-menu {
   padding: 0.9em;
-  width: 100%; /* Firefox support */
+  width: 50%; /* Firefox needs width to be specified */
 }
 
 #tresdb-toolbar-main {
