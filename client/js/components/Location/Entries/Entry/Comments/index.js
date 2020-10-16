@@ -23,6 +23,7 @@ module.exports = function (entry) {
   // Helper methods
 
   var generateComment = function (comment) {
+    // Generate comment view and element for a comment object.
     var commentId = comment.id;
     var v = new CommentView(entry, comment);
 

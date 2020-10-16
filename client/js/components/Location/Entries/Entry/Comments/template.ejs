@@ -4,7 +4,7 @@
   <form class="form entry-comment-form">
     <div class="form-group">
       <label for="entry-<%= entryId %>-comment-input" class="control-label"><span class="glyphicon glyphicon-comment"></span> Add Comment:</label>
-      <input id="entry-<%= entryId %>-comment-input" class="form-control" type="text" placeholder="message...">
+      <textarea id="entry-<%= entryId %>-comment-input" class="form-control" rows="2" placeholder="message..."></textarea>
     </div>
 
     <div id="entry-<%= entryId %>-comment-hint" class="text-info pull-left">enter at least <%= MIN_LEN %> characters</div>

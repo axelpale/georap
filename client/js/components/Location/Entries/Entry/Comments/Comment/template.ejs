@@ -13,7 +13,7 @@
     <% if (isOwner && isFresh) { %>
     <div class="form-group">
       <label for="comment-<%= id %>-input" class="control-label">Edit Comment:</label>
-      <input id="comment-<%= id %>-input" class="form-control" type="text" value="<%= comment.message %>">
+      <textarea id="comment-<%= id %>-input" class="form-control" type="text" rows="2"><%= comment.message %></textarea>
     </div>
     <% } %>
     <% if (isOwner && !isFresh) { %>
