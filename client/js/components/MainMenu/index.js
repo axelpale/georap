@@ -239,7 +239,16 @@ module.exports = function (mapComp) {
     });
 
 
-    // External tools
+    // Filter
+
+    $mount.on('click', '#tresdb-mainmenu-filter', function (ev) {
+      ev.preventDefault();
+
+      return tresdb.go('/filter');
+    });
+
+
+    // Search bar
 
     $mount.on('submit', '#tresdb-mainmenu-search-form', function (ev) {
       ev.preventDefault();

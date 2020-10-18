@@ -14,6 +14,7 @@ var Error401View = require('../components/Error401');
 var Error404View = require('../components/Error404');
 var EventsView = require('../components/Events');
 var ExportView = require('../components/Export');
+var FilterView = require('../components/Filter');
 var ImportView = require('../components/Import');
 var InviteView = require('../components/Invite');
 var LocationView = require('../components/Location');
@@ -181,6 +182,10 @@ exports.route = function () {
     var silent = true;
     card.close(silent);
     exports.emit('map_routed');
+  });
+
+  page('/filter', function () {
+    card.open(new FilterView());
   });
 
   page('/export', function () {

@@ -43,6 +43,25 @@ html, body {
   margin-bottom: 0.9em;
 }
 
+#tresdb-toolbar-main .dropdown,
+#tresdb-mainmenu-filter {
+  margin-right: 0.3em;
+}
+
+#tresdb-mainmenu-filter .label-danger {
+  position: absolute;
+  display: block;
+  top: 2.1em;
+  right: -0.7em;
+  width: 1.4em;
+  height: 1.4em;
+  border-radius: 0.7em;
+}
+
+#tresdb-mainmenu-search-form  {
+  width: 50%;
+}
+
 /* Menu END */
 
 
