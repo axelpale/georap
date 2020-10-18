@@ -95,6 +95,7 @@
     "tresdb-config": "file:local_modules/tresdb-config",
     "tresdb-db": "file:local_modules/tresdb-db",
     "tresdb-points": "file:local_modules/tresdb-points",
+    "tresdb-ui": "file:local_modules/tresdb-ui",
     "tresdb-urls": "file:local_modules/tresdb-urls",
     "turndown": "^5.0.3",
     "url-join": "^4.0.1",
