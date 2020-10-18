@@ -3,76 +3,14 @@
     <div class="col-md-12">
 
       <div>
-        <h1><span class="glyphicon glyphicon-filter" aria-hidden="true"></span> Filter</h1>
+        <h1><span class="glyphicon glyphicon-filter" aria-hidden="true"></span> Filter Map Markers</h1>
 
-        Choose below to hide some map markers and limit search results.
+        Choose below to show only map markers of the selected type.
       </div>
 
-      <div>
-        <h2><span class="glyphicon glyphicon-star" aria-hidden="true"></span> by visits</h2>
-
-        <div class="radio">
-          <label>
-            <input type="radio" name="visitFilter" value="1" checked> Show all locations.
-          </label>
-        </div>
-        <div class="radio">
-          <label>
-            <input type="radio" name="visitFilter" value="2"> Show only locations you have visited.
-          </label>
-        </div>
-        <div class="radio">
-          <label>
-            <input type="radio" name="visitFilter" value="3"> Show only locations you have <strong>not</strong> visited.
-          </label>
-        </div>
-        <div class="radio">
-          <label>
-            <input type="radio" name="visitFilter" value="4"> Show locations nobody have visited.
-          </label>
-        </div>
-
+      <div id="tresdb-filter-type-list">
+        <%= typeListHtml %>
       </div>
-
-
-      <div>
-        <h2>by tags <span class="glyphicon glyphicon-tag" aria-hidden="true"></span></h2>
-        <p>Show only locations with any of these tags:</p>
-
-        <div class="checkbox">
-          <label>
-            <input type="checkbox" checked> Hospital
-          </label>
-        </div>
-
-        <div class="checkbox">
-          <label>
-            <input type="checkbox" checked> Military
-          </label>
-        </div>
-
-        <div class="checkbox">
-          <label>
-            <input type="checkbox" checked> Town
-          </label>
-        </div>
-
-        <div class="checkbox">
-          <label>
-            <input type="checkbox" checked> Underground
-          </label>
-        </div>
-
-        <div class="checkbox">
-          <label>
-            <input type="checkbox" checked> - no tags -
-          </label>
-        </div>
-
-      </div>
-
-      <div></div>
-      <div></div>
 
     </div>
   </div>

@@ -9,6 +9,7 @@
 var account = require('./stores/account');
 var admin = require('./stores/admin');
 var events = require('./stores/events');
+var filter = require('./stores/filter');
 var locations = require('./stores/locations');
 var mapstate = require('./stores/mapstate');
 var markers = require('./stores/markers');
@@ -23,6 +24,7 @@ tresdb.stores = {
   account: account,
   admin: admin,
   events: events,
+  filter: filter,
   locations: locations,
   mapstate: mapstate,
   markers: markers,
