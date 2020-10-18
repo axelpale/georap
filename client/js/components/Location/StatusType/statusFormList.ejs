@@ -8,7 +8,7 @@
 %>
 
 <% locationStatuses.forEach(function (status) { %>
-  <button id="tresdb-status-<%= status %>" data-status="<%= status %>" class="<%= activityClass(status) %>">
+  <button data-status="<%= status %>" class="<%= activityClass(status) %>">
     <%= cap(status) %>
   </button>
 <% }) %>
