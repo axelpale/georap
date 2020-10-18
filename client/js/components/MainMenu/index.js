@@ -1,9 +1,11 @@
-
+/* eslint-disable max-statements */
 var account = require('../../stores/account');
 var locations = require('../../stores/locations');
+var filterStore = require('../../stores/filter');
 var template = require('./template.ejs');
 var glyphiconTemplate = require('./glyphicon.ejs');
 var emitter = require('component-emitter');
+var ui = require('tresdb-ui');
 
 // var isGeomAlmostEqual = function (geom1, geom2) {
 //   var prec = 5;
@@ -50,6 +52,7 @@ module.exports = function (mapComp) {
       config: tresdb.config,
       user: account.getUser(),  // might be undefined
       supportButtonTitle: tresdb.config.supportButtonTitle,
+      isFilterActive: filterStore.isActive(),
     }));
 
     _$root = $mount;
@@ -247,6 +250,15 @@ module.exports = function (mapComp) {
       return tresdb.go('/filter');
     });
 
+    filterStore.on('updated', function () {
+      // Show a red dot when the filter is active.
+      if (filterStore.isActive()) {
+        ui.show($('#tresdb-mainmenu-filter .label'));
+      } else {
+        ui.hide($('#tresdb-mainmenu-filter .label'));
+      }
+    });
+
 
     // Search bar
 
@@ -266,5 +278,6 @@ module.exports = function (mapComp) {
     if (_$root !== null) {
       _$root.off('click');
     }
+    filterStore.off();
   };
 };
