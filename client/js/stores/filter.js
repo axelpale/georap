@@ -66,6 +66,12 @@ var FilterStore = function () {
     console.log(_state);
   };
 
+  this.isActive = function () {
+    // Filter is active when it has non-default values.
+    return _state.type !== DEFAULT_STATE.type ||
+      _state.status !== DEFAULT_STATE.status;
+  };
+
   this.isEmpty = function () {
     // Return
     //   false if there is a stored state, true otherwise.
