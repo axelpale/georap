@@ -19,6 +19,8 @@ module.exports = function () {
 
   this.bind = function ($mount) {
     $mount.html(template({
+      // For any-type button.
+      currentType: filterStore.get().type,
       // List of available types
       typeListHtml: typeListTemplate({
         locationTypes: locationTypes,

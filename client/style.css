@@ -131,6 +131,14 @@ html, body {
 
 /* Status & Type END */
 
+/* Filter */
+
+.tresdb-filter-any {
+  width: 6rem;
+}
+
+/* Filter END */
+
 /* Entries */
 
 .tresdb-disabled {

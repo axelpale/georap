@@ -3,12 +3,17 @@
     <div class="col-md-12">
 
       <div>
-        <h1><span class="glyphicon glyphicon-filter" aria-hidden="true"></span> Filter Map Markers</h1>
+        <h1><span class="glyphicon glyphicon-filter" aria-hidden="true"></span> Filter Locations</h1>
+
+        <button class="btn btn-primary">Show All Locations</button>
 
         Choose below to show only map markers of the selected type.
       </div>
 
       <div id="tresdb-filter-type-list" class="tresdb-location-type-list">
+        <button data-type="any" class="tresdb-filter-any <%= currentType === 'any' ? 'tresdb-type-active' : '' %>">
+          Any type
+        </button>
         <%= typeListHtml %>
       </div>
 
