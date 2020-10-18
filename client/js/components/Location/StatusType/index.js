@@ -1,6 +1,6 @@
 // Tools
 var urls = require('tresdb-urls');
-var cap = require('./cap');
+var cap = require('tresdb-cap');
 // Templates
 var template = require('./template.ejs');
 var statusTypeTemplate = require('./statusType.ejs');
