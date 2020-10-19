@@ -29,10 +29,6 @@ socket.on('tresdb_event', function (ev) {
 var listenForChanges = (function () {
   var loc2listen = null;
 
-  var savedHandler = function () {
-    exports.emit('location_changed', loc2listen);
-  };
-
   var removeHandler = function () {
     exports.emit('location_removed', loc2listen);
     loc2listen = null;
@@ -52,13 +48,11 @@ var listenForChanges = (function () {
     //     a models.Location
 
     if (loc2listen !== null) {
-      loc2listen.off('saved', savedHandler);
       loc2listen.off('removed', removeHandler);
       loc2listen = null;
     }
 
     loc2listen = location;
-    loc2listen.on('saved', savedHandler);
     loc2listen.on('removed', removeHandler);
   };
 }());
