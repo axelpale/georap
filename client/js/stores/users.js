@@ -1,5 +1,5 @@
 // Usage:
-//   var users = require('./stores/users');
+//   var users = tresdb.stores.users;
 //
 
 var request = require('./lib/request');

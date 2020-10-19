@@ -1,10 +1,10 @@
 // Form to invite new users.
 
-var account = require('../../stores/account');
 var inviteTemplate = require('./template.ejs');
 var ui = require('tresdb-ui');
 var emitter = require('component-emitter');
 var validator = require('email-validator');
+var account = tresdb.stores.account;
 
 module.exports = function () {
   // Init

@@ -1,11 +1,11 @@
 /* eslint-disable max-statements */
-var account = require('../../stores/account');
-var locations = require('../../stores/locations');
-var filterStore = require('../../stores/filter');
 var template = require('./template.ejs');
 var glyphiconTemplate = require('./glyphicon.ejs');
 var emitter = require('component-emitter');
 var ui = require('tresdb-ui');
+var account = tresdb.stores.account;
+var locations = tresdb.stores.locations;
+var filterStore = tresdb.stores.filter;
 
 // var isGeomAlmostEqual = function (geom1, geom2) {
 //   var prec = 5;

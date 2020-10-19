@@ -4,7 +4,7 @@
 //   var en = new Entry(rawEntry, entries)
 
 var config = window.tresdb.config;
-var locations = require('../../../../stores/locations');
+var locations = tresdb.stores.locations;
 
 var emitter = require('component-emitter');
 var urljoin = require('url-join');

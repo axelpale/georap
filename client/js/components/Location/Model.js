@@ -1,10 +1,9 @@
 /* eslint-disable max-statements, max-lines */
 
 var emitter = require('component-emitter');
-
-var locations = require('../../stores/locations');
 var EventsModel = require('./Events/Model');
 var EntriesModel = require('./Entries/Model');
+var locations = tresdb.stores.locations;
 
 module.exports = function (rawLoc) {
   // Usage:
@@ -13,6 +12,7 @@ module.exports = function (rawLoc) {
   // Parameters:
   //   rawLoc
   //     Optional location properties that override the default.
+  //
 
   // Init
   var self = this;

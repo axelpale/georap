@@ -1,9 +1,9 @@
 // Payment history table
 
-var payments = require('../../../stores/payments');
-var template = require('./template.ejs');
 var emitter = require('component-emitter');
+var template = require('./template.ejs');
 var ui = require('tresdb-ui');
+var payments = tresdb.stores.payments;
 
 module.exports = function () {
 
