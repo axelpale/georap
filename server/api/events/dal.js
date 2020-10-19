@@ -2,6 +2,7 @@
 
 var db = require('tresdb-db');
 var io = require('../../services/io');
+var proj = require('../../services/proj');
 
 // Private methods
 
@@ -309,7 +310,20 @@ exports.createLocationGeomChanged = function (params, callback) {
     },
   };
 
-  insertAndEmit(newEvent, callback);
+  // Insert the basic version and emit an extended version with alt coords.
+  // The alt coords are needed in client.
+  insertOne(newEvent, function (err, newId) {
+    if (err) {
+      return callback(err);
+    }
+    newEvent._id = newId;
+    // Compute additional coodinate systems
+    var newAltGeom = proj.getAltPositions(params.newGeom.coordinates);
+    newEvent.data.newAltGeom = newAltGeom;
+    // Emit the extended version.
+    emitOne(newEvent);
+    return callback(null);
+  });
 };
 
 exports.createLocationNameChanged = function (params, callback) {

@@ -4,7 +4,6 @@ var geostamp = require('./geostamp');
 var template = require('./template.ejs');
 var AdditionMarker = require('../../Map/AdditionMarker');
 var ui = require('tresdb-ui');
-var locations = tresdb.stores.locations;
 var mapStateStore = tresdb.stores.mapstate;
 
 // Reuse the map instance after first use to avoid memory leaks.
@@ -223,30 +222,21 @@ module.exports = function (location) {
 
     var geomChangedHandler = function () {
       // Update coords on geom change.
-
-      // Fetch the location again because alternative geoms are computed
-      // server-side. HACK
-      locations.get(location.getId(), function (err, newloc) {
-        if (err) {
-          console.error(err);
-          return;
-        }
-
-        // Get coords in each coord system.
-        var allCoords = getAllCoords(newloc);
-        // WGS84
-        $geostamp.html(allCoords[0].html);
-        // Other systems
-        var $more = $('#tresdb-location-coords-more');
-        var moreHtml = allCoords.reduce(function (acc, c) {
-          var content = c.html + ' (' + c.name + ')';
-          return acc + '<div><span>' + content + '</span></div>';
-        }, '');
-        $more.html(moreHtml);
-      });
+      // Get coords in each coord system.
+      var allCoords = getAllCoords(location);
+      // WGS84
+      $geostamp.html(allCoords[0].html);
+      // Other systems
+      var $more = $('#tresdb-location-coords-more');
+      var moreHtml = allCoords.reduce(function (acc, c) {
+        var content = c.html + ' (' + c.name + ')';
+        return acc + '<div><span>' + content + '</span></div>';
+      }, '');
+      $more.html(moreHtml);
     };
 
     location.on('location_geom_changed', geomChangedHandler);
+    // Register listener.
     // eslint-disable-next-line dot-notation
     locationListeners['location_geom_changed'] = geomChangedHandler;
   };

@@ -44,6 +44,7 @@ module.exports = function (rawLoc) {
 
     if (ev.type === 'location_geom_changed') {
       rawLoc.geom = ev.data.newGeom;
+      rawLoc.altGeom = ev.data.newAltGeom;
       self.emit(ev.type);
     }
 
