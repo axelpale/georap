@@ -22,41 +22,6 @@ socket.on('tresdb_event', function (ev) {
   }
 });
 
-// To inform views (especially Map) about changes in locations,
-// we listen the previously created/retrieved location. This surveillance
-// should cover all the locations in the cache but as we do not have a cache,
-// the easiest solution is to listen only the last retrieved location.
-var listenForChanges = (function () {
-  var loc2listen = null;
-
-  var removeHandler = function () {
-    exports.emit('location_removed', loc2listen);
-    loc2listen = null;
-  };
-
-  // socket.on('tresdb_event', function (ev) {
-  //   if (loc2listen !== null) {
-  //     if (ev.locationId === loc2listen.getId()) {
-  //       loc2listen.react(ev);
-  //     }
-  //   }
-  // });
-
-  return function listen(location) {
-    // Parameters
-    //   location
-    //     a models.Location
-
-    if (loc2listen !== null) {
-      loc2listen.off('removed', removeHandler);
-      loc2listen = null;
-    }
-
-    loc2listen = location;
-    loc2listen.on('removed', removeHandler);
-  };
-}());
-
 var getJSON = request.getJSON;
 var postJSON = request.postJSON;
 var postFile = request.postFile;
@@ -139,10 +104,7 @@ exports.get = function (id, callback) {
     dataType: 'json',
     headers: { 'Authorization': 'Bearer ' + account.getToken() },
     success: function (rawLoc) {
-
       var loc = new Location(rawLoc);
-      listenForChanges(loc);
-
       return callback(null, loc);
     },
     error: function (jqxhr, status, statusMessage) {
