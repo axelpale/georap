@@ -3,7 +3,6 @@ var template = require('./template.ejs');
 var tableTemplate = require('./table.ejs');
 var emitter = require('component-emitter');
 var ui = require('tresdb-ui');
-var _ = require('lodash');
 var statistics = tresdb.stores.statistics;
 
 module.exports = function () {
@@ -36,7 +35,6 @@ module.exports = function () {
       stats.clientVersion = tresdb.version;
 
       $table.html(tableTemplate({
-        _: _,  // to loop stats
         stats: stats,
       }));
     });
