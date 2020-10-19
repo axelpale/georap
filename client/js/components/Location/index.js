@@ -3,6 +3,7 @@
 
 var emitter = require('component-emitter');
 var ui = require('tresdb-ui');
+var LocationModel = require('./Model');
 var NameView = require('./Name');
 var PlacesView = require('./Places');
 var GeomView = require('./Geom');
@@ -48,7 +49,7 @@ module.exports = function (id) {
     var $loading = $('#tresdb-location-loading');
 
     // Fetch location before rendering.
-    locations.get(id, function (err, loc) {
+    locations.get(id, function (err, rawLoc) {
       ui.hide($loading);
 
       if (err) {
@@ -57,7 +58,7 @@ module.exports = function (id) {
       }
 
       // Set state
-      _location = loc;
+      _location = new LocationModel(rawLoc);
 
       nameView = new NameView(_location);
       placesView = new PlacesView(_location);

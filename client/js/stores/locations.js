@@ -1,7 +1,6 @@
 /* eslint-disable max-lines */
 
 var socket = require('../connection/socket');
-var Location = require('../components/Location/Model');
 var validateCoords = require('./lib/validateCoords');
 var request = require('./lib/request');
 var account = require('./account');
@@ -104,8 +103,7 @@ exports.get = function (id, callback) {
     dataType: 'json',
     headers: { 'Authorization': 'Bearer ' + account.getToken() },
     success: function (rawLoc) {
-      var loc = new Location(rawLoc);
-      return callback(null, loc);
+      return callback(null, rawLoc);
     },
     error: function (jqxhr, status, statusMessage) {
       return callback(new Error(statusMessage));

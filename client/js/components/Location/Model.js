@@ -11,7 +11,7 @@ module.exports = function (rawLoc) {
   //
   // Parameters:
   //   rawLoc
-  //     Optional location properties that override the default.
+  //     An extended location object
   //
 
   // Init
