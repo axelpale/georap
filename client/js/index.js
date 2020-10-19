@@ -15,7 +15,6 @@ var mapstate = require('./stores/mapstate');
 var markers = require('./stores/markers');
 var statistics = require('./stores/statistics');
 var users = require('./stores/users');
-var minibus = require('minibus');
 
 // The html contains tresdb object,
 // preset with some config.
@@ -31,13 +30,6 @@ tresdb.stores = {
   statistics: statistics,
   users: users,
 };
-// Create also a global bus. Spaghetti or not?
-tresdb.bus = minibus.create();
-// DEBUG Bus is easy to listen:
-// tresdb.bus.on(function (ev) {
-//   console.log(ev);
-// });
-
 
 // Routes and main components.
 var routes = require('./routes');
