@@ -409,7 +409,6 @@ module.exports = {
   // EXPERIMENTAL FEATURES
   // Enable or disable features of the site.
   features: {
-    // Set false to hide payments page and payments admin page.
-    payments: false,
+    // no configurable features yet
   },
 };

@@ -17,8 +17,6 @@ var InviteView = require('../components/Invite');
 var LocationView = require('../components/Location');
 var LoginView = require('../components/Login');
 var BatchOutcomeView = require('../components/BatchOutcome');
-var PaymentsView = require('../components/Payments');
-var PaymentsAdminView = require('../components/PaymentsAdmin');
 var ResetPasswordView = require('../components/ResetPassword');
 var SearchView = require('../components/Search');
 var SignupView = require('../components/Signup');
@@ -224,11 +222,6 @@ exports.route = function () {
     card.open(view, 'page');
   });
 
-  page('/payments', function () {
-    var view = new PaymentsView();
-    card.open(view, 'page');
-  });
-
   page('/search', function (ctx) {
     var view = new SearchView(ctx.query);
     card.open(view);
@@ -266,11 +259,6 @@ exports.route = function () {
 
   page('/invite', adminOnly, function () {
     var view = new InviteView();
-    card.open(view);
-  });
-
-  page('/payments/admin', adminOnly, function () {
-    var view = new PaymentsAdminView();
     card.open(view);
   });
 
