@@ -1,11 +1,12 @@
 
-var users = require('../../stores/users');
+var users = tresdb.stores.users;
 var eventsListTemplate = require('../Events/list.ejs');
 var timestamp = require('../lib/timestamp');
 var pointstamp = require('../lib/pointstamp');
 var template = require('./template.ejs');
 var pointsTemplate = require('./points.ejs');
 var emitter = require('component-emitter');
+var ui = require('tresdb-ui');
 
 module.exports = function (username) {
   // Parameters
@@ -26,7 +27,7 @@ module.exports = function (username) {
     // Fetch user before further rendering.
     users.getOneWithEvents(username, function (err, user) {
       // Hide loading bar
-      $('#tresdb-user-loading').addClass('hidden');
+      ui.hide($('#tresdb-user-loading'));
 
       if (err) {
         console.error(err);

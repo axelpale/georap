@@ -2,6 +2,7 @@
 var account = require('../../stores/account');
 var template = require('./template.ejs');
 var emitter = require('component-emitter');
+var ui = require('tresdb-ui');
 
 module.exports = function () {
 
@@ -41,19 +42,19 @@ module.exports = function () {
     var agaPass = $('#tresdb-input-again-password').val();
 
     // Clear possible earlier error messages
-    $('#tresdb-change-password-invalid-curpass').addClass('hidden');
-    $('#tresdb-change-password-invalid-newpass').addClass('hidden');
-    $('#tresdb-change-password-incorrect-curpass').addClass('hidden');
-    $('#tresdb-change-password-server-error').addClass('hidden');
+    ui.hide($('#tresdb-change-password-invalid-curpass'));
+    ui.hide($('#tresdb-change-password-invalid-newpass'));
+    ui.hide($('#tresdb-change-password-incorrect-curpass'));
+    ui.hide($('#tresdb-change-password-server-error'));
 
     // Validate input
     if (curPass === '') {
-      $('#tresdb-change-password-invalid-curpass').removeClass('hidden');
+      ui.show($('#tresdb-change-password-invalid-curpass'));
 
       return;
     } // else
     if (newPass === '' || newPass !== agaPass) {
-      $('#tresdb-change-password-invalid-newpass').removeClass('hidden');
+      ui.show($('#tresdb-change-password-invalid-newpass'));
 
       return;
     } // else
@@ -61,9 +62,9 @@ module.exports = function () {
     // Okay, everything good. Request server to change password.
 
     // Display the progress bar
-    $('#tresdb-change-password-in-progress').removeClass('hidden');
+    ui.show($('#tresdb-change-password-in-progress'));
     // Hide the form
-    $('#tresdb-change-password-form').addClass('hidden');
+    ui.hide($('#tresdb-change-password-form'));
 
     account.changePassword(curPass, newPass, responseHandler);
   };
@@ -71,24 +72,24 @@ module.exports = function () {
   responseHandler = function (err) {
 
     // Hide the progress bar
-    $('#tresdb-change-password-in-progress').addClass('hidden');
+    ui.hide($('#tresdb-change-password-in-progress'));
 
     if (err) {
       if (err.message === 'Unauthorized') {
         // Show form and error message.
-        $('#tresdb-change-password-form').removeClass('hidden');
-        $('#tresdb-change-password-incorrect-curpass').removeClass('hidden');
+        ui.show($('#tresdb-change-password-form'));
+        ui.show($('#tresdb-change-password-incorrect-curpass'));
         return;
       }  // else
 
       // A rare error. Show error:
-      $('#tresdb-change-password-server-error').removeClass('hidden');
+      ui.show($('#tresdb-change-password-server-error'));
       $('#tresdb-change-password-server-error-name').text(err.message);
       return;
     }  // else
 
     // Successfully changed. Show success message. No need to show form.
-    $('#tresdb-change-password-success').removeClass('hidden');
+    ui.show($('#tresdb-change-password-success'));
     return;
   };
 

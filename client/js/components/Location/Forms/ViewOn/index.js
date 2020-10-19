@@ -1,6 +1,7 @@
 
 var template = require('./template.ejs');
 var emitter = require('component-emitter');
+var ui = require('tresdb-ui');
 
 var NAME = 0;
 var COORD_SYS = 2;
@@ -78,23 +79,20 @@ module.exports = function (location) {
 
     $show.click(function (ev) {
       ev.preventDefault();
-      tresdb.ui.toggleHidden($cont);
+      ui.toggleHidden($cont);
       // Prevent both export and viewon being open at the same time.
-      tresdb.ui.hide($('#tresdb-export-container'));
+      ui.hide($('#tresdb-export-container'));
     });
 
     $cancel.click(function (ev) {
       ev.preventDefault();
-      tresdb.ui.hide($cont);
+      ui.hide($cont);
     });
   };
 
   self.unbind = function () {
-    var $show = $('#tresdb-viewon-show');
-    var $cancel = $('#tresdb-viewon-cancel');
-
-    $show.off();
-    $cancel.off();
+    $('#tresdb-viewon-show').off();
+    $('#tresdb-viewon-cancel').off();
   };
 
 };

@@ -4,14 +4,7 @@ var payments = require('../../../stores/payments');
 var template = require('./template.ejs');
 var tableTemplate = require('./table.ejs');
 var emitter = require('component-emitter');
-
-var show = function ($el) {
-  $el.removeClass('hidden');
-};
-
-var hide = function ($el) {
-  $el.addClass('hidden');
-};
+var ui = require('tresdb-ui');
 
 module.exports = function () {
 
@@ -32,10 +25,11 @@ module.exports = function () {
     var $error = $('#tresdb-history-error');
 
     payments.getAll(function (err, ps) {
-      hide($progress);
+      ui.hide($progress);
 
       if (err) {
-        return show($error);
+        ui.show($error);
+        return;
       }
 
       $tablecont.html(tableTemplate({

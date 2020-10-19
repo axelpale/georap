@@ -1,8 +1,9 @@
 
-var users = require('../../stores/users');
+var users = tresdb.stores.users;
 var template = require('./template.ejs');
 var listTemplate = require('./list.ejs');
 var emitter = require('component-emitter');
+var ui = require('tresdb-ui');
 
 module.exports = function () {
 
@@ -18,7 +19,7 @@ module.exports = function () {
     // Fetch users and include to page.
     users.getAll(function (err, rawUsers) {
       // Hide loading bar
-      $('#tresdb-users-loading').addClass('hidden');
+      ui.hide($('#tresdb-users-loading'));
 
       if (err) {
         console.error(err);

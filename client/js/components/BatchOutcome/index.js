@@ -7,6 +7,7 @@ var messageTemplate = require('./message.ejs');
 var listTemplate = require('./list.ejs');
 var template = require('./template.ejs');
 var emitter = require('component-emitter');
+var ui = require('tresdb-ui');
 
 module.exports = function (batchId) {
   // Parameters
@@ -30,7 +31,7 @@ module.exports = function (batchId) {
 
     tresdb.stores.locations.getOutcome(batchId, function (err, result) {
       // Progress bar is visible by default
-      tresdb.ui.hide($progress);
+      ui.hide($progress);
 
       if (err) {
         console.error(err);
@@ -50,7 +51,7 @@ module.exports = function (batchId) {
         skippedLocs: result.skipped,
       }));
 
-      tresdb.ui.show($list);
+      ui.show($list);
     });
   };
 

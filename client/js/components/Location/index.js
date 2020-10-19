@@ -2,10 +2,7 @@
 // View for location
 
 var emitter = require('component-emitter');
-
-var locations = require('../../stores/locations');
-
-//var getEntryView = require('./lib/getEntryView');
+var ui = require('tresdb-ui');
 var NameView = require('./Name');
 var PlacesView = require('./Places');
 var GeomView = require('./Geom');
@@ -17,6 +14,7 @@ var EventsView = require('./Events');
 
 // Templates
 var locationTemplate = require('./template.ejs');
+var locations = tresdb.stores.locations;
 
 module.exports = function (id) {
   // Parameters
@@ -51,8 +49,7 @@ module.exports = function (id) {
 
     // Fetch location before rendering.
     locations.get(id, function (err, loc) {
-
-      $loading.addClass('hidden');
+      ui.hide($loading);
 
       if (err) {
         console.error(err);
@@ -105,7 +102,6 @@ module.exports = function (id) {
   };  // end bind
 
   self.unbind = function () {
-
     if (_location) {
       nameView.unbind();
       placesView.unbind();

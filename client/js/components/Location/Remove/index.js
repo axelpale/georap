@@ -1,6 +1,7 @@
 
 var account = tresdb.stores.account;
 var template = require('./template.ejs');
+var ui = require('tresdb-ui');
 
 module.exports = function (location) {
 
@@ -23,25 +24,23 @@ module.exports = function (location) {
 
     $ensure.click(function (ev) {
       ev.preventDefault();
-      $final.toggleClass('hidden');
+      ui.toggleHidden($final);
     });
 
     $del.click(function (ev) {
       ev.preventDefault();
 
       // Prevent user clicking the deletion again
-      $final.addClass('hidden');
+      ui.hide($final);
       // Show progress bar
-      $progress.removeClass('hidden');
+      ui.show($progress);
 
       location.remove(function (err) {
         if (err) {
           // Remove progress
-          $progress.addClass('hidden');
-
+          ui.hide($progress);
           // Show deletion failed error message
-          $error.removeClass('hidden');
-          return;
+          ui.show($error);
         }
         // ON successful removal the location will emit "location_removed" event
         // and the card will close the Location component.
@@ -50,7 +49,6 @@ module.exports = function (location) {
   };
 
   this.unbind = function () {
-
     $('#tresdb-location-delete-ensure').off();
     $('#tresdb-location-delete').off();
   };

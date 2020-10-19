@@ -3,6 +3,7 @@ var statistics = require('../../stores/statistics');
 var template = require('./template.ejs');
 var tableTemplate = require('./table.ejs');
 var emitter = require('component-emitter');
+var ui = require('tresdb-ui');
 var _ = require('lodash');
 
 module.exports = function () {
@@ -23,10 +24,10 @@ module.exports = function () {
     var $table = $('#tresdb-statistics-table');
 
     statistics.getAll(function (err, stats) {
-      tresdb.ui.hide($progress);
+      ui.hide($progress);
 
       if (err) {
-        tresdb.ui.show($error);
+        ui.show($error);
         return;
       }
 

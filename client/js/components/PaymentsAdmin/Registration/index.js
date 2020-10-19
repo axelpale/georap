@@ -3,18 +3,7 @@
 var payments = require('../../../stores/payments');
 var template = require('./template.ejs');
 var emitter = require('component-emitter');
-
-var isHidden = function ($el) {
-  return $el.hasClass('hidden');
-};
-
-var show = function ($el) {
-  $el.removeClass('hidden');
-};
-
-var hide = function ($el) {
-  $el.addClass('hidden');
-};
+var ui = require('tresdb-ui');
 
 module.exports = function () {
 
@@ -41,41 +30,39 @@ module.exports = function () {
     $open.click(function (ev) {
       ev.preventDefault();
 
-      if (isHidden($form)) {
-        show($form);
-        hide($error);
+      if (ui.isHidden($form)) {
+        ui.show($form);
+        ui.hide($error);
       } else {
-        hide($form);
+        ui.hide($form);
       }
     });
 
     $cancel.click(function (ev) {
       ev.preventDefault();
-
-      hide($form);
+      ui.hide($form);
     });
 
     $successClose.click(function (ev) {
       ev.preventDefault();
-
-      hide($success);
+      ui.hide($success);
     });
 
     $form.submit(function (ev) {
       ev.preventDefault();
 
-      hide($form);
-      show($progress);
+      ui.hide($form);
+      ui.show($progress);
 
       payments.create(function (err) {
-        hide($progress);
+        ui.hide($progress);
 
         if (err) {
-          show($error);
+          ui.show($error);
           return;
         }
 
-        show($success);
+        ui.show($success);
       });
     });
   };

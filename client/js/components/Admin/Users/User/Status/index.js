@@ -1,4 +1,5 @@
 var template = require('./template.ejs');
+var ui = require('tresdb-ui');
 var account = tresdb.stores.account;
 var admin = tresdb.stores.admin;
 
@@ -23,7 +24,7 @@ module.exports = function (user) {
     $cancel.click(function (ev) {
       ev.preventDefault();
       // Hide and reset form
-      tresdb.ui.hide($form);
+      ui.hide($form);
       $box.prop('checked', user.status === 'active');
     });
 
@@ -34,10 +35,10 @@ module.exports = function (user) {
       var author = account.getName();
 
       if (author === user.name) {
-        tresdb.ui.toggleHidden($noauto);
+        ui.toggleHidden($noauto);
       } else {
-        tresdb.ui.toggleHidden($form);
-        tresdb.ui.hide($success);
+        ui.toggleHidden($form);
+        ui.hide($success);
       }
     });
 
@@ -54,12 +55,12 @@ module.exports = function (user) {
       admin.setStatus(user.name, !isChecked, function (err) {
         if (err) {
           console.error(err);
-          tresdb.ui.show($error);
+          ui.show($error);
           return;
         }
 
-        tresdb.ui.hide($form);
-        tresdb.ui.show($success);
+        ui.hide($form);
+        ui.show($success);
         user.status = isChecked ? 'deactivated' : 'active';
         self.unbind();
         self.bind($mount);
@@ -69,13 +70,8 @@ module.exports = function (user) {
   };
 
   this.unbind = function () {
-
-    var $cancel = $('tresdb-admin-user-status-cancel');
-    var $edit = $('tresdb-admin-user-status-edit');
-    var $form = $('tresdb-admin-user-status-form');
-
-    $cancel.off();
-    $edit.off();
-    $form.off();
+    $('tresdb-admin-user-status-cancel').off();
+    $('tresdb-admin-user-status-edit').off();
+    $('tresdb-admin-user-status-form').off();
   };
 };

@@ -46,9 +46,6 @@ var MainMenuComp = require('./components/MainMenu');
 
 
 // Collect helpers under tresdb global.
-
-var ui = require('./components/lib/ui');
-tresdb.ui = ui;  // show and hide needed in almost every view
 tresdb.go = routes.show;  // go to path. very general, thus exposed globally
 
 

@@ -25,6 +25,7 @@ require('./style.css');
 var emitter = require('component-emitter');
 var closeButton = require('./closeButton');
 var contentView = require('./contentView');
+var ui = require('tresdb-ui');
 
 module.exports = function () {
 
@@ -101,7 +102,7 @@ module.exports = function () {
     _activeView.bind($content);
 
     // Reveal if hidden
-    _$mount.removeClass('hidden');
+    ui.show(_$mount);
 
     // Create close button (not created if not sidebar)
     closeButton(_$mount, cardType, function () {
@@ -136,7 +137,7 @@ module.exports = function () {
       _activeView = null;
     }
 
-    _$mount.addClass('hidden');
+    ui.hide(_$mount);
     contentView.unbind($content);
 
     if (!silent) {

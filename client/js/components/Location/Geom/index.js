@@ -3,8 +3,9 @@
 var geostamp = require('./geostamp');
 var template = require('./template.ejs');
 var AdditionMarker = require('../../Map/AdditionMarker');
-var locations = require('../../../stores/locations');
-var mapStateStore = require('../../../stores/mapstate');
+var ui = require('tresdb-ui');
+var locations = tresdb.stores.locations;
+var mapStateStore = tresdb.stores.mapstate;
 
 // Reuse the map instance after first use to avoid memory leaks.
 // Google Maps does not handle garbage collecting well.
@@ -130,18 +131,18 @@ module.exports = function (location) {
     };
 
     var openForm = function () {
-      tresdb.ui.show($container);
-      tresdb.ui.show($form);
+      ui.show($container);
+      ui.show($form);
       // Hide all possible error messages
-      tresdb.ui.hide($error);
+      ui.hide($error);
       // Load map
       initMap();
     };
 
     var closeForm = function () {
-      $container.addClass('hidden');
+      ui.hide($container);
       // Hide all possible error messages
-      $error.addClass('hidden');
+      ui.hide($error);
       // Destroy map (partially)
       closeMap();
     };
@@ -182,15 +183,15 @@ module.exports = function (location) {
       var lat = parseFloat(latRaw);
 
       // Hide form and show progress bar
-      $form.addClass('hidden');
-      $progress.removeClass('hidden');
+      ui.hide($form);
+      ui.show($progress);
 
       location.setGeom(lng, lat, function (err) {
         // Hide progress bar
-        $progress.addClass('hidden');
+        ui.hide($progress);
 
         if (err) {
-          $error.removeClass('hidden');
+          ui.show($error);
           return;
         }
         closeForm();
@@ -204,16 +205,16 @@ module.exports = function (location) {
 
       $moreopen.click(function (ev) {
         ev.preventDefault();
-        tresdb.ui.hide($moreopen);
-        tresdb.ui.show($moreclose);
-        tresdb.ui.show($more);
+        ui.hide($moreopen);
+        ui.show($moreclose);
+        ui.show($more);
       });
 
       $moreclose.click(function (ev) {
         ev.preventDefault();
-        tresdb.ui.hide($moreclose);
-        tresdb.ui.show($moreopen);
-        tresdb.ui.hide($more);
+        ui.hide($moreclose);
+        ui.show($moreopen);
+        ui.hide($more);
       });
 
     }());
@@ -251,15 +252,10 @@ module.exports = function (location) {
   };
 
   this.unbind = function () {
-    var $edit = $('#tresdb-location-coords-edit');
-    var $form = $('#tresdb-location-coords-form');
-    var $cancel = $('#tresdb-location-coords-cancel');
-    var $moreopen = $('#tresdb-location-coords-more-open');
-
-    $edit.off();
-    $form.off();
-    $cancel.off();
-    $moreopen.off();
+    $('#tresdb-location-coords-edit').off();
+    $('#tresdb-location-coords-form').off();
+    $('#tresdb-location-coords-cancel').off();
+    $('#tresdb-location-coords-more-open').off();
 
     var k;
     for (k in locationListeners) {
