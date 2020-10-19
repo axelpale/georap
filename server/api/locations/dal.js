@@ -19,7 +19,7 @@ exports.count = function (callback) {
 
   var coll = db.get().collection('locations');
 
-  coll.count({ deleted: false }).then(function (number) {
+  coll.countDocuments({ deleted: false }).then(function (number) {
     return callback(null, number);
   }).catch(function (err) {
     return callback(err);
