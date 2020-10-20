@@ -163,6 +163,18 @@ module.exports = {
       minItems: 1,
       uniqueItems: true,
     },
+    comments: {
+      type: 'object',
+      properties: {
+        minMessageLength: {
+          type: 'integer',
+        },
+        maxMessageLength: {
+          type: 'integer',
+        },
+      },
+      additionalProperties: false,
+    },
     coordinateSystems: {
       type: 'array',
       items: {

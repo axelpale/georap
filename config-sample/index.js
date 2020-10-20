@@ -174,6 +174,12 @@ module.exports = {
     'freak',
   ],
 
+  // Commenting
+  comments: {
+    minMessageLength: 2,
+    maxMessageLength: 600,
+  },
+
   // Register coordinate systems to be used.
   // These coordinate systems will be displayed on the location page.
   // These systems are also available for exportServices.

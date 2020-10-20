@@ -7,9 +7,8 @@ var preprocessMessage = require('./Comment/preprocessMessage');
 var ui = require('tresdb-ui');
 
 var account = tresdb.stores.account;
-var commentsConfig = require('./config');
-var MIN_MESSAGE_LEN = commentsConfig.MIN_MESSAGE_LEN;
-var MAX_MESSAGE_LEN = commentsConfig.MAX_MESSAGE_LEN;
+var MIN_LEN = tresdb.config.comments.minMessageLength;
+var MAX_LEN = tresdb.config.comments.maxMessageLength;
 
 module.exports = function (entry) {
   // Parameters:
@@ -46,7 +45,7 @@ module.exports = function (entry) {
 
     $mount.html(template({
       entryId: entryId,
-      MIN_LEN: MIN_MESSAGE_LEN,
+      MIN_LEN: MIN_LEN,
     }));
 
     var $commentsEl = $mount.find('#entry-' + entryId + '-comments');
@@ -111,7 +110,7 @@ module.exports = function (entry) {
       var message = $messageInput.val();
       var len = message.length;
 
-      if (len < MIN_MESSAGE_LEN || len > MAX_MESSAGE_LEN) {
+      if (len < MIN_LEN || len > MAX_LEN) {
         // Do not submit. Emphasize message hint.
         $messageHint.addClass('text-danger');
         $messageHint.removeClass('text-info');

@@ -2,13 +2,12 @@
 require('./style.css');
 var timestamp = require('timestamp');
 var template = require('./template.ejs');
-var commentsConfig = require('../config');
 var preprocessMessage = require('./preprocessMessage');
 var ui = require('tresdb-ui');
 var account = tresdb.stores.account;
 var locations = tresdb.stores.locations;
-var MIN_LEN = commentsConfig.MIN_MESSAGE_LEN;
-var MAX_LEN = commentsConfig.MAX_MESSAGE_LEN;
+var MIN_LEN = tresdb.config.comments.minMessageLength;
+var MAX_LEN = tresdb.config.comments.maxMessageLength;
 
 module.exports = function (entry, comment) {
   // Parameters:

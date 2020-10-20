@@ -30,6 +30,7 @@ var indexHtml = (function precompile() {
       uploadUrl: config.uploadUrl,
       uploadSizeLimit: config.uploadSizeLimit,
       tempUploadSizeLimit: config.tempUploadSizeLimit,
+      comments: config.comments,
       coordinateSystems: config.coordinateSystems,
       exportServices: config.exportServices,
     },
