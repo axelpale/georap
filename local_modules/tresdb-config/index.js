@@ -9,7 +9,9 @@ var Ajv = require('ajv');
 var ajv = new Ajv();
 var valid = ajv.validate(schema, config);
 
-if (!valid) {
+if (valid) {
+  console.log('Valid configuration loaded from config/index.js.');
+} else {
   console.log(ajv.errors);
   throw new Error('Invalid config/index.js detected. See above for details.');
 }
