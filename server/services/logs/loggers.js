@@ -7,6 +7,7 @@ var fs = require('fs');
 // Setup
 
 // Ensure directory for access logs exist.
+// eslint-disable-next-line no-sync
 fse.ensureDirSync(config.logDir);
 
 // Interface
