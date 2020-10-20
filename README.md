@@ -76,9 +76,10 @@ Fourth, create a MongoDB database named `tresdb` and create necessary database u
 
 Do not use the defaults in production. For production, see detailed [MongoDB user setup](#mongodb-user-setup).
 
-Fifth, rename or copy `config-sample/` to `config/`. The directory contains the main configuration for your TresDB app, including the title of the app, Google Maps API key, marker icons, and multiple other settings. Modify it to match your needs.
+Fifth, copy `config-sample/` as `config/`. The directory contains the main configuration for your TresDB app, including the title of the app, Google Maps API key, marker icons, and multiple other settings. Modify it to match your needs. The config will be validated whenever the server app is started.
 
     $ cp -R config-sample config
+    $ nano config/index.js
 
 After successful configuration, the final installation step is to populate the database with initial data. This will also install the user account you just configured.
 
