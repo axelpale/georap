@@ -7,6 +7,7 @@ var router = express.Router();
 
 router.get('/', handlers.getWithin);
 router.get('/search', handlers.getFiltered);
+router.get('/filtered', handlers.getFilteredWithin);
 
 router.use('/kml', kmlRouter);
 

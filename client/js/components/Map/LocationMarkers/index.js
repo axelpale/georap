@@ -5,6 +5,7 @@
 
 var markerStore = tresdb.stores.markers;
 var account = tresdb.stores.account;
+var filterStore = tresdb.stores.filter;
 var getBoundsDiagonal = require('./lib/getBoundsDiagonal');
 var rawEventToMarkerLocation = require('./lib/rawEventToMarkerLocation');
 var labels = require('./lib/labels');
@@ -142,19 +143,41 @@ module.exports = function (map) {
 
   };
 
+  var _loadMarkersThen = function (err, locs) {
+    if (err) {
+      return console.error(err);
+    } // else
+    _updateMarkers(locs);
+  };
+
   var _loadMarkers = function () {
-    var center = map.getCenter();
+    // Load markers for current viewport.
+    // Take into consideration the current
+    // - map center,
+    // - map zoom level
+    // - viewport size
+    // - filter settings
     var bounds = map.getBounds();
-    var radius = Math.ceil(getBoundsDiagonal(bounds) / 2);
     var zoom = map.getZoom();
 
-    markerStore.getWithin(center, radius, zoom, function (err, locs) {
-      if (err) {
-        return console.error(err);
-      }  // else
-
-      _updateMarkers(locs);
-    });
+    if (filterStore.isActive()) {
+      // Query filtered set of locations.
+      var filterState = filterStore.get();
+      var boundsLiteral = bounds.toJSON();
+      markerStore.getFilteredWithin({
+        east: boundsLiteral.east,
+        north: boundsLiteral.north,
+        south: boundsLiteral.south,
+        west: boundsLiteral.west,
+        type: filterState.type,
+        layer: zoom,
+      }, _loadMarkersThen);
+    } else {
+      // No filtration
+      var center = map.getCenter();
+      var radius = Math.ceil(getBoundsDiagonal(bounds) / 2);
+      markerStore.getWithin(center, radius, zoom, _loadMarkersThen);
+    }
   };
 
   // Bind

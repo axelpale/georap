@@ -43,6 +43,32 @@ var querySchema = {
 };
 var validateQuery = ajv.compile(querySchema);
 
+var schemaFilteredWithin = {
+  type: 'object',
+  properties: {
+    east: {
+      type: 'number',
+    },
+    north: {
+      type: 'number',
+    },
+    south: {
+      type: 'number',
+    },
+    west: {
+      type: 'number',
+    },
+    type: {
+      type: 'string',
+    },
+    layer: {
+      type: 'integer',
+    },
+  },
+  additionalProperties: false,
+};
+var validateFilteredWithin = ajv.compile(schemaFilteredWithin);
+
 
 exports.getFiltered = function (req, res, next) {
   // Parameters:
@@ -141,7 +167,29 @@ exports.getWithin = function (req, res, next) {
     if (err) {
       return next(err);
     }
+    return res.json(markers);
+  });
+};
 
+exports.getFilteredWithin = function (req, res, next) {
+  // Validate the request to prevent injection.
+  // Data types are coerced, thus req.query is modified.
+  if (!validateFilteredWithin(req.query)) {
+    // DEBUG console.log('ERROR', validateQuery.errors);
+    return res.sendStatus(status.BAD_REQUEST);
+  }
+
+  dal.getFilteredWithin({
+    east: req.query.east,
+    north: req.query.north,
+    south: req.query.south,
+    west: req.query.west,
+    type: req.query.type,
+    layer: req.query.layer,
+  }, function (err, markers) {
+    if (err) {
+      return next(err);
+    }
     return res.json(markers);
   });
 };

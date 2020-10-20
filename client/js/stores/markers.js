@@ -96,3 +96,26 @@ exports.getWithin = function (center, radius, zoomLevel, callback) {
     },
   });
 };
+
+exports.getFilteredWithin = function (opts, callback) {
+  $.ajax({
+    url: '/api/markers/filtered',
+    method: 'GET',
+    data: {
+      east: opts.east,
+      north: opts.north,
+      south: opts.south,
+      west: opts.west,
+      type: opts.type,
+      layer: opts.layer,
+    },
+    dataType: 'json',
+    headers: { 'Authorization': 'Bearer ' + account.getToken() },
+    success: function (rawMarkers) {
+      return callback(null, rawMarkers);
+    },
+    error: function (jqxhr, textStatus, errorThrown) {
+      return callback(new Error(errorThrown));
+    },
+  });
+};

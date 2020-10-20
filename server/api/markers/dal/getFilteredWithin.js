@@ -1,4 +1,4 @@
-// var db = require('tresdb-db');
+var db = require('tresdb-db');
 
 module.exports = function (params, callback) {
   // Get grid-filtered markers within bounds.
@@ -15,14 +15,14 @@ module.exports = function (params, callback) {
   //       latitude
   //     west
   //       longitude
-  //     color
-  //       an array of strings. Default is [].
-  //       Prioritize locations having this color.
-  //     symbol
-  //       an array of strings. Default is [].
-  //       Prioritize locations that have this symbols.
-  //     marking
-  //       an array of strings. Default is [].
+  //     status (FUTURE)
+  //       a string.
+  //       Prioritize locations having this status.
+  //     type
+  //       a string
+  //       Prioritize locations having this type.
+  //     marking (FUTURE)
+  //       a string
   //       Prioritize locations that the user has marked as this.
   //       Example values: 'visited', 'created'
   //   callback
@@ -54,5 +54,17 @@ module.exports = function (params, callback) {
 
   // Return with grid-filter contents.
 
-  return callback(new Error('Not implemented'));
+  var projOpts = {
+    name: true,
+    geom: true,
+    status: true,
+    type: true,
+    layer: true,
+    childLayer: true,
+  };
+
+  db.collection('locations')
+    .find({ deleted: false })
+    .project(projOpts)
+    .toArray(callback);
 };
