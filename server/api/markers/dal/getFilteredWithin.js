@@ -1,4 +1,5 @@
 var db = require('tresdb-db');
+var boundsToPolygon = require('./boundsToPolygon');
 
 module.exports = function (params, callback) {
   // Get grid-filtered markers within bounds.
@@ -44,16 +45,9 @@ module.exports = function (params, callback) {
   //   ]
   //
 
-  // Get the matching set of locations.
+  var coll = db.collection('locations');
 
-  // Add them to the grid filter.
-
-  // Get the basic set of locations.
-
-  // Add them to the grid filter.
-
-  // Return with grid-filter contents.
-
+  // Only these props are needed for markers.
   var projOpts = {
     name: true,
     geom: true,
@@ -63,8 +57,28 @@ module.exports = function (params, callback) {
     childLayer: true,
   };
 
-  db.collection('locations')
-    .find({ deleted: false })
-    .project(projOpts)
-    .toArray(callback);
+  // Build query for matching set of locations.
+  var q = {
+    geom: {
+      $geoWithin: {
+        $geometry: boundsToPolygon(params),
+      },
+    },
+    deleted: false,
+  };
+  // Limit by type if specified
+  if (params.type !== 'any') {
+    q.type = params.type;
+  }
+
+  // Get the matching set of locations.
+  coll.find(q).project(projOpts).toArray(callback);
+
+  // Add them to the grid filter.
+
+  // Get the basic set of locations.
+
+  // Add them to the grid filter.
+
+  // Return with grid-filter contents.
 };
