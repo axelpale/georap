@@ -64,6 +64,11 @@ var FilterStore = function () {
     }
   };
 
+  this.deactivate = function () {
+    // Turn filter off.
+    this.update(DEFAULT_STATE);
+  };
+
   this.isActive = function () {
     // Filter is active when it has non-default values.
     return _state.type !== DEFAULT_STATE.type ||

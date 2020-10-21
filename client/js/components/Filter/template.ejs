@@ -2,16 +2,16 @@
   <div class="row">
     <div class="col-md-12">
 
-      <div>
-        <h1><span class="glyphicon glyphicon-filter" aria-hidden="true"></span> Filter Locations</h1>
+      <h1><span class="glyphicon glyphicon-filter" aria-hidden="true"></span><span id="tresdb-filter-title-dot" class="<%= isFilterActive ? '' : 'hidden' %>">&nbsp;</span> Filter Locations</h1>
 
-        <button class="btn btn-primary">Show All Locations</button>
+      <p>
+      <button id="tresdb-filter-off" class="btn <%= isFilterActive ? 'btn-danger' : 'btn-default disabled' %>">Turn Off</button>
+      <p>
 
-        Choose below to show only map markers of the selected type.
-      </div>
+      <h3>Filter by Type</h3>
 
       <div id="tresdb-filter-type-list" class="tresdb-location-type-list">
-        <button data-type="any" class="tresdb-filter-any <%= currentType === 'any' ? 'tresdb-type-active' : '' %>">
+        <button data-type="any" class="tresdb-filter-any <%= currentType === 'any' ? 'tresdb-tag-active' : '' %>">
           Any type
         </button>
         <%= typeListHtml %>
