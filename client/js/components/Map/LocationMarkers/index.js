@@ -375,6 +375,9 @@ module.exports = function (map) {
       _loadMarkers();
     }
 
+    // Each time filter changes, fetch.
+    filterStore.on('updated', _loadMarkers);
+
     // Fetch the list of visited locations as soon as possible.
     account.getVisitedLocationIds(function (err, ids) {
       if (err) {
@@ -388,6 +391,7 @@ module.exports = function (map) {
 
   self.stopLoading = function () {
     google.maps.event.removeListener(_loaderListener);
+    filterStore.off('updated', _loadMarkers);
     _loaderListener = null;
   };
 

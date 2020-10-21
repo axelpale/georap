@@ -62,8 +62,6 @@ var FilterStore = function () {
     if (!opts.silent) {
       this.emit('updated', _state);
     }
-
-    console.log(_state);
   };
 
   this.isActive = function () {
