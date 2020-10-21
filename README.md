@@ -425,19 +425,37 @@ See `package.json` for test suite details.
 
 ## Populate from a remote database
 
-To clone a collection from a remote production database for local testing, following approach can be used. First we forward a local port to the remote database. Often the remote database cannot be accessed directly and therefore a SSH tunnel is needed.
+It is sometimes useful to clone a collection from a remote production database for local testing. Here are some tips how to do that with [mongoexport](https://docs.mongodb.com/manual/reference/program/mongoexport/) and [mongoimport](https://docs.mongodb.com/manual/reference/program/mongoimport/).
+
+First, ensure your production database and the local development database share identical versions. We have experienced weird errors about missing libssl files when attempting to clone between different versions.
+
+    $ mongod --version
+
+Second, we need to connect to the production database. Often the remote database cannot be accessed directly. Either login to the production server shell or alternatively forward a local port to the remote database so that it acts like a local one. For the latter a SSH tunnel is needed.
 
     $ ssh -L 27018:localhost:27017 123.123.123.123
 
-Second, we [mongoexport](https://docs.mongodb.com/manual/reference/program/mongoexport/) a remote collection and save it as a local JSON file:
+Third, we [mongoexport](https://docs.mongodb.com/manual/reference/program/mongoexport/) a remote collection and save it as a local JSON file:
 
-    $ mongoexport --host localhost:27018 --username remoteuser --password remoteword --db tresdb --collection locations --out .tmp/locations.json
+    $ mongoexport --host localhost:27018 --username remoteuser --password remoteword --db tresdb --collection locations --out tmp/locations.json
 
-Third, we [mongoimport](https://docs.mongodb.com/manual/reference/program/mongoimport/) the file to our local database:
+Repeat this for each collection you need. If you need all then repeat the above for `locations`, `users`, `events`, `entries`, and `config`.
+
+Fourth, log out of production server or close the tunnel. If you exported the files on the production server, copy them to your local machine.
+
+    $ scp 123.123.123.123:~/.tmp/locations.json .tmp/
+
+Fifth, ensure your development database is running. Then [mongoimport](https://docs.mongodb.com/manual/reference/program/mongoimport/) the files to the database:
 
     $ mongoimport --username localfoouser --password localbarword --db tresdb --collection locations --file .tmp/locations.json
 
-Finally, a bit of cleanup remains. We close the tunnel and remove the temp file:
+Use `--drop` flag if you need to clear each collection before importing.
+
+Sixth, build indices for the imported data.
+
+    $ npm run migrate
+
+Finally, a bit of cleanup remains. Remove the temp files:
 
     $ rm .tmp/locations.json
 
