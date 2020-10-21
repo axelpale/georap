@@ -1,4 +1,5 @@
 var db = require('tresdb-db');
+var gridfilter = require('gridfilter');
 var boundsToPolygon = require('./boundsToPolygon');
 
 module.exports = function (params, callback) {
@@ -8,14 +9,20 @@ module.exports = function (params, callback) {
   //
   // Parameters:
   //   params
-  //     east
-  //       longitude
-  //     north
-  //       latitude
-  //     south
-  //       latitude
-  //     west
-  //       longitude
+  //     bounds, an object with props
+  //       east
+  //         longitude
+  //       north
+  //         latitude
+  //       south
+  //         latitude
+  //       west
+  //         longitude
+  //     gridSize
+  //       width
+  //         horizontal eyes
+  //       height
+  //         vertical eyes
   //     status (FUTURE)
   //       a string.
   //       Prioritize locations having this status.
@@ -61,7 +68,7 @@ module.exports = function (params, callback) {
   var q = {
     geom: {
       $geoWithin: {
-        $geometry: boundsToPolygon(params),
+        $geometry: boundsToPolygon(params.bounds),
       },
     },
     deleted: false,
@@ -72,13 +79,23 @@ module.exports = function (params, callback) {
   }
 
   // Get the matching set of locations.
-  coll.find(q).project(projOpts).toArray(callback);
+  coll.find(q).project(projOpts).toArray(function (err, markers) {
+    if (err) {
+      return callback(err);
+    }
 
-  // Add them to the grid filter.
+    // Add matched to the grid filter.
+    var grid = new gridfilter.MarkerGrid(params.bounds, params.gridSize);
+    markers.forEach(function (m) {
+      grid.add(m);
+    });
 
-  // Get the basic set of locations.
+    // Get the basic set of locations.
 
-  // Add them to the grid filter.
+    // Add basic set to the grid filter.
 
-  // Return with grid-filter contents.
+    // Return with grid-filter contents.
+    var filteredMarkers = grid.getMarkers();
+    return callback(null, filteredMarkers);
+  });
 };

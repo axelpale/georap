@@ -171,6 +171,8 @@ module.exports = function (map) {
         west: boundsLiteral.west,
         type: filterState.type,
         layer: zoom,
+        gridWidth: 20, // TODO
+        gridHeight: 20,
       }, _loadMarkersThen);
     } else {
       // No filtration

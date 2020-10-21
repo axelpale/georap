@@ -64,6 +64,12 @@ var schemaFilteredWithin = {
     layer: {
       type: 'integer',
     },
+    gridWidth: {
+      type: 'integer',
+    },
+    gridHeight: {
+      type: 'integer',
+    },
   },
   additionalProperties: false,
 };
@@ -180,12 +186,18 @@ exports.getFilteredWithin = function (req, res, next) {
   }
 
   dal.getFilteredWithin({
-    east: req.query.east,
-    north: req.query.north,
-    south: req.query.south,
-    west: req.query.west,
+    bounds: {
+      east: req.query.east,
+      north: req.query.north,
+      south: req.query.south,
+      west: req.query.west,
+    },
     type: req.query.type,
     layer: req.query.layer,
+    gridSize: {
+      width: req.query.gridWidth,
+      height: req.query.gridHeight,
+    },
   }, function (err, markers) {
     if (err) {
       return next(err);

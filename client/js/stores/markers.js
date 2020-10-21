@@ -108,6 +108,8 @@ exports.getFilteredWithin = function (opts, callback) {
       west: opts.west,
       type: opts.type,
       layer: opts.layer,
+      gridWidth: opts.gridWidth,
+      gridHeight: opts.gridHeight,
     },
     dataType: 'json',
     headers: { 'Authorization': 'Bearer ' + account.getToken() },
