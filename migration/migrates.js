@@ -3,6 +3,7 @@ var versions = require('./versions');
 var schema = require('./lib/schema');
 var loadFixture = require('./lib/loadFixture');
 var initialStateFixture = require('./fixtures/initial');
+var ensureIndices = require('./ensureIndices');
 
 var initEmptyDatabase = function (callback) {
   console.log('Resetting database...');
@@ -13,6 +14,25 @@ var initEmptyDatabase = function (callback) {
     }
 
     console.log('Database reset successfully.');
+    return callback();
+  });
+};
+
+var migrationSuccess = function (callback) {
+  // Ensure indices
+  console.log();
+  console.log('##### Building indices #####');
+
+  ensureIndices(function (err) {
+    if (err) {
+      console.log('Index creation FAILED.');
+      return callback(err);
+    }
+    // Success note
+    console.log('Indices created successfully.');
+    console.log();
+    console.log('##### Migration SUCCESS #####');
+
     return callback();
   });
 };
@@ -77,19 +97,12 @@ exports.migrate = function (targetVersion, callback) {
           console.log('Data might be in a corrupted state.');
           return callback(err2);
         } // else
-
-        console.log();
-        console.log('##### Migration SUCCESS #####');
-
-        return callback();
+        return migrationSuccess(callback);
       });
     } else {
       console.log();
       console.log('DB schema versions are already met.');
-      console.log();
-      console.log('##### Migration SUCCESS #####');
-
-      return callback();
+      return migrationSuccess(callback);
     }
   });
 };
