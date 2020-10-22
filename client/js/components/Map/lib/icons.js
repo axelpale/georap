@@ -21,6 +21,16 @@ exports.marker = function (url) {
   };
 };
 
+exports.tiny = function (url) {
+  return {
+    labelOrigin: new google.maps.Point(4, 20),
+    url: url,
+    size: new google.maps.Size(9, 14),
+    origin: new google.maps.Point(0, 0),
+    anchor: new google.maps.Point(4, 14),
+  };
+};
+
 exports.geolocation = function () {
   return {
     url: geolocationUrl,
