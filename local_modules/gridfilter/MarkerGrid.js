@@ -16,6 +16,11 @@ const MarkerGrid = function (latLngBounds, gridSize) {
   this.width = gridSize.width
   this.height = gridSize.height
 
+  // Ensure correct handling over map edges.
+  // For example, usually west < east, except when east goes over
+  // the international date line.
+  // TODO
+
   // Maps from geo coords to grid coords
   this.lngToWidth = new Mapper(
     latLngBounds.west,
