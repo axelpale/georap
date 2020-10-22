@@ -163,6 +163,9 @@ module.exports = {
       minItems: 1,
       uniqueItems: true,
     },
+    markerTemplates: {
+      type: 'object',
+    },
     comments: {
       type: 'object',
       properties: {

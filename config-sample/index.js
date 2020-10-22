@@ -174,6 +174,103 @@ module.exports = {
     'freak',
   ],
 
+  // Marker templates.
+  // A mapping: status -> marking -> size -> template name without ext
+  // You can add or edit the templates at config/images/markers/templates
+  // NOTE template name must contain only lowercase letters and/or underscores.
+  markerTemplates: {
+    'unknown': {
+      'default': {
+        'sm': 'red_default_sm',
+        'md': 'red_default_md',
+      },
+      'visited': {
+        'sm': 'yellow_default_sm',
+        'md': 'yellow_default_md',
+      },
+    },
+    'active': {
+      'default': {
+        'sm': 'red_light_sm',
+        'md': 'red_light_md',
+      },
+      'visited': {
+        'sm': 'yellow_light_sm',
+        'md': 'yellow_light_md',
+      },
+    },
+    'guarded': {
+      'default': {
+        'sm': 'red_light_sm',
+        'md': 'red_light_md',
+      },
+      'visited': {
+        'sm': 'yellow_light_sm',
+        'md': 'yellow_light_md',
+      },
+    },
+    'locked': {
+      'default': {
+        'sm': 'red_light_sm',
+        'md': 'red_light_md',
+      },
+      'visited': {
+        'sm': 'yellow_light_sm',
+        'md': 'yellow_light_md',
+      },
+    },
+    'abandoned': {
+      'default': {
+        'sm': 'red_default_sm',
+        'md': 'red_default_md',
+      },
+      'visited': {
+        'sm': 'yellow_default_sm',
+        'md': 'yellow_default_md',
+      },
+    },
+    'ruined': {
+      'default': {
+        'sm': 'red_dark_sm',
+        'md': 'red_dark_md',
+      },
+      'visited': {
+        'sm': 'yellow_dark_sm',
+        'md': 'yellow_dark_md',
+      },
+    },
+    'buried': {
+      'default': {
+        'sm': 'red_darker_sm',
+        'md': 'red_darker_md',
+      },
+      'visited': {
+        'sm': 'yellow_darker_sm',
+        'md': 'yellow_darker_md',
+      },
+    },
+    'demolished': {
+      'default': {
+        'sm': 'red_darker_sm',
+        'md': 'red_darker_md',
+      },
+      'visited': {
+        'sm': 'yellow_darker_sm',
+        'md': 'yellow_darker_md',
+      },
+    },
+    'natural': {
+      'default': {
+        'sm': 'red_default_sm',
+        'md': 'red_default_md',
+      },
+      'visited': {
+        'sm': 'yellow_default_sm',
+        'md': 'yellow_default_md',
+      },
+    },
+  },
+
   // Commenting
   comments: {
     minMessageLength: 2,
