@@ -10,7 +10,7 @@ var emitter = require('component-emitter');
 var rawEventToMarkerLocation = require('./lib/rawEventToMarkerLocation');
 var getBoundsDiagonal = require('./lib/getBoundsDiagonal');
 var VisitedManager = require('./VisitedManager');
-var getGridSize = require('./getGridSize');
+var getGroupRadius = require('./getGroupRadius');
 var chooseIcon = require('./chooseIcon');
 var labels = require('./lib/labels');
 
@@ -173,7 +173,7 @@ module.exports = function (map) {
       // Query filtered set of locations.
       var filterState = filterStore.get();
       var boundsLiteral = bounds.toJSON();
-      var gridSize = getGridSize();
+      var groupRadius = getGroupRadius(boundsLiteral);
       markerStore.getFilteredWithin({
         east: boundsLiteral.east,
         north: boundsLiteral.north,
@@ -181,8 +181,7 @@ module.exports = function (map) {
         west: boundsLiteral.west,
         type: filterState.type,
         layer: zoom,
-        gridWidth: gridSize.width,
-        gridHeight: gridSize.height,
+        groupRadius: groupRadius,
       }, _loadMarkersThen);
     } else {
       // No filtration

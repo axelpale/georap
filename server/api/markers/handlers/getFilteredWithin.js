@@ -29,11 +29,8 @@ var schemaFilteredWithin = {
     layer: {
       type: 'integer',
     },
-    gridWidth: {
-      type: 'integer',
-    },
-    gridHeight: {
-      type: 'integer',
+    groupRadius: {
+      type: 'number',
     },
   },
   additionalProperties: false,
@@ -57,10 +54,7 @@ module.exports = function (req, res, next) {
     },
     type: req.query.type,
     layer: req.query.layer,
-    gridSize: {
-      width: req.query.gridWidth,
-      height: req.query.gridHeight,
-    },
+    groupRadius: req.query.groupRadius,
   }, function (err, markers) {
     if (err) {
       return next(err);

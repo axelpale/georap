@@ -1,5 +1,5 @@
 var db = require('tresdb-db');
-var gridfilter = require('gridfilter');
+var DistFilter = require('distfilter');
 var boundsToPolygon = require('./boundsToPolygon');
 
 module.exports = function (params, callback) {
@@ -18,11 +18,9 @@ module.exports = function (params, callback) {
   //         latitude
   //       west
   //         longitude
-  //     gridSize
-  //       width
-  //         horizontal eyes
-  //       height
-  //         vertical eyes
+  //     groupRadius
+  //       number in geo degrees
+  //       Group markers within this radius.
   //     status (FUTURE)
   //       a string.
   //       Prioritize locations having this status.
@@ -96,18 +94,14 @@ module.exports = function (params, callback) {
         return callback(err);
       }
 
-      // Add matched to the grid filter.
-      var grid = new gridfilter.MarkerGrid(params.bounds, params.gridSize);
+      // Add matched to the dist filter.
+      var df = new DistFilter(params.groupRadius);
       markers.forEach(function (m) {
-        grid.add(m);
+        df.add(m);
       });
 
-      // Get the basic set of locations.
-
-      // Add basic set to the grid filter.
-
-      // Return with grid-filter contents.
-      var filteredMarkers = grid.getMarkers();
+      // Return with filtered contents.
+      var filteredMarkers = df.getMarkers();
       return callback(null, filteredMarkers);
     });
 };
