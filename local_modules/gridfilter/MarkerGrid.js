@@ -5,12 +5,13 @@ const circle = require('./circle')
 // Define the structure of the key here.
 const stringify = (x, y) => x + ';' + y
 
-const MarkerGrid = function (latLngBounds, gridSize) {
+const MarkerGrid = function (bounds, gridSize) {
   // Parameters:
-  //   latLngBounds is a google.maps.LatLngBoundsLiteral
+  //   bounds is a google.maps.LatLngBoundsLiteral
   //     Is the grid area in geographical coordinates.
   //     Has structure { east, north, south, west }
   //   gridSize is { width, height } in integers.
+  //     Only width is used because height seems unstable in GMaps API
 
   // Store size
   this.width = gridSize.width
@@ -21,16 +22,30 @@ const MarkerGrid = function (latLngBounds, gridSize) {
   // the international date line.
   // TODO
 
+  // Grid stabilization. The grid must not filter locations differently
+  // when bounds are slightly different which happens when users pan.
+  // The grid dimensions must depend on viewport size instead of zoom level
+  // to ensure intented visual density regardless of coordinates.
+  // Still, grid origin must be fixed on map.
+  const eyeGeoSize = (bounds.east - bounds.west) / this.width
+  // Let a grid be placed to match world origin.
+  // Find the closest grid cross north-west from viewport top-left corner.
+  // There will be a margin outside the viewport with max width of an eye.
+  const stableWest = Math.floor(bounds.west / eyeGeoSize) * eyeGeoSize
+  const stableNorth = Math.ceil(bounds.north / eyeGeoSize) * eyeGeoSize
+  const stableEast = Math.ceil(bounds.east / eyeGeoSize) * eyeGeoSize
+  const stableSouth = Math.floor(bounds.south / eyeGeoSize) * eyeGeoSize
+
   // Maps from geo coords to grid coords
   this.lngToWidth = new Mapper(
-    latLngBounds.west,
-    latLngBounds.east,
+    stableWest,
+    stableEast,
     0,
     gridSize.width
   )
   this.latToHeight = new Mapper(
-    latLngBounds.north,
-    latLngBounds.south,
+    stableNorth,
+    stableSouth,
     0,
     gridSize.height
   )

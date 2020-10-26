@@ -70,6 +70,7 @@ module.exports = function (params, callback) {
   // Sort by points to enforce deterministic grid insertion order.
   var sortOpts = {
     points: -1,
+    name: 1, // Often points identical.
   };
 
   // Build query for matching set of locations.
