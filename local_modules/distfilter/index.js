@@ -44,10 +44,15 @@ proto.add = function (marker) {
   if (minParent === null) {
     // Add new marker
     marker.childCount = 0
+    // HACK ensure correct child mark
+    marker.layer = 0
+    marker.childLayer = 0
     this.added.push(marker)
   } else {
     // The neighbor is too close. Ignore the marker and top the parent.
     minParent.childCount += 1
+    // HACK ensure correct child mark
+    minParent.childLayer = 32
   }
 }
 
