@@ -44,6 +44,9 @@ module.exports = function (params, callback) {
   //       geom: <GeoJSON Point>,
   //       status: <string>,
   //       type: <string>,
+  //       layer: <integer>,
+  //       childLayer: <integer>,
+  //       // Possible future properties
   //       match: <bool>, true if filter matched
   //       hid: <int>, the number of hidden markers under it
   //       hidMatched: <int>, a number of matches in those hidden markers.
@@ -64,6 +67,11 @@ module.exports = function (params, callback) {
     childLayer: true,
   };
 
+  // Sort by points to enforce deterministic grid insertion order.
+  var sortOpts = {
+    points: -1,
+  };
+
   // Build query for matching set of locations.
   var q = {
     geom: {
@@ -79,23 +87,26 @@ module.exports = function (params, callback) {
   }
 
   // Get the matching set of locations.
-  coll.find(q).project(projOpts).toArray(function (err, markers) {
-    if (err) {
-      return callback(err);
-    }
+  coll.find(q)
+    .sort(sortOpts)
+    .project(projOpts)
+    .toArray(function (err, markers) {
+      if (err) {
+        return callback(err);
+      }
 
-    // Add matched to the grid filter.
-    var grid = new gridfilter.MarkerGrid(params.bounds, params.gridSize);
-    markers.forEach(function (m) {
-      grid.add(m);
+      // Add matched to the grid filter.
+      var grid = new gridfilter.MarkerGrid(params.bounds, params.gridSize);
+      markers.forEach(function (m) {
+        grid.add(m);
+      });
+
+      // Get the basic set of locations.
+
+      // Add basic set to the grid filter.
+
+      // Return with grid-filter contents.
+      var filteredMarkers = grid.getMarkers();
+      return callback(null, filteredMarkers);
     });
-
-    // Get the basic set of locations.
-
-    // Add basic set to the grid filter.
-
-    // Return with grid-filter contents.
-    var filteredMarkers = grid.getMarkers();
-    return callback(null, filteredMarkers);
-  });
 };

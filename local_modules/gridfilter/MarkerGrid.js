@@ -72,14 +72,22 @@ proto.add = function (marker) {
   const key = stringify(i, j)
 
   if (this.cells[key]) {
+    let parent = this.cells[key]
     // The cell is already taken. Marker is not added.
     // Mark that the occupying marker has a child.
-    this.cells[key].childrenCount += 1
+    parent.childCount += 1
+    // HACK ensure child mark by setting absurd childLayer.
+    // Fix hack by using childCount in client.
+    parent.childLayer = 32
   } else {
     // Add the marker.
     this.addedMarkers.push(marker)
     // Init children counting.
-    marker.childrenCount = 0
+    marker.childCount = 0
+    // HACK ensure the filtered markers have visible layer.
+    // To fix hack, use childCount also in non-filtered queries.
+    marker.layer = 0
+    marker.childLayer = 0
     // The marker reserves a circular area.
     // Determine circle indices. Attach marker to each index.
     const circleIndices = circle.getIndices(x, y, r)
@@ -107,7 +115,7 @@ proto.toString = function () {
       // Output number of stacked markers.
       if (m) {
         // a marker
-        str += '' + (m.childrenCount + 1)
+        str += '' + (m.childCount + 1)
       } else {
         // no marker in this cell
         str += '0'

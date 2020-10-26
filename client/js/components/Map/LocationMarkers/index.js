@@ -6,12 +6,13 @@
 var markerStore = tresdb.stores.markers;
 var account = tresdb.stores.account;
 var filterStore = tresdb.stores.filter;
-var getBoundsDiagonal = require('./lib/getBoundsDiagonal');
-var rawEventToMarkerLocation = require('./lib/rawEventToMarkerLocation');
-var labels = require('./lib/labels');
-var chooseIcon = require('./chooseIcon');
-var VisitedManager = require('./VisitedManager');
 var emitter = require('component-emitter');
+var rawEventToMarkerLocation = require('./lib/rawEventToMarkerLocation');
+var getBoundsDiagonal = require('./lib/getBoundsDiagonal');
+var VisitedManager = require('./VisitedManager');
+var getGridSize = require('./getGridSize');
+var chooseIcon = require('./chooseIcon');
+var labels = require('./lib/labels');
 
 module.exports = function (map) {
 
@@ -107,7 +108,7 @@ module.exports = function (map) {
     // To speed up things and avoid flicker,
     // only adds those markers on the screen that are not already there.
 
-    var i, l, m, k;
+    var i, l, m, mloc, k;
 
     // For each location candidate
     for (i = 0; i < locs.length; i += 1) {
@@ -116,7 +117,15 @@ module.exports = function (map) {
       // If location already on the map
       if (_markers.hasOwnProperty(l._id)) {
         // Mark that it does not need to be removed.
-        _markers[l._id].set('keep', true);
+        m = _markers[l._id];
+        m.set('keep', true);
+        // HACK Update dynamic layer and childLayer properties to
+        // display child mark properly.
+        // In filtered results the layer and childLayer changes constantly.
+        mloc = m.get('location');
+        mloc.layer = l.layer;
+        mloc.childLayer = l.childLayer;
+        m.setIcon(_chooseIcon(mloc)); // Update icon accordingly
       } else {
         // otherwise, add it to the map.
         m = _addMarker(l);
@@ -164,6 +173,7 @@ module.exports = function (map) {
       // Query filtered set of locations.
       var filterState = filterStore.get();
       var boundsLiteral = bounds.toJSON();
+      var gridSize = getGridSize();
       markerStore.getFilteredWithin({
         east: boundsLiteral.east,
         north: boundsLiteral.north,
@@ -171,8 +181,8 @@ module.exports = function (map) {
         west: boundsLiteral.west,
         type: filterState.type,
         layer: zoom,
-        gridWidth: 20, // TODO
-        gridHeight: 20,
+        gridWidth: gridSize.width,
+        gridHeight: gridSize.height,
       }, _loadMarkersThen);
     } else {
       // No filtration
