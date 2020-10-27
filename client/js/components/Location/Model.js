@@ -122,6 +122,7 @@ module.exports = function (rawLoc) {
       status: rawLoc.status,
       type: rawLoc.type,
       layer: rawLoc.layer,
+      childLayer: rawLoc.layer,
     };
   };
 

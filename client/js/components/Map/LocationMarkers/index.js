@@ -146,7 +146,7 @@ module.exports = function (map) {
         m = _markers[l._id];
         m.set('keep', true);
         // HACK Update dynamic layer and childLayer properties to
-        // display child mark properly.
+        // display child mark properly between updates.
         // In filtered results the layer and childLayer changes constantly.
         mloc = m.get('location');
         if (Math.abs(mloc.layer - l.layer) +
@@ -161,6 +161,12 @@ module.exports = function (map) {
         m = _addMarker(l);
         m.set('keep', true);
       }
+    }
+
+    // Keep the selected marker, because sometimes the selected is not
+    // among the locations from the marker api.
+    if (_markers[_selectedId]) {
+      _markers[_selectedId].set('keep', true);
     }
 
     // Remove markers that were not marked to be kept.
@@ -339,15 +345,20 @@ module.exports = function (map) {
     }
   });
 
-  // Listen possible location selections to update selected marker.
+  // Listen possible location selections to add or update selected marker.
   locationsStore.on('updated', function (state) {
     if (state.selectedLocationId) {
       if (_selectedId === state.selectedLocationId) {
         // Already selected, do nothing.
       } else {
-        // Unstyle old and style the new;
-        _updateIcon(_selectedId);
-        _updateIcon(state.selectedLocationId);
+        if (_markers[state.selectedLocationId]) {
+          // Unstyle old and style the new.
+          _updateIcon(_selectedId);
+          _updateIcon(state.selectedLocationId);
+        } else {
+          // Marker already on the map.
+          _addMarker(state.selectedLocation.getMarkerLocation());
+        }
         _ensureLabel(state.selectedLocationId);
         _selectedId = state.selectedLocationId;
       }

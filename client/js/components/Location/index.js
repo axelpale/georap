@@ -100,7 +100,7 @@ module.exports = function (id) {
       self.emit('idle', _location);
 
       // Select the location. Leads to creation of the selection marker.
-      locations.selectLocation(_location.getId());
+      locations.selectLocation(_location);
     });
   };  // end bind
 
