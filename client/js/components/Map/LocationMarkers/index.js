@@ -149,9 +149,13 @@ module.exports = function (map) {
         // display child mark properly.
         // In filtered results the layer and childLayer changes constantly.
         mloc = m.get('location');
-        mloc.layer = l.layer;
-        mloc.childLayer = l.childLayer;
-        m.setIcon(_chooseIcon(mloc)); // Update icon accordingly
+        if (Math.abs(mloc.layer - l.layer) +
+            Math.abs(mloc.childLayer - l.childLayer) > 0) {
+          // Change in layer data.
+          mloc.layer = l.layer;
+          mloc.childLayer = l.childLayer;
+          m.setIcon(_chooseIcon(mloc)); // Update accordingly
+        }
       } else {
         // otherwise, add it to the map.
         m = _addMarker(l);
