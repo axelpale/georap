@@ -291,11 +291,11 @@ To update the client and server, rebuild and restart:
 
 To take a snapshot of the database with [mongodump](https://docs.mongodb.com/v3.6/reference/program/mongodump/):
 
-    $ mongodump --username <admin> --password <adminpwd>
+    $ mongodump --username <admin> --password <adminpwd> --db tresdb
 
 To restore the snapshot with [mongorestore](https://docs.mongodb.com/v3.6/reference/program/mongorestore/):
 
-    $ mongorestore --username <admin> --password <adminpwd> dump/
+    $ mongorestore --username <admin> --password <adminpwd> --db tresdb dump/tresdb
 
 After restoring it might be necessary to run migrate and worker:
 
