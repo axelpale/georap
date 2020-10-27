@@ -25,6 +25,11 @@ module.exports = [
     options: {},
   },
   {
+    collection: 'locations',
+    spec: { status: 1, type: 1 },
+    options: {},
+  },
+  {
     // Text index
     collection: 'locations',
     spec: {
