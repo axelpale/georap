@@ -2,10 +2,8 @@
 // View for location
 
 var emitter = require('component-emitter');
-
-var locations = require('../../stores/locations');
-
-//var getEntryView = require('./lib/getEntryView');
+var ui = require('tresdb-ui');
+var LocationModel = require('./Model');
 var NameView = require('./Name');
 var PlacesView = require('./Places');
 var GeomView = require('./Geom');
@@ -17,6 +15,7 @@ var EventsView = require('./Events');
 
 // Templates
 var locationTemplate = require('./template.ejs');
+var locations = tresdb.stores.locations;
 
 module.exports = function (id) {
   // Parameters
@@ -50,9 +49,8 @@ module.exports = function (id) {
     var $loading = $('#tresdb-location-loading');
 
     // Fetch location before rendering.
-    locations.get(id, function (err, loc) {
-
-      $loading.addClass('hidden');
+    locations.get(id, function (err, rawLoc) {
+      ui.hide($loading);
 
       if (err) {
         console.error(err);
@@ -60,7 +58,7 @@ module.exports = function (id) {
       }
 
       // Set state
-      _location = loc;
+      _location = new LocationModel(rawLoc);
 
       nameView = new NameView(_location);
       placesView = new PlacesView(_location);
@@ -101,11 +99,12 @@ module.exports = function (id) {
       // Inform the view for the location is ready.
       self.emit('idle', _location);
 
+      // Select the location. Leads to creation of the selection marker.
+      locations.selectLocation(_location);
     });
   };  // end bind
 
   self.unbind = function () {
-
     if (_location) {
       nameView.unbind();
       placesView.unbind();
@@ -116,6 +115,7 @@ module.exports = function (id) {
       eventsView.unbind();
       removeView.unbind();
       _location.off();
+      locations.deselectLocation(_location.getId());
     }
     _location = null;
   };

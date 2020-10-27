@@ -9,15 +9,14 @@
 //   should be stored device-wise.
 // - If no location is stored and none can be retrieved from the browser,
 //   fallback to southern finland.
-var mapStateStore = require('../../stores/mapstate');
 
 var readGoogleMapState = require('./lib/readGoogleMapState');
 var AdditionMarker = require('./AdditionMarker');
 var GeolocationMarker = require('./GeolocationMarker');
 var Panner = require('./Panner');
 var LocationMarkers = require('./LocationMarkers');
-
 var emitter = require('component-emitter');
+var mapStateStore = tresdb.stores.mapstate;
 
 module.exports = function () {
   //

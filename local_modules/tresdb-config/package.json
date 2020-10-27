@@ -9,9 +9,15 @@
     "type": "git",
     "url": "git://github.com/axelpale/tresdb.git"
   },
-  "scripts": {},
+  "scripts": {
+    "lint": "eslint --config ../../.eslintrc.js *.js && echo OK"
+  },
   "author": "Akseli Palén <akseli.palen@gmail.com>",
   "license": "MIT",
-  "dependencies": {},
-  "devDependencies": {}
+  "dependencies": {
+    "ajv": "^6.12.6"
+  },
+  "devDependencies": {
+    "eslint": "^7.11.0"
+  }
 }

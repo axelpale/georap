@@ -1,9 +1,11 @@
-
-var account = require('../../stores/account');
-var locations = require('../../stores/locations');
+/* eslint-disable max-statements */
 var template = require('./template.ejs');
 var glyphiconTemplate = require('./glyphicon.ejs');
 var emitter = require('component-emitter');
+var ui = require('tresdb-ui');
+var account = tresdb.stores.account;
+var locations = tresdb.stores.locations;
+var filterStore = tresdb.stores.filter;
 
 // var isGeomAlmostEqual = function (geom1, geom2) {
 //   var prec = 5;
@@ -50,6 +52,7 @@ module.exports = function (mapComp) {
       config: tresdb.config,
       user: account.getUser(),  // might be undefined
       supportButtonTitle: tresdb.config.supportButtonTitle,
+      isFilterActive: filterStore.isActive(),
     }));
 
     _$root = $mount;
@@ -67,12 +70,12 @@ module.exports = function (mapComp) {
       ev.preventDefault();
 
       // Hide other menus
-      $('#tresdb-toolbar-main').addClass('hidden');
+      ui.hide($('#tresdb-toolbar-main'));
       // Show addition menu
-      $('#tresdb-toolbar-addition').removeClass('hidden');
+      ui.show($('#tresdb-toolbar-addition'));
 
       // Hide possible error message from previous addition
-      $('#tresdb-toolbar-error').addClass('hidden');
+      ui.hide($('#tresdb-toolbar-error'));
 
       // On addition start
       mapComp.addAdditionMarker();
@@ -84,9 +87,9 @@ module.exports = function (mapComp) {
       ev.preventDefault();
 
       // Show other menus
-      $('#tresdb-toolbar-main').removeClass('hidden');
+      ui.show($('#tresdb-toolbar-main'));
       // Hide addition menu
-      $('#tresdb-toolbar-addition').addClass('hidden');
+      ui.hide($('#tresdb-toolbar-addition'));
 
       // On addition cancel
       mapComp.removeAdditionMarker();
@@ -101,15 +104,15 @@ module.exports = function (mapComp) {
       $tooCloseError.find('button').click(function (cev) {
         // Will bind multiple times but we do not care
         cev.preventDefault();
-        tresdb.ui.hide($tooCloseError);
+        ui.hide($tooCloseError);
       });
 
       // Show progress bar
-      $('#tresdb-toolbar-progress').removeClass('hidden');
+      ui.show($('#tresdb-toolbar-progress'));
       // Hide addition menu
-      $('#tresdb-toolbar-addition').addClass('hidden');
+      ui.hide($('#tresdb-toolbar-addition'));
       // Hide possible error
-      tresdb.ui.hide($tooCloseError);
+      ui.hide($tooCloseError);
 
       // On addition create
       var geom = mapComp.getAdditionMarkerGeom();
@@ -126,10 +129,10 @@ module.exports = function (mapComp) {
         }
 
         // Hide progress bar
-        $('#tresdb-toolbar-progress').addClass('hidden');
+        ui.hide($('#tresdb-toolbar-progress'));
 
         // Show main menu
-        $('#tresdb-toolbar-main').removeClass('hidden');
+        ui.show($('#tresdb-toolbar-main'));
 
         locations.off('location_created', thisFn);
       });
@@ -141,18 +144,18 @@ module.exports = function (mapComp) {
 
         if (err) {
           if (err.message === 'TOO_CLOSE') {
-            tresdb.ui.show($tooCloseError);
+            ui.show($tooCloseError);
           } else {
             console.error(err);
             // Show error message
-            $('#tresdb-toolbar-error').removeClass('hidden');
+            ui.show($('#tresdb-toolbar-error'));
           }
 
           // Hide progress bar
-          $('#tresdb-toolbar-progress').addClass('hidden');
+          ui.hide($('#tresdb-toolbar-progress'));
 
           // Show main menu
-          $('#tresdb-toolbar-main').removeClass('hidden');
+          ui.show($('#tresdb-toolbar-main'));
 
           return;
         }
@@ -165,13 +168,11 @@ module.exports = function (mapComp) {
 
     $mount.on('click', '#tresdb-mainmenu-events', function (ev) {
       ev.preventDefault();
-
       return tresdb.go('/latest');
     });
 
     $mount.on('click', '#tresdb-mainmenu-users', function (ev) {
       ev.preventDefault();
-
       return tresdb.go('/users');
     });
 
@@ -234,12 +235,44 @@ module.exports = function (mapComp) {
 
     $mount.on('click', '#tresdb-mainmenu-logout', function (ev) {
       ev.preventDefault();
-
       return tresdb.go('/login');
     });
 
 
-    // External tools
+    // Filter
+
+    var filterTimer = false;
+    $mount.on('click', '#tresdb-mainmenu-filter', function (ev) {
+      ev.preventDefault();
+
+      var isFilterOpen = tresdb.getCurrentPath() === '/filter';
+
+      if (isFilterOpen) {
+        if (filterTimer) {
+          filterTimer = false;
+          tresdb.go('/');
+        }
+      } else {
+        // Delay to prevent immediate double click open close.
+        var SEC = 1000;
+        setTimeout(function () {
+          filterTimer = true;
+        }, SEC);
+        tresdb.go('/filter');
+      }
+    });
+
+    filterStore.on('updated', function () {
+      // Show a red dot when the filter is active.
+      if (filterStore.isActive()) {
+        ui.show($('#tresdb-mainmenu-filter .label'));
+      } else {
+        ui.hide($('#tresdb-mainmenu-filter .label'));
+      }
+    });
+
+
+    // Search bar
 
     $mount.on('submit', '#tresdb-mainmenu-search-form', function (ev) {
       ev.preventDefault();
@@ -257,5 +290,6 @@ module.exports = function (mapComp) {
     if (_$root !== null) {
       _$root.off('click');
     }
+    filterStore.off();
   };
 };

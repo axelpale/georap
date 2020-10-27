@@ -1,14 +1,14 @@
 /* eslint-disable max-statements */
 var template = require('./template.ejs');
-var account = require('../../../../../stores/account');
 var CommentView = require('./Comment');
 var PendingCommentView = require('./PendingComment');
 var updateHint = require('./updateHint');
 var preprocessMessage = require('./Comment/preprocessMessage');
+var ui = require('tresdb-ui');
 
-var commentsConfig = require('./config');
-var MIN_MESSAGE_LEN = commentsConfig.MIN_MESSAGE_LEN;
-var MAX_MESSAGE_LEN = commentsConfig.MAX_MESSAGE_LEN;
+var account = tresdb.stores.account;
+var MIN_LEN = tresdb.config.comments.minMessageLength;
+var MAX_LEN = tresdb.config.comments.maxMessageLength;
 
 module.exports = function (entry) {
   // Parameters:
@@ -45,7 +45,7 @@ module.exports = function (entry) {
 
     $mount.html(template({
       entryId: entryId,
-      MIN_LEN: MIN_MESSAGE_LEN,
+      MIN_LEN: MIN_LEN,
     }));
 
     var $commentsEl = $mount.find('#entry-' + entryId + '-comments');
@@ -69,18 +69,18 @@ module.exports = function (entry) {
       ev.preventDefault();
 
       // Show the form container; Hide the footer
-      $container.removeClass('hidden');
-      $entryFooter.addClass('hidden');
+      ui.show($container);
+      ui.hide($entryFooter);
 
       // Ensure visibility of the form inside the container.
       // Maybe hidden by previous success.
-      $commentForm.removeClass('hidden');
+      ui.show($commentForm);
 
       // Focus to message input
       $messageInput.focus();
 
       // Hide possible previous infos
-      $success.addClass('hidden');
+      ui.hide($success);
 
       // Update possibly previously changed hint
       var len = $messageInput.val().length;
@@ -91,8 +91,8 @@ module.exports = function (entry) {
       ev.preventDefault();
 
       // Hide the form container; Show the footer
-      $container.addClass('hidden');
-      $entryFooter.removeClass('hidden');
+      ui.hide($container);
+      ui.show($entryFooter);
     });
 
     // Message hint
@@ -110,7 +110,7 @@ module.exports = function (entry) {
       var message = $messageInput.val();
       var len = message.length;
 
-      if (len < MIN_MESSAGE_LEN || len > MAX_MESSAGE_LEN) {
+      if (len < MIN_LEN || len > MAX_LEN) {
         // Do not submit. Emphasize message hint.
         $messageHint.addClass('text-danger');
         $messageHint.removeClass('text-info');
@@ -118,29 +118,29 @@ module.exports = function (entry) {
       }
 
       // Hide form but not container.
-      $commentForm.addClass('hidden');
-      $commentProgress.removeClass('hidden');
+      ui.hide($commentForm);
+      ui.show($commentProgress);
       // Hide possible previous messages
-      $error.addClass('hidden');
+      ui.hide($error);
 
       entry.createComment(message, function (err) {
         if (err) {
           // Show form
-          $commentForm.removeClass('hidden');
+          ui.show($commentForm);
           // Hide progress
-          $commentProgress.addClass('hidden');
+          ui.hide($commentProgress);
           // Display error message
-          $error.removeClass('hidden');
+          ui.show($error);
           $error.html(err.message);
         } else {
           // Success //
           // Hide progress
-          $commentProgress.addClass('hidden');
+          ui.hide($commentProgress);
           // Show entry footer
-          $entryFooter.removeClass('hidden');
+          ui.show($entryFooter);
           // Hide form container but reveal the form for next comment.
-          $container.addClass('hidden');
-          $commentForm.removeClass('hidden');
+          ui.hide($container);
+          ui.show($commentForm);
           // Empty the successfully posted message input
           $messageInput.val('');
           // Generate a pending comment

@@ -1,6 +1,5 @@
-var commentConfig = require('./config');
-var min = commentConfig.MIN_MESSAGE_LEN;
-var max = commentConfig.MAX_MESSAGE_LEN;
+var min = tresdb.config.comments.minMessageLength;
+var max = tresdb.config.comments.maxMessageLength;
 
 module.exports = function ($messageHint, len) {
   if (len === 0) {

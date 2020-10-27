@@ -71,8 +71,6 @@ exports.getFiltered = function (params, callback) {
   //   ]
   //
 
-  var coll = db.collection('locations');
-
   // Build query piece by piece.
   var q = {};
   var projOpts = {};
@@ -151,7 +149,8 @@ exports.getFiltered = function (params, callback) {
     sortOpts.name = 1;
   }
 
-  coll.find(q)
+  db.collection('locations')
+    .find(q)
     .project(projOpts)
     .sort(sortOpts)
     .skip(skipValue)

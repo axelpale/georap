@@ -1,41 +1,47 @@
 /* eslint-disable max-statements */
 var icons = require('../lib/icons');
 var urls = require('tresdb-urls');
+var templates = tresdb.config.markerTemplates;
 
-module.exports = function (loc, zoomLevel, visitedManager) {
-  // Return an icon specification compatible with Google Maps Markers
+// Map size to a marker specification generating function.
+var sizeToMarkerSpecs = {
+  'sm': icons.small,
+  'md': icons.marker,
+  'lg': icons.large,
+};
 
-  // Choose template
-  var templateName = 'default';
-
-  var isVisited = visitedManager.isVisited(loc._id);
-  var isDemolished = loc.status === 'demolished'; // TODO rm inst specificity
-  var isParent = loc.childLayer > zoomLevel;
-
-  var templateSuffix = '';
-  // Set suffix. Visited takes priority.
-  if (isVisited) {
-    templateSuffix = 'visited';
-  } else if (isDemolished) {
-    templateSuffix = 'demolished';
+var getChildStatus = function (size, childLayer, zoomLevel) {
+  if (size === 'sm') {
+    return 'none';
+  } // else
+  if (childLayer > zoomLevel) {
+    return 'unknown';
   }
+  return 'none';
+};
 
-  // Suffix
-  if (isParent) {
-    templateSuffix += 'parent';
-  }
+module.exports = function (mloc, zoomLevel, isSelected, isVisited) {
+  // Return an icon specification compatible with Google Maps Markers.
+  //
+  // Params:
+  //   mloc
+  //     A marker location object
 
-  if (templateSuffix.length > 0) {
-    templateName = templateSuffix;
-  } // else use templateName as is
+  // Template parts
+  var status = mloc.status;
+  var marking = isVisited ? 'visited' : 'default';
+  var size = isSelected ? 'lg' : 'md';
+  var symbol = size === 'sm' ? 'any' : mloc.type;
 
-  // Choose symbol
-  var symbol = loc.type;
+  var childStatus = getChildStatus(size, mloc.childLayer, zoomLevel);
+
+  // Combine
+  var templateName = templates[status][marking][size] + '-' + childStatus;
 
   // Build URL
   var iconUrl = urls.markerIconUrl(templateName, symbol);
-
-  var iconObj = icons.marker(iconUrl);
-
+  // Build maps icon specs
+  var iconObj = sizeToMarkerSpecs[size](iconUrl);
+  // Return the icon specs
   return iconObj;
 };

@@ -3,6 +3,7 @@ var messageTemplate = require('./message.ejs');
 var template = require('./template.ejs');
 var ListComp = require('./List');
 var emitter = require('component-emitter');
+var ui = require('tresdb-ui');
 
 var DEC = 10;
 
@@ -55,11 +56,11 @@ module.exports = function (batchId) {
     });
 
     tresdb.stores.locations.getBatch(batchId, function (err, locs) {
-      tresdb.ui.hide($progress);
+      ui.hide($progress);
 
       if (err) {
         if (err.message === 'Not Found') {
-          tresdb.ui.show($error404);
+          ui.show($error404);
           return;
         }
         console.log('getBatch');
@@ -69,8 +70,8 @@ module.exports = function (batchId) {
 
       $message.html(messageTemplate({ locs: locs }));
 
-      tresdb.ui.show($list);
-      tresdb.ui.show($submitAllForm);
+      ui.show($list);
+      ui.show($submitAllForm);
       listComp.setState({
         locs: locs,
       });
@@ -80,19 +81,19 @@ module.exports = function (batchId) {
 
       var handleSubmit = function (indices) {
         // Begin import
-        tresdb.ui.show($progress);
-        tresdb.ui.hide($submitAllForm);
+        ui.show($progress);
+        ui.hide($submitAllForm);
 
         tresdb.stores.locations.importBatch({
           batchId: batchId,
           indices: indices,
         }, function (errs) {
-          tresdb.ui.hide($progress);
+          ui.hide($progress);
 
           if (errs) {
             console.error(errs);
             $error.children().first().text(errs.message);
-            tresdb.ui.show($error);
+            ui.show($error);
             return;
           }
 

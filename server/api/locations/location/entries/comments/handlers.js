@@ -1,4 +1,5 @@
 var entriesDal = require('../../../../entries/dal');
+var config = require('tresdb-config');
 var status = require('http-status-codes');
 
 exports.create = function (req, res, next) {
@@ -9,6 +10,13 @@ exports.create = function (req, res, next) {
   var entryId = req.entryId;
   var username = req.user.name;
   var message = req.body.message;
+
+  // Validate
+  if (typeof message !== 'string' ||
+      message.length < config.comments.minMessageLength ||
+      message.length > config.comments.maxMessageLength) {
+    return res.status(status.BAD_REQUEST).send('Invalid comment message.');
+  }
 
   entriesDal.createLocationEntryComment({
     locationId: locationId,
@@ -37,6 +45,13 @@ exports.change = function (req, res, next) {
   if (currentUsername !== req.comment.user) {
     var info = 'Only owners can edit their comments.';
     return res.status(status.FORBIDDEN).send(info);
+  }
+
+  // Validate message length
+  if (typeof newMessage !== 'string' ||
+      newMessage.length < config.comments.minMessageLength ||
+      newMessage.length > config.comments.maxMessageLength) {
+    return res.status(status.BAD_REQUEST).send('Invalid comment message.');
   }
 
   entriesDal.changeLocationEntryComment({

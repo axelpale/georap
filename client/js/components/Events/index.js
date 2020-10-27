@@ -1,12 +1,13 @@
 // Component for a list of events.
 
 var emitter = require('component-emitter');
-var events = require('../../stores/events');
 var pointstamp = require('../lib/pointstamp');
 var timestamp = require('../lib/timestamp');
 var prettyEvents = require('pretty-events');
 var template = require('./template.ejs');
 var listTemplate = require('./list.ejs');
+var ui = require('tresdb-ui');
+var events = tresdb.stores.events;
 
 var LIST_SIZE = 200;
 
@@ -30,7 +31,7 @@ module.exports = function () {
 
     // Fetch events for rendering.
     events.getRecent(LIST_SIZE, function (err, rawEvents) {
-      $loading.addClass('hidden');
+      ui.hide($loading);
 
       if (err) {
         console.error(err);

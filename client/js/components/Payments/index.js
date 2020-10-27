@@ -1,7 +1,7 @@
 
-var account = require('../../stores/account');
 var template = require('./template.ejs');
 var emitter = require('component-emitter');
+var account = tresdb.stores.account;
 
 module.exports = function () {
 

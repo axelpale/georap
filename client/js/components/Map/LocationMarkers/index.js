@@ -4,13 +4,16 @@
 // LocationMarkers is a marker manager.
 
 var markerStore = tresdb.stores.markers;
+var locationsStore = tresdb.stores.locations;
 var account = tresdb.stores.account;
-var getBoundsDiagonal = require('./lib/getBoundsDiagonal');
-var rawEventToMarkerLocation = require('./lib/rawEventToMarkerLocation');
-var labels = require('./lib/labels');
-var chooseIcon = require('./chooseIcon');
-var VisitedManager = require('./VisitedManager');
+var filterStore = tresdb.stores.filter;
 var emitter = require('component-emitter');
+var rawEventToMarkerLocation = require('./lib/rawEventToMarkerLocation');
+var getBoundsDiagonal = require('./lib/getBoundsDiagonal');
+var VisitedManager = require('./VisitedManager');
+var getGroupRadius = require('./getGroupRadius');
+var chooseIcon = require('./chooseIcon');
+var labels = require('./lib/labels');
 
 module.exports = function (map) {
 
@@ -35,11 +38,36 @@ module.exports = function (map) {
   // Fetch them as soon as possible.
   var _visitedIds = new VisitedManager();
 
+  // Array of ids of locations currently selected ON MAP not in store.
+  // The array is used to find the previously selected locations quickly.
+  var _selectedId = null;
+
   // Private methods
 
   var _chooseIcon = function (mloc) {
     var zoomLevel = map.getZoom();
-    return chooseIcon(mloc, zoomLevel, _visitedIds);
+    var isSelected = locationsStore.isSelected(mloc._id);
+    var isVisited = _visitedIds.isVisited(mloc._id);
+    return chooseIcon(mloc, zoomLevel, isSelected, isVisited);
+  };
+
+  var _updateIcon = function (locId) {
+    var m = _markers[locId];
+    if (m) {
+      m.setIcon(_chooseIcon(m.get('location')));
+    }
+  };
+
+  var _ensureLabel = function (locId, forceUpdate) {
+    // Ensure that label is visible.
+    // Parameters:
+    //   locId
+    //   forceUpdate, optional bool
+    //     re-render the label even if visible. Use to update the label text.
+    var m = _markers[locId];
+    if (m) {
+      labels.ensureLabel(m, map.getMapTypeId(), forceUpdate);
+    }
   };
 
   var _addMarker = function (mloc) {
@@ -106,7 +134,7 @@ module.exports = function (map) {
     // To speed up things and avoid flicker,
     // only adds those markers on the screen that are not already there.
 
-    var i, l, m, k;
+    var i, l, m, mloc, k;
 
     // For each location candidate
     for (i = 0; i < locs.length; i += 1) {
@@ -115,12 +143,30 @@ module.exports = function (map) {
       // If location already on the map
       if (_markers.hasOwnProperty(l._id)) {
         // Mark that it does not need to be removed.
-        _markers[l._id].set('keep', true);
+        m = _markers[l._id];
+        m.set('keep', true);
+        // HACK Update dynamic layer and childLayer properties to
+        // display child mark properly between updates.
+        // In filtered results the layer and childLayer changes constantly.
+        mloc = m.get('location');
+        if (Math.abs(mloc.layer - l.layer) +
+            Math.abs(mloc.childLayer - l.childLayer) > 0) {
+          // Change in layer data.
+          mloc.layer = l.layer;
+          mloc.childLayer = l.childLayer;
+          m.setIcon(_chooseIcon(mloc)); // Update accordingly
+        }
       } else {
         // otherwise, add it to the map.
         m = _addMarker(l);
         m.set('keep', true);
       }
+    }
+
+    // Keep the selected marker, because sometimes the selected is not
+    // among the locations from the marker api.
+    if (_markers[_selectedId]) {
+      _markers[_selectedId].set('keep', true);
     }
 
     // Remove markers that were not marked to be kept.
@@ -142,19 +188,44 @@ module.exports = function (map) {
 
   };
 
+  var _loadMarkersThen = function (err, locs) {
+    if (err) {
+      return console.error(err);
+    } // else
+    _updateMarkers(locs);
+  };
+
   var _loadMarkers = function () {
-    var center = map.getCenter();
+    // Load markers for current viewport.
+    // Take into consideration the current
+    // - map center,
+    // - map zoom level
+    // - viewport size
+    // - filter settings
     var bounds = map.getBounds();
-    var radius = Math.ceil(getBoundsDiagonal(bounds) / 2);
     var zoom = map.getZoom();
 
-    markerStore.getWithin(center, radius, zoom, function (err, locs) {
-      if (err) {
-        return console.error(err);
-      }  // else
-
-      _updateMarkers(locs);
-    });
+    if (filterStore.isActive()) {
+      // Query filtered set of locations.
+      var filterState = filterStore.get();
+      var boundsLiteral = bounds.toJSON();
+      var groupRadius = getGroupRadius(boundsLiteral);
+      markerStore.getFilteredWithin({
+        east: boundsLiteral.east,
+        north: boundsLiteral.north,
+        south: boundsLiteral.south,
+        west: boundsLiteral.west,
+        status: filterState.status,
+        type: filterState.type,
+        layer: zoom,
+        groupRadius: groupRadius,
+      }, _loadMarkersThen);
+    } else {
+      // No filtration
+      var center = map.getCenter();
+      var radius = Math.ceil(getBoundsDiagonal(bounds) / 2);
+      markerStore.getWithin(center, radius, zoom, _loadMarkersThen);
+    }
   };
 
   // Bind
@@ -258,31 +329,44 @@ module.exports = function (map) {
   });
 
   markerStore.on('location_entry_changed', function (ev) {
-    var m, mloc;
-
     // Change from non-visit to visit
     if (ev.data.newIsVisit && !ev.data.oldIsVisit && account.isMe(ev.user)) {
       // Add loc among visited locations if not visited before by this user.
       _visitedIds.add(ev.locationId);
-
       // Update marker icon to visited
-      if (_markers.hasOwnProperty(ev.locationId)) {
-        m = _markers[ev.locationId];
-        mloc = m.get('location');
-        m.setIcon(_chooseIcon(mloc));
-      }
+      _updateIcon(ev.locationId);
     } else {
       // From visit to non-visit
       if (ev.data.oldIsVisit && !ev.data.newIsVisit) {
         _visitedIds.remove(ev.locationId);
-
         // Update marker icon to unvisited
-        if (_markers.hasOwnProperty(ev.locationId)) {
-          m = _markers[ev.locationId];
-          mloc = m.get('location');
-          m.setIcon(_chooseIcon(mloc));
-        }
+        _updateIcon(ev.locationId);
       }
+    }
+  });
+
+  // Listen possible location selections to add or update selected marker.
+  locationsStore.on('updated', function (state) {
+    if (state.selectedLocationId) {
+      if (_selectedId === state.selectedLocationId) {
+        // Already selected, do nothing.
+      } else {
+        if (_markers[state.selectedLocationId]) {
+          // Unstyle old and style the new.
+          _updateIcon(_selectedId);
+          _updateIcon(state.selectedLocationId);
+        } else {
+          // Marker already on the map.
+          _addMarker(state.selectedLocation.getMarkerLocation());
+        }
+        _ensureLabel(state.selectedLocationId);
+        _selectedId = state.selectedLocationId;
+      }
+    } else {
+      // Null selected.
+      // Clear select-styled markers.
+      _updateIcon(_selectedId);
+      _selectedId = null;
     }
   });
 
@@ -313,14 +397,11 @@ module.exports = function (map) {
 
     // Listen zoom level change to update symbols of locations
     // when all their children become visible or hidden.
+    // Ensure that the correct marker icon is used.
+    // They are zoom-sensitive.
     for (k in _markers) {
       if (_markers.hasOwnProperty(k)) {
-        m = _markers[k];
-        mloc = m.get('location');
-
-        // Ensure that the correct marker icon is used.
-        // They are zoom-sensitive.
-        m.setIcon(_chooseIcon(mloc));
+        _updateIcon(k);
       }
     }
   });
@@ -352,6 +433,9 @@ module.exports = function (map) {
       _loadMarkers();
     }
 
+    // Each time filter changes, fetch.
+    filterStore.on('updated', _loadMarkers);
+
     // Fetch the list of visited locations as soon as possible.
     account.getVisitedLocationIds(function (err, ids) {
       if (err) {
@@ -365,6 +449,7 @@ module.exports = function (map) {
 
   self.stopLoading = function () {
     google.maps.event.removeListener(_loaderListener);
+    filterStore.off('updated', _loadMarkers);
     _loaderListener = null;
   };
 

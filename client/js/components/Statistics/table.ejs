@@ -1,9 +1,9 @@
 <table class="table">
   <tbody>
-  <% _.forOwn(stats, function (value, key) { %>
+  <% Object.keys(stats).forEach(function (key) { %>
     <tr>
       <td><%= key %></td>
-      <td><%= value %></td>
+      <td><%= stats[key] %></td>
     </tr>
   <% }); %>
   </tbody>

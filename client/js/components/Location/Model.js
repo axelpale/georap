@@ -1,10 +1,9 @@
 /* eslint-disable max-statements, max-lines */
 
 var emitter = require('component-emitter');
-
-var locations = require('../../stores/locations');
 var EventsModel = require('./Events/Model');
 var EntriesModel = require('./Entries/Model');
+var locations = tresdb.stores.locations;
 
 module.exports = function (rawLoc) {
   // Usage:
@@ -12,7 +11,8 @@ module.exports = function (rawLoc) {
   //
   // Parameters:
   //   rawLoc
-  //     Optional location properties that override the default.
+  //     An extended location object
+  //
 
   // Init
   var self = this;
@@ -44,6 +44,7 @@ module.exports = function (rawLoc) {
 
     if (ev.type === 'location_geom_changed') {
       rawLoc.geom = ev.data.newGeom;
+      rawLoc.altGeom = ev.data.newAltGeom;
       self.emit(ev.type);
     }
 
@@ -121,6 +122,7 @@ module.exports = function (rawLoc) {
       status: rawLoc.status,
       type: rawLoc.type,
       layer: rawLoc.layer,
+      childLayer: rawLoc.layer,
     };
   };
 

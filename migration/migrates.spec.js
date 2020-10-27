@@ -242,7 +242,6 @@ describe('migrates.migrate', function () {
   });
 
   describe('v8 to v9', function () {
-
     beforeEach(function (done) {
       loadFixtureByTag('v8', done);
     });
@@ -267,7 +266,29 @@ describe('migrates.migrate', function () {
         });
       });
     });
+  });
 
+  describe('v9 to v10', function () {
+    beforeEach(function (done) {
+      loadFixtureByTag('v9', done);
+    });
+
+    it('should be able to migrate from v9 to v10', function (done) {
+      var targetV = 10;
+      migrates.migrate(targetV, function (err) {
+        assert.ifError(err);
+
+        assertFixtureEqual('config', 'v10', function (err2) {
+          assert.ifError(err2);
+
+          assertFixtureEqual('locations', 'v10', function (err4) {
+            assert.ifError(err4);
+
+            done();
+          });
+        });
+      });
+    });
   });
 
 });

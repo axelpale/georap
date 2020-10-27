@@ -1,7 +1,8 @@
 
-var account = require('../../../../stores/account');
 var template = require('./template.ejs');
 var emitter = require('component-emitter');
+var ui = require('tresdb-ui');
+var account = tresdb.stores.account;
 
 module.exports = function (location) {
 
@@ -22,23 +23,20 @@ module.exports = function (location) {
 
     $show.click(function (ev) {
       ev.preventDefault();
-      tresdb.ui.toggleHidden($cont);
+      ui.toggleHidden($cont);
       // Prevent both export and viewon being open at the same time.
-      tresdb.ui.hide($('#tresdb-viewon-container'));
+      ui.hide($('#tresdb-viewon-container'));
     });
 
     $cancel.click(function (ev) {
       ev.preventDefault();
-      tresdb.ui.hide($cont);
+      ui.hide($cont);
     });
   };
 
   self.unbind = function () {
-    var $show = $('#tresdb-export-show');
-    var $cancel = $('#tresdb-export-cancel');
-
-    $show.off();
-    $cancel.off();
+    $('#tresdb-export-show').off();
+    $('#tresdb-export-cancel').off();
   };
 
 };

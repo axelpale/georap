@@ -1,8 +1,9 @@
 
-var locations = require('../../../../stores/locations');
+var locations = tresdb.stores.locations;
 var markdownSyntax = require('../../lib/markdownSyntax.ejs');
 var template = require('./template.ejs');
 var emitter = require('component-emitter');
+var ui = require('tresdb-ui');
 
 
 var K = 1024;
@@ -38,22 +39,22 @@ module.exports = function (location) {
     var responseHandler = function (err) {
 
       // Api responsed. Hide progress bar.
-      $progress.addClass('hidden');
+      ui.hide($progress);
 
       // On error, show error message
       if (err) {
         if (err.name === 'REQUEST_TOO_LONG') {
-          $form.removeClass('hidden');
-          $sizeerror.removeClass('hidden');
+          ui.show($form);
+          ui.show($sizeerror);
           return;
         }
         console.error(err);
-        $error.removeClass('hidden');
+        ui.show($error);
         return;
       }
 
       // Hide the form container
-      $cont.addClass('hidden');
+      ui.hide($cont);
       // Clear the form
       $form[0].reset();
     };
@@ -63,10 +64,10 @@ module.exports = function (location) {
       $text.val($text.val().trim());
 
       // Hide the form, errors and reveal progress bar
-      $form.addClass('hidden');
-      $error.addClass('hidden');
-      $sizeerror.addClass('hidden');
-      $progress.removeClass('hidden');
+      ui.hide($form);
+      ui.hide($error);
+      ui.hide($sizeerror);
+      ui.show($progress);
 
       // Post
       locations.createEntry(location.getId(), $form, responseHandler);
@@ -76,32 +77,32 @@ module.exports = function (location) {
       ev.preventDefault();
 
       // Remove possible error messages
-      $error.addClass('hidden');
+      ui.hide($error);
       // Hide possible progress bar
-      $progress.addClass('hidden');
+      ui.hide($progress);
       // Clear the form
       $form[0].reset();
 
       if ($cont.hasClass('hidden')) {
         // Show the form
-        $cont.removeClass('hidden');
-        $form.removeClass('hidden');
+        ui.show($cont);
+        ui.show($form);
         // Focus to input field
         $text.focus();
       } else {
         // Hide
-        $cont.addClass('hidden');
+        ui.hide($cont);
       }
     });
 
     $syntaxshow.click(function (ev) {
       ev.preventDefault();
-      $syntax.toggleClass('hidden');
+      ui.toggleHidden($syntax);
     });
 
     $cancel.click(function (ev) {
       ev.preventDefault();
-      $cont.addClass('hidden');
+      ui.hide($cont);
     });
 
     $form.submit(function (ev) {
@@ -133,14 +134,9 @@ module.exports = function (location) {
   };
 
   self.unbind = function () {
-    var $show = $('#tresdb-entry-show');
-    var $form = $('#tresdb-entry-form');
-    var $cancel = $('#tresdb-entry-cancel');
-    var $syntaxshow = $('#tresdb-entry-syntax-show');
-
-    $show.off();
-    $form.off();
-    $cancel.off();
-    $syntaxshow.off();
+    $('#tresdb-entry-show').off();
+    $('#tresdb-entry-form').off();
+    $('#tresdb-entry-cancel').off();
+    $('#tresdb-entry-syntax-show').off();
   };
 };

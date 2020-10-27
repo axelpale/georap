@@ -1,10 +1,11 @@
 // Component for search form and results.
 
-var markers = require('../../stores/markers');
 var template = require('./template.ejs');
 var listTemplate = require('./list.ejs');
 var emitter = require('component-emitter');
 var queryString = require('query-string');
+var ui = require('tresdb-ui');
+var markers = tresdb.stores.markers;
 
 var FOCUS_DELAY = 200;
 var BAD_REQUEST = 400;
@@ -182,22 +183,22 @@ module.exports = function (query) {
     // Do instant query.
     (function doQuery(q) {
       // Show progress bar
-      $progress.removeClass('hidden');
+      ui.show($progress);
       // Fetch search results.
       // Fetch one more than the limit to see if there is next page.
       // Note that this artificially changes the query.
       q.limit = parseInt(q.limit, 10) + 1;
       markers.getFiltered(q, function responseHandler(err, results) {
         // Hide progress if visible
-        $progress.addClass('hidden');
+        ui.hide($progress);
 
         if (err) {
           // Display error
           console.error(err);
           if (err.code === BAD_REQUEST) {
-            tresdb.ui.show($error400);
+            ui.show($error400);
           } else {
-            tresdb.ui.show($error500);
+            ui.show($error500);
           }
           return;
         }
@@ -217,16 +218,16 @@ module.exports = function (query) {
 
         if (skip > 0) {
           // Not first page
-          tresdb.ui.show($prevPage);
+          ui.show($prevPage);
         } else {
-          tresdb.ui.hide($prevPage);
+          ui.hide($prevPage);
         }
 
         if (l > limit) {
           // Not last page
-          tresdb.ui.show($nextPage);
+          ui.show($nextPage);
         } else {
-          tresdb.ui.hide($nextPage);
+          ui.hide($nextPage);
         }
 
         // Render results. If there is extra item, remove it.
@@ -251,9 +252,7 @@ module.exports = function (query) {
 
 
   this.unbind = function () {
-    var $form = $('#tresdb-search-form');
-
-    $form.off();
+    $('#tresdb-search-form').off();
   };
 
 };

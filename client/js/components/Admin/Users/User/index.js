@@ -6,6 +6,7 @@ var StatusComponent = require('./Status');
 var EventsComponent = require('./Events');
 var RoleComponent = require('./Role');
 var emitter = require('component-emitter');
+var ui = require('tresdb-ui');
 
 module.exports = function (username) {
 
@@ -31,10 +32,10 @@ module.exports = function (username) {
     var $roleRoot = $('#tresdb-admin-user-role-root');
 
     // Fetch users and include to page.
-    tresdb.ui.show($loading);
+    ui.show($loading);
     admin.getUser(username, function (err, user) {
       // Hide loading bar
-      tresdb.ui.hide($loading);
+      ui.hide($loading);
 
       if (err) {
         console.error(err);

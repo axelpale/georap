@@ -1,4 +1,5 @@
 var template = require('./template.ejs');
+var ui = require('tresdb-ui');
 var account = tresdb.stores.account;
 var admin = tresdb.stores.admin;
 
@@ -36,7 +37,7 @@ module.exports = function (user) {
     $cancel.click(function (ev) {
       ev.preventDefault();
       // Hide and reset form
-      tresdb.ui.hide($form);
+      ui.hide($form);
       reset();
     });
 
@@ -44,10 +45,10 @@ module.exports = function (user) {
       ev.preventDefault();
 
       if (author === user.name) {
-        tresdb.ui.toggleHidden($noauto);
+        ui.toggleHidden($noauto);
       } else {
-        tresdb.ui.toggleHidden($form);
-        tresdb.ui.hide($success);
+        ui.toggleHidden($form);
+        ui.hide($success);
       }
     });
 
@@ -57,12 +58,12 @@ module.exports = function (user) {
       admin.setRole(user.name, willBeAdmin(), function (err) {
         if (err) {
           console.error(err);
-          tresdb.ui.show($error);
+          ui.show($error);
           return;
         }
 
-        tresdb.ui.hide($form);
-        tresdb.ui.show($success);
+        ui.hide($form);
+        ui.show($success);
         user.admin = willBeAdmin();
         // Refresh
         self.unbind();

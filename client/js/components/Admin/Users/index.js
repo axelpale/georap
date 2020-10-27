@@ -4,6 +4,7 @@ var admin = tresdb.stores.admin;
 var template = require('./template.ejs');
 var tableTemplate = require('./table.ejs');
 var emitter = require('component-emitter');
+var ui = require('tresdb-ui');
 
 module.exports = function () {
 
@@ -21,10 +22,10 @@ module.exports = function () {
     var $table = $('#tresdb-admin-users-table');
 
     // Fetch users and include to page.
-    tresdb.ui.show($loading);
+    ui.show($loading);
     admin.getUsers(function (err, rawUsers) {
       // Hide loading bar
-      tresdb.ui.hide($loading);
+      ui.hide($loading);
 
       if (err) {
         console.error(err);

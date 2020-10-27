@@ -1,14 +1,14 @@
 var config = require('tresdb-config');
-
-var morgan = require('morgan');
-var mkdirp = require('mkdirp');
 var path = require('path');
+var morgan = require('morgan');
+var fse = require('fs-extra');
 var fs = require('fs');
 
 // Setup
 
 // Ensure directory for access logs exist.
-mkdirp.sync(config.logDir);
+// eslint-disable-next-line no-sync
+fse.ensureDirSync(config.logDir);
 
 // Interface
 

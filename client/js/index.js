@@ -9,12 +9,12 @@
 var account = require('./stores/account');
 var admin = require('./stores/admin');
 var events = require('./stores/events');
+var filter = require('./stores/filter');
 var locations = require('./stores/locations');
 var mapstate = require('./stores/mapstate');
 var markers = require('./stores/markers');
 var statistics = require('./stores/statistics');
 var users = require('./stores/users');
-var minibus = require('minibus');
 
 // The html contains tresdb object,
 // preset with some config.
@@ -23,19 +23,13 @@ tresdb.stores = {
   account: account,
   admin: admin,
   events: events,
+  filter: filter,
   locations: locations,
   mapstate: mapstate,
   markers: markers,
   statistics: statistics,
   users: users,
 };
-// Create also a global bus. Spaghetti or not?
-tresdb.bus = minibus.create();
-// DEBUG Bus is easy to listen:
-// tresdb.bus.on(function (ev) {
-//   console.log(ev);
-// });
-
 
 // Routes and main components.
 var routes = require('./routes');
@@ -44,11 +38,8 @@ var MainMenuComp = require('./components/MainMenu');
 
 
 // Collect helpers under tresdb global.
-
-var ui = require('./components/lib/ui');
-tresdb.ui = ui;  // show and hide needed in almost every view
 tresdb.go = routes.show;  // go to path. very general, thus exposed globally
-
+tresdb.getCurrentPath = routes.getCurrentPath;  // query current page
 
 // Define routes
 

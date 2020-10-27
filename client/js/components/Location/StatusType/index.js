@@ -1,6 +1,7 @@
 // Tools
 var urls = require('tresdb-urls');
-var cap = require('./cap');
+var cap = require('tresdb-cap');
+var ui = require('tresdb-ui');
 // Templates
 var template = require('./template.ejs');
 var statusTypeTemplate = require('./statusType.ejs');
@@ -62,34 +63,32 @@ module.exports = function (location) {
       ev.preventDefault();
 
       // Remove possible previous error messages
-      $error.addClass('hidden');
+      ui.hide($error);
 
-      if ($form.hasClass('hidden')) {
-        // Show
-        $form.removeClass('hidden');
+      if (ui.isHidden($form)) {
+        ui.show($form);
       } else {
-        // Hide
-        $form.addClass('hidden');
+        ui.hide($form);
       }
     });
 
     // Form cancel
     $cancel.click(function (ev) {
       ev.preventDefault();
-      $form.addClass('hidden');
+      ui.hide($form);
     });
 
     var submitStatus = function (newStatus) {
-      $progress.removeClass('hidden');
-      $form.addClass('hidden');
+      ui.show($progress);
+      ui.hide($form);
 
       location.setStatus(newStatus, function (err) {
-        $progress.addClass('hidden');
+        ui.hide($progress);
 
         if (err) {
           console.error(err);
           // Show error message
-          $error.removeClass('hidden');
+          ui.show($error);
           return;
         }
         // Everything ok
@@ -97,16 +96,15 @@ module.exports = function (location) {
     };
 
     var submitType = function (newType) {
-      $progress.removeClass('hidden');
-      $form.addClass('hidden');
+      ui.show($progress);
+      ui.hide($form);
 
       location.setType(newType, function (err) {
-        $progress.addClass('hidden');
+        ui.hide($progress);
 
         if (err) {
           console.error(err);
-          // Show error message
-          $error.removeClass('hidden');
+          ui.show($error);
           return;
         }
         // Everything ok

@@ -174,6 +174,128 @@ module.exports = {
     'freak',
   ],
 
+  // Marker templates.
+  // A mapping: status -> marking -> size -> template name without ext
+  // You can add or edit the templates at config/images/markers/templates
+  // NOTE template name must contain only lowercase letters and/or underscores
+  // NOTE for the server to parse it correctly.
+  markerTemplates: {
+    'unknown': {
+      'default': {
+        'sm': 'red_default_sm',
+        'md': 'red_default_md',
+        'lg': 'red_default_lg',
+      },
+      'visited': {
+        'sm': 'yellow_default_sm',
+        'md': 'yellow_default_md',
+        'lg': 'yellow_default_lg',
+      },
+    },
+    'active': {
+      'default': {
+        'sm': 'red_light_sm',
+        'md': 'red_light_md',
+        'lg': 'red_light_lg',
+      },
+      'visited': {
+        'sm': 'yellow_light_sm',
+        'md': 'yellow_light_md',
+        'lg': 'yellow_light_lg',
+      },
+    },
+    'guarded': {
+      'default': {
+        'sm': 'red_light_sm',
+        'md': 'red_light_md',
+        'lg': 'red_light_lg',
+      },
+      'visited': {
+        'sm': 'yellow_light_sm',
+        'md': 'yellow_light_md',
+        'lg': 'yellow_light_lg',
+      },
+    },
+    'locked': {
+      'default': {
+        'sm': 'red_light_sm',
+        'md': 'red_light_md',
+        'lg': 'red_light_lg',
+      },
+      'visited': {
+        'sm': 'yellow_light_sm',
+        'md': 'yellow_light_md',
+        'lg': 'yellow_light_lg',
+      },
+    },
+    'abandoned': {
+      'default': {
+        'sm': 'red_default_sm',
+        'md': 'red_default_md',
+        'lg': 'red_default_lg',
+      },
+      'visited': {
+        'sm': 'yellow_default_sm',
+        'md': 'yellow_default_md',
+        'lg': 'yellow_default_lg',
+      },
+    },
+    'ruined': {
+      'default': {
+        'sm': 'red_dark_sm',
+        'md': 'red_dark_md',
+        'lg': 'red_dark_lg',
+      },
+      'visited': {
+        'sm': 'yellow_dark_sm',
+        'md': 'yellow_dark_md',
+        'lg': 'yellow_dark_lg',
+      },
+    },
+    'buried': {
+      'default': {
+        'sm': 'red_darker_sm',
+        'md': 'red_darker_md',
+        'lg': 'red_darker_lg',
+      },
+      'visited': {
+        'sm': 'yellow_darker_sm',
+        'md': 'yellow_darker_md',
+        'lg': 'yellow_darker_lg',
+      },
+    },
+    'demolished': {
+      'default': {
+        'sm': 'red_darker_sm',
+        'md': 'red_darker_md',
+        'lg': 'red_darker_lg',
+      },
+      'visited': {
+        'sm': 'yellow_darker_sm',
+        'md': 'yellow_darker_md',
+        'lg': 'yellow_darker_lg',
+      },
+    },
+    'natural': {
+      'default': {
+        'sm': 'red_default_sm',
+        'md': 'red_default_md',
+        'lg': 'red_default_lg',
+      },
+      'visited': {
+        'sm': 'yellow_default_sm',
+        'md': 'yellow_default_md',
+        'lg': 'yellow_default_lg',
+      },
+    },
+  },
+
+  // Commenting
+  comments: {
+    minMessageLength: 2,
+    maxMessageLength: 600,
+  },
+
   // Register coordinate systems to be used.
   // These coordinate systems will be displayed on the location page.
   // These systems are also available for exportServices.
@@ -409,7 +531,6 @@ module.exports = {
   // EXPERIMENTAL FEATURES
   // Enable or disable features of the site.
   features: {
-    // Set false to hide payments page and payments admin page.
-    payments: false,
+    // no configurable features yet
   },
 };

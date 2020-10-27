@@ -1,6 +1,7 @@
 
 var template = require('./template.ejs');
 var emitter = require('component-emitter');
+var ui = require('tresdb-ui');
 
 var K = 1024;
 
@@ -32,24 +33,24 @@ module.exports = function () {
       ev.preventDefault();
 
       // Hide shown errors.
-      tresdb.ui.hide($missingError);
-      tresdb.ui.hide($otherError);
-      tresdb.ui.hide($sizeError);
-      tresdb.ui.hide($typeError);
+      ui.hide($missingError);
+      ui.hide($otherError);
+      ui.hide($sizeError);
+      ui.hide($typeError);
 
       // Begin progress
-      tresdb.ui.show($progress);
+      ui.show($progress);
 
       tresdb.stores.locations.importFile($uploadForm, function (err, result) {
-        tresdb.ui.hide($progress);
+        ui.hide($progress);
 
         if (err) {
           if (err.name === 'unknown filetype') {
-            tresdb.ui.show($typeError);
+            ui.show($typeError);
           } else if (err.name === 'no file given') {
-            tresdb.ui.show($missingError);
+            ui.show($missingError);
           } else {
-            tresdb.ui.show($otherError);
+            ui.show($otherError);
           }
           return;
         }

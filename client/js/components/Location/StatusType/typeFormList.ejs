@@ -1,10 +1,10 @@
-<div class="tresdb-types-form"><%
+<%
   locationTypes.forEach(function (t) {
     var isActive = (t === currentType);
 %>
-  <button id="tresdb-type-<%= t %>" data-type="<%= t %>" class="<%= isActive ? 'tresdb-type-active' : '' %>">
-    <img src="<%= toSymbolUrl(t) %>" title="<%= t %>" width="22" height="40">
+  <button data-type="<%= t %>" title="<%= t %>" class="tresdb-type-<%= t %> <%= isActive ? 'tresdb-tag-active' : '' %>">
+    <img src="<%= toSymbolUrl(t) %>" width="22" height="40">
   </button>
 <%
   });
-%></div>
+%>

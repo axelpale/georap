@@ -2,12 +2,12 @@
 require('./style.css');
 var timestamp = require('timestamp');
 var template = require('./template.ejs');
-var account = require('../../../../../../stores/account');
-var locations = require('../../../../../../stores/locations');
-var commentsConfig = require('../config');
 var preprocessMessage = require('./preprocessMessage');
-var MIN_LEN = commentsConfig.MIN_MESSAGE_LEN;
-var MAX_LEN = commentsConfig.MAX_MESSAGE_LEN;
+var ui = require('tresdb-ui');
+var account = tresdb.stores.account;
+var locations = tresdb.stores.locations;
+var MIN_LEN = tresdb.config.comments.minMessageLength;
+var MAX_LEN = tresdb.config.comments.maxMessageLength;
 
 module.exports = function (entry, comment) {
   // Parameters:
@@ -60,12 +60,12 @@ module.exports = function (entry, comment) {
 
     $openButton.click(function (ev) {
       ev.preventDefault();
-      $editContainer.toggleClass('hidden');
+      ui.toggleHidden($editContainer);
     });
 
     $editCancel.click(function (ev) {
       ev.preventDefault();
-      $editContainer.addClass('hidden');
+      ui.hide($editContainer);
     });
 
     $editForm.submit(function (ev) {
@@ -89,34 +89,33 @@ module.exports = function (entry, comment) {
       };
 
       // Hide form but keep the container visible
-      $editForm.addClass('hidden');
-      $progress.removeClass('hidden');
+      ui.hide($editForm);
+      ui.show($progress);
 
       locations.changeComment(newComment, function (err) {
-        $progress.addClass('hidden');
+        ui.hide($progress);
 
         if (err) {
-          $editError.removeClass('hidden');
+          ui.show($editError);
           $editError.html(err.message);
-          $editForm.removeClass('hidden');
+          ui.show($editForm);
         } else {
           // All good, hide the edit container.
           // Make the form visible for possible future edits.
-          $editContainer.addClass('hidden');
-          $editForm.removeClass('hidden');
+          ui.hide($editContainer);
+          ui.show($editForm);
         }
       });
     });
 
     $editCancel.click(function (ev) {
       ev.preventDefault();
-      $editContainer.addClass('hidden');
+      ui.hide($editContainer);
     });
 
     $deleteButton.click(function (ev) {
       ev.preventDefault();
-
-      $deleteEnsure.toggleClass('hidden');
+      ui.toggleHidden($deleteEnsure);
     });
 
     $deleteFinal.click(function (ev) {
@@ -127,16 +126,16 @@ module.exports = function (entry, comment) {
       var commentId = comment.id;
 
       // Hide form
-      $editForm.addClass('hidden');
+      ui.hide($editForm);
 
       locations.removeComment(locationId, entryId, commentId, function (err) {
         if (err) {
           console.log(err);
           // Show deletion failed error message
-          $deleteError.removeClass('hidden');
+          ui.show($deleteError);
           $deleteError.html(err.message);
         } else {
-          $deleteSuccess.removeClass('hidden');
+          ui.show($deleteSuccess);
           // ON successful removal the location will emit
           // location_entry_removed event
         }

@@ -1,4 +1,3 @@
-
 exports.isHidden = function ($el) {
   return $el.hasClass('hidden');
 };

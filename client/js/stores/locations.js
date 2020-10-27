@@ -1,7 +1,6 @@
 /* eslint-disable max-lines */
 
 var socket = require('../connection/socket');
-var Location = require('../components/Location/Model');
 var validateCoords = require('./lib/validateCoords');
 var request = require('./lib/request');
 var account = require('./account');
@@ -22,54 +21,46 @@ socket.on('tresdb_event', function (ev) {
   }
 });
 
-// To inform views (especially Map) about changes in locations,
-// we listen the previously created/retrieved location. This surveillance
-// should cover all the locations in the cache but as we do not have a cache,
-// the easiest solution is to listen only the last retrieved location.
-var listenForChanges = (function () {
-  var loc2listen = null;
-
-  var savedHandler = function () {
-    exports.emit('location_changed', loc2listen);
-  };
-
-  var removeHandler = function () {
-    exports.emit('location_removed', loc2listen);
-    loc2listen = null;
-  };
-
-  // socket.on('tresdb_event', function (ev) {
-  //   if (loc2listen !== null) {
-  //     if (ev.locationId === loc2listen.getId()) {
-  //       loc2listen.react(ev);
-  //     }
-  //   }
-  // });
-
-  return function listen(location) {
-    // Parameters
-    //   location
-    //     a models.Location
-
-    if (loc2listen !== null) {
-      loc2listen.off('saved', savedHandler);
-      loc2listen.off('removed', removeHandler);
-      loc2listen = null;
-    }
-
-    loc2listen = location;
-    loc2listen.on('saved', savedHandler);
-    loc2listen.on('removed', removeHandler);
-  };
-}());
-
 var getJSON = request.getJSON;
 var postJSON = request.postJSON;
 var postFile = request.postFile;
 var deleteJSON = request.deleteJSON;
 
+var state = {
+  selectedLocationId: null,
+  selectedLocation: null,
+};
 
-// Public methods
+// Public local state methods
+
+exports.selectLocation = function (loc) {
+  // Parameters
+  //   locId, a LocationModel
+  state = Object.assign({}, state, {
+    selectedLocationId: loc.getId(),
+    selectedLocation: loc,
+  });
+  exports.emit('updated', state);
+};
+
+exports.deselectLocation = function (locId) {
+  // Unselect the given location.
+  // NOTE Does not nullify the selection if another location is selected,
+  // NOTE to ensure correct behavior if async call order sometimes changes,
+  // NOTE e.g. in case where two LocationViews are opened one after another.
+  if (state.selectedLocationId === locId) {
+    state.selectedLocationId = null;
+    state.selectedLocation = null;
+    exports.emit('updated', state);
+  }
+};
+
+exports.isSelected = function (locId) {
+  return state.selectedLocationId === locId;
+};
+
+
+// Public API methods
 
 exports.changeEntry = function (locationId, entryId, form, callback) {
   // Parameters:
@@ -145,11 +136,7 @@ exports.get = function (id, callback) {
     dataType: 'json',
     headers: { 'Authorization': 'Bearer ' + account.getToken() },
     success: function (rawLoc) {
-
-      var loc = new Location(rawLoc);
-      listenForChanges(loc);
-
-      return callback(null, loc);
+      return callback(null, rawLoc);
     },
     error: function (jqxhr, status, statusMessage) {
       return callback(new Error(statusMessage));

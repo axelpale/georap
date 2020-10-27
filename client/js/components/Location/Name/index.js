@@ -1,4 +1,5 @@
 var template = require('./template.ejs');
+var ui = require('tresdb-ui');
 
 module.exports = function (location) {
 
@@ -31,26 +32,26 @@ module.exports = function (location) {
     $show.click(function (ev) {
       ev.preventDefault();
 
-      if ($form.hasClass('hidden')) {
+      if (ui.isHidden($form)) {
         // Show
-        $form.removeClass('hidden');
+        ui.show($form);
         // Remove possible error messages
-        $error.addClass('hidden');
+        ui.hide($error);
         // Prefill the form with the current name
         $input.val(location.getName());
         // Focus to input field
         $input.focus();
       } else {
         // Hide
-        $form.addClass('hidden');
+        ui.hide($form);
         // Remove possible error messages
-        $error.addClass('hidden');
+        ui.hide($error);
       }
     });
 
     $cancel.click(function (ev) {
       ev.preventDefault();
-      $form.addClass('hidden');
+      ui.hide($form);
     });
 
     $form.submit(function (ev) {
@@ -61,20 +62,19 @@ module.exports = function (location) {
 
       if (newName === oldName) {
         // If name not changed, just close the form.
-        $form.addClass('hidden');
-        $error.addClass('hidden');
+        ui.hide($form);
+        ui.hide($error);
         return;
       }
 
       location.setName(newName, function (err) {
+        ui.hide($form);
+
         if (err) {
           console.error(err);
-          $form.addClass('hidden');
-          $error.removeClass('hidden');
+          ui.show($error);
           return;
         }
-
-        $form.addClass('hidden');
       });
     });
 

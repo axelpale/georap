@@ -15,20 +15,22 @@ var sendFileOptions = {
 };
 
 // Finds <templateName> and <symbolName>
-var iconNamePattern = /^([^-./]+)-([^-./]+).png$/;
+var iconNamePattern = /^(\w+)-(\w+)-(\w+).png$/;
 
 exports.getOrGenerate = function (req, res, next) {
   var iconName = req.params.iconName;
   var matches = iconNamePattern.exec(iconName);
 
-  if (matches.length !== 3) {
+  if (matches.length !== 4) {
     var msgi = 'No such icon: ' + iconName;
     return res.status(status.NOT_FOUND).send(msgi);
   }
 
   var templateName = matches[1];
-  var symbolName = matches[2];
+  var childStatus = matches[2];
+  var symbolName = matches[3];
 
+  // Target path where to greate the icon.
   var iconPath = path.join(markersBase, iconName);
 
   // Serve from cache if the icon file already exists.
@@ -46,6 +48,10 @@ exports.getOrGenerate = function (req, res, next) {
     }
     // else generate the icon.
 
+    // Analyze the template name better
+    var templateParts = templateName.split('_');
+    var markerSize = templateParts[2];
+
     var templatePath = path.join(templatesBase, templateName + '.png');
     var symbolPath = path.join(symbolsBase, symbolName + '.png');
 
@@ -59,6 +65,18 @@ exports.getOrGenerate = function (req, res, next) {
         return res.status(status.NOT_FOUND).send(msgt);
       }
 
+      // If empty symbol just copy the template. Assume size sm
+      if (symbolName === 'any') {
+        fse.copy(templatePath, iconPath, function (errc) {
+          if (errc) {
+            return next(errc);
+          }
+          // and send the file.
+          return res.sendFile(iconPath, sendFileOptions, next);
+        });
+        return;
+      }
+
       fse.pathExists(symbolPath, function (errxs, symbolExists) {
         if (errxs) {
           return next(errxs);
@@ -69,10 +87,46 @@ exports.getOrGenerate = function (req, res, next) {
           return res.status(status.NOT_FOUND).send(msgs);
         }
 
+        // Select images to merge.
+        var compositeParts = [];
+        // Position the symbol according to template size
+        switch (markerSize) {
+          case 'md':
+            compositeParts.push({
+              input: symbolPath,
+            });
+            break;
+          case 'lg':
+            compositeParts.push({
+              input: symbolPath,
+              top: 9,
+              left: 8,
+            });
+            break;
+          case 'sm':
+            compositeParts.push({
+              input: symbolPath,
+              // TODO top left
+            });
+            break;
+          default:
+            compositeParts.push({
+              input: symbolPath,
+            });
+        }
+
+        // Merge a sub-location
+        if (childStatus !== 'none') {
+          var childTemplate = config.markerTemplates[childStatus].default.sm;
+          var childPath = path.join(templatesBase, childTemplate + '.png');
+          compositeParts.push({
+            input: childPath,
+            gravity: 'southeast',
+          });
+        }
+
         sharp(templatePath)
-          .composite([{
-            input: symbolPath,
-          }])
+          .composite(compositeParts)
           .png()
           .toFile(iconPath, function (errf) {
             if (errf) {

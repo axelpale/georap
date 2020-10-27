@@ -2,9 +2,6 @@
 
 // Client-side routing
 
-var account = require('../stores/account');
-var mapStateStore = require('../stores/mapstate');
-
 var AdminUsersView = require('../components/Admin/Users');
 var AdminUserView = require('../components/Admin/Users/User');
 var BatchView = require('../components/Batch');
@@ -14,13 +11,12 @@ var Error401View = require('../components/Error401');
 var Error404View = require('../components/Error404');
 var EventsView = require('../components/Events');
 var ExportView = require('../components/Export');
+var FilterView = require('../components/Filter');
 var ImportView = require('../components/Import');
 var InviteView = require('../components/Invite');
 var LocationView = require('../components/Location');
 var LoginView = require('../components/Login');
 var BatchOutcomeView = require('../components/BatchOutcome');
-var PaymentsView = require('../components/Payments');
-var PaymentsAdminView = require('../components/PaymentsAdmin');
 var ResetPasswordView = require('../components/ResetPassword');
 var SearchView = require('../components/Search');
 var SignupView = require('../components/Signup');
@@ -36,6 +32,9 @@ var page = require('page');
 var queryString = require('qs');
 var emitter = require('component-emitter');
 
+// Stores
+var account = tresdb.stores.account;
+var mapStateStore = tresdb.stores.mapstate;
 
 // Emit 'map_activated' so that map knows when to pan back to original state.
 emitter(exports);
@@ -183,6 +182,10 @@ exports.route = function () {
     exports.emit('map_routed');
   });
 
+  page('/filter', function () {
+    card.open(new FilterView());
+  });
+
   page('/export', function () {
     card.open(new ExportView());
   });
@@ -211,17 +214,11 @@ exports.route = function () {
     // the location becomes centered at the visible portion.
     view.once('idle', function (location) {
       exports.emit('location_routed', location);
-      tresdb.bus.emit('location_routed', location);
     });
   });
 
   page('/password', function () {
     var view = new ChangePasswordView();
-    card.open(view, 'page');
-  });
-
-  page('/payments', function () {
-    var view = new PaymentsView();
     card.open(view, 'page');
   });
 
@@ -262,11 +259,6 @@ exports.route = function () {
 
   page('/invite', adminOnly, function () {
     var view = new InviteView();
-    card.open(view);
-  });
-
-  page('/payments/admin', adminOnly, function () {
-    var view = new PaymentsAdminView();
     card.open(view);
   });
 

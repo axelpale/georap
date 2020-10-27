@@ -1,9 +1,10 @@
 // A form for an invited user to sign up.
 
-var account = require('../../stores/account');
+var account = tresdb.stores.account;
 var template = require('./template.ejs');
 var emitter = require('component-emitter');
 var jwtDecode = require('jwt-decode');
+var ui = require('tresdb-ui');
 
 module.exports = function (token, goLogin) {
   // Parameters:
@@ -53,9 +54,9 @@ module.exports = function (token, goLogin) {
 
     // Hide previous errors
     (function hidePreviousErrors() {
-      $('#tresdb-signup-invalid-username').addClass('hidden');
-      $('#tresdb-signup-password-no-match').addClass('hidden');
-      $('#tresdb-signup-email-username-taken').addClass('hidden');
+      ui.hide($('#tresdb-signup-invalid-username'));
+      ui.hide($('#tresdb-signup-password-no-match'));
+      ui.hide($('#tresdb-signup-email-username-taken'));
     }());
 
     // Collect values to send
@@ -66,7 +67,7 @@ module.exports = function (token, goLogin) {
     // Validate username
     if (username === '') {
       // Invalid username, show error
-      $('#tresdb-signup-invalid-username').removeClass('hidden');
+      ui.show($('#tresdb-signup-invalid-username'));
 
       return;
     }  // else
@@ -74,7 +75,7 @@ module.exports = function (token, goLogin) {
     // Validate password
     if (password !== password2 || password === '') {
       // Invalid password, display error message
-      $('#tresdb-signup-password-no-match').removeClass('hidden');
+      ui.show($('#tresdb-signup-password-no-match'));
 
       return;
     }  // else
@@ -82,45 +83,45 @@ module.exports = function (token, goLogin) {
     // Okay, all good.
 
     // Display loading animation
-    $('#tresdb-signup-in-progress').removeClass('hidden');
+    ui.show($('#tresdb-signup-in-progress'));
     // Hide form
-    $('#tresdb-signup-form').addClass('hidden');
+    ui.hide($('#tresdb-signup-form'));
 
     account.signup(token, username, password, responseHandler);
   };
 
   responseHandler = function (err) {
     // Hide loading animation
-    $('#tresdb-signup-in-progress').addClass('hidden');
+    ui.hide($('#tresdb-signup-in-progress'));
 
     if (!err) {
       // Show success message
-      $('#tresdb-signup-success').removeClass('hidden');
+      ui.show($('#tresdb-signup-success'));
       // Show button to continue to log in.
-      $('#tresdb-signup-to-login').removeClass('hidden');
+      ui.show($('#tresdb-signup-to-login'));
 
       return;
     }  // else
 
     if (err.message === 'Conflict') {
       // Duplicate username, show error.
-      $('#tresdb-signup-email-username-taken').removeClass('hidden');
+      ui.show($('#tresdb-signup-email-username-taken'));
       // Show form
-      $('#tresdb-signup-form').removeClass('hidden');
+      ui.show($('#tresdb-signup-form'));
 
       return;
     }  // else
 
     if (err.message === 'Unauthorized') {
       // Expired token
-      $('#tresdb-signup-token-error').removeClass('hidden');
+      ui.show($('#tresdb-signup-token-error'));
       // Do not show the form because filling it again would still fail.
 
       return;
     }  // else
 
     // Other server error, show error message
-    $('#tresdb-signup-server-error').removeClass('hidden');
+    ui.show($('#tresdb-signup-server-error'));
   };
 
 };

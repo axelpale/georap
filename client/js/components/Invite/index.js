@@ -1,10 +1,10 @@
 // Form to invite new users.
 
-var account = require('../../stores/account');
 var inviteTemplate = require('./template.ejs');
-
+var ui = require('tresdb-ui');
 var emitter = require('component-emitter');
 var validator = require('email-validator');
+var account = tresdb.stores.account;
 
 module.exports = function () {
   // Init
@@ -37,9 +37,9 @@ module.exports = function () {
   inviteAnotherButtonHandler = function (ev) {
     ev.preventDefault();
     // Reset the form
-    $('#tresdb-invite-form').removeClass('hidden');
-    $('#tresdb-invite-success').addClass('hidden');
-    $('#tresdb-invite-another').addClass('hidden');
+    ui.show($('#tresdb-invite-form'));
+    ui.hide($('#tresdb-invite-success'));
+    ui.hide($('#tresdb-invite-another'));
     $('#tresdb-invite-email').val('');
   };
 
@@ -47,8 +47,8 @@ module.exports = function () {
     ev.preventDefault();
 
     // Hide possible earlier error message
-    $('#tresdb-invite-email-error').addClass('hidden');
-    $('#tresdb-invite-exist-error').addClass('hidden');
+    ui.hide($('#tresdb-invite-email-error'));
+    ui.hide($('#tresdb-invite-exist-error'));
 
     // Collect values to send
     var email = $('#tresdb-invite-email').val();
@@ -56,44 +56,44 @@ module.exports = function () {
     // Validate email.
     if (!validator.validate(email)) {
       // Invalid email, show error.
-      $('#tresdb-invite-email-error').removeClass('hidden');
+      ui.show($('#tresdb-invite-email-error'));
 
       return;
     }  // else
 
     // Hide form
-    $('#tresdb-invite-form').addClass('hidden');
+    ui.hide($('#tresdb-invite-form'));
     // Display loading animation
-    $('#tresdb-invite-in-progress').removeClass('hidden');
+    ui.show($('#tresdb-invite-in-progress'));
 
     account.sendInviteEmail(email, inviteSubmitResponseHandler);
   };
 
   inviteSubmitResponseHandler = function (err) {
     // Hide loading animation
-    $('#tresdb-invite-in-progress').addClass('hidden');
+    ui.hide($('#tresdb-invite-in-progress'));
 
     if (err) {
       if (err.message === 'Conflict') {
         // Show error message.
-        $('#tresdb-invite-exist-error').removeClass('hidden');
+        ui.show($('#tresdb-invite-exist-error'));
         // Show form
-        $('#tresdb-invite-form').removeClass('hidden');
+        ui.show($('#tresdb-invite-form'));
 
         return;
       }  // else
 
       // Show error message. Do not show form because the issue
       // probably does not solve by instant retry (leading to frustration).
-      $('#tresdb-invite-server-error').removeClass('hidden');
+      ui.show($('#tresdb-invite-server-error'));
 
       return;
     }  // else
 
     // Show success message
-    $('#tresdb-invite-success').removeClass('hidden');
+    ui.show($('#tresdb-invite-success'));
     // Show button to invite another user.
-    $('#tresdb-invite-another').removeClass('hidden');
+    ui.show($('#tresdb-invite-another'));
   };
 
 };
