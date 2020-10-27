@@ -31,6 +31,16 @@ exports.small = function (url) {
   };
 };
 
+exports.large = function (url) {
+  return {
+    labelOrigin: new google.maps.Point(19, 72),
+    url: url,
+    size: new google.maps.Size(38, 66),
+    origin: new google.maps.Point(0, 0),
+    anchor: new google.maps.Point(19, 65),
+  };
+};
+
 exports.geolocation = function () {
   return {
     url: geolocationUrl,
