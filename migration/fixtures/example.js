@@ -215,8 +215,9 @@ module.exports = {
         // Latent properties, updated by worker:
         points: 18,
         layer: 1,
-        isLayered: true,
         childLayer: 9,
+        isLayered: true,
+        visits: [],
       },
       {
         // A location close to the first one.
@@ -236,8 +237,9 @@ module.exports = {
         // Latent properties, updated by worker:
         points: 11,
         layer: 9,
-        isLayered: true,
         childLayer: 0,
+        isLayered: true,
+        visits: [],
       },
       {
         // A deleted location
@@ -258,6 +260,7 @@ module.exports = {
         layer: 2,
         childLayer: 0,
         isLayered: false,
+        visits: [],
       },
     ],
     users: [
