@@ -1,11 +1,14 @@
 // Component to filter map markers.
 
 var ui = require('tresdb-ui');
+var cap = require('tresdb-cap');
 var urls = require('tresdb-urls');
 var emitter = require('component-emitter');
+var statusListTemplate = require('../Location/StatusType/statusFormList.ejs');
 var typeListTemplate = require('../Location/StatusType/typeFormList.ejs');
 var template = require('./template.ejs');
 var locationTypes = tresdb.config.locationTypes;
+var locationStatuses = tresdb.config.locationStatuses;
 var filterStore = tresdb.stores.filter;
 
 module.exports = function () {
@@ -19,25 +22,30 @@ module.exports = function () {
   var updateTemplate = function () {
     var offbtn = $('button#tresdb-filter-off');
     var dot = $('#tresdb-filter-title-dot');
+
+    // Unstyle the previously active
+    $('#tresdb-filter-status-list .tresdb-tag-active')
+      .removeClass('tresdb-tag-active');
+    $('#tresdb-filter-type-list .tresdb-tag-active')
+      .removeClass('tresdb-tag-active');
+
     if (filterStore.isActive()) {
       // Show red stuff
       ui.show(dot);
       offbtn.attr('class', 'btn btn-danger');
-      // Unstyle the previously active
-      $('#tresdb-filter-type-list .tresdb-tag-active')
-        .removeClass('tresdb-tag-active');
-      // Activate the current type button
-      var type = filterStore.get().type;
-      $('#tresdb-filter-type-list .tresdb-type-' + type)
+      // Activate the current status and type buttons
+      var filterState = filterStore.get();
+      $('#tresdb-filter-status-list .tresdb-status-' + filterState.status)
+        .addClass('tresdb-tag-active');
+      $('#tresdb-filter-type-list .tresdb-type-' + filterState.type)
         .addClass('tresdb-tag-active');
     } else {
       // Hide red stuff
       ui.hide(dot);
       offbtn.attr('class', 'btn btn-default disabled');
-      // Unstyle the previously active types
-      $('#tresdb-filter-type-list .tresdb-tag-active')
-        .removeClass('tresdb-tag-active');
       // Activate any
+      $('#tresdb-filter-status-list .tresdb-filter-any')
+        .addClass('tresdb-tag-active');
       $('#tresdb-filter-type-list .tresdb-filter-any')
         .addClass('tresdb-tag-active');
     }
@@ -46,22 +54,41 @@ module.exports = function () {
   // Public methods
 
   this.bind = function ($mount) {
+    var filterState = filterStore.get();
     $mount.html(template({
       // For title dot
       isFilterActive: filterStore.isActive(),
       // For any-type button.
-      currentType: filterStore.get().type,
+      currentStatus: filterState.status,
+      currentType: filterState.type,
+      // List of available statuses
+      statusListHtml: statusListTemplate({
+        locationStatuses: locationStatuses,
+        currentStatus: filterState.status,
+        cap: cap,
+      }),
       // List of available types
       typeListHtml: typeListTemplate({
         locationTypes: locationTypes,
-        currentType: filterStore.get().type,
+        currentType: filterState.type,
         toSymbolUrl: urls.locationTypeToSymbolUrl,
       }),
     }));
 
-    var $typeList = $('#tresdb-filter-type-list');
+    // Click on a status button
+    var $statusList = $('#tresdb-filter-status-list');
+    $statusList.click(function (ev) {
+      var btnValue = ev.target.dataset.status;
+      if (typeof btnValue === 'string' && btnValue.length > 0) {
+        // Submit status
+        filterStore.update({
+          status: btnValue,
+        });
+      }
+    });
 
     // Click on a type button
+    var $typeList = $('#tresdb-filter-type-list');
     $typeList.click(function (ev) {
       var btnValue = ev.target.dataset.type;
       if (typeof btnValue === 'string' && btnValue.length > 0) {
@@ -82,6 +109,7 @@ module.exports = function () {
   };
 
   this.unbind = function () {
+    $('#tresdb-filter-status-list').off();
     $('#tresdb-filter-type-list').off();
     filterStore.off('updated', updateTemplate);
   };

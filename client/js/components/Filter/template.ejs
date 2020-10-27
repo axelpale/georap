@@ -8,12 +8,17 @@
       <button id="tresdb-filter-off" class="btn <%= isFilterActive ? 'btn-danger' : 'btn-default disabled' %>">Turn Off</button>
       <p>
 
+      <h3>Filter by Status</h3>
+
+      <div id="tresdb-filter-status-list" class="tresdb-location-status-list">
+        <button data-status="any" class="tresdb-filter-any <%= currentStatus === 'any' ? 'tresdb-tag-active' : '' %>">Any</button>
+        <%= statusListHtml %>
+      </div>
+
       <h3>Filter by Type</h3>
 
       <div id="tresdb-filter-type-list" class="tresdb-location-type-list">
-        <button data-type="any" class="tresdb-filter-any <%= currentType === 'any' ? 'tresdb-tag-active' : '' %>">
-          Any type
-        </button>
+        <button data-type="any" class="tresdb-filter-any <%= currentType === 'any' ? 'tresdb-tag-active' : '' %>">Any</button>
         <%= typeListHtml %>
       </div>
 

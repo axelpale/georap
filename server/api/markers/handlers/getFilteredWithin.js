@@ -1,6 +1,7 @@
 var dal = require('../dal');
 var status = require('http-status-codes');
 var Ajv = require('ajv');
+var config = require('tresdb-config');
 
 // Schema validator
 var ajv = new Ajv({
@@ -23,8 +24,13 @@ var schemaFilteredWithin = {
     west: {
       type: 'number',
     },
+    status: {
+      type: 'string',
+      enum: config.locationStatuses.concat(['any']),
+    },
     type: {
       type: 'string',
+      enum: config.locationTypes.concat(['any']),
     },
     layer: {
       type: 'integer',
@@ -52,6 +58,7 @@ module.exports = function (req, res, next) {
       south: req.query.south,
       west: req.query.west,
     },
+    status: req.query.status,
     type: req.query.type,
     layer: req.query.layer,
     groupRadius: req.query.groupRadius,

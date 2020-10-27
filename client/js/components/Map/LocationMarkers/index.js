@@ -179,6 +179,7 @@ module.exports = function (map) {
         north: boundsLiteral.north,
         south: boundsLiteral.south,
         west: boundsLiteral.west,
+        status: filterState.status,
         type: filterState.type,
         layer: zoom,
         groupRadius: groupRadius,

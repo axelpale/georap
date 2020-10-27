@@ -106,6 +106,7 @@ exports.getFilteredWithin = function (opts, callback) {
       north: opts.north,
       south: opts.south,
       west: opts.west,
+      status: opts.status,
       type: opts.type,
       layer: opts.layer,
       groupRadius: opts.groupRadius,

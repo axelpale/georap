@@ -80,6 +80,10 @@ module.exports = function (params, callback) {
     },
     deleted: false,
   };
+  // Limit by status if specified
+  if (params.status !== 'any') {
+    q.status = params.status;
+  }
   // Limit by type if specified
   if (params.type !== 'any') {
     q.type = params.type;
