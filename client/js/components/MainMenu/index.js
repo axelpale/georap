@@ -254,9 +254,10 @@ module.exports = function (mapComp) {
         }
       } else {
         // Delay to prevent immediate double click open close.
+        var SEC = 1000;
         setTimeout(function () {
           filterTimer = true;
-        }, 1000);
+        }, SEC);
         tresdb.go('/filter');
       }
     });
