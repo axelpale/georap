@@ -48,6 +48,10 @@ exports.getOrGenerate = function (req, res, next) {
     }
     // else generate the icon.
 
+    // Analyze the template name better
+    var templateParts = templateName.split('_');
+    var markerSize = templateParts[2];
+
     var templatePath = path.join(templatesBase, templateName + '.png');
     var symbolPath = path.join(symbolsBase, symbolName + '.png');
 
@@ -84,11 +88,32 @@ exports.getOrGenerate = function (req, res, next) {
         }
 
         // Select images to merge.
-        var compositeParts = [
-          {
-            input: symbolPath,
-          },
-        ];
+        var compositeParts = [];
+        // Position the symbol according to template size
+        switch (markerSize) {
+          case 'md':
+            compositeParts.push({
+              input: symbolPath,
+            });
+            break;
+          case 'lg':
+            compositeParts.push({
+              input: symbolPath,
+              top: 9,
+              left: 8,
+            });
+            break;
+          case 'sm':
+            compositeParts.push({
+              input: symbolPath,
+              // TODO top left
+            });
+            break;
+          default:
+            compositeParts.push({
+              input: symbolPath,
+            });
+        }
 
         // Merge a sub-location
         if (childStatus !== 'none') {
