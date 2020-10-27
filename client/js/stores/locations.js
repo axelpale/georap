@@ -26,8 +26,38 @@ var postJSON = request.postJSON;
 var postFile = request.postFile;
 var deleteJSON = request.deleteJSON;
 
+var state = {
+  selectedLocationId: null,
+};
 
-// Public methods
+// Public local state methods
+
+exports.selectLocation = function (locId) {
+  // Parameters
+  //   locId, a LocationModel
+  state = Object.assign({}, state, {
+    selectedLocationId: locId,
+  });
+  exports.emit('updated', state);
+};
+
+exports.deselectLocation = function (locId) {
+  // Unselect the given location.
+  // NOTE Does not nullify the selection if another location is selected,
+  // NOTE to ensure correct behavior if async call order sometimes changes,
+  // NOTE e.g. in case where two LocationViews are opened one after another.
+  if (state.selectedLocationId === locId) {
+    state.selectedLocationId = null;
+    exports.emit('updated', state);
+  }
+};
+
+exports.isSelected = function (locId) {
+  return state.selectedLocationId === locId;
+};
+
+
+// Public API methods
 
 exports.changeEntry = function (locationId, entryId, form, callback) {
   // Parameters:

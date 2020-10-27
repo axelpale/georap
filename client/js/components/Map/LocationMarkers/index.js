@@ -4,6 +4,7 @@
 // LocationMarkers is a marker manager.
 
 var markerStore = tresdb.stores.markers;
+var locationsStore = tresdb.stores.locations;
 var account = tresdb.stores.account;
 var filterStore = tresdb.stores.filter;
 var emitter = require('component-emitter');
@@ -37,11 +38,36 @@ module.exports = function (map) {
   // Fetch them as soon as possible.
   var _visitedIds = new VisitedManager();
 
+  // Array of ids of locations currently selected ON MAP not in store.
+  // The array is used to find the previously selected locations quickly.
+  var _selectedId = null;
+
   // Private methods
 
   var _chooseIcon = function (mloc) {
     var zoomLevel = map.getZoom();
-    return chooseIcon(mloc, zoomLevel, _visitedIds);
+    var isSelected = locationsStore.isSelected(mloc._id);
+    var isVisited = _visitedIds.isVisited(mloc._id);
+    return chooseIcon(mloc, zoomLevel, isSelected, isVisited);
+  };
+
+  var _updateIcon = function (locId) {
+    var m = _markers[locId];
+    if (m) {
+      m.setIcon(_chooseIcon(m.get('location')));
+    }
+  };
+
+  var _ensureLabel = function (locId, forceUpdate) {
+    // Ensure that label is visible.
+    // Parameters:
+    //   locId
+    //   forceUpdate, optional bool
+    //     re-render the label even if visible. Use to update the label text.
+    var m = _markers[locId];
+    if (m) {
+      labels.ensureLabel(m, map.getMapTypeId(), forceUpdate);
+    }
   };
 
   var _addMarker = function (mloc) {
@@ -293,31 +319,39 @@ module.exports = function (map) {
   });
 
   markerStore.on('location_entry_changed', function (ev) {
-    var m, mloc;
-
     // Change from non-visit to visit
     if (ev.data.newIsVisit && !ev.data.oldIsVisit && account.isMe(ev.user)) {
       // Add loc among visited locations if not visited before by this user.
       _visitedIds.add(ev.locationId);
-
       // Update marker icon to visited
-      if (_markers.hasOwnProperty(ev.locationId)) {
-        m = _markers[ev.locationId];
-        mloc = m.get('location');
-        m.setIcon(_chooseIcon(mloc));
-      }
+      _updateIcon(ev.locationId);
     } else {
       // From visit to non-visit
       if (ev.data.oldIsVisit && !ev.data.newIsVisit) {
         _visitedIds.remove(ev.locationId);
-
         // Update marker icon to unvisited
-        if (_markers.hasOwnProperty(ev.locationId)) {
-          m = _markers[ev.locationId];
-          mloc = m.get('location');
-          m.setIcon(_chooseIcon(mloc));
-        }
+        _updateIcon(ev.locationId);
       }
+    }
+  });
+
+  // Listen possible location selections to update selected marker.
+  locationsStore.on('updated', function (state) {
+    if (state.selectedLocationId) {
+      if (_selectedId === state.selectedLocationId) {
+        // Already selected, do nothing.
+      } else {
+        // Unstyle old and style the new;
+        _updateIcon(_selectedId);
+        _updateIcon(state.selectedLocationId);
+        _ensureLabel(state.selectedLocationId);
+        _selectedId = state.selectedLocationId;
+      }
+    } else {
+      // Null selected.
+      // Clear select-styled markers.
+      _updateIcon(_selectedId);
+      _selectedId = null;
     }
   });
 
@@ -348,14 +382,11 @@ module.exports = function (map) {
 
     // Listen zoom level change to update symbols of locations
     // when all their children become visible or hidden.
+    // Ensure that the correct marker icon is used.
+    // They are zoom-sensitive.
     for (k in _markers) {
       if (_markers.hasOwnProperty(k)) {
-        m = _markers[k];
-        mloc = m.get('location');
-
-        // Ensure that the correct marker icon is used.
-        // They are zoom-sensitive.
-        m.setIcon(_chooseIcon(mloc));
+        _updateIcon(k);
       }
     }
   });

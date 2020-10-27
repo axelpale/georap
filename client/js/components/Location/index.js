@@ -99,6 +99,8 @@ module.exports = function (id) {
       // Inform the view for the location is ready.
       self.emit('idle', _location);
 
+      // Select the location. Leads to creation of the selection marker.
+      locations.selectLocation(_location.getId());
     });
   };  // end bind
 
@@ -113,6 +115,7 @@ module.exports = function (id) {
       eventsView.unbind();
       removeView.unbind();
       _location.off();
+      locations.deselectLocation(_location.getId());
     }
     _location = null;
   };
