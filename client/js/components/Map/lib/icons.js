@@ -21,7 +21,7 @@ exports.marker = function (url) {
   };
 };
 
-exports.tiny = function (url) {
+exports.small = function (url) {
   return {
     labelOrigin: new google.maps.Point(4, 20),
     url: url,
