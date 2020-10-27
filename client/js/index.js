@@ -39,7 +39,7 @@ var MainMenuComp = require('./components/MainMenu');
 
 // Collect helpers under tresdb global.
 tresdb.go = routes.show;  // go to path. very general, thus exposed globally
-
+tresdb.getCurrentPath = routes.getCurrentPath;  // query current page
 
 // Define routes
 
