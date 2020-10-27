@@ -241,9 +241,20 @@ module.exports = function (mapComp) {
 
     // Filter
 
+    var filterToggle = tresdb.getCurrentPath() === '/filter';
     $mount.on('click', '#tresdb-mainmenu-filter', function (ev) {
       ev.preventDefault();
-      return tresdb.go('/filter');
+
+      if (filterToggle) {
+        filterToggle = false;
+        tresdb.go('/');
+      } else {
+        // Delay to prevent immediate double click open close.
+        setTimeout(function () {
+          filterToggle = true;
+        }, 1000);
+        tresdb.go('/filter');
+      }
     });
 
     filterStore.on('updated', function () {
