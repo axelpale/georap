@@ -241,7 +241,7 @@ module.exports = function (mapComp) {
 
     // Filter
 
-    var filterTimer = false;
+    var filterTimer = true; // start without burn-in period
     $mount.on('click', '#tresdb-mainmenu-filter', function (ev) {
       ev.preventDefault();
 
