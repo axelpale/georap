@@ -40,6 +40,9 @@ var FilterStore = function () {
       throw new Error('Invalid filter settings');
     }
 
+    // Copy next state so that we do not end up modifing the DEFAULT_STATE.
+    _state = Object.assign({}, _state);
+
     if (typeof newState.type === 'string') {
       _state.type = newState.type;
     }
