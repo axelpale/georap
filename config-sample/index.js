@@ -2,12 +2,6 @@
 
 var path = require('path');
 
-// First, we ensure that config/index.js is not accidentally included in
-// client code, even in the weird case that the path module is available.
-if (typeof window !== 'undefined') {
-  throw new Error('Configuration leaked into client-side code.');
-}
-
 module.exports = {
 
   // Title and description of the site. Used in many places,
