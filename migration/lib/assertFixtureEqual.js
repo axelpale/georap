@@ -8,7 +8,8 @@ var _ = require('lodash');
 var clone = require('clone');
 
 module.exports = function (collectionName, versionTag, callback) {
-  // Compares current collection to a same collection in the fixture specified
+  // Compares current collection in database
+  // to a same collection in the fixture specified
   // by versionTag.
   //
   // Parameters
