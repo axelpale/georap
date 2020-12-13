@@ -18,7 +18,7 @@ module.exports = function (onSuccess) {
   var loginResponseHandler = function (err) {
 
     var $form = $('#tresdb-login-form');
-    var $bl = $('#tresdb-login-blacklisted');
+    var $deactivated = $('#tresdb-login-deactivated');
     var $progress = $('#tresdb-login-in-progress');
     var $incorrect = $('#tresdb-login-incorrect');
     var $reset = $('#tresdb-password-reset');
@@ -40,16 +40,16 @@ module.exports = function (onSuccess) {
       ui.show($reset);
 
       return;
-    }  // else
+    } // else
 
     if (err.name === 'Forbidden') {
-      // Show blacklist error. Allow user to try login again.
-      ui.show($bl);
-      ui.show($form);
-      ui.show($reset);
+      // Show error for deactivated account. Keep login form hidden.
+      var $msg = $deactivated.find('#tresdb-login-deactivated-message');
+      $msg.html(err.message);
+      ui.show($deactivated);
 
       return;
-    }
+    } // else
 
     // Show mystery error message. Do not show login form because
     // the issue is probably long-lasting.
