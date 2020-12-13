@@ -1,5 +1,5 @@
 /* eslint-disable no-magic-numbers */
-// NOTE This file is an important documentation of the data structure of v9.
+// NOTE This file is an important documentation of the data structure at v10.
 
 var c = require('./common');
 var db = require('tresdb-db');
