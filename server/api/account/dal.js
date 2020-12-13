@@ -21,7 +21,6 @@ exports.createUser = function (username, email, password, callback) {
   var r = config.bcrypt.rounds;
 
   bcrypt.hash(password, r, function (berr, pwdHash) {
-
     if (berr) {
       return callback(berr);
     }
@@ -31,13 +30,13 @@ exports.createUser = function (username, email, password, callback) {
       email: email,
       hash: pwdHash,
       admin: false,
-      status: 'active',  // 'deactivated'
+      status: 'active',  // options. 'active' | 'deactivated',
+      createdAt: (new Date()).toISOString(),
+      loginAt: (new Date()).toISOString(),
     }, function (qerr) {
-
       if (qerr) {
         return callback(qerr);
       }
-
       // User inserted successfully
       return callback();
     });
