@@ -55,7 +55,7 @@ exports.login = function (req, res, next) {
     }
 
     bcrypt.compare(password, user.hash, function (err2, match) {
-      var tokenPayload, tokenOptions, token;
+      var tokenPayload, tokenOptions, token, msg;
 
       if (err2) {
         // Hash comparison failed. Password might still be correct, though.
@@ -71,10 +71,11 @@ exports.login = function (req, res, next) {
 
       // Check if user is deactivated
       if (user.status !== 'active') {
-        res.status(status.FORBIDDEN);
-        res.send('Your account has been deactivated.');
-
-        return;
+        msg = 'Your account is deactivated. ' +
+          'This can happen for prolonged inactivity or other security-' +
+          'related reasons. Contact site administration for futher ' +
+          'assistance.';
+        return res.status(status.FORBIDDEN).send(msg);
       }
 
       // else, build jwt token
