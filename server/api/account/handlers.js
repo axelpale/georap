@@ -94,10 +94,17 @@ exports.login = function (req, res, next) {
 
       token = jwt.sign(tokenPayload, config.secret, tokenOptions);
 
-      // Successful login.
-      loggers.log(user.name + ' logged in.');
+      // Register login time.
+      dal.markLogin(user.name, function (errl) {
+        if (errl) {
+          return next(errl);
+        }
 
-      return res.json(token);
+        // Successful login.
+        loggers.log(user.name + ' logged in.');
+
+        return res.json(token);
+      });
     });
   });
 };
