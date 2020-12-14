@@ -2,6 +2,7 @@
 
 var admin = tresdb.stores.admin;
 var template = require('./template.ejs');
+var InfoComponent = require('./Info');
 var StatusComponent = require('./Status');
 var EventsComponent = require('./Events');
 var RoleComponent = require('./Role');
@@ -15,7 +16,7 @@ module.exports = function (username) {
   emitter(self);
 
   // Components
-  var eventsComp, roleComp, statusComp;
+  var infoComp, eventsComp, roleComp, statusComp;
 
 
   // Public methods
@@ -26,6 +27,7 @@ module.exports = function (username) {
       username: username,
     }));
 
+    var $infoRoot = $('#tresdb-admin-user-info-root');
     var $statusRoot = $('#tresdb-admin-user-status-root');
     var $eventsRoot = $('#tresdb-admin-user-events-root');
     var $loading = $('#tresdb-admin-user-loading');
@@ -43,10 +45,12 @@ module.exports = function (username) {
       }
 
       // Construct and bind child components
+      infoComp = new InfoComponent(user);
       statusComp = new StatusComponent(user);
       eventsComp = new EventsComponent(user);
       roleComp = new RoleComponent(user);
 
+      infoComp.bind($infoRoot);
       statusComp.bind($statusRoot);
       eventsComp.bind($eventsRoot);
       roleComp.bind($roleRoot);
@@ -55,6 +59,8 @@ module.exports = function (username) {
 
 
   self.unbind = function () {
+    infoComp.unbind();
+    statusComp.unbind();
     eventsComp.unbind();
     roleComp.unbind();
   };

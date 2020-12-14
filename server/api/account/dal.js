@@ -21,7 +21,6 @@ exports.createUser = function (username, email, password, callback) {
   var r = config.bcrypt.rounds;
 
   bcrypt.hash(password, r, function (berr, pwdHash) {
-
     if (berr) {
       return callback(berr);
     }
@@ -31,15 +30,48 @@ exports.createUser = function (username, email, password, callback) {
       email: email,
       hash: pwdHash,
       admin: false,
-      status: 'active',  // 'deactivated'
+      status: 'active',  // options. 'active' | 'deactivated',
+      createdAt: (new Date()).toISOString(),
+      loginAt: (new Date()).toISOString(),
     }, function (qerr) {
-
       if (qerr) {
         return callback(qerr);
       }
-
       // User inserted successfully
       return callback();
     });
+  });
+};
+
+exports.markLogin = function (username, callback) {
+  // Set last login time to the current time.
+  // If user is not found, fails silently.
+  //
+  // Parameters:
+  //   username
+  //     string
+  //   callback
+  //     function (err)
+  //
+  var users = db.collection('users');
+
+  var q = { name: username };
+  var u = {
+    $set: {
+      loginAt: (new Date()).toISOString(),
+    },
+  };
+
+  users.updateOne(q, u, function (err, result) {
+    if (err) {
+      return callback(err);
+    }
+
+    if (result.matchedCount === 0) {
+      // No users found
+      return callback();
+    }
+
+    return callback();
   });
 };

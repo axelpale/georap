@@ -1,4 +1,7 @@
 /* eslint-disable max-lines */
+//
+// Location events
+//
 
 var db = require('tresdb-db');
 var io = require('../../services/io');

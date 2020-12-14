@@ -11,4 +11,5 @@ module.exports = {
   'v8': require('./v8'),
   'v9': require('./v9'),
   'v10': require('./v10'),
+  'v11': require('./v11'),
 };
