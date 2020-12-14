@@ -291,4 +291,35 @@ describe('migrates.migrate', function () {
     });
   });
 
+  describe('v10 to v11', function () {
+    beforeEach(function (done) {
+      loadFixtureByTag('v10', done);
+    });
+
+    it('should be able to migrate from v10 to v11', function (done) {
+      var targetV = 11;
+      migrates.migrate(targetV, function (err) {
+        assert.ifError(err);
+
+        assertFixtureEqual('config', 'v11', function (err2) {
+          assert.ifError(err2);
+
+          // Assert that all users have createdAt and loginAt props
+          db.collection('users').find().toArray(function (erra, users) {
+            assert.ifError(erra);
+
+            assert.ok(users.length > 0, 'more than 0 users');
+
+            users.forEach(function (u) {
+              assert.ok(u.createdAt[0] === '2', 'has createdAt');
+              assert.ok(u.loginAt[0] === '2', 'has loginAt');
+            });
+
+            done();
+          });
+        });
+      });
+    });
+  });
+
 });

@@ -7,6 +7,8 @@ var config = require('tresdb-config');
 var db = require('tresdb-db');
 var bcrypt = require('bcryptjs');
 
+var NOW = (new Date()).toISOString();
+
 var admin = config.admin.username;
 
 var luznaId = db.id('581f266110a1482dd0b7cd14');
@@ -272,6 +274,8 @@ module.exports = {
         name: admin,
         points: 0,  // points are updated by worker
         status: 'active',
+        createdAt: NOW,
+        loginAt: NOW,
       },
       {
         _id: db.id('5867bdf00b5a9e18d7755e33'),
@@ -281,6 +285,8 @@ module.exports = {
         name: 'johndoe',
         points: 0,
         status: 'deactivated',
+        createdAt: NOW,
+        loginAt: NOW,
       },
     ],
   },
