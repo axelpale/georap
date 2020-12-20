@@ -174,6 +174,7 @@ module.exports = function (entry) {
     });
 
     entry.on('location_entry_comment_created', function (ev) {
+      // The server sent a new comment.
       // Construct comment struct
       var comment = {
         id: ev.data.commentId,
@@ -207,18 +208,8 @@ module.exports = function (entry) {
         var $commentEl = generateComment(comment);
         $commentsEl.append($commentEl);
         // Flash in green; Override list item styles.
-        var DURATION = 2;
-        var DELAY = 2;
-        var SECOND = 1000;
         var $listItem = $commentEl.find('.list-group-item');
-        $listItem.css('background-color', '#dff0d8');
-        $listItem.css('transition', 'background-color ' + DURATION + 's');
-        window.setTimeout(function () {
-          $listItem.css('background-color', 'white');
-        }, DELAY * SECOND);
-        window.setTimeout(function () {
-          $listItem.css('transition', 'unset');
-        }, (DURATION + DELAY) * SECOND);
+        ui.flash($listItem, '#dff0d8');
       }
     });
 
