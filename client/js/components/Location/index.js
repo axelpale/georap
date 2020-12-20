@@ -87,6 +87,22 @@ module.exports = function (id) {
         self.emit('removed');
       });
 
+      // Scroll down to possibly referred entry or comment
+      // eslint-disable-next-line no-magic-numbers
+      if (window.location.hash.substring(0, 9) === '#comment-') {
+        var scrollerEl = document.getElementById('card-layer-content');
+        var commentEl = document.querySelector(window.location.hash);
+        // Test if such comment exists
+        if (commentEl) {
+          // Scroll at comment and leave a small gap.
+          var MARGIN = 32;
+          scrollerEl.scrollTop = commentEl.offsetTop - MARGIN;
+          // Flash the comment in green
+          var $listItem = $(commentEl).find('.list-group-item');
+          ui.flash($listItem, '#dff0d8');
+        }
+      }
+
       // Enable tooltips. See http://getbootstrap.com/javascript/#tooltips
       $('[data-toggle="tooltip"]').tooltip();
 

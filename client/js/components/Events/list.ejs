@@ -50,10 +50,10 @@
         maybe visited <a href="<%= locUrl %>"><%= name %></a> <%= timestamp(ev.time) %> :)
 
       <% } else if (t === 'location_entry_comment_created') { %>
-        commented a post in <a href="<%= locUrl %>"><%= name %></a> <%= timestamp(ev.time) %>
+        commented a post in <a href="<%= locUrl %>#comment-<%= ev.data.commentId %>"><%= name %></a> <%= timestamp(ev.time) %>
 
       <% } else if (t === 'location_entry_comment_changed') { %>
-        edited a comment in <a href="<%= locUrl %>"><%= name %></a> <%= timestamp(ev.time) %>
+        edited a comment in <a href="<%= locUrl %>#comment-<%= ev.data.commentId %>"><%= name %></a> <%= timestamp(ev.time) %>
 
       <% } else if (t === 'location_entry_comment_removed') { %>
         deleted a comment in <a href="<%= locUrl %>"><%= name %></a> <%= timestamp(ev.time) %>
