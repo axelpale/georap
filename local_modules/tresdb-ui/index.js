@@ -1,3 +1,8 @@
+var marked = require('marked');
+var dompurify = require('dompurify');
+
+marked.setOptions({ breaks: true });
+
 exports.isHidden = function ($el) {
   return $el.hasClass('hidden');
 };
@@ -34,4 +39,10 @@ exports.flash = function ($el, color) {
   window.setTimeout(function () {
     $el.css('transition', 'unset');
   }, (DURATION + DELAY) * SECOND);
+}
+
+exports.markdownToHtml = function (markdown) {
+  // Convert (possibly dirty) markdown to safe HTML.
+  var dangerousHTML = marked(markdown);
+  return dompurify.sanitize(dangerousHTML);
 }

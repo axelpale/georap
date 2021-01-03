@@ -12,6 +12,9 @@
   "scripts": {},
   "author": "Akseli Palén <akseli.palen@gmail.com>",
   "license": "MIT",
-  "dependencies": {},
+  "dependencies": {
+    "dompurify": "^2.2.6",
+    "marked": "^1.2.7"
+  },
   "devDependencies": {}
 }
