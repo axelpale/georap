@@ -8,8 +8,8 @@ var locations = tresdb.stores.locations;
 
 var emitter = require('component-emitter');
 var urljoin = require('url-join');
-var marked = require('marked');
-var dompurify = require('dompurify');
+var ui = require('tresdb-ui');
+
 
 module.exports = function (rawEntry, entries) {
   // Parameters:
@@ -167,9 +167,7 @@ module.exports = function (rawEntry, entries) {
     if (!self.hasMarkdown()) {
       return null;
     }
-
-    var dangerousHTML = marked(rawEntry.data.markdown);
-    return dompurify.sanitize(dangerousHTML);
+    return ui.markdownToHtml(rawEntry.data.markdown);
   };
 
   self.isVisit = function () {

@@ -1,7 +1,5 @@
-var marked = require('marked');
-var dompurify = require('dompurify');
+var ui = require('tresdb-ui');
 
 module.exports = function (msg) {
-  var dangerousHTML = marked(msg);
-  return dompurify.sanitize(dangerousHTML);
+  return ui.markdownToHtml(msg);
 };

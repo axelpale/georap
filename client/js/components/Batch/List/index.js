@@ -2,7 +2,7 @@
 var template = require('./template.ejs');
 var detailsTemplate = require('./details.ejs');
 var emitter = require('component-emitter');
-var marked = require('marked');
+var markdownToHtml = require('tresdb-ui').markdownToHtml;
 
 module.exports = function () {
   // Parameters
@@ -81,7 +81,7 @@ module.exports = function () {
       } else {
         $tr.after(detailsTemplate({
           location: loc,
-          markdownToHtml: marked,
+          markdownToHtml: markdownToHtml,
         }));
         ev.target.dataset.isopen = 1;
       }
