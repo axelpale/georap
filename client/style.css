@@ -86,6 +86,10 @@ html, body {
   margin-bottom: 2.68em;
 }
 
+#tresdb-location-forms-menu button {
+  margin-bottom: 0.6rem;
+}
+
 /* Location page END */
 
 /* Status & Type */
