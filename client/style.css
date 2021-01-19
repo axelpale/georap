@@ -46,6 +46,7 @@ html, body {
 #tresdb-toolbar-main .dropdown,
 #tresdb-mainmenu-filter {
   margin-right: 0.3em;
+  margin-bottom: 0.5em;
 }
 
 #tresdb-mainmenu-filter .label-danger {
