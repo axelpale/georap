@@ -143,6 +143,7 @@ module.exports = {
     'church',
     'spiritual',
     'scientific',
+    'nuclear',
     'museum',
     'shop',
     'leisure',
