@@ -166,7 +166,8 @@ html, body {
   color: #999999;
 }
 
-.tresdb-entry .panel-body {
+.tresdb-entry .panel-body,
+.tresdb-entry .comment-message {
   overflow-wrap: break-word;
   word-wrap: break-word;
 }
