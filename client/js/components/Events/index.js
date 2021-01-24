@@ -19,18 +19,14 @@ module.exports = function () {
   // Init
   emitter(this);
 
-  // Public methods
-
-  this.bind = function ($mount) {
-
-    // Render initial page with loading bar
-    $mount.html(template());
-
+  // Event handler that is easy to off.
+  var updateView = function () {
     var $loading = $('#tresdb-events-loading');
     var $list = $('#tresdb-events-list');
 
     // Fetch events for rendering.
     events.getRecent(LIST_SIZE, function (err, rawEvents) {
+      // Ensure loading bar is hidden.
       ui.hide($loading);
 
       if (err) {
@@ -50,34 +46,23 @@ module.exports = function () {
         events: compactEvs,
       }));
     });
+  }
+
+  // Public methods
+
+  this.bind = function ($mount) {
+    // Render initial page with visible loading bar
+    $mount.html(template());
+
+    // Fetch events
+    updateView();
 
     // Update rendered on change
-    events.on('events_changed', function () {
-      events.getRecent(LIST_SIZE, function (err, rawEvents) {
-        if (err) {
-          console.error(err);
-          return;
-        }
-
-        var compactEvs = prettyEvents.mergeLocationCreateRename(rawEvents);
-        compactEvs = prettyEvents.mergeEntryCreateEdit(compactEvs);
-        compactEvs = prettyEvents.dropEntryCommentDeleteGroups(compactEvs);
-        compactEvs = prettyEvents.dropEntryCommentChanged(compactEvs);
-        compactEvs = prettyEvents.mergeSimilar(compactEvs);
-
-        $list.html(listTemplate({
-          pointstamp: pointstamp,
-          timestamp: timestamp,
-          events: compactEvs,
-        }));
-      });
-    });
-
+    events.on('events_changed', updateView);
   };
 
   this.unbind = function () {
-    // Only view for events, so it is safe to off everything.
-    events.off();
+    events.off('events_changed', updateView);
   };
 
 };
