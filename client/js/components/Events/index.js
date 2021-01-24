@@ -22,7 +22,6 @@ var startScrollRecording = function () {
   var scrollerEl = document.getElementById('card-layer-content');
 
   _scrollListener = function () {
-    console.log('scroll', scrollerEl.scrollTop);
     _scrollPosition = scrollerEl.scrollTop;
   };
 
@@ -35,9 +34,7 @@ var stopScrollRecording = function () {
 };
 
 var applyRecordedScroll = function () {
-  console.log('apply scroll', _scrollPosition);
   var scrollerEl = document.getElementById('card-layer-content');
-  console.log('to scroll', scrollerEl.scrollTop);
   scrollerEl.scrollTop = _scrollPosition;
 };
 
@@ -91,20 +88,21 @@ module.exports = function () {
     // Render initial page with visible loading bar
     $mount.html(template());
 
-    // Fetch events and apply previously recorded scroll position.
+    // Fetch events and then apply previously recorded scroll position.
+    // It seems that setTimeout is required to allow the fetched events
+    // to fill the scrollable container. Then, begin recording further
+    // scrolls.
     updateView(function () {
+      setTimeout(function () {
+        applyRecordedScroll();
 
+        // Record scroll positions
+        startScrollRecording();
+      }, 0);
     });
 
     // Update rendered on change
     events.on('events_changed', updateView);
-
-    setTimeout(function () {
-      applyRecordedScroll();
-    }, 0);
-
-    // Record scroll positions
-    startScrollRecording();
   };
 
   this.unbind = function () {
