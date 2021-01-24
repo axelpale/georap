@@ -22,7 +22,7 @@ emitter(exports);
 
 // Listen for new events and inform views that
 // new events are available.
-socket.on('tresdb_event', function (ev) {
+socket.on('tresdb_event', function () {
   exports.emit('events_changed');
 });
 

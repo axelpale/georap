@@ -80,7 +80,7 @@ module.exports = function () {
       }));
 
       if (callback) {
-        callback();
+        return callback();
       }
     });
   };
