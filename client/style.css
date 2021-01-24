@@ -75,6 +75,8 @@ html, body {
 
 #tresdb-location-name {
   margin-bottom: 1em;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 #tresdb-location-statustype-container {
@@ -162,6 +164,11 @@ html, body {
 
 .tresdb-disabled {
   color: #999999;
+}
+
+.tresdb-entry .panel-body {
+  overflow-wrap: break-word;
+  word-wrap: break-word;
 }
 
 .tresdb-entry .panel-body > p:last-child {
