@@ -19,6 +19,7 @@ module.exports = function (entry) {
   var _pendingCommentViews = {};
   var $els = [];
   var entryId = entry.getId();
+  var username = account.getName(); // prevent frequent decoding
 
   // Helper methods
 
@@ -147,7 +148,7 @@ module.exports = function (entry) {
           var tempId = Math.random().toString().substr(2);
           var tempComment = {
             tempId: tempId,
-            user: account.getName(),
+            user: username,
             message: message,
           };
           // Check if the comment has been created via events already.
@@ -256,19 +257,12 @@ module.exports = function (entry) {
 
   this.unbind = function () {
     // Unbind each child
-    var k, v;
-    for (k in _commentViewsMap) {
-      if (_commentViewsMap.hasOwnProperty(k)) {
-        v = _commentViewsMap[k];
-        v.unbind();
-      }
-    }
-
-    for (k in _pendingCommentViews) {
-      if (_pendingCommentViews.hasOwnProperty(k)) {
-        _pendingCommentViews[k].unbind();
-      }
-    }
+    Object.keys(_commentViewsMap).forEach(function (k) {
+      _commentViewsMap[k].unbind();
+    });
+    Object.keys(_pendingCommentViews).forEach(function (k) {
+      _pendingCommentViews[k].unbind();
+    });
 
     $els.forEach(function ($el) {
       $el.off();
