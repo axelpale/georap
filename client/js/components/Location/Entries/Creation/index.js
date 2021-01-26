@@ -1,4 +1,5 @@
-
+/* eslint-disable max-statements */
+var account = tresdb.stores.account;
 var locations = tresdb.stores.locations;
 var markdownSyntax = require('../../lib/markdownSyntax.ejs');
 var template = require('./template.ejs');
@@ -8,6 +9,13 @@ var ui = require('tresdb-ui');
 
 var K = 1024;
 
+// Temporary storage for unfinished entries.
+// Remembers input even if user closes the location card.
+// A mapping from location id to { markdown, username }
+// We do not save file input nor visit checkbox because
+// file input cannot be set programmatically (security issue).
+var entryInputSaver = {};
+
 module.exports = function (location) {
   // Parameters:
   //   location
@@ -15,6 +23,8 @@ module.exports = function (location) {
 
   var self = this;
   emitter(self);
+  var locationId = location.getId();
+  var username = account.getName();
 
   self.bind = function ($mount) {
 
@@ -58,6 +68,8 @@ module.exports = function (location) {
       ui.hide($cont);
       // Clear the form
       $form[0].reset();
+      // Clear saved state
+      entryInputSaver[locationId] = null;
     };
 
     var submitHandler = function () {
@@ -71,7 +83,28 @@ module.exports = function (location) {
       ui.show($progress);
 
       // Post
-      locations.createEntry(location.getId(), $form, responseHandler);
+      locations.createEntry(locationId, $form, responseHandler);
+    };
+
+    var fileChangeHandler = function () {
+      // If a file is selected, enable visit.
+      // If user chooses or changes a file, onchange is fired.
+      // See http://stackoverflow.com/a/5670938/638546
+
+      if ($file.val() === '') {
+        // Disable visit.
+        // Prevent user from marking the post as visit.
+        $visit.addClass('tresdb-disabled');
+        $visit.find('.checkbox').addClass('disabled');
+        $visitinput.prop('checked', false);
+        $visitinput.attr('disabled', 'disabled');
+      } else {
+        // Enable visit.
+        // Enable user to mark the post as visit.
+        $visit.removeClass('tresdb-disabled');
+        $visit.find('.checkbox').removeClass('disabled');
+        $visitinput.removeAttr('disabled');
+      }
     };
 
     $show.click(function (ev) {
@@ -83,11 +116,25 @@ module.exports = function (location) {
       ui.hide($progress);
       // Clear the form
       $form[0].reset();
+      // Ensure correct visit checkbox state after form clear.
+      fileChangeHandler();
 
       if ($cont.hasClass('hidden')) {
         // Show the form
         ui.show($cont);
         ui.show($form);
+
+        // Prefill with possibly previously saved values
+        var savedInput = entryInputSaver[locationId];
+        if (savedInput) {
+          // Prevent case where user logs out and another logs in.
+          if (savedInput.username === username) {
+            $text.val(savedInput.markdown);
+            // Setting file input is not possible due to browser security.
+            // $file.val(savedInput.filepath);
+          }
+        }
+
         // Focus to input field
         $text.focus();
       } else {
@@ -111,27 +158,14 @@ module.exports = function (location) {
       submitHandler();
     });
 
-    $file.change(function () {
-      // If a file is selected, enable visit.
-      // If user chooses or changes a file, onchange is fired.
-      // See http://stackoverflow.com/a/5670938/638546
+    $file.change(fileChangeHandler);
 
-      if ($file.val() === '') {
-        // Disable visit.
-        // Prevent user from marking the post as visit.
-        $visit.addClass('tresdb-disabled');
-        $visit.find('.checkbox').addClass('disabled');
-        $visit.find('input[type=checkbox]').prop('checked', false);
-        $visit.find('input[type=checkbox]').attr('disabled', 'disabled');
-      } else {
-        // Enable visit.
-        // Enable user to mark the post as visit.
-        $visit.removeClass('tresdb-disabled');
-        $visit.find('.checkbox').removeClass('disabled');
-        $visit.find('input[type=checkbox]').removeAttr('disabled');
-      }
+    $text.on('input', function () {
+      entryInputSaver[locationId] = {
+        username: username,
+        markdown: $text.val(),
+      };
     });
-
   };
 
   self.unbind = function () {
