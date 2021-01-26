@@ -35,6 +35,7 @@ module.exports = function (location) {
     var $syntaxshow = $('#tresdb-entry-syntax-show');
     var $text = $('#tresdb-entry-input');
     var $visit = $('#tresdb-entry-visit');
+    var $visitinput = $('#tresdb-entry-visit-input');
 
     var responseHandler = function (err) {
 
