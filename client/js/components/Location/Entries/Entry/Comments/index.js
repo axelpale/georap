@@ -10,6 +10,11 @@ var account = tresdb.stores.account;
 var MIN_LEN = tresdb.config.comments.minMessageLength;
 var MAX_LEN = tresdb.config.comments.maxMessageLength;
 
+// Temporary storage for unfinished comments.
+// Remembers input even if user closes the location card.
+// A mapping from entry id to { message, username }
+var commentInputSaver = {};
+
 module.exports = function (entry) {
   // Parameters:
   //   entry
@@ -77,6 +82,16 @@ module.exports = function (entry) {
       // Maybe hidden by previous success.
       ui.show($commentForm);
 
+      // Prefill with possibly previously saved message
+      var savedInput = commentInputSaver[entryId];
+      if (savedInput) {
+        // Ensure that the user is the same. It could be possible
+        // for a user to log out and then another user to log in.
+        if (savedInput.username === username) {
+          $messageInput.val(savedInput.message);
+        }
+      }
+
       // Focus to message input
       $messageInput.focus();
 
@@ -96,12 +111,18 @@ module.exports = function (entry) {
       ui.show($entryFooter);
     });
 
-    // Message hint
-    // Validate message on comment input. Max length etc.
     $messageInput.on('input', function () {
       var msg = $messageInput.val();
-      var len = msg.length;
 
+      // Save unfinished comment
+      commentInputSaver[entryId] = {
+        message: msg,
+        username: username,
+      };
+
+      // Message hint
+      // Validate message on comment input. Max length etc.
+      var len = msg.length;
       updateHint($messageHint, len);
     });
 
@@ -117,6 +138,9 @@ module.exports = function (entry) {
         $messageHint.removeClass('text-info');
         return;
       }
+
+      // Purge cache for unfinished comment.
+      commentInputSaver[entryId] = null;
 
       // Hide form but not container.
       ui.hide($commentForm);
