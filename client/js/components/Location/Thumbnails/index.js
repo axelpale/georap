@@ -14,9 +14,11 @@ module.exports = function (entries) {
 
   this.bind = function ($mount) {
 
+    // Select first few images
+    var N = 3;
     var imageEntries = entries.toArray().filter(function (entry) {
       return entry.hasImage();
-    });
+    }).slice(0, N);
 
     imageEntries.forEach(function (entry) {
       var id = entry.getId();
