@@ -31,6 +31,24 @@ module.exports = function (entries) {
       v.bind($('#thumbnail-' + id));
     });
 
+    // Click to scroll to the entry
+    $mount.click(function (ev) {
+      // Prevent link behavior and avoid reloading the view.
+      ev.preventDefault();
+      // If everything okay, scroll to entry.
+      var entryId = ev.target.dataset.eid;
+      if (typeof entryId === 'string') {
+        var scrollerEl = document.getElementById('card-layer-content');
+        var entryEl = document.getElementById(entryId);
+        // Test if such entry exists
+        if (entryEl) {
+          // Scroll to entry and leave a small gap.
+          var MARGIN = 32;
+          scrollerEl.scrollTop = entryEl.offsetTop - MARGIN;
+        }
+      }
+    });
+
     _handleEntryCreated = function (ev) {
       // Create view and store it among others
 
