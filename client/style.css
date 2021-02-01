@@ -96,9 +96,38 @@ html, body {
   margin-bottom: 0;
 }
 
-#tresdb-location-entries,
-#tresdb-location-events {
-  margin-bottom: 2.68em;
+#tresdb-location-thumbnails {
+  margin-bottom: 1.6rem;
+  line-height: 1;
+}
+#tresdb-location-thumbnails .tresdb-location-thumbnail {
+  position: relative;
+  display: inline-block;
+  margin-right: 0.6rem;
+  margin-bottom: 0.6rem;
+  overflow: hidden;
+}
+#tresdb-location-thumbnails a:hover,
+#tresdb-location-thumbnails a:active {
+  opacity: 0.7;
+}
+#tresdb-location-thumbnails img {
+  object-fit: cover;
+  width: 11.1rem;
+  height: 11.1rem;
+  border: 1px solid #dddddd;
+}
+@media (max-width: 500px) {
+  #tresdb-location-thumbnails img {
+    width: 8.7rem;
+    height: 8.7rem;
+  }
+}
+@media (max-width: 400px) {
+  #tresdb-location-thumbnails img {
+    width: 6.9rem;
+    height: 6.9rem;
+  }
 }
 
 #tresdb-location-forms {

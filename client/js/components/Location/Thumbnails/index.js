@@ -26,7 +26,8 @@ module.exports = function (entries) {
 
       _thumbnailViewsMap[id] = v;
 
-      $mount.append('<div id="thumbnail-' + id + '"></div>');
+      $mount.append('<div id="thumbnail-' + id + '" ' +
+        'class="tresdb-location-thumbnail"></div>');
       v.bind($('#thumbnail-' + id));
     });
 
