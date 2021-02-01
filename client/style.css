@@ -74,13 +74,26 @@ html, body {
 }
 
 #tresdb-location-name {
-  margin-bottom: 1em;
+  margin-bottom: 1rem;
   overflow-wrap: break-word;
   word-break: break-word;
 }
+#tresdb-location-name h1 {
+  margin-bottom: 0;
+}
+
+#tresdb-location-geom {
+  margin-bottom: 1rem;
+}
+#tresdb-location-geom .form-group {
+  margin-bottom: 0;
+}
 
 #tresdb-location-statustype-container {
-  margin-bottom: 2.68em;
+  margin-bottom: 1.6rem;
+}
+#tresdb-location-statustype-container .form-group {
+  margin-bottom: 0;
 }
 
 #tresdb-location-entries,
@@ -88,8 +101,19 @@ html, body {
   margin-bottom: 2.68em;
 }
 
+#tresdb-location-forms {
+  margin-bottom: 1rem;
+}
+#tresdb-location-forms .form-group {
+  margin-bottom: 0;
+}
 #tresdb-location-forms-menu button {
   margin-bottom: 0.6rem;
+}
+
+#tresdb-location-entries,
+#tresdb-location-events {
+  margin-bottom: 2.68em;
 }
 
 /* Location page END */
