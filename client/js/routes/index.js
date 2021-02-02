@@ -1,10 +1,7 @@
-/* eslint-disable max-statements */
+/* eslint-disable max-statements, max-lines */
 
 // Client-side routing
 
-var AdminUsersView = require('../components/Admin/Users');
-var AdminUserView = require('../components/Admin/Users/User');
-var BatchView = require('../components/Batch');
 var CardView = require('../components/Card');
 var ChangePasswordView = require('../components/ChangePassword');
 var Error401View = require('../components/Error401');
@@ -12,11 +9,9 @@ var Error404View = require('../components/Error404');
 var EventsView = require('../components/Events');
 var ExportView = require('../components/Export');
 var FilterView = require('../components/Filter');
-var ImportView = require('../components/Import');
 var InviteView = require('../components/Invite');
 var LocationView = require('../components/Location');
 var LoginView = require('../components/Login');
-var BatchOutcomeView = require('../components/BatchOutcome');
 var ResetPasswordView = require('../components/ResetPassword');
 var SearchView = require('../components/Search');
 var SignupView = require('../components/Signup');
@@ -191,15 +186,45 @@ exports.route = function () {
   });
 
   page('/import', function () {
-    card.open(new ImportView());
+    import(
+      /* webpackChunkName: "import-view" */
+      '../components/Import'
+    )
+      .then(function (moduleWrap) {
+        var ImportView = moduleWrap.default;
+        card.open(new ImportView());
+      })
+      .catch(function (err) {
+        console.error(err);
+      });
   });
 
   page('/import/:batchId/outcome', function (ctx) {
-    card.open(new BatchOutcomeView(ctx.params.batchId));
+    import(
+      /* webpackChunkName: "batch-outcome-view" */
+      '../components/BatchOutcome'
+    )
+      .then(function (moduleWrap) {
+        var BatchOutcomeView = moduleWrap.default;
+        card.open(new BatchOutcomeView(ctx.params.batchId));
+      })
+      .catch(function (err) {
+        console.error(err);
+      });
   });
 
   page('/import/:batchId', function (ctx) {
-    card.open(new BatchView(ctx.params.batchId));
+    import(
+      /* webpackChunkName: "batch-view" */
+      '../components/Batch'
+    )
+      .then(function (moduleWrap) {
+        var BatchView = moduleWrap.default;
+        card.open(new BatchView(ctx.params.batchId));
+      })
+      .catch(function (err) {
+        console.error(err);
+      });
   });
 
   page('/latest', function () {
@@ -248,13 +273,33 @@ exports.route = function () {
   //
 
   page('/admin/users', adminOnly, function () {
-    var view = new AdminUsersView();
-    card.open(view);
+    import(
+      /* webpackChunkName: "admin-users-view" */
+      '../components/Admin/Users'
+    )
+      .then(function (moduleWrap) {
+        var AdminUsersView = moduleWrap.default;
+        var view = new AdminUsersView();
+        card.open(view);
+      })
+      .catch(function (err) {
+        console.error(err);
+      });
   });
 
   page('/admin/users/:username', adminOnly, function (ctx) {
-    var view = new AdminUserView(ctx.params.username);
-    card.open(view);
+    import(
+      /* webpackChunkName: "admin-user-view" */
+      '../components/Admin/Users/User'
+    )
+      .then(function (moduleWrap) {
+        var AdminUserView = moduleWrap.default;
+        var view = new AdminUserView(ctx.params.username);
+        card.open(view);
+      })
+      .catch(function (err) {
+        console.error(err);
+      });
   });
 
   page('/invite', adminOnly, function () {

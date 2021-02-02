@@ -9,6 +9,8 @@ module.exports = {
   output: {
     // Directory to which the compiled static files will be stored.
     path: config.staticDir,
+    // Relative URL from where the bundle chunks will be read.
+    publicPath: config.staticUrl + '/',
     // The name of the bundle and its source maps.
     filename: 'app.bundle.js',
   },

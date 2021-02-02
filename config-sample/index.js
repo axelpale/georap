@@ -38,7 +38,8 @@ module.exports = {
   // Static files
   // Express/Webpack will copy the static files to be served to this directory:
   staticDir: path.resolve(__dirname, '../.tmp/public'),
-  // URLs of the static files are prefixed with this static URL root path:
+  // URLs of the static files are prefixed with this static URL root path.
+  // Ensure to remove any trailing slash.
   staticUrl: '/assets',
 
   // Uploaded files
