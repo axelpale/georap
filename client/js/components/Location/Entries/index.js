@@ -58,15 +58,10 @@ module.exports = function (entries) {
   };
 
   this.unbind = function () {
-
     // Unbind each child
-    var k, v;
-    for (k in _entryViewsMap) {
-      if (_entryViewsMap.hasOwnProperty(k)) {
-        v = _entryViewsMap[k];
-        v.unbind();
-      }
-    }
+    Object.keys(_entryViewsMap).forEach(function (k) {
+      _entryViewsMap[k].unbind();
+    });
 
     entries.off('location_entry_created', _handleEntryCreated);
     entries.off('location_entry_removed', _handleEntryRemoved);

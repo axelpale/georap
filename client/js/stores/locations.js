@@ -172,7 +172,7 @@ exports.importBatch = function (data, callback) {
   //   callback
   //     function (err)
   //
-  if (!data.hasOwnProperty('batchId') || !data.hasOwnProperty('indices')) {
+  if (!('batchId' in data) || !('indices' in data)) {
     throw new Error('Invalid argument: ' + JSON.stringify(data));
   }
 

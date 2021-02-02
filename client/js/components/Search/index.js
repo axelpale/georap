@@ -26,10 +26,10 @@ module.exports = function (query) {
   var _submitHandler;
 
   // Add default values to query if missing
-  if (!query.hasOwnProperty('skip')) {
+  if (!('skip' in query)) {
     query.skip = SKIP_DEFAULT;
   }
-  if (!query.hasOwnProperty('limit')) {
+  if (!('limit' in query)) {
     query.limit = LIMIT_DEFAULT;
   }
 
@@ -84,7 +84,7 @@ module.exports = function (query) {
       });
 
       // Reselect correct creator because these were just loaded.
-      if (query.hasOwnProperty('creator')) {
+      if ('creator' in query) {
         // TODO Check that creator exists in list. User can typo
         $creator.val(query.creator);
       }
@@ -153,26 +153,26 @@ module.exports = function (query) {
     (function initFormByQuery(q) {
       // Init the form piece by piece
 
-      if (q.hasOwnProperty('text')) {
+      if ('text' in q) {
         $text.val(q.text.trim());
       }
 
-      if (q.hasOwnProperty('creator')) {
+      if ('creator' in q) {
         // TODO Check that creator exists in list. User can typo
         $creator.val(q.creator);
       }
 
-      if (q.hasOwnProperty('order')) {
+      if ('order' in q) {
         $order.val(q.order);
       }
 
-      if (q.hasOwnProperty('skip')) {
+      if ('skip' in q) {
         $skip.val(q.skip);
       } else {
         $skip.val(SKIP_DEFAULT);
       }
 
-      if (q.hasOwnProperty('limit')) {
+      if ('limit' in q) {
         $limit.val(q.limit);
       } else {
         $limit.val(LIMIT_DEFAULT);
@@ -243,7 +243,7 @@ module.exports = function (query) {
     // because user probably did arrive here manually and not by
     // submitting the form.
     // Test this against order because it is always attached.
-    if (!query.hasOwnProperty('order')) {
+    if (!('order' in query)) {
       setTimeout(function () {
         $text.focus();
       }, FOCUS_DELAY);

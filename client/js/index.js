@@ -1,6 +1,3 @@
-/* globals tresdb */
-
-
 
 // Collect data access API's under tresdb global.
 // This prevents cumbersome ../../../ requires.

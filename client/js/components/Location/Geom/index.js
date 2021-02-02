@@ -247,11 +247,8 @@ module.exports = function (location) {
     $('#tresdb-location-coords-cancel').off();
     $('#tresdb-location-coords-more-open').off();
 
-    var k;
-    for (k in locationListeners) {
-      if (locationListeners.hasOwnProperty(k)) {
-        location.off(k, locationListeners[k]);
-      }
-    }
+    Object.keys(locationListeners).forEach(function (k) {
+      location.off(k, locationListeners[k]);
+    });
   };
 };

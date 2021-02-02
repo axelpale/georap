@@ -49,17 +49,14 @@ exports.updateMarkerLabels = function (markers, typeid) {
   //     an object collection of google.maps.Marker instances
   //   typeid
   //     google maps map type id. Dark type asks white labels and vice versa.
-  var color, k, label;
+  //
+  var color = exports.mapTypeIdToLabelColor(typeid);
 
-  color = exports.mapTypeIdToLabelColor(typeid);
-
-  for (k in markers) {
-    if (markers.hasOwnProperty(k)) {
-      label = markers[k].getLabel();
-      if (label) {
-        label.color = color;
-        markers[k].setLabel(label);
-      }
+  Object.keys(markers).forEach(function (k) {
+    var label = markers[k].getLabel();
+    if (label) {
+      label.color = color;
+      markers[k].setLabel(label);
     }
-  }
+  });
 };

@@ -145,7 +145,7 @@ exports.geohackLink = function (geom, options) {
     options = {};
   }
 
-  if (!options.hasOwnProperty('target')) {
+  if (!('target' in options)) {
     options.target = DEFAULT_TARGET;
   }
 

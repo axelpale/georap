@@ -134,14 +134,10 @@ module.exports = function (map) {
     // To speed up things and avoid flicker,
     // only adds those markers on the screen that are not already there.
 
-    var i, l, m, mloc, k;
-
     // For each location candidate
-    for (i = 0; i < locs.length; i += 1) {
-      l = locs[i];
-
-      // If location already on the map
-      if (_markers.hasOwnProperty(l._id)) {
+    locs.forEach(function (l) {
+      var m, mloc;
+      if (l._id in _markers) {
         // Mark that it does not need to be removed.
         m = _markers[l._id];
         m.set('keep', true);
@@ -161,7 +157,7 @@ module.exports = function (map) {
         m = _addMarker(l);
         m.set('keep', true);
       }
-    }
+    });
 
     // Keep the selected marker, because sometimes the selected is not
     // among the locations from the marker api.
@@ -171,21 +167,17 @@ module.exports = function (map) {
 
     // Remove markers that were not marked to be kept.
     // Also, reset keep for next update.
-    for (i in _markers) {
-      if (_markers.hasOwnProperty(i)) {
-        m = _markers[i];
-        k = m.get('keep');
-
-        if (k) {
-          // Reset for next update
-          m.set('keep', false);
-        } else {
-          // Remove
-          _removeMarker(m);
-        }
+    Object.keys(_markers).forEach(function (k) {
+      var m = _markers[k];
+      var keep = m.get('keep');
+      if (keep) {
+        // Reset for next update
+        m.set('keep', false);
+      } else {
+        // Remove
+        _removeMarker(m);
       }
-    }
-
+    });
   };
 
   var _loadMarkersThen = function (err, locs) {
@@ -239,7 +231,7 @@ module.exports = function (map) {
     var m, mloc;
 
     // No need to update if no such marker on the map.
-    if (!_markers.hasOwnProperty(ev.locationId)) {
+    if (!(ev.locationId in _markers)) {
       return;
     }
 
@@ -259,7 +251,7 @@ module.exports = function (map) {
     var m, g, mloc;
 
     // No need to update if no such marker on the map.
-    if (!_markers.hasOwnProperty(ev.locationId)) {
+    if (!(ev.locationId in _markers)) {
       return;
     }
 
@@ -282,7 +274,7 @@ module.exports = function (map) {
   });
 
   markerStore.on('location_removed', function (ev) {
-    if (_markers.hasOwnProperty(ev.locationId)) {
+    if (_markers[ev.locationId]) {
       var mToRemove = _markers[ev.locationId];
       _removeMarker(mToRemove);
     }
@@ -291,7 +283,7 @@ module.exports = function (map) {
   markerStore.on('location_status_changed', function (ev) {
     // Update icon according to new status.
     // Do this only if the marker has reached the map.
-    if (_markers.hasOwnProperty(ev.locationId)) {
+    if (_markers[ev.locationId]) {
       var m = _markers[ev.locationId];
       var mloc = m.get('location');
       // First update the stored MarkerLocation
@@ -304,7 +296,7 @@ module.exports = function (map) {
   markerStore.on('location_type_changed', function (ev) {
     // Update icon according to new type.
     // Do this only if the marker has reached the map.
-    if (_markers.hasOwnProperty(ev.locationId)) {
+    if (_markers[ev.locationId]) {
       var m = _markers[ev.locationId];
       var mloc = m.get('location');
       // First update the stored MarkerLocation
@@ -320,7 +312,7 @@ module.exports = function (map) {
       _visitedIds.add(ev.locationId);
 
       // Update marker icon to visited
-      if (_markers.hasOwnProperty(ev.locationId)) {
+      if (_markers[ev.locationId]) {
         var m = _markers[ev.locationId];
         var mloc = m.get('location');
         m.setIcon(_chooseIcon(mloc));
@@ -376,34 +368,27 @@ module.exports = function (map) {
   });
 
   map.addListener('zoom_changed', function () {
-    var z, k, m, mloc;
+    var z = map.getZoom();
 
-    z = map.getZoom();
+    Object.keys(_markers).forEach(function (k) {
+      var m = _markers[k];
+      var mloc = m.get('location');
 
-    // Listen zoom level change to only show labels of locations
-    // with higher level than current zoom level.
-    for (k in _markers) {
-      if (_markers.hasOwnProperty(k)) {
-        m = _markers[k];
-        mloc = m.get('location');
-        if (mloc.layer < z - 1) {
-          // Ensure that label is visible.
-          labels.ensureLabel(m, map.getMapTypeId());
-        } else {
-          labels.hideLabel(m);
-        }
+      // Listen zoom level change to only show labels of locations
+      // with higher level than current zoom level.
+      if (mloc.layer < z - 1) {
+        // Ensure that label is visible.
+        labels.ensureLabel(m, map.getMapTypeId());
+      } else {
+        labels.hideLabel(m);
       }
-    }
 
-    // Listen zoom level change to update symbols of locations
-    // when all their children become visible or hidden.
-    // Ensure that the correct marker icon is used.
-    // They are zoom-sensitive.
-    for (k in _markers) {
-      if (_markers.hasOwnProperty(k)) {
-        _updateIcon(k);
-      }
-    }
+      // Listen zoom level change to update symbols of locations
+      // when all their children become visible or hidden.
+      // Ensure that the correct marker icon is used.
+      // They are zoom-sensitive.
+      _updateIcon(k);
+    });
   });
 
   // Track when map becomes usable.
@@ -455,11 +440,9 @@ module.exports = function (map) {
 
   self.removeAll = function () {
     // Clear the map.
-    for (var i in _markers) {
-      if (_markers.hasOwnProperty(i)) {
-        _removeMarker(_markers[i]);
-      }
-    }
+    Object.keys(_markers).forEach(function (k) {
+      _removeMarker(_markers[k]);
+    });
   };
 
 };

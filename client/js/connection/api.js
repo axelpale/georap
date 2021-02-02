@@ -21,11 +21,11 @@ exports.requestRaw = function (route, payload, callback) {
   socket.emit(route, payload, function (response) {
     var err;
 
-    if (response.hasOwnProperty('success')) {
+    if (response.success) {
       return callback(null, response.success);
     }
 
-    if (response.hasOwnProperty('error')) {
+    if (response.error) {
       err = new Error(response.error);
       err.name = response.error;  // Name prop is for machine readable.
       return callback(err);
