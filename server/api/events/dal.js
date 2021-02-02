@@ -14,7 +14,7 @@ var timestamp = function () {
 };
 
 var emitOne = function (ev) {
-  if (!ev.hasOwnProperty('_id')) {
+  if (!('_id' in ev)) {
     throw new Error('Event must have a _id before emitting');
   }
 

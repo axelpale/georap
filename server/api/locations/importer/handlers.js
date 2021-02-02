@@ -56,7 +56,7 @@ exports.import = function (req, res, next) {
     };
     var methodName = null;
 
-    if (ext2methodName.hasOwnProperty(ext)) {
+    if (ext2methodName[ext]) {
       methodName = ext2methodName[ext];
       return dal[methodName](req.file.path, function (errr, result) {
         if (errr) {

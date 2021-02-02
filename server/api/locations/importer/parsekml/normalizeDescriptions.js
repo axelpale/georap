@@ -9,10 +9,10 @@ module.exports = function (loc, avgLonLat) {
   var combined = [];
 
   // Combine descriptions
-  if (loc.hasOwnProperty('descriptions')) {
+  if ('descriptions' in loc) {
     combined = loc.descriptions;
   }
-  if (loc.hasOwnProperty('description')) {
+  if ('description' in loc) {
     combined.push(loc.description);
   }
 

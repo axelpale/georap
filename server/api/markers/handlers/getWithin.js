@@ -36,10 +36,10 @@ module.exports = function (req, res, next) {
   var lat, lng, radius, layer;
 
   // Validate the request to prevent injection
-  var validRequest = (req.query.hasOwnProperty('lat') &&
-                      req.query.hasOwnProperty('lng') &&
-                      req.query.hasOwnProperty('radius') &&
-                      req.query.hasOwnProperty('layer'));
+  var validRequest = ('lat' in req.query &&
+                      'lng' in req.query &&
+                      'radius' in req.query &&
+                      'layer' in req.query);
 
   if (validRequest) {
     try {

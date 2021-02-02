@@ -3,7 +3,7 @@
 var sanitizeDescription = require('./sanitizeDescription');
 
 module.exports = function (loc) {
-  if (!loc.hasOwnProperty('overlays')) {
+  if (!('overlays' in loc)) {
     return [];
   }
 

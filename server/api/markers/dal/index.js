@@ -120,7 +120,7 @@ exports.getFiltered = function (params, callback) {
     if (params.order === 'rel') {
       // We cannot order by relevance score if text search is not used.
       // We assume the most recent to be the most relevant.
-      if (q.hasOwnProperty('$text')) {
+      if ('$text' in q) {
         // Sort by score. Same options need to appear in projection.
         // See https://docs.mongodb.com/manual/reference/operator/
         //     projection/meta/#proj._S_meta
@@ -138,7 +138,7 @@ exports.getFiltered = function (params, callback) {
     } else if (params.order === 'oldest') {
       sortOpts._id = 1;
     }
-  } else if (q.hasOwnProperty('$text')) {
+  } else if ('$text' in q) {
     // Sort by score. Same options need to appear in projection.
     // See https://docs.mongodb.com/manual/reference/operator/
     //     projection/meta/#proj._S_meta

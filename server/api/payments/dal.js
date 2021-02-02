@@ -38,8 +38,7 @@ exports.createPayment = function (params, callback) {
   }
 
   if (p.type === 'correction') {
-    if (!p.data.hasOwnProperty('paymentId') ||
-        !p.data.hasOwnProperty('description')) {
+    if (!p.data.paymentId || !p.data.description) {
       throw new Error('invalid correction data');
     }
   }
