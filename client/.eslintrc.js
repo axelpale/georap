@@ -1,20 +1,20 @@
 
 module.exports = {
-  'env': {
+  env: {
     // Browser global variables
-    'browser': true,
+    browser: true,
 
     // jQuery global variables
-    'jquery': true,
+    jquery: true,
 
     // CommonJS global variables and CommonJS scoping.
-    'commonjs': true,
+    commonjs: true,
 
     // Disable node environment
-    'node': false,
+    node: false,
   },
 
-  'globals': {
-    'tresdb': true,
+  globals: {
+    tresdb: true,
   },
 };
