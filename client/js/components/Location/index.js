@@ -18,10 +18,12 @@ var EventsView = require('./Events');
 var locationTemplate = require('./template.ejs');
 var locations = tresdb.stores.locations;
 
-module.exports = function (id) {
+module.exports = function (id, query) {
   // Parameters
   //   id
   //     location id
+  //   query
+  //     url query parameters from router
   //
   // Emits
   //   idle
@@ -45,7 +47,10 @@ module.exports = function (id) {
   self.bind = function ($mount) {
 
     // Loading
-    $mount.html(locationTemplate());
+    $mount.html(locationTemplate({
+      // ref: Where the location was referred
+      ref: query.ref === 'latest' ? 'latest' : 'map',
+    }));
 
     var $loading = $('#tresdb-location-loading');
 

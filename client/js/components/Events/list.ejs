@@ -4,7 +4,7 @@
     <% ev = events[i]; %>
     <% t = ev.type; %>
     <% name = ev.locationName; %>
-    <% locUrl = '/locations/' + ev.locationId + '?zoom=11' %>
+    <% locUrl = '/locations/' + ev.locationId + '?zoom=11&ref=latest' %>
     <% name = (name === '' ? 'Untitled' : name) %>
     <li class="list-group-item">
       <% if (typeof pointstamp !== 'undefined') { %>
@@ -15,7 +15,7 @@
         created <a href="<%= locUrl %>"><%= name %></a> <%= timestamp(ev.time) %>
 
       <% } else if (t === 'location_removed') { %>
-        deleted <a href="/locations/<%= ev.locationId %>"><%= name %></a> <%= timestamp(ev.time) %>
+        deleted <span title="/locations/<%= ev.locationId %>"><%= name %></span> <%= timestamp(ev.time) %>
 
       <% } else if (t === 'location_geom_changed') { %>
         edited coords of <a href="<%= locUrl %>"><%= name %></a> <%= timestamp(ev.time) %>

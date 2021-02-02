@@ -207,7 +207,7 @@ exports.route = function () {
   });
 
   page('/locations/:id', function (ctx) {
-    var view = new LocationView(ctx.params.id);
+    var view = new LocationView(ctx.params.id, ctx.query);
     card.open(view);
 
     // Inform that location page has loaded. Map will pan so that
