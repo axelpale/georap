@@ -5,6 +5,7 @@ var emitter = require('component-emitter');
 var ui = require('tresdb-ui');
 var LocationModel = require('./Model');
 var NameView = require('./Name');
+var ThumbnailsView = require('./Thumbnails');
 var PlacesView = require('./Places');
 var GeomView = require('./Geom');
 var StatusTypeView = require('./StatusType');
@@ -36,7 +37,7 @@ module.exports = function (id) {
   // State
   var _location;
   var nameView, placesView, geomView, statusTypeView, formsView;
-  var entriesView, eventsView, removeView;
+  var thumbnailsView, entriesView, eventsView, removeView;
 
 
   // Public methods
@@ -65,11 +66,16 @@ module.exports = function (id) {
       geomView = new GeomView(_location);
       statusTypeView = new StatusTypeView(_location);
       formsView = new FormsView(_location);
-      entriesView = new EntriesView(_location.getEntries());
+
+      var entries = _location.getEntries();
+      thumbnailsView = new ThumbnailsView(entries);
+      entriesView = new EntriesView(entries);
+
       eventsView = new EventsView(_location.getEvents());
       removeView = new RemoveView(_location);
 
       nameView.bind($('#tresdb-location-name'));
+      thumbnailsView.bind($('#tresdb-location-thumbnails'));
       placesView.bind($('#tresdb-location-places'));
       geomView.bind($('#tresdb-location-geom'));
       statusTypeView.bind($('#tresdb-location-statustype-container'));
@@ -127,6 +133,7 @@ module.exports = function (id) {
       geomView.unbind();
       statusTypeView.unbind();
       formsView.unbind();
+      thumbnailsView.unbind();
       entriesView.unbind();
       eventsView.unbind();
       removeView.unbind();
