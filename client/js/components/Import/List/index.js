@@ -3,7 +3,7 @@ var template = require('./template.ejs');
 var detailsTemplate = require('./details.ejs');
 var emitter = require('component-emitter');
 
-module.exports = function () {
+var ImportList = function () {
   // Parameters
   //
 
@@ -42,7 +42,7 @@ module.exports = function () {
 
     $checkAllBox.change(function () {
       var $rows = $('#tresdb-import-list .tresdb-import-row-check');
-      $rows.prop('checked', this.checked);
+      $rows.prop('checked', $checkAllBox.prop('checked'));
     });
 
     $list.on('click', '.tresdb-import-view-details', function (ev) {
@@ -69,3 +69,5 @@ module.exports = function () {
   };
 
 };
+
+module.exports = ImportList;

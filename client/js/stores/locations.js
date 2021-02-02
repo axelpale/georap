@@ -182,7 +182,7 @@ exports.importBatch = function (data, callback) {
   }, callback);
 };
 
-this.setGeom = function (id, lng, lat, callback) {
+exports.setGeom = function (id, lng, lat, callback) {
   // Parameters:
   //   id
   //     location id
@@ -224,7 +224,7 @@ exports.setName = function (id, newName, callback) {
   }, callback);
 };
 
-this.setStatus = function (id, newStatus, callback) {
+exports.setStatus = function (id, newStatus, callback) {
   // Replaces the current status and saves to server.
   //
   // Parameters
@@ -246,7 +246,7 @@ this.setStatus = function (id, newStatus, callback) {
   }, callback);
 };
 
-this.setType = function (id, newType, callback) {
+exports.setType = function (id, newType, callback) {
   // Replaces the current type and saves to server.
   //
   // Parameters

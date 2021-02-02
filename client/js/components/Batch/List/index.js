@@ -4,7 +4,7 @@ var detailsTemplate = require('./details.ejs');
 var emitter = require('component-emitter');
 var markdownToHtml = require('tresdb-ui').markdownToHtml;
 
-module.exports = function () {
+var BatchList = function () {
   // Parameters
   //
 
@@ -21,8 +21,8 @@ module.exports = function () {
 
   this.getSelectedIndices = function () {
     var $boxes = $('#tresdb-batch-table tbody input[name="row-check"]:checked');
-    var $vals = $boxes.map(function () {
-      return parseInt(this.value, 10);
+    var $vals = $boxes.map(function (i, elem) {
+      return parseInt(elem.value, 10);
     });
     return $vals.toArray();
   };
@@ -62,7 +62,8 @@ module.exports = function () {
 
     $checkAllBox.change(function () {
       var $rows = $('#tresdb-batch-table .tresdb-batch-row-check');
-      $rows.prop('checked', this.checked);
+      var checked = $checkAllBox.prop('checked');
+      $rows.prop('checked', checked);
     });
 
     $list.on('click', '.tresdb-batch-view-details', function (ev) {
@@ -101,3 +102,5 @@ module.exports = function () {
   };
 
 };
+
+module.exports = BatchList;

@@ -18,7 +18,7 @@ var EventsView = require('./Events');
 var locationTemplate = require('./template.ejs');
 var locations = tresdb.stores.locations;
 
-module.exports = function (id, query) {
+var LocationView = function (id, query) {
   // Parameters
   //   id
   //     location id
@@ -119,8 +119,8 @@ module.exports = function (id, query) {
 
       // Command all external links in entries to open a new tab.
       // See http://stackoverflow.com/a/4425214/638546
-      $('#tresdb-location-entries a').filter(function () {
-        return this.hostname !== window.location.hostname;
+      $('#tresdb-location-entries a').filter(function (i, elem) {
+        return elem.hostname !== window.location.hostname;
       }).attr('target', '_blank');
 
       // Inform the view for the location is ready.
@@ -149,3 +149,5 @@ module.exports = function (id, query) {
   };
 
 };
+
+module.exports = LocationView;
