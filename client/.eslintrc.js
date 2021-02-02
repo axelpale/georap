@@ -14,6 +14,11 @@ module.exports = {
     node: false,
   },
 
+  parser: 'babel-eslint',
+  parserOptions: {
+    sourceType: 'module',
+  },
+
   globals: {
     tresdb: true,
   },
