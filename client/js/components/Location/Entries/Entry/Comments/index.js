@@ -238,5 +238,7 @@ module.exports = function (entry) {
     $els = [];
 
     entry.off('location_entry_comment_created');
+    entry.off('location_entry_comment_changed');
+    entry.off('location_entry_comment_removed');
   };
 };
