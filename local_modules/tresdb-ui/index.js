@@ -1,6 +1,6 @@
 var marked = require('marked');
-var dompurify = require('dompurify');
 
+// Setup
 marked.setOptions({ breaks: true });
 
 exports.isHidden = function ($el) {
@@ -39,10 +39,8 @@ exports.flash = function ($el, color) {
   window.setTimeout(function () {
     $el.css('transition', 'unset');
   }, (DURATION + DELAY) * SECOND);
-}
+};
 
 exports.markdownToHtml = function (markdown) {
-  // Convert (possibly dirty) markdown to safe HTML.
-  var dangerousHTML = marked(markdown);
-  return dompurify.sanitize(dangerousHTML);
-}
+  return marked(markdown);
+};
