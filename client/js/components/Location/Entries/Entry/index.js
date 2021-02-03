@@ -17,6 +17,7 @@ module.exports = function (entry) {
   var id = entry.getId();
 
   var _commentsView;
+  var _entryChangedHandler = null;
 
   // Public methods
 
@@ -135,18 +136,18 @@ module.exports = function (entry) {
       ui.toggleHidden($syntax);
     });
 
-    entry.on('location_entry_changed', function () {
+    _entryChangedHandler = function () {
       // Rebind
       self.unbind();
       self.bind($mount);
-    });
+    };
+    entry.on('location_entry_changed', _entryChangedHandler);
 
     _commentsView = new CommentsView(entry);
     _commentsView.bind($mount.find('.entry-comments-container'));
   };
 
   this.unbind = function () {
-
     $('#' + id + '-edit').off();
     $('#' + id + '-save').off();
     $('#' + id + '-cancel').off();
@@ -154,7 +155,7 @@ module.exports = function (entry) {
     $('#' + id + '-delete').off();
     $('#' + id + '-file-input').off();
     $('#' + id + '-syntax-show').off();
-    entry.off();
+    entry.off('location_entry_changed', _entryChangedHandler);
     _commentsView.unbind();
   };
 
