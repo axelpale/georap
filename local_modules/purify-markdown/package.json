@@ -1,0 +1,28 @@
+{
+  "name": "purify-markdown",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Sanitize dirty markdown",
+  "keywords": [],
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/axelpale/tresdb.git"
+  },
+  "scripts": {
+    "lint": "standard",
+    "test": "tape test.js"
+  },
+  "author": "Akseli Palén <akseli.palen@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "dompurify": "^2.2.6",
+    "jsdom": "^16.4.0",
+    "marked": "^1.2.8",
+    "turndown": "7.0.0"
+  },
+  "devDependencies": {
+    "standard": "^16.0.3",
+    "tape": "^5.1.1"
+  }
+}
