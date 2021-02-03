@@ -95,7 +95,7 @@
     "tresdb-points": "file:local_modules/tresdb-points",
     "tresdb-ui": "file:local_modules/tresdb-ui",
     "tresdb-urls": "file:local_modules/tresdb-urls",
-    "turndown": "^5.0.3",
+    "turndown": "^7.0.0",
     "url-join": "^4.0.1",
     "zpad": "^0.5.0"
   },
