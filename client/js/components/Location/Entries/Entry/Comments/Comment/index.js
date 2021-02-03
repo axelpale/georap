@@ -2,7 +2,6 @@
 require('./style.css');
 var timestamp = require('timestamp');
 var template = require('./template.ejs');
-var preprocessMessage = require('./preprocessMessage');
 var ui = require('tresdb-ui');
 var account = tresdb.stores.account;
 var locations = tresdb.stores.locations;
@@ -28,12 +27,12 @@ module.exports = function (entry, comment) {
     var maxAgeMs = 3600000;
     var isFresh = ageMs < maxAgeMs;
 
-    var safeHtmlMessage = preprocessMessage(comment.message);
+    var htmlMessage = ui.markdownToHtml(comment.message);
 
     $mount.html(template({
       id: id,
       comment: comment,
-      safeHtmlMessage: safeHtmlMessage,
+      htmlMessage: htmlMessage,
       timestamp: timestamp,
       isOwner: isMe,
       isFresh: isFresh,

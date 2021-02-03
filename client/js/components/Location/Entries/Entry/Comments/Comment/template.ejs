@@ -6,7 +6,7 @@
   <% } %>
 
   <%= comment.user %> <%= timestamp(comment.time) %>:
-  <span class="comment-message"><%= safeHtmlMessage %></span>
+  <span class="comment-message"><%= htmlMessage %></span>
 </li>
 <li class="list-group-item hidden comment-edit-form-container">
   <form id="comment-<%= id %>-edit-form" style="margin-bottom: 0.5em">
