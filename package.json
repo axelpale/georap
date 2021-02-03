@@ -75,6 +75,7 @@
     "page": "^1.7.1",
     "pretty-events": "file:local_modules/pretty-events",
     "proj4": "^2.4.3",
+    "purify-markdown": "file:local_modules/purify-markdown",
     "qs": "^6.3.1",
     "query-string": "^5.1.1",
     "request": "^2.88.2",

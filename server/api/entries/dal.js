@@ -4,6 +4,7 @@ var db = require('tresdb-db');
 var eventsDal = require('../events/dal');
 var path = require('path');
 var _ = require('lodash');
+var purifyMarkdown = require('purify-markdown');
 
 // Private methods
 
@@ -71,6 +72,9 @@ exports.changeLocationEntry = function (params, callback) {
   var oldComments = params.oldEntry.comments;
   var nextComments = oldComments ? oldComments : [];
 
+  // Sanitize
+  var sanitizedMarkdown = purifyMarkdown(params.markdown).trim();
+
   var changedEntry = {
     type: 'location_entry',
     user: params.oldEntry.user,
@@ -78,7 +82,7 @@ exports.changeLocationEntry = function (params, callback) {
     locationId: params.oldEntry.locationId,
     deleted: params.oldEntry.deleted,
     data: {
-      markdown: params.markdown,
+      markdown: sanitizedMarkdown,
       isVisit: params.isVisit,
       filepath: params.filepath,
       mimetype: params.mimetype,
@@ -93,7 +97,11 @@ exports.changeLocationEntry = function (params, callback) {
       return callback(err);
     }
 
-    eventsDal.createLocationEntryChanged(params, callback);
+    var eventParams = Object.assign({}, params, {
+      markdown: sanitizedMarkdown,
+    });
+
+    eventsDal.createLocationEntryChanged(eventParams, callback);
   });
 };
 
@@ -125,6 +133,8 @@ exports.createLocationEntry = function (params, callback) {
   //   callback
   //     function (err, insertedId)
 
+  var sanitizedMarkdown = purifyMarkdown(params.markdown).trim();
+
   var newEntry = {
     type: 'location_entry',
     user: params.username,
@@ -132,7 +142,7 @@ exports.createLocationEntry = function (params, callback) {
     locationId: params.locationId,
     deleted: false,
     data: {
-      markdown: params.markdown,
+      markdown: sanitizedMarkdown,
       isVisit: params.isVisit,
       filepath: params.filepath,
       mimetype: params.mimetype,
@@ -143,13 +153,17 @@ exports.createLocationEntry = function (params, callback) {
     comments: [],
   };
 
-  insertOne(newEntry, function (err, entryId) {
+  insertOne(newEntry, function (err, newEntryId) {
     if (err) {
       return callback(err);
     }
 
-    params.entryId = entryId;
-    eventsDal.createLocationEntryCreated(params, callback);
+    var eventParams = Object.assign({}, params, {
+      entryId: newEntryId,
+      markdown: sanitizedMarkdown,
+    });
+
+    eventsDal.createLocationEntryCreated(eventParams, callback);
   });
 };
 
@@ -236,6 +250,8 @@ exports.getOneRaw = function (entryId, callback) {
 
 
 exports.getAllOfLocation = function (locationId, callback) {
+  // Get all non-deleted entries of a location, most recent first.
+  //
   // Parameters
   //   locationId
   //     object id
@@ -254,7 +270,8 @@ exports.getAllOfLocation = function (locationId, callback) {
 
 
 exports.getAllOfUser = function (username, callback) {
-  // Return all entries created by user, ordered from oldest to newest.
+  // Return all non-deleted entries created by user,
+  // ordered from oldest to newest.
   //
   // Parameters
   //   username
@@ -281,11 +298,11 @@ exports.removeLocationEntry = function (params, callback) {
   //     username
   //   callback
   //     function (err)
+  //
   removeOne(params.entryId, function (err) {
     if (err) {
       return callback(err);
     }
-
     eventsDal.createLocationEntryRemoved(params, callback);
   });
 };
@@ -298,17 +315,19 @@ exports.createLocationEntryComment = function (params, callback) {
   //     entryId
   //     locationName
   //     username
-  //     message: UTF8 string TODO prevent script attack
+  //     message: markdown UTF8 string
   //   callback
   //     function (err)
-
-  var coll = db.collection('entries');
-  var filter = { _id: params.entryId };
 
   var time = timestamp();
   var rand1 = Math.random().toString().substr(2, 10);
   var rand2 = Math.random().toString().substr(2, 10);
   var commentId = time.substr(0, 4) + rand1 + rand2; // 24 chars
+
+  var sanitizedMessage = purifyMarkdown(params.message).trim();
+
+  var coll = db.collection('entries');
+  var filter = { _id: params.entryId };
 
   var update = {
     $push: {
@@ -316,7 +335,7 @@ exports.createLocationEntryComment = function (params, callback) {
         id: commentId,
         time: time,
         user: params.username,
-        message: params.message,
+        message: sanitizedMessage,
       },
     },
   };
@@ -329,6 +348,7 @@ exports.createLocationEntryComment = function (params, callback) {
     var eventParams = Object.assign({}, params, {
       commentId: commentId,
       time: time,
+      message: sanitizedMessage,
     });
 
     eventsDal.createLocationEntryCommentCreated(eventParams, callback);
@@ -343,9 +363,12 @@ exports.changeLocationEntryComment = function (params, callback) {
   //     entryId
   //     commentId
   //     username
-  //     newMessage: UTF8 string TODO prevent script attack
+  //     newMessage: markdown UTF8 string
   //   callback
   //     function (err)
+
+  // Sanitize
+  var sanitizedMessage = purifyMarkdown(params.newMessage).trim();
 
   var coll = db.collection('entries');
   var filter = {
@@ -355,7 +378,7 @@ exports.changeLocationEntryComment = function (params, callback) {
 
   var update = {
     $set: {
-      'comments.$.message': params.newMessage,
+      'comments.$.message': sanitizedMessage,
     },
   };
 
@@ -364,7 +387,10 @@ exports.changeLocationEntryComment = function (params, callback) {
       return callback(err);
     }
 
-    var eventParams = params;
+    var eventParams = Object.assign({}, params, {
+      newMessage: sanitizedMessage,
+    });
+
     eventsDal.createLocationEntryCommentChanged(eventParams, callback);
   });
 };
