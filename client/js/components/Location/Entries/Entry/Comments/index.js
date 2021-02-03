@@ -1,7 +1,6 @@
 /* eslint-disable max-statements */
 var template = require('./template.ejs');
 var CommentView = require('./Comment');
-var PendingCommentView = require('./PendingComment');
 var updateHint = require('./updateHint');
 var preprocessMessage = require('./Comment/preprocessMessage');
 var ui = require('tresdb-ui');
@@ -21,7 +20,6 @@ module.exports = function (entry) {
   //     Entry model.
 
   var _commentViewsMap = {};
-  var _pendingCommentViews = {};
   var $els = [];
   var entryId = entry.getId();
   var username = account.getName(); // prevent frequent decoding
@@ -168,74 +166,24 @@ module.exports = function (entry) {
           ui.show($commentForm);
           // Empty the successfully posted message input
           $messageInput.val('');
-          // Generate a pending comment
-          var tempId = Math.random().toString().substr(2);
-          var tempComment = {
-            tempId: tempId,
-            user: username,
-            message: message,
-          };
-          // Check if the comment has been created via events already.
-          // This can happen when server emits the event before response.
-          var foundComment = entry.getComments().find(function (comment) {
-            var sameUser = tempComment.user === comment.user;
-            var sameContent = tempComment.message === comment.message;
-            var commentTime = new Date(comment.time);
-            var ageMs = Date.now() - commentTime.getTime();
-            var minute = 60000;
-            return sameUser && sameContent && ageMs < minute;
-          });
-          // If the comment is not already received, create a pending comment.
-          if (typeof foundComment === 'undefined') {
-            var pcv = new PendingCommentView(entry, tempComment);
-            _pendingCommentViews[tempId] = pcv;
-            var pendingCommentEl = document.createElement('div');
-            pendingCommentEl.id = 'pending-comment-' + tempId;
-            $commentsEl.append(pendingCommentEl);
-            pcv.bind($(pendingCommentEl));
-          }
         }
       });
     });
 
     entry.on('location_entry_comment_created', function (ev) {
       // The server sent a new comment.
-      // Construct comment struct
       var comment = {
         id: ev.data.commentId,
         user: ev.user,
         time: ev.time,
         message: ev.data.message,
       };
-      // Find if there is replaceable comment elements
-      var replaceKey = Object.keys(_pendingCommentViews).find(function (key) {
-        var pcv = _pendingCommentViews[key];
-        var sameUser = pcv.comment.user === comment.user;
-        var sameContent = pcv.comment.message === comment.message;
-        return sameUser && sameContent;
-      });
-      if (replaceKey) {
-        // Replace the pending comment with the real thing.
-        var replaceable = _pendingCommentViews[replaceKey];
-        var tempId = replaceable.comment.tempId;
-        var $tempEl = $commentsEl.find('#pending-comment-' + tempId);
-        // Create the real thing.
-        var $newCommentEl = generateComment(comment);
-        $tempEl.replaceWith($newCommentEl);
-        // Clean up
-        _pendingCommentViews[tempId].unbind();
-        delete _pendingCommentViews[tempId];
-      } else {
-        // There is no replaceable element.
-        // Either the comment is made by another user or
-        // from another client or the pending comment has not yet been created.
-        // Append to the list of comments.
-        var $commentEl = generateComment(comment);
-        $commentsEl.append($commentEl);
-        // Flash in green; Override list item styles.
-        var $listItem = $commentEl.find('.list-group-item');
-        ui.flash($listItem, '#dff0d8');
-      }
+      // Append to the list of comments.
+      var $commentEl = generateComment(comment);
+      $commentsEl.append($commentEl);
+      // Flash in green; Override list item styles.
+      var $listItem = $commentEl.find('.list-group-item');
+      ui.flash($listItem, '#dff0d8');
     });
 
     entry.on('location_entry_comment_changed', function (ev) {
@@ -283,9 +231,6 @@ module.exports = function (entry) {
     // Unbind each child
     Object.keys(_commentViewsMap).forEach(function (k) {
       _commentViewsMap[k].unbind();
-    });
-    Object.keys(_pendingCommentViews).forEach(function (k) {
-      _pendingCommentViews[k].unbind();
     });
 
     $els.forEach(function ($el) {
