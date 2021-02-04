@@ -12,28 +12,28 @@
         </li>
         <li role="separator" class="divider"></li>
         <li>
-          <a id="tresdb-mainmenu-events" href="#"><%= glyphicon({ name: 'bell' }) %> Latest</a>
+          <a href="/latest"><%= glyphicon({ name: 'bell' }) %> Latest</a>
         </li>
         <li>
-          <a id="tresdb-mainmenu-users" href="#"><%= glyphicon({ name: 'user' }) %> Explorers</a>
+          <a href="/users"><%= glyphicon({ name: 'user' }) %> Explorers</a>
         </li>
         <li>
-          <a id="tresdb-mainmenu-locations" href="/search"><%= glyphicon({ name: 'th-list' }) %> Locations</a>
+          <a href="/search"><%= glyphicon({ name: 'th-list' }) %> Locations</a>
         </li>
         <li role="separator" class="divider"></li>
         <li>
-          <a id="tresdb-mainmenu-import" href="/import"><%= glyphicon({ name: 'import' }) %> Import...</a>
+          <a href="/import"><%= glyphicon({ name: 'import' }) %> Import...</a>
         </li>
         <li>
-          <a id="tresdb-mainmenu-export" href="/export"><%= glyphicon({ name: 'export' }) %> Export...</a>
+          <a href="/export"><%= glyphicon({ name: 'export' }) %> Export...</a>
         </li>
         <li role="separator" class="divider"></li>
         <li class="dropdown-header">Account</li>
         <li>
-          <a id="tresdb-mainmenu-user" href="#"><%= glyphicon({ name: 'user' }) %> <%= user.name %></a>
+          <a href="/users/<%= user.name %>"><%= glyphicon({ name: 'user' }) %> <%= user.name %></a>
         </li>
         <li>
-          <a id="tresdb-mainmenu-change-password" href="#"><%= glyphicon({ name: 'asterisk' }) %> Change Password...</a>
+          <a href="/password"><%= glyphicon({ name: 'asterisk' }) %> Change Password...</a>
         </li>
 
         <li role="separator" class="divider"></li>
@@ -41,20 +41,23 @@
         <% if (user.admin) { %>
           <li class="dropdown-header">Admin Only</li>
           <li>
-            <a id="tresdb-mainmenu-invite" href="#"><%= glyphicon({ name: 'envelope' }) %> Invite...</a>
+            <a href="/invite"><%= glyphicon({ name: 'envelope' }) %> Invite...</a>
           </li>
           <li>
-            <a id="tresdb-mainmenu-users-admin" href="#"><%= glyphicon({ name: 'user' }) %> Manage Users...</a>
+            <a href="/admin/users"><%= glyphicon({ name: 'user' }) %> Manage Users...</a>
           </li>
           <li>
-            <a id="tresdb-mainmenu-statistics" href="#"><%= glyphicon({ name: 'signal' }) %> Statistics</a>
+            <a href="/statistics"><%= glyphicon({ name: 'signal' }) %> Statistics</a>
           </li>
           <li role="separator" class="divider"></li>
         <% } %>
 
         <li>
-          <a id="tresdb-mainmenu-support" href="#"><%= glyphicon({ name: 'star' }) %> <%= supportButtonTitle %></a>
-          <a id="tresdb-mainmenu-logout" href="#"><%= glyphicon({ name: 'off' }) %> Log out</a>
+          <a href="/fund"><%= glyphicon({ name: 'star' }) %> <%= supportButtonTitle %></a>
+        </li>
+
+        <li>
+          <a href="/login"><%= glyphicon({ name: 'off' }) %> Log out</a>
         </li>
       </ul>
     </div><!-- .dropdown -->
