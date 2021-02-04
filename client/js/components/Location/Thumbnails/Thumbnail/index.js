@@ -6,8 +6,6 @@ module.exports = function (entry) {
   //   entry
   //     Entry model.
 
-  var self = this;
-
   var _changeHandler = null;
 
   // Public methods
@@ -17,7 +15,7 @@ module.exports = function (entry) {
       entry: entry,
     }));
 
-    _changeHandler = function (ev) {
+    _changeHandler = function () {
       // If entry still has an image, replace the image.
       if (entry.hasImage()) {
         var $img = $mount.find('img');
