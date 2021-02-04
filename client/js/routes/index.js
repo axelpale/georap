@@ -59,6 +59,11 @@ exports.route = function () {
   // Handle paths where to redirect after login.
   var afterLogin = new AfterLogin();
 
+  // Dynamic imports might fail
+  var importErrorHandler = function (err) {
+    console.error(err);
+  };
+
   // Middleware
   var adminOnly = function (context, next) {
     if (account.isAdmin()) {
@@ -193,9 +198,7 @@ exports.route = function () {
         var ImportView = moduleWrap.default;
         card.open(new ImportView());
       })
-      .catch(function (err) {
-        console.error(err);
-      });
+      .catch(importErrorHandler);
   });
 
   page('/import/:batchId/outcome', function (ctx) {
@@ -207,9 +210,7 @@ exports.route = function () {
         var BatchOutcomeView = moduleWrap.default;
         card.open(new BatchOutcomeView(ctx.params.batchId));
       })
-      .catch(function (err) {
-        console.error(err);
-      });
+      .catch(importErrorHandler);
   });
 
   page('/import/:batchId', function (ctx) {
@@ -221,9 +222,7 @@ exports.route = function () {
         var BatchView = moduleWrap.default;
         card.open(new BatchView(ctx.params.batchId));
       })
-      .catch(function (err) {
-        console.error(err);
-      });
+      .catch(importErrorHandler);
   });
 
   page('/latest', function () {
@@ -250,9 +249,7 @@ exports.route = function () {
         var ChangePasswordView = moduleWrap.default;
         card.open(new ChangePasswordView());
       })
-      .catch(function (err) {
-        console.error(err);
-      });
+      .catch(importErrorHandler);
   });
 
   page('/search', function (ctx) {
@@ -290,9 +287,7 @@ exports.route = function () {
         var view = new AdminUsersView();
         card.open(view);
       })
-      .catch(function (err) {
-        console.error(err);
-      });
+      .catch(importErrorHandler);
   });
 
   page('/admin/users/:username', adminOnly, function (ctx) {
@@ -305,9 +300,7 @@ exports.route = function () {
         var view = new AdminUserView(ctx.params.username);
         card.open(view);
       })
-      .catch(function (err) {
-        console.error(err);
-      });
+      .catch(importErrorHandler);
   });
 
   page('/invite', adminOnly, function () {
