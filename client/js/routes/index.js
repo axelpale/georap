@@ -10,9 +10,7 @@ var ExportView = require('../components/Export');
 var FilterView = require('../components/Filter');
 var LocationView = require('../components/Location');
 var LoginView = require('../components/Login');
-var ResetPasswordView = require('../components/ResetPassword');
 var SearchView = require('../components/Search');
-var SignupView = require('../components/Signup');
 var StatisticsView = require('../components/Statistics');
 var SupportFundView = require('../components/SupportFund');
 var UsersView = require('../components/Users');
@@ -101,36 +99,36 @@ exports.route = function () {
   });
 
   page('/reset/:token', function (context) {
-    var token = context.params.token;
-    var view = new ResetPasswordView(token, function success() {
-      page.show('/login');
-    });
-    card.open(view, 'full');
+    import(
+      /* webpackChunkName: "reset-password-view" */
+      '../components/ResetPassword'
+    )
+      .then(function (moduleWrap) {
+        var token = context.params.token;
+        var ResetPasswordView = moduleWrap.default;
+        var view = new ResetPasswordView(token, function success() {
+          page.show('/login');
+        });
+        card.open(view, 'full');
+      })
+      .catch(importErrorHandler);
   });
 
   page('/signup/:token', function (context) {
-    var token = context.params.token;
-    var view = new SignupView(token, function success() {
-      page.show('/login');
-    });
-    card.open(view, 'full');
+    import(
+      /* webpackChunkName: "signup-view" */
+      '../components/Signup'
+    )
+      .then(function (moduleWrap) {
+        var token = context.params.token;
+        var SignupView = moduleWrap.default;
+        var view = new SignupView(token, function success() {
+          page.show('/login');
+        });
+        card.open(view, 'full');
+      })
+      .catch(importErrorHandler);
   });
-
-  // Backwards compatiblity with v1 invite URLs
-  page('*', function (context, next) {
-    var q = context.query;
-
-    if ('invite' in q) {
-      return page.show('/signup/' + q.invite);
-    }  // else
-
-    if ('reset' in q) {
-      return page.show('/reset/' + q.reset);
-    }  // else
-
-    return next();
-  });
-
 
   /////////////////////////////
   // Private routes i.e. routes that require login
