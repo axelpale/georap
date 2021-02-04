@@ -178,6 +178,18 @@ exports.route = function () {
     exports.emit('map_routed');
   });
 
+  page('/account', function () {
+    import(
+      /* webpackChunkName: "account-view" */
+      '../components/Account'
+    )
+      .then(function (moduleWrap) {
+        var AccountView = moduleWrap.default;
+        card.open(new AccountView());
+      })
+      .catch(importErrorHandler);
+  });
+
   page('/filter', function () {
     card.open(new FilterView());
   });
