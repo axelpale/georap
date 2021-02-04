@@ -3,7 +3,6 @@
 // Client-side routing
 
 var CardView = require('../components/Card');
-var ChangePasswordView = require('../components/ChangePassword');
 var Error401View = require('../components/Error401');
 var Error404View = require('../components/Error404');
 var EventsView = require('../components/Events');
@@ -243,8 +242,17 @@ exports.route = function () {
   });
 
   page('/password', function () {
-    var view = new ChangePasswordView();
-    card.open(view, 'page');
+    import(
+      /* webpackChunkName: "change-password-view" */
+      '../components/ChangePassword'
+    )
+      .then(function (moduleWrap) {
+        var ChangePasswordView = moduleWrap.default;
+        card.open(new ChangePasswordView());
+      })
+      .catch(function (err) {
+        console.error(err);
+      });
   });
 
   page('/search', function (ctx) {
