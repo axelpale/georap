@@ -8,7 +8,6 @@ var Error404View = require('../components/Error404');
 var EventsView = require('../components/Events');
 var ExportView = require('../components/Export');
 var FilterView = require('../components/Filter');
-var InviteView = require('../components/Invite');
 var LocationView = require('../components/Location');
 var LoginView = require('../components/Login');
 var ResetPasswordView = require('../components/ResetPassword');
@@ -304,8 +303,15 @@ exports.route = function () {
   });
 
   page('/invite', adminOnly, function () {
-    var view = new InviteView();
-    card.open(view);
+    import(
+      /* webpackChunkName: "invite-view" */
+      '../components/Invite'
+    )
+      .then(function (moduleWrap) {
+        var InviteView = moduleWrap.default;
+        card.open(new InviteView());
+      })
+      .catch(importErrorHandler);
   });
 
   page('/statistics', adminOnly, function () {
