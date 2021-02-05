@@ -53,7 +53,7 @@ module.exports = function (storage, storageKey, defaultState) {
     // Store the string
     storage.setItem(storageKey, s);
 
-    if (!opts || opts.silent !== false) {
+    if (!opts || opts.silent !== true) {
       self.emit('updated', _state);
     }
   };
