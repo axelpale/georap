@@ -15,8 +15,8 @@ module.exports = function (storage, storageKey, defaultState) {
   // Return
   //   a new store object
   //
-  var self = {};
-  emitter(self);
+  var store = {};
+  emitter(store);
 
   var _state;
 
@@ -27,7 +27,7 @@ module.exports = function (storage, storageKey, defaultState) {
     _state = defaultState;
   }
 
-  self.update = function (newState, opts) {
+  store.update = function (newState, opts) {
     // Parameters:
     //   newState
     //     object with optional keys:
@@ -54,23 +54,23 @@ module.exports = function (storage, storageKey, defaultState) {
     storage.setItem(storageKey, s);
 
     if (!opts || opts.silent !== true) {
-      self.emit('updated', _state);
+      store.emit('updated', _state);
     }
   };
 
-  self.reset = function () {
+  store.reset = function () {
     // Reset to default state
-    self.update(defaultState);
+    store.update(defaultState);
   };
 
-  self.isDefault = function () {
+  store.isDefault = function () {
     // Check if store is in default state
     return Object.keys(defaultState).every(function (k) {
       return _state[k] === defaultState[k];
     });
   };
 
-  self.isEmpty = function () {
+  store.isEmpty = function () {
     // Return
     //   false if there is a stored state, true otherwise.
     if (storage.getItem(storageKey)) {
@@ -79,7 +79,7 @@ module.exports = function (storage, storageKey, defaultState) {
     return true;
   };
 
-  self.get = function () {
+  store.get = function () {
     // Get the stored state
     // If there is no state stored, returns the default state.
     //
@@ -96,5 +96,5 @@ module.exports = function (storage, storageKey, defaultState) {
     return defaultState;
   };
 
-  return self;
+  return store;
 };

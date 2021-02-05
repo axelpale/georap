@@ -197,7 +197,12 @@ module.exports = function (map) {
     var bounds = map.getBounds();
     var zoom = map.getZoom();
 
-    if (!filterStore.isDefault()) {
+    if (filterStore.isDefault()) {
+      // No filtration
+      var center = map.getCenter();
+      var radius = Math.ceil(getBoundsDiagonal(bounds) / 2);
+      markerStore.getWithin(center, radius, zoom, _loadMarkersThen);
+    } else {
       // Query filtered set of locations.
       var filterState = filterStore.get();
       var boundsLiteral = bounds.toJSON();
@@ -212,11 +217,6 @@ module.exports = function (map) {
         layer: zoom,
         groupRadius: groupRadius,
       }, _loadMarkersThen);
-    } else {
-      // No filtration
-      var center = map.getCenter();
-      var radius = Math.ceil(getBoundsDiagonal(bounds) / 2);
-      markerStore.getWithin(center, radius, zoom, _loadMarkersThen);
     }
   };
 
