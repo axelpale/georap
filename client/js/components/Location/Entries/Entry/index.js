@@ -1,5 +1,4 @@
 /* eslint-disable max-statements */
-require('./style.css');
 var timestamp = require('../../../lib/timestamp');
 var markdownSyntax = require('../../lib/markdownSyntax.ejs');
 var template = require('./template.ejs');
