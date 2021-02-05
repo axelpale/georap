@@ -9,6 +9,10 @@ body {
 .dropdown-menu > li > a {
   color: #fff;
 }
+.dropdown-menu .divider {
+  background-color: #222;
+}
+
 .btn-default {
   color: #fff;
   background-color: #333;
