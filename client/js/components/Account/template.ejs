@@ -1,16 +1,24 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col-md-12">
-
       <h1><span class="glyphicon glyphicon-user" aria-hidden="true"></span> Account settings</h1>
 
       <h3>Security</h3>
       <p><a class="btn btn-default" href="/account/password" role="button"><span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span> Change Password...</a></p>
 
       <h3>Theme</h3>
-      <div id="tresdb-theme" class="btn-group" role="group" aria-label="select-theme">
-        <button type="button" class="btn btn-default" data-theme="light">Light</button>
-        <button type="button" class="btn btn-default" data-theme="dark">Dark</button>
+
+      <div class="radio">
+        <label>
+          <input type="radio" name="colorScheme" id="theme-light" value="light" <%= theme.colorScheme === 'light' ? 'checked' : '' %>>
+          Light
+        </label>
+      </div>
+      <div class="radio">
+        <label>
+          <input type="radio" name="colorScheme" id="theme-dark" value="dark" <%= theme.colorScheme === 'dark' ? 'checked' : '' %>>
+          Dark
+        </label>
       </div>
 
     </div>

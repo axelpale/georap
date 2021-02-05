@@ -1,5 +1,8 @@
 var template = require('./template.ejs');
 var emitter = require('component-emitter');
+var themeStore = tresdb.stores.theme;
+
+var colorSchemes = ['light', 'dark'];
 
 module.exports = function () {
 
@@ -10,17 +13,22 @@ module.exports = function () {
   // Public methods
 
   this.bind = function ($mount) {
-    $mount.html(template());
+    $mount.html(template({
+      theme: themeStore.get(),
+    }));
 
-    $('#tresdb-theme').click(function (ev) {
-      var themeName = ev.target.dataset.theme;
-      if (themeName) {
-        var linkEl = document.getElementById('theme-stylesheet');
-        linkEl.setAttribute('href', '/assets/themes/' + themeName + '.css');
-      }
-      console.log(themeName);
+    colorSchemes.forEach(function (colorScheme) {
+      $('#theme-' + colorScheme).on('change', function () {
+        themeStore.update({
+          colorScheme: colorScheme,
+        });
+      });
     });
   };
+
   this.unbind = function () {
+    colorSchemes.forEach(function (colorScheme) {
+      $('#theme-' + colorScheme).off();
+    });
   };
 };
