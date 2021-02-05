@@ -71,6 +71,7 @@ db.init(function (dbErr) {
   // Instance-specific static files are best copied without webpack
   // because webpack does not support dynamic paths well.
   var imagesSource = path.resolve(__dirname, '..', 'client', 'images');
+  var themesSource = path.resolve(__dirname, '..', 'client', 'themes');
   var modulesSource = path.resolve(__dirname, '..', 'node_modules');
   var bootstrapSource = path.resolve(modulesSource, 'bootstrap', 'dist');
   var configSource = path.resolve(__dirname, '..', 'config');
@@ -86,6 +87,7 @@ db.init(function (dbErr) {
   }([
     [imagesSource, imagesTarget],
     [bootstrapSource, bootstrapTarget],
+    [themesSource, path.join(config.staticDir, 'themes')],
     [config.loginBackground, path.join(imagesTarget, 'login.jpg')],
     [markersSource, path.join(imagesTarget, 'markers')],
   ]));

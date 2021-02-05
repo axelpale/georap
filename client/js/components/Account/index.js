@@ -11,6 +11,15 @@ module.exports = function () {
 
   this.bind = function ($mount) {
     $mount.html(template());
+
+    $('#tresdb-theme').click(function (ev) {
+      var themeName = ev.target.dataset.theme;
+      if (themeName) {
+        var linkEl = document.getElementById('theme-stylesheet');
+        linkEl.setAttribute('href', '/assets/themes/' + themeName + '.css');
+      }
+      console.log(themeName);
+    });
   };
   this.unbind = function () {
   };
