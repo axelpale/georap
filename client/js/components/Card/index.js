@@ -21,7 +21,6 @@
 //   card.open(new Login());
 //   card.close()
 //
-require('./style.css');
 var emitter = require('component-emitter');
 var closeButton = require('./closeButton');
 var contentView = require('./contentView');
