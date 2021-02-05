@@ -6,12 +6,9 @@ var CardView = require('../components/Card');
 var Error401View = require('../components/Error401');
 var Error404View = require('../components/Error404');
 var EventsView = require('../components/Events');
-var ExportView = require('../components/Export');
-var FilterView = require('../components/Filter');
 var LocationView = require('../components/Location');
 var LoginView = require('../components/Login');
 var SearchView = require('../components/Search');
-var StatisticsView = require('../components/Statistics');
 var SupportFundView = require('../components/SupportFund');
 var UsersView = require('../components/Users');
 var UserView = require('../components/User');
@@ -203,11 +200,27 @@ exports.route = function () {
   });
 
   page('/filter', function () {
-    card.open(new FilterView());
+    import(
+      /* webpackChunkName: "filter-view" */
+      '../components/Filter'
+    )
+      .then(function (moduleWrap) {
+        var FilterView = moduleWrap.default;
+        card.open(new FilterView());
+      })
+      .catch(importErrorHandler);
   });
 
   page('/export', function () {
-    card.open(new ExportView());
+    import(
+      /* webpackChunkName: "export-view" */
+      '../components/Export'
+    )
+      .then(function (moduleWrap) {
+        var ExportView = moduleWrap.default;
+        card.open(new ExportView());
+      })
+      .catch(importErrorHandler);
   });
 
   page('/import', function () {
@@ -325,8 +338,15 @@ exports.route = function () {
   });
 
   page('/statistics', adminOnly, function () {
-    var view = new StatisticsView();
-    card.open(view);
+    import(
+      /* webpackChunkName: "statistics-view" */
+      '../components/Statistics'
+    )
+      .then(function (moduleWrap) {
+        var StatisticsView = moduleWrap.default;
+        card.open(new StatisticsView());
+      })
+      .catch(importErrorHandler);
   });
 
   // Catch all
