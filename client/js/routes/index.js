@@ -190,6 +190,18 @@ exports.route = function () {
       .catch(importErrorHandler);
   });
 
+  page('/account/password', function () {
+    import(
+      /* webpackChunkName: "change-password-view" */
+      '../components/ChangePassword'
+    )
+      .then(function (moduleWrap) {
+        var ChangePasswordView = moduleWrap.default;
+        card.open(new ChangePasswordView());
+      })
+      .catch(importErrorHandler);
+  });
+
   page('/filter', function () {
     card.open(new FilterView());
   });
@@ -247,18 +259,6 @@ exports.route = function () {
     view.once('idle', function (location) {
       exports.emit('location_routed', location);
     });
-  });
-
-  page('/password', function () {
-    import(
-      /* webpackChunkName: "change-password-view" */
-      '../components/ChangePassword'
-    )
-      .then(function (moduleWrap) {
-        var ChangePasswordView = moduleWrap.default;
-        card.open(new ChangePasswordView());
-      })
-      .catch(importErrorHandler);
   });
 
   page('/search', function (ctx) {
