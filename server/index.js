@@ -70,18 +70,24 @@ db.init(function (dbErr) {
 
   // Instance-specific static files are best copied without webpack
   // because webpack does not support dynamic paths well.
-  var imagesDir = path.resolve(__dirname, '..', 'client', 'images');
-  var configDir = path.resolve(__dirname, '..', 'config');
-  var markersDir = path.join(configDir, 'images', 'markers');
-  var loginBgPath = path.join(config.staticDir, 'images', 'login.jpg');
+  var imagesSource = path.resolve(__dirname, '..', 'client', 'images');
+  var modulesSource = path.resolve(__dirname, '..', 'node_modules');
+  var bootstrapSource = path.resolve(modulesSource, 'bootstrap', 'dist');
+  var configSource = path.resolve(__dirname, '..', 'config');
+  var markersSource = path.join(configSource, 'images', 'markers');
+  // Target paths
+  var imagesTarget = path.join(config.staticDir, 'images');
+  var bootstrapTarget = path.join(config.staticDir, 'bootstrap');
+  // Copy
   (function copyCustomStatic(copyPaths) {
     copyPaths.forEach(function (pp) {
       fse.copy(pp[0], pp[1]);
     });
   }([
-    [config.loginBackground, loginBgPath],
-    [imagesDir, path.join(config.staticDir, 'images')],
-    [markersDir, path.join(config.staticDir, 'images', 'markers')],
+    [imagesSource, imagesTarget],
+    [bootstrapSource, bootstrapTarget],
+    [config.loginBackground, path.join(imagesTarget, 'login.jpg')],
+    [markersSource, path.join(imagesTarget, 'markers')],
   ]));
   console.log('Copying custom static files to', config.staticDir);
   // -------------
