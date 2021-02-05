@@ -197,7 +197,7 @@ module.exports = function (map) {
     var bounds = map.getBounds();
     var zoom = map.getZoom();
 
-    if (filterStore.isActive()) {
+    if (!filterStore.isDefault()) {
       // Query filtered set of locations.
       var filterState = filterStore.get();
       var boundsLiteral = bounds.toJSON();

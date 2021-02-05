@@ -52,7 +52,7 @@ module.exports = function (mapComp) {
       config: tresdb.config,
       user: account.getUser(),  // might be undefined
       supportButtonTitle: tresdb.config.supportButtonTitle,
-      isFilterActive: filterStore.isActive(),
+      isFilterActive: !filterStore.isDefault(),
     }));
 
     _$root = $mount;
@@ -188,10 +188,10 @@ module.exports = function (mapComp) {
 
     filterStore.on('updated', function () {
       // Show a red dot when the filter is active.
-      if (filterStore.isActive()) {
-        ui.show($('#tresdb-mainmenu-filter .label'));
-      } else {
+      if (filterStore.isDefault()) {
         ui.hide($('#tresdb-mainmenu-filter .label'));
+      } else {
+        ui.show($('#tresdb-mainmenu-filter .label'));
       }
     });
 
