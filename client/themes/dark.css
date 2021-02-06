@@ -66,6 +66,27 @@ a.focus, a:hover {
   border: 1px solid #333;
 }
 
+/* Google Maps specific */
+
+.gm-svpc,
+.gm-control-active,
+.gm-style-mtc button,
+.gm-style-mtc ul,
+.gm-style-mtc li {
+  color: #aaa !important;
+  background-color: #111 !important;
+}
+.gm-style-mtc button:hover,
+.gm-style-mtc button:active,
+.gm-style-mtc button:focus {
+  color: #fff !important;
+  background-color: #333 !important;
+}
+.gm-control-active img,
+.gm-style-mtc li img {
+  filter: invert(1);
+}
+
 /* TresDB specific */
 #card-layer {
   background-color: #111;
