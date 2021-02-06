@@ -1,31 +1,57 @@
 /* Bootstrap specific */
 body {
-  color: #fff;
+  color: #e5e5e5;
   background-color: #111;
 }
+
+a {
+  color: #2D97F0;
+}
+a.focus, a:hover {
+  color: #5BACEF;
+}
+
 .dropdown-menu {
   background-color: #111;
 }
 .dropdown-menu > li > a {
-  color: #fff;
+  color: #e5e5e5;
 }
 .dropdown-menu .divider {
   background-color: #222;
 }
 
 .btn-default {
-  color: #fff;
+  color: #e5e5e5;
+  background-color: #111;
+  border-color: #444;
+}
+.btn-default:hover,
+.open > .dropdown-toggle.btn-default {
+  color: #e5e5e5;
   background-color: #333;
-  border-color: #666;
+  border-color: #444;
 }
 
 .panel {
+  background-color: #111;
+}
+.panel-default {
+  border-color: #444;
+}
+.panel-default > .panel-heading {
+  color: #e5e5e5;
   background-color: #333;
+  border-color: #444;
+}
+.panel-footer {
+  background-color: #333;
+  border-top: 1px solid #444;
 }
 
 .list-group-item {
-  background-color: #333;
-  border: 1px solid #666;
+  background-color: #111;
+  border: 1px solid #333;
 }
 
 /* TresDB specific */
@@ -45,4 +71,15 @@ body {
 .tresdb-tag-active.tresdb-filter-any {
   border: 1px solid #e5e5e5;
 }
+
+#tresdb-location-thumbnails img {
+  border: 1px solid #333;
+}
+
+#tresdb-location-return {
+  color: #666;
+  border-bottom: 1px solid #333;
+}
+#tresdb-location-return:hover h1 {
+  color: #999;
 }
