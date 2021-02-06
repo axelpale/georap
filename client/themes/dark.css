@@ -68,7 +68,10 @@ a.focus, a:hover {
 
 /* Google Maps specific */
 
-.gm-svpc,
+.gm-bundled-control div {
+  background-color: #333 !important;
+}
+.gm-bundled-control .gm-svpc,
 .gm-control-active,
 .gm-style-mtc button,
 .gm-style-mtc ul,
@@ -88,6 +91,7 @@ a.focus, a:hover {
 }
 
 /* TresDB specific */
+
 #card-layer {
   background-color: #111;
 }
