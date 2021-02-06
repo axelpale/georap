@@ -127,7 +127,7 @@ var LocationView = function (id, query) {
       self.emit('idle', _location);
 
       // Select the location. Leads to creation of the selection marker.
-      locations.selectLocation(_location);
+      locations.selectLocation(_location.getMarkerLocation());
     });
   };  // end bind
 

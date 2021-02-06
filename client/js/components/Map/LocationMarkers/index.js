@@ -160,7 +160,8 @@ module.exports = function (map) {
     });
 
     // Keep the selected marker, because sometimes the selected is not
-    // among the locations from the marker api.
+    // among the locations from the marker api but hierarchically hidden
+    // below them.
     if (_markers[_selectedId]) {
       _markers[_selectedId].set('keep', true);
     }
@@ -348,8 +349,10 @@ module.exports = function (map) {
           _updateIcon(_selectedId);
           _updateIcon(state.selectedLocationId);
         } else {
-          // Marker already on the map.
-          _addMarker(state.selectedLocation.getMarkerLocation());
+          // Marker not on the map. Use state's location if available.
+          if (state.selectedMarkerLocation) {
+            _addMarker(state.selectedMarkerLocation);
+          }
         }
         _ensureLabel(state.selectedLocationId);
         _selectedId = state.selectedLocationId;
