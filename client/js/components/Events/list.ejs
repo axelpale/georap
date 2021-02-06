@@ -6,7 +6,7 @@
     <% name = ev.locationName; %>
     <% locUrl = '/locations/' + ev.locationId + '?zoom=11&ref=latest' %>
     <% name = (name === '' ? 'Untitled' : name) %>
-    <li class="list-group-item">
+    <li class="list-group-item" data-locationid="<%= ev.locationId %>">
       <% if (typeof pointstamp !== 'undefined') { %>
         <div class="pull-right"><%= pointstamp(ev) %></div>
       <% } %>

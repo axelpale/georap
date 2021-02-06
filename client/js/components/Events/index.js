@@ -119,32 +119,36 @@ module.exports = function () {
     // Update rendered on change
     events.on('events_changed', updateView);
 
-    // Detect if hovering a location link.
-    // This data can be used to emphasize markers.
-    var locationIdPattern = /\/locations\/([0-9a-f]*)/i;
+    // Select associated marker by clicking an event or hovering cursor on it.
     // Prevent duplicate binds
+    $mount.off('click');
     $mount.off('mouseover');
     $mount.off('mouseout');
     // Detect hover
-    $mount.on('mouseover', function (ev) {
-      if (typeof ev.target.href === 'string') {
-        var match = ev.target.href.match(locationIdPattern);
-        if (match) {
-          var locationId = match[1];
-          var mloc = fetchedMarkerLocations[locationId];
-          if (mloc) {
-            locations.selectLocation(mloc);
-          }
+    var _trySelectLocation = function (ev) {
+      var locationId = null;
+      if (typeof ev.target.dataset.locationid === 'string') {
+        locationId = ev.target.dataset.locationid;
+      } else {
+        var parent = ev.target.parentElement;
+        if (typeof parent.dataset.locationid === 'string') {
+          locationId = parent.dataset.locationid;
         }
       }
-    });
-    $mount.on('mouseout', function (ev) {
-      if (typeof ev.target.href === 'string') {
-        var match = ev.target.href.match(locationIdPattern);
-        if (match) {
-          var locationId = match[1];
-          locations.deselectLocation(locationId);
+      if (locationId) {
+        var mloc = fetchedMarkerLocations[locationId];
+        if (mloc) {
+          locations.selectLocation(mloc);
         }
+      }
+    };
+    $mount.on('click', _trySelectLocation);
+    $mount.on('mouseover', _trySelectLocation);
+    $mount.on('mouseout', function (ev) {
+      // Outside li
+      if (typeof ev.target.dataset.locationid === 'string') {
+        var locationId = ev.target.dataset.locationid;
+        locations.deselectLocation(locationId);
       }
     });
   };
@@ -152,6 +156,8 @@ module.exports = function () {
   this.unbind = function () {
     events.off('events_changed', updateView);
     stopScrollRecording();
+    // Deselect any selected locations
+    locations.deselectAll();
     // Ensure that fetched locations become garbage collected
     Object.keys(fetchedMarkerLocations).forEach(function (lid) {
       delete fetchedMarkerLocations[lid];
