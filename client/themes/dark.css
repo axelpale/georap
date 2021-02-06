@@ -100,3 +100,10 @@ a.focus, a:hover {
 #tresdb-location-return:hover h1 {
   color: #999;
 }
+
+button.tresdb-geolocation {
+  background-color: #111 !important;
+}
+button.tresdb-geolocation .tresdb-geolocation-icon {
+  filter: invert(1);
+}
