@@ -503,19 +503,19 @@ exports.getRecentFiltered = function (filter, n, beforeTime, callback) {
       // Specify last document to return
       $limit: n,
     },
-    // {
-    //   // Join with location data
-    //   $lookup: {
-    //     from: 'locations',
-    //     localField: 'locationId',
-    //     foreignField: '_id',
-    //     as: 'location',
-    //   },
-    // },
-    // {
-    //   // Change the location array to the single location (the first item).
-    //   $unwind: '$location',
-    // },
+    {
+      // Join with location data
+      $lookup: {
+        from: 'locations',
+        localField: 'locationId',
+        foreignField: '_id',
+        as: 'location',
+      },
+    },
+    {
+      // Change the location array to the single location (the first item).
+      $unwind: '$location',
+    },
   ]).toArray(function (err, docs) {
     if (err) {
       return callback(err);

@@ -52,14 +52,14 @@ module.exports = function (mapComp) {
       config: tresdb.config,
       user: account.getUser(),  // might be undefined
       supportButtonTitle: tresdb.config.supportButtonTitle,
-      isFilterActive: filterStore.isActive(),
+      isFilterActive: !filterStore.isDefault(),
     }));
 
     _$root = $mount;
 
     // Menu opening
 
-    $mount.on('click', '#tresdb-mainmenu-account', function () {
+    $mount.on('click', '#tresdb-mainmenu', function () {
       // Close the sidebar whenever user opens the menu.
       return tresdb.go('/');
     });
@@ -163,82 +163,6 @@ module.exports = function (mapComp) {
       });
     });
 
-
-    // Listings and resources
-
-    $mount.on('click', '#tresdb-mainmenu-events', function (ev) {
-      ev.preventDefault();
-      return tresdb.go('/latest');
-    });
-
-    $mount.on('click', '#tresdb-mainmenu-users', function (ev) {
-      ev.preventDefault();
-      return tresdb.go('/users');
-    });
-
-    $mount.on('click', '#tresdb-mainmenu-locations', function (ev) {
-      ev.preventDefault();
-      return tresdb.go('/search');
-    });
-
-    // Export / import
-
-    $mount.on('click', '#tresdb-mainmenu-import', function (ev) {
-      ev.preventDefault();
-      return tresdb.go('/import');
-    });
-
-    $mount.on('click', '#tresdb-mainmenu-export', function (ev) {
-      ev.preventDefault();
-      return tresdb.go('/export');
-    });
-
-
-    // Account
-
-    $mount.on('click', '#tresdb-mainmenu-user', function (ev) {
-      ev.preventDefault();
-      return tresdb.go('/users/' + account.getName());
-    });
-
-    $mount.on('click', '#tresdb-mainmenu-change-password', function (ev) {
-      ev.preventDefault();
-      return tresdb.go('/password');
-    });
-
-    // Support
-
-    $mount.on('click', '#tresdb-mainmenu-support', function (ev) {
-      ev.preventDefault();
-      return tresdb.go('/fund');
-    });
-
-    // Admin stuff
-
-    $mount.on('click', '#tresdb-mainmenu-invite', function (ev) {
-      ev.preventDefault();
-      return tresdb.go('/invite');
-    });
-
-    $mount.on('click', '#tresdb-mainmenu-users-admin', function (ev) {
-      ev.preventDefault();
-      return tresdb.go('/admin/users');
-    });
-
-    $mount.on('click', '#tresdb-mainmenu-statistics', function (ev) {
-      ev.preventDefault();
-      return tresdb.go('/statistics');
-    });
-
-
-    // Logout
-
-    $mount.on('click', '#tresdb-mainmenu-logout', function (ev) {
-      ev.preventDefault();
-      return tresdb.go('/login');
-    });
-
-
     // Filter
 
     var filterTimer = true; // start without burn-in period
@@ -264,10 +188,10 @@ module.exports = function (mapComp) {
 
     filterStore.on('updated', function () {
       // Show a red dot when the filter is active.
-      if (filterStore.isActive()) {
-        ui.show($('#tresdb-mainmenu-filter .label'));
-      } else {
+      if (filterStore.isDefault()) {
         ui.hide($('#tresdb-mainmenu-filter .label'));
+      } else {
+        ui.show($('#tresdb-mainmenu-filter .label'));
       }
     });
 

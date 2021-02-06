@@ -49,16 +49,7 @@ module.exports = function (map) {
 
     var firstChild = (function defineFirstChild() {
       var el = document.createElement('button');
-      el.style.backgroundColor = '#fff';
-      el.style.border = 'none';
-      el.style.outline = 'none';
-      el.style.width = '28px';
-      el.style.height = '28px';
-      el.style.borderRadius = '2px';
-      el.style.boxShadow = '0 1px 4px rgba(0,0,0,0.3)';
-      el.style.cursor = 'pointer';
-      el.style.marginRight = '10px';
-      el.style.padding = '0';
+      el.className = 'tresdb-geolocation';
       el.title = 'Your Location';
       return el;
     }());
@@ -66,13 +57,7 @@ module.exports = function (map) {
 
     var secondChild = (function defineSecondChild() {
       var el = document.createElement('div');
-      el.style.margin = '5px';
-      el.style.width = ICON_SIZE + 'px';
-      el.style.height = ICON_SIZE + 'px';
-      el.style.backgroundImage = 'url(/assets/images/mylocation.png)';
-      el.style.backgroundSize = '180px 18px';
-      el.style.backgroundPosition = '0 0';
-      el.style.backgroundRepeat = 'no-repeat';
+      el.className = 'tresdb-geolocation-icon';
       return el;
     }());
     firstChild.appendChild(secondChild);

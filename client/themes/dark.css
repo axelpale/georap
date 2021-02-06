@@ -1,0 +1,134 @@
+/* Bootstrap specific */
+body {
+  color: #e5e5e5;
+  background-color: #111;
+}
+
+a {
+  color: #2D97F0;
+}
+a.focus, a:hover {
+  color: #5BACEF;
+}
+
+.table > thead > tr > th {
+  border-bottom-color: #333;
+}
+.table > tbody > tr > td {
+  border-top-color: #333;
+}
+
+.dropdown-menu {
+  background-color: #111;
+}
+.dropdown-menu > li > a {
+  color: #e5e5e5;
+}
+.dropdown-menu .divider {
+  background-color: #222;
+}
+
+.btn-default {
+  color: #e5e5e5;
+  background-color: #111;
+  border-color: #444;
+}
+.btn-default:active,
+.btn-default:focus,
+.btn-default:hover,
+.open > .dropdown-toggle.btn-default,
+.open > .dropdown-toggle.btn-default:active,
+.open > .dropdown-toggle.btn-default:focus,
+.open > .dropdown-toggle.btn-default:hover {
+  color: #e5e5e5;
+  background-color: #333;
+  border-color: #444;
+}
+
+.panel {
+  background-color: #111;
+}
+.panel-default {
+  border-color: #444;
+}
+.panel-default > .panel-heading {
+  color: #e5e5e5;
+  background-color: #333;
+  border-color: #444;
+}
+.panel-footer {
+  background-color: #333;
+  border-top: 1px solid #444;
+}
+
+.list-group-item {
+  background-color: #111;
+  border: 1px solid #333;
+}
+
+/* Google Maps specific */
+
+.gm-bundled-control div {
+  background-color: #333 !important;
+}
+.gm-bundled-control .gm-svpc,
+.gm-control-active,
+.gm-style-mtc button,
+.gm-style-mtc ul,
+.gm-style-mtc li {
+  color: #aaa !important;
+  background-color: #111 !important;
+}
+.gm-style-mtc button:hover,
+.gm-style-mtc button:active,
+.gm-style-mtc button:focus {
+  color: #fff !important;
+  background-color: #333 !important;
+}
+.gm-control-active img,
+.gm-style-mtc li img {
+  filter: invert(1);
+}
+
+/* TresDB specific */
+
+#card-layer {
+  background-color: #111;
+}
+
+.tresdb-tag {
+  border: 0px solid gray;
+}
+.tresdb-tag-active {
+  border: 1px solid #e5e5e5;
+}
+.tresdb-tag.tresdb-filter-any {
+  border: 1px solid #666;
+}
+.tresdb-tag-active.tresdb-filter-any {
+  border: 1px solid #e5e5e5;
+}
+
+#tresdb-location-statustype-viewer img,
+.tresdb-tag img {
+  filter: invert(1);
+}
+
+#tresdb-location-thumbnails img {
+  border: 1px solid #333;
+}
+
+#tresdb-location-return {
+  color: #666;
+  border-bottom: 1px solid #333;
+}
+#tresdb-location-return:hover h1 {
+  color: #999;
+}
+
+button.tresdb-geolocation {
+  background-color: #111 !important;
+}
+button.tresdb-geolocation .tresdb-geolocation-icon {
+  filter: invert(1);
+}

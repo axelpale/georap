@@ -1,0 +1,28 @@
+#card-layer {
+  background: white;
+}
+
+.tresdb-tag {
+  border: 0px solid gray;
+}
+.tresdb-tag-active {
+  border: 1px solid #111;
+}
+.tresdb-tag.tresdb-filter-any {
+  border: 1px solid #bbb;
+}
+.tresdb-tag-active.tresdb-filter-any {
+  border: 1px solid #111;
+}
+
+#tresdb-location-thumbnails img {
+  border: 1px solid #ddd;
+}
+
+#tresdb-location-return {
+  color: #666;
+  border-bottom: 1px solid gray;
+}
+#tresdb-location-return:hover h1 {
+  color: #333;
+}

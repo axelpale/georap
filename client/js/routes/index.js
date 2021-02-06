@@ -6,12 +6,9 @@ var CardView = require('../components/Card');
 var Error401View = require('../components/Error401');
 var Error404View = require('../components/Error404');
 var EventsView = require('../components/Events');
-var ExportView = require('../components/Export');
-var FilterView = require('../components/Filter');
 var LocationView = require('../components/Location');
 var LoginView = require('../components/Login');
 var SearchView = require('../components/Search');
-var StatisticsView = require('../components/Statistics');
 var SupportFundView = require('../components/SupportFund');
 var UsersView = require('../components/Users');
 var UserView = require('../components/User');
@@ -178,12 +175,52 @@ exports.route = function () {
     exports.emit('map_routed');
   });
 
+  page('/account', function () {
+    import(
+      /* webpackChunkName: "account-view" */
+      '../components/Account'
+    )
+      .then(function (moduleWrap) {
+        var AccountView = moduleWrap.default;
+        card.open(new AccountView());
+      })
+      .catch(importErrorHandler);
+  });
+
+  page('/account/password', function () {
+    import(
+      /* webpackChunkName: "change-password-view" */
+      '../components/ChangePassword'
+    )
+      .then(function (moduleWrap) {
+        var ChangePasswordView = moduleWrap.default;
+        card.open(new ChangePasswordView());
+      })
+      .catch(importErrorHandler);
+  });
+
   page('/filter', function () {
-    card.open(new FilterView());
+    import(
+      /* webpackChunkName: "filter-view" */
+      '../components/Filter'
+    )
+      .then(function (moduleWrap) {
+        var FilterView = moduleWrap.default;
+        card.open(new FilterView());
+      })
+      .catch(importErrorHandler);
   });
 
   page('/export', function () {
-    card.open(new ExportView());
+    import(
+      /* webpackChunkName: "export-view" */
+      '../components/Export'
+    )
+      .then(function (moduleWrap) {
+        var ExportView = moduleWrap.default;
+        card.open(new ExportView());
+      })
+      .catch(importErrorHandler);
   });
 
   page('/import', function () {
@@ -235,18 +272,6 @@ exports.route = function () {
     view.once('idle', function (location) {
       exports.emit('location_routed', location);
     });
-  });
-
-  page('/password', function () {
-    import(
-      /* webpackChunkName: "change-password-view" */
-      '../components/ChangePassword'
-    )
-      .then(function (moduleWrap) {
-        var ChangePasswordView = moduleWrap.default;
-        card.open(new ChangePasswordView());
-      })
-      .catch(importErrorHandler);
   });
 
   page('/search', function (ctx) {
@@ -313,8 +338,15 @@ exports.route = function () {
   });
 
   page('/statistics', adminOnly, function () {
-    var view = new StatisticsView();
-    card.open(view);
+    import(
+      /* webpackChunkName: "statistics-view" */
+      '../components/Statistics'
+    )
+      .then(function (moduleWrap) {
+        var StatisticsView = moduleWrap.default;
+        card.open(new StatisticsView());
+      })
+      .catch(importErrorHandler);
   });
 
   // Catch all

@@ -7,7 +7,9 @@ var prettyEvents = require('pretty-events');
 var template = require('./template.ejs');
 var listTemplate = require('./list.ejs');
 var ui = require('tresdb-ui');
+var models = require('tresdb-models');
 var events = tresdb.stores.events;
+var locations = tresdb.stores.locations;
 
 var LIST_SIZE = 200;
 
@@ -44,7 +46,12 @@ module.exports = function () {
   //     models.Events
 
   // Init
-  emitter(this);
+  var self = this;
+  emitter(self);
+
+  // Collect location data in events. Can be used to display
+  // markers associated with the events.
+  var fetchedMarkerLocations = {};
 
   // Event handler that is easy to off.
   var updateView = function (callback) {
@@ -63,6 +70,14 @@ module.exports = function () {
         console.error(err);
         return;
       }
+
+      // Collect location data in events
+      rawEvents.forEach(function (rev) {
+        if (rev.location) {
+          var mloc = models.rawLocationToMarkerLocation(rev.location);
+          fetchedMarkerLocations[mloc._id] = mloc;
+        }
+      });
 
       var compactEvs = prettyEvents.mergeLocationCreateRename(rawEvents);
       compactEvs = prettyEvents.mergeEntryCreateEdit(compactEvs);
@@ -103,11 +118,50 @@ module.exports = function () {
 
     // Update rendered on change
     events.on('events_changed', updateView);
+
+    // Select associated marker by clicking an event or hovering cursor on it.
+    // Prevent duplicate binds
+    $mount.off('click');
+    $mount.off('mouseover');
+    $mount.off('mouseout');
+    // Detect hover
+    var _trySelectLocation = function (ev) {
+      var locationId = null;
+      if (typeof ev.target.dataset.locationid === 'string') {
+        locationId = ev.target.dataset.locationid;
+      } else {
+        var parent = ev.target.parentElement;
+        if (typeof parent.dataset.locationid === 'string') {
+          locationId = parent.dataset.locationid;
+        }
+      }
+      if (locationId) {
+        var mloc = fetchedMarkerLocations[locationId];
+        if (mloc) {
+          locations.selectLocation(mloc);
+        }
+      }
+    };
+    $mount.on('click', _trySelectLocation);
+    $mount.on('mouseover', _trySelectLocation);
+    $mount.on('mouseout', function (ev) {
+      // Outside li
+      if (typeof ev.target.dataset.locationid === 'string') {
+        var locationId = ev.target.dataset.locationid;
+        locations.deselectLocation(locationId);
+      }
+    });
   };
 
   this.unbind = function () {
     events.off('events_changed', updateView);
     stopScrollRecording();
+    // Deselect any selected locations
+    locations.deselectAll();
+    // Ensure that fetched locations become garbage collected
+    Object.keys(fetchedMarkerLocations).forEach(function (lid) {
+      delete fetchedMarkerLocations[lid];
+    });
   };
 
 };

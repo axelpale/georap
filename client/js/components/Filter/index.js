@@ -29,7 +29,16 @@ module.exports = function () {
     $('#tresdb-filter-type-list .tresdb-tag-active')
       .removeClass('tresdb-tag-active');
 
-    if (filterStore.isActive()) {
+    if (filterStore.isDefault()) {
+      // Hide red stuff
+      ui.hide(dot);
+      offbtn.attr('class', 'btn btn-default disabled');
+      // Activate any
+      $('#tresdb-filter-status-list .tresdb-filter-any')
+        .addClass('tresdb-tag-active');
+      $('#tresdb-filter-type-list .tresdb-filter-any')
+        .addClass('tresdb-tag-active');
+    } else {
       // Show red stuff
       ui.show(dot);
       offbtn.attr('class', 'btn btn-danger');
@@ -38,15 +47,6 @@ module.exports = function () {
       $('#tresdb-filter-status-list .tresdb-status-' + filterState.status)
         .addClass('tresdb-tag-active');
       $('#tresdb-filter-type-list .tresdb-type-' + filterState.type)
-        .addClass('tresdb-tag-active');
-    } else {
-      // Hide red stuff
-      ui.hide(dot);
-      offbtn.attr('class', 'btn btn-default disabled');
-      // Activate any
-      $('#tresdb-filter-status-list .tresdb-filter-any')
-        .addClass('tresdb-tag-active');
-      $('#tresdb-filter-type-list .tresdb-filter-any')
         .addClass('tresdb-tag-active');
     }
   };
@@ -57,7 +57,7 @@ module.exports = function () {
     var filterState = filterStore.get();
     $mount.html(template({
       // For title dot
-      isFilterActive: filterStore.isActive(),
+      isFilterActive: !filterStore.isDefault(),
       // For any-type button.
       currentStatus: filterState.status,
       currentType: filterState.type,
@@ -101,7 +101,7 @@ module.exports = function () {
 
     // Click on off button
     $('button#tresdb-filter-off').click(function () {
-      filterStore.deactivate();
+      filterStore.reset();
     });
 
     // Listen changes in filters.

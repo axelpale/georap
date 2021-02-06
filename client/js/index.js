@@ -11,6 +11,7 @@ var locations = require('./stores/locations');
 var mapstate = require('./stores/mapstate');
 var markers = require('./stores/markers');
 var statistics = require('./stores/statistics');
+var theme = require('./stores/theme');
 var users = require('./stores/users');
 
 // The html contains tresdb object,
@@ -25,8 +26,18 @@ tresdb.stores = {
   mapstate: mapstate,
   markers: markers,
   statistics: statistics,
+  theme: theme,
   users: users,
 };
+
+// Theme setup
+
+var applyTheme = function (state) {
+  var linkEl = document.getElementById('theme-stylesheet');
+  linkEl.setAttribute('href', '/assets/themes/' + state.colorScheme + '.css');
+};
+theme.on('updated', applyTheme);
+applyTheme(theme.get());
 
 // Routes and main components.
 var routes = require('./routes');

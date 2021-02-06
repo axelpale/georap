@@ -28,17 +28,18 @@ var deleteJSON = request.deleteJSON;
 
 var state = {
   selectedLocationId: null,
-  selectedLocation: null,
+  selectedMarkerLocation: null,
 };
 
 // Public local state methods
 
-exports.selectLocation = function (loc) {
+exports.selectLocation = function (mloc) {
   // Parameters
-  //   locId, a LocationModel
+  //   mloc, a MarkerLocation
+  //
   state = Object.assign({}, state, {
-    selectedLocationId: loc.getId(),
-    selectedLocation: loc,
+    selectedLocationId: mloc._id,
+    selectedMarkerLocation: mloc,
   });
   exports.emit('updated', state);
 };
@@ -50,9 +51,17 @@ exports.deselectLocation = function (locId) {
   // NOTE e.g. in case where two LocationViews are opened one after another.
   if (state.selectedLocationId === locId) {
     state.selectedLocationId = null;
-    state.selectedLocation = null;
+    state.selectedMarkerLocation = null;
     exports.emit('updated', state);
   }
+};
+
+exports.deselectAll = function () {
+  state = Object.assign({}, state, {
+    selectedLocationId: null,
+    selectedMarkerLocation: null,
+  });
+  exports.emit('updated', state);
 };
 
 exports.isSelected = function (locId) {
