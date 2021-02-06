@@ -44,6 +44,7 @@ module.exports = function () {
   //     models.Events
 
   // Init
+  var self = this;
   emitter(this);
 
   // Event handler that is easy to off.
@@ -103,6 +104,19 @@ module.exports = function () {
 
     // Update rendered on change
     events.on('events_changed', updateView);
+
+    // Detect if hovering a location link.
+    // This data can be used to emphasize markers.
+    var locationIdPattern = /\/locations\/([0-9a-f]*)/i;
+    $mount.on('mouseover', function (ev) {
+      if (typeof ev.target.href === 'string') {
+        var match = ev.target.href.match(locationIdPattern);
+        if (match) {
+          var locationId = match[1];
+          self.emit('mouseover-location', locationId);
+        }
+      }
+    });
   };
 
   this.unbind = function () {
