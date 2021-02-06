@@ -1,6 +1,7 @@
 /* eslint-disable max-statements, max-lines */
 
 var emitter = require('component-emitter');
+var models = require('tresdb-models');
 var EventsModel = require('./Events/Model');
 var EntriesModel = require('./Entries/Model');
 var locations = tresdb.stores.locations;
@@ -115,15 +116,7 @@ module.exports = function (rawLoc) {
   };
 
   self.getMarkerLocation = function () {
-    return {
-      _id: rawLoc._id,
-      name: rawLoc.name,
-      geom: rawLoc.geom,
-      status: rawLoc.status,
-      type: rawLoc.type,
-      layer: rawLoc.layer,
-      childLayer: rawLoc.layer,
-    };
+    return models.rawLocationToMarkerLocation(rawLoc);
   };
 
   self.getPlaces = function () {
