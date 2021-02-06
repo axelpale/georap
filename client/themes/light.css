@@ -2,6 +2,16 @@
   background: white;
 }
 
+.tresdb-tag {
+  border: 0px solid gray;
+}
 .tresdb-tag-active {
-  border: 1px solid black;
+  border: 1px solid #111;
+}
+.tresdb-tag.tresdb-filter-any {
+  border: 1px solid #bbb;
+}
+.tresdb-tag-active.tresdb-filter-any {
+  border: 1px solid #111;
+}
 }

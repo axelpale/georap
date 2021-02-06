@@ -300,10 +300,9 @@ html, body {
   background-color: #D9534F;
 }
 
-.tresdb-location-status-list .tresdb-filter-any,
-.tresdb-location-type-list .tresdb-filter-any {
+.tresdb-location-status-list button.tresdb-filter-any,
+.tresdb-location-type-list button.tresdb-filter-any {
   width: 6rem;
-  border: 1px solid #BBB;
 }
 
 /* Filter END */
