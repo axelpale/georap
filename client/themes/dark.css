@@ -11,6 +11,13 @@ a.focus, a:hover {
   color: #5BACEF;
 }
 
+.table > thead > tr > th {
+  border-bottom-color: #333;
+}
+.table > tbody > tr > td {
+  border-top-color: #333;
+}
+
 .dropdown-menu {
   background-color: #111;
 }
