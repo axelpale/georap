@@ -34,7 +34,10 @@ a.focus, a:hover {
   border-color: #444;
 }
 .btn-default:hover,
-.open > .dropdown-toggle.btn-default {
+.open > .dropdown-toggle.btn-default,
+.open > .dropdown-toggle.btn-default:active,
+.open > .dropdown-toggle.btn-default:focus,
+.open > .dropdown-toggle.btn-default:hover {
   color: #e5e5e5;
   background-color: #333;
   border-color: #444;
