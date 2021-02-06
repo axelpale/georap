@@ -7,7 +7,9 @@ var prettyEvents = require('pretty-events');
 var template = require('./template.ejs');
 var listTemplate = require('./list.ejs');
 var ui = require('tresdb-ui');
+var models = require('tresdb-models');
 var events = tresdb.stores.events;
+var locations = tresdb.stores.locations;
 
 var LIST_SIZE = 200;
 
@@ -45,7 +47,11 @@ module.exports = function () {
 
   // Init
   var self = this;
-  emitter(this);
+  emitter(self);
+
+  // Collect location data in events. Can be used to display
+  // markers associated with the events.
+  var fetchedMarkerLocations = {};
 
   // Event handler that is easy to off.
   var updateView = function (callback) {
@@ -64,6 +70,14 @@ module.exports = function () {
         console.error(err);
         return;
       }
+
+      // Collect location data in events
+      rawEvents.forEach(function (rev) {
+        if (rev.location) {
+          var mloc = models.rawLocationToMarkerLocation(rev.location);
+          fetchedMarkerLocations[mloc._id] = mloc;
+        }
+      });
 
       var compactEvs = prettyEvents.mergeLocationCreateRename(rawEvents);
       compactEvs = prettyEvents.mergeEntryCreateEdit(compactEvs);
@@ -108,12 +122,28 @@ module.exports = function () {
     // Detect if hovering a location link.
     // This data can be used to emphasize markers.
     var locationIdPattern = /\/locations\/([0-9a-f]*)/i;
+    // Prevent duplicate binds
+    $mount.off('mouseover');
+    $mount.off('mouseout');
+    // Detect hover
     $mount.on('mouseover', function (ev) {
       if (typeof ev.target.href === 'string') {
         var match = ev.target.href.match(locationIdPattern);
         if (match) {
           var locationId = match[1];
-          self.emit('mouseover-location', locationId);
+          var mloc = fetchedMarkerLocations[locationId];
+          if (mloc) {
+            locations.selectLocation(mloc);
+          }
+        }
+      }
+    });
+    $mount.on('mouseout', function (ev) {
+      if (typeof ev.target.href === 'string') {
+        var match = ev.target.href.match(locationIdPattern);
+        if (match) {
+          var locationId = match[1];
+          locations.deselectLocation(locationId);
         }
       }
     });
@@ -122,6 +152,10 @@ module.exports = function () {
   this.unbind = function () {
     events.off('events_changed', updateView);
     stopScrollRecording();
+    // Ensure that fetched locations become garbage collected
+    Object.keys(fetchedMarkerLocations).forEach(function (lid) {
+      delete fetchedMarkerLocations[lid];
+    });
   };
 
 };
