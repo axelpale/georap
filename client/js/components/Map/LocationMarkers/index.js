@@ -41,6 +41,10 @@ module.exports = function (map) {
   // Array of ids of locations currently selected ON MAP not in store.
   // The array is used to find the previously selected locations quickly.
   var _selectedId = null;
+  // If selected location was hidden, a marker is created for it.
+  // To avoid these markers from piling up, remove a deselected marker
+  // if it was hidden before.
+  var _selectedWasVisible = false;
 
   // Private methods
 
@@ -344,23 +348,38 @@ module.exports = function (map) {
       if (_selectedId === state.selectedLocationId) {
         // Already selected, do nothing.
       } else {
-        if (_markers[state.selectedLocationId]) {
-          // Unstyle old and style the new.
+        // Unstyle the previous selected. Remove the previously selected
+        // if it was hidden before.
+        if (_selectedWasVisible) {
           _updateIcon(_selectedId);
+        } else {
+          _removeMarker(_markers[_selectedId]);
+        }
+
+        if (_markers[state.selectedLocationId]) {
+          // New selection already on map. Restyle the new.
           _updateIcon(state.selectedLocationId);
+          _selectedWasVisible = true;
         } else {
           // Marker not on the map. Use state's location if available.
           if (state.selectedMarkerLocation) {
             _addMarker(state.selectedMarkerLocation);
+            _selectedWasVisible = false;
           }
         }
+
+        // Show location title
         _ensureLabel(state.selectedLocationId);
         _selectedId = state.selectedLocationId;
       }
     } else {
       // Null selected.
       // Clear select-styled markers.
-      _updateIcon(_selectedId);
+      if (_selectedWasVisible) {
+        _updateIcon(_selectedId);
+      } else {
+        _removeMarker(_markers[_selectedId]);
+      }
       _selectedId = null;
     }
   });
