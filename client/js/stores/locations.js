@@ -56,6 +56,14 @@ exports.deselectLocation = function (locId) {
   }
 };
 
+exports.deselectAll = function () {
+  state = Object.assign({}, state, {
+    selectedLocationId: null,
+    selectedMarkerLocation: null,
+  });
+  exports.emit('updated', state);
+};
+
 exports.isSelected = function (locId) {
   return state.selectedLocationId === locId;
 };
