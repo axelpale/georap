@@ -2,8 +2,8 @@
 
 var icons = require('../lib/icons');
 
-var ICON_SIZE = 18;
-var TRACKING_X = 144;
+var ICON_SIZE = 30; // 18
+var TRACKING_X = 240; // 144
 var ANIMATION_INTERVAL = 500;
 
 module.exports = function (map) {
