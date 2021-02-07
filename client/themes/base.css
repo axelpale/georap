@@ -20,6 +20,7 @@ html, body {
   box-shadow: 0px 0px 2.62em black;
   z-index: 3;
   overflow: visible;
+  background: white;
 }
 
 #card-layer.tresdb-card-full {
@@ -121,6 +122,8 @@ html, body {
 }
 
 #tresdb-location-return {
+  color: #666;
+  border-bottom: 1px solid gray;
   display: block;
   padding: 1rem 0 1rem 0;
   font-size: 1.6rem;
@@ -130,6 +133,7 @@ html, body {
 }
 #tresdb-location-return h1 {
   margin: 0;
+  color: #333;
 }
 
 #tresdb-location-name {
@@ -175,6 +179,7 @@ html, body {
   object-fit: cover;
   width: 11.1rem;
   height: 11.1rem;
+  border: 1px solid #ddd;
 }
 @media (max-width: 500px) {
   #tresdb-location-thumbnails img {
