@@ -328,8 +328,8 @@ button.tresdb-geolocation {
   background-color: #fff;
   border: none;
   outline: none;
-  width: 28px;
-  height: 28px;
+  width: 40px;
+  height: 40px;
   border-radius: 2px;
   box-shadow: 0 1px 4px rgba(0,0,0,0.3);
   cursor: pointer;
@@ -338,10 +338,10 @@ button.tresdb-geolocation {
 }
 button.tresdb-geolocation .tresdb-geolocation-icon {
   margin: 5px;
-  width: 18px;
-  height: 18px;
+  width: 30px;
+  height: 30px;
   background-image: url(/assets/images/mylocation.png);
-  background-size: 180px 18px;
+  background-size: 300px 30px;
   background-position: 0 0;
   background-repeat: no-repeat;
 }
