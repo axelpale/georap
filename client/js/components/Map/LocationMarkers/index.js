@@ -145,6 +145,10 @@ module.exports = function (map) {
         // Mark that it does not need to be removed.
         m = _markers[l._id];
         m.set('keep', true);
+        // If the marker is selected, ensure it is not hidden after deselect.
+        if (l._id === _selectedId) {
+          _selectedWasVisible = true;
+        }
         // HACK Update dynamic layer and childLayer properties to
         // display child mark properly between updates.
         // In filtered results the layer and childLayer changes constantly.
@@ -362,6 +366,8 @@ module.exports = function (map) {
           _selectedWasVisible = true;
         } else {
           // Marker not on the map. Use state's location if available.
+          // If there is an attempt to add the selected marker on the map
+          // afterwards, ensure elsewhere that _selectedWasVisible is flipped.
           if (state.selectedMarkerLocation) {
             _addMarker(state.selectedMarkerLocation);
             _selectedWasVisible = false;
