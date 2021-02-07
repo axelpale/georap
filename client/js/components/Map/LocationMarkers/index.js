@@ -386,6 +386,7 @@ module.exports = function (map) {
       var deselectedId = _selectedId;
       var deselectedWasVisible = _selectedWasVisible;
       _selectedId = null;
+      var DELAY = 500;
       setTimeout(function () {
         // If not reselected
         if (_selectedId !== deselectedId) {
@@ -395,7 +396,7 @@ module.exports = function (map) {
             _removeMarker(_markers[deselectedId]);
           }
         }
-      }, 500);
+      }, DELAY);
     }
   });
 
