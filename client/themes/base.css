@@ -90,7 +90,7 @@ html, body {
 
 .tresdb-map-menu {
   padding: 0.9em;
-  width: 50%; /* Firefox needs width to be specified */
+  max-width: 60%; /* Firefox needs width to be specified */
 }
 
 #tresdb-toolbar-main {
@@ -103,6 +103,20 @@ html, body {
   margin-bottom: 0.5em;
 }
 
+#tresdb-toolbar-main .btn-lg {
+  /* Match size with gmaps buttons */
+  padding: 8px 13px;
+  font-size: 16px;
+}
+#tresdb-toolbar-main .input-lg {
+  height: 39px;
+  padding: 8px 13px;
+  font-size: 16px;
+}
+
+#tresdb-mainmenu-filter .glyphicon {
+  top: 2px;
+}
 #tresdb-mainmenu-filter .label-danger {
   position: absolute;
   display: block;
@@ -114,7 +128,39 @@ html, body {
 }
 
 #tresdb-mainmenu-search-form  {
-  width: 50%;
+  width: 20rem;
+}
+@media (max-width: 600px) {
+  #tresdb-mainmenu-search-form {
+    width: 16rem;
+  }
+}
+@media (max-width: 520px) {
+  #tresdb-mainmenu-search-form {
+    width: 13rem;
+  }
+}
+@media (max-width: 480px) {
+  #tresdb-mainmenu-search-form {
+    width: 5rem;
+  }
+  #tresdb-mainmenu-search-form input {
+    display: none;
+  }
+  #tresdb-mainmenu-search-form button {
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
+  }
+}
+@media (max-width: 380px) {
+  .tresdb-map-menu {
+    width: 14rem;
+  }
+}
+@media (max-width: 330px) {
+  .tresdb-map-menu {
+    width: 13rem;
+  }
 }
 
 /* Menu END */

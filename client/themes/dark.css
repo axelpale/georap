@@ -42,6 +42,8 @@ a.focus, a:hover {
 .btn-default:active,
 .btn-default:focus,
 .btn-default:hover,
+.btn-default:active:hover,
+.btn-default:active:focus,
 .open > .dropdown-toggle.btn-default,
 .open > .dropdown-toggle.btn-default:active,
 .open > .dropdown-toggle.btn-default:focus,

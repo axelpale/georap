@@ -2,7 +2,7 @@
 
   <div class="btn-toolbar" role="toolbar">
     <div class="dropdown btn-group">
-      <button id="tresdb-mainmenu" type="button" data-toggle="dropdown" class="dropdown-toggle btn btn-default" aria-haspopup="true" aria-expanded="false">
+      <button id="tresdb-mainmenu" type="button" data-toggle="dropdown" class="dropdown-toggle btn btn-default btn-lg" aria-haspopup="true" aria-expanded="false">
         <%= glyphicon({ name: 'th-list' }) %>
         <span class="caret"></span>
       </button>
@@ -61,15 +61,15 @@
     </div><!-- .dropdown -->
 
     <div class="btn-group" role="group" aria-label="Filter tools">
-      <button id="tresdb-mainmenu-filter" class="btn btn-default" type="button" title="Filter"><%= glyphicon({ name: 'filter' }) %>
+      <button id="tresdb-mainmenu-filter" class="btn btn-default btn-lg" type="button" title="Filter"><%= glyphicon({ name: 'filter' }) %>
         <span class="label label-danger<%= isFilterActive ? '' : ' hidden' %>">&nbsp;</span>
       </button>
     </div>
 
     <form id="tresdb-mainmenu-search-form" class="input-group">
-      <input id="tresdb-mainmenu-search-text" type="text" class="form-control" placeholder="search...">
+      <input id="tresdb-mainmenu-search-text" type="text" class="form-control input-lg" placeholder="search...">
       <span class="input-group-btn">
-        <button id="tresdb-mainmenu-search-submit" class="btn btn-default" type="submit"><%= glyphicon({ name: 'search' }) %></button>
+        <button id="tresdb-mainmenu-search-submit" class="btn btn-default btn-lg" type="submit"><%= glyphicon({ name: 'search' }) %></button>
       </span>
     </form>
   </div><!-- .btn-toolbar -->
