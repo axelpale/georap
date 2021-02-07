@@ -133,7 +133,7 @@ a.focus, a:hover {
 }
 
 button.tresdb-geolocation {
-  background-color: #111 !important;
+  background-color: #111;
 }
 button.tresdb-geolocation .tresdb-geolocation-icon {
   filter: invert(1);
