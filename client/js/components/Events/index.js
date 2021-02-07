@@ -121,9 +121,10 @@ module.exports = function () {
 
     // Select associated marker by clicking an event or hovering cursor on it.
     // Prevent duplicate binds
-    $mount.off('click');
-    $mount.off('mouseover');
-    $mount.off('mouseout');
+    var $list = $('#tresdb-events-list');
+    $list.off('click');
+    $list.off('mouseover');
+    $list.off('mouseout');
     // Detect hover
     var _trySelectLocation = function (ev) {
       var locationId = null;
@@ -142,9 +143,9 @@ module.exports = function () {
         }
       }
     };
-    $mount.on('click', _trySelectLocation);
-    $mount.on('mouseover', _trySelectLocation);
-    $mount.on('mouseout', function (ev) {
+    $list.on('click', _trySelectLocation);
+    $list.on('mouseover', _trySelectLocation);
+    $list.on('mouseout', function (ev) {
       // Outside li
       if (typeof ev.target.dataset.locationid === 'string') {
         var locationId = ev.target.dataset.locationid;
