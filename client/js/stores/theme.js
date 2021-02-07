@@ -5,4 +5,5 @@ var createStore = require('./lib/createStore');
 
 module.exports = createStore(storage, 'tresdb-theme', {
   colorScheme: 'light',
+  themeColor: 'white',
 });

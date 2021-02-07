@@ -35,6 +35,8 @@ tresdb.stores = {
 var applyTheme = function (state) {
   var linkEl = document.getElementById('theme-stylesheet');
   linkEl.setAttribute('href', '/assets/themes/' + state.colorScheme + '.css');
+  var metaEl = document.getElementById('theme-color');
+  metaEl.setAttribute('content', state.themeColor);
 };
 theme.on('updated', applyTheme);
 applyTheme(theme.get());

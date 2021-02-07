@@ -3,6 +3,7 @@ var emitter = require('component-emitter');
 var themeStore = tresdb.stores.theme;
 
 var colorSchemes = ['light', 'dark'];
+var themeColors = ['white', '#111111'];
 
 module.exports = function () {
 
@@ -17,10 +18,11 @@ module.exports = function () {
       theme: themeStore.get(),
     }));
 
-    colorSchemes.forEach(function (colorScheme) {
+    colorSchemes.forEach(function (colorScheme, i) {
       $('#theme-' + colorScheme).on('change', function () {
         themeStore.update({
           colorScheme: colorScheme,
+          themeColor: themeColors[i],
         });
       });
     });
