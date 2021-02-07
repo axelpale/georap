@@ -381,12 +381,21 @@ module.exports = function (map) {
     } else {
       // Null selected.
       // Clear select-styled markers.
-      if (_selectedWasVisible) {
-        _updateIcon(_selectedId);
-      } else {
-        _removeMarker(_markers[_selectedId]);
-      }
+      // Wait a moment before actually changing marker so that
+      // quick reselection does not cause unnecessary flicker.
+      var deselectedId = _selectedId;
+      var deselectedWasVisible = _selectedWasVisible;
       _selectedId = null;
+      setTimeout(function () {
+        // If not reselected
+        if (_selectedId !== deselectedId) {
+          if (deselectedWasVisible) {
+            _updateIcon(deselectedId);
+          } else {
+            _removeMarker(_markers[deselectedId]);
+          }
+        }
+      }, 500);
     }
   });
 
