@@ -182,7 +182,7 @@ module.exports = function (entry) {
       $commentsEl.append($commentEl);
       // Flash in green; Override list item styles.
       var $listItem = $commentEl.find('.list-group-item');
-      ui.flash($listItem, '#dff0d8');
+      ui.flash($listItem);
     });
 
     entry.on('location_entry_comment_changed', function (ev) {

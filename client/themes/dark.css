@@ -98,6 +98,10 @@ a.focus, a:hover {
 
 /* TresDB specific */
 
+.tresdb-flash {
+  background-color: #10C48A !important;
+}
+
 #card-layer {
   background-color: #111;
 }

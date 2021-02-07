@@ -8,6 +8,12 @@ html, body {
   height: 100%;
 }
 
+/* Effects */
+
+.tresdb-flash {
+  background-color: #76E68C !important;
+}
+
 /* Card */
 
 #card-layer {

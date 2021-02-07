@@ -110,7 +110,7 @@ var LocationView = function (id, query) {
           scrollerEl.scrollTop = commentEl.offsetTop - MARGIN;
           // Flash the comment in green
           var $listItem = $(commentEl).find('.list-group-item');
-          ui.flash($listItem, '#dff0d8');
+          ui.flash($listItem);
         }
       }
 
