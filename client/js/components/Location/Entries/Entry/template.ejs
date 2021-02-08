@@ -5,7 +5,7 @@
   <div class="panel-heading">
     <div class="pull-right">
       <% if (entry.getUserName() === account.getName()) { %>
-        <button id="<%= entry.getId() %>-edit" type="button" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-pencil"></span></button>
+        <button id="<%= entry.getId() %>-edit" type="button" class="btn btn-default btn-sm entry-edit-open"><span class="glyphicon glyphicon-pencil"></span></button>
       <% } %>
     </div>
     <%= entry.getUserName() %> posted <%= entry.isVisit() ? '<strong>a visit</strong> ' : '' %><%= timestamp(entry.getTime()) %>
