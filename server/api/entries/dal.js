@@ -38,7 +38,7 @@ var removeOne = function (entryId, callback) {
   var coll = db.get().collection('entries');
   var q = { _id: entryId };
 
-  coll.remove(q, function (err) {
+  coll.deleteOne(q, {}, function (err) {
     if (err) {
       return callback(err);
     }
