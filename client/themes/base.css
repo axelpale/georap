@@ -378,6 +378,10 @@ html, body {
   margin: -5px -9px 0 0;
 }
 
+.tresdb-entry .comment-photo-btn {
+  margin-right: 1rem;
+}
+
 time {
   text-decoration: underline;
 }
