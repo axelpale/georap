@@ -373,6 +373,10 @@ html, body {
   margin-bottom: 0px;
 }
 
+.tresdb-entry .pull-right button {
+  margin: -5px -9px 0 0;
+}
+
 time {
   text-decoration: underline;
 }
