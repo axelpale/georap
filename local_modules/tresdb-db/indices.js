@@ -1,5 +1,10 @@
 module.exports = [
   {
+    collection: 'attachments',
+    spec: { key: 1 },
+    options: { unique: true },
+  },
+  {
     collection: 'entries',
     spec: { locationId: 1 },
     options: {},
