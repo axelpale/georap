@@ -1,7 +1,5 @@
-
 var dal = require('./dal');
 var status = require('http-status-codes');
-
 
 exports.count = function (req, res, next) {
 

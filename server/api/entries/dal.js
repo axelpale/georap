@@ -105,6 +105,42 @@ exports.changeLocationEntry = function (params, callback) {
   });
 };
 
+exports.createBlank = function (params, callback) {
+  // Parameters:
+  //   params
+  //     locationId
+  //       ObjectId
+  //     locationName
+  //       string
+  //     username
+  //       string
+  //   callback
+  //     function (err, blankEntry)
+  //
+  var blankEntry = {
+    type: 'location_entry',
+    user: params.username,
+    time: timestamp(),
+    locationId: params.locationId,
+    created: false,
+    deleted: false,
+    published: false,
+    markdown: '',
+    flags: [], // e.g. 'visit'
+    attachments: [],
+    comments: [],
+  };
+
+  insertOne(blankEntry, function (err, newEntryId) {
+    if (err) {
+      return callback(err);
+    }
+
+    blankEntry._id = newEntryId;
+    return callback(null, blankEntry);
+  });
+};
+
 exports.createLocationEntry = function (params, callback) {
   // Parameters:
   //   params:
