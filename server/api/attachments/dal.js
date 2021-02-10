@@ -47,6 +47,7 @@ exports.create = function (params, callback) {
 
   db.collection('attachments').insertOne(attachment, function (err) {
     if (err) {
+      // TODO key already exists
       return callback(err);
     }
     return callback(null, attachment);

@@ -20,6 +20,9 @@ exports.rotatePhoto = function (req, res, next) {
 
   var atta = req.attachment;
 
+  // Detect if image
+
+  // Rotate
   // TODO var imageFile = path ?
   // TODO sharp
 

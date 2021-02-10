@@ -1,9 +1,7 @@
 // URL parser middleware
 
 var dal = require('../attachment/dal');
-
 var status = require('http-status-codes');
-var db = require('tresdb-db');
 
 var keyPattern = /^[a-zA-Z0-9]{6}$/;
 

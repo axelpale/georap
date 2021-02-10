@@ -41,7 +41,7 @@ exports.create = function (req, res, next) {
     // console.log(req.body);
 
     if (typeof req.file !== 'object') {
-      // Empty post
+      // No file attachment
       return res.sendStatus(status.BAD_REQUEST);
     }
 

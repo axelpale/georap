@@ -50,7 +50,7 @@ exports.change = function (params, callback) {
     if (err) {
       return callback(err);
     }
-    return callback()
+    return callback();
   });
 };
 
