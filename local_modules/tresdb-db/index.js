@@ -1,4 +1,5 @@
-// Singleton wrapper around mongodb
+// Singleton wrapper around mongodb with
+// some handy server-side functions.
 
 var config = require('tresdb-config');
 var mongodb = require('mongodb');
@@ -11,6 +12,10 @@ exports.INDICES = require('./indices');
 
 exports.id = function (k) {
   return new ObjectId(k);
+};
+
+exports.timestamp = function () {
+  return (new Date()).toISOString();
 };
 
 exports.init = function (mongoUrl, callback) {

@@ -8,10 +8,6 @@ var purifyMarkdown = require('purify-markdown');
 
 // Private methods
 
-var timestamp = function () {
-  return (new Date()).toISOString();
-};
-
 var insertOne = function (entry, callback) {
   // Parameters:
   //   entry
@@ -120,7 +116,7 @@ exports.createBlank = function (params, callback) {
   var blankEntry = {
     type: 'location_entry',
     user: params.username,
-    time: timestamp(),
+    time: db.timestamp(),
     locationId: params.locationId,
     created: false,
     deleted: false,
@@ -174,7 +170,7 @@ exports.createLocationEntry = function (params, callback) {
   var newEntry = {
     type: 'location_entry',
     user: params.username,
-    time: timestamp(),
+    time: db.timestamp(),
     locationId: params.locationId,
     deleted: false,
     data: {
@@ -355,7 +351,7 @@ exports.createLocationEntryComment = function (params, callback) {
   //   callback
   //     function (err)
 
-  var time = timestamp();
+  var time = db.timestamp();
   var rand1 = Math.random().toString().substr(2, 10);
   var rand2 = Math.random().toString().substr(2, 10);
   var commentId = time.substr(0, 4) + rand1 + rand2; // 24 chars
