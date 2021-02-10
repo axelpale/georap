@@ -93,6 +93,7 @@
     "tresdb-cap": "file:local_modules/tresdb-cap",
     "tresdb-config": "file:local_modules/tresdb-config",
     "tresdb-db": "file:local_modules/tresdb-db",
+    "tresdb-key": "file:local_modules/tresdb-key",
     "tresdb-models": "file:local_modules/tresdb-models",
     "tresdb-points": "file:local_modules/tresdb-points",
     "tresdb-ui": "file:local_modules/tresdb-ui",
