@@ -12,7 +12,7 @@ module.exports = function (req, res, next) {
 
   // Validate key
   if (!keyPattern.test(key)) {
-    return res.sendStatus(status.BAD_REQUEST);
+    return res.status(status.BAD_REQUEST).send('Invalid attachment key');
   }
 
   dal.get(key, function (err, doc) {
