@@ -1,6 +1,4 @@
-
 var status = require('http-status-codes');
-
 var dal = require('./dal');
 var loggers = require('../../../services/logs/loggers');
 

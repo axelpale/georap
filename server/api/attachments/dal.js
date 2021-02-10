@@ -40,7 +40,7 @@ exports.create = function (params, callback) {
   var attachment = {
     key: keygen.generate(),
     user: params.username,
-    time: timestamp(),
+    time: db.timestamp(),
     deleted: false,
     filepath: params.filepath,
     mimetype: params.mimetype,

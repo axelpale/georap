@@ -50,9 +50,6 @@ exports.rotatePhoto = function (req, res, next) {
 exports.remove = function (req, res, next) {
   // Remove an attachment
   var key = req.attachment.key;
-  var username = req.user.name;
-
-  // TODO Ensure user is owner or admin
 
   dal.remove({
     key: key,

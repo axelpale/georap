@@ -25,7 +25,7 @@ router.use('/icons', iconsRouter);
 // the router is used before the jwt middleware.
 router.use('/account', accountRouter);
 
-// Token middleware. User can access the routes only with valid token.
+// Token middleware. User can access the routes only with a valid token.
 // Token contents are stored in req.user with properties:
 //
 // req.user = {
