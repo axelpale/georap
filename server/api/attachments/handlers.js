@@ -5,7 +5,7 @@ const uploads = require('../../services/uploads');
 
 // Setup
 const MAX_FILES = 10;
-const multiUploadHandler = uploads.uploader.array('files', MAX_FILES);
+const multiUploadHandler = uploads.uploader.array('attachments', MAX_FILES);
 
 exports.count = (req, res, next) => {
   // Number of attachments
@@ -52,7 +52,7 @@ exports.create = (req, res, next) => {
           return finish(errt);
         }
 
-        dal.createAttachment({
+        dal.create({
           username: username,
           filepath: uploads.getRelativePath(file.path),
           mimetype: file.mimetype,
