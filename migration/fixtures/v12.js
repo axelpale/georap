@@ -17,6 +17,8 @@ module.exports = {
     attachments: [
       {
         key: 'ewdsf3s',
+        user: 'admin',
+        time: '2009-09-04T23:44:21.000Z',
         filepath: '2009/RxRvKSlbl/radar.jpg', // the uploads/ contains this...
         mimetype: 'image/jpeg',
         thumbfilepath: '2009/RxRvKSlbl/radar_medium.jpg', // ...and this.
@@ -25,6 +27,8 @@ module.exports = {
       },
       {
         key: 'adebd2r',
+        user: 'admin',
+        time: '2009-09-04T23:44:21.000Z',
         filepath: '2021/EdvjkeEdf/tunnel-ground.jpg', // see uploads/
         mimetype: 'image/jpeg', /// small pic = same image
         thumbfilepath: '2021/EdvjkeEdf/tunnel-ground.jpg',
