@@ -1,5 +1,11 @@
 /* eslint-disable no-magic-numbers, no-sync, max-lines */
 
+// Latest v12 schema. Tedious to migrate, but is the most complete
+// representation of the available data structures yet easy to modify
+// without burden of migration consistency. Also here user credentials
+// are loaded from config/index instead of test-specific literals.
+// Also no need for change notes here.
+//
 // This fixture is aimed to be used as a demo and for experimenting
 // in development.
 
@@ -32,43 +38,64 @@ module.exports = {
       {
         _id: db.id('58092312bbba430a35fb4139'),
         key: 'schemaVersion',
-        value: 9,
+        value: 12,
       },
     ],
     entries: [
       {
+        // Blank entry before creation
+        _id: db.id('b1a24b1a24b1a24b1a246474'),
+        created: false,
+        deleted: false,
+        published: false,
+        locationId: irbeneId,
+        type: 'location_entry',
+        time: '2021-02-10T00:26:00.000Z',
+        user: admin,
+        markdown: '',
+        attachments: [],
+        comments: [],
+        flags: [],
+      },
+      {
         // A brief description about location
         _id: db.id('58092312bbba420a35fb4201'),
+        created: true,
         deleted: false,
+        published: false,
         locationId: irbeneId,
         type: 'location_entry',
         time: '2009-09-04T23:44:21.000Z',
         user: admin,
-        data: {
-          isVisit: false,
-          markdown: irbeneInfo,
+        markdown: irbeneInfo,
+        attachments: [{
           filepath: null,
           mimetype: null,
           thumbfilepath: null,
           thumbmimetype: null,
-        },
+        }],
+        comments: [],
+        flags: [],
       },
       {
         // A visit with attachment
         _id: db.id('58092312bebc430a35fb4102'),
+        created: true,
         deleted: false,
+        published: false,
         locationId: irbeneId,
         type: 'location_entry',
         time: '2009-10-05T12:23:34.000Z',
         user: admin,
-        data: {
-          isVisit: true,
-          markdown: null,
+        markdown: '',
+        attachments: [{
           filepath: '2009/RxRvKSlbl/radar.jpg',
           mimetype: 'image/jpeg',
           thumbfilepath: '2009/RxRvKSlbl/radar_medium.jpg',
           thumbmimetype: 'image/jpeg',
-        },
+        }],
+        comments: [],
+        flags: ['visit'],
       },
     ],
     events: [
@@ -109,12 +136,7 @@ module.exports = {
         time: '2009-09-04T23:44:21.000Z',
         data: {
           entryId: db.id('58092312bbba420a35fb4201'),
-          isVisit: false,
           markdown: irbeneInfo,
-          filepath: null,
-          mimetype: null,
-          thumbfilepath: null,
-          thumbmimetype: null,
         },
       },
       {
@@ -127,12 +149,16 @@ module.exports = {
         time: '2009-10-05T12:23:34.000Z',
         data: {
           entryId: db.id('58092312bebc430a35fb4102'),
-          isVisit: true,
-          markdown: null,
-          filepath: '2009/RxRvKSlbl/radar.jpg',
-          mimetype: 'image/jpeg',
-          thumbfilepath: '2009/RxRvKSlbl/radar_medium.jpg',
-          thumbmimetype: 'image/jpeg',
+          flags: ['visit'],
+          markdown: '',
+          attachments: [
+            {
+              filepath: '2009/RxRvKSlbl/radar.jpg',
+              mimetype: 'image/jpeg',
+              thumbfilepath: '2009/RxRvKSlbl/radar_medium.jpg',
+              thumbmimetype: 'image/jpeg',
+            },
+          ],
         },
       },
       {
