@@ -34,8 +34,9 @@ router.use('/account', accountRouter);
 // Token contents are stored in req.user with properties:
 //
 // req.user = {
-//   name
-//   admin
+//   name: <string>,
+//   email: <string>,
+//   admin: <bool>,
 // }
 //
 // See https://github.com/auth0/express-jwt
