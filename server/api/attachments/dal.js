@@ -9,11 +9,13 @@ exports.count = function (callback) {
   //
   db.collection('attachments').countDocuments({
     deleted: false,
-  }).then(function (number) {
-    return callback(null, number);
-  }).catch(function (err) {
-    return callback(err);
-  });
+  })
+    .then(function (number) {
+      return callback(null, number);
+    })
+    .catch(function (err) {
+      return callback(err);
+    });
 };
 
 exports.create = function (params, callback) {
