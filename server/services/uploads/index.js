@@ -91,36 +91,6 @@ exports.getRelativePath = function (absolutePath) {
   return path.relative(config.uploadDir, absolutePath);
 };
 
-// exports.makeLocalPermanent = function (tempFilePath, callback) {
-//   // Copy a file from a temporary local location to
-//   // the permanent upload directory.
-//   //
-//   // Parameters:
-//   //   tempFilePath
-//   //     absolute local file path to source file
-//   //   callback
-//   //     function (err, newFilePath)
-//   //
-//   var fname = path.basename(tempFilePath);
-//
-//   yearShortId(null, null, function (err, absDirPath) {
-//     if (err) {
-//       return callback(err);
-//     }
-//
-//     var sanename = sanitizeFilename(fname);
-//     var newpath = path.resolve(absDirPath, sanename);
-//
-//     fse.copy(tempFilePath, newpath, function (errm) {
-//       if (errm) {
-//         return callback(errm);
-//       }
-//
-//       return callback(null, newpath);
-//     });
-//   });
-// };
-
 exports.makePermanent = function (filePath, callback) {
   // Copy a file to the permanent upload directory.
   //
@@ -166,7 +136,6 @@ exports.makePermanent = function (filePath, callback) {
     }
   });
 };
-
 
 exports.createThumbnail = function (file, callback) {
   // Create a thumbnail for the file.
