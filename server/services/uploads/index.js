@@ -223,7 +223,8 @@ exports.rotateImage = function (imageFile, degrees, callback) {
   //   filename
   //   path
   //
-  var roundedDegrees = 90 * Math.round(degrees / 90);
+  var QUAD = 90;
+  var roundedDegrees = QUAD * Math.round(degrees / QUAD);
 
   if (roundedDegrees === 0) {
     // Rotated equals the original
@@ -237,11 +238,6 @@ exports.rotateImage = function (imageFile, degrees, callback) {
         return callback(err);
       }
 
-      return callback(null, {
-        mimetype: 'image/jpeg',
-        destination: dir,
-        filename: thumbname,
-        path: thumbpath,
-      });
+      return callback(null, imageFile);
     });
 };
