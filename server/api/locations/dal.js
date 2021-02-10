@@ -16,7 +16,7 @@ exports.count = function (callback) {
   // Parameters:
   //   callback
   //     function (err, number)
-
+  //
   var coll = db.get().collection('locations');
 
   coll.countDocuments({ deleted: false }).then(function (number) {
