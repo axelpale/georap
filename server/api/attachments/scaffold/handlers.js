@@ -6,7 +6,7 @@ var path = require('path');
 // Precompile template and prerender index.html.
 var indexHtml = (function precompile() {
 
-  var p = path.resolve(__dirname, './scaffold.ejs');
+  var p = path.resolve(__dirname, './template.ejs');
   var f = fs.readFileSync(p, 'utf8');  // eslint-disable-line no-sync
   var template = ejs.compile(f);
 
