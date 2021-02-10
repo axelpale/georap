@@ -236,3 +236,43 @@ exports.createThumbnail = function (file, callback) {
     return callback(null, file);
   }
 };
+
+exports.rotateImage = function (imageFile, degrees, callback) {
+  // Try to rotate image file and replace it.
+  //
+  // Parameters
+  //   imageFile
+  //     a file descriptor similar to the resulting object.
+  //   degrees
+  //     amount of rotation. Rounded to 90 deg steps.
+  //   callback
+  //     function (err, rotatedImage)
+  //
+  // Where imageFile and rotatedImage are objects with properties:
+  //   mimetype
+  //   destination
+  //   filename
+  //   path
+  //
+  var roundedDegrees = 90 * Math.round(degrees / 90);
+
+  if (roundedDegrees === 0) {
+    // Rotated equals the original
+    return callback(null, imageFile);
+  }
+
+  sharp(imageFile.path)
+    .rotate(roundedDegrees)
+    .toFile(imageFile.path, function (err) {
+      if (err) {
+        return callback(err);
+      }
+
+      return callback(null, {
+        mimetype: 'image/jpeg',
+        destination: dir,
+        filename: thumbname,
+        path: thumbpath,
+      });
+    });
+};
