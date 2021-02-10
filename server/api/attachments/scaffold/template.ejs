@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+
+    <title>Attachment upload scaffold</title>
+
+    <!-- Viewport mobile tag for sensible mobile support -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/assets/images/logo/16.png">
+
+    <!-- Bootstrap 3 styles -->
+    <link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css">
+    <!-- TresDB theme -->
+    <link rel="stylesheet" href="/assets/themes/base.css">
+    <link id="theme-stylesheet" rel="stylesheet" href="/assets/themes/light.css">
+
+    <style>
+      .dropbox-dragndrop,
+      .dropbox-uploading,
+      .dropbox-success,
+      .dropbox-error {
+        display: none;
+      }
+
+      .dropbox.has-advanced-upload {
+        background-color: white;
+        outline: 2px dashed black;
+        outline-offset: -10px;
+      }
+      .dropbox.has-advanced-upload .dropbox-dragndrop {
+        display: inline;
+      }
+
+      .dropbox.is-dragover {
+        background-color: grey;
+      }
+
+      .dropbox-button {
+        display: none;
+      }
+    </style>
+  </head>
+
+  <body>
+    <form class="dropbox" method="post" action="" enctype="multipart/form-data">
+      <div class="dropbox-input">
+        <input class="dropbox-file" type="file" name="files[]" id="file" data-multiple-caption="{count} files selected" multiple />
+        <label for="file"><strong>Choose a file</strong><span class="dropbox-dragndrop"> or drag it here</span>.</label>
+        <button class="dropbox-button" type="submit">Upload</button>
+      </div>
+      <div class="dropbox-uploading">Uploading…</div>
+      <div class="dropbox-success">Done!</div>
+      <div class="dropbox-error">Error! <span></span>.</div>
+    </form>
+
+    <!-- jQuery 3 (required by Bootstrap 3) -->
+    <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous"></script>
+
+    <!-- Bootstrap 3 JavaScript -->
+    <script src="/assets/bootstrap/js/bootstrap.min.js"></script>
+
+    <!-- Mocked site config variables -->
+    <script>
+      window.tresdb = <%- JSON.stringify(tresdb) %>
+    </script>
+
+    <!-- Uploader code -->
+    <script>
+      // Drag-n-drop feature support recognition.
+      // See https://css-tricks.com/drag-and-drop-file-uploading/
+      var isAdvancedUpload = function () {
+        var div = document.createElement('div');
+        return (
+          ('draggable' in div) ||
+          ('ondragstart' in div && 'ondrop' in div)
+        ) && 'FormData' in window && 'FileReader' in window;
+      }();
+
+      var $form = $('.dropbox');
+
+      if (isAdvancedUpload) {
+        $form.addClass('has-advanced-upload');
+      }
+
+      if (isAdvancedUpload) {
+        var droppedFiles = false;
+
+        $form.on('drag dragstart dragend dragover dragenter dragleave drop', function (e) {
+          e.preventDefault();
+          e.stopPropagation();
+        })
+        .on('dragover dragenter', function () {
+          $form.addClass('is-dragover');
+        })
+        .on('dragleave dragend drop', function () {
+          $form.removeClass('is-dragover');
+        })
+        .on('drop', function (e) {
+          droppedFiles = e.originalEvent.dataTransfer.files;
+          $form.trigger('submit');
+        });
+      }
+
+      $form.on('submit', function(e) {
+        if ($form.hasClass('is-uploading')) return false;
+
+        $form.addClass('is-uploading').removeClass('is-error');
+
+        if (isAdvancedUpload) {
+          // ajax for modern browsers
+          e.preventDefault();
+
+          var ajaxData = new FormData($form.get(0));
+
+          if (droppedFiles) {
+            $.each( droppedFiles, function(i, file) {
+              ajaxData.append( $input.attr('name'), file );
+            });
+          }
+
+          $.ajax({
+            url: $form.attr('action'),
+            type: $form.attr('method'),
+            data: ajaxData,
+            dataType: 'json',
+            cache: false,
+            contentType: false,
+            processData: false,
+            complete: function() {
+              $form.removeClass('is-uploading');
+            },
+            success: function(data) {
+              $form.addClass( data.success == true ? 'is-success' : 'is-error' );
+              if (!data.success) $errorMsg.text(data.error);
+            },
+            error: function() {
+              // Log the error, show an alert, whatever works for you
+            }
+          });
+        } else {
+          // ajax for legacy browsers
+        }
+      });
+
+    </script>
+  </body>
+</html>
