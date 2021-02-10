@@ -18,6 +18,7 @@ router.use((req, res, next) => {
   return next();
 });
 
+router.get('/', jsonParser, handlers.getMany);
 router.post('/', jsonParser, handlers.create);
 router.get('/count', handlers.count);
 router.use('/scaffold', scaffoldRouter);

@@ -56,3 +56,17 @@ exports.create = (params, callback) => {
     return callback(null, attachment);
   });
 };
+
+exports.getMany = (keys, callback) => {
+  // Multiple attachments with single query.
+  //
+  // Parameters:
+  //   keys: array of attachment keys
+  //   callback: function (err, attachments)
+  //
+  db.collection('attachments').find({
+    key: {
+      $in: keys,
+    },
+  }).toArray(callback);
+};

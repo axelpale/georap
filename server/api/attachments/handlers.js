@@ -77,3 +77,28 @@ exports.create = (req, res, next) => {
     });
   });
 };
+
+exports.getMany = (req, res, next) => {
+  // Find multiple attachments
+  // Response with { attachments: [...] }
+  //
+  const keys = req.body.keys;
+
+  // Validate keys
+  try {
+    if (!keys.every(k => keyPattern.test(k)) {
+      return res.status(status.BAD_REQUEST).send('Invalid attribute: keys');
+    }
+  } catch (err) {
+    return res.status(status.BAD_REQUEST).send('Invalid attribute: keys');
+  }
+
+  dal.getMany(keys, (err, attachments) => {
+    if (err) {
+      return next(err);
+    }
+    return res.json({
+      attachments: attachments,
+    });
+  });
+};
