@@ -12,6 +12,9 @@ module.exports = {
 
     // Disable node environment
     node: false,
+
+    // Try to support ES5
+    es6: false,
   },
 
   parser: 'babel-eslint',

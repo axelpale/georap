@@ -5,6 +5,8 @@ module.exports = {
   'env': {
     // Node.js global variables and Node.js scoping
     'node': true,
+    // Const, let, arrow functions...
+    'es6': true,
   },
   'globals': {
     // place settings for globals here
