@@ -2,8 +2,7 @@
 
 var dal = require('../attachment/dal');
 var status = require('http-status-codes');
-
-var keyPattern = /^[a-zA-Z0-9]{8}$/;
+var keyPattern = require('./keyPattern');
 
 module.exports = function (req, res, next) {
   // Converts string object id to ObjectId and fetches the location.
