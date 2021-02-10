@@ -45,6 +45,19 @@
   </head>
 
   <body>
+    <h1>Basic file upload</h1>
+
+    <form method="post" action="/api/attachments" enctype="multipart/form-data">
+      <input type="file" name="attachments" id="file" multiple />
+      <label for="file">Choose a file.</label>
+
+      <div>
+        <button type="submit">Submit</button>
+      </div>
+    </form>
+
+    <h1>Advanced file upload</h1>
+
     <form class="dropbox" method="post" action="" enctype="multipart/form-data">
       <div class="dropbox-input">
         <input class="dropbox-file" type="file" name="files[]" id="file" data-multiple-caption="{count} files selected" multiple />
