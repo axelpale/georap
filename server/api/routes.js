@@ -4,6 +4,7 @@ var config = require('tresdb-config');
 
 var accountRouter = require('./account/routes');
 var adminRouter = require('./admin/routes');
+var attachmentsRouter = require('./attachments/routes');
 var eventsRouter = require('./events/routes');
 var iconsRouter = require('./icons/routes');
 var locationsRouter = require('./locations/routes');
@@ -20,6 +21,10 @@ var router = require('express').Router();
 
 // Icon routes do not require authentication. Thus before jwt middleware.
 router.use('/icons', iconsRouter);
+
+// Scaffold routes do not require authentication but must be removed
+// or closed after development.
+router.use('/attachments', attachmentsRouter);
 
 // Account routes only partially require JWT authentication. Thus
 // the router is used before the jwt middleware.
