@@ -16,7 +16,7 @@ module.exports = {
     // NOTE New collection
     attachments: [
       {
-        key: 'ewdsf3s',
+        key: 'ewdsf3kk',
         user: 'admin',
         time: '2009-09-04T23:44:21.000Z',
         filepath: '2009/RxRvKSlbl/radar.jpg', // the uploads/ contains this...
@@ -26,7 +26,7 @@ module.exports = {
         deleted: false,
       },
       {
-        key: 'adebd2r',
+        key: 'adebd2rq',
         user: 'admin',
         time: '2009-09-04T23:44:21.000Z',
         filepath: '2021/EdvjkeEdf/tunnel-ground.jpg', // see uploads/
@@ -52,13 +52,19 @@ module.exports = {
       user: 'admin',
     }, {
       _id: db.id('581f166110a1482dd0b7ea02'),
-      attachments: ['ewdsf3s'], // NOTE
+      attachments: ['ewdsf3kk'], // NOTE
       comments: [
         {
           time: '2009-10-04T19:55:01.000Z',
           user: 'admin',
           message: 'Hello world',
           attachments: [], // NOTE
+        },
+        {
+          time: '2021-02-10T20:30:01.000Z',
+          user: 'admin',
+          message: 'Tunnel ground',
+          attachments: ['adebd2rq'], // NOTE
         },
       ],
       created: true, // NOTE
@@ -111,7 +117,7 @@ module.exports = {
         entryId: db.id('581f166110a1482dd0b7ea02'),
         created: true, // NOTE
         markdown: '', // NOTE null to ''
-        attachments: ['ewdsf3s'], // NOTE ref to attachment key
+        attachments: ['ewdsf3kk'], // NOTE ref to attachment key
         // NOTE isVisit:false converted to implicit flags:[]
       },
       locationId: c.irbeneId,
