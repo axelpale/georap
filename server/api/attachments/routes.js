@@ -8,6 +8,16 @@ const attachmentLoader = require('./lib/attachmentLoader');
 const attachmentRouter = require('./attachment/routes');
 const scaffoldRouter = require('./scaffold/routes');
 
+// TEMP Scaffold
+router.use((req, res, next) => {
+  req.user = {
+    name: 'foobar',
+    email: 'foobar@example.com',
+    admin: true,
+  };
+  return next();
+});
+
 router.post('/', jsonParser, handlers.create);
 router.get('/count', handlers.count);
 router.use('/scaffold', scaffoldRouter);
