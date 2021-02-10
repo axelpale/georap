@@ -9,12 +9,17 @@
     "type": "git",
     "url": "git://github.com/axelpale/tresdb.git"
   },
-  "scripts": {},
+  "scripts": {
+    "lint": "standard",
+    "test": "standard"
+  },
   "author": "Akseli Palén <akseli.palen@gmail.com>",
   "license": "MIT",
   "dependencies": {
     "nanoid": "^3.1.20",
     "nanoid-dictionary": "^4.2.0"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "standard": "*"
+  }
 }
