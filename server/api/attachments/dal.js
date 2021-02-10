@@ -1,7 +1,7 @@
 var db = require('tresdb-db');
 var keygen = require('tresdb-key');
 
-exports.count = function (callback) {
+exports.count = (callback) => {
   // Count non-deleted attachments
   //
   // Parameters:
@@ -11,15 +11,15 @@ exports.count = function (callback) {
   db.collection('attachments').countDocuments({
     deleted: false,
   })
-    .then(function (number) {
+    .then((number) => {
       return callback(null, number);
     })
-    .catch(function (err) {
+    .catch((err) => {
       return callback(err);
     });
 };
 
-exports.create = function (params, callback) {
+exports.create = (params, callback) => {
   // Parameters:
   //   params:
   //     username
@@ -37,7 +37,7 @@ exports.create = function (params, callback) {
   //   callback
   //     function (err, attachment)
 
-  var attachment = {
+  const attachment = {
     key: keygen.generate(),
     user: params.username,
     time: db.timestamp(),
@@ -48,7 +48,7 @@ exports.create = function (params, callback) {
     thumbmimetype: params.thumbmimetype,
   };
 
-  db.collection('attachments').insertOne(attachment, function (err) {
+  db.collection('attachments').insertOne(attachment, (err) => {
     if (err) {
       // TODO key already exists
       return callback(err);
