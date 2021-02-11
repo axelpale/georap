@@ -97,7 +97,7 @@ exports.getMany = (req, res, next) => {
 
   // Validate keys
   try {
-    if (!keys.every(k => keyPattern.test(k)) {
+    if (!keys.every(k => keyPattern.test(k))) {
       return res.status(status.BAD_REQUEST).send('Invalid attribute: keys');
     }
   } catch (err) {
