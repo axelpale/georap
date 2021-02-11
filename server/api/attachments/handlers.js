@@ -1,6 +1,7 @@
 const dal = require('./dal');
 const asyn = require('async');
 const status = require('http-status-codes');
+const keyPattern = require('./lib/keyPattern');
 const uploads = require('../../services/uploads');
 
 // Setup
