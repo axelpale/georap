@@ -78,6 +78,17 @@ exports.create = (req, res, next) => {
   });
 };
 
+exports.getAll = (req, res, next) => {
+  dal.getAll((err, attachments) => {
+    if (err) {
+      return next(err);
+    }
+    return res.json({
+      attachments: attachments,
+    });
+  });
+};
+
 exports.getMany = (req, res, next) => {
   // Find multiple attachments
   // Response with { attachments: [...] }

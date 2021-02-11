@@ -57,6 +57,10 @@ exports.create = (params, callback) => {
   });
 };
 
+exports.getAll = (callback) => {
+  db.collection('attachments').find().toArray(callback);
+};
+
 exports.getMany = (keys, callback) => {
   // Multiple attachments with single query.
   //
