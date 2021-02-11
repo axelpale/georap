@@ -18,6 +18,45 @@
     <link id="theme-stylesheet" rel="stylesheet" href="/assets/themes/light.css">
 
     <style>
+      body {
+        color: #0f3c4b;
+        background-color: #e5edf1;
+        padding: 5rem 1.25rem;
+      }
+
+      .dropbox-input input {
+        width: 0.1px;
+        height: 0.1px;
+        opacity: 0;
+        overflow: hidden;
+        position: absolute;
+        z-index: -1;
+      }
+
+      .dropbox-input label {
+        font-size: 1.25em;
+        font-weight: 700;
+        display: inline-block;
+        cursor: pointer;
+      }
+
+      .dropbox-file:focus + label,
+      .dropbox-file + label:hover {
+        color: #39bfd3;
+      }
+
+      .dropbox-file:focus + label {
+        outline: 1px dotted #000;
+        outline: -webkit-focus-ring-color auto 5px;
+      }
+
+      /* Prevent touch-reactive content inside label */
+      .dropbox-input label * {
+        pointer-events: none;
+      }
+
+      /* Drag'n'drop styling */
+
       .dropbox-dragndrop,
       .dropbox-uploading,
       .dropbox-success,
@@ -25,9 +64,13 @@
         display: none;
       }
 
+      .dropbox {
+        font-size: 1.28rem;
+        background-color: #c8dadf;
+        padding: 6.85rem 1.28rem;
+      }
       .dropbox.has-advanced-upload {
-        background-color: white;
-        outline: 2px dashed black;
+        outline: 2px dashed #92b0b3;
         outline-offset: -10px;
       }
       .dropbox.has-advanced-upload .dropbox-dragndrop {
@@ -36,6 +79,13 @@
 
       .dropbox.is-dragover {
         background-color: grey;
+      }
+
+      .dropbox.is-error .dropbox-error {
+        display: block;
+      }
+      .dropbox.is-success .dropbox-success {
+        display: block;
       }
 
       .dropbox-button {
@@ -48,8 +98,8 @@
     <h1>Basic file upload</h1>
 
     <form method="post" action="/api/attachments" enctype="multipart/form-data">
-      <input type="file" name="attachments" id="file" multiple />
-      <label for="file">Choose a file.</label>
+      <input type="file" name="attachments" id="basic-file-input" multiple />
+      <label for="basic-file-input">Choose a file.</label>
 
       <div>
         <button type="submit">Submit</button>
@@ -58,10 +108,10 @@
 
     <h1>Advanced file upload</h1>
 
-    <form class="dropbox" method="post" action="" enctype="multipart/form-data">
+    <form class="dropbox" method="post" action="/api/attachments" enctype="multipart/form-data">
       <div class="dropbox-input">
-        <input class="dropbox-file" type="file" name="files[]" id="file" data-multiple-caption="{count} files selected" multiple />
-        <label for="file"><strong>Choose a file</strong><span class="dropbox-dragndrop"> or drag it here</span>.</label>
+        <input class="dropbox-file" type="file" name="attachments" id="advanced-file-input" data-multiple-caption="{count} files selected" multiple />
+        <label for="advanced-file-input"><strong>Choose a file</strong><span class="dropbox-dragndrop"> or drag it here</span>.</label>
         <button class="dropbox-button" type="submit">Upload</button>
       </div>
       <div class="dropbox-uploading">Uploading…</div>
@@ -82,6 +132,28 @@
 
     <!-- Uploader code -->
     <script>
+
+      // Display selected files
+      var inputEl = document.getElementById('advanced-file-input');
+      var labelEl	 = inputEl.nextElementSibling;
+      var labelVal = labelEl.innerHTML;
+      var nameTemplate = (inputEl.getAttribute('data-multiple-caption') || '');
+
+      inputEl.addEventListener('change', function (ev) {
+        var fileName = '';
+        if (inputEl.files && inputEl.files.length > 1) {
+          fileName = nameTemplate.replace('{count}', inputEl.files.length);
+        } else {
+          fileName = ev.target.value.split('\\').pop();
+        }
+
+        if (fileName) {
+          labelEl.querySelector('span').innerHTML = fileName;
+        } else {
+          labelEl.innerHTML = labelVal;
+        }
+      });
+
       // Drag-n-drop feature support recognition.
       // See https://css-tricks.com/drag-and-drop-file-uploading/
       var isAdvancedUpload = function () {
@@ -93,13 +165,14 @@
       }();
 
       var $form = $('.dropbox');
+      var $errorMsg = $('.dropbox-error');
+      var droppedFiles = false;
 
       if (isAdvancedUpload) {
         $form.addClass('has-advanced-upload');
       }
 
       if (isAdvancedUpload) {
-        var droppedFiles = false;
 
         $form.on('drag dragstart dragend dragover dragenter dragleave drop', function (e) {
           e.preventDefault();
@@ -113,12 +186,15 @@
         })
         .on('drop', function (e) {
           droppedFiles = e.originalEvent.dataTransfer.files;
+          console.log('drop', droppedFiles);
           $form.trigger('submit');
         });
       }
 
-      $form.on('submit', function(e) {
-        if ($form.hasClass('is-uploading')) return false;
+      $form.on('submit', function (e) {
+        if ($form.hasClass('is-uploading')) {
+          return false;
+        }
 
         $form.addClass('is-uploading').removeClass('is-error');
 
@@ -129,10 +205,12 @@
           var ajaxData = new FormData($form.get(0));
 
           if (droppedFiles) {
-            $.each( droppedFiles, function(i, file) {
-              ajaxData.append( $input.attr('name'), file );
+            $.each(droppedFiles, function (i, file) {
+              ajaxData.append(inputEl.name, file);
             });
           }
+
+          console.log('droppedFiles', droppedFiles);
 
           $.ajax({
             url: $form.attr('action'),
@@ -142,16 +220,17 @@
             cache: false,
             contentType: false,
             processData: false,
-            complete: function() {
+            complete: function () {
               $form.removeClass('is-uploading');
             },
-            success: function(data) {
-              $form.addClass( data.success == true ? 'is-success' : 'is-error' );
+            success: function (data) {
+              $form.addClass(data.success == true ? 'is-success' : 'is-error');
               if (!data.success) $errorMsg.text(data.error);
             },
-            error: function() {
+            error: function () {
               // Log the error, show an alert, whatever works for you
-            }
+
+            },
           });
         } else {
           // ajax for legacy browsers
