@@ -40,6 +40,10 @@
         cursor: pointer;
       }
 
+      .dropbox-input label .glyphicon {
+        font-size: 6.8rem;
+      }
+
       .dropbox-file:focus + label,
       .dropbox-file + label:hover {
         color: #39bfd3;
@@ -66,6 +70,7 @@
 
       .dropbox {
         font-size: 1.28rem;
+        text-align: center;
         background-color: #c8dadf;
         padding: 6.85rem 1.28rem;
       }
@@ -81,6 +86,9 @@
         background-color: grey;
       }
 
+      .dropbox.is-uploading .dropbox-uploading {
+        display: block;
+      }
       .dropbox.is-error .dropbox-error {
         display: block;
       }
@@ -111,13 +119,17 @@
     <form class="dropbox" method="post" action="/api/attachments" enctype="multipart/form-data">
       <div class="dropbox-input">
         <input class="dropbox-file" type="file" name="attachments" id="advanced-file-input" data-multiple-caption="{count} files selected" multiple />
-        <label for="advanced-file-input"><strong>Choose a file</strong><span class="dropbox-dragndrop"> or drag it here</span>.</label>
+        <label for="advanced-file-input"><span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span><br><strong>Choose a file</strong><span class="dropbox-dragndrop"> or drag it here</span>.</label>
         <button class="dropbox-button" type="submit">Upload</button>
       </div>
       <div class="dropbox-uploading">Uploading…</div>
       <div class="dropbox-success">Done!</div>
       <div class="dropbox-error">Error! <span></span>.</div>
     </form>
+
+    <h2>Attachments</h2>
+
+    <div id="attachments-container"></div>
 
     <!-- jQuery 3 (required by Bootstrap 3) -->
     <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous"></script>
@@ -130,8 +142,21 @@
       window.tresdb = <%- JSON.stringify(tresdb) %>
     </script>
 
-    <!-- Uploader code -->
     <script>
+
+      var $attachments = $('#attachments-container');
+      var renderAttachments = function (attas) {
+        attas.forEach(function (atta) {
+          var url = tresdb.config.uploadUrl + '/' + atta.filepath;
+          $attachments.append(
+            '<div class="attachment">' +
+            '<img src="' + url + '" height="200">' +
+            '</div>'
+          );
+        });
+      };
+
+      // Advanced File Uploader
 
       // Display selected files
       var inputEl = document.getElementById('advanced-file-input');
@@ -186,7 +211,6 @@
         })
         .on('drop', function (e) {
           droppedFiles = e.originalEvent.dataTransfer.files;
-          console.log('drop', droppedFiles);
           $form.trigger('submit');
         });
       }
@@ -210,8 +234,6 @@
             });
           }
 
-          console.log('droppedFiles', droppedFiles);
-
           $.ajax({
             url: $form.attr('action'),
             type: $form.attr('method'),
@@ -223,13 +245,18 @@
             complete: function () {
               $form.removeClass('is-uploading');
             },
-            success: function (data) {
-              $form.addClass(data.success == true ? 'is-success' : 'is-error');
-              if (!data.success) $errorMsg.text(data.error);
+            success: function (data, textStatus, xhr) {
+              if (xhr.status === 200) {
+                $form.addClass('is-success');
+                renderAttachments(data.attachments);
+              } else {
+                $form.addClass('is-error');
+                $errorMsg.text(textStatus);
+              }
             },
-            error: function () {
-              // Log the error, show an alert, whatever works for you
-
+            error: function (err) {
+              $form.addClass('is-error');
+              $errorMsg.text(textStatus);
             },
           });
         } else {
