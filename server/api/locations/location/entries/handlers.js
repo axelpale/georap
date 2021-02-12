@@ -1,7 +1,7 @@
-
+const _ = require('lodash');
+const status = require('http-status-codes');
 const uploads = require('../../../../services/uploads');
 const dal = require('../../../entries/dal');
-const status = require('http-status-codes');
 
 // Setup
 const uploadHandler = uploads.uploader.single('entryfile');
@@ -109,87 +109,56 @@ exports.change = (req, res, next) => {
 exports.create = (req, res, next) => {
   // Create entry.
   //
-  // File is optional
-
   const locationId = req.location._id;
   const locationName = req.location.name;
   const username = req.user.name;
 
-  const then = (err) => {
+  let markdown, attachments, flags;
+
+  if ('entrytext' in req.body) {
+    markdown = req.body.entrytext.trim();
+  } else {
+    markdown = '';
+  }
+
+  if ('attachments' in req.body && typeof req.body.attachments === 'object') {
+    attachments = req.body.attachments;
+  } else {
+    attachments = [];
+  }
+
+  if ('flags' in req.body && typeof req.body.flags === 'object') {
+    flags = req.body.flags;
+  } else {
+    flags = [];
+  }
+
+  // Do not allow empty posts
+  if (markdown === '' && attachments.length === 0) {
+    return res.status(status.BAD_REQUEST).send('Empty posts are not allowed.');
+  }
+
+  // Check possible conditions for flags
+  // TODO make configurable
+  // Visit is only regarded with a file for proof.
+  if (flags.indexOf('visit') >= 0 && attachments.length === 0) {
+    flags = _.without(flags, 'visit');
+  }
+
+  dal.createLocationEntry({
+    locationId: locationId,
+    locationName: locationName,
+    username: username,
+    markdown: markdown,
+    attachments: attachments,
+    flags: flags,
+  }, (err, entry) => {
     if (err) {
       return next(err);
     }
-    // Return json because client side response handlers expect json.
-    // jQuery throws error if no json.
-    return res.json({});
-  };
-
-  uploadHandler(req, res, (err) => {
-    if (err) {
-      if (err.code === 'LIMIT_FILE_SIZE') {
-        return res.sendStatus(status.REQUEST_TOO_LONG);
-      }
-      return next(err);
-    }
-
-    // console.log('req.file:');
-    // console.log(req.file);
-    // console.log('req.body:');
-    // console.log(req.body);
-
-    let markdown = req.body.entrytext;
-
-    // Do not allow empty strings
-    if (typeof markdown === 'string' && markdown.trim().length === 0) {
-      markdown = null;
-    }
-
-    const hasFile = (typeof req.file === 'object');
-    const hasText = (typeof markdown === 'string');
-    // Visit is only regarded with a file for proof
-    const hasVisit = (hasFile && req.body.entryvisit === 'visited');
-
-    if (!hasFile && !hasText) {
-      // Empty post
-      return res.sendStatus(status.BAD_REQUEST);
-    }
-
-    if (hasFile) {
-      // Create thumbnail. Create even for non-images.
-      uploads.createThumbnail(req.file, (errt, thumb) => {
-        if (errt) {
-          return next(errt);
-        }
-
-        dal.createLocationEntry({
-          locationId: locationId,
-          locationName: locationName,
-          username: username,
-          markdown: hasText ? markdown : null,
-          isVisit: hasVisit,
-          filepath: uploads.getRelativePath(req.file.path),
-          mimetype: req.file.mimetype,
-          thumbfilepath: uploads.getRelativePath(thumb.path),
-          thumbmimetype: thumb.mimetype,
-        }, then);
-      });
-
-      return;
-    }
-
-    // No thumbnail
-    dal.createLocationEntry({
-      locationId: locationId,
-      locationName: locationName,
-      username: username,
-      markdown: hasText ? markdown : null,
-      isVisit: hasVisit,
-      filepath: null,
-      mimetype: null,
-      thumbfilepath: null,
-      thumbmimetype: null,
-    }, then);
-
+    return res.json({
+      entry: entry,
+    });
   });
 };
 
@@ -199,7 +168,7 @@ exports.remove = (req, res, next) => {
 
   const locationId = req.location._id;
   const locationName = req.location.name;
-  const entryId = req.entryId;
+  const entryId = req.entry._id;
   const username = req.user.name;
 
   dal.removeLocationEntry({

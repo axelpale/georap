@@ -1,11 +1,12 @@
 const express = require('express');
 const router = express.Router(); // eslint-disable-line new-cap
+const jsonParser = require('body-parser').json();
 
 const handlers = require('./handlers');
 const entryIdParser = require('./lib/entryIdParser');
 const commentsRouter = require('./comments/routes');
 
-router.post('/', handlers.create); // uses multer body-parser inside
+router.post('/', jsonParser, handlers.create);
 
 router.use('/:entryId', entryIdParser);
 

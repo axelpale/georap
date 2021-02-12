@@ -159,7 +159,12 @@ exports.createLocationEntry = (params, callback) => {
       newEntry: newEntry,
     };
 
-    eventsDal.createLocationEntryCreated(eventParams, callback);
+    eventsDal.createLocationEntryCreated(eventParams, (errr) => {
+      if (errr) {
+        return callback(errr);
+      }
+      return callback(null, newEntry);
+    });
   });
 };
 
