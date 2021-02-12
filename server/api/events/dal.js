@@ -85,24 +85,16 @@ exports.createLocationCreated = function (params, callback) {
 exports.createLocationEntryChanged = function (params, callback) {
   // Parameters:
   //   params:
-  //     oldEntry
-  //       raw entry object
+  //     entryId
+  //       string
+  //     locationId
+  //       string
   //     locationName
   //       string
-  //     markdown
-  //       string or null
-  //     isVisit
-  //       boolean
-  //     filepath
-  //       string or null
-  //       The relative path of the file in the uploads dir
-  //     mimetype
-  //       string or null
-  //     thumbfilepath
-  //       string or null
-  //       The relative path of the thumbnail file in the uploads dir
-  //     thumbmimetype
-  //       string or null
+  //     delta
+  //       object of changed values
+  //     original
+  //       object of original values
 
   if (typeof params.oldEntry._id !== 'object') {
     throw new Error('invalid entryId type');
@@ -112,22 +104,12 @@ exports.createLocationEntryChanged = function (params, callback) {
     type: 'location_entry_changed',
     user: params.oldEntry.user,
     time: db.timestamp(),
-    locationId: params.oldEntry.locationId,
+    locationId: params.locationId,
     locationName: params.locationName,
     data: {
       entryId: params.oldEntry._id,
-      oldMarkdown: params.oldEntry.data.markdown,
-      newMarkdown: params.markdown,
-      oldIsVisit: params.oldEntry.data.isVisit,
-      newIsVisit: params.isVisit,
-      oldFilepath: params.oldEntry.data.filepath,
-      newFilepath: params.filepath,
-      oldMimetype: params.oldEntry.data.mimetype,
-      newMimetype: params.mimetype,
-      oldThumbfilepath: params.oldEntry.data.thumbfilepath,
-      newThumbfilepath: params.thumbfilepath,
-      oldThumbmimetype: params.oldEntry.data.thumbmimetype,
-      newThumbmimetype: params.thumbmimetype,
+      original: params.original,
+      delta: params.delta,
     },
   };
 
