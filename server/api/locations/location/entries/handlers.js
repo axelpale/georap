@@ -2,12 +2,12 @@ const _ = require('lodash');
 const status = require('http-status-codes');
 const dal = require('../../../entries/dal');
 
+// eslint-disable-next-line max-statements
 exports.change = (req, res, next) => {
   // Update entry.
   //
   const oldEntry = req.entry;
   const location = req.location;
-  const username = req.user.name;
 
   // Allow only creator or admin to edit.
   // TODO make a difference between editor and owner
@@ -15,8 +15,8 @@ exports.change = (req, res, next) => {
     return res.sendStatus(status.FORBIDDEN);
   }
 
-  const diff = false; // has some content
   const delta = {};
+  let diff = false; // if delta has some content
 
   if ('entrytext' in req.body) {
     delta.markdown = req.body.entrytext.trim();
@@ -38,12 +38,12 @@ exports.change = (req, res, next) => {
   }
 
   // Preassign for validation only. Pass only delta to dal.
-  const markdown = ('markdown' in delta) ?
-    delta.markdown : oldEntry.markdown;
-  const attachments = ('attachments' in delta) ?
-    delta.attachments : oldEntry.attachments;
-  const flags = ('flags' in delta) ?
-    delta.flags : oldEntry.flags;
+  const markdown = ('markdown' in delta)
+    ? delta.markdown : oldEntry.markdown;
+  const attachments = ('attachments' in delta)
+    ? delta.attachments : oldEntry.attachments;
+  const flags = ('flags' in delta)
+    ? delta.flags : oldEntry.flags;
 
   // Do not allow empty posts
   if (markdown === '' && attachments.length === 0) {
