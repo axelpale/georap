@@ -1,22 +1,22 @@
 /* eslint-disable max-lines,no-magic-numbers */
 
-var db = require('tresdb-db');
-var eventsDal = require('../events/dal');
-var path = require('path');
-var _ = require('lodash');
-var purifyMarkdown = require('purify-markdown');
+const db = require('tresdb-db');
+const eventsDal = require('../events/dal');
+const path = require('path');
+const _ = require('lodash');
+const purifyMarkdown = require('purify-markdown');
 
 // Private methods
 
-var insertOne = function (entry, callback) {
+const insertOne = (entry, callback) => {
   // Parameters:
   //   entry
   //     raw entry to insert
   //   callback
   //     function (err, entryId);
-  var coll = db.collection('entries');
+  const coll = db.collection('entries');
 
-  coll.insertOne(entry, function (err, result) {
+  coll.insertOne(entry, (err, result) => {
     if (err) {
       return callback(err);
     }
@@ -24,17 +24,17 @@ var insertOne = function (entry, callback) {
   });
 };
 
-var removeOne = function (entryId, callback) {
+const removeOne = (entryId, callback) => {
   // Parameters
   //   entryId
   //     object id
   //   callback
   //     function (err)
 
-  var coll = db.get().collection('entries');
-  var q = { _id: entryId };
+  const coll = db.get().collection('entries');
+  const q = { _id: entryId };
 
-  coll.deleteOne(q, {}, function (err) {
+  coll.deleteOne(q, {}, (err) => {
     if (err) {
       return callback(err);
     }
@@ -45,7 +45,7 @@ var removeOne = function (entryId, callback) {
 
 // Public methods
 
-exports.changeLocationEntry = function (params, callback) {
+exports.changeLocationEntry = (params, callback) => {
   // Modify entry markdown, attachments, or flags.
   //
   // Parameters:
@@ -94,7 +94,7 @@ exports.changeLocationEntry = function (params, callback) {
 
   const changedEntry = Object.assign({}, oldEntry, minDelta);
 
-  coll.replaceOne(q, changedEntry, function (err) {
+  coll.replaceOne(q, changedEntry, (err) => {
     if (err) {
       return callback(err);
     }
@@ -111,7 +111,7 @@ exports.changeLocationEntry = function (params, callback) {
   });
 };
 
-exports.createLocationEntry = function (params, callback) {
+exports.createLocationEntry = (params, callback) => {
   // Parameters:
   //   params:
   //     locationId
@@ -129,7 +129,7 @@ exports.createLocationEntry = function (params, callback) {
   //   callback
   //     function (err, insertedId)
   //
-  var sanitizedMarkdown = purifyMarkdown(params.markdown).trim();
+  const sanitizedMarkdown = purifyMarkdown(params.markdown).trim();
 
   if (typeof params.markdown !== 'string') {
     params.markdown = '';
@@ -141,7 +141,7 @@ exports.createLocationEntry = function (params, callback) {
     params.flags = [];
   }
 
-  var newEntry = {
+  const newEntry = {
     type: 'location_entry',
     user: params.username,
     time: db.timestamp(),
@@ -154,13 +154,13 @@ exports.createLocationEntry = function (params, callback) {
     flags: params.flags,
   };
 
-  insertOne(newEntry, function (err, newEntryId) {
+  insertOne(newEntry, (err, newEntryId) => {
     if (err) {
       return callback(err);
     }
 
     newEntry._id = newEntryId;
-    var eventParams = {
+    const eventParams = {
       locationName: params.locationName,
       newEntry: newEntry,
     };
