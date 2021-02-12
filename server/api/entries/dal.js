@@ -46,58 +46,60 @@ var removeOne = function (entryId, callback) {
 // Public methods
 
 exports.changeLocationEntry = function (params, callback) {
-  // Modify entry
+  // Modify entry markdown, attachments, or flags.
   //
   // Parameters:
   //   params:
   //     oldEntry
   //       raw entry object
   //     locationName
-  //       because entries do not store location name but events do
-  //     markdown
-  //     isVisit
-  //     filepath
-  //     mimetype
-  //     thumbfilepath
-  //     thumbmimetype
+  //       because entries dont store location name but events do
+  //     delta
+  //       object of changed values
   //   callback
   //     function (err)
   //
-  var coll = db.collection('entries');
-  var q = { _id: params.oldEntry._id };
+  const oldEntry = params.oldEntry;
+  const coll = db.collection('entries');
+  const q = { _id: oldEntry._id };
+  const delta = Object.assign({}, params.delta); // keep original intact
 
   // Backward compatibility for comments. Reset to [].
-  var oldComments = params.oldEntry.comments;
-  var nextComments = oldComments ? oldComments : [];
+  if (!('comments' in oldEntry)) {
+    delta.comments = [];
+  }
 
-  // Sanitize
-  var sanitizedMarkdown = purifyMarkdown(params.markdown).trim();
+  // Sanitize possible markdown
+  if ('markdown' in delta) {
+    const md = purifyMarkdown(delta.markdown).trim();
+    delta.markdown = md;
+  }
 
-  var changedEntry = {
-    type: 'location_entry',
-    user: params.oldEntry.user,
-    time: params.oldEntry.time,
-    locationId: params.oldEntry.locationId,
-    deleted: params.oldEntry.deleted,
-    data: {
-      markdown: sanitizedMarkdown,
-      isVisit: params.isVisit,
-      filepath: params.filepath,
-      mimetype: params.mimetype,
-      thumbfilepath: params.thumbfilepath,
-      thumbmimetype: params.thumbmimetype,
-    },
-    comments: nextComments,
-  };
+  // Ensure minimal delta by including only values that differ.
+  // This step also ensures there are no forbidden properties.
+  const minDelta = {};
+  if (delta.markdown !== oldEntry.markdown) {
+    minDelta.markdown = delta.markdown;
+  }
+  if (!_.isEqual(delta.attachments, oldEntry.attachments) {
+    minDelta.attachments = delta.attachments;
+  }
+  if (!_.isEqual(delta.flags, oldEntry.flags)) {
+    minDelta.flags = delta.flags;
+  }
+
+  const changedEntry = Object.assign({}, oldEntry, minDelta);
 
   coll.replaceOne(q, changedEntry, function (err) {
     if (err) {
       return callback(err);
     }
 
-    var eventParams = Object.assign({}, params, {
-      markdown: sanitizedMarkdown,
-    });
+    const eventParams = {
+      oldEntry: oldEntry,
+      locationName: params.locationName,
+      delta: minDelta,
+    };
 
     eventsDal.createLocationEntryChanged(eventParams, callback);
   });
@@ -154,7 +156,7 @@ exports.createLocationEntry = function (params, callback) {
     newEntry._id = newEntryId;
     var eventParams = {
       locationName: params.locationName,
-      entry: newEntry,
+      newEntry: newEntry,
     };
 
     eventsDal.createLocationEntryCreated(eventParams, callback);
