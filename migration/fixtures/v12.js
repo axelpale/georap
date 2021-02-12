@@ -43,7 +43,6 @@ module.exports = {
       _id: db.id('581f166110a1482dd0b7ea01'),
       attachments: [], // NOTE
       comments: [], // NOTE
-      created: true, // NOTE
       deleted: false,
       flags: [], // NOTE
       locationId: c.irbeneId,
@@ -70,7 +69,6 @@ module.exports = {
           attachments: ['adebd2rq'], // NOTE
         },
       ],
-      created: true, // NOTE
       deleted: false,
       flags: ['visit'], // NOTE
       locationId: c.irbeneId,
