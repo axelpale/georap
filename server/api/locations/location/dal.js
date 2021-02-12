@@ -229,23 +229,22 @@ exports.getRaw = function (id, callback) {
   });
 };
 
-exports.getOne = function (id, callback) {
+exports.getOne = (id, callback) => {
   // Get single location with additional cooridinate systems, events,
   // and entries.
   //
   // Parameters:
   //   id
-  //     ObjectId
+  //     ObjectId of location
   //   callback
   //     function (err, loc)
   //       err null and loc null if no loc found
   //
+  const locColl = db.collection('locations');
+  const evColl = db.collection('events');
+  const enColl = db.collection('entries');
 
-  var locColl = db.get().collection('locations');
-  var evColl = db.get().collection('events');
-  var enColl = db.get().collection('entries');
-
-  locColl.findOne({ _id: id }, function (err, doc) {
+  locColl.findOne({ _id: id }, (err, doc) => {
     if (err) {
       return callback(err);
     }
@@ -254,16 +253,16 @@ exports.getOne = function (id, callback) {
       return callback(null, null);
     }
 
-    var q = { locationId: id };
-    var opt = { sort: { time: -1 } };
-    evColl.find(q, opt).toArray(function (err2, docs) {
+    const q = { locationId: id };
+    const opt = { sort: { time: -1 } };
+    evColl.find(q, opt).toArray((err2, docs) => {
       if (err2) {
         return callback(err2);
       }
 
       doc.events = docs;
 
-      enColl.find(q, opt).toArray(function (err3, docs2) {
+      enColl.find(q, opt).toArray((err3, docs2) => {
         if (err3) {
           return callback(err3);
         }
