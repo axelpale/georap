@@ -9,10 +9,6 @@ var proj = require('../../services/proj');
 
 // Private methods
 
-var timestamp = function () {
-  return (new Date()).toISOString();
-};
-
 var emitOne = function (ev) {
   if (!('_id' in ev)) {
     throw new Error('Event must have a _id before emitting');
@@ -74,7 +70,7 @@ exports.createLocationCreated = function (params, callback) {
   var newEvent = {
     type: 'location_created',
     user: params.username,
-    time: timestamp(),
+    time: db.timestamp(),
     locationId: params.locationId,
     locationName: params.locationName,
     data: {
@@ -115,7 +111,7 @@ exports.createLocationEntryChanged = function (params, callback) {
   var newEvent = {
     type: 'location_entry_changed',
     user: params.oldEntry.user,
-    time: timestamp(),
+    time: db.timestamp(),
     locationId: params.oldEntry.locationId,
     locationName: params.locationName,
     data: {
@@ -165,7 +161,7 @@ exports.createLocationEntryCreated = function (params, callback) {
   var newEvent = {
     type: 'location_entry_created',
     user: params.username,
-    time: timestamp(),
+    time: db.timestamp(),
     locationId: params.locationId,
     locationName: params.locationName,
     data: {
@@ -195,7 +191,7 @@ exports.createLocationEntryRemoved = function (params, callback) {
   var newEvent = {
     type: 'location_entry_removed',
     user: params.username,
-    time: timestamp(),
+    time: db.timestamp(),
     locationId: params.locationId,
     locationName: params.locationName,
     data: {
@@ -250,7 +246,7 @@ exports.createLocationEntryCommentChanged = function (params, callback) {
   var newEvent = {
     type: 'location_entry_comment_changed',
     user: params.username,
-    time: timestamp(),
+    time: db.timestamp(),
     locationId: params.locationId,
     locationName: params.locationName,
     data: {
@@ -278,7 +274,7 @@ exports.createLocationEntryCommentRemoved = function (params, callback) {
   var newEvent = {
     type: 'location_entry_comment_removed',
     user: params.username,
-    time: timestamp(),
+    time: db.timestamp(),
     locationId: params.locationId,
     locationName: params.locationName,
     data: {
@@ -304,7 +300,7 @@ exports.createLocationGeomChanged = function (params, callback) {
   var newEvent = {
     type: 'location_geom_changed',
     user: params.username,
-    time: timestamp(),
+    time: db.timestamp(),
     locationId: params.locationId,
     locationName: params.locationName,
     data: {
@@ -343,7 +339,7 @@ exports.createLocationNameChanged = function (params, callback) {
   var newEvent = {
     type: 'location_name_changed',
     user: params.username,
-    time: timestamp(),
+    time: db.timestamp(),
     locationId: params.locationId,
     locationName: params.locationName,
     data: {
@@ -369,7 +365,7 @@ exports.createLocationStatusChanged = function (params, callback) {
   var newEvent = {
     type: 'location_status_changed',
     user: params.username,
-    time: timestamp(),
+    time: db.timestamp(),
     locationId: params.locationId,
     locationName: params.locationName,
     data: {
@@ -395,7 +391,7 @@ exports.createLocationTypeChanged = function (params, callback) {
   var newEvent = {
     type: 'location_type_changed',
     user: params.username,
-    time: timestamp(),
+    time: db.timestamp(),
     locationId: params.locationId,
     locationName: params.locationName,
     data: {
