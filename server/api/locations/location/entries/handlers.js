@@ -65,7 +65,9 @@ exports.change = (req, res, next) => {
     if (err) {
       return next(err);
     }
-    return res.json(changedEntry);
+    return res.json({
+      entry: changedEntry
+    });
   });
 };
 
