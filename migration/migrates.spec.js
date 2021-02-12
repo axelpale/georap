@@ -322,4 +322,25 @@ describe('migrates.migrate', function () {
     });
   });
 
+  describe('v11 to v12', function () {
+    beforeEach(function (done) {
+      loadFixtureByTag('v11', done);
+    });
+
+    it('should be able to migrate from v11 to v12', function (done) {
+      var targetV = 12;
+      migrates.migrate(targetV, function (err) {
+        assert.ifError(err);
+
+        assertFixtureEqual('config', 'v12', function (err2) {
+          assert.ifError(err2);
+
+          // TODO ensure entries
+          // TODO ensure entry events
+          done();
+        });
+      });
+    });
+  });
+
 });

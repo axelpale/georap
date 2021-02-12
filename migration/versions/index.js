@@ -13,6 +13,7 @@ var v = {
   8: require('./v8v9'),
   9: require('./v9v10'),
   10: require('./v10v11'),
+  11: require('./v11v12'),
 };
 
 
