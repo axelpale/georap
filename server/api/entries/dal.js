@@ -76,16 +76,20 @@ exports.changeLocationEntry = function (params, callback) {
   }
 
   // Ensure minimal delta by including only values that differ.
-  // This step also ensures there are no forbidden properties.
+  // This step also ensures that forbidden properties have no effect.
   const minDelta = {};
+  const original = {};
   if (delta.markdown !== oldEntry.markdown) {
     minDelta.markdown = delta.markdown;
+    original.markdown = oldEntry.markdown;
   }
   if (!_.isEqual(delta.attachments, oldEntry.attachments) {
     minDelta.attachments = delta.attachments;
+    original.attachments = oldEntry.attachments;
   }
   if (!_.isEqual(delta.flags, oldEntry.flags)) {
     minDelta.flags = delta.flags;
+    original.flags = oldEntry.flags;
   }
 
   const changedEntry = Object.assign({}, oldEntry, minDelta);
@@ -96,9 +100,11 @@ exports.changeLocationEntry = function (params, callback) {
     }
 
     const eventParams = {
-      oldEntry: oldEntry,
+      entryId: oldEntry._id,
+      locationId: oldEntry.locationId,
       locationName: params.locationName,
       delta: minDelta,
+      original: original,
     };
 
     eventsDal.createLocationEntryChanged(eventParams, callback);
