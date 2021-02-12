@@ -89,7 +89,7 @@ exports.changeName = function (params, callback) {
   //     username
   //
 
-  var locColl = db.get().collection('locations');
+  var locColl = db.collection('locations');
 
   var q = { _id: params.locationId };
   var u = { $set: { name: params.newName } };
@@ -131,7 +131,7 @@ exports.changeStatus = function (params, callback) {
   //   callback
   //     function (err)
 
-  var locColl = db.get().collection('locations');
+  var locColl = db.collection('locations');
 
   var q = { _id: params.locationId };
   var newStatus = params.status;
@@ -174,7 +174,7 @@ exports.changeType = function (params, callback) {
   //   callback
   //     function (err)
 
-  var locColl = db.get().collection('locations');
+  var locColl = db.collection('locations');
 
   var q = { _id: params.locationId };
   var newType = params.type;
@@ -214,7 +214,7 @@ exports.getRaw = function (id, callback) {
   //       err null and loc null if no loc found
   //
 
-  var locColl = db.get().collection('locations');
+  var locColl = db.collection('locations');
 
   locColl.findOne({ _id: id }, function (err, doc) {
     if (err) {
@@ -290,7 +290,7 @@ exports.removeOne = function (id, username, callback) {
   //     function (err)
   //
 
-  var coll = db.get().collection('locations');
+  var coll = db.collection('locations');
 
   // Prevent deletion of already deleted location.
   var q = {
