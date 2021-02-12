@@ -63,6 +63,8 @@ exports.remove = function (req, res, next) {
     if (err) {
       return next(err);
     }
-    return res.sendStatus(status.OK);
+    return res.json({
+      removed: 1, // TODO actual value from mongo
+    });
   });
 };

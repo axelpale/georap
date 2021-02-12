@@ -28,7 +28,7 @@ var deleteJSON = request.deleteJSON;
 
 var state = {
   selectedLocationId: null,
-  selectedMarkerLocation: null,
+  selectedMarkerLocation: null, // data of the selected loc
 };
 
 // Public local state methods
