@@ -101,7 +101,13 @@ exports.changeLocationEntry = (params, callback) => {
       original: original,
     };
 
-    eventsDal.createLocationEntryChanged(eventParams, callback);
+    eventsDal.createLocationEntryChanged(eventParams, (everr) => {
+      if (everr) {
+        return callback(everr);
+      }
+
+      return callback(null, changedEntry);
+    });
   });
 };
 

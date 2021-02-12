@@ -10,7 +10,7 @@ router.post('/', jsonParser, handlers.create);
 
 router.use('/:entryId', entryIdParser);
 
-router.post('/:entryId', handlers.change);  // uses multer body-parser inside
+router.post('/:entryId', jsonParser, handlers.change);
 router.delete('/:entryId', handlers.remove);
 
 router.use('/:entryId/comments', commentsRouter);
