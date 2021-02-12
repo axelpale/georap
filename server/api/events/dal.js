@@ -82,7 +82,7 @@ exports.createLocationCreated = function (params, callback) {
   insertAndEmit(newEvent, callback);
 };
 
-exports.createLocationEntryChanged = function (params, callback) {
+exports.createLocationEntryChanged = (params, callback) => {
   // Parameters:
   //   params:
   //     entryId
@@ -97,10 +97,10 @@ exports.createLocationEntryChanged = function (params, callback) {
   //       object of original values
 
   if (typeof params.oldEntry._id !== 'object') {
-    throw new Error('invalid entryId type');
+    throw new Error('Invalid entry id type: ' + typeof params.oldEntry._id);
   }
 
-  var newEvent = {
+  const newEvent = {
     type: 'location_entry_changed',
     user: params.oldEntry.user,
     time: db.timestamp(),
@@ -116,7 +116,7 @@ exports.createLocationEntryChanged = function (params, callback) {
   insertAndEmit(newEvent, callback);
 };
 
-exports.createLocationEntryCreated = function (params, callback) {
+exports.createLocationEntryCreated = (params, callback) => {
   // Parameters:
   //   params:
   //     entry
@@ -146,7 +146,7 @@ exports.createLocationEntryCreated = function (params, callback) {
   insertAndEmit(newEvent, callback);
 };
 
-exports.createLocationEntryRemoved = function (params, callback) {
+exports.createLocationEntryRemoved = (params, callback) => {
   // Parameters:
   //   params:
   //     entryId
@@ -156,7 +156,7 @@ exports.createLocationEntryRemoved = function (params, callback) {
   //   callback
   //     function (err)
   //
-  var newEvent = {
+  const newEvent = {
     type: 'location_entry_removed',
     user: params.username,
     time: db.timestamp(),
