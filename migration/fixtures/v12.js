@@ -24,6 +24,7 @@ module.exports = {
         thumbfilepath: '2009/RxRvKSlbl/radar_medium.jpg', // ...and this.
         thumbmimetype: 'image/jpeg',
         deleted: false,
+        data: {}, // optional additional data e.g. overlay positions
       },
       {
         key: 'adebd2rq',
@@ -34,6 +35,7 @@ module.exports = {
         thumbfilepath: '2021/EdvjkeEdf/tunnel-ground.jpg',
         thumbmimetype: 'image/jpeg',
         deleted: false,
+        data: {},
       },
     ],
 
@@ -50,6 +52,7 @@ module.exports = {
       time: '2009-09-04T23:44:21.000Z',
       type: 'location_entry',
       user: 'admin',
+      // NOTE possible entry.overlay moved to attachment.data.overlay
     }, {
       _id: db.id('581f166110a1482dd0b7ea02'),
       attachments: ['ewdsf3kk'], // NOTE
