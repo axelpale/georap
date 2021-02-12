@@ -1,11 +1,9 @@
-/* eslint-disable new-cap */
+const express = require('express');
+const router = express.Router(); // eslint-disable-line new-cap
 
-var express = require('express');
-var router = express.Router();
-
-var handlers = require('./handlers');
-var entryIdParser = require('./lib/entryIdParser');
-var commentsRouter = require('./comments/routes');
+const handlers = require('./handlers');
+const entryIdParser = require('./lib/entryIdParser');
+const commentsRouter = require('./comments/routes');
 
 router.post('/', handlers.create); // uses multer body-parser inside
 

@@ -1,23 +1,23 @@
 
-var uploads = require('../../../../services/uploads');
-var dal = require('../../../entries/dal');
-var uploadHandler = uploads.uploader.single('entryfile');
+const uploads = require('../../../../services/uploads');
+const dal = require('../../../entries/dal');
+const status = require('http-status-codes');
 
-var status = require('http-status-codes');
+// Setup
+const uploadHandler = uploads.uploader.single('entryfile');
 
-
-exports.change = function (req, res, next) {
+exports.change = (req, res, next) => {
   // Update entry.
   //
   // File is optional.
 
-  var entryId = req.entryId;
-  var location = req.location;
+  const entryId = req.entryId;
+  const location = req.location;
 
   // Editor vs creator. TODO make a difference between
   // var username = req.user.name;
 
-  var then = function (err) {
+  const then = (err) => {
     if (err) {
       return next(err);
     }
@@ -25,7 +25,7 @@ exports.change = function (req, res, next) {
   };
 
   // Handle file upload
-  uploadHandler(req, res, function (err) {
+  uploadHandler(req, res, (err) => {
     if (err) {
       if (err.code === 'LIMIT_FILE_SIZE') {
         return res.sendStatus(status.REQUEST_TOO_LONG);
@@ -34,7 +34,7 @@ exports.change = function (req, res, next) {
     }
 
     // Find the current entry data for comparison
-    dal.getOneRaw(entryId, function (errr, oldEntry) {
+    dal.getOneRaw(entryId, (errr, oldEntry) => {
       if (errr) {
         return next(errr);
       }
@@ -45,7 +45,7 @@ exports.change = function (req, res, next) {
       }
 
       // New markdown text replaces old markdown text, even if empty.
-      var newMarkdown = req.body.entrytext;
+      let newMarkdown = req.body.entrytext;
       // var oldMarkdown = oldEntry.data.markdown;
 
       // Do not allow empty strings
@@ -54,14 +54,14 @@ exports.change = function (req, res, next) {
       }
 
       // New file replaces old file only if new file is not empty.
-      var hasNewFile = (typeof req.file === 'object');
-      var hasOldFile = (typeof oldEntry.data.filepath === 'string');
-      var hasFile = (hasNewFile || hasOldFile);
+      const hasNewFile = (typeof req.file === 'object');
+      const hasOldFile = (typeof oldEntry.data.filepath === 'string');
+      const hasFile = (hasNewFile || hasOldFile);
 
-      var hasNewVisit = hasFile && req.body.entryvisit === 'visited';
+      const hasNewVisit = hasFile && req.body.entryvisit === 'visited';
       // var hasOldVisit = oldEntry.data.isVisit;
 
-      var hasText = (typeof newMarkdown === 'string');
+      const hasText = (typeof newMarkdown === 'string');
 
       if (!hasFile && !hasText) {
         // Cannot make empty post.
@@ -70,7 +70,7 @@ exports.change = function (req, res, next) {
 
       if (hasNewFile) {
         // Create thumbnail. Create even for non-images.
-        uploads.createThumbnail(req.file, function (errt, thumb) {
+        uploads.createThumbnail(req.file, (errt, thumb) => {
           if (errt) {
             return next(errt);
           }
@@ -106,16 +106,16 @@ exports.change = function (req, res, next) {
 };
 
 
-exports.create = function (req, res, next) {
+exports.create = (req, res, next) => {
   // Create entry.
   //
   // File is optional
 
-  var locationId = req.location._id;
-  var locationName = req.location.name;
-  var username = req.user.name;
+  const locationId = req.location._id;
+  const locationName = req.location.name;
+  const username = req.user.name;
 
-  var then = function (err) {
+  const then = (err) => {
     if (err) {
       return next(err);
     }
@@ -124,7 +124,7 @@ exports.create = function (req, res, next) {
     return res.json({});
   };
 
-  uploadHandler(req, res, function (err) {
+  uploadHandler(req, res, (err) => {
     if (err) {
       if (err.code === 'LIMIT_FILE_SIZE') {
         return res.sendStatus(status.REQUEST_TOO_LONG);
@@ -137,17 +137,17 @@ exports.create = function (req, res, next) {
     // console.log('req.body:');
     // console.log(req.body);
 
-    var markdown = req.body.entrytext;
+    let markdown = req.body.entrytext;
 
     // Do not allow empty strings
     if (typeof markdown === 'string' && markdown.trim().length === 0) {
       markdown = null;
     }
 
-    var hasFile = (typeof req.file === 'object');
-    var hasText = (typeof markdown === 'string');
+    const hasFile = (typeof req.file === 'object');
+    const hasText = (typeof markdown === 'string');
     // Visit is only regarded with a file for proof
-    var hasVisit = (hasFile && req.body.entryvisit === 'visited');
+    const hasVisit = (hasFile && req.body.entryvisit === 'visited');
 
     if (!hasFile && !hasText) {
       // Empty post
@@ -156,7 +156,7 @@ exports.create = function (req, res, next) {
 
     if (hasFile) {
       // Create thumbnail. Create even for non-images.
-      uploads.createThumbnail(req.file, function (errt, thumb) {
+      uploads.createThumbnail(req.file, (errt, thumb) => {
         if (errt) {
           return next(errt);
         }
@@ -194,20 +194,20 @@ exports.create = function (req, res, next) {
 };
 
 
-exports.remove = function (req, res, next) {
+exports.remove = (req, res, next) => {
   // Remove entry from db
 
-  var locationId = req.location._id;
-  var locationName = req.location.name;
-  var entryId = req.entryId;
-  var username = req.user.name;
+  const locationId = req.location._id;
+  const locationName = req.location.name;
+  const entryId = req.entryId;
+  const username = req.user.name;
 
   dal.removeLocationEntry({
     locationId: locationId,
     locationName: locationName,
     entryId: entryId,
     username: username,
-  }, function (err) {
+  }, (err) => {
     if (err) {
       return next(err);
     }
