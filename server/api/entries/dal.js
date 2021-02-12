@@ -64,15 +64,9 @@ exports.changeLocationEntry = (params, callback) => {
   const q = { _id: oldEntry._id };
   const delta = Object.assign({}, params.delta); // keep original intact
 
-  // Backward compatibility for comments. Reset to [].
-  if (!('comments' in oldEntry)) {
-    delta.comments = [];
-  }
-
   // Sanitize possible markdown
   if ('markdown' in delta) {
-    const md = purifyMarkdown(delta.markdown).trim();
-    delta.markdown = md;
+    delta.markdown = purifyMarkdown(delta.markdown).trim();
   }
 
   // Ensure minimal delta by including only values that differ.
@@ -83,7 +77,7 @@ exports.changeLocationEntry = (params, callback) => {
     minDelta.markdown = delta.markdown;
     original.markdown = oldEntry.markdown;
   }
-  if (!_.isEqual(delta.attachments, oldEntry.attachments) {
+  if (!_.isEqual(delta.attachments, oldEntry.attachments)) {
     minDelta.attachments = delta.attachments;
     original.attachments = oldEntry.attachments;
   }
