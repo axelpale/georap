@@ -145,29 +145,29 @@ exports.createLocationEntry = function (params, callback) {
   //     locationId
   //       ObjectId
   //     locationName
-  //       string
+  //       string, for event
   //     username
   //       string
   //     markdown
-  //       string or null
-  //     isVisit
-  //       boolean
-  //     filepath
-  //       string or null
-  //       The relative path of the file in the uploads dir
-  //     mimetype
-  //       string or null
-  //     thumbfilepath
-  //       string or null
-  //       The relative path of the thumbnail file in the uploads dir
-  //     thumbmimetype
-  //       string or null
-  //     overlay
-  //       overlay-import object or null
+  //       optional string or null
+  //     attachments
+  //       optional array of attachment keys
+  //     flags
+  //       optional array of instance-specific flags e.g. 'visit'
   //   callback
   //     function (err, insertedId)
-
+  //
   var sanitizedMarkdown = purifyMarkdown(params.markdown).trim();
+
+  if (typeof params.markdown !== 'string') {
+    params.markdown = '';
+  }
+  if (typeof params.attachments !== 'object') {
+    params.attachments = [];
+  }
+  if (typeof params.flags !== 'object') {
+    params.flags = [];
+  }
 
   var newEntry = {
     type: 'location_entry',
@@ -175,16 +175,11 @@ exports.createLocationEntry = function (params, callback) {
     time: db.timestamp(),
     locationId: params.locationId,
     deleted: false,
-    data: {
-      markdown: sanitizedMarkdown,
-      isVisit: params.isVisit,
-      filepath: params.filepath,
-      mimetype: params.mimetype,
-      thumbfilepath: params.thumbfilepath,
-      thumbmimetype: params.thumbmimetype,
-      overlay: params.overlay ? params.overlay : null,
-    },
+    published: false,
+    markdown: sanitizedMarkdown,
+    attachments: params.attachments,
     comments: [],
+    flags: params.flags,
   };
 
   insertOne(newEntry, function (err, newEntryId) {
@@ -192,10 +187,11 @@ exports.createLocationEntry = function (params, callback) {
       return callback(err);
     }
 
-    var eventParams = Object.assign({}, params, {
-      entryId: newEntryId,
-      markdown: sanitizedMarkdown,
-    });
+    newEntry._id = newEntryId;
+    var eventParams = {
+      locationName: params.locationName,
+      entry: newEntry,
+    };
 
     eventsDal.createLocationEntryCreated(eventParams, callback);
   });
