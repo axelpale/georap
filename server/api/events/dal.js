@@ -161,7 +161,7 @@ exports.createLocationEntryCreated = function (params, callback) {
   //       string or null
   //   callback
   //     function (err)
-
+  //
   var newEvent = {
     type: 'location_entry_created',
     user: params.username,
@@ -191,7 +191,7 @@ exports.createLocationEntryRemoved = function (params, callback) {
   //     username
   //   callback
   //     function (err)
-
+  //
   var newEvent = {
     type: 'location_entry_removed',
     user: params.username,

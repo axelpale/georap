@@ -46,6 +46,8 @@ var removeOne = function (entryId, callback) {
 // Public methods
 
 exports.changeLocationEntry = function (params, callback) {
+  // Modify entry
+  //
   // Parameters:
   //   params:
   //     oldEntry
@@ -60,7 +62,7 @@ exports.changeLocationEntry = function (params, callback) {
   //     thumbmimetype
   //   callback
   //     function (err)
-
+  //
   var coll = db.collection('entries');
   var q = { _id: params.oldEntry._id };
 
