@@ -119,41 +119,27 @@ exports.createLocationEntryChanged = function (params, callback) {
 exports.createLocationEntryCreated = function (params, callback) {
   // Parameters:
   //   params:
-  //     entryId
+  //     entry
+  //       the new raw entry object with _id
   //     locationId
   //     locationName
   //     username
-  //     markdown
-  //       string or null
-  //     isVisit
-  //       boolean
-  //     filepath
-  //       string or null
-  //       The relative path of the file in the uploads dir
-  //     mimetype
-  //       string or null
-  //     thumbfilepath
-  //       string or null
-  //       The relative path of the thumbnail file in the uploads dir
-  //     thumbmimetype
-  //       string or null
   //   callback
   //     function (err)
   //
-  var newEvent = {
+  if (typeof params.entry._id !== 'object') {
+    throw new Error('Invalid entry id type: ' + typeof params.entry._id);
+  }
+
+  const newEvent = {
     type: 'location_entry_created',
     user: params.username,
     time: db.timestamp(),
     locationId: params.locationId,
     locationName: params.locationName,
     data: {
-      entryId: params.entryId,
-      markdown: params.markdown,
-      isVisit: params.isVisit,
-      filepath: params.filepath,
-      mimetype: params.mimetype,
-      thumbfilepath: params.thumbfilepath,
-      thumbmimetype: params.thumbmimetype,
+      entryId: params.newEntry._id, // consistent with change and delete
+      entry: params.newEntry,
     },
   };
 
