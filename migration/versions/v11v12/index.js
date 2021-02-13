@@ -8,19 +8,19 @@
 //
 // Also, new indices were made and thus 'npm run migrate' is needed.
 
-var db = require('tresdb-db');
-var schema = require('../../lib/schema');
-var iter = require('../../iter');
-var asyn = require('async');
-var clone = require('clone');
+const db = require('tresdb-db');
+const schema = require('../../lib/schema');
+const iter = require('../../iter');
+const asyn = require('async');
+const clone = require('clone');
 
-var FROM_VERSION = 11;
-var TO_VERSION = FROM_VERSION + 1;
+const FROM_VERSION = 11;
+const TO_VERSION = FROM_VERSION + 1;
 
 // Steps to be executed with asyn.eachSeries in the given order.
 // The parameter 'next' is function (err) that must be called in the end of
 // each step.
-var substeps = [
+const substeps = [
 
   function updateSchema (next) {
     console.log('1. Updating schema version tag...');
@@ -44,7 +44,14 @@ var substeps = [
   function refactorEntries (next) {
     console.log('3. Refactor entries and create attachments...');
     // TODO ensure comments: []
-    return next();
+
+    const atColl = db.collection('attachments');
+    const enColl = db.collection('entries');
+    const evColl = db.collection('events');
+
+    iter.updateEach(enColl, function (origEntry, iterNext) {
+
+    }, next);
   },
 
   function refactorEntryEvents (next) {
@@ -55,7 +62,7 @@ var substeps = [
 
 ];
 
-exports.run = function (callback) {
+exports.run = (callback) => {
   // Parameters
   //   callback
   //     function (err)
