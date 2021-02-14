@@ -46,7 +46,7 @@ module.exports = {
       deleted: false,
       flags: [], // NOTE
       locationId: c.irbeneId,
-      markdown: 'A ghost town', // NOTE
+      markdown: 'A ghost town', // NOTE outside data
       published: false, // NOTE
       time: '2009-09-04T23:44:21.000Z',
       type: 'location_entry',
@@ -93,10 +93,19 @@ module.exports = {
     }, {
       data: {
         entryId: db.id('581f166110a1482dd0b7ea01'),
-        markdown: 'A ghost town',
-        created: true, // NOTE changed value
-        // NOTE no need to list empty flags, comments or attachments
-        // NOTE implicit published:false and deleted:false
+        entry: { // NOTE full entry
+          _id: db.id('581f166110a1482dd0b7ea01'),
+          attachments: [], // NOTE
+          comments: [], // NOTE
+          deleted: false,
+          flags: [], // NOTE
+          locationId: c.irbeneId,
+          markdown: 'A ghost town', // NOTE outside data
+          published: false, // NOTE
+          time: '2009-09-04T23:44:21.000Z',
+          type: 'location_entry',
+          user: 'admin',
+        },
       },
       locationId: c.irbeneId,
       locationName: 'Irbene',
@@ -114,12 +123,21 @@ module.exports = {
       type: 'location_tags_changed', // legacy event type
       user: 'admin',
     }, {
-      data: {
+      data: { // NOTE
         entryId: db.id('581f166110a1482dd0b7ea02'),
-        created: true, // NOTE
-        markdown: '', // NOTE null to ''
-        attachments: ['ewdsf3kk'], // NOTE ref to attachment key
-        // NOTE isVisit:false converted to implicit flags:[]
+        entry: { // NOTE full entry state
+          _id: db.id('581f166110a1482dd0b7ea02'),
+          locationId: c.irbeneId,
+          time: '2009-10-02T11:11:01.000Z',
+          type: 'location_entry',
+          user: 'admin',
+          deleted: false,
+          published: false,
+          markdown: '',
+          attachments: ['ewdsf3kk'], // NOTE ref to attachment key
+          comments: [],
+          flags: ['visit'], // NOTE isVisit:false converted to flags:[]
+        },
       },
       locationId: c.irbeneId,
       locationName: 'Irbene',
