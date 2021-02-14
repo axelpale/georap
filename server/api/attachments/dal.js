@@ -36,6 +36,12 @@ exports.create = (params, callback) => {
   //       string or null
   //   callback
   //     function (err, attachment)
+  //
+
+  if (typeof filepath !== 'string') {
+    // No attachment given
+    return callback(new Error('Missing attachment data'));
+  }
 
   const attachment = {
     key: keygen.generate(),
