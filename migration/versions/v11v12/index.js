@@ -2,7 +2,8 @@
 
 // In this version increase:
 // 1. set schema version to 12
-// 2. create collection for attachments
+// 2. Remove orphan event i.e. entry events whose entry has been deleted.
+//    Do this to simplify entry event refactor.
 // 3. refactor entries
 // 4. refactor entry events
 //
@@ -13,35 +14,43 @@ const schema = require('../../lib/schema');
 const iter = require('../../iter');
 const asyn = require('async');
 const clone = require('clone');
+const removeOrphanEvents = require('./removeOrphanEvents');
 
 const FROM_VERSION = 11;
 const TO_VERSION = FROM_VERSION + 1;
 
 // Steps to be executed with asyn.eachSeries in the given order.
-// The parameter 'next' is function (err) that must be called in the end of
+// The parameter 'nextStep' is function (err) that must be called in the end of
 // each step.
 const substeps = [
 
-  function updateSchema (next) {
+  function updateSchema (nextStep) {
     console.log('1. Updating schema version tag...');
 
     schema.setVersion(TO_VERSION, function (err) {
       if (err) {
-        return next(err);
+        return nextStep(err);
       }
 
       console.log('Schema version tag created:', TO_VERSION);
-      return next(null);
+      return nextStep(null);
     });
   },
 
-  function createCollection (next) {
-    console.log('2. Creating collection for attachments...');
+  function createCollection (nextStep) {
+    console.log('2. Remove orphan events...');
 
-    return next();
+    removeOrphanEvents((err, numRemoved) => {
+      if (err) {
+        return nextStep(err);
+      }
+
+      console.log('  ' + numRemoved + ' orphan entry events were removed.');
+      return nextStep();
+    });
   },
 
-  function refactorEntries (next) {
+  function refactorEntries (nextStep) {
     console.log('3. Refactor entries and create attachments...');
     // TODO ensure comments: []
     // TODO overlay
@@ -52,13 +61,13 @@ const substeps = [
 
     iter.updateEach(enColl, function (origEntry, iterNext) {
 
-    }, next);
+    }, nextStep);
   },
 
-  function refactorEntryEvents (next) {
+  function refactorEntryEvents (nextStep) {
     console.log('4. Refactor entry events...');
     // TODO requires attachment ids from prev step.
-    return next();
+    return nextStep();
   },
 
 ];
