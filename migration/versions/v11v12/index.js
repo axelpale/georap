@@ -44,6 +44,7 @@ const substeps = [
   function refactorEntries (next) {
     console.log('3. Refactor entries and create attachments...');
     // TODO ensure comments: []
+    // TODO overlay
 
     const atColl = db.collection('attachments');
     const enColl = db.collection('entries');
