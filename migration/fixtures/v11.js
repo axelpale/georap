@@ -38,8 +38,8 @@ module.exports = {
         },
       ],
       data: {
-        isVisit: false,
-        markdown: null,
+        isVisit: true, // NOTE changed by location_entry_changed
+        markdown: 'Ventspils RT-32 radio telescope', // NOTE changed by ev
         filepath: '2009/RxRvKSlbl/radar.jpg', // the sample contains this
         mimetype: 'image/jpeg',
         thumbfilepath: '2009/RxRvKSlbl/radar_medium.jpg',
@@ -112,7 +112,30 @@ module.exports = {
       time: '2009-10-04T19:55:01.000Z',
       type: 'location_entry_comment_created',
       user: 'admin',
-    }],
+    }, { // NOTE added location_entry_changed ev for docs and v11v12 migr.
+      _id: db.id('581f166110a1482dd038f33a'),
+      type: "location_entry_changed",
+      user: "admin",
+      time: "2017-06-29T18:44:21.194Z",
+      locationId: c.irbeneId,
+      locationName: "Irbene",
+      data: {
+        entryId: c.locatorEntryId,
+        oldMarkdown: null,
+        newMarkdown: 'Ventspils RT-32 radio telescope',
+        oldIsVisit: false,
+        newIsVisit: true,
+        oldFilepath: '2009/RxRvKSlbl/radar.jpg',
+        newFilepath: 'image/jpeg',
+        oldMimetype: '2009/RxRvKSlbl/radar_medium.jpg',
+        newMimetype: 'image/jpeg',
+        oldThumbfilepath: '2009/RxRvKSlbl/radar.jpg',
+        newThumbfilepath: 'image/jpeg',
+        oldThumbmimetype: '2009/RxRvKSlbl/radar_medium.jpg',
+        newThumbmimetype: 'image/jpeg',
+      },
+    },
+  ],
 
     users: [{
       admin: true,

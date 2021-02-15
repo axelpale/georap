@@ -80,82 +80,107 @@ module.exports = {
     }],
 
     // No event _ids needed, they are created in run time.
-    events: [{
-      data: {
-        lng: 21.857705,
-        lat: 57.55341,
+    events: [
+      {
+        data: {
+          lng: 21.857705,
+          lat: 57.55341,
+        },
+        locationId: c.irbeneId,
+        locationName: 'Irbene',
+        time: '2009-07-30T10:44:57.000Z',
+        type: 'location_created',
+        user: 'admin',
       },
-      locationId: c.irbeneId,
-      locationName: 'Irbene',
-      time: '2009-07-30T10:44:57.000Z',
-      type: 'location_created',
-      user: 'admin',
-    }, {
-      data: {
-        entryId: db.id('581f166110a1482dd0b7ea01'),
-        entry: { // NOTE full entry
-          _id: db.id('581f166110a1482dd0b7ea01'),
-          attachments: [], // NOTE
-          comments: [], // NOTE
-          deleted: false,
-          flags: [], // NOTE
-          locationId: c.irbeneId,
-          markdown: 'A ghost town', // NOTE outside data
-          published: false, // NOTE
-          time: '2009-09-04T23:44:21.000Z',
-          type: 'location_entry',
-          user: 'admin',
+      {
+        data: {
+          entryId: db.id('581f166110a1482dd0b7ea01'),
+          entry: { // NOTE full entry
+            _id: db.id('581f166110a1482dd0b7ea01'),
+            attachments: [], // NOTE
+            comments: [], // NOTE
+            deleted: false,
+            flags: [], // NOTE
+            locationId: c.irbeneId,
+            markdown: 'A ghost town', // NOTE outside data
+            published: false, // NOTE
+            time: '2009-09-04T23:44:21.000Z',
+            type: 'location_entry',
+            user: 'admin',
+          },
+        },
+        locationId: c.irbeneId,
+        locationName: 'Irbene',
+        time: '2009-09-04T23:44:21.000Z',
+        type: 'location_entry_created',
+        user: 'admin',
+      },
+      {
+        data: {
+          newTags: ['abandoned'],
+          oldTags: [],
+        },
+        locationId: c.irbeneId,
+        locationName: 'Irbene',
+        time: '2009-09-04T23:45:20.000Z',
+        type: 'location_tags_changed', // legacy event type
+        user: 'admin',
+      },
+      {
+        data: { // NOTE
+          entryId: c.locatorEntryId,
+          entry: { // NOTE full entry state
+            _id: c.locatorEntryId,
+            locationId: c.irbeneId,
+            time: '2009-10-02T11:11:01.000Z',
+            type: 'location_entry',
+            user: 'admin',
+            deleted: false,
+            published: false,
+            markdown: '',
+            attachments: ['ewdsf3kk'], // NOTE ref to attachment key
+            comments: [],
+            flags: ['visit'], // NOTE isVisit:false converted to flags:[]
+          },
+        },
+        locationId: c.irbeneId,
+        locationName: 'Irbene',
+        time: '2009-10-02T11:11:01.000Z',
+        type: 'location_entry_created',
+        user: 'admin',
+      },
+      {
+        data: {
+          entryId: c.locatorEntryId,
+          message: 'Dang radar, dude',
+          // NOTE no change but implicit attachments:[]
+        },
+        locationId: c.irbeneId,
+        locationName: 'Irbene',
+        time: '2009-10-04T19:55:01.000Z',
+        type: 'location_entry_comment_created',
+        user: 'admin',
+      },
+      {
+        _id: db.id('581f166110a1482dd038f33a'),
+        type: "location_entry_changed",
+        user: "admin",
+        time: "2017-06-29T18:44:21.194Z",
+        locationId: c.irbeneId,
+        locationName: "Irbene",
+        data: {
+          entryId: c.locatorEntryId,
+          original: { // NOTE original values of the changed
+            markdown: null,
+            flags: [],
+          },
+          delta: { // NOTE new values of the changed
+            markdown: 'Ventspils RT-32 radio telescope',
+            flags: ['visit'],
+          },
         },
       },
-      locationId: c.irbeneId,
-      locationName: 'Irbene',
-      time: '2009-09-04T23:44:21.000Z',
-      type: 'location_entry_created',
-      user: 'admin',
-    }, {
-      data: {
-        newTags: ['abandoned'],
-        oldTags: [],
-      },
-      locationId: c.irbeneId,
-      locationName: 'Irbene',
-      time: '2009-09-04T23:45:20.000Z',
-      type: 'location_tags_changed', // legacy event type
-      user: 'admin',
-    }, {
-      data: { // NOTE
-        entryId: db.id('581f166110a1482dd0b7ea02'),
-        entry: { // NOTE full entry state
-          _id: db.id('581f166110a1482dd0b7ea02'),
-          locationId: c.irbeneId,
-          time: '2009-10-02T11:11:01.000Z',
-          type: 'location_entry',
-          user: 'admin',
-          deleted: false,
-          published: false,
-          markdown: '',
-          attachments: ['ewdsf3kk'], // NOTE ref to attachment key
-          comments: [],
-          flags: ['visit'], // NOTE isVisit:false converted to flags:[]
-        },
-      },
-      locationId: c.irbeneId,
-      locationName: 'Irbene',
-      time: '2009-10-02T11:11:01.000Z',
-      type: 'location_entry_created',
-      user: 'admin',
-    }, {
-      data: {
-        entryId: db.id('581f166110a1482dd0b7ea02'),
-        message: 'Dang radar, dude',
-        // NOTE no change but implicit attachments:[]
-      },
-      locationId: c.irbeneId,
-      locationName: 'Irbene',
-      time: '2009-10-04T19:55:01.000Z',
-      type: 'location_entry_comment_created',
-      user: 'admin',
-    }],
+    ],
 
     users: [{
       admin: true,
