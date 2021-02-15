@@ -53,7 +53,7 @@ module.exports = {
       user: 'admin',
       // NOTE possible entry.overlay moved to attachment.data.overlay
     }, {
-      _id: db.id('581f166110a1482dd0b7ea02'),
+      _id: c.locatorEntryId,
       attachments: ['ewdsf3kk'], // NOTE
       comments: [
         {

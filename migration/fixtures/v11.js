@@ -29,7 +29,7 @@ module.exports = {
       type: 'location_entry',
       user: 'admin',
     }, {
-      _id: db.id('581f166110a1482dd0b7ea02'),
+      _id: c.locatorEntryId,
       comments: [
         {
           time: '2009-10-04T19:55:01.000Z',
@@ -89,7 +89,7 @@ module.exports = {
       user: 'admin',
     }, {
       data: {
-        entryId: db.id('581f166110a1482dd0b7ea02'),
+        entryId: c.locatorEntryId,
         isVisit: false,
         markdown: null,
         filepath: '2009/RxRvKSlbl/radar.jpg', // the sample contains this
@@ -104,7 +104,7 @@ module.exports = {
       user: 'admin',
     }, {
       data: {
-        entryId: db.id('581f166110a1482dd0b7ea02'),
+        entryId: c.locatorEntryId,
         message: 'Dang radar, dude',
       },
       locationId: c.irbeneId,
