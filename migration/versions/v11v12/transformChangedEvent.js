@@ -52,8 +52,16 @@ module.exports = (chev, filepathToAttachments) => {
   const delta = {};
 
   if (chev.data.oldMarkdown !== chev.data.newMarkdown) {
-    original.markdown = chev.data.oldMarkdown;
-    delta.markdown = chev.data.newMarkdown;
+    let oldmd = chev.data.oldMarkdown;
+    let newmd = chev.data.newMarkdown;
+    if (oldmd === null) {
+      oldmd = '';
+    }
+    if (newmd === null) {
+      newmd = '';
+    }
+    original.markdown = oldmd;
+    delta.markdown = newmd;
   }
 
   if (chev.data.oldIsVisit !== chev.data.newIsVisit) {
