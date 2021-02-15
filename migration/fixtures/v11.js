@@ -44,6 +44,7 @@ module.exports = {
         mimetype: 'image/jpeg',
         thumbfilepath: '2009/RxRvKSlbl/radar_medium.jpg',
         thumbmimetype: 'image/jpeg',
+        overlay: {}, // NOTE mimic failed overlay to ensure removal in v11v12
       },
       deleted: false,
       locationId: c.irbeneId,

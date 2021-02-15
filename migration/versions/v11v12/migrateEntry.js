@@ -216,6 +216,7 @@ module.exports = (entryId, callback) => {
         attachments: attachments,
         comments: oldEntry.comments,
         flags: oldEntry.data.isVisit ? ['visit'] : [],
+        // NOTE failed overlay property is dropped
       };
 
       db.collection('entries').replaceOne({

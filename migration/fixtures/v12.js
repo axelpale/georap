@@ -51,7 +51,6 @@ module.exports = {
       time: '2009-09-04T23:44:21.000Z',
       type: 'location_entry',
       user: 'admin',
-      // NOTE possible entry.overlay moved to attachment.data.overlay
     }, {
       _id: c.locatorEntryId,
       attachments: ['ewdsf3kk'], // NOTE
@@ -77,6 +76,7 @@ module.exports = {
       time: '2009-10-02T11:11:01.000Z',
       type: 'location_entry',
       user: 'admin',
+      // NOTE overlay prop is dropped
     }],
 
     // No event _ids needed, they are created in run time.

@@ -52,7 +52,6 @@ const substeps = [
 
   function refactorEntries (nextStep) {
     console.log('3. Refactor entries and create attachments...');
-    // TODO handle overlay
 
     enColl.find().project({
       _id: 1,
