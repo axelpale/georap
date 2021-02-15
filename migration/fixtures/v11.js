@@ -124,11 +124,11 @@ module.exports = {
       },
       { // NOTE added location_entry_changed ev for docs and v11v12 migr.
         _id: db.id('581f166110a1482dd038f33a'),
-        type: "location_entry_changed",
-        user: "admin",
-        time: "2017-06-29T18:44:21.194Z",
+        type: 'location_entry_changed',
+        user: 'admin',
+        time: '2017-06-29T18:44:21.194Z',
         locationId: c.irbeneId,
-        locationName: "Irbene",
+        locationName: 'Irbene',
         data: {
           entryId: c.locatorEntryId,
           oldMarkdown: null,
