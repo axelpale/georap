@@ -86,7 +86,7 @@ describe('iter.updateEach', function () {
           return done(err2);
         }
         users[0].should.not.have.ownProperty('name');
-        assert.ok(!users[1].hasOwnProperty('name'));
+        assert.ok(!('name' in users[1]));
         return done();
       });
     });

@@ -19,4 +19,4 @@ module.exports = (crev, chevs, comments) => {
   entry.comments = comments;
 
   return entry;
-}
+};

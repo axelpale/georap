@@ -30,13 +30,13 @@ module.exports = function (fixture, callback) {
   //
   var colls, indices;
 
-  if (!fixture.hasOwnProperty('collections')) {
+  if (!('collections' in fixture)) {
     return callback(new Error('no fixture collections specified'));
   }
   colls = fixture.collections;
 
   // Indices are optional
-  if (fixture.hasOwnProperty('indices')) {
+  if ('indices' in fixture) {
     indices = fixture.indices;
   } else {
     indices = [];

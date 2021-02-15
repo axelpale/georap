@@ -1,5 +1,5 @@
+/* eslint-disable no-magic-numbers, max-lines */
 /* global describe, it, beforeEach, before, after */
-/* eslint-disable no-magic-numbers */
 
 var db = require('tresdb-db');
 var assert = require('assert');
@@ -23,7 +23,7 @@ var loadFixtureByTag = function (versionTag, callback) {
   //     function (err)
   //
 
-  if (!fixtures.hasOwnProperty(versionTag)) {
+  if (!fixtures[versionTag]) {
     throw new Error('invalid version tag:' + versionTag);
   }
 

@@ -75,7 +75,7 @@ module.exports = (callback) => {
     },
 
     // No further tasks.
-  ], (taskErr, taskResult) => {
+  ], (taskErr) => {
     if (taskErr) {
       return callback(taskErr);
     }

@@ -3,6 +3,7 @@ const transformChangedEvent = require('./transformChangedEvent');
 const replayEntry = require('./replayEntry');
 const asyn = require('async');
 const db = require('tresdb-db');
+const _ = require('lodash');
 
 module.exports = (entryId, callback) => {
   //
@@ -30,49 +31,52 @@ module.exports = (entryId, callback) => {
 
     // Find entry's events
     (entry, next) => {
-      db.collection('events').find({
-        locationId: entry.locationId,
-        'data.entryId': entry._id,
-      }).sort([[time: 1]]).toArray((err, events) => {
-        if (err) {
-          return next(err);
-        }
+      db.collection('events')
+        .find({
+          locationId: entry.locationId,
+          'data.entryId': entry._id,
+        })
+        .sort('time', 1)
+        .toArray((err, events) => {
+          if (err) {
+            return next(err);
+          }
 
-        // Split events by their type.
-        entryCreatedEvs = events.filter(ev => {
-          return ev.type === 'location_entry_created';
+          // Split events by their type.
+          const entryCreatedEvs = events.filter(ev => {
+            return ev.type === 'location_entry_created';
+          });
+
+          const entryChangedEvs = events.filter(ev => {
+            return ev.type === 'location_entry_changed';
+          });
+
+          const entryRemovedEvs = events.filter(ev => {
+            return ev.type === 'location_entry_removed';
+          });
+
+          // Ensure there are correct number of events.
+          if (entryCreatedEvs.length !== 1) {
+            const msg = 'None or multiple location_entry_created events ' +
+              'for entry id: ' + entry._id;
+            return next(new Error(msg));
+          }
+
+          // No location_entry_removed events should exist anymore.
+          if (entryRemovedEvs.length > 0) {
+            const msg = 'Unexpected location_entry_removed event ' +
+              'for entry id: ' + entry._id;
+            return next(new Error(msg));
+          }
+
+          return next(null, {
+            entry: entry,
+            entryCreatedEv: entryCreatedEvs[0],
+            entryChangedEvs: entryChangedEvs,
+            entryRemovedEv: entryRemovedEvs.length > 0
+              ? entryRemovedEvs[0] : null,
+          });
         });
-
-        entryChangedEvs = events.filter(ev => {
-          return ev.type === 'location_entry_changed';
-        });
-
-        entryRemovedEvs = events.filter(ev => {
-          return ev.type === 'location_entry_removed';
-        });
-
-        // Ensure there are correct number of events.
-        if (entryCreatedEvs.length !== 1) {
-          const msg = 'None or multiple location_entry_created events ' +
-            'for entry id: ' + entry._id;
-          return next(new Error(msg));
-        }
-
-        // No location_entry_removed events should exist anymore.
-        if (entryRemovedEvs.length > 0) {
-          const msg = 'Unexpected location_entry_removed event ' +
-            'for entry id: ' + entry._id;
-          return next(new Error(msg));
-        }
-
-        return next(null, {
-          entry: entry,
-          entryCreatedEv: entryCreatedEvs[0],
-          entryChangedEvs: entryChangedEvs,
-          entryRemovedEv: entryRemovedEvs.length > 0
-            ? entryRemovedEvs[0] : null,
-        });
-      });
     },
 
     // Capture attachments
@@ -127,7 +131,7 @@ module.exports = (entryId, callback) => {
           filepathToAttachments[enAtta.filepath] = attachmentKeys;
           return eachNext();
         });
-      }, (eachErr, eachResult) => {
+      }, (eachErr) => {
         if (eachErr) {
           return next(eachErr);
         }
@@ -181,19 +185,19 @@ module.exports = (entryId, callback) => {
 
         return next(null, Object.assign({}, payload, {
           newEntryCreatedEv: newCrev,
-        });
+        }));
       });
     },
 
     // Migrate location_entry_changed
     (payload, next) => {
       const newEntryChangedEvs = payload.entryChangedEvs.map((chev) => {
-        return transformChangeEvent(chev, payload.filepathToAttachments);
+        return transformChangedEvent(chev, payload.filepathToAttachments);
       });
 
       return next(null, Object.assign({}, payload, {
         newEntryChangedEvs: newEntryChangedEvs,
-      });
+      }));
     },
 
     // Migrate entry
@@ -228,7 +232,7 @@ module.exports = (entryId, callback) => {
 
         return next(null, Object.assign({}, payload, {
           newEntry: newEntry,
-        });
+        }));
       });
     },
 
@@ -237,7 +241,7 @@ module.exports = (entryId, callback) => {
       const replayedEntry = replayEntry(
         payload.newEntryCreatedEv,
         payload.newEntryChangedEvs,
-        payload.oldEntry.comments,
+        payload.oldEntry.comments
       );
 
       if (!_.isEqual(replayedEntry, payload.newEntry)) {
@@ -256,14 +260,4 @@ module.exports = (entryId, callback) => {
 
     return callback(null, finalResult);
   });
-
-
-
-  transform entry
-  place latest attachment
-
-  replay events to build entry
-  compare
-
-
 };

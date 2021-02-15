@@ -24,7 +24,7 @@ var getSteps = function (currentVersion, targetVersion) {
   var steps = [];
 
   for (i = currentVersion; i !== targetVersion; i += 1) {
-    if (v.hasOwnProperty(i)) {
+    if (typeof v[i].run === 'function') {
       steps.push(v[i].run);
     } else {
       throw new Error('No migration steps available from v' + i +

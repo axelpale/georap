@@ -11,10 +11,9 @@
 
 const db = require('tresdb-db');
 const schema = require('../../lib/schema');
-const iter = require('../../iter');
 const asyn = require('async');
-const clone = require('clone');
 const removeOrphanEvents = require('./removeOrphanEvents');
+const migrateEntry = require('./migrateEntry');
 
 const FROM_VERSION = 11;
 const TO_VERSION = FROM_VERSION + 1;
@@ -24,7 +23,7 @@ const TO_VERSION = FROM_VERSION + 1;
 // each step.
 const substeps = [
 
-  function updateSchema (nextStep) {
+  function updateSchema(nextStep) {
     console.log('1. Updating schema version tag...');
 
     schema.setVersion(TO_VERSION, function (err) {
@@ -37,7 +36,7 @@ const substeps = [
     });
   },
 
-  function createCollection (nextStep) {
+  function createCollection(nextStep) {
     console.log('2. Remove orphan events...');
 
     removeOrphanEvents((err, numRemoved) => {
@@ -50,26 +49,29 @@ const substeps = [
     });
   },
 
-  function refactorEntries (nextStep) {
+  function refactorEntries(nextStep) {
     console.log('3. Refactor entries and create attachments...');
 
-    enColl.find().project({
-      _id: 1,
-    }).toArray((err, entryIds) => {
-      if (err) {
-        return nextStep(err);
-      }
-
-      asyn.eachSeries(entryIds, (wrappedEntryId, eachNext) => {
-        migrateEntry(wrappedEntryId._id, eachNext);
-      }, (eachErr) => {
-        if (eachErr) {
-          return nextStep(eachErr);
+    db.collection('entries')
+      .find()
+      .project({
+        _id: 1,
+      })
+      .toArray((err, entryIds) => {
+        if (err) {
+          return nextStep(err);
         }
-        console.log('  ' + entryIds.length + ' entries were migrated.');
-        return nextStep();
+
+        asyn.eachSeries(entryIds, (wrappedEntryId, eachNext) => {
+          migrateEntry(wrappedEntryId._id, eachNext);
+        }, (eachErr) => {
+          if (eachErr) {
+            return nextStep(eachErr);
+          }
+          console.log('  ' + entryIds.length + ' entries were migrated.');
+          return nextStep();
+        });
       });
-    });
   },
 
 ];
