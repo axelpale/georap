@@ -1,10 +1,11 @@
-module.exports = (crev, chevs) => {
+module.exports = (crev, chevs, comments) => {
   // Parameters:
   //   crev
   //     location_entry_created event
   //   chevs
   //     an array of location_entry_changed events
-  //
+  //   comments
+  //     an array of comments for the entry
 
   // Init and then build forward.
   const entry = Object.assign({}, crev.data.entry);
@@ -14,6 +15,8 @@ module.exports = (crev, chevs) => {
       entry[prop] = chev.data.delta[prop];
     });
   });
+
+  entry.comments = comments;
 
   return entry;
 }

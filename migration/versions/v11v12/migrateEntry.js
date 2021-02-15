@@ -214,7 +214,7 @@ module.exports = (entryId, callback) => {
         published: false,
         markdown: oldEntry.data.markdown ? oldEntry.data.markdown : '',
         attachments: attachments,
-        comments: [],
+        comments: oldEntry.comments,
         flags: oldEntry.data.isVisit ? ['visit'] : [],
       };
 
@@ -231,11 +231,12 @@ module.exports = (entryId, callback) => {
       });
     },
 
-    // Replay new events to ensure same result
+    // Test integrity: Replay new events to ensure same result
     (payload, next) => {
       const replayedEntry = replayEntry(
         payload.newEntryCreatedEv,
         payload.newEntryChangedEvs,
+        payload.oldEntry.comments,
       );
 
       if (!_.isEqual(replayedEntry, payload.newEntry)) {
