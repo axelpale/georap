@@ -145,6 +145,35 @@ module.exports = {
           newThumbmimetype: 'image/jpeg',
         },
       },
+      // NOTE an entry create-remove pair to test removal of these orphans
+      {
+        _id: db.id('581f166110a1482dd577fbba'),
+        type: 'location_entry_created',
+        user: 'admin',
+        time: '2021-02-15T22:16:10.000Z',
+        locationId: c.irbeneId,
+        locationName: 'Irbene',
+        data: {
+          entryId: db.id('d784ee5136f59eb3dda9c79e'),
+          isVisit: false,
+          markdown: 'Something not so relevant',
+          filepath: null,
+          mimetype: null,
+          thumbfilepath: null,
+          thumbmimetype: null,
+        },
+      },
+      {
+        _id: db.id('581f166110a1482dd577fbbb'),
+        type: 'location_entry_removed',
+        user: 'admin',
+        time: '2021-02-15T22:18:13.000Z',
+        locationId: c.irbeneId,
+        locationName: 'Irbene',
+        data: {
+          entryId: db.id('d784ee5136f59eb3dda9c79e'),
+        },
+      },
     ],
 
     users: [{
