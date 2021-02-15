@@ -1,4 +1,6 @@
 const createAttachments = require('./createAttachments');
+const transformChangedEvent = require('./transformChangedEvent');
+const replayEntry = require('./replayEntry');
 const asyn = require('async');
 const db = require('tresdb-db');
 
@@ -55,8 +57,10 @@ module.exports = (entryId, callback) => {
             'for entry id: ' + entry._id;
           return next(new Error(msg));
         }
-        if (entryRemovedEvs.length > 1) {
-          const msg = 'Multiple location_entry_removed events ' +
+
+        // No location_entry_removed events should exist anymore.
+        if (entryRemovedEvs.length > 0) {
+          const msg = 'Unexpected location_entry_removed event ' +
             'for entry id: ' + entry._id;
           return next(new Error(msg));
         }
@@ -110,9 +114,9 @@ module.exports = (entryId, callback) => {
 
     // Create attachments
     (payload, next) => {
-      // Construct entry.data.filepath to attachment key
+      // Construct mapping from entry.data.filepath to attachment array
       // so that we can replace files in the entries and events with keys.
-      const filepathToKey = {};
+      const filepathToAttachments = {};
 
       asyn.eachSeries(payload.entryAttachments, (enAtta, eachNext) => {
         createAttachments(enAtta, (catErr, attachmentKeys) => {
@@ -120,11 +124,7 @@ module.exports = (entryId, callback) => {
             return eachNext(catErr);
           }
 
-          // 0 to 1 keys
-          attachmentKeys.forEach(key => {
-            filepathToKey[enAtta.filepath] = key;
-          });
-
+          filepathToAttachments[enAtta.filepath] = attachmentKeys;
           return eachNext();
         });
       }, (eachErr, eachResult) => {
@@ -133,7 +133,7 @@ module.exports = (entryId, callback) => {
         }
 
         return next(null, Object.assign({}, payload, {
-          filepathToKey: filepathToKey,
+          filepathToAttachments: filepathToAttachments,
         }));
       });
     },
@@ -142,12 +142,9 @@ module.exports = (entryId, callback) => {
     (payload, next) => {
       const crev = payload.entryCreatedEv;
 
-      const attachments = [];
+      let attachments = [];
       if (crev.data.filepath) {
-        const key = payload.filepathToKey[crev.data.filepath];
-        if (key) {
-          attachments.push(key);
-        }
+        attachments = payload.filepathToAttachments[crev.data.filepath];
       }
 
       const newEntry = {
@@ -157,7 +154,7 @@ module.exports = (entryId, callback) => {
         user: crev.user,
         deleted: false,
         published: false,
-        markdown: crev.data.markdown,
+        markdown: crev.data.markdown === null ? '' : crev.data.markdown,
         attachments: attachments,
         comments: [],
         flags: crev.data.isVisit ? ['visit'] : [],
@@ -190,21 +187,72 @@ module.exports = (entryId, callback) => {
 
     // Migrate location_entry_changed
     (payload, next) => {
+      const newEntryChangedEvs = payload.entryChangedEvs.map((chev) => {
+        return transformChangeEvent(chev, payload.filepathToAttachments);
+      });
 
-    },
-
-    // Migrate location_entry_removed
-    (payload, next) => {
-
+      return next(null, Object.assign({}, payload, {
+        newEntryChangedEvs: newEntryChangedEvs,
+      });
     },
 
     // Migrate entry
     (payload, next) => {
+      const oldEntry = payload.entry;
 
+      let attachments = [];
+      if (oldEntry.data.filepath) {
+        attachments = payload.filepathToAttachments[oldEntry.data.filepath];
+      }
+
+      const newEntry = {
+        _id: oldEntry._id,
+        locationId: oldEntry.locationId,
+        time: oldEntry.time,
+        user: oldEntry.user,
+        deleted: false,
+        published: false,
+        markdown: oldEntry.data.markdown ? oldEntry.data.markdown : '',
+        attachments: attachments,
+        comments: [],
+        flags: oldEntry.data.isVisit ? ['visit'] : [],
+      };
+
+      db.collection('entries').replaceOne({
+        _id: oldEntry._id,
+      }, newEntry, (repErr) => {
+        if (repErr) {
+          return next(repErr);
+        }
+
+        return next(null, Object.assign({}, payload, {
+          newEntry: newEntry,
+        });
+      });
+    },
+
+    // Replay new events to ensure same result
+    (payload, next) => {
+      const replayedEntry = replayEntry(
+        payload.newEntryCreatedEv,
+        payload.newEntryChangedEvs,
+      );
+
+      if (!_.isEqual(replayedEntry, payload.newEntry)) {
+        const msg = 'Inconsistent entry creation detected for ' +
+          'entry id: ' + entryId;
+        return next(new Error(msg));
+      }
+
+      return next(null, payload);
     },
 
   ], (finalError, finalResult) => {
+    if (finalError) {
+      return callback(finalError);
+    }
 
+    return callback(null, finalResult);
   });
 
 
