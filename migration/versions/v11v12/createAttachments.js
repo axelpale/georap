@@ -4,6 +4,7 @@ module.exports = (attachmentData, callback) => {
   // Parameters
   //   attachmentData, object with keys
   //     username
+  //     time
   //     filepath
   //     mimetype
   //     thumbfilepath
