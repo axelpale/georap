@@ -241,7 +241,7 @@ module.exports = (entryId, callback) => {
       const replayedEntry = replayEntry(
         payload.newEntryCreatedEv,
         payload.newEntryChangedEvs,
-        payload.oldEntry.comments
+        payload.entry.comments
       );
 
       if (!_.isEqual(replayedEntry, payload.newEntry)) {

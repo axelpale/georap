@@ -40,7 +40,7 @@ exports.create = (params, callback) => {
   //     function (err, attachment)
   //
 
-  if (typeof filepath !== 'string') {
+  if (typeof params.filepath !== 'string') {
     // No attachment given
     return callback(new Error('Missing attachment data'));
   }
