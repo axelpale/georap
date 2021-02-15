@@ -24,6 +24,8 @@ exports.create = (params, callback) => {
   //   params:
   //     username
   //       string
+  //     time
+  //       optional ISO datetime string (see db.timestamp). Defaults to now.
   //     filepath
   //       string or null
   //       The relative path of the file in the uploads dir
@@ -46,7 +48,7 @@ exports.create = (params, callback) => {
   const attachment = {
     key: keygen.generate(),
     user: params.username,
-    time: db.timestamp(),
+    time: params.time ? params.time : db.timestamp(),
     deleted: false,
     filepath: params.filepath,
     mimetype: params.mimetype,
