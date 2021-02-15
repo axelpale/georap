@@ -52,22 +52,25 @@ const substeps = [
 
   function refactorEntries (nextStep) {
     console.log('3. Refactor entries and create attachments...');
-    // TODO ensure comments: []
-    // TODO overlay
+    // TODO handle overlay
 
-    const atColl = db.collection('attachments');
-    const enColl = db.collection('entries');
-    const evColl = db.collection('events');
+    enColl.find().project({
+      _id: 1,
+    }).toArray((err, entryIds) => {
+      if (err) {
+        return nextStep(err);
+      }
 
-    iter.updateEach(enColl, function (origEntry, iterNext) {
-
-    }, nextStep);
-  },
-
-  function refactorEntryEvents (nextStep) {
-    console.log('4. Refactor entry events...');
-    // TODO requires attachment ids from prev step.
-    return nextStep();
+      asyn.eachSeries(entryIds, (wrappedEntryId, eachNext) => {
+        migrateEntry(wrappedEntryId._id, eachNext);
+      }, (eachErr) => {
+        if (eachErr) {
+          return nextStep(eachErr);
+        }
+        console.log('  ' + entryIds.length + ' entries were migrated.');
+        return nextStep();
+      });
+    });
   },
 
 ];
