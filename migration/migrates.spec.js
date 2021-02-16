@@ -8,6 +8,7 @@ var config = require('tresdb-config');
 var migrates = require('./migrates');
 var schema = require('./lib/schema');
 var assertFixtureEqual = require('./lib/assertFixtureEqual');
+var dropCollections = require('./lib/dropCollections');
 var fixtures = require('./fixtures');
 var loadFixture = require('./lib/loadFixture');
 var fse = require('fs-extra');
@@ -38,14 +39,23 @@ describe('migrates.migrate', function () {
       if (err) {
         return console.error('Failed to connect to MongoDB.');
       }
-
-      return done();
+      // As a first step, drop all test db collections in case they
+      // have dirt after a bug or so.
+      return dropCollections(db, done);
     });
   });
 
   after(function (done) {
-    db.close();
-    done();
+    // As a final step, reset the test database for future tests.
+    return dropCollections(db, (err) => {
+      if (err) {
+        return done(err);
+      }
+
+      // Then, close and exit.
+      db.close();
+      done();
+    });
   });
 
   describe('v1 to v2', function () {
