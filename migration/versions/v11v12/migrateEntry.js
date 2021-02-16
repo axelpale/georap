@@ -170,6 +170,7 @@ module.exports = (entryId, callback) => {
         locationId: crev.locationId,
         locationName: crev.locationName,
         time: crev.time,
+        type: 'location_entry_created',
         user: crev.user,
         data: {
           entryId: crev.data.entryId,

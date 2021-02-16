@@ -81,6 +81,7 @@ module.exports = (chev, filepathToAttachments) => {
     locationId: chev.locationId,
     locationName: chev.locationName,
     time: chev.time,
+    type: 'location_entry_changed',
     user: chev.user,
     data: {
       entryId: chev.data.entryId,

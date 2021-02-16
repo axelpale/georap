@@ -71,7 +71,7 @@ module.exports = {
       deleted: false,
       flags: ['visit'], // NOTE
       locationId: c.irbeneId,
-      markdown: '', // NOTE null to ''
+      markdown: 'Ventspils RT-32 radio telescope', // NOTE null to '' by deflt
       published: false, // NOTE
       time: '2009-10-02T11:11:01.000Z',
       user: 'admin',
@@ -105,7 +105,6 @@ module.exports = {
             markdown: 'A ghost town', // NOTE outside data
             published: false, // NOTE
             time: '2009-09-04T23:44:21.000Z',
-            type: 'location_entry',
             user: 'admin',
           },
         },
@@ -133,7 +132,6 @@ module.exports = {
             _id: c.locatorEntryId,
             locationId: c.irbeneId,
             time: '2009-10-02T11:11:01.000Z',
-            type: 'location_entry',
             user: 'admin',
             deleted: false,
             published: false,
