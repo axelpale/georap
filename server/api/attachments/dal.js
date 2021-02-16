@@ -54,6 +54,7 @@ exports.create = (params, callback) => {
     mimetype: params.mimetype,
     thumbfilepath: params.thumbfilepath,
     thumbmimetype: params.thumbmimetype,
+    data: {}, // For possible future metadata
   };
 
   db.collection('attachments').insertOne(attachment, (err) => {
