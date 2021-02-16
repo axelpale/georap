@@ -138,7 +138,7 @@ module.exports = {
             markdown: '',
             attachments: ['ewdsf3kk'], // NOTE ref to attachment key
             comments: [],
-            flags: ['visit'], // NOTE isVisit:false converted to flags:[]
+            flags: [], // NOTE isVisit:false converted to flags:[]
           },
         },
         locationId: c.irbeneId,
@@ -169,7 +169,7 @@ module.exports = {
         data: {
           entryId: c.locatorEntryId,
           original: { // NOTE original values of the changed
-            markdown: null,
+            markdown: '', // NOTE in v11 was null but in v12 is ''
             flags: [],
           },
           delta: { // NOTE new values of the changed
