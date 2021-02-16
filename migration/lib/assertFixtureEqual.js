@@ -52,6 +52,38 @@ module.exports = function (collectionName, versionTag, callback) {
       if (fixDoc.data) {
         delete fixDoc.data.entryId;
       }
+      // Attachment keys are generated in v11v12 and thus differ.
+      // Therefore test only for length.
+      if (realDoc.attachments) {
+        realDoc.attachments = realDoc.attachments.map(() => 'attakey');
+      }
+      if (fixDoc.attachments) {
+        fixDoc.attachments = fixDoc.attachments.map(() => 'attakey');
+      }
+      if (realDoc.data) {
+        if (realDoc.data.entry && realDoc.data.entry.attachments) {
+          const a = realDoc.data.entry.attachments;
+          realDoc.data.entry.attachments = a.map(() => 'attakey');
+        }
+        if (realDoc.data.original && realDoc.data.original.attachments) {
+          const a = realDoc.data.original.attachments;
+          realDoc.data.original.attachments = a.map(() => 'attakey');
+          const b = realDoc.data.delta.attachments;
+          realDoc.data.delta.attachments = b.map(() => 'attakey');
+        }
+      }
+      if (fixDoc.data) {
+        if (fixDoc.data.entry && fixDoc.data.entry.attachments) {
+          const a = fixDoc.data.entry.attachments;
+          fixDoc.data.entry.attachments = a.map(() => 'attakey');
+        }
+        if (fixDoc.data.original && fixDoc.data.original.attachments) {
+          const a = fixDoc.data.original.attachments;
+          fixDoc.data.original.attachments = a.map(() => 'attakey');
+          const b = fixDoc.data.delta.attachments;
+          fixDoc.data.delta.attachments = b.map(() => 'attakey');
+        }
+      }
 
       // Deep compare & find differences both ways.
       // See http://stackoverflow.com/a/31686152/638546
