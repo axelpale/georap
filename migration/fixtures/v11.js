@@ -36,11 +36,13 @@ module.exports = {
         _id: c.locatorEntryId,
         comments: [
           {
+            id: '200908007777756281648757',
             time: '2009-10-04T19:55:01.000Z',
             user: 'admin',
-            message: 'Hello world',
+            message: 'Dang radar, dude',
           },
           {
+            id: '202129864710097690580043',
             time: '2021-02-10T20:30:01.000Z',
             user: 'admin',
             message: 'Tunnel ground',
@@ -122,11 +124,25 @@ module.exports = {
       {
         data: {
           entryId: c.locatorEntryId,
+          commentId: '200908007777756281648757',
           message: 'Dang radar, dude',
         },
         locationId: c.irbeneId,
         locationName: 'Irbene',
         time: '2009-10-04T19:55:01.000Z',
+        type: 'location_entry_comment_created',
+        user: 'admin',
+      },
+      {
+        data: {
+          entryId: c.locatorEntryId,
+          commentId: '202129864710097690580043',
+          message: 'Tunnel ground',
+          attachments: ['adebd2rq'], // NOTE not v11 but prefilled v12
+        },
+        locationId: c.irbeneId,
+        locationName: 'Irbene',
+        time: '2021-02-10T20:30:01.000Z',
         type: 'location_entry_comment_created',
         user: 'admin',
       },

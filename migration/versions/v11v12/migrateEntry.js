@@ -1,5 +1,7 @@
 const createAttachments = require('./createAttachments');
 const captureAttachments = require('./captureAttachments');
+const migrateCommentCreated = require('./migrateCommentCreated');
+const migrateCommentChanged = require('./migrateCommentChanged');
 const migrateEntryCreated = require('./migrateEntryCreated');
 const transformChangedEvent = require('./transformChangedEvent');
 const transformComments = require('./transformComments');
@@ -63,6 +65,18 @@ module.exports = (entryId, callback) => {
             return ev.type === 'location_entry_removed';
           });
 
+          const commentCreatedEvs = events.filter(ev => {
+            return ev.type === 'location_entry_comment_created';
+          });
+
+          const commentChangedEvs = events.filter(ev => {
+            return ev.type === 'location_entry_comment_changed';
+          });
+
+          const commentRemovedEvs = events.filter(ev => {
+            return ev.type === 'location_entry_comment_removed';
+          });
+
           // Ensure there are correct number of events.
           if (entryCreatedEvs.length !== 1) {
             const msg = 'None or multiple location_entry_created events ' +
@@ -83,6 +97,9 @@ module.exports = (entryId, callback) => {
             entryChangedEvs: entryChangedEvs,
             entryRemovedEv: entryRemovedEvs.length > 0
               ? entryRemovedEvs[0] : null,
+            commentCreatedEvs: commentCreatedEvs,
+            commentChangedEvs: commentChangedEvs,
+            commentRemovedEvs: commentRemovedEvs,
           });
         });
     },
@@ -161,6 +178,33 @@ module.exports = (entryId, callback) => {
         }));
       });
     },
+
+    // Migrate location_entry_comment_created
+    // to contain the full comment object
+    (payload, next) => {
+      migrateCommentCreated(payload.commentCreatedEvs, (err, newEvs) => {
+        if (err) {
+          return next(err);
+        }
+        return next(null, Object.assign({}, payload, {
+          newCommentCreatedEvs: newEvs,
+        }));
+      });
+    },
+
+    // Migrate location_entry_comment_changed
+    (payload, next) => {
+      migrateCommentChanged(payload.commentChangedEvs, (err, newEvs) => {
+        if (err) {
+          return next(err);
+        }
+        return next(null, Object.assign({}, payload, {
+          newCommentChangedEvs: newEvs,
+        }));
+      });
+    },
+
+    // No need to migrate location_entry_comment_removed
 
     // Migrate entry
     (payload, next) => {

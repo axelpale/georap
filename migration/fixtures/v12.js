@@ -56,15 +56,17 @@ module.exports = {
       attachments: ['ewdsf3kk'], // NOTE
       comments: [
         {
+          id: '200908007777756281648757',
           time: '2009-10-04T19:55:01.000Z',
           user: 'admin',
-          message: 'Hello world',
+          markdown: 'Dang radar, dude',
           attachments: [], // NOTE
         },
         {
+          id: '202129864710097690580043',
           time: '2021-02-10T20:30:01.000Z',
           user: 'admin',
-          message: 'Tunnel ground',
+          markdown: 'Tunnel ground',
           attachments: ['adebd2rq'], // NOTE
         },
       ],
@@ -150,12 +152,36 @@ module.exports = {
       {
         data: {
           entryId: c.locatorEntryId,
-          message: 'Dang radar, dude',
-          // NOTE no change but implicit attachments:[]
+          commentId: '200908007777756281648757',
+          comment: { // NOTE
+            id: '200908007777756281648757',
+            time: '2009-10-04T19:55:01.000Z',
+            user: 'admin',
+            markdown: 'Dang radar, dude',
+            attachments: [],
+          },
         },
         locationId: c.irbeneId,
         locationName: 'Irbene',
         time: '2009-10-04T19:55:01.000Z',
+        type: 'location_entry_comment_created',
+        user: 'admin',
+      },
+      {
+        data: {
+          entryId: c.locatorEntryId,
+          commentId: '202129864710097690580043',
+          comment: { // NOTE
+            id: '202129864710097690580043',
+            time: '2021-02-10T20:30:01.000Z',
+            user: 'admin',
+            markdown: 'Tunnel ground',
+            attachments: ['adebd2rq'],
+          },
+        },
+        locationId: c.irbeneId,
+        locationName: 'Irbene',
+        time: '2021-02-10T20:30:01.000Z',
         type: 'location_entry_comment_created',
         user: 'admin',
       },

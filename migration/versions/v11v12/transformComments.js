@@ -13,8 +13,12 @@ module.exports = (comments) => {
   }
 
   return comments.map(comment => {
-    return Object.assign({}, comment, {
+    return {
+      id: comment.id,
+      time: comment.time,
+      user: comment.user,
+      markdown: comment.message,
       attachments: comment.attachments ? comment.attachments : [],
-    });
+    };
   });
 };
