@@ -2,61 +2,61 @@ module.exports = [
   {
     collection: 'attachments',
     spec: { key: 1 },
-    options: { unique: true },
+    options: { unique: true }
   },
   {
     collection: 'entries',
     spec: { locationId: 1 },
-    options: {},
+    options: {}
   },
   {
     collection: 'events',
     spec: { time: 1 },
-    options: {},
+    options: {}
   },
   {
     collection: 'events',
     spec: { locationId: 1 },
-    options: {},
+    options: {}
   },
   {
     collection: 'locations',
     spec: { geom: '2dsphere' },
-    options: {},
+    options: {}
   },
   {
     collection: 'locations',
     spec: { layer: 1 },
-    options: {},
+    options: {}
   },
   {
     collection: 'locations',
     spec: { status: 1, type: 1 },
-    options: {},
+    options: {}
   },
   {
     // Text index
     collection: 'locations',
     spec: {
-      text1: 'text',  // primary
-      text2: 'text',  // secondary
+      text1: 'text', // primary
+      text2: 'text' //  secondary
     },
     options: {
       weights: {
         text1: 3,
-        text2: 1,
+        text2: 1
       },
-      name: 'TextIndex',
-    },
+      name: 'TextIndex'
+    }
   },
   {
     collection: 'users',
     spec: { email: 1 },
-    options: { unique: true },
+    options: { unique: true }
   },
   {
     collection: 'users',
     spec: { name: 1 },
-    options: { unique: true },
-  },
-];
+    options: { unique: true }
+  }
+]

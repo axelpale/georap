@@ -1,24 +1,24 @@
 // Singleton wrapper around mongodb with
 // some handy server-side functions.
 
-var config = require('tresdb-config');
-var mongodb = require('mongodb');
-var mongoClient = mongodb.MongoClient;
-var ObjectId = mongodb.ObjectId;
+const config = require('tresdb-config')
+const mongodb = require('mongodb')
+const mongoClient = mongodb.MongoClient
+const ObjectId = mongodb.ObjectId
 
-var dbClient = null;
+let dbClient = null
 
-exports.INDICES = require('./indices');
+exports.INDICES = require('./indices')
 
-exports.id = function (k) {
-  return new ObjectId(k);
-};
+exports.id = (k) => {
+  return new ObjectId(k)
+}
 
-exports.timestamp = function () {
-  return (new Date()).toISOString();
-};
+exports.timestamp = () => {
+  return (new Date()).toISOString()
+}
 
-exports.init = function (mongoUrl, callback) {
+exports.init = (mongoUrl, callback) => {
   // Usage:
   //   db.init(function (err) {
   //     if (err) ...
@@ -33,61 +33,60 @@ exports.init = function (mongoUrl, callback) {
   //     function (err)
 
   if (dbClient !== null) {
-    return;
+    return
   }
 
   if (typeof mongoUrl === 'function') {
-    callback = mongoUrl;
+    callback = mongoUrl
 
     if (config.env === 'test') {
-      mongoUrl = config.mongo.testUrl;
+      mongoUrl = config.mongo.testUrl
     } else {
-      mongoUrl = config.mongo.url;
+      mongoUrl = config.mongo.url
     }
   }
 
-  var mongoOpts = {
+  const mongoOpts = {
     // Use new server discovery and monitoring engine
     // instead of the deprecated one. Becomes the default in the future.
-    useUnifiedTopology: true,
-  };
+    useUnifiedTopology: true
+  }
 
-  mongoClient.connect(mongoUrl, mongoOpts, function (dbErr, connectedClient) {
+  mongoClient.connect(mongoUrl, mongoOpts, (dbErr, connectedClient) => {
     if (dbErr) {
-      return callback(dbErr);
+      return callback(dbErr)
     }
 
-    dbClient = connectedClient;
-    return callback();
-  });
+    dbClient = connectedClient
+    return callback()
+  })
+}
 
-};
-
-exports.get = function () {
+exports.get = () => {
   // Return
   //   connected mongodb database instance
 
   if (dbClient !== null) {
-    return dbClient.db();
+    return dbClient.db()
   }
 
-  throw new Error('db.init must be called and finished before db.get');
-};
+  throw new Error('db.init must be called and finished before db.get')
+}
 
-exports.collection = function (collName) {
+exports.collection = (collName) => {
   // Return
   //   a MongoDB collection instance
 
   if (dbClient !== null) {
-    return dbClient.db().collection(collName);
+    return dbClient.db().collection(collName)
   }
 
-  throw new Error('db.init must be called and finished before db.collection');
-};
+  throw new Error('db.init must be called and finished before db.collection')
+}
 
-exports.close = function () {
+exports.close = () => {
   if (dbClient !== null) {
-    dbClient.close();
-    dbClient = null;
+    dbClient.close()
+    dbClient = null
   }
-};
+}
