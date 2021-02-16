@@ -7,6 +7,11 @@ const db = require('tresdb-db');
 const _ = require('lodash');
 
 module.exports = (entryId, callback) => {
+  // Parameters
+  //   entryId
+  //     an ObjectId
+  //   callback
+  //     migration payload object
   //
 
   asyn.waterfall([

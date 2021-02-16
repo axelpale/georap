@@ -1,4 +1,6 @@
 module.exports = (comments) => {
+  // In-entry comment object from v11 to v12
+  //
   // Parameters:
   //   comments
   //     array of v11 comment objects
