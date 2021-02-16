@@ -1,5 +1,6 @@
 const createAttachments = require('./createAttachments');
 const transformChangedEvent = require('./transformChangedEvent');
+const transformComments = require('./transformComments');
 const replayEntry = require('./replayEntry');
 const asyn = require('async');
 const db = require('tresdb-db');
@@ -218,7 +219,7 @@ module.exports = (entryId, callback) => {
         published: false,
         markdown: oldEntry.data.markdown ? oldEntry.data.markdown : '',
         attachments: attachments,
-        comments: oldEntry.comments ? oldEntry.comments : [],
+        comments: transformComments(oldEntry.comments),
         flags: oldEntry.data.isVisit ? ['visit'] : [],
         // NOTE failed overlay property is dropped
         // NOTE type property is dropped
@@ -242,7 +243,7 @@ module.exports = (entryId, callback) => {
       const replayedEntry = replayEntry(
         payload.newEntryCreatedEv,
         payload.newEntryChangedEvs,
-        payload.entry.comments ? payload.entry.comments : [],
+        transformComments(payload.entry.comments),
       );
 
       if (!_.isEqual(replayedEntry, payload.newEntry)) {
