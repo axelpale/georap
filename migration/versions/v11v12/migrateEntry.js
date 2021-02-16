@@ -1,4 +1,5 @@
 const createAttachments = require('./createAttachments');
+const captureAttachments = require('./captureAttachments');
 const transformChangedEvent = require('./transformChangedEvent');
 const transformComments = require('./transformComments');
 const replayEntry = require('./replayEntry');
@@ -87,38 +88,11 @@ module.exports = (entryId, callback) => {
 
     // Capture attachments
     (payload, next) => {
-      const entryAttachments = [];
-      const crev = payload.entryCreatedEv;
-      const chevs = payload.entryChangedEvs;
-
-      if (crev.data.filepath) {
-        entryAttachments.push({
-          username: crev.user,
-          time: crev.time,
-          filepath: crev.data.filepath,
-          mimetype: crev.data.mimetype,
-          thumbfilepath: crev.data.thumbfilepath,
-          thumbmimetype: crev.data.thumbmimetype,
-        });
-      }
-
-      chevs.forEach((chev) => {
-        if (chev.data.newFilepath) {
-          if (chev.data.newFilepath !== chev.data.oldFilepath) {
-            entryAttachments.push({
-              username: chev.user,
-              time: chev.time,
-              filepath: chev.data.newFilepath,
-              mimetype: chev.data.newMimetype,
-              thumbfilepath: chev.data.newThumbfilepath,
-              thumbmimetype: chev.data.newThumbmimetype,
-            });
-          }
-        }
-      });
-
       return next(null, Object.assign({}, payload, {
-        entryAttachments: entryAttachments,
+        entryAttachments: captureAttachments(
+          payload.entryCreatedEv,
+          payload.entryChangedEvs
+        ),
       }));
     },
 
