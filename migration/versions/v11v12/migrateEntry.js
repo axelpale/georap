@@ -197,9 +197,20 @@ module.exports = (entryId, callback) => {
         return transformChangedEvent(chev, payload.filepathToAttachments);
       });
 
-      return next(null, Object.assign({}, payload, {
-        newEntryChangedEvs: newEntryChangedEvs,
-      }));
+      // Replace each
+      asyn.eachSeries(newEntryChangedEvs, (newChev, nextEach) => {
+        db.collection('events').replaceOne({
+          _id: newChev._id,
+        }, newChev, nextEach);
+      }, (eachErr) => {
+        if (eachErr) {
+          return next(eachErr);
+        }
+
+        return next(null, Object.assign({}, payload, {
+          newEntryChangedEvs: newEntryChangedEvs,
+        }));
+      });
     },
 
     // Migrate entry
@@ -244,7 +255,7 @@ module.exports = (entryId, callback) => {
       const replayedEntry = replayEntry(
         payload.newEntryCreatedEv,
         payload.newEntryChangedEvs,
-        transformComments(payload.entry.comments),
+        transformComments(payload.entry.comments)
       );
 
       if (!_.isEqual(replayedEntry, payload.newEntry)) {
