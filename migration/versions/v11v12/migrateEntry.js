@@ -248,6 +248,8 @@ module.exports = (entryId, callback) => {
       if (!_.isEqual(replayedEntry, payload.newEntry)) {
         const msg = 'Inconsistent entry creation detected for ' +
           'entry id: ' + entryId;
+        console.log('Migrated entry:', payload.newEntry);
+        console.log('Replayed entry:', replayedEntry);
         return next(new Error(msg));
       }
 
