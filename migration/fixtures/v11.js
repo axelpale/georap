@@ -40,6 +40,12 @@ module.exports = {
             user: 'admin',
             message: 'Hello world',
           },
+          {
+            time: '2021-02-10T20:30:01.000Z',
+            user: 'admin',
+            message: 'Tunnel ground',
+            attachments: ['adebd2rq'], // NOTE not v11 but prefilled v12
+          },
         ],
         data: {
           isVisit: true, // NOTE changed by location_entry_changed
