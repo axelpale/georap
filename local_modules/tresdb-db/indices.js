@@ -5,6 +5,12 @@ module.exports = [
     options: { unique: true }
   },
   {
+    // Ensure same upload is not added twice
+    collection: 'attachments',
+    spec: { filepath: 1 },
+    options: { unique: true }
+  },
+  {
     collection: 'entries',
     spec: { locationId: 1 },
     options: {}
