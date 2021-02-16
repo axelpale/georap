@@ -10,8 +10,10 @@
 // Also, new indices were made and thus 'npm run migrate' is needed.
 
 const db = require('tresdb-db');
-const schema = require('../../lib/schema');
 const asyn = require('async');
+const clone = require('clone');
+const schema = require('../../lib/schema');
+const iter = require('../../iter');
 const removeOrphanEvents = require('./removeOrphanEvents');
 const migrateEntry = require('./migrateEntry');
 
@@ -72,6 +74,19 @@ const substeps = [
           return nextStep();
         });
       });
+  },
+
+  function migrateLocations(nextStep) {
+    console.log('4. Add published prop and ensure visits prop in locations...');
+
+    const coll = db.collection('locations');
+
+    iter.updateEach(coll, function (origLoc, iterNext) {
+      var loc = clone(origLoc);
+      loc.visits = [];
+      loc.published = false;
+      return iterNext(null, loc);
+    }, nextStep);
   },
 
 ];

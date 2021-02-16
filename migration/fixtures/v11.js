@@ -213,7 +213,7 @@ module.exports = {
       places: [],
       status: 'abandoned',
       type: 'default',
-      visits: [],
+      // visits: [], new locations did not receive visits due to bug in v10
       text1: '',
       text2: '',
     }],
