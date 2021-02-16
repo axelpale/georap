@@ -336,7 +336,7 @@ describe('migrates.migrate', function () {
           assertFixtureEqual('entries', 'v12', function (err3) {
             assert.ifError(err3);
             assertFixtureEqual('events', 'v12', function (err4) {
-              assert.ifError(err3);
+              assert.ifError(err4);
               done();
             });
           });
