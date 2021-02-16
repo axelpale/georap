@@ -49,8 +49,8 @@ module.exports = {
       markdown: 'A ghost town', // NOTE outside data
       published: false, // NOTE
       time: '2009-09-04T23:44:21.000Z',
-      type: 'location_entry',
       user: 'admin',
+      // NOTE type prop is dropped
     }, {
       _id: c.locatorEntryId,
       attachments: ['ewdsf3kk'], // NOTE
@@ -74,9 +74,9 @@ module.exports = {
       markdown: '', // NOTE null to ''
       published: false, // NOTE
       time: '2009-10-02T11:11:01.000Z',
-      type: 'location_entry',
       user: 'admin',
       // NOTE overlay prop is dropped
+      // NOTE type prop is dropped
     }],
 
     // No event _ids needed, they are created in run time.

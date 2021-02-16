@@ -29,6 +29,8 @@ module.exports = {
         time: '2009-09-04T23:44:21.000Z',
         type: 'location_entry',
         user: 'admin',
+        // NOTE in v11 we allow missing comments prop.
+        // NOTE In v12 the comments prop is required.
       },
       {
         _id: c.locatorEntryId,
