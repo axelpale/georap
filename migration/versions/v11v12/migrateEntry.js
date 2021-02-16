@@ -218,9 +218,10 @@ module.exports = (entryId, callback) => {
         published: false,
         markdown: oldEntry.data.markdown ? oldEntry.data.markdown : '',
         attachments: attachments,
-        comments: oldEntry.comments,
+        comments: oldEntry.comments ? oldEntry.comments : [],
         flags: oldEntry.data.isVisit ? ['visit'] : [],
         // NOTE failed overlay property is dropped
+        // NOTE type property is dropped
       };
 
       db.collection('entries').replaceOne({
@@ -241,7 +242,7 @@ module.exports = (entryId, callback) => {
       const replayedEntry = replayEntry(
         payload.newEntryCreatedEv,
         payload.newEntryChangedEvs,
-        payload.entry.comments
+        payload.entry.comments ? payload.entry.comments : [],
       );
 
       if (!_.isEqual(replayedEntry, payload.newEntry)) {
