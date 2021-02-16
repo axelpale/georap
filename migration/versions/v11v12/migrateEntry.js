@@ -1,5 +1,6 @@
 const createAttachments = require('./createAttachments');
 const captureAttachments = require('./captureAttachments');
+const migrateEntryCreated = require('./migrateEntryCreated');
 const transformChangedEvent = require('./transformChangedEvent');
 const transformComments = require('./transformComments');
 const replayEntry = require('./replayEntry');
@@ -124,50 +125,19 @@ module.exports = (entryId, callback) => {
 
     // Migrate location_entry_created
     (payload, next) => {
-      const crev = payload.entryCreatedEv;
+      migrateEntryCreated(
+        payload.entryCreatedEv,
+        payload.filepathToAttachments,
+        (err, newEvent) => {
+          if (err) {
+            return next(err);
+          }
 
-      let attachments = [];
-      if (crev.data.filepath) {
-        attachments = payload.filepathToAttachments[crev.data.filepath];
-      }
-
-      const newEntry = {
-        _id: crev.data.entryId,
-        locationId: crev.locationId,
-        time: crev.time,
-        user: crev.user,
-        deleted: false,
-        published: false,
-        markdown: crev.data.markdown === null ? '' : crev.data.markdown,
-        attachments: attachments,
-        comments: [],
-        flags: crev.data.isVisit ? ['visit'] : [],
-      };
-
-      const newCrev = {
-        _id: crev._id,
-        locationId: crev.locationId,
-        locationName: crev.locationName,
-        time: crev.time,
-        type: 'location_entry_created',
-        user: crev.user,
-        data: {
-          entryId: crev.data.entryId,
-          entry: newEntry,
-        },
-      };
-
-      db.collection('events').replaceOne({
-        _id: crev._id,
-      }, newCrev, (repErr) => {
-        if (repErr) {
-          return next(repErr);
+          return next(null, Object.assign({}, payload, {
+            newEntryCreatedEv: newEvent,
+          }));
         }
-
-        return next(null, Object.assign({}, payload, {
-          newEntryCreatedEv: newCrev,
-        }));
-      });
+      );
     },
 
     // Migrate location_entry_changed
