@@ -331,13 +331,15 @@ describe('migrates.migrate', function () {
       var targetV = 12;
       migrates.migrate(targetV, function (err) {
         assert.ifError(err);
-
         assertFixtureEqual('config', 'v12', function (err2) {
           assert.ifError(err2);
-
-          // TODO ensure entries
-          // TODO ensure entry events
-          done();
+          assertFixtureEqual('entries', 'v12', function (err3) {
+            assert.ifError(err3);
+            assertFixtureEqual('events', 'v12', function (err4) {
+              assert.ifError(err3);
+              done();
+            });
+          });
         });
       });
     });
