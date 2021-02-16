@@ -58,6 +58,7 @@ exports.createLocation = function (args, callback) {
     var newLoc = {
       creator: args.username,
       deleted: false,
+      published: false,
       geom: geom,
       isLayered: true,
       layer: layer,

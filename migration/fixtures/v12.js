@@ -198,6 +198,7 @@ module.exports = {
       _id: c.irbeneId,
       creator: 'admin',
       deleted: false,
+      published: false,
       geom: {
         type: 'Point',
         coordinates: [21.857705, 57.55341],
