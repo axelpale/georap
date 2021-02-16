@@ -15,6 +15,7 @@ module.exports = {
         value: 9,
       },
     ],
+    attachments: [],
     entries: [],
     events: [],
     locations: [],
