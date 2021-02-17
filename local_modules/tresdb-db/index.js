@@ -33,7 +33,7 @@ exports.init = (mongoUrl, callback) => {
   //     function (err)
 
   if (dbClient !== null) {
-    return
+    return callback()
   }
 
   if (typeof mongoUrl === 'function') {
