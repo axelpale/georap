@@ -170,48 +170,68 @@ exports.createLocationEntryRemoved = (params, callback) => {
   insertAndEmit(newEvent, callback);
 };
 
-exports.createLocationEntryCommentCreated = function (params, callback) {
+exports.createLocationEntryCommentCreated = (params, callback) => {
   // Parameters:
   //   params:
-  //     entryId
   //     locationId
   //     locationName
-  //     username
-  //     commentId
-  //     time
-  //     message
+  //     entryId
+  //     comment
+  //       new comment object
   //   callback
   //     function (err)
-
-  var newEvent = {
+  //
+  const newEvent = {
     type: 'location_entry_comment_created',
-    user: params.username,
-    time: params.time,
+    user: params.comment.user,
+    time: params.comment.time,
     locationId: params.locationId,
     locationName: params.locationName,
     data: {
       entryId: params.entryId,
-      commentId: params.commentId,
-      message: params.message,
+      commentId: params.comment.id,
+      comment: params.comment,
     },
   };
 
   insertAndEmit(newEvent, callback);
 };
 
-exports.createLocationEntryCommentChanged = function (params, callback) {
+exports.createLocationEntryCommentChanged = (params, callback) => {
   // Parameters:
   //   params:
   //     username
   //     locationId
   //     locationName
   //     entryId
-  //     commentId
-  //     newMessage
+  //     oldComment
+  //     newComment
   //   callback
   //     function (err)
+  //
+  const original = {};
+  const delta = {};
+  const filled = false; // Prevent empty changes
 
-  var newEvent = {
+  if (params.oldComment.markdown !== params.newComment.markdown) {
+    original.markdown = params.oldComment.markdown;
+    delta.markdown = params.newComment.markdown;
+    filled = true;
+  }
+
+  if (params.oldComment.attachments !== params.newComment.attachments) {
+    original.attachments = params.oldComment.attachments;
+    delta.attachments = params.newComment.attachments;
+    filled = true;
+  }
+
+  if (!filled) {
+    // No need to emit anything.
+    // It is okay for user to save the same message, so no error.
+    return callback();
+  }
+
+  const newEvent = {
     type: 'location_entry_comment_changed',
     user: params.username,
     time: db.timestamp(),
@@ -220,14 +240,15 @@ exports.createLocationEntryCommentChanged = function (params, callback) {
     data: {
       entryId: params.entryId,
       commentId: params.commentId,
-      newMessage: params.newMessage,
+      original: original,
+      delta: delta,
     },
   };
 
   insertAndEmit(newEvent, callback);
 };
 
-exports.createLocationEntryCommentRemoved = function (params, callback) {
+exports.createLocationEntryCommentRemoved = (params, callback) => {
   // Parameters:
   //   params:
   //     username
@@ -239,7 +260,7 @@ exports.createLocationEntryCommentRemoved = function (params, callback) {
   //   callback
   //     function (err)
 
-  var newEvent = {
+  const newEvent = {
     type: 'location_entry_comment_removed',
     user: params.username,
     time: db.timestamp(),
