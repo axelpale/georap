@@ -1,0 +1,63 @@
+<div id="tresdb-entry-container" class="hidden">
+
+  <div id="tresdb-entry-error" class="hidden">
+    <div class="alert alert-danger" role="alert">Saving the post failed. Might be a connection issue.</div>
+  </div>
+
+  <div id="tresdb-entry-sizeerror" class="hidden">
+    <div class="alert alert-danger" role="alert">The file is too large. Please choose a smaller version of the file.</div>
+  </div>
+
+  <form id="tresdb-entry-form" class="panel panel-primary">
+    <div class="panel-heading">
+      New post
+    </div>
+    <div class="panel-body">
+
+      <div class="form-group">
+        <label for="tresdb-entry-input">Tell something about the location:</label>
+        <textarea id="tresdb-entry-input" name="entrytext" class="form-control" rows="3"></textarea>
+        <div class="pull-right">
+          <a id="tresdb-entry-syntax-show" href="#">Formatting Help</a>
+        </div>
+      </div>
+
+      <div id="tresdb-entry-syntax" class="well hidden">
+        <%= markdownSyntax() %>
+      </div>
+
+      <div class="form-group">
+        <label for="tresdb-entry-file-input">Attach a photo or other document. Optional. Max size is <%= limit %> MiB.</label>
+        <input id="tresdb-entry-file-input" type="file" name="entryfile">
+      </div>
+
+      <div id="tresdb-entry-visit" class="form-group tresdb-disabled">
+        <label>Did you visit the location? A photo is required.</label>
+        <div class="checkbox disabled">
+          <label>
+            <input id="tresdb-entry-visit-input" type="checkbox" name="entryvisit" value="visited" disabled> This was a visit.
+          </label>
+        </div>
+        <!--div class="checkbox disabled">
+          <label>
+            <input type="checkbox" disabled> This was infiltration! Attach a photo to enable.
+          </label>
+        </div-->
+      </div>
+
+
+      <div class="pull-right">
+        <button id="tresdb-entry-cancel" type="button" class="btn btn-default">Cancel</button>
+        <button type="submit" class="btn btn-primary">Save</button>
+      </div>
+
+    </div>
+  </form>
+
+  <div id="tresdb-entry-progress" class="progress hidden">
+    <div class="progress-bar progress-bar-striped active" role="progressbar" style="width: 100%">
+      <span class="sr-only">Waiting for server</span>
+    </div>
+  </div>
+
+</div>
