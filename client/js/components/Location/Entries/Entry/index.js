@@ -1,6 +1,6 @@
 /* eslint-disable max-statements */
 var timestamp = require('../../../lib/timestamp');
-var markdownSyntax = require('../../lib/markdownSyntax.ejs');
+var markdownSyntax = require('../lib/markdownSyntax.ejs');
 var template = require('./template.ejs');
 var CommentsView = require('./Comments');
 var ui = require('tresdb-ui');
