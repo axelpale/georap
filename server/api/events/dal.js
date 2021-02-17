@@ -204,24 +204,25 @@ exports.createLocationEntryCommentChanged = (params, callback) => {
   //     locationId
   //     locationName
   //     entryId
-  //     oldComment
-  //     newComment
+  //     commentId
+  //     original
+  //       original values of changed props
+  //     delta
+  //       new values of changed props
   //   callback
   //     function (err)
   //
-  const original = {};
-  const delta = {};
+  // Precondition:
+  //   original and delta are minimal
+  //
   const filled = false; // Prevent empty changes
 
-  if (params.oldComment.markdown !== params.newComment.markdown) {
-    original.markdown = params.oldComment.markdown;
-    delta.markdown = params.newComment.markdown;
+  if ('markdown' in params.original && 'markdown' in params.delta &&
+      params.original.markdown !== params.delta.markdown) {
     filled = true;
   }
-
-  if (params.oldComment.attachments !== params.newComment.attachments) {
-    original.attachments = params.oldComment.attachments;
-    delta.attachments = params.newComment.attachments;
+  if ('attachments' in params.original && 'attachments' in params.delta &&
+      params.original.attachments !== params.delta.attachments) {
     filled = true;
   }
 

@@ -380,37 +380,42 @@ exports.changeLocationEntryComment = function (params, callback) {
   //     locationId
   //     locationName
   //     entryId
-  //     commentId
   //     username
-  //     newMessage: markdown UTF8 string
+  //     commentId
+  //     original
+  //       original values of props in delta
+  //     delta
+  //       markdown: markdown UTF8 string
+  //       attachments: an array of attachment keys
   //   callback
   //     function (err)
-
-  // Sanitize
-  var sanitizedMessage = purifyMarkdown(params.newMessage).trim();
-
-  var coll = db.collection('entries');
-  var filter = {
+  //
+  // Precondition
+  //   original and delta are minimal (contain only changed prop values)
+  //
+  const coll = db.collection('entries');
+  const filter = {
     _id: params.entryId,
     'comments.id': params.commentId,
   };
 
-  var update = {
-    $set: {
-      'comments.$.message': sanitizedMessage,
-    },
+  // Sanitize input and build update
+  let update = {
+    $set: {},
   };
+  if (params.delta.markdown) {
+    update['$set']['comments.$.markdown'] = params.delta.markdown;
+  }
+  if (params.delta.attachments) {
+    update['$set']['comments.$.attachments'] = params.delta.attachments;
+  }
 
   coll.updateOne(filter, update, function (err) {
     if (err) {
       return callback(err);
     }
 
-    var eventParams = Object.assign({}, params, {
-      newMessage: sanitizedMessage,
-    });
-
-    eventsDal.createLocationEntryCommentChanged(eventParams, callback);
+    eventsDal.createLocationEntryCommentChanged(params, callback);
   });
 };
 
