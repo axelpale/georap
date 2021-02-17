@@ -1,6 +1,5 @@
 // This model is responsible for rawLocation.entries array.
 
-var rawEventToRawEntry = require('./lib/rawEventToRawEntry');
 var EntryModel = require('./Entry/Model');
 
 var emitter = require('component-emitter');
@@ -62,7 +61,7 @@ module.exports = function (rawEntries, location) {
   location.on('location_entry_event', function (ev) {
 
     if (ev.type.endsWith('entry_created')) {
-      _createEntry(rawEventToRawEntry(ev));
+      _createEntry(ev.data.entry);
       // E.g. self.emit('location_entry_created', ev);
       self.emit(ev.type, ev);
     }
