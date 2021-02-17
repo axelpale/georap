@@ -71,32 +71,37 @@ exports.isSelected = function (locId) {
 
 // Public API methods
 
-exports.changeEntry = function (locationId, entryId, form, callback) {
+exports.changeEntry = function (locId, entryId, entryData, callback) {
   // Parameters:
-  //   locationId
+  //   locId
+  //     location id
   //   entryId
-  //   form
-  //     jQuery instance of the file upload form.
+  //   entryData, object with following props
+  //     markdown
+  //     attachments
+  //     flags
   //   callback
   //     function (err)
-  return postFile({
-    url: '/api/locations/' + locationId + '/entries/' + entryId,
-    form: form,
+  return postJSON({
+    url: '/api/locations/' + locId + '/entries/' + entryId,
+    entryData: entryData,
   }, callback);
 };
 
-exports.createEntry = function (id, form, callback) {
+exports.createEntry = function (id, entryData, callback) {
   // Parameters
   //   id
   //     location id
-  //   form
-  //     jQuery instance of the file upload form
+  //   entryData, object with following props
+  //     markdown
+  //     attachments
+  //     flags
   //   callback
   //     function (err)
 
-  return postFile({
+  return postJSON({
     url: '/api/locations/' + id + '/entries',
-    form: form,
+    data: entryData,
   }, callback);
 };
 
@@ -277,7 +282,7 @@ exports.setType = function (id, newType, callback) {
   }, callback);
 };
 
-exports.createComment = function (locationId, entryId, message, callback) {
+exports.createComment = function (locationId, entryId, markdown, callback) {
   // Parameters:
   //   locationId
   //   entryId
@@ -286,8 +291,8 @@ exports.createComment = function (locationId, entryId, message, callback) {
   //   callback
   //     function (err)
 
-  if (typeof message !== 'string' || message.length === 0) {
-    return callback(new Error('Invalid message'));
+  if (typeof markdown !== 'string' || markdown.length === 0) {
+    return callback(new Error('Invalid comment message'));
   }
 
   return postJSON({
