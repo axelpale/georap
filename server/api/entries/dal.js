@@ -315,47 +315,59 @@ exports.removeLocationEntry = function (params, callback) {
 };
 
 
-exports.createLocationEntryComment = function (params, callback) {
+exports.createLocationEntryComment = (params, callback) => {
+  // Add new comment object to entry.comments
+  //
   // Parameters:
   //   params
   //     locationId
   //     entryId
   //     locationName
   //     username
-  //     message: markdown UTF8 string
+  //     markdown: markdown UTF8 string
+  //     attachments: optional array of attachment keys
   //   callback
   //     function (err)
+  //
+  const time = db.timestamp();
+  const rand1 = Math.random().toString().substr(2, 10);
+  const rand2 = Math.random().toString().substr(2, 10);
+  const commentId = time.substr(0, 4) + rand1 + rand2; // 24 chars
 
-  var time = db.timestamp();
-  var rand1 = Math.random().toString().substr(2, 10);
-  var rand2 = Math.random().toString().substr(2, 10);
-  var commentId = time.substr(0, 4) + rand1 + rand2; // 24 chars
+  const sanitizedMarkdown = purifyMarkdown(params.markdown).trim();
 
-  var sanitizedMessage = purifyMarkdown(params.message).trim();
+  const coll = db.collection('entries');
+  const filter = { _id: params.entryId };
 
-  var coll = db.collection('entries');
-  var filter = { _id: params.entryId };
+  let attachments = [];
+  if (params.attachments) {
+    attachments = params.attachments;
+  }
 
-  var update = {
+  const comment = {
+    id: commentId,
+    time: time,
+    user: params.username,
+    markdown: sanitizedMarkdown,
+    attachments: attachments,
+  };
+
+  const update = {
     $push: {
-      comments: {
-        id: commentId,
-        time: time,
-        user: params.username,
-        message: sanitizedMessage,
-      },
+      comments: comment,
     },
   };
 
-  coll.updateOne(filter, update, function (err) {
+  coll.updateOne(filter, update, (err) => {
     if (err) {
       return callback(err);
     }
 
-    var eventParams = Object.assign({}, params, {
-      commentId: commentId,
-      time: time,
-      message: sanitizedMessage,
+    const eventParams = {
+      locationId: params.locationId,
+      locationName: params.locationName,
+      entryId: params.entryId,
+      comment: comment,
     });
 
     eventsDal.createLocationEntryCommentCreated(eventParams, callback);
