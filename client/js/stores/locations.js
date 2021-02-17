@@ -281,8 +281,8 @@ exports.createComment = function (locationId, entryId, message, callback) {
   // Parameters:
   //   locationId
   //   entryId
-  //   message
-  //     comment content string
+  //   markdown
+  //     comment content string in Markdown
   //   callback
   //     function (err)
 
@@ -293,7 +293,8 @@ exports.createComment = function (locationId, entryId, message, callback) {
   return postJSON({
     url: '/api/locations/' + locationId + '/entries/' + entryId + '/comments',
     data: {
-      message: message,
+      markdown: markdown,
+      attachments: [], // future proof
     },
   }, callback);
 };
@@ -302,13 +303,14 @@ exports.changeComment = function (params, callback) {
   var locationId = params.locationId;
   var entryId = params.entryId;
   var commentId = params.commentId;
-  var newMessage = params.newMessage;
+  var markdown = params.newMessage;
 
   var entryUrl = '/api/locations/' + locationId + '/entries/' + entryId;
   return postJSON({
     url: entryUrl + '/comments/' + commentId,
     data: {
-      newMessage: newMessage,
+      markdown: markdown,
+      // attachments: attachments,
     },
   }, callback);
 };
