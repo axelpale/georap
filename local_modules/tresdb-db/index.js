@@ -52,6 +52,11 @@ exports.init = (mongoUrl, callback) => {
     useUnifiedTopology: true
   }
 
+  if (config.env === 'test') {
+    // Detect stopped database quickly when just testing.
+    mongoOpts.serverSelectionTimeoutMS = 500
+  }
+
   mongoClient.connect(mongoUrl, mongoOpts, (dbErr, connectedClient) => {
     if (dbErr) {
       return callback(dbErr)

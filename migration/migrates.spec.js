@@ -37,7 +37,7 @@ describe('migrates.migrate', function () {
   before(function (done) {
     db.init(config.mongo.testUrl, function (err) {
       if (err) {
-        return console.error('Failed to connect to MongoDB.');
+        return done(err);
       }
       // As a first step, drop all test db collections in case they
       // have dirt after a bug or so.
