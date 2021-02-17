@@ -32,7 +32,7 @@ describe('iter.updateEach', function () {
   before(function (done) {
     db.init(config.mongo.testUrl, function (err) {
       if (err) {
-        return console.error('Failed to connect to MongoDB.');
+        return done(new Error('Failed to connect to MongoDB.'));
       }
 
       return done();
