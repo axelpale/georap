@@ -369,7 +369,7 @@ exports.createLocationEntryComment = (params, callback) => {
       locationName: params.locationName,
       entryId: params.entryId,
       comment: comment,
-    });
+    };
 
     eventsDal.createLocationEntryCommentCreated(eventParams, callback);
   });
@@ -405,10 +405,10 @@ exports.changeLocationEntryComment = function (params, callback) {
     $set: {},
   };
   if (params.delta.markdown) {
-    update['$set']['comments.$.markdown'] = params.delta.markdown;
+    update.$set['comments.$.markdown'] = params.delta.markdown;
   }
   if (params.delta.attachments) {
-    update['$set']['comments.$.attachments'] = params.delta.attachments;
+    update.$set['comments.$.attachments'] = params.delta.attachments;
   }
 
   coll.updateOne(filter, update, function (err) {

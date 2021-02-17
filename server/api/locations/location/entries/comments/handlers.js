@@ -49,17 +49,17 @@ exports.create = (req, res, next) => {
   });
 };
 
+// eslint-disable-next-line max-statements
 exports.change = function (req, res, next) {
   // Update comment
   const locationId = req.location._id;
   const locationName = req.location.name;
   const entryId = req.entry._id;
-  const currentUsername = req.user.name;
   const markdown = req.body.markdown.trim(); // trim for length check
   let attachments = req.body.attachments;
 
   // Allow only owners edit.
-  if (currentUsername !== req.comment.user) {
+  if (req.user.name !== req.comment.user) {
     const info = 'Only owners can edit their comments.';
     return res.status(status.FORBIDDEN).send(info);
   }
@@ -77,13 +77,13 @@ exports.change = function (req, res, next) {
   }
   // Cut excess
   if (attachments.length > 1) {
-    attachments = attachment.slice(0, 1);
+    attachments = attachments.slice(0, 1);
   }
 
   // Keep delta minimal
   const original = {};
   const delta = {};
-  const filled = false;
+  let filled = false;
 
   // Sanitize and ensure change
   if (markdown) {
@@ -123,7 +123,7 @@ exports.change = function (req, res, next) {
   }
 
   entriesDal.changeLocationEntryComment({
-    username: currentUsername,
+    username: req.user.name,
     locationId: locationId,
     locationName: locationName,
     entryId: entryId,

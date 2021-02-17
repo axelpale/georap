@@ -215,7 +215,7 @@ exports.createLocationEntryCommentChanged = (params, callback) => {
   // Precondition:
   //   original and delta are minimal
   //
-  const filled = false; // Prevent empty changes
+  let filled = false; // Prevent empty changes
 
   if ('markdown' in params.original && 'markdown' in params.delta &&
       params.original.markdown !== params.delta.markdown) {
@@ -241,8 +241,8 @@ exports.createLocationEntryCommentChanged = (params, callback) => {
     data: {
       entryId: params.entryId,
       commentId: params.commentId,
-      original: original,
-      delta: delta,
+      original: params.original,
+      delta: params.delta,
     },
   };
 
