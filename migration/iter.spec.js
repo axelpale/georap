@@ -2,8 +2,10 @@
 
 // The Unit
 var iter = require('./iter');
+
 var db = require('tresdb-db');
 var config = require('tresdb-config');
+var dropCollections = require('./lib/dropCollections');
 // Enable should api
 // eslint-disable-next-line no-unused-vars
 var should = require('should');
@@ -32,10 +34,11 @@ describe('iter.updateEach', function () {
   before(function (done) {
     db.init(config.mongo.testUrl, function (err) {
       if (err) {
-        return done(new Error('Failed to connect to MongoDB.'));
+        return done(err);
       }
-
-      return done();
+      // As a first step, drop all test db collections in case they
+      // have dirt after a bug or so.
+      return dropCollections(db, done);
     });
   });
 
