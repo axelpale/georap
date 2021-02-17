@@ -329,12 +329,13 @@ exports.createLocationEntryComment = (params, callback) => {
   //   callback
   //     function (err)
   //
+  // Precondition:
+  //   markdown is sanitized
+  //
   const time = db.timestamp();
   const rand1 = Math.random().toString().substr(2, 10);
   const rand2 = Math.random().toString().substr(2, 10);
   const commentId = time.substr(0, 4) + rand1 + rand2; // 24 chars
-
-  const sanitizedMarkdown = purifyMarkdown(params.markdown).trim();
 
   const coll = db.collection('entries');
   const filter = { _id: params.entryId };
@@ -348,7 +349,7 @@ exports.createLocationEntryComment = (params, callback) => {
     id: commentId,
     time: time,
     user: params.username,
-    markdown: sanitizedMarkdown,
+    markdown: params.markdown,
     attachments: attachments,
   };
 
