@@ -18,8 +18,8 @@ exports.change = (req, res, next) => {
   const delta = {};
   let diff = false; // if delta has some content
 
-  if ('entrytext' in req.body) {
-    delta.markdown = req.body.entrytext.trim();
+  if ('markdown' in req.body) {
+    delta.markdown = req.body.markdown.trim();
     diff = true;
   }
 
@@ -81,8 +81,8 @@ exports.create = (req, res, next) => {
 
   let markdown, attachments, flags;
 
-  if ('entrytext' in req.body) {
-    markdown = req.body.entrytext.trim();
+  if ('markdown' in req.body) {
+    markdown = req.body.markdown.trim();
   } else {
     markdown = '';
   }
