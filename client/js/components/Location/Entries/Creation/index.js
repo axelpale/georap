@@ -6,7 +6,7 @@ var template = require('./template.ejs');
 var emitter = require('component-emitter');
 var ui = require('tresdb-ui');
 
-
+// Kilobyte
 var K = 1024;
 
 // Temporary storage for unfinished entries.
@@ -82,8 +82,14 @@ module.exports = function (location) {
       ui.hide($sizeerror);
       ui.show($progress);
 
+      var entryData = {
+        markdown: $text.val(),
+        attachments: [], // TODO
+        flags: $visitinput.prop('checked') ? ['visit'] : [], // TODO from cfg
+      };
+
       // Post
-      locations.createEntry(locationId, $form, responseHandler);
+      locations.createEntry(locationId, entryData, responseHandler);
     };
 
     var fileChangeHandler = function () {
