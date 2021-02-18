@@ -2,13 +2,13 @@
 //
 // Location events
 //
-var db = require('tresdb-db');
-var proj = require('../../../services/proj');
+const db = require('tresdb-db');
+const proj = require('../../../services/proj');
 const lib = require('./lib');
 
 // Public methods
 
-exports.createLocationCreated = function (params, callback) {
+exports.createLocationCreated = (params, callback) => {
   // Parameters:
   //   params:
   //     locationId
@@ -22,7 +22,7 @@ exports.createLocationCreated = function (params, callback) {
   //   callback
   //     function (err);
 
-  var newEvent = {
+  const newEvent = {
     type: 'location_created',
     user: params.username,
     time: db.timestamp(),
@@ -147,7 +147,7 @@ exports.createLocationEntryCommentRemoved = (params, callback) => {
   lib.insertAndEmit(newEvent, callback);
 };
 
-exports.createLocationGeomChanged = function (params, callback) {
+exports.createLocationGeomChanged = (params, callback) => {
   // Parameters:
   //   params:
   //     locationId
@@ -158,7 +158,7 @@ exports.createLocationGeomChanged = function (params, callback) {
   //     oldGeom
   //       GeoJSON Point
 
-  var newEvent = {
+  const newEvent = {
     type: 'location_geom_changed',
     user: params.username,
     time: db.timestamp(),
@@ -172,13 +172,13 @@ exports.createLocationGeomChanged = function (params, callback) {
 
   // Insert the basic version and emit an extended version with alt coords.
   // The alt coords are needed in client.
-  lib.insertOne(newEvent, function (err, newId) {
+  lib.insertOne(newEvent, (err, newId) => {
     if (err) {
       return callback(err);
     }
     newEvent._id = newId;
     // Compute additional coodinate systems
-    var newAltGeom = proj.getAltPositions(params.newGeom.coordinates);
+    const newAltGeom = proj.getAltPositions(params.newGeom.coordinates);
     newEvent.data.newAltGeom = newAltGeom;
     // Emit the extended version.
     lib.emitOne(newEvent);
@@ -186,7 +186,7 @@ exports.createLocationGeomChanged = function (params, callback) {
   });
 };
 
-exports.createLocationNameChanged = function (params, callback) {
+exports.createLocationNameChanged = (params, callback) => {
   // Parameters:
   //   params:
   //     locationId
@@ -197,7 +197,7 @@ exports.createLocationNameChanged = function (params, callback) {
   //     oldName
   //       string
 
-  var newEvent = {
+  const newEvent = {
     type: 'location_name_changed',
     user: params.username,
     time: db.timestamp(),
@@ -212,7 +212,7 @@ exports.createLocationNameChanged = function (params, callback) {
   lib.insertAndEmit(newEvent, callback);
 };
 
-exports.createLocationStatusChanged = function (params, callback) {
+exports.createLocationStatusChanged = (params, callback) => {
   // Parameters:
   //   params:
   //     locationId
@@ -223,7 +223,7 @@ exports.createLocationStatusChanged = function (params, callback) {
   //     oldStatus
   //       string
 
-  var newEvent = {
+  const newEvent = {
     type: 'location_status_changed',
     user: params.username,
     time: db.timestamp(),
@@ -238,7 +238,7 @@ exports.createLocationStatusChanged = function (params, callback) {
   lib.insertAndEmit(newEvent, callback);
 };
 
-exports.createLocationTypeChanged = function (params, callback) {
+exports.createLocationTypeChanged = (params, callback) => {
   // Parameters:
   //   params:
   //     locationId
@@ -249,7 +249,7 @@ exports.createLocationTypeChanged = function (params, callback) {
   //     oldType
   //       string
 
-  var newEvent = {
+  const newEvent = {
     type: 'location_type_changed',
     user: params.username,
     time: db.timestamp(),
@@ -264,7 +264,7 @@ exports.createLocationTypeChanged = function (params, callback) {
   lib.insertAndEmit(newEvent, callback);
 };
 
-exports.createLocationRemoved = function (params, callback) {
+exports.createLocationRemoved = (params, callback) => {
   // Parameters:
   //   params:
   //     locationId
@@ -276,7 +276,7 @@ exports.createLocationRemoved = function (params, callback) {
   //   callback
   //     function (err);
 
-  var newEvent = {
+  const newEvent = {
     type: 'location_removed',
     user: params.username,
     time: (new Date()).toISOString(),
@@ -288,19 +288,19 @@ exports.createLocationRemoved = function (params, callback) {
   lib.insertAndEmit(newEvent, callback);
 };
 
-exports.getAllOfUser = function (username, callback) {
+exports.getAllOfUser = (username, callback) => {
   // Parameters
   //   username
   //     string
   //   callback
   //     function (err, events)
 
-  var coll = db.collection('events');
+  const coll = db.collection('events');
 
   coll.find({ user: username }).toArray(callback);
 };
 
-exports.getAllOfLocation = function (locationId, callback) {
+exports.getAllOfLocation = (locationId, callback) => {
   // Parameters:
   //   locationId
   //   callback
@@ -308,7 +308,7 @@ exports.getAllOfLocation = function (locationId, callback) {
   db.collection('events').find({ locationId: locationId }).toArray(callback);
 };
 
-exports.getRecent = function (n, beforeTime, callback) {
+exports.getRecent = (n, beforeTime, callback) => {
   // Parameters
   //   n
   //     number of events to return
@@ -319,12 +319,12 @@ exports.getRecent = function (n, beforeTime, callback) {
   return exports.getRecentFiltered({}, n, beforeTime, callback);
 };
 
-exports.getRecentOfUser = function (username, n, beforeTime, callback) {
-  var filter = { user: username };
+exports.getRecentOfUser = (username, n, beforeTime, callback) => {
+  const filter = { user: username };
   return exports.getRecentFiltered(filter, n, beforeTime, callback);
 };
 
-exports.getRecentFiltered = function (filter, n, beforeTime, callback) {
+exports.getRecentFiltered = (filter, n, beforeTime, callback) => {
   // Parameters
   //   filter
   //     the value of $match operator. See
@@ -336,8 +336,8 @@ exports.getRecentFiltered = function (filter, n, beforeTime, callback) {
   //     time as ISOString. Only events before this time are selected.
   //   callback
   //     function (err, events)
-
-  var eventsColl = db.get().collection('events');
+  //
+  const eventsColl = db.get().collection('events');
 
   eventsColl.aggregate([
     {
@@ -373,7 +373,7 @@ exports.getRecentFiltered = function (filter, n, beforeTime, callback) {
       // Change the location array to the single location (the first item).
       $unwind: '$location',
     },
-  ]).toArray(function (err, docs) {
+  ]).toArray((err, docs) => {
     if (err) {
       return callback(err);
     }
