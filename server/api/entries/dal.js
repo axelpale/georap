@@ -219,6 +219,36 @@ exports.filterUniqueLocationEntries = function (args, callback) {
   });
 };
 
+exports.getOneComplete = function (entryId, callback) {
+  // Find single entry with attachments
+  return db.collection('entries')
+    .aggregate([
+      {
+        $match: {
+          _id: entryId,
+        },
+      },
+      {
+        $lookup: {
+          from: 'attachments',
+          localField: 'attachments',
+          foreignField: 'key',
+          as: 'attachments',
+        },
+      },
+    ])
+    .toArray((err, entries) => {
+      if (err) {
+        return callback(err);
+      }
+
+      if (entries.length === 0) {
+        return callback(null, null);
+      }
+
+      return callback(null, entries[0]);
+    });
+};
 
 exports.getOneRaw = function (entryId, callback) {
   // Find single entry
