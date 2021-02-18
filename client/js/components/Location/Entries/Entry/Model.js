@@ -10,11 +10,10 @@ var emitter = require('component-emitter');
 var urljoin = require('url-join');
 var ui = require('tresdb-ui');
 
-
 module.exports = function (rawEntry, entries) {
   // Parameters:
   //   rawEntry
-  //     plain content entry object
+  //     raw entry object with complete attachments
   //   entries
   //     EntriesModel instance. Work as a parent.
 
@@ -161,19 +160,22 @@ module.exports = function (rawEntry, entries) {
     return (rawEntry.attachments.length > 0);
   };
 
-  self.hasImage = function () {
-    // Return true if attachment is an image
-    var HEAD = 6;
-    if (self.hasFile()) {
-      return (rawEntry.data.mimetype.substr(0, HEAD) === 'image/');
-    }
-    return false;
+  self.getAttachments = function () {
+    return rawEntry.attachments;
+  };
+
+  self.getImages = function () {
+    const HEAD = 6;
+    return rawEntry.attachments.filter(at => {
+      return at.mimetype.substr(0, HEAD) === 'image/';
+    });
   };
 
   self.getComments = function () {
     return rawEntry.comments;
   };
 
+  // TODO
   self.getFileName = function () {
     // Get filename part of attachment file path.
     // Null if no file.
@@ -188,6 +190,7 @@ module.exports = function (rawEntry, entries) {
     return null;
   };
 
+  // TODO
   self.getUrl = function () {
     if (self.hasFile()) {
       return urljoin(config.uploadUrl, rawEntry.data.filepath);
@@ -195,11 +198,13 @@ module.exports = function (rawEntry, entries) {
     return null;
   };
 
+  // TODO
   self.getMimeType = function () {
     // Return null if no file
     return rawEntry.data.mimetype;
   };
 
+  // TODO
   self.getThumbUrl = function () {
     if (self.hasFile()) {
       return urljoin(config.uploadUrl, rawEntry.data.thumbfilepath);
@@ -207,6 +212,7 @@ module.exports = function (rawEntry, entries) {
     return null;
   };
 
+  // TODO
   self.getThumbMimeType = function () {
     // Return null if no file
     return rawEntry.data.thumbmimetype;
