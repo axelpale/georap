@@ -38,14 +38,8 @@ module.exports = function (rawEntry, entries) {
     if (ev.data.entryId !== rawEntry._id) {
       return;
     }
-
-    rawEntry.data.markdown = ev.data.newMarkdown;
-    rawEntry.data.isVisit = ev.data.newIsVisit;
-    rawEntry.data.filepath = ev.data.newFilepath;
-    rawEntry.data.mimetype = ev.data.newMimetype;
-    rawEntry.data.thumbfilepath = ev.data.newThumbfilepath;
-    rawEntry.data.thumbmimetype = ev.data.newThumbmimetype;
-
+    // Update changed
+    Object.assign(rawEntry, ev.data.delta);
     // Emit for view to react by rerendering.
     self.emit(ev.type, ev);
   });
@@ -60,12 +54,7 @@ module.exports = function (rawEntry, entries) {
       rawEntry.comments = [];
     }
 
-    rawEntry.comments.push({
-      id: ev.data.commentId,
-      time: ev.time,
-      user: ev.user,
-      message: ev.data.message,
-    });
+    rawEntry.comments.push(ev.data.comment);
 
     // Emit for the view to react
     self.emit(ev.type, ev);
@@ -85,9 +74,7 @@ module.exports = function (rawEntry, entries) {
     // Update a comment.
     rawEntry.comments = rawEntry.comments.map(function (comm) {
       if (ev.data.commentId === comm.id) {
-        return Object.assign({}, comm, {
-          message: ev.data.newMessage,
-        });
+        return Object.assign({}, comm, ev.data.delta);
       }
       return comm;
     });
@@ -133,10 +120,6 @@ module.exports = function (rawEntry, entries) {
     return rawEntry._id;
   };
 
-  self.getType = function () {
-    return rawEntry.type;
-  };
-
   self.getTime = function () {
     return rawEntry.time;
   };
@@ -155,27 +138,27 @@ module.exports = function (rawEntry, entries) {
   };
 
   self.hasMarkdown = function () {
-    return (typeof rawEntry.data.markdown === 'string');
+    return (typeof rawEntry.markdown === 'string');
   };
 
   self.getMarkdown = function () {
     // Null if no markdown
-    return rawEntry.data.markdown;
+    return rawEntry.markdown;
   };
 
   self.getMarkdownHTML = function () {
     if (!self.hasMarkdown()) {
       return null;
     }
-    return ui.markdownToHtml(rawEntry.data.markdown);
+    return ui.markdownToHtml(rawEntry.markdown);
   };
 
   self.isVisit = function () {
-    return rawEntry.data.isVisit;
+    return rawEntry.flags.indexOf('visit') !== -1;
   };
 
   self.hasFile = function () {
-    return (typeof rawEntry.data.filepath === 'string');
+    return (rawEntry.attachments.length > 0);
   };
 
   self.hasImage = function () {
@@ -188,10 +171,7 @@ module.exports = function (rawEntry, entries) {
   };
 
   self.getComments = function () {
-    if (rawEntry.comments) {
-      return rawEntry.comments;
-    }
-    return [];
+    return rawEntry.comments;
   };
 
   self.getFileName = function () {
@@ -239,9 +219,9 @@ module.exports = function (rawEntry, entries) {
     locations.removeEntry(lid, eid, callback);
   };
 
-  self.createComment = function (message, callback) {
+  self.createComment = function (markdown, callback) {
     var lid = rawEntry.locationId;
     var eid = rawEntry._id;
-    locations.createComment(lid, eid, message, callback);
+    locations.createComment(lid, eid, markdown, callback);
   };
 };
