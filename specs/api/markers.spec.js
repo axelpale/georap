@@ -12,13 +12,7 @@ const fixture = require('./markers.spec.fixture');
 describe('server.api.markers.dal', function () {
 
   before(function (done) {
-    db.init(config.mongo.testUrl, function (err) {
-      if (err) {
-        return console.error('Failed to connect to MongoDB.');
-      }
-
-      return done();
-    });
+    db.init(config.mongo.testUrl, done);
   });
 
   after(function (done) {
