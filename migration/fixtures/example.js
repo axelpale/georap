@@ -12,6 +12,7 @@
 var config = require('tresdb-config');
 var db = require('tresdb-db');
 var bcrypt = require('bcryptjs');
+var common = require('./common');
 
 var NOW = (new Date()).toISOString();
 
@@ -19,7 +20,7 @@ var admin = config.admin.username;
 
 var luznaId = db.id('581f266110a1482dd0b7cd14');
 var rummuId = db.id('581f166130a1482dd0b7cd15');
-var irbeneId = db.id('581f166110a1482dd0b7cd13');
+var irbeneId = common.irbeneId;
 
 // Temporary names of locations before they are titled
 var luznaBaby = 'rkVdAtjYg';
