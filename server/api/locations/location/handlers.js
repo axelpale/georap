@@ -7,7 +7,6 @@ var status = require('http-status-codes');
 var sanitizeFilename = require('sanitize-filename');
 var slugify = require('slugify');
 
-
 exports.changeGeom = function (req, res, next) {
 
   var u, lat, lng;
@@ -39,8 +38,6 @@ exports.changeGeom = function (req, res, next) {
   });
 };
 
-
-
 exports.changeName = function (req, res, next) {
 
   if (typeof req.body.newName !== 'string') {
@@ -63,15 +60,11 @@ exports.changeName = function (req, res, next) {
   });
 };
 
-
-
 exports.changeTags = function (req, res) {
   // TODO Remove at some point
   var msg = 'Tags API is not available anymore. Update your client.';
   return res.status(status.GONE).send(msg);
 };
-
-
 
 exports.changeStatus = function (req, res, next) {
   // Validate status
@@ -106,8 +99,6 @@ exports.changeStatus = function (req, res, next) {
   });
 };
 
-
-
 exports.changeType = function (req, res, next) {
   // Validate type
   if (typeof req.body.type === 'string') {
@@ -140,8 +131,6 @@ exports.changeType = function (req, res, next) {
     return res.sendStatus(status.OK);
   });
 };
-
-
 
 exports.getOne = function (req, res, next) {
   // Fetch single location with entries and events
@@ -201,8 +190,6 @@ exports.getOne = function (req, res, next) {
     return res.json(rawLoc);
   });
 };
-
-
 
 exports.removeOne = function (req, res, next) {
   // Delete single location
