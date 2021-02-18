@@ -230,9 +230,9 @@ exports.getRaw = function (id, callback) {
   });
 };
 
-exports.getOne = (id, callback) => {
-  // Get single location with additional cooridinate systems, events,
-  // and entries.
+exports.getOneComplete = (id, callback) => {
+  // Get single location with additional coordinate systems, events,
+  // and entries and their attachments.
   //
   // Parameters:
   //   id
