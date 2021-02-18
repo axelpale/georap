@@ -276,6 +276,38 @@ exports.getOneRaw = function (entryId, callback) {
   });
 };
 
+exports.getAllOfLocationComplete = (locationId, callback) => {
+  // Get all non-deleted entries of a location with their attachments.
+  //
+  // Parameters:
+  //   locationId
+  //     object id
+  //   callback
+  //     function (err, entries)
+  //
+  return db.collection('entries')
+    .aggregate([
+      {
+        $match: {
+          locationId: locationId,
+          deleted: false,
+        },
+      },
+      {
+        $sort: {
+          time: -1, // most recent first
+        },
+      },
+      {
+        $lookup: {
+          from: 'attachments',
+          localField: 'attachments',
+          foreignField: 'key',
+          as: 'attachments',
+        },
+      },
+    ]).toArray(callback);
+};
 
 exports.getAllOfLocation = function (locationId, callback) {
   // Get all non-deleted entries of a location, most recent first.
