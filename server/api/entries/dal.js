@@ -204,27 +204,18 @@ exports.filterUniqueLocationEntries = function (args, callback) {
       // entry. Entry is different if creator, text, OR file basename differs.
       return _.every(realEntries, function isDifferent(re) {
         // Paths are null for descriptions
-        var reBase = re.data.filepath ? path.basename(re.data.filepath) : null;
+        let reBase = null;
+        if (re.attachments.length > 0) {
+          reBase = path.basename(re.attachments[0].filepath);
+        }
         var ecBase = ec.filepath ? path.basename(ec.filepath) : null;
         return (re.user !== ec.username ||
-                re.data.markdown !== ec.markdown ||
+                re.markdown !== ec.markdown ||
                 reBase !== ecBase);
       });
     });
 
     return callback(null, newEntries);
-
-    // asyn.eachSeries(newEntries, function (ne, next) {
-    //   exports.createLocationEntry({
-    //
-    //   }, next);
-    // }, function then(errs) {
-    //   if (errs) {
-    //     return callback(errs);
-    //   }
-    //
-    //   return callback();
-    // });
   });
 };
 
