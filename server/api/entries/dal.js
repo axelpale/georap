@@ -194,7 +194,8 @@ exports.filterUniqueLocationEntries = function (args, callback) {
   //       uniqueEntries
   //         subset of given entryCandidates
 
-  exports.getAllOfLocation(args.locationId, function (err, realEntries) {
+  const locId = args.locationId;
+  exports.getAllOfLocationComplete(locId, function (err, realEntries) {
     if (err) {
       return callback(err);
     }

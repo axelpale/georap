@@ -147,7 +147,7 @@ exports.getOne = function (req, res, next) {
   // Fetch single location with entries and events
 
   // eslint-disable-next-line max-statements
-  dal.getOne(req.location._id, function (err, rawLoc) {
+  dal.getOneComplete(req.location._id, function (err, rawLoc) {
     if (err) {
       return next(err);
     }

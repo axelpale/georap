@@ -4,6 +4,7 @@ var db = require('tresdb-db');
 var proj = require('../../../services/proj');
 var googlemaps = require('../../../services/googlemaps');
 var eventsDal = require('../../events/dal');
+var entriesDal = require('../../entries/dal');
 
 exports.changeGeom = function (params, callback) {
   // Change geom but do not recompute layer.
@@ -242,7 +243,6 @@ exports.getOne = (id, callback) => {
   //
   const locColl = db.collection('locations');
   const evColl = db.collection('events');
-  const enColl = db.collection('entries');
 
   locColl.findOne({ _id: id }, (err, doc) => {
     if (err) {
@@ -262,7 +262,7 @@ exports.getOne = (id, callback) => {
 
       doc.events = docs;
 
-      enColl.find(q, opt).toArray((err3, docs2) => {
+      entriesDal.getAllOfLocationComplete(id, (err3, docs2) => {
         if (err3) {
           return callback(err3);
         }
