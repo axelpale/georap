@@ -77,6 +77,12 @@ exports.getMany = (keys, callback) => {
   //   keys: array of attachment keys
   //   callback: function (err, attachments)
   //
+
+  // No need to find none.
+  if (!keys || keys.length === 0) {
+    return callback(null, []);
+  }
+
   db.collection('attachments').find({
     key: {
       $in: keys,
