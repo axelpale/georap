@@ -2,54 +2,9 @@
 //
 // Location events
 //
-
 var db = require('tresdb-db');
-var io = require('../../services/io');
-var proj = require('../../services/proj');
-
-// Private methods
-
-var emitOne = function (ev) {
-  if (!('_id' in ev)) {
-    throw new Error('Event must have a _id before emitting');
-  }
-
-  io.get().emit('tresdb_event', ev);
-};
-
-var insertOne = function (ev, callback) {
-  // Parameters:
-  //   ev
-  //     event object to insert
-  //   callback
-  //     function (err, eventId);
-  var coll = db.get().collection('events');
-
-  coll.insertOne(ev, function (err, result) {
-    if (err) {
-      return callback(err);
-    }
-    return callback(null, result.insertedId);
-  });
-};
-
-var insertAndEmit = function (ev, callback) {
-  // Parameters:
-  //   ev
-  //     event object to insert and emit after insertion. Ev is given a _id.
-  //   callback
-  //     function (err)
-  //
-  insertOne(ev, function (err, newId) {
-    if (err) {
-      return callback(err);
-    }
-    ev._id = newId;
-    emitOne(ev);
-    return callback(null);
-  });
-};
-
+var proj = require('../../../services/proj');
+const lib = require('./lib');
 
 // Public methods
 
@@ -79,122 +34,12 @@ exports.createLocationCreated = function (params, callback) {
     },
   };
 
-  insertAndEmit(newEvent, callback);
+  lib.insertAndEmit(newEvent, callback);
 };
 
-exports.createLocationEntryChanged = (params, callback) => {
-  // Parameters:
-  //   params:
-  //     entryId
-  //       string
-  //     locationId
-  //       string
-  //     locationName
-  //       string
-  //     delta
-  //       object of changed values
-  //     original
-  //       object of original values
-
-  if (typeof params.oldEntry._id !== 'object') {
-    throw new Error('Invalid entry id type: ' + typeof params.oldEntry._id);
-  }
-
-  const newEvent = {
-    type: 'location_entry_changed',
-    user: params.oldEntry.user,
-    time: db.timestamp(),
-    locationId: params.locationId,
-    locationName: params.locationName,
-    data: {
-      entryId: params.oldEntry._id,
-      original: params.original,
-      delta: params.delta,
-    },
-  };
-
-  insertAndEmit(newEvent, callback);
-};
-
-exports.createLocationEntryCreated = (params, callback) => {
-  // Parameters:
-  //   params:
-  //     entry
-  //       the new raw entry object with _id
-  //     locationId
-  //     locationName
-  //     username
-  //   callback
-  //     function (err)
-  //
-  if (typeof params.entry._id !== 'object') {
-    throw new Error('Invalid entry id type: ' + typeof params.entry._id);
-  }
-
-  const newEvent = {
-    type: 'location_entry_created',
-    user: params.username,
-    time: db.timestamp(),
-    locationId: params.locationId,
-    locationName: params.locationName,
-    data: {
-      entryId: params.entry._id, // consistent with change and delete
-      entry: params.entry,
-    },
-  };
-
-  // Insert the basic version and emit an extended version
-  // with complete attachments.
-  insertOne(newEvent, (err, newId) => {
-    if (err) {
-      return callback(err);
-    }
-
-    // Clone and fill id
-    const eventForEmit = Object.assign({}, newEvent, {
-      _id: newId,
-    }):
-
-    // Convert attachment keys to attachments.
-    // This prevents additional requests from clients.
-    attachmentsDal.getMany(params.entry.attachments, (merr, completeAtts) => {
-      if (merr) {
-        return callback(merr);
-      }
-
-      eventForEmit.data.entry.attachments = completeAtts;
-
-      // Emit the extended version.
-      emitOne(eventForEmit);
-
-      return callback();
-    });
-  });
-};
-
-exports.createLocationEntryRemoved = (params, callback) => {
-  // Parameters:
-  //   params:
-  //     entryId
-  //     locationId
-  //     locationName
-  //     username
-  //   callback
-  //     function (err)
-  //
-  const newEvent = {
-    type: 'location_entry_removed',
-    user: params.username,
-    time: db.timestamp(),
-    locationId: params.locationId,
-    locationName: params.locationName,
-    data: {
-      entryId: params.entryId,
-    },
-  };
-
-  insertAndEmit(newEvent, callback);
-};
+exports.createLocationEntryChanged = require('./createLocationEntryChanged');
+exports.createLocationEntryCreated = require('./createLocationEntryCreated');
+exports.createLocationEntryRemoved = require('./createLocationEntryRemoved');
 
 exports.createLocationEntryCommentCreated = (params, callback) => {
   // Parameters:
@@ -220,7 +65,7 @@ exports.createLocationEntryCommentCreated = (params, callback) => {
     },
   };
 
-  insertAndEmit(newEvent, callback);
+  lib.insertAndEmit(newEvent, callback);
 };
 
 exports.createLocationEntryCommentChanged = (params, callback) => {
@@ -272,7 +117,7 @@ exports.createLocationEntryCommentChanged = (params, callback) => {
     },
   };
 
-  insertAndEmit(newEvent, callback);
+  lib.insertAndEmit(newEvent, callback);
 };
 
 exports.createLocationEntryCommentRemoved = (params, callback) => {
@@ -299,7 +144,7 @@ exports.createLocationEntryCommentRemoved = (params, callback) => {
     },
   };
 
-  insertAndEmit(newEvent, callback);
+  lib.insertAndEmit(newEvent, callback);
 };
 
 exports.createLocationGeomChanged = function (params, callback) {
@@ -327,7 +172,7 @@ exports.createLocationGeomChanged = function (params, callback) {
 
   // Insert the basic version and emit an extended version with alt coords.
   // The alt coords are needed in client.
-  insertOne(newEvent, function (err, newId) {
+  lib.insertOne(newEvent, function (err, newId) {
     if (err) {
       return callback(err);
     }
@@ -336,7 +181,7 @@ exports.createLocationGeomChanged = function (params, callback) {
     var newAltGeom = proj.getAltPositions(params.newGeom.coordinates);
     newEvent.data.newAltGeom = newAltGeom;
     // Emit the extended version.
-    emitOne(newEvent);
+    lib.emitOne(newEvent);
     return callback(null);
   });
 };
@@ -364,7 +209,7 @@ exports.createLocationNameChanged = function (params, callback) {
     },
   };
 
-  insertAndEmit(newEvent, callback);
+  lib.insertAndEmit(newEvent, callback);
 };
 
 exports.createLocationStatusChanged = function (params, callback) {
@@ -390,7 +235,7 @@ exports.createLocationStatusChanged = function (params, callback) {
     },
   };
 
-  insertAndEmit(newEvent, callback);
+  lib.insertAndEmit(newEvent, callback);
 };
 
 exports.createLocationTypeChanged = function (params, callback) {
@@ -416,7 +261,7 @@ exports.createLocationTypeChanged = function (params, callback) {
     },
   };
 
-  insertAndEmit(newEvent, callback);
+  lib.insertAndEmit(newEvent, callback);
 };
 
 exports.createLocationRemoved = function (params, callback) {
@@ -440,7 +285,7 @@ exports.createLocationRemoved = function (params, callback) {
     data: {},
   };
 
-  insertAndEmit(newEvent, callback);
+  lib.insertAndEmit(newEvent, callback);
 };
 
 exports.getAllOfUser = function (username, callback) {
