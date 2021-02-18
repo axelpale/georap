@@ -9,6 +9,8 @@ var postFile = request.postFile;
 var deleteJSON = request.deleteJSON;
 
 exports.createAttachments = function (form, callback) {
+  // Create one or more attachments with single upload
+  //
   // Parameters:
   //   form
   //     jQuery instance of the file upload form.
