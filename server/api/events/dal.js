@@ -138,12 +138,38 @@ exports.createLocationEntryCreated = (params, callback) => {
     locationId: params.locationId,
     locationName: params.locationName,
     data: {
-      entryId: params.newEntry._id, // consistent with change and delete
-      entry: params.newEntry,
+      entryId: params.entry._id, // consistent with change and delete
+      entry: params.entry,
     },
   };
 
-  insertAndEmit(newEvent, callback);
+  // Insert the basic version and emit an extended version
+  // with complete attachments.
+  insertOne(newEvent, (err, newId) => {
+    if (err) {
+      return callback(err);
+    }
+
+    // Clone and fill id
+    const eventForEmit = Object.assign({}, newEvent, {
+      _id: newId,
+    }):
+
+    // Convert attachment keys to attachments.
+    // This prevents additional requests from clients.
+    attachmentsDal.getMany(params.entry.attachments, (merr, completeAtts) => {
+      if (merr) {
+        return callback(merr);
+      }
+
+      eventForEmit.data.entry.attachments = completeAtts;
+
+      // Emit the extended version.
+      emitOne(eventForEmit);
+
+      return callback();
+    });
+  });
 };
 
 exports.createLocationEntryRemoved = (params, callback) => {
