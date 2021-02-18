@@ -310,7 +310,7 @@ exports.getAllOfLocationComplete = (locationId, callback) => {
     ]).toArray(callback);
 };
 
-exports.getAllOfLocation = function (locationId, callback) {
+exports.getAllOfLocationRaw = function (locationId, callback) {
   // Get all non-deleted entries of a location, most recent first.
   //
   // Parameters
