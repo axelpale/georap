@@ -9,6 +9,7 @@ module.exports = {
         _id: db.id('581f166110a1482dd0b7cd13'),
         creator: 'admin',
         deleted: false,
+        published: false,
         geom: {
           type: 'Point',
           coordinates: [21.857705, 57.55341],
@@ -27,6 +28,7 @@ module.exports = {
         _id: db.id('581f166110a1482dd0b7cd14'),
         creator: 'johndoe',
         deleted: false,
+        published: false,
         geom: {
           type: 'Point',
           coordinates: [18.23655, 59.30067],
@@ -45,6 +47,7 @@ module.exports = {
         _id: db.id('581f166110a1482dd0b7cd15'),
         creator: 'johndoe',
         deleted: true,
+        published: false,
         geom: {
           type: 'Point',
           coordinates: [23.721067, 61.502633],
