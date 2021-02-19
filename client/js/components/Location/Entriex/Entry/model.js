@@ -1,18 +1,29 @@
 /* eslint-disable max-statements */
 
-// Usage:
-//   var en = new Entry(rawEntry, entries)
-
 var config = window.tresdb.config;
 var locations = tresdb.stores.locations;
 
-var emitter = require('component-emitter');
+var models = require('tresdb-models');
 var urljoin = require('url-join');
 var ui = require('tresdb-ui');
 
-entry
-var unbind = addListeners(entry, entries)
+var commentsModel = require('./Comments/model');
 
+var forwardComments = function (entry, ev) {
+  commentsModel.forward(entry.comments, ev);
+};
+
+var forwarders = {
+  'location_entry_changed': function (entry, ev) {
+    Object.assign(entry, ev.data.delta);
+  },
+
+  'location_entry_comment_created': forwardComments,
+  'location_entry_comment_changed', forwardComments,
+  'location_entry_comment_removed', forwardComments,
+};
+
+exports.forward = models.forward(forwarders);
 
 exports.change = function (entry, entryData, callback) {
   // Parameters:
@@ -43,155 +54,52 @@ exports.getLocation = function (entry) {
   return entries.getLocation();
 };
 
+exports.getLocationId = function (entry) {
+  return String(entry.locationId);
+};
 
-module.exports = function (rawEntry, entries) {
-  // Parameters:
-  //   rawEntry
-  //     raw entry object with complete attachments
-  //   entries
-  //     EntriesModel instance. Work as a parent.
+exports.hasMarkdown = function (entry) {
+  return (entry.markdown.length > 0);
+};
 
-  if (typeof rawEntry !== 'object') {
-    throw new Error('Missing or invalid rawEntry object.');
-  }
+exports.getMarkdown = function (entry) {
+  return entry.markdown;
+};
 
-  if (typeof entries !== 'object') {
-    throw new Error('Missing or invalid entries model.');
-  }
+exports.getMarkdownHTML = function (entry) {
+  return ui.markdownToHtml(entry.markdown);
+};
 
-  if (rawEntry.type !== 'location_entry') {
-    throw new Error('Wrong entry type for location_entry: ' + rawEntry.type);
-  }
+exports.isVisit = function (entry) {
+  return entry.flags.indexOf('visit') !== -1;
+};
 
-  var self = this;
-  emitter(self);
+exports.hasFile = function (entry) {
+  return (entry.attachments.length > 0);
+};
 
-  entries.on('location_entry_changed', function (ev) {
-    // Skip events of other entries
-    if (ev.data.entryId !== rawEntry._id) {
-      return;
-    }
-    // Update changed
-    Object.assign(rawEntry, ev.data.delta);
-    // Emit for view to react by rerendering.
-    self.emit(ev.type, ev);
+exports.getAttachments = function (entry) {
+  return entry.attachments;
+};
+
+exports.getImages = function (entry) {
+  const HEAD = 6;
+  return entry.attachments.filter(at => {
+    return at.mimetype.substr(0, HEAD) === 'image/';
   });
+};
 
-  entries.on('location_entry_comment_created', function (ev) {
-    // Skip events of other entries
-    if (ev.data.entryId !== rawEntry._id) {
-      return;
-    }
+exports.getComments = function (entry) {
+  return entry.comments;
+};
 
-    if (!rawEntry.comments) {
-      rawEntry.comments = [];
-    }
+exports.remove = function (entry, callback) {
+  // Remove entry from the backend
+  var lid = entry.locationId;
+  var eid = entry._id;
+  locations.removeEntry(lid, eid, callback);
+};
 
-    rawEntry.comments.push(ev.data.comment);
-
-    // Emit for the view to react
-    self.emit(ev.type, ev);
-  });
-
-  entries.on('location_entry_comment_changed', function (ev) {
-    // Skip events of other entries
-    if (ev.data.entryId !== rawEntry._id) {
-      return;
-    }
-
-    if (!rawEntry.comments) {
-      // Weird state. But let us be sure.
-      rawEntry.comments = [];
-    }
-
-    // Update a comment.
-    rawEntry.comments = rawEntry.comments.map(function (comm) {
-      if (ev.data.commentId === comm.id) {
-        return Object.assign({}, comm, ev.data.delta);
-      }
-      return comm;
-    });
-
-    // Emit for the view to react
-    self.emit(ev.type, ev);
-  });
-
-  entries.on('location_entry_comment_removed', function (ev) {
-    // Skip events of other entries
-    if (ev.data.entryId !== rawEntry._id) {
-      return;
-    }
-
-    if (!rawEntry.comments) {
-      // No need to update anything
-      return;
-    }
-
-    // Filter out the removed comment.
-    rawEntry.comments = rawEntry.comments.filter(function (comm) {
-      return ev.data.commentId !== comm.id;
-    });
-
-    // Emit for the view to react
-    self.emit(ev.type, ev);
-  });
-
-
-  // Public methods
-
-  self.getLocationId = function () {
-    return String(rawEntry.locationId);
-  };
-
-  self.hasMarkdown = function () {
-    return (typeof rawEntry.markdown === 'string');
-  };
-
-  self.getMarkdown = function () {
-    // Null if no markdown
-    return rawEntry.markdown;
-  };
-
-  self.getMarkdownHTML = function () {
-    if (!self.hasMarkdown()) {
-      return null;
-    }
-    return ui.markdownToHtml(rawEntry.markdown);
-  };
-
-  self.isVisit = function () {
-    return rawEntry.flags.indexOf('visit') !== -1;
-  };
-
-  self.hasFile = function () {
-    return (rawEntry.attachments.length > 0);
-  };
-
-  self.getAttachments = function () {
-    return rawEntry.attachments;
-  };
-
-  self.getImages = function () {
-    const HEAD = 6;
-    return rawEntry.attachments.filter(at => {
-      return at.mimetype.substr(0, HEAD) === 'image/';
-    });
-  };
-
-  self.getComments = function () {
-    return rawEntry.comments;
-  };
-
-  self.remove = function (callback) {
-    // Remove entry from the backend
-    var lid = rawEntry.locationId;
-    var eid = rawEntry._id;
-    locations.removeEntry(lid, eid, callback);
-  };
-
-  self.createComment = function (markdown, callback) {
-    var lid = rawEntry.locationId;
-    var eid = rawEntry._id;
-    locations.createComment(lid, eid, markdown, callback);
-  };
+exports.createComment = function (entry, markdown, callback) {
+  locations.createComment(entry, markdown, callback);
 };
