@@ -3,7 +3,7 @@
 var emitter = require('component-emitter');
 var models = require('tresdb-models');
 var EventsModel = require('./Events/Model');
-var EntriesModel = require('./Entries/Model');
+var entriesModel = require('./Entries/model');
 var locations = tresdb.stores.locations;
 
 module.exports = function (rawLoc) {
@@ -20,7 +20,6 @@ module.exports = function (rawLoc) {
   emitter(self);
 
   var _events = new EventsModel(rawLoc.events, self);
-  var _entries = new EntriesModel(rawLoc.entries, self);
 
   // Bind
 
@@ -35,7 +34,8 @@ module.exports = function (rawLoc) {
 
     // For entries model
     if (ev.type.startsWith('location_entry_')) {
-      self.emit('location_entry_event', ev);
+      entriesModel.forward(rawLoc.entries, ev);
+      // self.emit('location_entry_event', ev);
     }
 
     if (ev.type === 'location_name_changed') {
@@ -107,7 +107,7 @@ module.exports = function (rawLoc) {
 
   self.getEntries = function () {
     // Return EntriesModel.
-    return _entries;
+    return rawLoc.entries;
   };
 
   self.getEvents = function () {
