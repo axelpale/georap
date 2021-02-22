@@ -22,6 +22,31 @@ var forwarders = {
 
 exports.forward = models.forward(forwarders);
 
+exports.bus = function (entry) {
+  // Return a bus object that emits events of the given entry.
+  //
+  var routes = [];
+  return {
+
+    on: function (evName, handler) {
+      var route = bus.on(evName, function (ev) {
+        if (ev.data && ev.data.entryId === entry._id) {
+          return handler(ev);
+        }
+      });
+      routes.push(route);
+    },
+
+    off: function () {
+      routes.forEach(function (route) {
+        bus.off(route);
+      });
+      routes = null; // for garbage collector
+    },
+
+  };
+};
+
 exports.change = function (entry, entryData, callback) {
   // Parameters:
   //   entry
@@ -107,12 +132,4 @@ exports.remove = function (entry, callback) {
 
 exports.createComment = function (entry, markdown, callback) {
   locations.createComment(entry, markdown, callback);
-};
-
-exports.handlerFor = function (entry, handler) {
-  return function (ev) {
-    if (ev.data && ev.data.entryId === entry._id) {
-      return handler(ev);
-    }
-  };
 };
