@@ -1,27 +1,51 @@
 // A list of images from entries.
 
 var ThumbnailView = require('./Thumbnail');
+var entriesModel = require('../Entriex/model');
+var entryModel = require('../Entriex/Entry/model');
 
-module.exports = function (entries) {
+module.exports = function (location, entries) {
   // Parameters:
-  //   entries: a list of Entry models. Use same models with Entries view.
+  //   location: plain location object
+  //   entries: an array of entry objects
   //
 
   // Keep track of created views and handlers for easy unbind.
   var _thumbnailViewsMap = {};  // id -> thumbnailView
-  var _handleEntryCreated;
-  var _handleEntryRemoved;
+  var locBus = locationModel.bus(location);
+
+  // Sketching. Place to locationModel
+  exports.bus = function (location) {
+    var routes = [];
+    return {
+
+      on: function (evName, handler) {
+        var route = bus.on(evName, function (ev) {
+          if (ev.locationId === location._id) {
+            return handler(ev);
+          }
+        });
+        routes.push(route);
+      },
+
+      off: function () {
+        routes.forEach(function (route) {
+          bus.off(route);
+        });
+        routes = null; // for garbage collector
+      },
+
+    };
+  };
 
   this.bind = function ($mount) {
 
     // Select first few images
     var N = 3;
-    var imageEntries = entries.toArray().filter(function (entry) {
-      return entry.hasImage();
-    }).slice(0, N);
+    var imageEntries = entriesModel.getImageEntries(entries).slice(0, N);
 
     imageEntries.forEach(function (entry) {
-      var id = entry.getId();
+      var id = entry._id;
       var v = new ThumbnailView(entry);
 
       _thumbnailViewsMap[id] = v;
@@ -49,13 +73,15 @@ module.exports = function (entries) {
       }
     });
 
-    _handleEntryCreated = function (ev) {
+    locationModel.bus(location, 'location_entry_created')
+
+    locBus.on('location_entry_created', function (ev) {
       // Create view and store it among others
+      var newEntry = ev.data.entry;
 
-      var newEntry = entries.getEntry(ev.data.entryId);
-
-      if (newEntry.hasImage()) {
-        var id = newEntry.getId();
+      var firstImage = entryModel.getImage(newEntry);
+      if (firstImage) {
+        var id = newEntry._id;
         var v = new ThumbnailView(newEntry);
         _thumbnailViewsMap[id] = v;
 
@@ -63,9 +89,9 @@ module.exports = function (entries) {
           'class="tresdb-location-thumbnail"></div>');
         v.bind($('#thumbnail-' + id));
       }
-    };
+    });
 
-    _handleEntryRemoved = function (ev) {
+    locBus.on('location_entry_removed', function (ev) {
       // Remove entry from _thumbnailViewsMap.
       var id = ev.data.entryId;
 
@@ -79,10 +105,7 @@ module.exports = function (entries) {
           $('#thumbnail-' + id).remove();
         });
       }
-    };
-
-    entries.on('location_entry_created', _handleEntryCreated);
-    entries.on('location_entry_removed', _handleEntryRemoved);
+    });
   };
 
   this.unbind = function () {
@@ -92,7 +115,6 @@ module.exports = function (entries) {
       _thumbnailViewsMap[k].unbind();
     });
 
-    entries.off('location_entry_created', _handleEntryCreated);
-    entries.off('location_entry_removed', _handleEntryRemoved);
+    locBus.off();
   };
 };
