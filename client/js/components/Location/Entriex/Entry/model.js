@@ -1,8 +1,5 @@
 /* eslint-disable max-statements */
-
-
 var locations = tresdb.stores.locations;
-
 var models = require('tresdb-models');
 var ui = require('tresdb-ui');
 
@@ -78,7 +75,7 @@ exports.getAttachments = function (entry) {
 
 exports.getImages = function (entry) {
   const HEAD = 6;
-  return entry.attachments.filter(at => {
+  return entry.attachments.filter(function (at) {
     return at.mimetype.substr(0, HEAD) === 'image/';
   });
 };
