@@ -145,6 +145,7 @@ module.exports = (entryId, callback) => {
       migrateEntryCreated(
         payload.entryCreatedEv,
         payload.filepathToAttachments,
+        payload.entry.time,
         (err, newEvent) => {
           if (err) {
             return next(err);

@@ -2,12 +2,15 @@
 //
 const db = require('tresdb-db');
 
-module.exports = (crev, filepathToAttachments, callback) => {
+module.exports = (crev, filepathToAttachments, entryTime, callback) => {
   // Parameters
   //   crev
   //     a v11 location_entry_created event
   //   filepathToAttachments
   //     a mapping from entry filepaths to attachment key arrays
+  //   entryTime
+  //     iso timestamp. Necessary to match original entry creation time
+  //     which is usually a few milliseconds earlier than the event.
   //   callback
   //     function (err, newEvent) where newEvent in v12
   //
@@ -20,7 +23,7 @@ module.exports = (crev, filepathToAttachments, callback) => {
   const newEntry = {
     _id: crev.data.entryId,
     locationId: crev.locationId,
-    time: crev.time,
+    time: entryTime,
     user: crev.user,
     deleted: false,
     published: false,
