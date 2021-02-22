@@ -102,18 +102,19 @@ exports.getAttachments = function (entry) {
 exports.getImage = function (entry) {
   // Return first image attachment. Null if none found.
   //
+  var HEAD = 6;
   var i, att;
-  for (var i = 0; i < entry.attachments; i += 1) {
+  for (i = 0; i < entry.attachments; i += 1) {
     att = entry.attachments[i];
     if (att.mimetype.substr(0, HEAD) === 'image/') {
       return att;
     }
   }
   return null;
-}
+};
 
 exports.getImages = function (entry) {
-  const HEAD = 6;
+  var HEAD = 6;
   return entry.attachments.filter(function (at) {
     return at.mimetype.substr(0, HEAD) === 'image/';
   });

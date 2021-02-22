@@ -26,17 +26,18 @@ exports.getImageEntries = function (entries) {
   // Return entries with image attachments.
   //
   var i, j, att;
-  var entries = [];
+  var imgEnts = [];
+  var HEAD = 6;
 
   for (i = 0; i < entries.length; i += 1) {
     for (j = 0; j < entries[i].attachments; j += 1) {
       att = entries[i].attachments[j];
       if (att.mimetype.substr(0, HEAD) === 'image/') {
-        entries.push(entries[i]);
+        imgEnts.push(entries[i]);
         break; // break inner loop
       }
     }
   }
 
-  return entries;
+  return imgEnts;
 };

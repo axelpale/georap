@@ -109,12 +109,10 @@ module.exports = function (location, entries) {
   };
 
   this.unbind = function () {
-
     // Unbind each child
     Object.keys(_thumbnailViewsMap).forEach(function (k) {
       _thumbnailViewsMap[k].unbind();
     });
-
     locBus.off();
   };
 };
