@@ -1,6 +1,7 @@
 /* eslint-disable max-statements */
 var locations = tresdb.stores.locations;
 var models = require('tresdb-models');
+var bus = require('tresdb-bus');
 var ui = require('tresdb-ui');
 
 var commentsModel = require('./Comments/model');
@@ -106,4 +107,12 @@ exports.remove = function (entry, callback) {
 
 exports.createComment = function (entry, markdown, callback) {
   locations.createComment(entry, markdown, callback);
+};
+
+exports.handlerFor = function (entry, handler) {
+  return function (ev) {
+    if (ev.data && ev.data.entryId === entry._id) {
+      return handler(ev);
+    }
+  };
 };

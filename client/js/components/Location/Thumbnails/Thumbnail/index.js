@@ -1,12 +1,15 @@
 var template = require('./template.ejs');
+var entryModel = require('../../../Entriex/Entry/model');
+var attachmentModel = require('../../../Attachments/Attachment/model');
+var bus = require('tresdb-bus');
 var ui = require('tresdb-ui');
 
 module.exports = function (entry) {
   // Parameters:
   //   entry
-  //     Entry model.
+  //     entry object.
 
-  var _changeHandler = null;
+  var route = null;
 
   // Public methods
 
@@ -15,22 +18,24 @@ module.exports = function (entry) {
       entry: entry,
     }));
 
-    _changeHandler = function () {
-      // If entry still has an image, replace the image.
-      if (entry.hasImage()) {
-        var $img = $mount.find('img');
-        $img.attr('src', entry.getThumbUrl());
-        $img.attr('title', entry.getFileName());
-      } else {
-        // No image anymore. Hide.
-        ui.hide($mount);
-      }
-    };
-
-    entry.on('location_entry_changed', _changeHandler);
+    var route = bus.on(
+      'location_entry_changed',
+      entryModel.handlerFor(entry, function (ev) {
+        // If entry still has an image, replace the image.
+        var firstImage = entryModel.getImage(entry);
+        if (firstImage) {
+          var $img = $mount.find('img');
+          $img.attr('src', attachmentModel.getThumbUrl(firstImage));
+          $img.attr('title', attachmentModel.getFileName(firstImage));
+        } else {
+          // No image anymore. Hide.
+          ui.hide($mount);
+        }
+      })
+    );
   };
 
   this.unbind = function () {
-    entry.off('location_entry_changed', _changeHandler);
+    bus.off(route);
   };
 };
