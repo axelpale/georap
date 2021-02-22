@@ -87,7 +87,9 @@ module.exports = {
 
   // Mongo database settings
   mongo: {
+    // Main database for persistent data.
     url: 'mongodb://mongouser:mongouserpwd@localhost:27017/tresdb',
+    // Database for testing and development. You may leave it null.
     testUrl: 'mongodb://testuser:testuserpwd@localhost:27017/test',
   },
 

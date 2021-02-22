@@ -46,6 +46,15 @@ exports.init = (mongoUrl, callback) => {
     }
   }
 
+  // Test url can be undefined or null to signal that no test db is set.
+  if (!mongoUrl) {
+    let msg = 'Database is not configured. Stopping...'
+    if (config.env === 'test') {
+      msg = 'Test database is not configured. Skipping tests...'
+    }
+    return callback(new Error(msg))
+  }
+
   const mongoOpts = {
     // Use new server discovery and monitoring engine
     // instead of the deprecated one. Becomes the default in the future.
