@@ -11,7 +11,7 @@ var GeomView = require('./Geom');
 var StatusTypeView = require('./StatusType');
 var FormsView = require('./Forms');
 var RemoveView = require('./Remove');
-var EntriesView = require('./Entries');
+var EntriesView = require('./Entriex');
 var EventsView = require('./Events');
 
 // Templates
