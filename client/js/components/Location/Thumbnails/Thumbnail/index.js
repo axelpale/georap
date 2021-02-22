@@ -1,5 +1,5 @@
 var template = require('./template.ejs');
-var entryModel = require('../../../Entriex/Entry/model');
+var entryModel = require('../../Entriex/Entry/model');
 var attachmentModel = require('../../../Attachments/Attachment/model');
 var ui = require('tresdb-ui');
 
