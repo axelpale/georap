@@ -72,9 +72,8 @@ var LocationView = function (id, query) {
       statusTypeView = new StatusTypeView(_location);
       formsView = new FormsView(_location);
 
-      var entries = _location.getEntries();
-      thumbnailsView = new ThumbnailsView(entries);
-      entriesView = new EntriesView(entries);
+      thumbnailsView = new ThumbnailsView(rawLoc, rawLoc.entries);
+      entriesView = new EntriesView(rawLoc.entries);
 
       eventsView = new EventsView(_location.getEvents());
       removeView = new RemoveView(_location);

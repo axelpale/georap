@@ -8,28 +8,27 @@ module.exports = function (entry) {
   //   entry
   //     entry object.
   //
-  var route = null;
   var bus = entryModel.bus(entry);
 
   // Public methods
 
   this.bind = function ($mount) {
-    $mount.html(template({
-      entry: entry,
-    }));
-
-    bus.on('location_entry_changed', function (ev) {
-      // If entry still has an image, replace the image.
+    var render = function () {
       var firstImage = entryModel.getImage(entry);
       if (firstImage) {
-        var $img = $mount.find('img');
-        $img.attr('src', attachmentModel.getThumbUrl(firstImage));
-        $img.attr('title', attachmentModel.getFileName(firstImage));
+        $mount.html(template({
+          entryId: entry._id,
+          thumbUrl: attachmentModel.getThumbUrl(firstImage),
+          fileName: attachmentModel.getFileName(firstImage),
+        }));
       } else {
         // No image anymore. Hide.
         ui.hide($mount);
       }
-    });
+    };
+
+    render();
+    bus.on('location_entry_changed', render);
   };
 
   this.unbind = function () {
