@@ -1,7 +1,7 @@
 /* eslint-disable max-statements */
 var locations = tresdb.stores.locations;
 var models = require('tresdb-models');
-var bus = require('tresdb-bus');
+var rootBus = require('tresdb-bus');
 var ui = require('tresdb-ui');
 
 var commentsModel = require('./Comments/model');
@@ -22,30 +22,9 @@ var forwarders = {
 
 exports.forward = models.forward(forwarders);
 
-exports.bus = function (entry) {
-  // Return a bus object that emits events of the given entry.
-  //
-  var routes = [];
-  return {
-
-    on: function (evName, handler) {
-      var route = bus.on(evName, function (ev) {
-        if (ev.data && ev.data.entryId === entry._id) {
-          return handler(ev);
-        }
-      });
-      routes.push(route);
-    },
-
-    off: function () {
-      routes.forEach(function (route) {
-        bus.off(route);
-      });
-      routes = null; // for garbage collector
-    },
-
-  };
-};
+exports.bus = models.bus(rootBus, function (entry, ev) {
+  return ev.data && ev.data.entryId === entry._id;
+});
 
 exports.change = function (entry, entryData, callback) {
   // Parameters:

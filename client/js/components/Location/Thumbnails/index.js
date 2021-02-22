@@ -1,6 +1,7 @@
 // A list of images from entries.
 
 var ThumbnailView = require('./Thumbnail');
+var locationModel = require('../modelAlt');
 var entriesModel = require('../Entriex/model');
 var entryModel = require('../Entriex/Entry/model');
 
@@ -13,30 +14,6 @@ module.exports = function (location, entries) {
   // Keep track of created views and handlers for easy unbind.
   var _thumbnailViewsMap = {};  // id -> thumbnailView
   var locBus = locationModel.bus(location);
-
-  // Sketching. Place to locationModel
-  exports.bus = function (location) {
-    var routes = [];
-    return {
-
-      on: function (evName, handler) {
-        var route = bus.on(evName, function (ev) {
-          if (ev.locationId === location._id) {
-            return handler(ev);
-          }
-        });
-        routes.push(route);
-      },
-
-      off: function () {
-        routes.forEach(function (route) {
-          bus.off(route);
-        });
-        routes = null; // for garbage collector
-      },
-
-    };
-  };
 
   this.bind = function ($mount) {
 
@@ -72,8 +49,6 @@ module.exports = function (location, entries) {
         }
       }
     });
-
-    locationModel.bus(location, 'location_entry_created')
 
     locBus.on('location_entry_created', function (ev) {
       // Create view and store it among others
