@@ -12,12 +12,12 @@ exports.createLocationEntryCommentCreated = require('./commentCreated');
 exports.createLocationEntryCommentChanged = require('./commentChanged');
 exports.createLocationEntryCommentRemoved = require('./commentRemoved');
 
-exports.createLocationCreated = require('locationCreated');
-exports.createLocationGeomChanged = require('locationGeomChanged');
-exports.createLocationNameChanged = require('locationNameChanged');
-exports.createLocationStatusChanged = require('locationStatusChanged');
-exports.createLocationTypeChanged = require('locationTypeChanged');
-exports.createLocationRemoved = require('locationRemoved');
+exports.createLocationCreated = require('./locationCreated');
+exports.createLocationGeomChanged = require('./locationGeomChanged');
+exports.createLocationNameChanged = require('./locationNameChanged');
+exports.createLocationStatusChanged = require('./locationStatusChanged');
+exports.createLocationTypeChanged = require('./locationTypeChanged');
+exports.createLocationRemoved = require('./locationRemoved');
 
 exports.getAllOfUser = (username, callback) => {
   // Parameters
