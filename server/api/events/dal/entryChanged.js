@@ -1,5 +1,6 @@
 const db = require('tresdb-db');
 const asyn = require('async');
+const attachmentsDal = require('../../attachments/dal');
 const lib = require('./lib');
 
 module.exports = (params, callback) => {
@@ -77,7 +78,7 @@ module.exports = (params, callback) => {
         } else {
           return next();
         }
-      }
+      },
 
     ], (finalErr) => {
       if (finalErr) {

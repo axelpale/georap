@@ -1,10 +1,9 @@
 /* eslint-disable max-statements */
 
-var config = window.tresdb.config;
+
 var locations = tresdb.stores.locations;
 
 var models = require('tresdb-models');
-var urljoin = require('url-join');
 var ui = require('tresdb-ui');
 
 var commentsModel = require('./Comments/model');
@@ -19,8 +18,8 @@ var forwarders = {
   },
 
   'location_entry_comment_created': forwardComments,
-  'location_entry_comment_changed', forwardComments,
-  'location_entry_comment_removed', forwardComments,
+  'location_entry_comment_changed': forwardComments,
+  'location_entry_comment_removed': forwardComments,
 };
 
 exports.forward = models.forward(forwarders);
@@ -47,11 +46,6 @@ exports.getTime = function (entry) {
 
 exports.getUserName = function (entry) {
   return entry.user;
-};
-
-exports.getLocation = function (entry) {
-  // Return Location.Model instance
-  return entries.getLocation();
 };
 
 exports.getLocationId = function (entry) {
