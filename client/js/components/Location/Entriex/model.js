@@ -21,3 +21,22 @@ exports.forward = models.forward({
     });
   },
 });
+
+exports.getImageEntries = function (entries) {
+  // Return entries with image attachments.
+  //
+  var i, j, att;
+  var entries = [];
+
+  for (i = 0; i < entries.length; i += 1) {
+    for (j = 0; j < entries[i].attachments; j += 1) {
+      att = entries[i].attachments[j];
+      if (att.mimetype.substr(0, HEAD) === 'image/') {
+        entries.push(entries[i]);
+        break; // break inner loop
+      }
+    }
+  }
+
+  return entries;
+};
