@@ -3,7 +3,7 @@ const models = require('./index')
 const rootBus = require('minibus').create()
 
 test('bus', t => {
-  const busFactory = models.bus(rootBus, (obj, ev) => {
+  const busFactory = models.bus((obj, ev) => {
     return obj.foo === ev.baz && ev.baz === 'bar'
   })
 
@@ -11,7 +11,7 @@ test('bus', t => {
     foo: 'bar'
   }
 
-  const bus = busFactory(obj)
+  const bus = busFactory(obj, rootBus)
 
   let calls = 0
   bus.on('test-event', function (ev) {
