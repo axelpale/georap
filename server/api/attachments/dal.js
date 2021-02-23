@@ -1,5 +1,6 @@
-var db = require('tresdb-db');
-var keygen = require('tresdb-key');
+const db = require('tresdb-db');
+const path = require('path');
+const keygen = require('tresdb-key');
 
 exports.count = (callback) => {
   // Count non-deleted attachments
@@ -50,6 +51,7 @@ exports.create = (params, callback) => {
     user: params.username,
     time: params.time ? params.time : db.timestamp(),
     deleted: false,
+    filename: path.basename(params.filepath),
     filepath: params.filepath,
     mimetype: params.mimetype,
     thumbfilepath: params.thumbfilepath,
