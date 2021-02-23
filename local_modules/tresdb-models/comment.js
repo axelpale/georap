@@ -8,3 +8,12 @@ var forwarders = {
 }
 
 exports.forward = forward(forwarders)
+
+exports.isFresh = function (comment) {
+  // Return
+  //   bool. True if the comment is young enough to be edited.
+  //
+  var ageMs = Date.now() - (new Date(comment.time)).getTime()
+  var maxAgeMs = 3600000
+  return ageMs < maxAgeMs
+}
