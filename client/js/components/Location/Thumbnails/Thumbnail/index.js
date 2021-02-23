@@ -1,6 +1,6 @@
 var template = require('./template.ejs');
-var entryModel = require('../../Entriex/Entry/model');
-var attachmentModel = require('../../../Attachments/Attachment/model');
+var models = require('tresdb-models');
+var rootBus = require('tresdb-bus');
 var ui = require('tresdb-ui');
 
 module.exports = function (entry) {
@@ -8,18 +8,18 @@ module.exports = function (entry) {
   //   entry
   //     entry object.
   //
-  var bus = entryModel.bus(entry);
+  var bus = models.entry.bus(entry, rootBus);
 
   // Public methods
 
   this.bind = function ($mount) {
     var render = function () {
-      var firstImage = entryModel.getImage(entry);
+      var firstImage = models.entry.getImage(entry);
       if (firstImage) {
         $mount.html(template({
           entryId: entry._id,
-          thumbUrl: attachmentModel.getThumbUrl(firstImage),
-          fileName: attachmentModel.getFileName(firstImage),
+          thumbUrl: firstImage.thumburl,
+          fileName: firstImage.filename,
         }));
       } else {
         // No image anymore. Hide.

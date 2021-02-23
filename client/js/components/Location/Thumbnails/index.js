@@ -1,9 +1,8 @@
 // A list of images from entries.
 
 var ThumbnailView = require('./Thumbnail');
-var locationModel = require('../modelAlt');
-var entriesModel = require('../Entriex/model');
-var entryModel = require('../Entriex/Entry/model');
+var models = require('tresdb-models');
+var rootBus = require('tresdb-bus');
 
 module.exports = function (location, entries) {
   // Parameters:
@@ -13,13 +12,13 @@ module.exports = function (location, entries) {
 
   // Keep track of created views and handlers for easy unbind.
   var _thumbnailViewsMap = {};  // id -> thumbnailView
-  var locBus = locationModel.bus(location);
+  var bus = models.location.bus(location, rootBus);
 
   this.bind = function ($mount) {
 
     // Select first few images
     var N = 3;
-    var imageEntries = entriesModel.getImageEntries(entries).slice(0, N);
+    var imageEntries = models.entries.getImageEntries(entries).slice(0, N);
 
     imageEntries.forEach(function (entry) {
       var id = entry._id;
@@ -50,11 +49,11 @@ module.exports = function (location, entries) {
       }
     });
 
-    locBus.on('location_entry_created', function (ev) {
+    bus.on('location_entry_created', function (ev) {
       // Create view and store it among others
       var newEntry = ev.data.entry;
 
-      var firstImage = entryModel.getImage(newEntry);
+      var firstImage = models.entry.getImage(newEntry);
       if (firstImage) {
         var id = newEntry._id;
         var v = new ThumbnailView(newEntry);
@@ -66,7 +65,7 @@ module.exports = function (location, entries) {
       }
     });
 
-    locBus.on('location_entry_removed', function (ev) {
+    bus.on('location_entry_removed', function (ev) {
       // Remove entry from _thumbnailViewsMap.
       var id = ev.data.entryId;
 
@@ -88,6 +87,6 @@ module.exports = function (location, entries) {
     Object.keys(_thumbnailViewsMap).forEach(function (k) {
       _thumbnailViewsMap[k].unbind();
     });
-    locBus.off();
+    bus.off();
   };
 };
