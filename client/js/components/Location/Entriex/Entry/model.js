@@ -2,7 +2,6 @@
 var locations = tresdb.stores.locations;
 var models = require('tresdb-models');
 var rootBus = require('tresdb-bus');
-var ui = require('tresdb-ui');
 
 var commentsModel = require('./Comments/model');
 
@@ -60,10 +59,6 @@ exports.hasMarkdown = function (entry) {
 
 exports.getMarkdown = function (entry) {
   return entry.markdown;
-};
-
-exports.getMarkdownHTML = function (entry) {
-  return ui.markdownToHtml(entry.markdown);
 };
 
 exports.isVisit = function (entry) {
