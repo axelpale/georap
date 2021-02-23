@@ -2,6 +2,7 @@
 
 const db = require('tresdb-db');
 const eventsDal = require('../events/dal');
+const attachmentUrls = require('../attachments/attachment/urls');
 const path = require('path');
 const _ = require('lodash');
 const purifyMarkdown = require('purify-markdown');
@@ -221,7 +222,9 @@ exports.filterUniqueLocationEntries = function (args, callback) {
 };
 
 exports.getOneComplete = function (entryId, callback) {
-  // Find single entry with attachments
+  // Find single entry with attachments.
+  // Expand their URLs.
+  //
   return db.collection('entries')
     .aggregate([
       {
@@ -247,7 +250,12 @@ exports.getOneComplete = function (entryId, callback) {
         return callback(null, null);
       }
 
-      return callback(null, entries[0]);
+      const entry = entries[0];
+
+      // Complete attachment URLs
+      entry.attachments = entry.attachments.map(attachmentUrls.complete);
+
+      return callback(null, entry);
     });
 };
 
@@ -307,7 +315,18 @@ exports.getAllOfLocationComplete = (locationId, callback) => {
           as: 'attachments',
         },
       },
-    ]).toArray(callback);
+    ]).toArray((err, entries) => {
+      if (err) {
+        return callback(err);
+      }
+
+      // Complete attachment URLs
+      entries.forEach(entry => {
+        entry.attachments = entry.attachments.map(attachmentUrls.complete);
+      });
+
+      return callback(null, entries);
+    });
 };
 
 exports.getAllOfLocationRaw = function (locationId, callback) {
