@@ -39,7 +39,7 @@ module.exports = function (location, entries) {
       var entryId = ev.target.dataset.eid;
       if (typeof entryId === 'string') {
         var scrollerEl = document.getElementById('card-layer-content');
-        var entryEl = document.getElementById(entryId);
+        var entryEl = document.getElementById('entry-' + entryId);
         // Test if such entry exists
         if (entryEl) {
           // Scroll to entry and leave a small gap.

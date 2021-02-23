@@ -64,7 +64,7 @@ exports.getImage = function (entry) {
   //
   var HEAD = 6
   var i, att
-  for (i = 0; i < entry.attachments; i += 1) {
+  for (i = 0; i < entry.attachments.length; i += 1) {
     att = entry.attachments[i]
     if (att.mimetype.substr(0, HEAD) === 'image/') {
       return att

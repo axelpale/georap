@@ -33,7 +33,7 @@ exports.getImageEntries = function (entries) {
   var HEAD = 6
 
   for (i = 0; i < entries.length; i += 1) {
-    for (j = 0; j < entries[i].attachments; j += 1) {
+    for (j = 0; j < entries[i].attachments.length; j += 1) {
       att = entries[i].attachments[j]
       if (att.mimetype.substr(0, HEAD) === 'image/') {
         imgEnts.push(entries[i])
