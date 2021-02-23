@@ -1,5 +1,4 @@
 /* eslint-disable max-statements */
-var timestamp = require('../../../lib/timestamp');
 var markdownSyntax = require('../lib/markdownSyntax.ejs');
 var template = require('./template.ejs');
 var CommentsView = require('./Comments');
@@ -25,7 +24,7 @@ module.exports = function (entry) {
     $mount.html(template({
       entry: entry,
       account: account,
-      timestamp: timestamp,
+      timestamp: ui.timestamp,
       markdownSyntax: markdownSyntax,
     }));
 

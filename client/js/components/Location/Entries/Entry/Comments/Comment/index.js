@@ -1,6 +1,5 @@
 /* eslint-disable max-statements */
 require('./style.css');
-var timestamp = require('timestamp');
 var template = require('./template.ejs');
 var ui = require('tresdb-ui');
 var account = tresdb.stores.account;
@@ -33,7 +32,7 @@ module.exports = function (entry, comment) {
       id: id,
       comment: comment,
       htmlMessage: htmlMessage,
-      timestamp: timestamp,
+      timestamp: ui.timestamp,
       isOwner: isMe,
       isFresh: isFresh,
       isOwnerOrAdmin: isOwnerOrAdmin,

@@ -1,6 +1,6 @@
 
 var pointstamp = require('../../lib/pointstamp');
-var timestamp = require('../../lib/timestamp');
+var ui = require('tresdb-ui');
 var template = require('./template.ejs');
 var eventListTemplate = require('../../Events/list.ejs');
 var filters = require('pretty-events');
@@ -21,7 +21,7 @@ module.exports = function (events) {
 
     $mount.html(template({
       eventList: eventListTemplate({
-        timestamp: timestamp,
+        timestamp: ui.timestamp,
         pointstamp: pointstamp,
         events: eventFilter(events.toRawArray()),
       }),
@@ -30,7 +30,7 @@ module.exports = function (events) {
     _handleCreated = function () {
       // Refresh whole list
       $mount.html(eventListTemplate({
-        timestamp: timestamp,
+        timestamp: ui.timestamp,
         pointstamp: pointstamp,
         events: eventFilter(events.toRawArray()),
       }));

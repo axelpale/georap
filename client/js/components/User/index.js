@@ -1,7 +1,6 @@
 
 var users = tresdb.stores.users;
 var eventsListTemplate = require('../Events/list.ejs');
-var timestamp = require('../lib/timestamp');
 var pointstamp = require('../lib/pointstamp');
 var template = require('./template.ejs');
 var pointsTemplate = require('./points.ejs');
@@ -44,7 +43,7 @@ module.exports = function (username) {
       }));
 
       $('#tresdb-user-events').html(eventsListTemplate({
-        timestamp: timestamp,
+        timestamp: ui.timestamp,
         pointstamp: pointstamp,
         events: user.events,
       }));

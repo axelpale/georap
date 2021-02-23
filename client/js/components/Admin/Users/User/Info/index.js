@@ -1,10 +1,10 @@
 var template = require('./template.ejs');
-var timestamp = require('timestamp');
+var ui = require('tresdb-ui');
 
 module.exports = function (user) {
   this.bind = function ($mount) {
     $mount.html(template({
-      timestamp: timestamp,
+      timestamp: ui.timestamp,
       createdAt: user.createdAt,
       loginAt: user.loginAt,
     }));
