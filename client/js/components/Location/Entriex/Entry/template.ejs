@@ -9,6 +9,19 @@
     <%= username %> posted <%= flagstamp %><%= timestamp %>
   </div>
 
+  <div class="entry-images <%= images.length > 0 ? '' : 'hidden' %>">
+    <% images.forEach(function (attachment) { %>
+      <div class="panel-body tresdb-entry-image-body">
+        <a href="<%= attachment.url %>" target="_blank">
+          <div class="entry-image-zoom-icon">
+            <span class="glyphicon glyphicon-zoom-in"></span>
+          </div>
+          <img src="<%= attachment.thumburl %>" title="<%= attachment.filename %>">
+        </a>
+      </div>
+    <% }); %>
+  </div>
+
   <div id="entry-<%= entryId %>-body" class="panel-body<%= hasMarkdown ? '' : ' hidden' %>">
     <%= markdownHtml %>
   </div>

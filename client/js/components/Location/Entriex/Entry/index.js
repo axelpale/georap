@@ -18,6 +18,8 @@ module.exports = function (entry) {
       timestamp: ui.timestamp(entry.time),
       hasMarkdown: entryModel.hasMarkdown(entry),
       markdownHtml: ui.markdownToHtml(entry.markdown),
+      images: entryModel.getImages(entry),
+      nonImages: entryModel.getNonImages(entry),
     }));
   };
 
