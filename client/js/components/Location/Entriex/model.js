@@ -23,7 +23,7 @@ exports.forward = models.forward({
 });
 
 exports.getImageEntries = function (entries) {
-  // Return entries with image attachments.
+  // Return entries that have one or more image attachments.
   //
   var i, j, att;
   var imgEnts = [];
