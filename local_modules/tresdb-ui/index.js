@@ -56,3 +56,20 @@ exports.flagstamp = function (flags) {
   }
   return '';
 };
+
+exports.pointstamp = function (points) {
+  var p = points;
+  var h = '<span class="glyphicon glyphicon-star" aria-hidden="true"></span>';
+
+  if (p > 0) {
+    // Plus sign
+    h += ' <span>+' + p + '</span>';
+  } else if (p < 0) {
+    // Special, wide minus sign
+    h += ' <span>–' + Math.abs(p) + '</span>';
+  } else {
+    return ''; // No points
+  }
+
+  return h;
+};
