@@ -1,0 +1,19 @@
+<div class="panel panel-default tresdb-entry">
+
+  <div class="panel-heading">
+    <div class="pull-right">
+      <% if (isOwner) { %>
+        <button id="entry-<%= entryId %>-edit" type="button" class="btn btn-default btn-sm entry-edit-open"><span class="glyphicon glyphicon-pencil"></span></button>
+      <% } %>
+    </div>
+    <%= username %> posted <%= flagstamp %><%= timestamp %>
+  </div>
+
+  <div id="entry-<%= entryId %>-body" class="panel-body<%= hasMarkdown ? '' : ' hidden' %>">
+    <%= markdownHtml %>
+  </div>
+
+  <div id="entry-<%= entryId %>-footer" class="panel-footer">
+    <button id="entry-<%= entryId %>-open-comment-form" type="button" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-comment"></span> Add Comment</button>
+  </div>
+</div>
