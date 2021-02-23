@@ -1,4 +1,5 @@
 var marked = require('marked');
+var timestamp = require('timestamp');
 
 // Setup
 marked.setOptions({ breaks: true });
@@ -41,4 +42,17 @@ exports.flash = function ($el) {
 
 exports.markdownToHtml = function (markdown) {
   return marked(markdown);
+};
+
+exports.timestamp = function (time) {
+  return timestamp(time);
+};
+
+exports.flagstamp = function (flags) {
+  // Convert an array of flags to string
+  //
+  if (flags && flags.length > 0) {
+    return 'a <strong>' + flags.join(' ') + '</strong> ';
+  }
+  return '';
 };

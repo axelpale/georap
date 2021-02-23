@@ -1,3 +1,6 @@
+// HTML timestamp. Keep this module separate for
+// server-side usage.
+
 var timeago = require('./timeago');
 
 module.exports = function (isoTime) {
