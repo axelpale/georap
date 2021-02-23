@@ -1,5 +1,5 @@
 var template = require('./template.ejs');
-var model = require('./model');
+var entryModel = require('tresdb-models').entry;
 var ui = require('tresdb-ui');
 var account = tresdb.stores.account;
 
@@ -16,7 +16,7 @@ module.exports = function (entry) {
       isOwner: (entry.user === account.getName()),
       flagstamp: ui.flagstamp(entry.flags),
       timestamp: ui.timestamp(entry.time),
-      hasMarkdown: model.hasMarkdown(entry),
+      hasMarkdown: entryModel.hasMarkdown(entry),
       markdownHtml: ui.markdownToHtml(entry.markdown),
     }));
   };
