@@ -1,6 +1,4 @@
 /* eslint-disable no-var */
-var config = window.tresdb.config
-var urljoin = require('url-join')
 
 exports.getFileName = function (attachment) {
   // Get filename part of attachment file path.
@@ -11,17 +9,9 @@ exports.getFileName = function (attachment) {
   return p.substr(p.lastIndexOf('/') + 1)
 }
 
-exports.getUrl = function (attachment) {
-  return urljoin(config.uploadUrl, attachment.filepath)
-}
-
 exports.getMimeType = function (attachment) {
   // Return null if no file
   return attachment.mimetype
-}
-
-exports.getThumbUrl = function (attachment) {
-  return urljoin(config.uploadUrl, attachment.thumbfilepath)
 }
 
 exports.getThumbMimeType = function (attachment) {

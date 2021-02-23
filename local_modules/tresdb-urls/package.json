@@ -9,9 +9,13 @@
     "type": "git",
     "url": "git://github.com/axelpale/tresdb.git"
   },
-  "scripts": {},
+  "scripts": {
+    "lint": "standard"
+  },
   "author": "Akseli Palén <akseli.palen@gmail.com>",
   "license": "MIT",
   "dependencies": {},
-  "devDependencies": {}
+  "devDependencies": {
+    "standard": "^16.0.3"
+  }
 }
