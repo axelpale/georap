@@ -51,7 +51,7 @@ exports.getAllOfLocationComplete = (locationId, callback) => {
       return callback(err);
     }
 
-    return callback;
+    return callback(null, evs);
   });
 };
 

@@ -243,7 +243,6 @@ exports.getOneComplete = (id, callback) => {
   //       err null and loc null if no loc found
   //
   const locColl = db.collection('locations');
-  const evColl = db.collection('events');
 
   locColl.findOne({ _id: id }, (err, doc) => {
     if (err) {
