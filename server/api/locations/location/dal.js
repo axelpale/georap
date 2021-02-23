@@ -25,6 +25,7 @@ exports.changeGeom = function (params, callback) {
   //       number
   //     longitude
   //       number
+  //
   var lat = params.latitude;
   var lng = params.longitude;
 
@@ -232,7 +233,7 @@ exports.getRaw = function (id, callback) {
 
 exports.getOneComplete = (id, callback) => {
   // Get single location with additional coordinate systems, events,
-  // and entries and their attachments.
+  // and entries and their attachments with full urls.
   //
   // Parameters:
   //   id
@@ -253,9 +254,7 @@ exports.getOneComplete = (id, callback) => {
       return callback(null, null);
     }
 
-    const q = { locationId: id };
-    const opt = { sort: { time: -1 } };
-    evColl.find(q, opt).toArray((err2, docs) => {
+    eventsDal.getAllOfLocationComplete(id, (err2, docs) => {
       if (err2) {
         return callback(err2);
       }

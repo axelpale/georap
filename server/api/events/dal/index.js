@@ -39,6 +39,22 @@ exports.getAllOfLocation = (locationId, callback) => {
   db.collection('events').find({ locationId: locationId }).toArray(callback);
 };
 
+exports.getAllOfLocationComplete = (locationId, callback) => {
+  // Get all events of the location, most recent first.
+  // TODO Expand possible attachments and their URLs.
+  //
+  const q = { locationId: locationId };
+  const opt = { sort: { time: -1 } };
+
+  db.collection('events').find(q, opt).toArray(function (err, evs) {
+    if (err) {
+      return callback(err);
+    }
+
+    return callback;
+  });
+};
+
 exports.getRecent = (n, beforeTime, callback) => {
   // Parameters
   //   n
