@@ -11,7 +11,7 @@ module.exports = function (location, entries) {
   //
 
   // Keep track of created views and handlers for easy unbind.
-  var _thumbnailViewsMap = {};  // id -> thumbnailView
+  var _thumbnailViews = {};  // id -> thumbnailView
   var bus = models.location.bus(location, rootBus);
 
   this.bind = function ($mount) {
@@ -24,7 +24,7 @@ module.exports = function (location, entries) {
       var id = entry._id;
       var v = new ThumbnailView(entry);
 
-      _thumbnailViewsMap[id] = v;
+      _thumbnailViews[id] = v;
 
       $mount.append('<div id="thumbnail-' + id + '" ' +
         'class="tresdb-location-thumbnail"></div>');
@@ -57,7 +57,7 @@ module.exports = function (location, entries) {
       if (firstImage) {
         var id = newEntry._id;
         var v = new ThumbnailView(newEntry);
-        _thumbnailViewsMap[id] = v;
+        _thumbnailViews[id] = v;
 
         $mount.prepend('<div id="thumbnail-' + id + '" ' +
           'class="tresdb-location-thumbnail"></div>');
@@ -66,12 +66,12 @@ module.exports = function (location, entries) {
     });
 
     bus.on('location_entry_removed', function (ev) {
-      // Remove entry from _thumbnailViewsMap.
+      // Remove entry from _thumbnailViews.
       var id = ev.data.entryId;
 
-      if (id in _thumbnailViewsMap) {
-        var v = _thumbnailViewsMap[id];
-        delete _thumbnailViewsMap[id];
+      if (id in _thumbnailViews) {
+        var v = _thumbnailViews[id];
+        delete _thumbnailViews[id];
 
         // Remove entry's HTML and unbind view.
         v.unbind();
@@ -84,8 +84,8 @@ module.exports = function (location, entries) {
 
   this.unbind = function () {
     // Unbind each child
-    Object.keys(_thumbnailViewsMap).forEach(function (k) {
-      _thumbnailViewsMap[k].unbind();
+    Object.keys(_thumbnailViews).forEach(function (k) {
+      _thumbnailViews[k].unbind();
     });
     bus.off();
   };
