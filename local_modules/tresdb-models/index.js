@@ -5,6 +5,7 @@ exports.comment = require('./comment')
 exports.comments = require('./comments')
 exports.entries = require('./entries')
 exports.entry = require('./entry')
+exports.location = require('./location')
 
 exports.rawLocationToMarkerLocation = function (rawLoc) {
   return {
