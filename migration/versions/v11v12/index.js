@@ -4,8 +4,9 @@
 // 1. set schema version to 12
 // 2. Remove orphan event i.e. entry events whose entry has been deleted.
 //    Do this to simplify entry event refactor.
-// 3. refactor entries
-// 4. refactor entry events
+// 3. Drop possible 'attachments' collections from earlier failed migration.
+// 4. refactor entries and entry events
+// 5. refactor locations by adding published prop
 //
 // Also, new indices were made and thus 'npm run migrate' is needed.
 
@@ -38,7 +39,7 @@ const substeps = [
     });
   },
 
-  function createCollection(nextStep) {
+  function removeOrphan(nextStep) {
     console.log('2. Remove orphan events...');
 
     removeOrphanEvents((err, numRemoved) => {
@@ -51,8 +52,24 @@ const substeps = [
     });
   },
 
+  function dropFailed(nextStep) {
+    console.log('3. Drop possible attachments collection...');
+
+    db.get().dropCollection('attachments', (err, wasDropped) => {
+      if (err) {
+        return nextStep(err);
+      }
+      if (wasDropped) {
+        console.log('  The attachments collection was dropped successfully.');
+      } else {
+        console.log('  No need to drop collections.');
+      }
+      return nextStep();
+    });
+  },
+
   function refactorEntries(nextStep) {
-    console.log('3. Refactor entries and create attachments...');
+    console.log('4. Refactor entries and create attachments...');
 
     db.collection('entries')
       .find()
@@ -77,7 +94,7 @@ const substeps = [
   },
 
   function migrateLocations(nextStep) {
-    console.log('4. Add published prop and ensure visits prop in locations...');
+    console.log('5. Add published prop and ensure visits prop in locations...');
 
     const coll = db.collection('locations');
 
