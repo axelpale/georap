@@ -80,6 +80,13 @@ exports.getImages = function (entry) {
   })
 }
 
+exports.getNonImages = function (entry) {
+  var HEAD = 6
+  return entry.attachments.filter(function (at) {
+    return at.mimetype.substr(0, HEAD) !== 'image/'
+  })
+}
+
 exports.getComments = function (entry) {
   return entry.comments
 }
