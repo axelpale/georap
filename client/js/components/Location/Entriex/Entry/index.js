@@ -1,5 +1,6 @@
 var template = require('./template.ejs');
 var entryModel = require('tresdb-models').entry;
+var CommentsView = require('./Comments');
 var ui = require('tresdb-ui');
 var account = tresdb.stores.account;
 
@@ -8,6 +9,8 @@ module.exports = function (entry) {
   //   entry
   //     entry object.
   //
+
+  var children = {};
 
   this.bind = function ($mount) {
     $mount.html(template({
@@ -21,8 +24,14 @@ module.exports = function (entry) {
       images: entryModel.getImages(entry),
       nonImages: entryModel.getNonImages(entry),
     }));
+
+    children.comments = new CommentsView(entry);
+    children.comments.bind($mount.find('.entry-comments-container'));
   };
 
   this.unbind = function () {
+    Object.keys(children).forEach(function (k) {
+      children[k].unbind();
+    });
   };
 };
