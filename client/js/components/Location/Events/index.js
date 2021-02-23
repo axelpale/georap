@@ -1,8 +1,8 @@
 
-var pointstamp = require('../../lib/pointstamp');
 var ui = require('tresdb-ui');
 var template = require('./template.ejs');
 var eventListTemplate = require('../../Events/list.ejs');
+var eventModel = require('../../Events/Event/model');
 var filters = require('pretty-events');
 
 var eventFilter = function (evs) {
@@ -22,7 +22,8 @@ module.exports = function (events) {
     $mount.html(template({
       eventList: eventListTemplate({
         timestamp: ui.timestamp,
-        pointstamp: pointstamp,
+        pointstamp: ui.pointstamp,
+        getPoints: eventModel.getPoints,
         events: eventFilter(events.toRawArray()),
       }),
     }));
@@ -31,7 +32,8 @@ module.exports = function (events) {
       // Refresh whole list
       $mount.html(eventListTemplate({
         timestamp: ui.timestamp,
-        pointstamp: pointstamp,
+        pointstamp: ui.pointstamp,
+        getPoints: eventModel.getPoints,
         events: eventFilter(events.toRawArray()),
       }));
     };

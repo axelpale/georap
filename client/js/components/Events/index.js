@@ -1,11 +1,11 @@
 // Component for a list of events.
 
 var emitter = require('component-emitter');
-var pointstamp = require('../lib/pointstamp');
 var prettyEvents = require('pretty-events');
 var template = require('./template.ejs');
 var listTemplate = require('./list.ejs');
 var ui = require('tresdb-ui');
+var eventModel = require('./Event/model');
 var models = require('tresdb-models');
 var events = tresdb.stores.events;
 var locations = tresdb.stores.locations;
@@ -85,8 +85,9 @@ module.exports = function () {
       compactEvs = prettyEvents.mergeSimilar(compactEvs);
 
       $list.html(listTemplate({
-        pointstamp: pointstamp,
+        pointstamp: ui.pointstamp,
         timestamp: ui.timestamp,
+        getPoints: eventModel.getPoints,
         events: compactEvs,
       }));
 

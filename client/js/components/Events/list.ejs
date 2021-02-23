@@ -8,7 +8,7 @@
     <% name = (name === '' ? 'Untitled' : name) %>
     <li class="list-group-item" data-locationid="<%= ev.locationId %>">
       <% if (typeof pointstamp !== 'undefined') { %>
-        <div class="pull-right"><%= pointstamp(ev) %></div>
+        <div class="pull-right"><%= pointstamp(getPoints(ev)) %></div>
       <% } %>
       <a href="/users/<%= ev.user %>"><%= ev.user %></a>
       <% if (t === 'location_created') { %>

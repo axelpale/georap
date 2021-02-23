@@ -1,7 +1,7 @@
 
 var users = tresdb.stores.users;
 var eventsListTemplate = require('../Events/list.ejs');
-var pointstamp = require('../lib/pointstamp');
+var eventModel = require('../Events/Event/model');
 var template = require('./template.ejs');
 var pointsTemplate = require('./points.ejs');
 var emitter = require('component-emitter');
@@ -33,6 +33,7 @@ module.exports = function (username) {
         return;
       }
 
+      // User statistics
       $('#tresdb-user-points').html(pointsTemplate({
         visits: user.locationsVisited,
         adds: user.locationsCreated,
@@ -44,7 +45,8 @@ module.exports = function (username) {
 
       $('#tresdb-user-events').html(eventsListTemplate({
         timestamp: ui.timestamp,
-        pointstamp: pointstamp,
+        pointstamp: ui.pointstamp,
+        getPoints: eventModel.getPoints,
         events: user.events,
       }));
     });
