@@ -2,12 +2,14 @@
 
   <div class="panel-heading">
     <div class="pull-right">
-      <% if (isOwner) { %>
-        <button id="entry-<%= entryId %>-edit" type="button" class="btn btn-default btn-sm entry-edit-open"><span class="glyphicon glyphicon-pencil"></span></button>
+      <% if (isAuthorOrAdmin) { %>
+        <button type="button" class="btn btn-default btn-sm entry-form-open"><span class="glyphicon glyphicon-pencil"></span></button>
       <% } %>
     </div>
     <%= username %> posted <%= flagstamp %><%= timestamp %>
   </div>
+
+  <div class="entry-form-container hidden"></div>
 
   <div class="entry-images <%= images.length > 0 ? '' : 'hidden' %>">
     <% images.forEach(function (attachment) { %>

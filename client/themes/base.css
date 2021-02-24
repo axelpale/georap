@@ -373,8 +373,8 @@ html, body {
   margin-bottom: 0px;
 }
 
-.tresdb-entry .pull-right button.entry-edit-open,
-.tresdb-entry .pull-right button.comment-edit-open {
+.tresdb-entry .pull-right button.entry-form-open,
+.tresdb-entry .pull-right button.comment-form-open {
   margin: -5px -9px 0 0;
 }
 
