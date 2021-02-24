@@ -74,6 +74,11 @@ a.focus, a:hover {
   border: 1px solid #333;
 }
 
+.well {
+  background-color: #121212;
+  border-color: #999999;
+}
+
 /* Google Maps specific */
 
 .gm-bundled-control div {
