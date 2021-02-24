@@ -261,40 +261,6 @@ html, body {
   margin-bottom: 2.68em;
 }
 
-.tresdb-entry-image-body {
-  position: relative;
-  padding: 0px;
-  text-align: center;
-}
-
-.tresdb-entry-image-body img {
-  max-width: 100%;
-  /*margin: 0px auto 0px auto;*/
-}
-
-.tresdb-entry-image-body a {
-  position: relative;
-  display: block;
-  height: 100%;
-  width: 100%;
-}
-
-.entry-image-zoom-icon {
-  position: absolute;
-  display: block;
-  top: auto;
-  bottom: 3px;
-  right: 3px;
-  width: 32px;
-  height: 32px;
-  padding-top: 6px;
-  background-color: rgba(255, 255, 255, 0.8);
-  color: black;
-  border-right: 1px solid rgba(190, 190, 190, 0.9);
-  border-bottom: 1px solid rgba(190, 190, 190, 0.9);
-  border-radius: 14px;
-}
-
 /* Location page END */
 
 /* Status & Type */
@@ -359,6 +325,40 @@ html, body {
 
 /* Entries */
 
+.tresdb-entry-image-body {
+  position: relative;
+  padding: 0px;
+  text-align: center;
+}
+
+.tresdb-entry-image-body img {
+  max-width: 100%;
+  /*margin: 0px auto 0px auto;*/
+}
+
+.tresdb-entry-image-body a {
+  position: relative;
+  display: block;
+  height: 100%;
+  width: 100%;
+}
+
+.entry-image-zoom-icon {
+  position: absolute;
+  display: block;
+  top: auto;
+  bottom: 3px;
+  right: 3px;
+  width: 32px;
+  height: 32px;
+  padding-top: 6px;
+  background-color: rgba(255, 255, 255, 0.8);
+  color: black;
+  border-right: 1px solid rgba(190, 190, 190, 0.9);
+  border-bottom: 1px solid rgba(190, 190, 190, 0.9);
+  border-radius: 14px;
+}
+
 .tresdb-disabled {
   color: #999999;
 }
@@ -378,15 +378,21 @@ html, body {
   margin: -5px -9px 0 0;
 }
 
-.tresdb-entry .comment-photo-btn {
-  margin-right: 1rem;
-}
-
 time {
   text-decoration: underline;
 }
 
 /* Entries END*/
+
+/* Comments */
+
+.tresdb-entry .comment-photo-btn {
+  margin-right: 1rem;
+}
+
+.comment-edit-form-container {
+  border: 0px;
+}
 
 /* Geolocation */
 

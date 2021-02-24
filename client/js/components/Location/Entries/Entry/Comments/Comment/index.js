@@ -1,5 +1,4 @@
 /* eslint-disable max-statements */
-require('./style.css');
 var template = require('./template.ejs');
 var ui = require('tresdb-ui');
 var account = tresdb.stores.account;
