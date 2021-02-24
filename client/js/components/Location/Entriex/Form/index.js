@@ -14,6 +14,7 @@
 // behavior can adapt if id or not
 //
 var template = require('./template.ejs');
+var AttachmentsView = require('./Attachments');
 var ui = require('tresdb-ui');
 var account = tresdb.stores.account;
 
@@ -24,6 +25,7 @@ module.exports = function (entry) {
 
   var self = this;
   var bound = {};
+  var children = {};
 
   self.bind = function ($mount) {
 
@@ -50,11 +52,17 @@ module.exports = function (entry) {
       ev.preventDefault();
       ui.toggleHidden($mount.find('.entry-syntax'));
     });
+
+    children.attachments = new AttachmentsView(entry, entry.attachments);
+    children.attachments.bind($mount.find('.entry-attachments-container'));
   };
 
   self.unbind = function () {
     Object.keys(bound).forEach(function (k) {
       bound[k].off();
+    });
+    Object.keys(children).forEach(function (k) {
+      children[k].unbind();
     });
   };
 };
