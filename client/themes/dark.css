@@ -11,6 +11,10 @@ a.focus, a:hover {
   color: #5BACEF;
 }
 
+hr {
+  border-color: #666;
+}
+
 .table > thead > tr > th {
   border-bottom-color: #333;
 }
