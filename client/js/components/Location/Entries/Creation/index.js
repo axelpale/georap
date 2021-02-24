@@ -1,7 +1,6 @@
 /* eslint-disable max-statements */
 var account = tresdb.stores.account;
 var locations = tresdb.stores.locations;
-var markdownSyntax = require('../lib/markdownSyntax.ejs');
 var template = require('./template.ejs');
 var emitter = require('component-emitter');
 var ui = require('tresdb-ui');
@@ -29,7 +28,7 @@ module.exports = function (location) {
   self.bind = function ($mount) {
 
     $mount.html(template({
-      markdownSyntax: markdownSyntax,
+      markdownSyntax: ui.markdownSyntax(),
       limit: Math.round(tresdb.config.uploadSizeLimit / (K * K)),
     }));
 

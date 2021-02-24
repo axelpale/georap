@@ -14,7 +14,7 @@
 // behavior can adapt if id or not
 //
 var template = require('./template.ejs');
-var markdownSyntax = require('../lib/markdownSyntax.ejs');
+var ui = require('tresdb-ui');
 
 // Kilobyte
 var K = 1024;
@@ -28,7 +28,7 @@ module.exports = function (entry) {
     $mount.html(template({
       entry: entry,
       isNew: '_id' in entry,
-      markdownSyntax: markdownSyntax,
+      markdownSyntax: ui.markdownSyntax(),
       limit: Math.round(tresdb.config.uploadSizeLimit / (K * K)),
     }));
   };

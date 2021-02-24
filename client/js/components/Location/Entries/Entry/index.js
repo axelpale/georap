@@ -1,5 +1,4 @@
 /* eslint-disable max-statements */
-var markdownSyntax = require('../lib/markdownSyntax.ejs');
 var template = require('./template.ejs');
 var CommentsView = require('./Comments');
 var ui = require('tresdb-ui');
@@ -25,7 +24,7 @@ module.exports = function (entry) {
       entry: entry,
       account: account,
       timestamp: ui.timestamp,
-      markdownSyntax: markdownSyntax,
+      markdownSyntax: ui.markdownSyntax(),
     }));
 
     var $cancel = $('#' + id + '-cancel');
