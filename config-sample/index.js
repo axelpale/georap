@@ -125,9 +125,10 @@ module.exports = {
   ],
 
   // Location classification: type
-  // They need to have matching png symbols available
-  // under config/images/markers/symbols
-  // The list order defines the button order on the location page.
+  // Comment out types you do not need or add your own.
+  // Each type needs a matching png symbol available under
+  // directory: config/images/markers/symbols
+  // The order of the list defines the button order in symbol pickers.
   locationTypes: [
     'default',
     'castle',
@@ -149,6 +150,7 @@ module.exports = {
     'nuclear',
     'museum',
     'shop',
+    'restaurant',
     'leisure',
     'sports',
     'school',
@@ -159,6 +161,7 @@ module.exports = {
     'railway',
     'marine',
     'vehicle',
+    'roadhouse',
     'aviation',
     'helicopter',
     'infrastructure',
