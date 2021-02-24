@@ -15,6 +15,7 @@
 //
 var template = require('./template.ejs');
 var ui = require('tresdb-ui');
+var account = tresdb.stores.account;
 
 // Kilobyte
 var K = 1024;
@@ -22,18 +23,38 @@ var K = 1024;
 module.exports = function (entry) {
 
   var self = this;
+  var bound = {};
 
   self.bind = function ($mount) {
 
+    var isNew = !('_id' in entry);
+    var isAuthor = account.isMe(entry.user);
+    var isAdmin = account.isAdmin();
+    var isAuthorOrAdmin = (isAuthor || isAdmin);
+
+    if (!isAuthorOrAdmin) {
+      // No form needed non-authors and non-admins
+      return;
+    }
+
     $mount.html(template({
       entry: entry,
-      isNew: '_id' in entry,
+      isAuthor: isAuthor,
+      isNew: isNew,
       markdownSyntax: ui.markdownSyntax(),
       limit: Math.round(tresdb.config.uploadSizeLimit / (K * K)),
     }));
+
+    bound.syntaxOpen = $mount.find('.entry-syntax-open');
+    bound.syntaxOpen.click(function (ev) {
+      ev.preventDefault();
+      ui.toggleHidden($mount.find('.entry-syntax'));
+    });
   };
 
   self.unbind = function () {
-
+    Object.keys(bound).forEach(function (k) {
+      bound[k].off();
+    });
   };
 };

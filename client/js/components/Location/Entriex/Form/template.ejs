@@ -5,24 +5,42 @@
   </div>
 
   <form>
-      <div class="form-group">
-        <label for="tresdb-entry-input">Tell something about the location:</label>
-        <textarea id="tresdb-entry-input" name="entrytext" class="form-control" rows="3"></textarea>
-        <div class="pull-right">
-          <a id="tresdb-entry-syntax-show" href="#">Formatting Help</a>
-        </div>
-      </div>
-
-      <div id="tresdb-entry-syntax" class="well hidden">
-        <%= markdownSyntax %>
-      </div>
-
+    <% if (isAuthor) { %>
+    <div class="form-group entry-markdown-group">
+      <label for="tresdb-entry-input">Tell something about the location:</label>
+      <textarea id="tresdb-entry-input" name="entrytext" class="form-control" rows="3"><%= entry.markdown %></textarea>
       <div class="pull-right">
-        <button id="tresdb-entry-cancel" type="button" class="btn btn-default">Cancel</button>
-        <button type="submit" class="btn btn-primary">Save</button>
+        <a class="entry-syntax-open" href="#">Formatting Help</a>
       </div>
-
     </div>
+
+    <div class="entry-syntax well hidden">
+      <%= markdownSyntax %>
+    </div>
+
+    <div class="entry-attachments-container"></div>
+    <% } %>
+
+    <div class="form-group">
+      <% if (isAuthor) { %>
+      <div class="pull-right">
+        <button id="entry-<%= entry._id %>-cancel" type="button" class="btn btn-default">Cancel</button>
+        <button id="entry-<%= entry._id %>-save" type="submit" class="btn btn-primary">Save</button>
+      </div>
+      <% } %>
+      <% if (!isNew) { %>
+      <button id="entry-<%= entry._id %>-delete-ensure" type="button" class="btn btn-danger">Delete post...</button>
+      <% } %>
+    </div>
+
+    <% if (!isNew) { %>
+    <!-- Delete confirmation -->
+    <div id="entry-<%= entry._id %>-delete-final" class="form-group hidden">
+      Are you sure?
+      <button id="entry-<%= entry._id %>-delete" type="button" class="btn btn-danger">Yes, delete!</button>
+    </div>
+    <% } %>
+
   </form>
 
   <div id="tresdb-entry-progress" class="progress hidden">
