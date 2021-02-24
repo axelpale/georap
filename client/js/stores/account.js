@@ -15,7 +15,6 @@
 //   logout
 
 var storage = require('../connection/storage');
-var api = require('../connection/api');
 var users = require('./users');
 var emitter = require('component-emitter');
 var jwtDecode = require('jwt-decode');
@@ -23,7 +22,7 @@ var jwtDecode = require('jwt-decode');
 emitter(exports);
 
 // Key of token in storage.
-var TOKEN_KEY = api.getTokenKey();
+var TOKEN_KEY = 'tresdb-session-token';
 
 exports.login = function (email, password, callback) {
   // Parameters:
