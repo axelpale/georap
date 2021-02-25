@@ -127,6 +127,14 @@ exports.route = function () {
       .catch(importErrorHandler);
   });
 
+  page('/uploads/*', function (context) {
+    // Prevent page.js routing links of uploads
+    // See https://github.com/visionmedia/page.js/issues/566
+    page.stop();
+    context.handled = false;
+    window.location.href = context.canonicalPath;
+  });
+
   /////////////////////////////
   // Private routes i.e. routes that require login
   //
