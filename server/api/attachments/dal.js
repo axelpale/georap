@@ -1,6 +1,7 @@
 const db = require('tresdb-db');
 const path = require('path');
 const keygen = require('tresdb-key');
+const attachmentUrls = require('./attachment/urls');
 
 exports.count = (callback) => {
   // Count non-deleted attachments
@@ -64,7 +65,9 @@ exports.create = (params, callback) => {
       // TODO key already exists
       return callback(err);
     }
-    return callback(null, attachment);
+
+    // Full urls before reply
+    return callback(null, attachmentUrls.complete(attachment));
   });
 };
 
