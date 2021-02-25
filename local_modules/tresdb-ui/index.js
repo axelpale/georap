@@ -97,3 +97,13 @@ exports.unbindAll = function (obj) {
     obj[k].unbind();
   });
 };
+
+exports.isAdvancedUpload = function () {
+  // Drag-n-drop feature support recognition.
+  // See https://css-tricks.com/drag-and-drop-file-uploading/
+  var div = document.createElement('div');
+  return (
+    ('draggable' in div) ||
+    ('ondragstart' in div && 'ondrop' in div)
+  ) && 'FormData' in window && 'FileReader' in window;
+};
