@@ -1,5 +1,6 @@
 var template = require('./template.ejs');
 var ui = require('tresdb-ui');
+var uploadSizeLimit = tresdb.config.uploadSizeLimit;
 
 module.exports = function (onAttachments) {
 
@@ -69,13 +70,21 @@ module.exports = function (onAttachments) {
       // Prevent default form submit
       e.preventDefault();
 
+      // Mix selected files and dropped files.
       var ajaxData = new FormData($form.get(0));
-
       if (droppedFiles) {
         $.each(droppedFiles, function (i, file) {
           ajaxData.append(inputEl.name, file);
         });
       }
+
+      // Test file sizes
+      ajaxData.getAll(inputEl.name).forEach(function (file) {
+        if (file.size > uploadSizeLimit) {
+          $form.removeClass('is-uploading').addClass('is-filesize-error');
+          console.error('max upload size');
+        }
+      })
 
       $.ajax({
         url: $form.attr('action'),
