@@ -2,6 +2,7 @@
 // View for attachment upload and listing.
 // Pluggable into Entry and Comments
 var AttachmentView = require('./Attachment');
+var UploaderView = require('./Uploader');
 var template = require('./template.ejs');
 var ui = require('tresdb-ui');
 
@@ -22,6 +23,9 @@ module.exports = function (entry, attachments) {
       children[att.key] = new AttachmentView(att);
       children[att.key].bind($attContainer);
     });
+
+    children.uploader = new UploaderView();
+    children.uploader.bind($mount.find('.form-uploader-container'));
   };
 
   this.unbind = function () {
