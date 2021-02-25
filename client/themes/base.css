@@ -303,26 +303,6 @@ html, body {
 
 /* Status & Type END */
 
-/* Filter */
-#tresdb-filter-title-dot {
-  position: relative;
-  display: inline-block;
-  top: 0.7em;
-  left: -0.3em;
-  width: 1.4rem;
-  height: 1.4rem;
-  margin-right: -1.4rem;
-  border-radius: 0.7rem;
-  background-color: #D9534F;
-}
-
-.tresdb-location-status-list button.tresdb-filter-any,
-.tresdb-location-type-list button.tresdb-filter-any {
-  width: 6rem;
-}
-
-/* Filter END */
-
 /* Entries */
 
 .tresdb-entry-image-body {
@@ -492,19 +472,35 @@ time {
 
 /* Uploader END */
 
-
 /* Comments */
-
 .tresdb-entry .comment-photo-btn {
   margin-right: 1rem;
 }
-
 .comment-edit-form-container {
   border: 0px;
 }
+/* Comments END */
+
+/* Filter */
+#tresdb-filter-title-dot {
+  position: relative;
+  display: inline-block;
+  top: 0.7em;
+  left: -0.3em;
+  width: 1.4rem;
+  height: 1.4rem;
+  margin-right: -1.4rem;
+  border-radius: 0.7rem;
+  background-color: #D9534F;
+}
+
+.tresdb-location-status-list button.tresdb-filter-any,
+.tresdb-location-type-list button.tresdb-filter-any {
+  width: 6rem;
+}
+/* Filter END */
 
 /* Geolocation */
-
 button.tresdb-geolocation {
   background-color: #fff;
   border: none;
@@ -526,5 +522,4 @@ button.tresdb-geolocation .tresdb-geolocation-icon {
   background-position: 0 0;
   background-repeat: no-repeat;
 }
-
 /* Geolocation END */
