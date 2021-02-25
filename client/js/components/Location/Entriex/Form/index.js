@@ -54,7 +54,7 @@ module.exports = function (entry) {
     });
 
     children.attachments = new AttachmentsView(entry, entry.attachments);
-    children.attachments.bind($mount.find('.entry-attachments-container'));
+    children.attachments.bind($mount.find('.form-attachments-container'));
   };
 
   self.unbind = function () {

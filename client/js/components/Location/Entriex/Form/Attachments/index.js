@@ -1,17 +1,30 @@
 /* eslint-disable */
 // View for attachment upload and listing.
 // Pluggable into Entry and Comments
+var AttachmentView = require('./Attachment');
+var template = require('./template.ejs');
+var ui = require('tresdb-ui');
 
 module.exports = function (entry, attachments) {
 
+  var children = {};
+
   this.bind = function ($mount) {
+    $mount.html(template({}));
+
+    var $list = $mount.find('.form-attachments-list');
+
     attachments.forEach(function (att) {
-      $mount.append('<p>' + att.filename + '</p>');
+      // Container for attachment form
+      var $attContainer = $('<li class="form-attachment-container"></li>');
+      $list.append($attContainer);
+      children[att.key] = new AttachmentView(att);
+      children[att.key].bind($attContainer);
     });
   };
 
   this.unbind = function () {
-
+    ui.unbindAll(children);
   };
 
   this.getAttachments = function () {

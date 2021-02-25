@@ -386,6 +386,13 @@ time {
   margin-bottom: 2.6rem;
 }
 
+.form-attachment img {
+  object-fit: cover;
+  width: 8.7rem;
+  height: 8.7rem;
+  border: 1px solid #ddd;
+}
+
 /* Entries END*/
 
 /* Comments */
