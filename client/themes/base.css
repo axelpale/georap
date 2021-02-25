@@ -404,7 +404,94 @@ time {
   margin-bottom: 1rem;
 }
 
-/* Entries END*/
+/* Entries END */
+
+/* Uploader */
+
+.uploader-box {
+  color: #0f3c4b;
+  background-color: #e5edf1;
+  padding: 5rem 1.25rem;
+}
+
+.uploader-box-input input {
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: -1;
+}
+
+.uploader-box-input label {
+  font-size: 1.25em;
+  font-weight: 700;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.uploader-box-input label .glyphicon {
+  font-size: 6.8rem;
+}
+
+.uploader-box-file:focus + label,
+.uploader-box-file + label:hover {
+  color: #39bfd3;
+}
+
+.uploader-box-file:focus + label {
+  outline: 1px dotted #000;
+  outline: -webkit-focus-ring-color auto 5px;
+}
+
+/* Prevent touch-reactive content inside label */
+.uploader-box-input label * {
+  pointer-events: none;
+}
+
+/* Drag'n'drop styling */
+
+.uploader-box-dragndrop,
+.uploader-box-uploading,
+.uploader-box-success,
+.uploader-box-error {
+  display: none;
+}
+
+.uploader-box {
+  font-size: 1.28rem;
+  text-align: center;
+  background-color: #c8dadf;
+  padding: 6.85rem 1.28rem;
+}
+.uploader-box.has-advanced-upload {
+  outline: 2px dashed #92b0b3;
+  outline-offset: -10px;
+}
+.uploader-box.has-advanced-upload .uploader-box-dragndrop {
+  display: inline;
+}
+
+.uploader-box.is-dragover {
+  background-color: grey;
+}
+
+.uploader-box.is-uploading .uploader-box-uploading {
+  display: block;
+}
+.uploader-box.is-error .uploader-box-error {
+  display: block;
+}
+.uploader-box.is-success .uploader-box-success {
+  display: block;
+}
+
+.uploader-box-button {
+  display: none;
+}
+
+/* Uploader END */
+
 
 /* Comments */
 
