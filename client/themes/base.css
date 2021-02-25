@@ -390,7 +390,18 @@ time {
   object-fit: cover;
   width: 8.7rem;
   height: 8.7rem;
-  border: 1px solid #ddd;
+  border-right: 1px solid #ddd;
+  margin: -10px 0 -10px -15px;
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+  vertical-align: top;
+}
+.form-attachment .form-attachment-controls {
+  display: inline-block;
+  margin-left: 1rem;
+}
+.form-attachment .form-attachment-filename {
+  margin-bottom: 1rem;
 }
 
 /* Entries END*/

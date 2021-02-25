@@ -153,3 +153,7 @@ button.tresdb-geolocation {
 button.tresdb-geolocation .tresdb-geolocation-icon {
   filter: invert(1);
 }
+
+.form-attachment img {
+  border-color: #333;
+}

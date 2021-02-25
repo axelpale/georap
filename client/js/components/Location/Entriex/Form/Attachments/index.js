@@ -16,7 +16,8 @@ module.exports = function (entry, attachments) {
 
     attachments.forEach(function (att) {
       // Container for attachment form
-      var $attContainer = $('<li class="form-attachment-container"></li>');
+      var $attContainer = $('<li></li>');
+      $attContainer.addClass('list-group-item form-attachment-container');
       $list.append($attContainer);
       children[att.key] = new AttachmentView(att);
       children[att.key].bind($attContainer);
