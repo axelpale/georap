@@ -85,3 +85,15 @@ exports.markdownSyntax = function () {
     ' target="_blank">See more...</a>' +
     '</p>';
 };
+
+exports.offAll = function (obj) {
+  Object.keys(obj).forEach(function (k) {
+    obj[k].off();
+  });
+};
+
+exports.unbindAll = function (obj) {
+  Object.keys(obj).forEach(function (k) {
+    obj[k].unbind();
+  });
+};
