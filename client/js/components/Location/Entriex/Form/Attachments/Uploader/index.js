@@ -14,22 +14,28 @@ module.exports = function (onAttachments) {
 
     // Display selected files
     var inputEl = document.getElementById('uploader-file-input');
-    var labelEl	 = inputEl.nextElementSibling;
-    var labelVal = labelEl.innerHTML;
-    var nameTemplate = (inputEl.getAttribute('data-multiple-caption') || '');
+    // var labelEl	 = inputEl.nextElementSibling;
+    // var labelVal = labelEl.innerHTML;
+    // var nameTemplate = (inputEl.getAttribute('data-multiple-caption') || '');
 
-    inputEl.addEventListener('change', function (ev) {
-      var fileName = '';
-      if (inputEl.files && inputEl.files.length > 1) {
-        fileName = nameTemplate.replace('{count}', inputEl.files.length);
-      } else {
-        fileName = ev.target.value.split('\\').pop();
-      }
+    // inputEl.addEventListener('change', function (ev) {
+    //   var fileName = '';
+    //   if (inputEl.files && inputEl.files.length > 1) {
+    //     fileName = nameTemplate.replace('{count}', inputEl.files.length);
+    //   } else {
+    //     fileName = ev.target.value.split('\\').pop();
+    //   }
+    //
+    //   if (fileName) {
+    //     labelEl.querySelector('span').innerHTML = fileName;
+    //   } else {
+    //     labelEl.innerHTML = labelVal;
+    //   }
+    // });
 
-      if (fileName) {
-        labelEl.querySelector('span').innerHTML = fileName;
-      } else {
-        labelEl.innerHTML = labelVal;
+    inputEl.addEventListener('change', function () {
+      if (inputEl.files && inputEl.files.length > 0) {
+        $form.trigger('submit');
       }
     });
 
