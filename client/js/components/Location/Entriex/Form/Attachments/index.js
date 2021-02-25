@@ -15,17 +15,24 @@ module.exports = function (entry, attachments) {
 
     var $list = $mount.find('.form-attachments-list');
 
-    attachments.forEach(function (att) {
+    var appendAttachment = function (att) {
       // Container for attachment form
       var $attContainer = $('<li></li>');
       $attContainer.addClass('list-group-item form-attachment-container');
       $list.append($attContainer);
       children[att.key] = new AttachmentView(att);
       children[att.key].bind($attContainer);
-    });
+    };
 
-    children.uploader = new UploaderView();
-    children.uploader.bind($mount.find('.form-uploader-container'));
+    attachments.forEach(appendAttachment);
+
+    children.uploader = new UploaderView(function (err, newAttachments) {
+      if (err) {
+        return console.error(err);
+      }
+      newAttachments.forEach(appendAttachment);
+    });
+    children.uploader.bind($mount.find('.uploader-container'));
   };
 
   this.unbind = function () {

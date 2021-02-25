@@ -1,8 +1,10 @@
-<form method="post" action="/api/attachments" enctype="multipart/form-data">
-  <input type="file" name="attachments" id="basic-file-input" multiple />
-  <label for="basic-file-input">Choose a file.</label>
-
-  <div>
-    <button type="submit">Submit</button>
+<form class="uploader-box" method="post" action="/api/attachments" enctype="multipart/form-data">
+  <div class="uploader-box-input">
+    <input class="uploader-box-file" type="file" name="attachments" id="uploader-file-input" data-multiple-caption="{count} files selected" multiple />
+    <label for="uploader-file-input"><span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span><br><strong>Choose a file</strong><span class="uploader-box-dragndrop"> or drag it here</span>.</label>
+    <button class="uploader-box-button" type="submit">Upload</button>
   </div>
+  <div class="uploader-box-uploading">Uploading…</div>
+  <div class="uploader-box-success">Done!</div>
+  <div class="uploader-box-error">Error! <span></span>.</div>
 </form>
