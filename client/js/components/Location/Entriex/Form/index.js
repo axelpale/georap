@@ -58,11 +58,7 @@ module.exports = function (entry) {
   };
 
   self.unbind = function () {
-    Object.keys(bound).forEach(function (k) {
-      bound[k].off();
-    });
-    Object.keys(children).forEach(function (k) {
-      children[k].unbind();
-    });
+    ui.offAll(bound);
+    ui.unbindAll(children);
   };
 };

@@ -44,8 +44,6 @@ module.exports = function (entry) {
   };
 
   this.unbind = function () {
-    Object.keys(children).forEach(function (k) {
-      children[k].unbind();
-    });
+    ui.unbindAll(children);
   };
 };

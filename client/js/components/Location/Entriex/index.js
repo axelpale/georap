@@ -1,4 +1,5 @@
 var EntryView = require('./Entry');
+var ui = require('tresdb-ui');
 
 module.exports = function (entries) {
   // Parameters:
@@ -6,7 +7,7 @@ module.exports = function (entries) {
   //     an array of entries
   //
 
-  var _entryViewsMap = {};  // id -> entryView
+  var children = {};  // id -> entryView
 
   this.bind = function ($mount) {
 
@@ -14,7 +15,7 @@ module.exports = function (entries) {
       var id = entry._id;
       var v = new EntryView(entry);
 
-      _entryViewsMap[id] = v;
+      children[id] = v;
 
       $mount.append('<div id="entry-' + id + '"></div>');
       v.bind($('#entry-' + id));
@@ -26,7 +27,6 @@ module.exports = function (entries) {
   };
 
   this.unbind = function () {
-
+    ui.unbindAll(children);
   };
-
 };

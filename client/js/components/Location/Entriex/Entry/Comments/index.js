@@ -1,5 +1,6 @@
 var template = require('./template.ejs');
 var CommentView = require('./Comment');
+var ui = require('tresdb-ui');
 
 module.exports = function (entry) {
   // Parameters:
@@ -7,7 +8,7 @@ module.exports = function (entry) {
   //     entry object
   //
 
-  var _commentViews = {};
+  var children = {};
 
   // Helper methods
 
@@ -16,7 +17,7 @@ module.exports = function (entry) {
     var commentId = comment.id;
     var v = new CommentView(entry, comment);
 
-    _commentViews[commentId] = v;
+    children[commentId] = v;
 
     var commentEl = document.createElement('div');
     commentEl.id = 'comment-' + commentId;
@@ -43,9 +44,6 @@ module.exports = function (entry) {
   };
 
   this.unbind = function () {
-    // Unbind each child
-    Object.keys(_commentViews).forEach(function (k) {
-      _commentViews[k].unbind();
-    });
+    ui.unbindAll(children);
   };
 };
