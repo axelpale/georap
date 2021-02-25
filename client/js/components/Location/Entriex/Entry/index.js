@@ -34,11 +34,17 @@ module.exports = function (entry) {
     children.comments.bind($mount.find('.entry-comments-container'));
 
     if (isAuthorOrAdmin) {
-      children.editform = new FormView(entry);
-      children.editform.bind($mount.find('.entry-form-container'));
-
       $mount.find('.entry-form-open').click(function () {
-        ui.toggleHidden($mount.find('.entry-form-container'));
+        var $formContainer = $mount.find('.entry-form-container');
+        if (ui.isHidden($formContainer)) {
+          ui.show($formContainer);
+          children.editform = new FormView(entry);
+          children.editform.bind($formContainer);
+        } else {
+          ui.hide($formContainer);
+          children.editform.unbind();
+          delete children.editform;
+        }
       });
     }
   };
