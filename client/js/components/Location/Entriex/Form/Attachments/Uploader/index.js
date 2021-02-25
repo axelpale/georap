@@ -1,3 +1,4 @@
+/* eslint-disable no-magic-numbers */
 var template = require('./template.ejs');
 var ui = require('tresdb-ui');
 var uploadSizeLimit = tresdb.config.uploadSizeLimit;
@@ -81,10 +82,10 @@ module.exports = function (onAttachments) {
       // Test file sizes
       ajaxData.getAll(inputEl.name).forEach(function (file) {
         if (file.size > uploadSizeLimit) {
-          $form.removeClass('is-uploading').addClass('is-filesize-error');
-          console.error('max upload size');
+          // $form.removeClass('is-uploading').addClass('is-filesize-error');
+          console.error('too large upload size');
         }
-      })
+      });
 
       $.ajax({
         url: $form.attr('action'),
@@ -94,10 +95,20 @@ module.exports = function (onAttachments) {
         cache: false,
         contentType: false,
         processData: false,
-        complete: function () {
-          $form.removeClass('is-uploading');
+        xhr: function () {
+          var xhr = new window.XMLHttpRequest();
+          xhr.upload.addEventListener('progress', function (evt) {
+            if (evt.lengthComputable) {
+              var percentComplete = (evt.loaded / evt.total) * 100;
+              // Place upload progress bar visibility code here
+              console.log(percentComplete);
+            }
+          }, false);
+          return xhr;
         },
-        success: function (data, textStatus, xhr) {
+      })
+        .done(function (data, textStatus, xhr) {
+          console.log('success');
           var SUCCESS = 200;
           if (xhr.status === SUCCESS) {
             $form.addClass('is-success');
@@ -106,13 +117,20 @@ module.exports = function (onAttachments) {
             $form.addClass('is-error');
             $errorMsg.text(textStatus);
           }
-        },
-        error: function (err) {
+        })
+        .fail(function (jqxhr, textStatus, err) {
           $form.addClass('is-error');
           console.error(err);
           $errorMsg.text(err.message);
-        },
-      });
+        })
+        .progress(function (a, b, c) {
+          console.log('progress a b c');
+          console.log(a, b, c);
+        })
+        .always(function () {
+          console.log('deferred always');
+          $form.removeClass('is-uploading');
+        });
     });
 
     bound.form = $form;
