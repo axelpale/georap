@@ -4,7 +4,8 @@ module.exports = function (fileupload) {
 
   this.bind = function ($mount) {
     $mount.html(template({
-      filename: fileupload.file,
+      filename: fileupload.file.name,
+      filesize: Math.round(fileupload.file.size / 1024),
     }));
 
     var $bar = $mount.find('.progress-bar');
