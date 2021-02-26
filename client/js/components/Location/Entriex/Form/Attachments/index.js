@@ -1,4 +1,3 @@
-/* eslint-disable */
 // View for attachment upload and listing.
 // Pluggable into Entry and Comments
 var AttachmentView = require('./Attachment');
@@ -25,21 +24,32 @@ module.exports = function (entry, attachments) {
       children[att.key].bind($attContainer);
     };
 
+    var appendAttachmentUpload = function (fileupload) {
+      var $attContainer = $('<li></li>');
+      $attContainer.addClass('list-group-item form-attachment-container');
+      $list.append($attContainer);
+      children[fileupload.id] = new AttachmentUploadView(fileupload);
+      children[fileupload.id].bind($attContainer);
+      // Convert to attachment if success
+      fileupload.on('success', function (attachment) {
+        appendAttachment(attachment);
+        // Remove progress bar
+        children[fileupload.id].unbind();
+        delete children[fileupload.id];
+        $attContainer.remove();
+      });
+    };
+
     attachments.forEach(appendAttachment);
 
+    // Upload form
     children.uploader = new UploaderView();
     children.uploader.bind($mount.find('.uploader-container'));
-    // On upload start, create a progress bar.
-    children.uploader.on('fileupload', function (fileupload) {
-      // render view for uploading attachment
-      var uploadView = new AttachmentUploadView(fileupload);
-      uploadProcess.on('success', function (attachment) {
-        appendAttachment(attachment);
-      });
-    })
+    // For each file uploaded, create a progress bar.
+    children.uploader.on('fileupload', appendAttachmentUpload);
   };
 
-  this.unbind = function () {
+  this.unbind = function () {
     ui.unbindAll(children);
   };
 
@@ -47,7 +57,7 @@ module.exports = function (entry, attachments) {
     // Return list of attachment keys
   };
 
-  this.setAttachmentKeys = function (keys) {
+  this.setAttachmentKeys = function () {
     // Fetch?
   };
 };

@@ -84,19 +84,19 @@ module.exports = function () {
         });
       }
 
+      // Emit each new file to upload so that parent can build views.
+      var fileuploads = ajaxData.getAll(inputEl.name).map(function (file) {
+        var fileupload = new FileUpload(file);
+        self.emit('fileupload', fileupload);
+        return fileupload;
+      });
+
       // Test file sizes
       ajaxData.getAll(inputEl.name).forEach(function (file) {
         if (file.size > uploadSizeLimit) {
           // $form.removeClass('is-uploading').addClass('is-filesize-error');
           console.error('too large upload size');
         }
-      });
-
-      // Emit each new file to upload
-      var fileuploads = ajaxData.getAll(inputEl.name).map(function (file) {
-        var fileupload = new FileUpload(file);
-        self.emit('fileupload', fileupload);
-        return fileupload;
       });
 
       $.ajax({
