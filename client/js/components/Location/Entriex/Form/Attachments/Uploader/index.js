@@ -1,9 +1,14 @@
 /* eslint-disable no-magic-numbers */
 var template = require('./template.ejs');
+var FileUpload = require('./FileUpload');
+var emitter = require('component-emitter');
 var ui = require('tresdb-ui');
 var uploadSizeLimit = tresdb.config.uploadSizeLimit;
 
-module.exports = function (onAttachments) {
+module.exports = function () {
+
+  var self = this;
+  emitter(self);
 
   var bound = {};
 
@@ -87,6 +92,13 @@ module.exports = function (onAttachments) {
         }
       });
 
+      // Emit each new file to upload
+      var fileuploads = ajaxData.getAll(inputEl.name).map(function (file) {
+        var fileupload = new FileUpload(file);
+        self.emit('fileupload', fileupload);
+        return fileupload;
+      });
+
       $.ajax({
         url: $form.attr('action'),
         type: $form.attr('method'),
@@ -101,7 +113,12 @@ module.exports = function (onAttachments) {
             if (evt.lengthComputable) {
               var percentComplete = (evt.loaded / evt.total) * 100;
               // Place upload progress bar visibility code here
+              console.log(evt);
               console.log(percentComplete);
+
+              fileuploads.forEach(function (fileupload) {
+                fileupload.emit('progress', percentComplete);
+              });
             }
           }, false);
           return xhr;
@@ -112,20 +129,21 @@ module.exports = function (onAttachments) {
           var SUCCESS = 200;
           if (xhr.status === SUCCESS) {
             $form.addClass('is-success');
-            onAttachments(null, data.attachments);
+            fileuploads.forEach(function (fileupload, i) {
+              fileupload.emit('success', data.attachments[i]);
+            });
           } else {
             $form.addClass('is-error');
             $errorMsg.text(textStatus);
+            fileuploads.forEach(function (fileupload) {
+              fileupload.emit('error', data);
+            });
           }
         })
         .fail(function (jqxhr, textStatus, err) {
           $form.addClass('is-error');
           console.error(err);
           $errorMsg.text(err.message);
-        })
-        .progress(function (a, b, c) {
-          console.log('progress a b c');
-          console.log(a, b, c);
         })
         .always(function () {
           console.log('deferred always');

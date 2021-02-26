@@ -2,6 +2,7 @@
 // View for attachment upload and listing.
 // Pluggable into Entry and Comments
 var AttachmentView = require('./Attachment');
+var AttachmentUploadView = require('./AttachmentUpload');
 var UploaderView = require('./Uploader');
 var template = require('./template.ejs');
 var ui = require('tresdb-ui');
@@ -26,13 +27,16 @@ module.exports = function (entry, attachments) {
 
     attachments.forEach(appendAttachment);
 
-    children.uploader = new UploaderView(function (err, newAttachments) {
-      if (err) {
-        return console.error(err);
-      }
-      newAttachments.forEach(appendAttachment);
-    });
+    children.uploader = new UploaderView();
     children.uploader.bind($mount.find('.uploader-container'));
+    // On upload start, create a progress bar.
+    children.uploader.on('fileupload', function (fileupload) {
+      // render view for uploading attachment
+      var uploadView = new AttachmentUploadView(fileupload);
+      uploadProcess.on('success', function (attachment) {
+        appendAttachment(attachment);
+      });
+    })
   };
 
   this.unbind = function () {
