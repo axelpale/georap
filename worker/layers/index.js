@@ -17,7 +17,7 @@
 // - Then you look the result from below of the glass.
 
 var dal = require('./dal');
-var async = require('async');
+var asyn = require('async');
 
 exports.run = function (callback) {
 
@@ -31,7 +31,7 @@ exports.run = function (callback) {
         return callback(err2);
       }
 
-      async.eachSeries(locs, function iteratee(loc, cb) {
+      asyn.eachSeries(locs, function iteratee(loc, cb) {
         // This step marks each location as layered.
         dal.findLayerAndStore(loc, cb);
       }, function (err3) {

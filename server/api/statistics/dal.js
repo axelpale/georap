@@ -1,7 +1,7 @@
 //var db = require('tresdb-db');
 var pjson = require('../../../package.json');
 var locsDal = require('../locations/dal');
-var async = require('async');
+var asyn = require('async');
 
 exports.getServerVersion = function (callback) {
   // Callback with error and version tag
@@ -25,7 +25,7 @@ exports.getAll = function (callback) {
     locationCount: locsDal.count,
   };
 
-  async.mapValues(steps, function iteratee(fn, key, done) {
+  asyn.mapValues(steps, function iteratee(fn, key, done) {
     fn(done);
   }, function (err, results) {
     if (err) {

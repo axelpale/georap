@@ -1,7 +1,7 @@
 
 var db = require('tresdb-db');
 var googlemaps = require('../../server/services/googlemaps');
-var async = require('async');
+var asyn = require('async');
 
 // For Google Maps API usage limits, see:
 // https://developers.google.com/maps/documentation/geocoding/usage-limits
@@ -46,7 +46,7 @@ exports.run = function (callback) {
       return callback(err);
     }
 
-    async.eachSeries(locs, function iteratee(loc, cb) {
+    asyn.eachSeries(locs, function iteratee(loc, cb) {
       setTimeout(function () {
         reverseAndStore(loc, cb);
       }, INTERVAL);

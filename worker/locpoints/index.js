@@ -2,7 +2,7 @@
 
 var markersDal = require('../../server/api/markers/dal');
 var dal = require('./dal');
-var async = require('async');
+var asyn = require('async');
 
 exports.run = function (callback) {
 
@@ -11,7 +11,7 @@ exports.run = function (callback) {
       return callback(err);
     }
 
-    async.eachSeries(markers, function iteratee(m, cb) {
+    asyn.eachSeries(markers, function iteratee(m, cb) {
       dal.computePointsAndStore(m._id, cb);
     }, function (err2) {
       if (err2) {
