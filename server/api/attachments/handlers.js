@@ -33,11 +33,6 @@ exports.create = (req, res, next) => {
       return next(err);
     }
 
-    // console.log('req.file:');
-    // console.log(req.file);
-    // console.log('req.body:');
-    // console.log(req.body);
-
     if (typeof req.files !== 'object' || req.files.length === 0) {
       // No file attachments
       return res.sendStatus(status.BAD_REQUEST);
