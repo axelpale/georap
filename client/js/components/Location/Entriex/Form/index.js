@@ -18,8 +18,8 @@ var AttachmentsView = require('./Attachments');
 var ui = require('tresdb-ui');
 var account = tresdb.stores.account;
 
-// Kilobyte
-var K = 1024;
+// Megabyte
+var MB = 1024 * 1024;
 
 module.exports = function (entry) {
 
@@ -44,7 +44,7 @@ module.exports = function (entry) {
       isAuthor: isAuthor,
       isNew: isNew,
       markdownSyntax: ui.markdownSyntax(),
-      limit: Math.round(tresdb.config.uploadSizeLimit / (K * K)),
+      limit: Math.round(tresdb.config.uploadSizeLimit / MB),
     }));
 
     bound.syntaxOpen = $mount.find('.entry-syntax-open');
