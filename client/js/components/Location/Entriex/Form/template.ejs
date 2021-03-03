@@ -4,8 +4,8 @@
     <div class="alert alert-danger" role="alert">Saving the post failed. Might be a connection issue.</div>
   </div>
 
+  <% if (isAuthor) { %>
   <form>
-    <% if (isAuthor) { %>
     <div class="form-group entry-markdown-group">
       <label for="tresdb-entry-input">Tell something about the location:</label>
       <textarea id="tresdb-entry-input" name="entrytext" class="form-control" rows="3"><%= entry.markdown %></textarea>
