@@ -24,14 +24,22 @@ module.exports = function (location) {
 
     var $entryCreationOpen = $('#entry-creation-open');
     var $entryCreationContainer = $('#entry-creation-container');
-    $entryCreationOpen.click(function () {
+
+    var exitEntryCreation = function () {
       if (_entryCom) {
         _entryCom.unbind();
         $entryCreationContainer.empty();
         _entryCom = null;
+      }
+    };
+
+    $entryCreationOpen.click(function () {
+      if (_entryCom) {
+        exitEntryCreation();
       } else {
         _entryCom = new EntryCreationComponent(location);
         _entryCom.bind($entryCreationContainer);
+        _entryCom.once('exit', exitEntryCreation);
       }
     });
 

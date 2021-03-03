@@ -16,6 +16,7 @@
 var template = require('./template.ejs');
 var AttachmentsView = require('./Attachments');
 var ui = require('tresdb-ui');
+var emitter = require('component-emitter');
 var account = tresdb.stores.account;
 
 // Megabyte
@@ -35,6 +36,8 @@ module.exports = function (entry) {
   }
 
   var self = this;
+  emitter(self);
+
   var bound = {};
   var children = {};
 
@@ -66,6 +69,11 @@ module.exports = function (entry) {
 
     children.attachments = new AttachmentsView(entry, entry.attachments);
     children.attachments.bind($mount.find('.form-attachments-container'));
+
+    bound.cancelBtn = $mount.find('.entry-form-cancel');
+    bound.cancelBtn.click(function () {
+      self.emit('exit');
+    });
   };
 
   self.unbind = function () {
