@@ -3,7 +3,6 @@ var template = require('./template.ejs');
 var FileUpload = require('./FileUpload');
 var emitter = require('component-emitter');
 var ui = require('tresdb-ui');
-var uploadSizeLimit = tresdb.config.uploadSizeLimit;
 
 module.exports = function () {
 
@@ -69,37 +68,49 @@ module.exports = function () {
       }
 
       // Emit each new file to upload so that parent can build views.
-      var fileuploads = ajaxData.getAll(inputEl.name).map(function (file) {
-        var fileupload = new FileUpload(file);
-        self.emit('fileupload', fileupload);
-        return fileupload;
-      });
-
-      // Test file sizes
+      var fileuploads = [];
+      var someInvalid = false;
       ajaxData.getAll(inputEl.name).forEach(function (file) {
-        if (file.size > uploadSizeLimit) {
-          // $form.removeClass('is-uploading').addClass('is-filesize-error');
-          console.error('too large upload size');
+        var fileupload = new FileUpload(file);
+        // Emit so that a view becomes built.
+        self.emit('fileupload', fileupload);
+        if (fileupload.valid) {
+          fileuploads.push(fileupload);
+        } else {
+          someInvalid = true;
         }
       });
+
+      // If no valid files left, skip submit
+      if (fileuploads.length < 1) {
+        return;
+      }
+
+      // If needed, rebuild the form data to include only the valid files.
+      var validAjaxData;
+      if (someInvalid) {
+        validAjaxData = new FormData();
+        fileuploads.forEach(function (fileupload) {
+          validAjaxData.append(inputEl.name, fileupload.file);
+        });
+      } else {
+        validAjaxData = ajaxData;
+      }
 
       $.ajax({
         url: $form.attr('action'),
         type: $form.attr('method'),
-        data: ajaxData,
+        data: validAjaxData,
         dataType: 'json',
         cache: false,
         contentType: false,
         processData: false,
         xhr: function () {
+          // For upload progress bar
           var xhr = new window.XMLHttpRequest();
           xhr.upload.addEventListener('progress', function (evt) {
             if (evt.lengthComputable) {
               var percentComplete = (evt.loaded / evt.total) * 100;
-              // Place upload progress bar visibility code here
-              console.log(evt);
-              console.log(percentComplete);
-
               fileuploads.forEach(function (fileupload) {
                 fileupload.emit('progress', percentComplete);
               });
