@@ -4,6 +4,7 @@ var ViewOnComponent = require('./ViewOn');
 var EntryCreationComponent = require('../Entriex/Creation');
 var template = require('./template.ejs');
 var emitter = require('component-emitter');
+var ui = require('tresdb-ui');
 
 
 module.exports = function (location) {
@@ -14,34 +15,46 @@ module.exports = function (location) {
   var self = this;
   emitter(self);
 
+  var listeners = {};
+  var children = {};
+
   // Child components
-  var _entryCom;
   var _exportCom = new ExportComponent(location);
   var _viewOnCom = new ViewOnComponent(location);
+
+  var makeOpenable = function (viewName, View) {
+    var $openBtn = $('#' + viewName + '-open');
+    var $container = $('#' + viewName + '-container');
+
+    // Define view close
+    var exitView = function () {
+      if (children[viewName]) {
+        children[viewName].unbind();
+        children[viewName].off();
+        $container.empty();
+        delete children[viewName];
+      }
+    };
+
+    // Handle button
+    $openBtn.click(function () {
+      if (children[viewName]) {
+        exitView();
+      } else {
+        children[viewName] = new View(location);
+        children[viewName].bind($container);
+        children[viewName].once('exit', exitView);
+      }
+    });
+
+    // Set way to off()
+    listeners[viewName] = $openBtn;
+  };
 
   self.bind = function ($mount) {
     $mount.html(template({}));
 
-    var $entryCreationOpen = $('#entry-creation-open');
-    var $entryCreationContainer = $('#entry-creation-container');
-
-    var exitEntryCreation = function () {
-      if (_entryCom) {
-        _entryCom.unbind();
-        $entryCreationContainer.empty();
-        _entryCom = null;
-      }
-    };
-
-    $entryCreationOpen.click(function () {
-      if (_entryCom) {
-        exitEntryCreation();
-      } else {
-        _entryCom = new EntryCreationComponent(location);
-        _entryCom.bind($entryCreationContainer);
-        _entryCom.once('exit', exitEntryCreation);
-      }
-    });
+    makeOpenable('entry-creation', EntryCreationComponent);
 
     var $exportCont = $('#tresdb-export-container-outer');
     var $viewOnCont = $('#tresdb-viewon-container-outer');
@@ -52,7 +65,8 @@ module.exports = function (location) {
   };
 
   self.unbind = function () {
-    _entryCom.unbind();
+    ui.offAll(listeners);
+    ui.unbindAll(children);
     _exportCom.unbind();
     _viewOnCom.unbind();
   };
