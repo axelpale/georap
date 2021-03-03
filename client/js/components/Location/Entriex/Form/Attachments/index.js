@@ -13,13 +13,13 @@ module.exports = function (entry, attachments) {
   this.bind = function ($mount) {
     $mount.html(template({}));
 
-    var $list = $mount.find('.form-attachments-list');
+    var $uploaderContainer = $mount.find('.uploader-container');
 
     var appendAttachment = function (att) {
       // Container for attachment form
       var $attContainer = $('<li></li>');
       $attContainer.addClass('list-group-item form-attachment-container');
-      $list.append($attContainer);
+      $uploaderContainer.before($attContainer);
       children[att.key] = new AttachmentView(att);
       children[att.key].bind($attContainer);
     };
@@ -27,7 +27,7 @@ module.exports = function (entry, attachments) {
     var appendAttachmentUpload = function (fileupload) {
       var $attContainer = $('<li></li>');
       $attContainer.addClass('list-group-item form-attachment-container');
-      $list.append($attContainer);
+      $uploaderContainer.before($attContainer);
       children[fileupload.id] = new AttachmentUploadView(fileupload);
       children[fileupload.id].bind($attContainer);
       // Convert to attachment if success
