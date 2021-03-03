@@ -441,24 +441,8 @@ li.form-attachment-container:first-child img {
 
 /* Drag'n'drop styling */
 
-.uploader-box-uploading,
-.uploader-box-success,
-.uploader-box-error {
-  display: none;
-}
-
 .uploader-box.is-dragover {
   background-color: grey;
-}
-
-.uploader-box.is-uploading .uploader-box-uploading {
-  display: block;
-}
-.uploader-box.is-error .uploader-box-error {
-  display: block;
-}
-.uploader-box.is-success .uploader-box-success {
-  display: block;
 }
 
 .uploader-box-button {

@@ -15,7 +15,6 @@ module.exports = function () {
     $mount.html(template({}));
 
     var $form = $mount.find('form.uploader-box');
-    var $errorMsg = $('.uploader-box-error');
     var droppedFiles = false;
 
     // Display selected files
@@ -50,12 +49,6 @@ module.exports = function () {
       });
 
     $form.on('submit', function (e) {
-      if ($form.hasClass('is-uploading')) {
-        return false;
-      }
-
-      $form.addClass('is-uploading').removeClass('is-error');
-
       // Prevent default form submit
       e.preventDefault();
 
@@ -123,27 +116,30 @@ module.exports = function () {
           console.log('success');
           var SUCCESS = 200;
           if (xhr.status === SUCCESS) {
-            $form.addClass('is-success');
             fileuploads.forEach(function (fileupload, i) {
               fileupload.emit('success', data.attachments[i]);
             });
           } else {
-            $form.addClass('is-error');
-            $errorMsg.text(textStatus);
             fileuploads.forEach(function (fileupload) {
-              fileupload.emit('error', data);
+              fileupload.emit('error', {
+                data: data,
+                textStatus: textStatus,
+              });
             });
           }
         })
         .fail(function (jqxhr, textStatus, err) {
-          $form.addClass('is-error');
           console.error(err);
-          $errorMsg.text(err.message);
-        })
-        .always(function () {
-          console.log('deferred always');
-          $form.removeClass('is-uploading');
+          fileuploads.forEach(function (fileupload) {
+            fileupload.emit('error', {
+              data: err,
+              textStatus: textStatus,
+            });
+          });
         });
+      // .always(function () {
+      //   console.log('deferred always');
+      // });
     });
 
     bound.form = $form;
