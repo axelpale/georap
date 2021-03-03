@@ -53,7 +53,7 @@ module.exports = function () {
       e.preventDefault();
 
       // Mix selected files and dropped files.
-      var ajaxData = new FormData();
+      var ajaxData = new window.FormData();
       // NOTE Unexpected additional empty files were detected on Chrome
       // on macOS Mojave if constructed like: new FormData($form.get(0))
       if (inputEl.files && inputEl.files.length > 0) {
@@ -94,7 +94,7 @@ module.exports = function () {
       // If needed, rebuild the form data to include only the valid files.
       var validAjaxData;
       if (someInvalid) {
-        validAjaxData = new FormData();
+        validAjaxData = new window.FormData();
         fileuploads.forEach(function (fileupload) {
           validAjaxData.append(inputEl.name, fileupload.file);
         });
