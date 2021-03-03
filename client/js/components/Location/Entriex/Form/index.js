@@ -22,6 +22,17 @@ var account = tresdb.stores.account;
 var MB = 1024 * 1024;
 
 module.exports = function (entry) {
+  // Parameters:
+  //   entry
+  //     optional entry object. If not given, a blank entry form is shown.
+  //
+  if (!entry) {
+    entry = {
+      user: account.getName(),
+      markdown: '',
+      attachments: [],
+    };
+  }
 
   var self = this;
   var bound = {};
