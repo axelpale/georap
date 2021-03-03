@@ -53,12 +53,24 @@ module.exports = function () {
       e.preventDefault();
 
       // Mix selected files and dropped files.
-      var ajaxData = new FormData($form.get(0));
+      var ajaxData = new FormData();
+      // NOTE Unexpected additional empty files were detected on Chrome
+      // on macOS Mojave if constructed like: new FormData($form.get(0))
+      if (inputEl.files && inputEl.files.length > 0) {
+        Array.from(inputEl.files).forEach(function (file) {
+          ajaxData.append(inputEl.name, file);
+        });
+      }
+      // Once appended, clear
+      inputEl.value = '';
+
       if (droppedFiles) {
         $.each(droppedFiles, function (i, file) {
           ajaxData.append(inputEl.name, file);
         });
       }
+      // Once appended, clear.
+      droppedFiles = false;
 
       // Emit each new file to upload so that parent can build views.
       var fileuploads = [];
