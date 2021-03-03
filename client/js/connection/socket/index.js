@@ -9,6 +9,7 @@ var setupMessages = require('./messages');
 var queue = {};
 
 import(
+  /* webpackChunkName: "socket-io" */
   /* webpackPrefetch: true */
   'socket.io-client'
 )
