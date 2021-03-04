@@ -19,7 +19,6 @@ module.exports = function (location) {
   var children = {};
 
   // Child components
-  var _exportCom = new ExportComponent(location);
   var _viewOnCom = new ViewOnComponent(location);
 
   var makeOpenable = function (viewName, View) {
@@ -55,19 +54,17 @@ module.exports = function (location) {
     $mount.html(template({}));
 
     makeOpenable('entry-creation', EntryCreationComponent);
+    makeOpenable('location-export', ExportComponent);
 
-    var $exportCont = $('#tresdb-export-container-outer');
     var $viewOnCont = $('#tresdb-viewon-container-outer');
 
     // Bind child components
-    _exportCom.bind($exportCont);
     _viewOnCom.bind($viewOnCont);
   };
 
   self.unbind = function () {
     ui.offAll(listeners);
     ui.unbindAll(children);
-    _exportCom.unbind();
     _viewOnCom.unbind();
   };
 };
