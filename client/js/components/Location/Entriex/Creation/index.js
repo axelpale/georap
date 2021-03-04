@@ -14,7 +14,7 @@ module.exports = function (location) {
   var children = {};
 
   self.bind = function ($mount) {
-    children.form = new FormView();
+    children.form = new FormView(location);
     children.form.bind($mount);
 
     children.form.once('exit', function () {

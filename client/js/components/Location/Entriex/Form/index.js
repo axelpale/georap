@@ -15,10 +15,12 @@ var account = tresdb.stores.account;
 // Megabyte
 var MB = 1024 * 1024;
 
-module.exports = function (entry) {
+module.exports = function (location, entry) {
   // Entry form View.
   //
   // Parameters:
+  //   location
+  //     location object
   //   entry
   //     optional entry object. If not given, a blank entry form is shown.
   //

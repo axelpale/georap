@@ -1,8 +1,10 @@
 var EntryView = require('./Entry');
 var ui = require('tresdb-ui');
 
-module.exports = function (entries) {
+module.exports = function (location, entries) {
   // Parameters:
+  //   location
+  //     location object
   //   entries
   //     an array of entries
   //
@@ -13,12 +15,10 @@ module.exports = function (entries) {
 
     var appendEntry = function (entry) {
       var id = entry._id;
-      var v = new EntryView(entry);
-
-      children[id] = v;
-
+      children[id] = new EntryView(location, entry);
+      // New container for entry
       $mount.append('<div id="entry-' + id + '"></div>');
-      v.bind($('#entry-' + id));
+      children[id].bind($('#entry-' + id));
     };
 
     entries.forEach(function (entry) {

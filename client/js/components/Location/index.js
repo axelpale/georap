@@ -73,7 +73,7 @@ var LocationView = function (id, query) {
       formsView = new FormsView(_location);
 
       thumbnailsView = new ThumbnailsView(rawLoc, rawLoc.entries);
-      entriesView = new EntriesView(rawLoc.entries);
+      entriesView = new EntriesView(rawLoc, rawLoc.entries);
 
       eventsView = new EventsView(_location.getEvents());
       removeView = new RemoveView(_location);

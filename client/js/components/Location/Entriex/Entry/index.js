@@ -5,10 +5,12 @@ var FormView = require('../Form');
 var ui = require('tresdb-ui');
 var account = tresdb.stores.account;
 
-module.exports = function (entry) {
+module.exports = function (location, entry) {
   // Parameters:
+  //   location
+  //     location object
   //   entry
-  //     entry object.
+  //     entry object
   //
 
   var children = {};
@@ -38,7 +40,7 @@ module.exports = function (entry) {
         var $formContainer = $mount.find('.entry-form-container');
         if (ui.isHidden($formContainer)) {
           ui.show($formContainer);
-          children.editform = new FormView(entry);
+          children.editform = new FormView(location, entry);
           children.editform.bind($formContainer);
         } else {
           ui.hide($formContainer);
