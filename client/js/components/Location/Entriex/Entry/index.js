@@ -2,6 +2,7 @@ var template = require('./template.ejs');
 var entryModel = require('tresdb-models').entry;
 var CommentsView = require('./Comments');
 var FormView = require('../Form');
+var FormAdminView = require('../FormAdmin');
 var ui = require('tresdb-ui');
 var account = tresdb.stores.account;
 
@@ -13,6 +14,7 @@ module.exports = function (location, entry) {
   //     entry object
   //
 
+  var listeners = {};
   var children = {};
 
   var isAuthor = account.isMe(entry.user);
@@ -36,15 +38,30 @@ module.exports = function (location, entry) {
     children.comments.bind($mount.find('.entry-comments-container'));
 
     if (isAuthorOrAdmin) {
-      $mount.find('.entry-form-open').click(function () {
+      listeners.openBtn = $mount.find('.entry-form-open');
+      listeners.openBtn.click(function () {
         var $formContainer = $mount.find('.entry-form-container');
         if (ui.isHidden($formContainer)) {
           ui.show($formContainer);
-          children.editform = new FormView(location, entry);
-          children.editform.bind($formContainer);
+
+          if (isAuthor) {
+            children.editform = new FormView(location, entry);
+            children.editform.bind($formContainer);
+          } else {
+            // The user is non-author admin. Show reduced form.
+            children.editform = new FormAdminView(location, entry);
+            children.editform.bind($formContainer);
+          }
+
+          children.editform.once('exit', function () {
+            ui.hide($formContainer);
+            children.editform.unbind();
+            delete children.editform;
+          });
         } else {
           ui.hide($formContainer);
           children.editform.unbind();
+          children.editform.off(); // for once
           delete children.editform;
         }
       });
@@ -52,6 +69,7 @@ module.exports = function (location, entry) {
   };
 
   this.unbind = function () {
+    ui.offAll(listeners);
     ui.unbindAll(children);
   };
 };

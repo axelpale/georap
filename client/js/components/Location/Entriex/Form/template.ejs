@@ -4,7 +4,6 @@
     <div class="alert alert-danger" role="alert">Saving the post failed. Might be a connection issue.</div>
   </div>
 
-  <% if (isAuthor) { %>
   <form>
     <div class="form-group entry-markdown-group">
       <label for="tresdb-entry-input">Tell something about the location:</label>
@@ -20,15 +19,12 @@
   </div>
 
   <div class="form-attachments-container"></div>
-  <% } %>
 
   <div class="form-group">
-    <% if (isAuthor) { %>
     <div class="pull-right">
       <button type="button" class="btn btn-default entry-form-cancel">Cancel</button>
       <button id="entry-<%= entry._id %>-save" type="button" class="btn btn-primary">Save</button>
     </div>
-    <% } %>
     <% if (!isNew) { %>
     <button id="entry-<%= entry._id %>-delete-ensure" type="button" class="btn btn-danger">Delete post...</button>
     <% } %>

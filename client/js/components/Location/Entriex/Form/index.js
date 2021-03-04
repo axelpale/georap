@@ -13,9 +13,6 @@ var emitter = require('component-emitter');
 var account = tresdb.stores.account;
 var entries = tresdb.stores.entries;
 
-// Megabyte
-var MB = 1024 * 1024;
-
 module.exports = function (location, entry) {
   // Entry form View.
   //
@@ -42,21 +39,11 @@ module.exports = function (location, entry) {
   self.bind = function ($mount) {
 
     var isNew = !('_id' in entry);
-    var isAuthor = account.isMe(entry.user);
-    var isAdmin = account.isAdmin();
-    var isAuthorOrAdmin = (isAuthor || isAdmin);
-
-    if (!isAuthorOrAdmin) {
-      // No form needed non-authors and non-admins
-      return;
-    }
 
     $mount.html(template({
       entry: entry,
-      isAuthor: isAuthor,
       isNew: isNew,
       markdownSyntax: ui.markdownSyntax(),
-      limit: Math.round(tresdb.config.uploadSizeLimit / MB),
     }));
 
     bound.syntaxOpen = $mount.find('.entry-syntax-open');
