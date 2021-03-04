@@ -1,17 +1,10 @@
 // module EntryForm
 //
-// takes in an entry, blank or prefilled (edit)
-//
-// no submit cancel or delete buttons
-//
-// is able to create attachments
-//
-// temporary store of content for interrupted creation or edit
-//
-// either data export or submit method
-//   submit target can adapt if given entry has id or not
-//
-// behavior can adapt if id or not
+// Features
+// - use same form for entry creation and edit.
+// - handles the API calls internally
+// - is able to upload attachments
+// - temporary store of content for interrupted creation or edit
 //
 var template = require('./template.ejs');
 var AttachmentsView = require('./Attachments');
@@ -23,6 +16,8 @@ var account = tresdb.stores.account;
 var MB = 1024 * 1024;
 
 module.exports = function (entry) {
+  // Entry form View.
+  //
   // Parameters:
   //   entry
   //     optional entry object. If not given, a blank entry form is shown.
