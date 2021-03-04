@@ -17,6 +17,7 @@ module.exports = function (location) {
   var listeners = {};
   var children = {};
 
+  // Abstract view opening and closing
   var makeOpenable = function (viewName, View) {
     var $openBtn = $('#' + viewName + '-open');
     var $container = $('#' + viewName + '-container');
@@ -31,14 +32,18 @@ module.exports = function (location) {
       }
     };
 
+    var enterView = function () {
+      children[viewName] = new View(location);
+      children[viewName].bind($container);
+      children[viewName].once('exit', exitView);
+    };
+
     // Handle button
     $openBtn.click(function () {
       if (children[viewName]) {
         exitView();
       } else {
-        children[viewName] = new View(location);
-        children[viewName].bind($container);
-        children[viewName].once('exit', exitView);
+        enterView();
       }
     });
 
