@@ -400,7 +400,7 @@ module.exports = {
       'https://tools.wmflabs.org/geohack/geohack.php' +
       '?language=en&params=<%= latitude %>;<%= longitude %>_type:landmark',
       'WGS84',
-      [{
+      [{ // Global
         east: 180,
         north: 90,
         south: -90,
@@ -413,12 +413,48 @@ module.exports = {
       '?ver=1.17&zoomLevel=8&coord=<%= longitude %>_<%= latitude %>&' +
       'mapLayers=base_35+100+default&showMarker=true',
       'ETRS-TM35FIN',
-      [{
+      [{ // Finland
         east: 32.14,
         north: 70.166,
         south: 59.56,
         west: 18.86,
       }],
+    ],
+    [
+      'Karttapaikka',
+      'https://asiointi.maanmittauslaitos.fi/karttapaikka/' +
+      '?lang=fi&share=customMarker&' +
+      'n=<%= latitude %>&e=<%= longitude %>&' +
+      'zoom=8',
+      'ETRS-TM35FIN',
+      [{ // Finland
+        east: 32.14,
+        north: 70.166,
+        south: 59.56,
+        west: 18.86,
+      }],
+    ],
+    [
+      'Oskari',
+      'https://kartat.tampere.fi/oskari/' +
+      '?zoomLevel=8&' +
+      'coord=<%= longitude %>_<%= latitude %>&' +
+      'showMarker=true&showIntro=false',
+      'ETRS-TM35FIN',
+      [
+        { // Northern Pirkanmaa, Finland
+          east: 24.178,
+          north: 61.869,
+          south: 61.556,
+          west: 23.691,
+        },
+        { // Southern Pirkanmaa, Finland
+          east: 24.079,
+          north: 61.596,
+          south: 61.377,
+          west: 23.493,
+        },
+      ],
     ],
     [
       'Lantmäteriet',
