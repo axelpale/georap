@@ -30,6 +30,8 @@ module.exports = function (location) {
   var self = this;
   emitter(self);
 
+  var listeners = {};
+
   self.bind = function ($mount) {
 
     // Select services available for this location
@@ -73,26 +75,14 @@ module.exports = function (location) {
       services: exportServiceUrls,
     }));
 
-    var $cont = $('#tresdb-viewon-container');
-    var $show = $('#tresdb-viewon-show');
-    var $cancel = $('#tresdb-viewon-cancel');
-
-    $show.click(function (ev) {
-      ev.preventDefault();
-      ui.toggleHidden($cont);
-      // Prevent both export and viewon being open at the same time.
-      ui.hide($('#tresdb-export-container'));
-    });
-
-    $cancel.click(function (ev) {
-      ev.preventDefault();
-      ui.hide($cont);
+    listeners.cancel = $mount.find('.location-viewon-cancel');
+    listeners.cancel.click(function () {
+      self.emit('exit');
     });
   };
 
   self.unbind = function () {
-    $('#tresdb-viewon-show').off();
-    $('#tresdb-viewon-cancel').off();
+    ui.offAll(listeners);
   };
 
 };

@@ -6,7 +6,6 @@ var template = require('./template.ejs');
 var emitter = require('component-emitter');
 var ui = require('tresdb-ui');
 
-
 module.exports = function (location) {
   // Parameters:
   //   location
@@ -17,9 +16,6 @@ module.exports = function (location) {
 
   var listeners = {};
   var children = {};
-
-  // Child components
-  var _viewOnCom = new ViewOnComponent(location);
 
   var makeOpenable = function (viewName, View) {
     var $openBtn = $('#' + viewName + '-open');
@@ -55,16 +51,11 @@ module.exports = function (location) {
 
     makeOpenable('entry-creation', EntryCreationComponent);
     makeOpenable('location-export', ExportComponent);
-
-    var $viewOnCont = $('#tresdb-viewon-container-outer');
-
-    // Bind child components
-    _viewOnCom.bind($viewOnCont);
+    makeOpenable('location-viewon', ViewOnComponent);
   };
 
   self.unbind = function () {
     ui.offAll(listeners);
     ui.unbindAll(children);
-    _viewOnCom.unbind();
   };
 };
