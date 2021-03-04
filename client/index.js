@@ -1,5 +1,5 @@
 // Webpack entry point.
-// The client build is described here.
+// This is a good place for initia setup, if any.
 
-// JavaScript
+// App
 require('./js/index.js');
