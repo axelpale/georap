@@ -26,13 +26,18 @@ module.exports = function (location) {
     var exitView = function () {
       if (children[viewName]) {
         children[viewName].unbind();
-        children[viewName].off();
+        children[viewName].off(); // off once
         $container.empty();
         delete children[viewName];
       }
     };
 
     var enterView = function () {
+      // Close other views before opening one.
+      Object.keys(children).forEach(function (key) {
+        children[key].emit('exit');
+      });
+      // Open new view
       children[viewName] = new View(location);
       children[viewName].bind($container);
       children[viewName].once('exit', exitView);
