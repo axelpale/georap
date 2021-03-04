@@ -15,21 +15,26 @@ exports.change = (req, res, next) => {
     return res.sendStatus(status.FORBIDDEN);
   }
 
+  const entryData = req.body.entryData;
+  if (!entryData) {
+    return res.status(status.BAD_REQUEST).send('Missing entryData');
+  }
+
   const delta = {};
   let diff = false; // if delta has some content
 
-  if ('markdown' in req.body) {
-    delta.markdown = req.body.markdown.trim();
+  if ('markdown' in entryData) {
+    delta.markdown = entryData.markdown.trim();
     diff = true;
   }
 
-  if ('attachments' in req.body && typeof req.body.attachments === 'object') {
-    delta.attachments = req.body.attachments;
+  if ('attachments' in entryData && typeof entryData.attachments === 'object') {
+    delta.attachments = entryData.attachments;
     diff = true;
   }
 
-  if ('flags' in req.body && typeof req.body.flags === 'object') {
-    delta.flags = req.body.flags;
+  if ('flags' in entryData && typeof entryData.flags === 'object') {
+    delta.flags = entryData.flags;
     diff = true;
   }
 
@@ -71,7 +76,6 @@ exports.change = (req, res, next) => {
   });
 };
 
-
 exports.create = (req, res, next) => {
   // Create entry.
   //
@@ -81,20 +85,25 @@ exports.create = (req, res, next) => {
 
   let markdown, attachments, flags;
 
-  if ('markdown' in req.body) {
-    markdown = req.body.markdown.trim();
+  const entryData = req.body.entryData;
+  if (!entryData) {
+    return res.status(status.BAD_REQUEST).send('Missing entryData');
+  }
+
+  if ('markdown' in entryData) {
+    markdown = entryData.markdown.trim();
   } else {
     markdown = '';
   }
 
-  if ('attachments' in req.body && typeof req.body.attachments === 'object') {
-    attachments = req.body.attachments;
+  if ('attachments' in entryData && typeof entryData.attachments === 'object') {
+    attachments = entryData.attachments;
   } else {
     attachments = [];
   }
 
-  if ('flags' in req.body && typeof req.body.flags === 'object') {
-    flags = req.body.flags;
+  if ('flags' in entryData && typeof entryData.flags === 'object') {
+    flags = entryData.flags;
   } else {
     flags = [];
   }
