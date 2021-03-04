@@ -11,6 +11,7 @@ var AttachmentsView = require('./Attachments');
 var ui = require('tresdb-ui');
 var emitter = require('component-emitter');
 var account = tresdb.stores.account;
+var entries = tresdb.stores.entries;
 
 // Megabyte
 var MB = 1024 * 1024;
@@ -66,6 +67,35 @@ module.exports = function (location, entry) {
 
     children.attachments = new AttachmentsView(entry, entry.attachments);
     children.attachments.bind($mount.find('.form-attachments-container'));
+
+    bound.saveBtn = $mount.find('.entry-form-save');
+    bound.saveBtn.click(function () {
+      // Create new entry or update the existing
+
+      var entryData = {
+        markdown: '', // TODO children.markdown.getMarkdown(),
+        attachments: children.attachments.getAttachments(),
+        flags: [], // TODO children.flags.getFlags(),
+      };
+
+      if (isNew) {
+        entries.create(location._id, entryData, function (err) {
+          if (err) {
+            // TODO show submit error
+            return console.log(err);
+          }
+          self.emit('success');
+        });
+      } else {
+        entries.change(location._id, entry._id, entryData, function (err) {
+          if (err) {
+            // TODO
+            return console.log(err);
+          }
+          self.emit('success');
+        });
+      }
+    });
 
     bound.cancelBtn = $mount.find('.entry-form-cancel');
     bound.cancelBtn.click(function () {
