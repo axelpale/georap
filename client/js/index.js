@@ -2,40 +2,18 @@
 // Collect data access API's under tresdb global.
 // This prevents cumbersome ../../../ requires.
 // The tresdb global is defined in index.html
-
-var account = require('./stores/account');
-var admin = require('./stores/admin');
-var attachments = require('./stores/attachments');
-var entries = require('./stores/entries');
-var events = require('./stores/events');
-var filter = require('./stores/filter');
-var locations = require('./stores/locations');
-var mapstate = require('./stores/mapstate');
-var markers = require('./stores/markers');
-var statistics = require('./stores/statistics');
-var theme = require('./stores/theme');
-var users = require('./stores/users');
+var stores = require('./stores');
 
 // The html contains tresdb object,
 // preset with some config.
 // Let us append the stores to the global namespace.
-tresdb.stores = {
-  account: account,
-  admin: admin,
-  attachments: attachments,
-  entries: entries,
-  events: events,
-  filter: filter,
-  locations: locations,
-  mapstate: mapstate,
-  markers: markers,
-  statistics: statistics,
-  theme: theme,
-  users: users,
-};
+tresdb.stores = stores;
+
+// Use following stores here
+var account = stores.account;
+var theme = stores.theme;
 
 // Theme setup
-
 var applyTheme = function (state) {
   var linkEl = document.getElementById('theme-stylesheet');
   linkEl.setAttribute('href', '/assets/themes/' + state.colorScheme + '.css');
