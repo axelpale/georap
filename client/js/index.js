@@ -6,6 +6,7 @@
 var account = require('./stores/account');
 var admin = require('./stores/admin');
 var attachments = require('./stores/attachments');
+var entries = require('./stores/entries');
 var events = require('./stores/events');
 var filter = require('./stores/filter');
 var locations = require('./stores/locations');
@@ -22,6 +23,7 @@ tresdb.stores = {
   account: account,
   admin: admin,
   attachments: attachments,
+  entries: entries,
   events: events,
   filter: filter,
   locations: locations,

@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 
 var socket = require('../connection/socket');
 var validateCoords = require('./lib/validateCoords');
@@ -24,7 +23,7 @@ socket.on('tresdb_event', function (ev) {
 var getJSON = request.getJSON;
 var postJSON = request.postJSON;
 var postFile = request.postFile;
-var deleteJSON = request.deleteJSON;
+// var deleteJSON = request.deleteJSON;
 
 var state = {
   selectedLocationId: null,
@@ -71,40 +70,6 @@ exports.isSelected = function (locId) {
 
 // Public API methods
 
-exports.changeEntry = function (locId, entryId, entryData, callback) {
-  // Parameters:
-  //   locId
-  //     location id
-  //   entryId
-  //   entryData, object with following props
-  //     markdown
-  //     attachments
-  //     flags
-  //   callback
-  //     function (err)
-  return postJSON({
-    url: '/api/locations/' + locId + '/entries/' + entryId,
-    entryData: entryData,
-  }, callback);
-};
-
-exports.createEntry = function (locId, entryData, callback) {
-  // Parameters
-  //   locId
-  //     location id
-  //   entryData, object with following props
-  //     markdown
-  //     attachments
-  //     flags
-  //   callback
-  //     function (err)
-
-  return postJSON({
-    url: '/api/locations/' + locId + '/entries',
-    data: entryData,
-  }, callback);
-};
-
 exports.create = function (geom, callback) {
   // Create a new location on the server.
   //
@@ -113,6 +78,7 @@ exports.create = function (geom, callback) {
   //     GeoJSON Point
   //   callback
   //     function (err, rawLoc)
+  //
 
   return postJSON({
     url: '/api/locations',
@@ -164,7 +130,7 @@ exports.importFile = function (form, callback) {
   //     jQuery instance of the file upload form
   //   callback
   //     function (err)
-
+  //
   return postFile({
     url: '/api/locations/import',
     form: form,
@@ -206,7 +172,7 @@ exports.setGeom = function (id, lng, lat, callback) {
   //     number
   //   callback
   //     function (err)
-
+  //
   if (!validateCoords.isValidLongitude(lng)) {
     return callback(new Error('Invalid coordinate'));
   }
@@ -231,7 +197,7 @@ exports.setName = function (id, newName, callback) {
   //     string
   //   callback
   //     function (err)
-
+  //
   return postJSON({
     url: '/api/locations/' + id + '/name',
     data: { newName: newName },
@@ -282,65 +248,14 @@ exports.setType = function (id, newType, callback) {
   }, callback);
 };
 
-exports.createComment = function (locationId, entryId, markdown, callback) {
-  // Parameters:
-  //   locationId
-  //   entryId
-  //   markdown
-  //     comment content string in Markdown
-  //   callback
-  //     function (err)
-
-  if (typeof markdown !== 'string' || markdown.length === 0) {
-    return callback(new Error('Invalid comment message'));
-  }
-
-  return postJSON({
-    url: '/api/locations/' + locationId + '/entries/' + entryId + '/comments',
-    data: {
-      markdown: markdown,
-      attachments: [], // future proof
-    },
-  }, callback);
-};
-
-exports.changeComment = function (params, callback) {
-  var locationId = params.locationId;
-  var entryId = params.entryId;
-  var commentId = params.commentId;
-  var markdown = params.newMessage;
-
-  var entryUrl = '/api/locations/' + locationId + '/entries/' + entryId;
-  return postJSON({
-    url: entryUrl + '/comments/' + commentId,
-    data: {
-      markdown: markdown,
-      // attachments: attachments,
-    },
-  }, callback);
-};
-
-exports.removeComment = function (locationId, entryId, commentId, callback) {
-  var entryUrl = '/api/locations/' + locationId + '/entries/' + entryId;
-  return deleteJSON({
-    url: entryUrl + '/comments/' + commentId,
-    data: {},
-  }, callback);
-};
-
-exports.removeEntry = function (locationId, entryId, callback) {
-  return deleteJSON({
-    url: '/api/locations/' + locationId + '/entries/' + entryId,
-    data: {},
-  }, callback);
-};
-
 exports.removeOne = function (id, callback) {
+  // Delete a location
+  //
   // Parameters
   //   id
   //   callback
   //     function (err)
-
+  //
   $.ajax({
     url: '/api/locations/' + id,
     method: 'DELETE',
