@@ -208,7 +208,7 @@ module.exports = {
     // enforce a maximum number of statements allowed per line
     'max-statements-per-line': 'error',
     // enforce a maximum number of statements allowed in function blocks
-    'max-statements': ['error', 20 ],
+    'max-statements': ['error', 25 ],
     // require constructor names to begin with a capital letter
     'new-cap': ['error', { capIsNewExceptions: ['Emitter' ] } ],
     // require parentheses when invoking a constructor with no arguments
