@@ -88,9 +88,9 @@ exports.changeEntry = function (locId, entryId, entryData, callback) {
   }, callback);
 };
 
-exports.createEntry = function (id, entryData, callback) {
+exports.createEntry = function (locId, entryData, callback) {
   // Parameters
-  //   id
+  //   locId
   //     location id
   //   entryData, object with following props
   //     markdown
@@ -100,7 +100,7 @@ exports.createEntry = function (id, entryData, callback) {
   //     function (err)
 
   return postJSON({
-    url: '/api/locations/' + id + '/entries',
+    url: '/api/locations/' + locId + '/entries',
     data: entryData,
   }, callback);
 };
