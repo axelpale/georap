@@ -1,5 +1,6 @@
 var ui = require('tresdb-ui');
 var emitter = require('component-emitter');
+var template = require('./template.ejs');
 var FormView = require('../Form');
 
 // eslint-disable-next-line no-unused-vars
@@ -14,15 +15,18 @@ module.exports = function (location) {
   var children = {};
 
   self.bind = function ($mount) {
+    $mount.html(template({}));
+
     children.form = new FormView(location);
-    children.form.bind($mount);
+    children.form.bind($mount.find('.entry-form-container'));
 
     children.form.once('exit', function () {
       self.emit('exit');
     });
-    // children.form.on('submit', function (entryData) {
-    //
-    // });
+    children.form.on('success', function () {
+      // TODO
+      console.log('success');
+    });
   };
 
   self.unbind = function () {
