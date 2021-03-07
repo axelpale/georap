@@ -1,6 +1,14 @@
 // This Store takes care of reading and storing a map viewport state
 // to a given storage, e.g. localStorage.
-
+//
+// Structure:
+//   {
+//     lat: <number>,
+//     lng: <number>,
+//     zoom: <integer>,
+//     mapTypeId: <string>,
+//   }
+//
 var createStore = require('./lib/createStore');
 var storage = require('../connection/storage');
 
