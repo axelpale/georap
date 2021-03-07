@@ -283,6 +283,13 @@ exports.route = function () {
     });
   });
 
+  page('/crosshair', basicViewSetup(function () {
+    return import(
+      /* webpackChunkName: "crosshair-view" */
+      '../components/Crosshair'
+    );
+  }));
+
   page('/search', function (ctx) {
     var view = new SearchView(ctx.query);
     card.open(view);
