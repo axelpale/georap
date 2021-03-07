@@ -59,6 +59,22 @@ exports.route = function () {
   };
 
   // Middleware
+
+  var basicViewSetup = function (importer) {
+    // Minimal setup for a card page that is loaded with Webpack's lazy import.
+    // There are many pages that cannot use this basic setup due to
+    // additional configuration.
+    return function () {
+      // General view handler function.
+      importer()
+        .then(function (moduleWrap) {
+          var View = moduleWrap.default;
+          card.open(new View());
+        })
+        .catch(importErrorHandler);
+    };
+  };
+
   var adminOnly = function (context, next) {
     if (account.isAdmin()) {
       return next();
@@ -195,41 +211,26 @@ exports.route = function () {
       .catch(importErrorHandler);
   });
 
-  page('/account/password', function () {
-    import(
+  page('/account/password', basicViewSetup(function () {
+    return import(
       /* webpackChunkName: "change-password-view" */
       '../components/ChangePassword'
-    )
-      .then(function (moduleWrap) {
-        var ChangePasswordView = moduleWrap.default;
-        card.open(new ChangePasswordView());
-      })
-      .catch(importErrorHandler);
-  });
+    );
+  }));
 
-  page('/filter', function () {
-    import(
+  page('/filter', basicViewSetup(function () {
+    return import(
       /* webpackChunkName: "filter-view" */
       '../components/Filter'
-    )
-      .then(function (moduleWrap) {
-        var FilterView = moduleWrap.default;
-        card.open(new FilterView());
-      })
-      .catch(importErrorHandler);
-  });
+    );
+  }));
 
-  page('/export', function () {
-    import(
+  page('/export', basicViewSetup(function () {
+    return import(
       /* webpackChunkName: "export-view" */
       '../components/Export'
-    )
-      .then(function (moduleWrap) {
-        var ExportView = moduleWrap.default;
-        card.open(new ExportView());
-      })
-      .catch(importErrorHandler);
-  });
+    );
+  }));
 
   page('/import', function () {
     import(
