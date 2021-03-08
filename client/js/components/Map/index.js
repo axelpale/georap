@@ -2,13 +2,11 @@
 /* global google */
 
 // Remember map view state (center, zoom, type...)
-// Default to southern Finland.
 //
 // Rules:
-// - Whenever user's location on the map changes, the new location
-//   should be stored device-wise.
-// - If no location is stored and none can be retrieved from the browser,
-//   fallback to southern finland.
+// - Whenever user's position on the map changes, the new position
+//   should be stored to browser's local storage.
+//
 
 var readGoogleMapState = require('./lib/readGoogleMapState');
 var AdditionMarker = require('./AdditionMarker');
@@ -96,17 +94,29 @@ module.exports = function () {
       self.emit('marker_activated', markerLocation);
     });
 
-    mapStateStore.on('updated', function (newState) {
-      var targetLatLng = new google.maps.LatLng(newState.lat, newState.lng);
-      _map.panTo(targetLatLng);
-      _map.setZoom(newState.zoom);
-      _map.setMapTypeId(newState.mapTypeId);
-    });
 
     (function defineMapStateChange() {
       // Save new state to the state store when the state of the map changes.
+      // Prevent update emit loop by checking if state really changed.
+      // Alternative prevention method would be to set option { silent: true }
+      // when updating the store. However, then other listeners would not
+      // receive updates. Other listeners include the "what-is-here" crosshair.
+      mapStateStore.on('updated', function (newState) {
+        var oldState = readGoogleMapState(_map);
+        if (oldState.lat !== newState.lat || oldState.lng !== newState.lng) {
+          var targetLatLng = new google.maps.LatLng(newState.lat, newState.lng);
+          _map.panTo(targetLatLng);
+        }
+        if (oldState.zoom !== newState.zoom) {
+          _map.setZoom(newState.zoom);
+        }
+        if (oldState.mapTypeId !== newState.mapTypeId) {
+          _map.setMapTypeId(newState.mapTypeId);
+        }
+      });
+
       var handleStateChange = function () {
-        mapStateStore.update(readGoogleMapState(_map), { silent: true });
+        mapStateStore.update(readGoogleMapState(_map));
       };
       _map.addListener('idle', handleStateChange);
       _map.addListener('maptypeid_changed', handleStateChange);
