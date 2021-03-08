@@ -1,6 +1,6 @@
 /* global google */
 /* eslint-disable max-statements */
-var geostamp = require('./geostamp');
+var geostamp = require('geostamp');
 var template = require('./template.ejs');
 var AdditionMarker = require('../../Map/AdditionMarker');
 var ui = require('tresdb-ui');
