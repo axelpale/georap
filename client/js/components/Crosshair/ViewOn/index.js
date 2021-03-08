@@ -75,11 +75,6 @@ module.exports = function () {
     $mount.html(template({
       services: exportServiceUrls,
     }));
-
-    listeners.cancel = $mount.find('.location-viewon-cancel');
-    listeners.cancel.click(function () {
-      self.emit('exit');
-    });
   };
 
   self.unbind = function () {
