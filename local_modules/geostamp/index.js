@@ -23,10 +23,24 @@ var MINUTES = 60
 var SECONDS = 60
 
 exports.latitudeDirection = function (lat) {
+  // Parameters
+  //   lat
+  //     number, latitude
+  //
+  // Return
+  //   string in ['N', 'S']
+  //
   return (lat >= 0) ? 'N' : 'S'
 }
 
 exports.longitudeDirection = function (lng) {
+  // Parameters
+  //   lng
+  //     number, longitude
+  //
+  // Return
+  //   string in ['E', 'W']
+  //
   return (lng >= 0) ? 'E' : 'W'
 }
 
@@ -37,11 +51,22 @@ exports.getDecimal = function (degrees) {
   //   degrees
   //     number
   //
+  // Return
+  //   string, e.g `12.345678°`
+  //
   return degrees.toFixed(DEFAULT_PRECISION) + '&deg;'
 }
 
 exports.getDM = function (degrees) {
   // Get degrees in degree minute format.
+  //
+  // Parameters:
+  //   degrees
+  //     number
+  //
+  // Return
+  //   string, e.g `12° 34.5678'`
+  //
   var degs = Math.floor(degrees)
   var degsRemainder = degrees - degs
   var mins = degsRemainder * MINUTES
@@ -56,7 +81,9 @@ exports.getDMS = function (degrees) {
   //   degrees
   //     number
   //
-
+  // Return
+  //   string, e.g `12° 34' 56.78"`
+  //
   var degs = Math.floor(degrees)
   var degsRemainder = degrees - degs
   var mins = Math.floor(degsRemainder * MINUTES)
