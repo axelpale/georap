@@ -137,3 +137,49 @@ exports.geomDMS = function (geom) {
 
   return latStr + ' ' + latChar + ', ' + lngStr + ' ' + lngChar
 }
+
+exports.html = function (template, lat, lng) {
+  // Render coordinates as HTML
+  //
+  // Parameters
+  //   template
+  //     Coordinate system dependent template function.
+  //   lat
+  //     Latitude in the coordinate system
+  //   lng
+  //     Longitude in the coordinate system
+  //
+  // The template receives following variables
+  //   lat
+  //     number
+  //   lng
+  //     number
+  //   absLat
+  //     abs(latitude)
+  //   absLng
+  //     abs(longitude)
+  //   getLatDir
+  //     See exports.getLatitudeDirection
+  //   getLngDir
+  //     See exports.getLongitudeDirection
+  //   getD
+  //     See exports.getDecimal
+  //   getDM
+  //     See exports.getDM
+  //   getDMS
+  //     See exports.getDMS
+  //
+  var tmplParams = {
+    lat: lat,
+    lng: lng,
+    absLat: Math.abs(lat),
+    absLng: Math.abs(lng),
+    getLatDir: exports.latitudeDirection,
+    getLngDir: exports.longitudeDirection,
+    getD: exports.getDecimal,
+    getDM: exports.getDM,
+    getDMS: exports.getDMS
+  }
+
+  return template(tmplParams)
+}
