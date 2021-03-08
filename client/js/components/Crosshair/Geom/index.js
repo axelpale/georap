@@ -59,13 +59,16 @@ module.exports = function () {
 
     listeners.$form = $('#crosshair-coords-form');
 
-    (function prefill() {
-      var lng = geom.coordinates[0];
-      var lat = geom.coordinates[1];
+    var prefill = function (g) {
+      // Parameters
+      //   g: geom
+      var lng = g.coordinates[0];
+      var lat = g.coordinates[1];
 
       $lng.val(lng);
       $lat.val(lat);
-    }());
+    };
+    prefill(geom);
 
     listeners.$form.submit(function (ev) {
       ev.preventDefault();
@@ -96,12 +99,13 @@ module.exports = function () {
     listeners.change = (function () {
       var geomChangedHandler = function () {
         // Update coords on geom change.
-        // Get coords in each coord system.
-
+        // TODO Get coords in each coord system.
+        // WGS84
         var g = mapStateToGeom(mapStateStore.get());
         var coordsHtml = geomToHtml(g);
-        // WGS84
         $geostamp.html(coordsHtml);
+        // Reset form fields
+        prefill(g);
       };
 
       mapStateStore.on('updated', geomChangedHandler);
