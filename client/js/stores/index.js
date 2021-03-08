@@ -4,6 +4,7 @@ exports.attachments = require('./attachments');
 exports.entries = require('./entries');
 exports.events = require('./events');
 exports.filter = require('./filter');
+exports.geometry = require('./geometry');
 exports.locations = require('./locations');
 exports.mapstate = require('./mapstate');
 exports.markers = require('./markers');
