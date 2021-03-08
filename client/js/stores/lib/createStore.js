@@ -1,5 +1,18 @@
 // This Store takes care of reading and storing state data
 // to a given storage, e.g. localStorage.
+//
+// Store Object
+//   Constructor
+//     createStore(storage, storageKey, defaultState)
+//   Methods
+//     update(newState, opts)
+//     reset()
+//     isDefault()
+//     isEmpty()
+//     get()
+//   Emits
+//     'updated' with state
+//
 
 var emitter = require('component-emitter');
 
