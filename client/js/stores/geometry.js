@@ -8,9 +8,11 @@ exports.getInEverySystem = function (geom, callback) {
 
   $.ajax({
     url: '/api/geometry',
-    method: 'GET',
-    data: params,
-    dataType: 'json',
+    method: 'POST', // get cannot have JSON body
+    data: JSON.stringify(params), // request data
+    contentType: 'application/json', // request data type
+    processData: false, // already string
+    dataType: 'json', // response data type
     headers: { 'Authorization': 'Bearer ' + account.getToken() },
     success: function (coordinates) {
       console.log('result', coordinates);
