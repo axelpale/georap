@@ -110,7 +110,5 @@ exports.create = function (lat, lng, username, callback) {
     latitude: lat,
     longitude: lng,
     username: username,
-    status: config.locationStatuses[0],
-    type: config.locationTypes[0],
   }, callback);
 };
