@@ -15,7 +15,6 @@ exports.getInEverySystem = function (geom, callback) {
     dataType: 'json', // response data type
     headers: { 'Authorization': 'Bearer ' + account.getToken() },
     success: function (coordinates) {
-      console.log('result', coordinates);
       return callback(null, coordinates);
     },
     error: function (jqxhr) {
