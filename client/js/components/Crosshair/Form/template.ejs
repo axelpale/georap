@@ -1,0 +1,24 @@
+<form class="panel panel-primary crosshair-form">
+  <div class="panel-heading">
+    Go to Coordinates
+  </div>
+  <div class="panel-body">
+    <div class="form-group">
+      <label for="crosshair-coords-latitude">Latitude</label>
+      <input type="text" class="form-control" id="crosshair-coords-latitude">
+      <small class="form-text text-muted">WGS 84, decimal degrees (DD.DDDD)</small>
+    </div>
+    <div class="form-group">
+      <label for="crosshair-coords-longitude">Longitude</label>
+      <input type="text" class="form-control" id="crosshair-coords-longitude">
+      <small class="form-text text-muted">WGS 84, decimal degrees (DD.DDDD)</small>
+    </div>
+    <div class="pull-right">
+      <button type="submit" class="btn btn-primary">Go</button>
+    </div>
+  </div>
+</form>
+
+<div class="hidden crosshair-form-error">
+  <div class="alert alert-danger" role="alert">Updating the coordinates failed. Ensure both coordinates to be in the decimal degree format similar to 12.345678.</div>
+</div>

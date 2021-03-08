@@ -1,10 +1,10 @@
 // Component to filter map markers.
-
+//
 var ui = require('tresdb-ui');
 var emitter = require('component-emitter');
 var template = require('./template.ejs');
-var GeomView = require('./Geom');
-var mapstateStore = tresdb.stores.mapstate;
+var TitleView = require('./Title');
+var FormView = require('./Form');
 
 module.exports = function () {
   // Parameters
@@ -12,32 +12,22 @@ module.exports = function () {
 
   // Init
   var self = this;
-  emitter(self); // Every card must be emitter to be able to detect close
+  emitter(self); // Every card must be an emitter to be able to detect close
   var children = {};
-
-  var updateTemplate = function () {
-    // TODO Rebind geom
-  };
 
   // Public methods
 
   this.bind = function ($mount) {
-    var mapstate = mapstateStore.get();
+    $mount.html(template({}));
 
-    $mount.html(template({
-      // For any-type button.
-      geom: mapstate.geom, // TODO latitude longitude
-    }));
+    children.title = new TitleView();
+    children.title.bind($mount.find('.crosshair-title-container'));
 
-    children.geom = new GeomView();
-    children.geom.bind($mount.find('.crosshair-geom-container'));
-
-    // Listen changes on position.
-    mapstateStore.on('updated', updateTemplate);
+    children.form = new FormView();
+    children.form.bind($mount.find('.crosshair-form-container'));
   };
 
   this.unbind = function () {
-    mapstateStore.off('updated', updateTemplate);
     ui.unbindAll(children);
   };
 };
