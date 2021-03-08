@@ -5,6 +5,7 @@ var emitter = require('component-emitter');
 var template = require('./template.ejs');
 var TitleView = require('./Title');
 var FormView = require('./Form');
+var ViewOnView = require('./ViewOn');
 
 module.exports = function () {
   // Parameters
@@ -25,6 +26,9 @@ module.exports = function () {
 
     children.form = new FormView();
     children.form.bind($mount.find('.crosshair-form-container'));
+
+    children.viewon = new ViewOnView();
+    children.viewon.bind($mount.find('.crosshair-viewon-container'));
   };
 
   this.unbind = function () {
