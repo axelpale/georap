@@ -1,0 +1,21 @@
+{
+  "name": "geostamp",
+  "private": true,
+  "version": "1.0.0",
+  "description": "GeoJSON helpers",
+  "keywords": [],
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/axelpale/tresdb.git"
+  },
+  "scripts": {
+    "lint": "standard"
+  },
+  "author": "Akseli Palén <akseli.palen@gmail.com>",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {
+    "standard": "^16.0.3"
+  }
+}

@@ -63,6 +63,7 @@
     "express-jwt": "^6.0.0",
     "extract-zip": "^1.6.5",
     "fs-extra": "^4.0.2",
+    "geostamp": "file:local_modules/geostamp",
     "glob": "^7.1.2",
     "http-status-codes": "^1.1.6",
     "jsonwebtoken": "^8.0.1",
