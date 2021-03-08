@@ -2,14 +2,24 @@ const proj = require('../../services/proj');
 const status = require('http-status-codes');
 
 exports.getInEverySystem = function (req, res) {
-  // Return given WGS84 coordinate in all configured coordinate systems.
+  // Return given GeoJSON geometry in all configured coordinate systems.
   //
-  const lat = parseFloat(req.body.latitude);
-  const lng = parseFloat(req.body.longitude);
+  const geom = req.body.geometry;
+
+  if (!geom) {
+    return res.status(status.BAD_REQUEST).send('Invalid geometry');
+  }
+
+  if (geom.type !== 'Point') {
+    const msg = 'No support yet for geometry type ' + geom.type;
+    return res.status(status.NOT_IMPLEMENTED).send(msg);
+  }
+
+  const lat = geom.coordinates[1];
+  const lng = geom.coordinates[0];
 
   if (isNaN(lat) || isNaN(lng)) {
-    const msg = 'Invalid lat lng: ' +
-      req.body.latitude + ' ' + req.body.longitude;
+    const msg = 'Invalid lat lng: ' + lat + ' ' + lng;
     return res.status(status.BAD_REQUEST).send(msg);
   }
 

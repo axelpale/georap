@@ -3,8 +3,7 @@ var account = require('./account');
 exports.getInEverySystem = function (geom, callback) {
 
   var params = {
-    latitude: geom.coordinates[1],
-    longitude: geom.coordinates[0],
+    geometry: geom,
   };
 
   $.ajax({
