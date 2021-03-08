@@ -9,6 +9,7 @@ var geomToHtml = function (geom) {
 
   // Coordinate systems and their templates
   var systemName = tresdb.config.coordinateSystems[0][0];
+  var systemTemplate = tresdb.templates[systemName];
 
   var coords = geom.coordinates;
 
@@ -24,13 +25,13 @@ var geomToHtml = function (geom) {
     getDMS: geostamp.getDMS,
   };
 
-  return tresdb.templates[systemName](tmplParams);
+  return systemTemplate(tmplParams);
 };
 
 var mapStateToGeom = function (mapState) {
   return {
     type: 'Point',
-    coordinates: [mapState.longitude, mapState.latitude],
+    coordinates: [mapState.lng, mapState.lat],
   };
 };
 
