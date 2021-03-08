@@ -14,18 +14,50 @@ exports.count = function (req, res, next) {
 
 exports.create = function (req, res, next) {
 
-  var valid = (typeof req.body === 'object' &&
+  // Validate required arguments
+
+  const valid = (typeof req.body === 'object' &&
                typeof req.body.lat === 'number' &&
                typeof req.body.lng === 'number');
 
   if (!valid) {
-    return res.sendStatus(status.BAD_REQUEST);
+    return res.status(status.BAD_REQUEST).send('Invalid loc name');
   }
 
-  var lat = req.body.lat;
-  var lng = req.body.lng;
+  const lat = req.body.lat;
+  const lng = req.body.lng;
 
-  dal.create(lat, lng, req.user.name, function (err, rawLoc) {
+  const username = req.user.name;
+
+  // Validate optional arguments
+
+  if (typeof req.body.name === 'string') {
+    const name = req.body.name.trim();
+
+    const minLen = 2;
+    const maxLen = 120;
+    if (name.length < 2 || name.length > 120) {
+      return res.status(status.BAD_REQUEST).send('Too short or too long name');
+    }
+
+    dal.createLocation({
+      name: name,
+      latitude: lat,
+      longitude: lng,
+      username: username,
+    }, function (err) {
+      if (err) {
+        if (err.message === 'TOO_CLOSE') {
+          return res.json('TOO_CLOSE');
+        }
+        return next(err);
+      }
+    });
+
+    return;
+  }
+
+  dal.create(lat, lng, username, function (err, rawLoc) {
     if (err) {
       if (err.message === 'TOO_CLOSE') {
         return res.json('TOO_CLOSE');
