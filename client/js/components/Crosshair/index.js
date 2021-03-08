@@ -6,6 +6,7 @@ var template = require('./template.ejs');
 var TitleView = require('./Title');
 var FormView = require('./Form');
 var ViewOnView = require('./ViewOn');
+var CreateView = require('./Create');
 var mapStateStore = tresdb.stores.mapstate;
 var geometryApi = tresdb.stores.geometry;
 
@@ -32,6 +33,9 @@ module.exports = function () {
 
     children.viewon = new ViewOnView();
     children.viewon.bind($mount.find('.crosshair-viewon-container'));
+
+    children.create = new CreateView();
+    children.create.bind($mount.find('.crosshair-create-container'));
 
     listeners.updated = function (mapState) {
       var geom = {

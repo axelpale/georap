@@ -1,0 +1,19 @@
+<form class="panel panel-primary crosshair-create">
+  <div class="panel-heading">
+    Create a location here
+  </div>
+  <div class="panel-body">
+    <div class="form-group">
+      <label for="crosshair-coords-latitude">Location name</label>
+      <input type="text" class="form-control crosshair-create-name">
+      <small class="form-text text-muted">2–100 characters</small>
+    </div>
+    <div class="pull-right">
+      <button type="submit" class="btn btn-primary">Create here</button>
+    </div>
+  </div>
+</form>
+
+<div class="hidden crosshair-create-error">
+  <div class="alert alert-danger" role="alert">Location creation failed. Ensure location name, position, and connection.</div>
+</div>
