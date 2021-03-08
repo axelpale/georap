@@ -86,7 +86,22 @@ exports.markdownSyntax = function () {
     '</p>';
 };
 
+exports.onBy = function (emitter, listeners) {
+  // Call emitter.on(key, value) for each key-value pair in listeners.
+  Object.keys(listeners).forEach(function (k) {
+    emitter.on(k, listeners[k]);
+  });
+};
+
+exports.offBy = function (emitter, listeners) {
+  // Call emitter.off(key, value) for each key-value pair in listeners.
+  Object.keys(listeners).forEach(function (k) {
+    emitter.off(k, listeners[k]);
+  });
+};
+
 exports.offAll = function (obj) {
+  // Call .off() for each value in obj.
   Object.keys(obj).forEach(function (k) {
     obj[k].off();
   });
