@@ -60,8 +60,8 @@ module.exports = function () {
     listeners.$form = $('#crosshair-coords-form');
 
     (function prefill() {
-      var lng = geom.coordinates.lng;
-      var lat = geom.coordinates.lat;
+      var lng = geom.coordinates[0];
+      var lat = geom.coordinates[1];
 
       $lng.val(lng);
       $lat.val(lat);
@@ -77,7 +77,7 @@ module.exports = function () {
       var lat = parseFloat(latRaw);
 
       console.log(lng, lat);
-      // TODO
+      // TODO move map on edit
       // map.setGeom(lng, lat, function (err) {
       //   // Hide progress bar
       //   ui.hide($progress);
@@ -104,11 +104,11 @@ module.exports = function () {
         $geostamp.html(coordsHtml);
       };
 
-      mapStateStore.on('changed', geomChangedHandler);
+      mapStateStore.on('updated', geomChangedHandler);
 
       return {
         off: function () {
-          mapStateStore.off('changed', geomChangedHandler);
+          mapStateStore.off('updated', geomChangedHandler);
         },
       };
     }());
