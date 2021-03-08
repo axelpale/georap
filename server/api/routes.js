@@ -6,6 +6,7 @@ var accountRouter = require('./account/routes');
 var adminRouter = require('./admin/routes');
 var attachmentsRouter = require('./attachments/routes');
 var eventsRouter = require('./events/routes');
+var geometryRouter = require('./geometry/routes');
 var iconsRouter = require('./icons/routes');
 var locationsRouter = require('./locations/routes');
 var markersRouter = require('./markers/routes');
@@ -79,6 +80,7 @@ router.use(function (req, res, next) {
 
 router.use('/admin', adminRouter);
 router.use('/events', eventsRouter);
+router.use('/geometry', geometryRouter);
 router.use('/locations', locationsRouter);
 router.use('/markers', markersRouter);
 router.use('/payments', paymentsRouter);
