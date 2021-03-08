@@ -5,7 +5,7 @@
 //   Constructor
 //     createStore(storage, storageKey, defaultState)
 //   Methods
-//     update(newState, opts)
+//     update(stateDelta, opts)
 //     reset()
 //     isDefault()
 //     isEmpty()
@@ -40,25 +40,22 @@ module.exports = function (storage, storageKey, defaultState) {
     _state = defaultState;
   }
 
-  store.update = function (newState, opts) {
+  store.update = function (stateDelta, opts) {
     // Parameters:
-    //   newState
-    //     object with optional keys:
-    //       type
-    //         string, a valid location type OR 'any'
-    //       status
-    //         string, a valid location status OR 'any'
+    //   stateDelta
+    //     object with optional keys. Each given key-value will
+    //     be upserted to the state.
     //  opts
     //    optional object with optional keys
     //      silent
     //        set true to prevent 'update' event emission
     //
-    if (typeof newState !== 'object') {
+    if (typeof stateDelta !== 'object') {
       throw new Error('Invalid filter settings');
     }
 
     // Copy next state so that we do not end up modifing the default state.
-    _state = Object.assign({}, _state, newState);
+    _state = Object.assign({}, _state, stateDelta);
 
     // Build the string to store
     var s = JSON.stringify(_state);
