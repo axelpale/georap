@@ -157,15 +157,16 @@ module.exports = function () {
     component.bind($(el));
   };
 
-  self.panForLocation = function (location) {
-    // Pan map so that target location becomes centered on
-    // the visible background.
+  self.panForCard = function (geom) {
+    // Pan map so that the given geom becomes centered on
+    // the visible portion of the map next to the card page.
     //
     // Parameters:
-    //   location, so that location.getGeom() returns lat, lng
+    //   geom
+    //     a GeoJSON Point
     //
     assertBound();
-    return _panner.panForLocation(location);
+    return _panner.panForCard(geom);
   };
 
   self.panUndo = function () {

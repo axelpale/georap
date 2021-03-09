@@ -2,9 +2,9 @@
 
 var convert = require('./lib/convert');
 
-var getPanTarget = function (locGeom, map) {
-  var lat = locGeom.coordinates[1];
-  var lng = locGeom.coordinates[0];
+var getPanTarget = function (geom, map) {
+  var lat = geom.coordinates[1];
+  var lng = geom.coordinates[0];
 
   // Pan location
   var cardWidthPx = $('#card-layer').width();
@@ -39,12 +39,12 @@ module.exports = function (map) {
 
   // Public methods
 
-  self.panForLocation = function (location) {
-    // Pan map so that target location becomes centered on
-    // the visible background.
+  self.panForCard = function (geom) {
+    // Pan map so that the given geom becomes centered on
+    // the visible portion of the map.
     //
     // Parameters:
-    //   location, where location.getGeom() is a
+    //   geom
     //     GeoJSON Point
 
     // Wait until map has projection.
@@ -52,7 +52,7 @@ module.exports = function (map) {
     var pev = 'projection_changed';
     if (!map.getProjection()) {
       google.maps.event.addListenerOnce(map, pev, function () {
-        self.panForLocation(location);
+        self.panForCard(geom);
       });
       return;
     }
@@ -60,7 +60,7 @@ module.exports = function (map) {
     // Store current, original center for undo.
     _panUndoLatLng = map.getCenter();
 
-    var targetLatLng = getPanTarget(location.getGeom(), map);
+    var targetLatLng = getPanTarget(geom, map);
     map.panTo(targetLatLng);
   };
 
