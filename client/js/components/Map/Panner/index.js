@@ -1,32 +1,5 @@
 /* global google */
-
-var convert = require('./lib/convert');
-
-var getPanTarget = function (geom, map) {
-  var lat = geom.coordinates[1];
-  var lng = geom.coordinates[0];
-
-  // Pan location
-  var cardWidthPx = $('#card-layer').width();
-  var mapWidthPx = $('body').width();
-  var bgWidthPx = (mapWidthPx - cardWidthPx);
-  var bgHeightPx = $('body').height();
-  var bgXPx = Math.round(bgWidthPx / 2);
-  // eslint-disable-next-line no-magic-numbers
-  var bgYPx = Math.round(bgHeightPx / 2.1);
-
-  var bgPx = new google.maps.Point(bgXPx, bgYPx);
-  var bgLatLng = convert.point2LatLng(bgPx, map);
-
-  var dLat = lat - bgLatLng.lat();
-  var dLng = lng - bgLatLng.lng();
-
-  var c = map.getCenter();
-
-  var targetLatLng = new google.maps.LatLng(c.lat() + dLat, c.lng() + dLng);
-
-  return targetLatLng;
-};
+var getPanTarget = require('./getPanTarget');
 
 module.exports = function (map) {
 
