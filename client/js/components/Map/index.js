@@ -10,6 +10,7 @@
 
 var readGoogleMapState = require('./lib/readGoogleMapState');
 var AdditionMarker = require('./AdditionMarker');
+var CrosshairMarker = require('./CrosshairMarker');
 var GeolocationMarker = require('./GeolocationMarker');
 var Panner = require('./Panner');
 var LocationMarkers = require('./LocationMarkers');
@@ -30,6 +31,7 @@ module.exports = function () {
   var _map = null;
   var _geolocationMarker = null;
   var _additionMarker = null;
+  var _crosshairMarker = null;
   var _panner = null;
   var _manager = null;
 
@@ -48,6 +50,11 @@ module.exports = function () {
 
     // Get initial map state i.e. coordinates, zoom level, and map type
     var initMapState = mapStateStore.get();
+
+    // Backward compatibility v11
+    if (!initMapState.crosshair) {
+      initMapState.crosshair = false;
+    }
 
     _map = new google.maps.Map($mount[0], {
       center: {
@@ -79,6 +86,9 @@ module.exports = function () {
     // An addition marker. User moves this large marker to point where
     // the new location is to be created.
     _additionMarker = new AdditionMarker(_map);
+    // Crosshair marker. Shown during crosshair page.
+    _crosshairMarker = new CrosshairMarker(_map);
+
     // When location page opens, map pans so that location becomes visible
     // on the background. After location page is closed, this pan is being
     // undone.
@@ -86,7 +96,11 @@ module.exports = function () {
     // Manager for the location markers, their loading and refreshing.
     _manager = new LocationMarkers(_map);
 
+    // Show right away if available
     _geolocationMarker.bind();
+    if (initMapState.crosshair) {
+      _crosshairMarker.show();
+    }
 
     // Inform that user wants to open a location.
     // Leads to opening of location page.
@@ -101,21 +115,45 @@ module.exports = function () {
       // Alternative prevention method would be to set option { silent: true }
       // when updating the store. However, then other listeners would not
       // receive updates. Other listeners include the "what-is-here" crosshair.
+      var oldState = initMapState;
+      var selfEmitted = false;
       mapStateStore.on('updated', function (newState) {
-        var oldState = readGoogleMapState(_map);
-        if (oldState.lat !== newState.lat || oldState.lng !== newState.lng) {
-          var targetLatLng = new google.maps.LatLng(newState.lat, newState.lng);
-          _map.panTo(targetLatLng);
+        if (selfEmitted) {
+          // Mark as handled
+          selfEmitted = false;
+        } else {
+          // Change was done elsewehere.
+          if (
+            oldState.lat !== newState.lat ||
+            oldState.lng !== newState.lng
+          ) {
+            var target = new google.maps.LatLng(newState.lat, newState.lng);
+            _map.panTo(target);
+          }
+
+          if (oldState.zoom !== newState.zoom) {
+            _map.setZoom(newState.zoom);
+          }
+
+          if (oldState.mapTypeId !== newState.mapTypeId) {
+            _map.setMapTypeId(newState.mapTypeId);
+          }
         }
-        if (oldState.zoom !== newState.zoom) {
-          _map.setZoom(newState.zoom);
+
+        // Ensure correct crosshair visibility.
+        // Crosshair methods are idempotent.
+        if (newState.crosshair) {
+          _crosshairMarker.show();
+          _crosshairMarker.update();
+        } else {
+          _crosshairMarker.hide();
         }
-        if (oldState.mapTypeId !== newState.mapTypeId) {
-          _map.setMapTypeId(newState.mapTypeId);
-        }
+
+        oldState = newState;
       });
 
       var handleStateChange = function () {
+        selfEmitted = true;
         mapStateStore.update(readGoogleMapState(_map));
       };
       _map.addListener('idle', handleStateChange);
