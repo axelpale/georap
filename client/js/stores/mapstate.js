@@ -7,6 +7,10 @@
 //     lng: <number>,
 //     zoom: <integer>,
 //     mapTypeId: <string>,
+//     crosshair: null OR {
+//       lat: <number>,
+//       lng: <number>,
+//     },
 //   }
 //
 var createStore = require('./lib/createStore');
