@@ -58,3 +58,12 @@ exports.additionMarker = function () {
     anchor: new google.maps.Point(19, 65),
   };
 };
+
+exports.crosshair = function () {
+  return {
+    url: geolocationUrl,
+    size: new google.maps.Size(32, 32),
+    origin: new google.maps.Point(0, 0),
+    anchor: new google.maps.Point(16, 16),
+  };
+};
