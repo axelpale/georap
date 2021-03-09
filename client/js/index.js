@@ -88,6 +88,7 @@ window.initMap = function () {
     // Via whatever way user arrived to loc,
     // pan map so that marker becomes visible.
 
+    // Prevent double-click open-close
     cardCooldown = true;
     var COOLDOWN_MSEC = 500;
     setTimeout(function () {
