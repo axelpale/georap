@@ -6,6 +6,7 @@
 
 var staticUrl = tresdb.config.staticUrl;
 var geolocationUrl = staticUrl + '/images/mapicons/geolocation.png';
+var crosshairUrl = staticUrl + '/images/mapicons/crosshair.png';
 var additionMarkerUrl = staticUrl + '/images/mapicons/additionMarker.png';
 
 // NOTE google.maps is populated asynchronously and therefore
@@ -61,9 +62,9 @@ exports.additionMarker = function () {
 
 exports.crosshair = function () {
   return {
-    url: geolocationUrl,
-    size: new google.maps.Size(32, 32),
+    url: crosshairUrl,
+    size: new google.maps.Size(64, 64),
     origin: new google.maps.Point(0, 0),
-    anchor: new google.maps.Point(16, 16),
+    anchor: new google.maps.Point(32, 32),
   };
 };
