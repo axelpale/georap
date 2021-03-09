@@ -1,12 +1,15 @@
 var template = require('./template.ejs');
 var ui = require('tresdb-ui');
-var mapStateStore = tresdb.stores.mapstate;
+var geometryModel = require('tresdb-models').geometry;
 var locationsStore = tresdb.stores.locations;
 
 module.exports = function () {
 
   // For unbinding to prevent memory leaks.
   var $elems = {};
+
+  // Geometries
+  var _geoms;
 
   // Public methods
 
@@ -22,10 +25,13 @@ module.exports = function () {
     $elems.form.submit(function (ev) {
       ev.preventDefault();
 
-      var mapState = mapStateStore.get();
+      if (!_geoms) {
+        return;
+      }
 
-      var lng = mapState.lng;
-      var lat = mapState.lat;
+      var wgs84 = _geoms.WGS84;
+      var lng = wgs84[0];
+      var lat = wgs84[1];
 
       if (isNaN(lng) || isNaN(lat)) {
         ui.show($error);
@@ -35,14 +41,14 @@ module.exports = function () {
       var name = $name.val().trim();
 
       locationsStore.createWithName({
-        geometry: {
-          type: 'Point',
-          coordinates: [lng, lat],
-        },
+        geometry: geometryModel.latLngToPoint({
+          lat: lat,
+          lng: lng,
+        }),
         name: name,
       }, function (err) {
         if (err) {
-          console.error();
+          console.error(err);
           return;
         }
 
@@ -50,6 +56,10 @@ module.exports = function () {
         // Or just add to map and a list below.
       });
     });
+  };
+
+  this.updateGeometry = function (geoms) {
+    _geoms = geoms;
   };
 
   this.unbind = function () {

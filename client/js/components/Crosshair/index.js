@@ -9,6 +9,8 @@ var ViewOnView = require('./ViewOn');
 var CreateView = require('./Create');
 var mapStateStore = tresdb.stores.mapstate;
 var geometryApi = tresdb.stores.geometry;
+var geometryModel = require('tresdb-models').geometry;
+var bus = require('tresdb-bus');
 
 module.exports = function () {
   // Parameters
@@ -18,7 +20,7 @@ module.exports = function () {
   var self = this;
   emitter(self); // Every card must be an emitter to be able to detect close
   var children = {};
-  var listeners = {};
+  var routes = {};
 
   // Public methods
 
@@ -37,27 +39,39 @@ module.exports = function () {
     children.create = new CreateView();
     children.create.bind($mount.find('.crosshair-create-container'));
 
-    listeners.updated = function (mapState) {
-      var geom = {
-        type: 'Point',
-        coordinates: [mapState.lng, mapState.lat],
-      };
+    routes.crosshair = bus.on('crosshair_moved', function (latLng) {
+      var geom = geometryModel.latLngToPoint(latLng);
       geometryApi.getInEverySystem(geom, function (err, geoms) {
         if (err) {
           return console.error(err); // TODO
         }
         console.log('geoms', geoms);
+        children.create.updateGeometry(geoms);
         // children.title.updateCoords(geoms);
         // children.form.updateCoords(geoms);
         // children.viewon.updateCoords(geoms);
       });
-    };
+    });
 
-    ui.onBy(mapStateStore, listeners);
+    // Enable crosshair after the view has rendered
+    // Rendering is necessary to get the card width to place the crosshair.
+    setTimeout(function () {
+      mapStateStore.update({
+        crosshair: true,
+      });
+    }, 0);
   };
 
   this.unbind = function () {
     ui.unbindAll(children);
-    ui.offBy(mapStateStore, listeners);
+    children = {};
+
+    bus.off(routes.crosshair);
+    routes = {};
+
+    // Disable crosshair
+    mapStateStore.update({
+      crosshair: false,
+    });
   };
 };
