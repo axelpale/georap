@@ -69,6 +69,7 @@ module.exports = function (map) {
   this.hide = function () {
     // Remove addition marker from the map.
     centerListener.remove();
+    google.maps.event.clearListeners(additionMarker, 'dragstart');
     google.maps.event.clearListeners(additionMarker, 'dragend');
     additionMarker.setMap(null);
     additionMarker = null;
