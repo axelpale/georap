@@ -99,7 +99,7 @@ window.initMap = function () {
 
     location.on('location_geom_changed', function () {
       // Center on the location.
-      mapComp.panForCard(location);
+      mapComp.panForCard(location.getGeom());
     });
     // The Location view will call location.off() when unbound.
   });

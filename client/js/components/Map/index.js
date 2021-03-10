@@ -155,7 +155,7 @@ module.exports = function () {
     // User inputs new coordinates. Move the map so that
     // the crosshair moves to the new position.
     bus.on('crosshair_form_submit', function (ev) {
-      _panner.panForCard(geometryModel.latLngToPoint(ev.latLng));
+      _panner.panForCard(ev.latLng);
     });
   };  // bind end
 
@@ -191,10 +191,10 @@ module.exports = function () {
     //
     // Parameters:
     //   geom
-    //     a GeoJSON Point
+    //     a GeoJSON Point. In future this can also be a complex shape.
     //
     assertBound();
-    return _panner.panForCard(geom);
+    return _panner.panForCard(geometryModel.pointToLatLng(geom));
   };
 
   self.panUndo = function () {

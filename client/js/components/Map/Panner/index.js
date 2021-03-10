@@ -12,20 +12,20 @@ module.exports = function (map) {
 
   // Public methods
 
-  self.panForCard = function (geom) {
+  self.panForCard = function (latLng) {
     // Pan map so that the given geom becomes centered on
     // the visible portion of the map.
     //
     // Parameters:
-    //   geom
-    //     GeoJSON Point
+    //   latLng
+    //     LatLngLiteral
 
     // Wait until map has projection.
     // See convert.point2LatLng for details.
     var pev = 'projection_changed';
     if (!map.getProjection()) {
       google.maps.event.addListenerOnce(map, pev, function () {
-        self.panForCard(geom);
+        self.panForCard(latLng);
       });
       return;
     }
@@ -33,7 +33,7 @@ module.exports = function (map) {
     // Store current, original center for undo.
     _panUndoLatLng = map.getCenter();
 
-    var targetLatLng = getPanTarget(geom, map);
+    var targetLatLng = getPanTarget(latLng, map);
     map.panTo(targetLatLng);
   };
 

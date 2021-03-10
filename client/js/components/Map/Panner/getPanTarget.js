@@ -1,11 +1,11 @@
 /* global google */
 var getVisibleCenter = require('../lib/getVisibleCenter');
 
-module.exports = function (geom, map) {
+module.exports = function (latLng, map) {
 
   var bgLatLng = getVisibleCenter(map);
-  var lat = geom.coordinates[1];
-  var lng = geom.coordinates[0];
+  var lat = latLng.lat;
+  var lng = latLng.lng;
   var dLat = lat - bgLatLng.lat;
   var dLng = lng - bgLatLng.lng;
 
@@ -13,5 +13,8 @@ module.exports = function (geom, map) {
 
   var targetLatLng = new google.maps.LatLng(c.lat() + dLat, c.lng() + dLng);
 
-  return targetLatLng;
+  return {
+    lat: targetLatLng.lat(),
+    lng: targetLatLng.lng(),
+  };
 };
