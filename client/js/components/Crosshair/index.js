@@ -7,7 +7,6 @@ var TitleView = require('./Title');
 var FormView = require('./Form');
 var ViewOnView = require('./ViewOn');
 var CreateView = require('./Create');
-var mapStateStore = tresdb.stores.mapstate;
 var geometryApi = tresdb.stores.geometry;
 var geometryModel = require('tresdb-models').geometry;
 var bus = require('tresdb-bus');
@@ -56,9 +55,7 @@ module.exports = function () {
     // Enable crosshair after the view has rendered
     // Rendering is necessary to get the card width to place the crosshair.
     setTimeout(function () {
-      mapStateStore.update({
-        crosshair: true,
-      });
+      bus.emit('crosshair_view_enter');
     }, 0);
   };
 
@@ -70,8 +67,6 @@ module.exports = function () {
     routes = {};
 
     // Disable crosshair
-    mapStateStore.update({
-      crosshair: false,
-    });
+    bus.emit('crosshair_view_exit');
   };
 };

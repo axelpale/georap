@@ -6,11 +6,9 @@ var bus = require('tresdb-bus');
 
 module.exports = function (map) {
 
-  var self = this;
-  // Creates a draggable marker at the middle of the map.
   var crosshairMarker = null;
 
-  this.show = function () {
+  var showMarker = function () {
     // Reveal the crosshair.
     //
     if (!crosshairMarker) {
@@ -20,7 +18,7 @@ module.exports = function (map) {
       var pev = 'projection_changed';
       if (!map.getProjection()) {
         google.maps.event.addListenerOnce(map, pev, function () {
-          self.show();
+          showMarker();
         });
         return;
       }
@@ -32,25 +30,34 @@ module.exports = function (map) {
         icon: icons.crosshair(),
         draggable: false,
       });
+      // Initial emit
+      setTimeout(function () {
+        bus.emit('crosshair_moved', visCenter);
+      }, 0);
     }
   };
 
-  this.update = function () {
+  var updateMarker = function () {
     if (crosshairMarker) {
-      var vcenter = getVisibleCenter(map);
-      crosshairMarker.setPosition(vcenter);
+      var visCenter = getVisibleCenter(map);
+      crosshairMarker.setPosition(visCenter);
       // HACK A bit hacky way to pass marker position
       // HACK but passing through mapState or other store becomes complex
       // HACK because crosshair position is not map center.
-      bus.emit('crosshair_moved', vcenter);
+      bus.emit('crosshair_moved', visCenter);
     }
   };
 
-  this.hide = function () {
+  var hideMarker = function () {
     // Remove crosshair marker from the map.
     if (crosshairMarker) {
       crosshairMarker.setMap(null);
       crosshairMarker = null;
     }
   };
+
+  bus.on('crosshair_view_enter', showMarker);
+  bus.on('crosshair_view_exit', hideMarker);
+
+  map.addListener('idle', updateMarker);
 };

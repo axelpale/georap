@@ -51,11 +51,6 @@ module.exports = function () {
     // Get initial map state i.e. coordinates, zoom level, and map type
     var initMapState = mapStateStore.get();
 
-    // Backward compatibility v11
-    if (!initMapState.crosshair) {
-      initMapState.crosshair = false;
-    }
-
     _map = new google.maps.Map($mount[0], {
       center: {
         lat: initMapState.lat,
@@ -87,8 +82,8 @@ module.exports = function () {
     // the new location is to be created.
     _additionMarker = new AdditionMarker(_map);
     // Crosshair marker. Shown during crosshair page.
+    // eslint-disable-next-line no-unused-vars
     _crosshairMarker = new CrosshairMarker(_map);
-
     // When location page opens, map pans so that location becomes visible
     // on the background. After location page is closed, this pan is being
     // undone.
@@ -96,11 +91,8 @@ module.exports = function () {
     // Manager for the location markers, their loading and refreshing.
     _manager = new LocationMarkers(_map);
 
-    // Show right away if available
+    // Bind buttons
     _geolocationMarker.bind();
-    if (initMapState.crosshair) {
-      _crosshairMarker.show();
-    }
 
     // Inform that user wants to open a location.
     // Leads to opening of location page.
@@ -114,7 +106,7 @@ module.exports = function () {
       // Prevent update emit loop by checking if state really changed.
       // Alternative prevention method would be to set option { silent: true }
       // when updating the store. However, then other listeners would not
-      // receive updates. Other listeners include the "what-is-here" crosshair.
+      // receive updates.
       var oldState = initMapState;
       var selfEmitted = false;
       mapStateStore.on('updated', function (newState) {
@@ -138,15 +130,6 @@ module.exports = function () {
           if (oldState.mapTypeId !== newState.mapTypeId) {
             _map.setMapTypeId(newState.mapTypeId);
           }
-        }
-
-        // Ensure correct crosshair visibility.
-        // Crosshair methods are idempotent.
-        if (newState.crosshair) {
-          _crosshairMarker.show();
-          _crosshairMarker.update();
-        } else {
-          _crosshairMarker.hide();
         }
 
         oldState = newState;
