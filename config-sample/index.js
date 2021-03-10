@@ -411,7 +411,7 @@ module.exports = {
       'Paikkatietoikkuna',
       'http://www.paikkatietoikkuna.fi/web/fi/kartta' +
       '?ver=1.17&zoomLevel=8&coord=<%= longitude %>_<%= latitude %>&' +
-      'mapLayers=base_35+100+default&showMarker=true',
+      'mapLayers=base_35+100+default&showMarker=true&showIntro=false',
       'ETRS-TM35FIN',
       [{ // Finland
         east: 32.14,
