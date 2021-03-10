@@ -1,5 +1,5 @@
 /* global google */
-var getPanTarget = require('./getPanTarget');
+var setVisibleCenter = require('../lib/setVisibleCenter');
 
 module.exports = function (map) {
 
@@ -33,7 +33,7 @@ module.exports = function (map) {
     // Store current, original center for undo.
     _panUndoLatLng = map.getCenter();
 
-    var targetLatLng = getPanTarget(latLng, map);
+    var targetLatLng = setVisibleCenter(latLng, map);
     map.panTo(targetLatLng);
   };
 
