@@ -344,31 +344,31 @@ module.exports = {
     [
       'WGS84',
       '+proj=longlat +ellps=WGS84 +datum=WGS84 +units=degrees',
-      '<%= getD(absLat) %> <%= getLatDir(lat) %>, ' +
-      '<%= getD(absLng) %> <%= getLngDir(lng) %>',
+      '<%= getD(absLat) %>&nbsp;<%= getLatDir(lat) %>, ' +
+      '<%= getD(absLng) %>&nbsp;<%= getLngDir(lng) %>',
     ],
     [
       'WGS84-DM',
       '+proj=longlat +ellps=WGS84 +datum=WGS84 +units=degrees',
-      '<%= getDM(absLat) %> <%= getLatDir(lat) %>, ' +
-      '<%= getDM(absLng) %> <%= getLngDir(lng) %>',
+      '<%= getDM(absLat) %>&nbsp;<%= getLatDir(lat) %>, ' +
+      '<%= getDM(absLng) %>&nbsp;<%= getLngDir(lng) %>',
     ],
     [
       'WGS84-DMS',
       '+proj=longlat +ellps=WGS84 +datum=WGS84 +units=degrees',
-      '<%= getDMS(absLat) %> <%= getLatDir(lat) %>, ' +
-      '<%= getDMS(absLng) %> <%= getLngDir(lng) %>',
+      '<%= getDMS(absLat) %>&nbsp;<%= getLatDir(lat) %>, ' +
+      '<%= getDMS(absLng) %>&nbsp;<%= getLngDir(lng) %>',
     ],
     // For example, the official coordinate system in Finland:
     [
       'ETRS-TM35FIN',
       '+proj=utm +zone=35 +ellps=GRS80 +units=m +no_defs',
-      'N <%= lat %>, E <%= lng %>',
+      'N&nbsp;<%= lat %>, E&nbsp;<%= lng %>',
     ],
     [
       'SWEREF99-TM',
       '+proj=utm +zone=33 +ellps=GRS80 +units=m +no_defs',
-      'N <%= Math.round(lat) %>, E <%= Math.round(lng) %>',
+      'N&nbsp;<%= Math.round(lat) %>, E&nbsp;<%= Math.round(lng) %>',
     ],
   ],
 
