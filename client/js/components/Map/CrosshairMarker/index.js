@@ -32,7 +32,7 @@ module.exports = function (map) {
       });
       // Initial emit
       setTimeout(function () {
-        bus.emit('crosshair_moved', visCenter);
+        bus.emit('crosshair_marker_moved', visCenter);
       }, 0);
     }
   };
@@ -44,7 +44,7 @@ module.exports = function (map) {
       // HACK A bit hacky way to pass marker position
       // HACK but passing through mapState or other store becomes complex
       // HACK because crosshair position is not map center.
-      bus.emit('crosshair_moved', visCenter);
+      bus.emit('crosshair_marker_moved', visCenter);
     }
   };
 

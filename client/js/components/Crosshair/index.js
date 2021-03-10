@@ -38,7 +38,7 @@ module.exports = function () {
     children.create = new CreateView();
     children.create.bind($mount.find('.crosshair-create-container'));
 
-    routes.crosshair = bus.on('crosshair_moved', function (latLng) {
+    routes.crosshair = bus.on('crosshair_marker_moved', function (latLng) {
       var geom = geometryModel.latLngToPoint(latLng);
       geometryApi.getInEverySystem(geom, function (err, geoms) {
         if (err) {
