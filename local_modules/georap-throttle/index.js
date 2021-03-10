@@ -3,6 +3,24 @@
 //
 
 module.exports = function (iteratee, duration) {
+  // This function decorator prevents repeated calls of iteratee
+  // within the given duration and until the iteratee has finished.
+  // Any call within this locking period is queued and when the locking
+  // period ends, the most recent of the queued calls will be executed,
+  // which starts the new locking period.
+  //
+  // Usage
+  //   var throttledFn = throttle((arg, cb) => {
+  //     ... do stuff with arg ...
+  //     cb()
+  //   }, 1000)
+  //
+  // Parameters:
+  //   iteratee
+  //     fn(arg, callback) where callback must be called after execution
+  //   duration
+  //     integer, milliseconds
+  //
   var queueArg = null
   var hasQueueArg = false
   var returned = true
