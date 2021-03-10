@@ -1,21 +1,23 @@
 var template = require('./template.ejs');
 var ui = require('tresdb-ui');
-var mapStateStore = tresdb.stores.mapstate;
+var bus = require('tresdb-bus');
+var defaultSystemName = tresdb.config.coordinateSystems[0][0];
 
 module.exports = function () {
 
   // For unbinding to prevent memory leaks.
   var $elems = {};
-  var listeners = {};
+  var $mount = null;
 
   // Public methods
 
-  this.bind = function ($mount) {
+  this.bind = function ($mountArg) {
+    $mount = $mountArg;
     $mount.html(template({}));
 
     $elems.form = $mount.find('.crosshair-form');
-    var $lng = $('#crosshair-coords-longitude');
-    var $lat = $('#crosshair-coords-latitude');
+    var $lng = $mount.find('.crosshair-coords-longitude');
+    var $lat = $mount.find('.crosshair-coords-latitude');
     var $error = $mount.find('.crosshair-form-error');
 
     // Form submit
@@ -34,29 +36,31 @@ module.exports = function () {
         return;
       }
 
-      mapStateStore.update({
-        lat: lat,
-        lng: lng,
+      bus.emit('crosshair_form_submit', {
+        latLng: {
+          lat: lat,
+          lng: lng,
+        },
       });
     });
+  };
 
-    // Form reset and reactivity
+  this.updateGeometry = function (geoms) {
+    if ($mount) {
+      var defaultCoords = geoms[defaultSystemName];
+      var lat = defaultCoords[1];
+      var lng = defaultCoords[0];
 
-    var fillForm = function (mapState) {
-      $lng.val(mapState.lng);
-      $lat.val(mapState.lat);
-    };
-    fillForm(mapStateStore.get());
+      var $lng = $mount.find('.crosshair-coords-longitude');
+      var $lat = $mount.find('.crosshair-coords-latitude');
 
-    listeners.updated = function (mapState) {
-      fillForm(mapState);
-    };
-
-    ui.onBy(mapStateStore, listeners);
+      $lng.val(lng);
+      $lat.val(lat);
+    }
   };
 
   this.unbind = function () {
     ui.offAll($elems);
-    ui.offBy(mapStateStore, listeners);
+    $mount = null;
   };
 };

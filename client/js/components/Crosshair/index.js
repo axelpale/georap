@@ -47,7 +47,7 @@ module.exports = function () {
         console.log('geoms', geoms);
         children.create.updateGeometry(geoms);
         children.title.updateGeometry(geoms);
-        // children.form.updateCoords(geoms);
+        children.form.updateGeometry(geoms);
         // children.viewon.updateCoords(geoms);
       });
     });

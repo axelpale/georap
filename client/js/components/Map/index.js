@@ -15,7 +15,9 @@ var GeolocationMarker = require('./GeolocationMarker');
 var Panner = require('./Panner');
 var LocationMarkers = require('./LocationMarkers');
 var emitter = require('component-emitter');
+var geometryModel = require('tresdb-models').geometry;
 var mapStateStore = tresdb.stores.mapstate;
+var bus = require('tresdb-bus');
 
 module.exports = function () {
   //
@@ -150,6 +152,11 @@ module.exports = function () {
       _map.addListener('click', handle);
     }());
 
+    // User inputs new coordinates. Move the map so that
+    // the crosshair moves to the new position.
+    bus.on('crosshair_form_submit', function (ev) {
+      _panner.panForCard(geometryModel.latLngToPoint(ev.latLng));
+    });
   };  // bind end
 
   self.unbind = function () {
