@@ -10,6 +10,7 @@ var CreateView = require('./Create');
 var geometryApi = tresdb.stores.geometry;
 var geometryModel = require('tresdb-models').geometry;
 var bus = require('tresdb-bus');
+var throttle = require('georap-throttle');
 
 module.exports = function () {
   // Parameters
@@ -38,19 +39,25 @@ module.exports = function () {
     children.create = new CreateView();
     children.create.bind($mount.find('.crosshair-create-container'));
 
-    routes.crosshair = bus.on('crosshair_marker_moved', function (latLng) {
-      var geom = geometryModel.latLngToPoint(latLng);
-      geometryApi.getInEverySystem(geom, function (err, geoms) {
-        if (err) {
-          return console.error(err); // TODO
-        }
-        console.log('geoms', geoms);
-        children.create.updateGeometry(geoms);
-        children.title.updateGeometry(geoms);
-        children.form.updateGeometry(geoms);
-        children.viewon.updateGeometry(geoms);
-      });
-    });
+    var THROTTLE_DURATION = 2000; // ms
+    routes.crosshair = bus.on('crosshair_marker_moved', throttle(
+      function (latLng, callback) {
+        var geom = geometryModel.latLngToPoint(latLng);
+        geometryApi.getInEverySystem(geom, function (err, geoms) {
+          if (err) {
+            return console.error(err); // TODO
+          }
+          console.log('geoms', geoms);
+          children.create.updateGeometry(geoms);
+          children.title.updateGeometry(geoms);
+          children.form.updateGeometry(geoms);
+          children.viewon.updateGeometry(geoms);
+
+          return callback();
+        });
+      },
+      THROTTLE_DURATION
+    ));
 
     // Enable crosshair after the view has rendered
     // Rendering is necessary to get the card width to place the crosshair.
