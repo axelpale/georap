@@ -64,7 +64,7 @@ module.exports = function () {
       THROTTLE_DURATION
     ));
 
-    // Enable crosshair after the view has rendered
+    // Enable crosshair on the map after the view has rendered
     // Rendering is necessary to get the card width to place the crosshair.
     setTimeout(function () {
       bus.emit('crosshair_view_enter');
