@@ -363,7 +363,7 @@ module.exports = {
     [
       'ETRS-TM35FIN',
       '+proj=utm +zone=35 +ellps=GRS80 +units=m +no_defs',
-      'N&nbsp;<%= lat %>, E&nbsp;<%= lng %>',
+      'N&nbsp;<%= Math.round(lat) %>, E&nbsp;<%= Math.round(lng) %>',
     ],
     [
       'SWEREF99-TM',
