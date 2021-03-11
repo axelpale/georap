@@ -36,7 +36,7 @@ exports.create = function (req, res, next) {
 
     const minLen = 2;
     const maxLen = 120;
-    if (name.length < 2 || name.length > 120) {
+    if (name.length < minLen || name.length > maxLen) {
       return res.status(status.BAD_REQUEST).send('Too short or too long name');
     }
 
