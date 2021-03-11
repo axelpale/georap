@@ -4,13 +4,10 @@
 //   var socket = require('./socket');
 //   socket.on('myevent', fn)
 
-var socket = null;
 var setupMessages = require('./messages');
-
 var io = require('socket.io-client');
-socket = io('/');
 
-console.log('socket = io(/) called');
+var socket = io('/');
 setupMessages(socket);
 
 exports.on = function (eventName, handler) {
