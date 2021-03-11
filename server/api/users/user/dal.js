@@ -120,10 +120,10 @@ exports.getVisitedLocationIds = function (username, callback) {
     var visits = new Set();
 
     ents.filter(function (ent) {
-      // Future proof
-      return ent.type === 'location_entry';
+      // Deleted visits do not count.
+      return ent.deleted === false;
     }).forEach(function (ent) {
-      if (ent.data.isVisit) {
+      if (ent.flags.indexOf('visit') >= 0) {
         visits.add(ent.locationId);
       }
     });
