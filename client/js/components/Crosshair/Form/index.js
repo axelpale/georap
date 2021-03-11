@@ -16,8 +16,8 @@ module.exports = function () {
     $mount.html(template({}));
 
     $elems.form = $mount.find('.crosshair-form');
-    var $lng = $mount.find('.crosshair-coords-longitude');
-    var $lat = $mount.find('.crosshair-coords-latitude');
+    var $lng = $mount.find('#crosshair-form-longitude');
+    var $lat = $mount.find('#crosshair-form-latitude');
     var $error = $mount.find('.crosshair-form-error');
 
     // Form submit
@@ -51,8 +51,8 @@ module.exports = function () {
       var lat = defaultCoords[1];
       var lng = defaultCoords[0];
 
-      var $lng = $mount.find('.crosshair-coords-longitude');
-      var $lat = $mount.find('.crosshair-coords-latitude');
+      var $lng = $mount.find('#crosshair-form-longitude');
+      var $lat = $mount.find('#crosshair-form-latitude');
 
       $lng.val(lng);
       $lat.val(lat);
