@@ -231,17 +231,12 @@ exports.route = function () {
     );
   }));
 
-  page('/import', function () {
-    import(
+  page('/import', basicViewSetup(function () {
+    return import(
       /* webpackChunkName: "import-view" */
       '../components/Import'
-    )
-      .then(function (moduleWrap) {
-        var ImportView = moduleWrap.default;
-        card.open(new ImportView());
-      })
-      .catch(importErrorHandler);
-  });
+    );
+  }));
 
   page('/import/:batchId/outcome', function (ctx) {
     import(
@@ -322,18 +317,12 @@ exports.route = function () {
   // Routes that require admin. Note the adminOnly middleware.
   //
 
-  page('/admin/users', adminOnly, function () {
-    import(
+  page('/admin/users', adminOnly, basicViewSetup(function () {
+    return import(
       /* webpackChunkName: "admin-users-view" */
       '../components/Admin/Users'
-    )
-      .then(function (moduleWrap) {
-        var AdminUsersView = moduleWrap.default;
-        var view = new AdminUsersView();
-        card.open(view);
-      })
-      .catch(importErrorHandler);
-  });
+    );
+  }));
 
   page('/admin/users/:username', adminOnly, function (ctx) {
     import(
@@ -348,29 +337,19 @@ exports.route = function () {
       .catch(importErrorHandler);
   });
 
-  page('/invite', adminOnly, function () {
-    import(
+  page('/invite', adminOnly, basicViewSetup(function () {
+    return import(
       /* webpackChunkName: "invite-view" */
       '../components/Invite'
-    )
-      .then(function (moduleWrap) {
-        var InviteView = moduleWrap.default;
-        card.open(new InviteView());
-      })
-      .catch(importErrorHandler);
-  });
+    );
+  }));
 
-  page('/statistics', adminOnly, function () {
-    import(
+  page('/statistics', adminOnly, basicViewSetup(function () {
+    return import(
       /* webpackChunkName: "statistics-view" */
       '../components/Statistics'
-    )
-      .then(function (moduleWrap) {
-        var StatisticsView = moduleWrap.default;
-        card.open(new StatisticsView());
-      })
-      .catch(importErrorHandler);
-  });
+    );
+  }));
 
   // Catch all
 
