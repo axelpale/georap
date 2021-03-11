@@ -6,7 +6,6 @@ var CardView = require('../components/Card');
 var Error401View = require('../components/Error401');
 var Error404View = require('../components/Error404');
 var EventsView = require('../components/Events');
-var LocationView = require('../components/Location');
 var LoginView = require('../components/Login');
 var SearchView = require('../components/Search');
 var SupportFundView = require('../components/SupportFund');
@@ -273,14 +272,22 @@ exports.route = function () {
   });
 
   page('/locations/:id', function (ctx) {
-    var view = new LocationView(ctx.params.id, ctx.query);
-    card.open(view);
+    import(
+      /* webpackChunkName: "location" */
+      '../components/Location'
+    )
+      .then(function (moduleWrap) {
+        var LocationView = moduleWrap.default;
+        var view = new LocationView(ctx.params.id, ctx.query);
+        card.open(view);
 
-    // Inform that location page has loaded. Map will pan so that
-    // the location becomes centered at the visible portion.
-    view.once('idle', function (location) {
-      exports.emit('location_routed', location);
-    });
+        // Inform that location page has loaded. Map will pan so that
+        // the location becomes centered at the visible portion.
+        view.once('idle', function (location) {
+          exports.emit('location_routed', location);
+        });
+      })
+      .catch(importErrorHandler);
   });
 
   page('/crosshair', basicViewSetup(function () {
