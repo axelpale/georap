@@ -4,6 +4,7 @@ var ui = require('tresdb-ui');
 var emitter = require('component-emitter');
 var template = require('./template.ejs');
 var TitleView = require('./Title');
+var CoordsView = require('./Coords');
 var FormView = require('./Form');
 var ViewOnView = require('./ViewOn');
 var CreateView = require('./Create');
@@ -30,6 +31,9 @@ module.exports = function () {
     children.title = new TitleView();
     children.title.bind($mount.find('.crosshair-title-container'));
 
+    children.coords = new CoordsView();
+    children.coords.bind($mount.find('.crosshair-coords-container'));
+
     children.form = new FormView();
     children.form.bind($mount.find('.crosshair-form-container'));
 
@@ -48,10 +52,11 @@ module.exports = function () {
             return console.error(err); // TODO
           }
           console.log('geoms', geoms);
-          children.create.updateGeometry(geoms);
           children.title.updateGeometry(geoms);
+          children.coords.updateGeometry(geoms);
           children.form.updateGeometry(geoms);
           children.viewon.updateGeometry(geoms);
+          children.create.updateGeometry(geoms);
 
           return callback();
         });
