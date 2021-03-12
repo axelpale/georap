@@ -51,7 +51,6 @@ module.exports = function () {
           if (err) {
             return console.error(err); // TODO
           }
-          console.log('geoms', geoms);
           children.title.updateGeometry(geoms);
           children.coords.updateGeometry(geoms);
           children.form.updateGeometry(geoms);
