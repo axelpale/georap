@@ -201,8 +201,12 @@ html, body {
 #tresdb-location-geom {
   margin-bottom: 1rem;
 }
-#tresdb-location-geom .form-group {
+#tresdb-location-geom > .form-group {
   margin-bottom: 0;
+}
+
+#tresdb-location-geom .location-coords-container {
+  margin-top: 0.6rem;
 }
 
 #tresdb-location-statustype-container {
