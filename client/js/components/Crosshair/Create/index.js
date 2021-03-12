@@ -17,8 +17,24 @@ module.exports = function () {
     $mount.html(template({}));
 
     $elems.form = $mount.find('.crosshair-create');
-    var $name = $mount.find('.crosshair-create-name');
+    $elems.$name = $mount.find('.crosshair-create-name');
+    $elems.$btn = $mount.find('button');
     var $error = $mount.find('.crosshair-create-error');
+
+    // Emphasize create button only after there is text input
+    $elems.$name.on('input', function () {
+      var locName = $elems.$name.val().trim();
+
+      var minLen = 2;
+      var maxLen = 100;
+      if (locName.length >= minLen && locName.length <= maxLen) {
+        if ($elems.$btn.hasClass('btn-default')) {
+          $elems.$btn.addClass('btn-primary').removeClass('btn-default');
+        }
+      } else if ($elems.$btn.hasClass('btn-primary')) {
+        $elems.$btn.addClass('btn-default').removeClass('btn-primary');
+      }
+    });
 
     // Form submit
 
@@ -38,7 +54,7 @@ module.exports = function () {
         return;
       }
 
-      var name = $name.val().trim();
+      var name = $elems.$name.val().trim();
 
       locationsStore.createWithName({
         geometry: geometryModel.latLngToPoint({
