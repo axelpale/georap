@@ -16,17 +16,28 @@ module.exports = function () {
     $mount.html(template({}));
 
     $elems.form = $mount.find('.crosshair-form');
-    var $lng = $mount.find('#crosshair-form-longitude');
-    var $lat = $mount.find('#crosshair-form-latitude');
+    $elems.$lng = $mount.find('#crosshair-form-longitude');
+    $elems.$lat = $mount.find('#crosshair-form-latitude');
+    $elems.$goBtn = $mount.find('button');
     var $error = $mount.find('.crosshair-form-error');
+
+    // Make go button stand out during custom coordinates.
+    // Return it default during geometry update.
+    var handleChange = function () {
+      if ($elems.$goBtn.hasClass('btn-default')) {
+        $elems.$goBtn.addClass('btn-primary').removeClass('btn-default');
+      }
+    };
+    $elems.$lng.on('input', handleChange);
+    $elems.$lat.on('input', handleChange);
 
     // Form submit
 
     $elems.form.submit(function (ev) {
       ev.preventDefault();
 
-      var lngRaw = $lng.val();
-      var latRaw = $lat.val();
+      var lngRaw = $elems.$lng.val();
+      var latRaw = $elems.$lat.val();
 
       var lng = parseFloat(lngRaw);
       var lat = parseFloat(latRaw);
@@ -51,11 +62,13 @@ module.exports = function () {
       var lat = defaultCoords[1];
       var lng = defaultCoords[0];
 
-      var $lng = $mount.find('#crosshair-form-longitude');
-      var $lat = $mount.find('#crosshair-form-latitude');
+      $elems.$lng.val(lng);
+      $elems.$lat.val(lat);
 
-      $lng.val(lng);
-      $lat.val(lat);
+      // Make go button default style if not already.
+      if ($elems.$goBtn.hasClass('btn-primary')) {
+        $elems.$goBtn.addClass('btn-default').removeClass('btn-primary');
+      }
     }
   };
 
