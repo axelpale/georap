@@ -253,7 +253,7 @@ html, body {
 #tresdb-location-forms {
   margin-bottom: 1rem;
 }
-#tresdb-location-forms .form-group {
+#tresdb-location-forms > .form-group {
   margin-bottom: 0;
 }
 #tresdb-location-forms-menu button {
