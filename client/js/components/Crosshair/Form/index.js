@@ -3,6 +3,9 @@ var ui = require('tresdb-ui');
 var bus = require('tresdb-bus');
 var defaultSystemName = tresdb.config.coordinateSystems[0][0];
 
+// Coordinate decimals
+var PRECISION = 6; //
+
 module.exports = function () {
 
   // For unbinding to prevent memory leaks.
@@ -62,8 +65,8 @@ module.exports = function () {
       var lat = defaultCoords[1];
       var lng = defaultCoords[0];
 
-      $elems.$lng.val(lng);
-      $elems.$lat.val(lat);
+      $elems.$lng.val(lng.toFixed(PRECISION));
+      $elems.$lat.val(lat.toFixed(PRECISION));
 
       // Make go button default style if not already.
       if ($elems.$goBtn.hasClass('btn-primary')) {
