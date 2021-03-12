@@ -8,6 +8,7 @@
 //
 var template = require('./template.ejs');
 var AttachmentsView = require('./Attachments');
+var MarkdownView = require('./Markdown');
 var ui = require('tresdb-ui');
 var emitter = require('component-emitter');
 var account = tresdb.stores.account;
@@ -27,13 +28,14 @@ module.exports = function (location, entry) {
       user: account.getName(),
       markdown: '',
       attachments: [],
+      flags: [],
     };
   }
 
   var self = this;
   emitter(self);
 
-  var bound = {};
+  var $elems = {};
   var children = {};
 
   self.bind = function ($mount) {
@@ -43,24 +45,20 @@ module.exports = function (location, entry) {
     $mount.html(template({
       entry: entry,
       isNew: isNew,
-      markdownSyntax: ui.markdownSyntax(),
     }));
 
-    bound.syntaxOpen = $mount.find('.entry-syntax-open');
-    bound.syntaxOpen.click(function (ev) {
-      ev.preventDefault();
-      ui.toggleHidden($mount.find('.entry-syntax'));
-    });
+    children.markdown = new MarkdownView(location, entry);
+    children.markdown.bind($mount.find('.form-markdown-container'));
 
     children.attachments = new AttachmentsView(entry, entry.attachments);
     children.attachments.bind($mount.find('.form-attachments-container'));
 
-    bound.saveBtn = $mount.find('.entry-form-save');
-    bound.saveBtn.click(function () {
+    $elems.saveBtn = $mount.find('.entry-form-save');
+    $elems.saveBtn.click(function () {
       // Create new entry or update the existing
 
       var entryData = {
-        markdown: '', // TODO children.markdown.getMarkdown(),
+        markdown: children.markdown.getMarkdown(),
         attachments: children.attachments.getAttachments(),
         flags: [], // TODO children.flags.getFlags(),
       };
@@ -84,14 +82,14 @@ module.exports = function (location, entry) {
       }
     });
 
-    bound.cancelBtn = $mount.find('.entry-form-cancel');
-    bound.cancelBtn.click(function () {
+    $elems.cancelBtn = $mount.find('.entry-form-cancel');
+    $elems.cancelBtn.click(function () {
       self.emit('exit');
     });
   };
 
   self.unbind = function () {
-    ui.offAll(bound);
+    ui.offAll($elems);
     ui.unbindAll(children);
   };
 };

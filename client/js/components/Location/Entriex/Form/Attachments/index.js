@@ -55,6 +55,7 @@ module.exports = function (entry, attachments) {
 
   this.getAttachments = function () {
     // Return list of attachment keys
+    return []; // TODO
   };
 
   this.setAttachmentKeys = function () {
