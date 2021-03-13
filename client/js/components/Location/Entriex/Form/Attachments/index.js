@@ -9,8 +9,10 @@ var ui = require('tresdb-ui');
 module.exports = function (entry, attachments) {
 
   var children = {};
+  var $mount = null;
 
-  this.bind = function ($mount) {
+  this.bind = function ($mountEl) {
+    $mount = $mountEl;
     $mount.html(template({}));
 
     var $uploaderContainer = $mount.find('.uploader-container');
@@ -49,16 +51,24 @@ module.exports = function (entry, attachments) {
     children.uploader.on('fileupload', appendAttachmentUpload);
   };
 
-  this.unbind = function () {
-    ui.unbindAll(children);
-  };
-
   this.getAttachments = function () {
     // Return list of attachment keys
-    return []; // TODO
+    // To ensure correct order, read from dom
+    if ($mount) {
+      var $keys = $mount.find('.form-attachment').map(function (i, attEl) {
+        return attEl.dataset.attachmentKey;
+      });
+      return $keys.get(); // convert to plain array
+    }
+    return [];
   };
 
   this.setAttachmentKeys = function () {
     // Fetch?
+  };
+
+  this.unbind = function () {
+    ui.unbindAll(children);
+    $mount = null;
   };
 };
