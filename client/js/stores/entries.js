@@ -17,7 +17,9 @@ exports.create = function (locId, entryData, callback) {
   //
   return request.postJSON({
     url: '/api/locations/' + locId + '/entries',
-    entryData: entryData,
+    data: {
+      entryData: entryData,
+    },
   }, callback);
 };
 
@@ -37,7 +39,9 @@ exports.change = function (locId, entryId, entryData, callback) {
   //
   return request.postJSON({
     url: '/api/locations/' + locId + '/entries/' + entryId,
-    entryData: entryData,
+    data: {
+      entryData: entryData,
+    },
   }, callback);
 };
 

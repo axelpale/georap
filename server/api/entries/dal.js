@@ -166,7 +166,7 @@ exports.createLocationEntry = (params, callback) => {
     newEntry._id = newEntryId;
     const eventParams = {
       locationName: params.locationName,
-      newEntry: newEntry,
+      entry: newEntry,
     };
 
     eventsDal.createLocationEntryCreated(eventParams, (errr) => {
