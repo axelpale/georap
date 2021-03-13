@@ -28,7 +28,7 @@ exports.change = (req, res, next) => {
     diff = true;
   }
 
-  if ('attachments' in entryData && typeof entryData.attachments === 'object') {
+  if ('attachments' in entryData && Array.isArray(entryData.attachments)) {
     delta.attachments = entryData.attachments;
     diff = true;
   }
