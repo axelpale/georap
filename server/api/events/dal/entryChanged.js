@@ -14,23 +14,25 @@ module.exports = (params, callback) => {
   //       string
   //     locationName
   //       string
+  //     username
+  //       string
   //     delta
   //       object of changed values
   //     original
   //       object of original values
   //
-  if (typeof params.oldEntry._id !== 'object') {
-    throw new Error('Invalid entry id type: ' + typeof params.oldEntry._id);
+  if (typeof params.entryId !== 'object') {
+    throw new Error('Invalid entry id type: ' + typeof params.entryId);
   }
 
   const newEvent = {
     type: 'location_entry_changed',
-    user: params.oldEntry.user,
+    user: params.username,
     time: db.timestamp(),
     locationId: params.locationId,
     locationName: params.locationName,
     data: {
-      entryId: params.oldEntry._id,
+      entryId: params.entryId,
       original: params.original,
       delta: params.delta,
     },

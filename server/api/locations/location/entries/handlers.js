@@ -64,6 +64,7 @@ exports.change = (req, res, next) => {
 
   dal.changeLocationEntry({
     oldEntry: oldEntry,
+    username: req.user.name, // in future, admins or moderators could edit.
     locationName: location.name,
     delta: delta,
   }, (err, changedEntry) => {

@@ -53,6 +53,8 @@ exports.changeLocationEntry = (params, callback) => {
   //   params:
   //     oldEntry
   //       raw entry object
+  //     username
+  //       string
   //     locationName
   //       because entries dont store location name but events do
   //     delta
@@ -98,6 +100,7 @@ exports.changeLocationEntry = (params, callback) => {
       entryId: oldEntry._id,
       locationId: oldEntry.locationId,
       locationName: params.locationName,
+      username: params.username,
       delta: minDelta,
       original: original,
     };
