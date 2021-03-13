@@ -146,7 +146,6 @@ exports.createLocationEntry = (params, callback) => {
   }
 
   const newEntry = {
-    type: 'location_entry',
     user: params.username,
     time: db.timestamp(),
     locationId: params.locationId,
