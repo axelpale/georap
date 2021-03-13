@@ -26,6 +26,10 @@ var exportServices = tresdb.config.exportServices.map(function (serv) {
 
 
 module.exports = function (location) {
+  // Parameters:
+  //   location
+  //     a location object
+  //
 
   var self = this;
   emitter(self);
@@ -35,8 +39,8 @@ module.exports = function (location) {
   self.bind = function ($mount) {
 
     // Select services available for this location
-    var lat = location.getLatitude();
-    var lng = location.getLongitude();
+    var lat = location.geom.coordinates[1];
+    var lng = location.geom.coordinates[0];
     var availableServices = exportServices.filter(function (es) {
       // Select service if current location in any of its bounds.
       if (es.bounds) {
@@ -58,7 +62,7 @@ module.exports = function (location) {
 
     // Compute service templates into URLs
     var exportServiceUrls = availableServices.map(function (es) {
-      var altCoords = location.getAltGeom(es.system);
+      var altCoords = location.altGeom[es.system];
       var url = es.template({
         longitude: altCoords[0],
         latitude: altCoords[1],

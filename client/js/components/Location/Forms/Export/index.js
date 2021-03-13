@@ -5,6 +5,10 @@ var account = tresdb.stores.account;
 var ui = require('tresdb-ui');
 
 module.exports = function (location) {
+  // Parameters:
+  //   location
+  //     a location object
+  //
 
   var self = this;
   emitter(self);
@@ -14,7 +18,7 @@ module.exports = function (location) {
   self.bind = function ($mount) {
     // Render
     $mount.html(template({
-      id: location.getId(),
+      id: location._id,
       token: account.getToken(),
     }));
 

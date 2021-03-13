@@ -9,7 +9,7 @@ var ui = require('tresdb-ui');
 module.exports = function (location) {
   // Parameters:
   //   location
-  //     models.Location object
+  //     location object
 
   var self = this;
   emitter(self);

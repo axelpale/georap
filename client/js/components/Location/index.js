@@ -70,7 +70,7 @@ var LocationView = function (id, query) {
       placesView = new PlacesView(_location);
       geomView = new GeomView(_location);
       statusTypeView = new StatusTypeView(_location);
-      formsView = new FormsView(_location);
+      formsView = new FormsView(rawLoc);
 
       thumbnailsView = new ThumbnailsView(rawLoc, rawLoc.entries);
       entriesView = new EntriesView(rawLoc, rawLoc.entries);
