@@ -37,98 +37,97 @@ db.init(function (dbErr) {
   }
   // Success
   console.log('Connected to MongoDB...');
+});
+
+// Start the server.
+
+server.listen(config.port, function () {
+  console.log('Express listening on port ' + config.port + '...');
+});
 
 
-  // Start the server.
+// Security best practices
+// -----------------------
+// https://expressjs.com/en/advanced/best-practice-security.html
 
-  server.listen(config.port, function () {
-    console.log('Express listening on port ' + config.port + '...');
+// Do not tell we are using Express.
+app.disable('x-powered-by');
+
+// -----------------------
+// Security best practices END
+
+
+// Request logging
+// ---------------
+if (config.env === 'production') {
+  app.use(loggers.http());
+}
+// ---------------
+// Request logging END
+
+app.use(config.staticUrl, express.static(config.staticDir));
+console.log('Serving static files from', config.staticUrl);
+
+// Instance-specific static files are best copied without webpack
+// because webpack does not support dynamic paths well.
+var imagesSource = path.resolve(__dirname, '..', 'client', 'images');
+var themesSource = path.resolve(__dirname, '..', 'client', 'themes');
+var modulesSource = path.resolve(__dirname, '..', 'node_modules');
+var bootstrapSource = path.resolve(modulesSource, 'bootstrap', 'dist');
+var configSource = path.resolve(__dirname, '..', 'config');
+var markersSource = path.join(configSource, 'images', 'markers');
+// Target paths
+var imagesTarget = path.join(config.staticDir, 'images');
+var bootstrapTarget = path.join(config.staticDir, 'bootstrap');
+// Copy
+(function copyCustomStatic(copyPaths) {
+  copyPaths.forEach(function (pp) {
+    fse.copy(pp[0], pp[1]);
   });
+}([
+  [imagesSource, imagesTarget],
+  [bootstrapSource, bootstrapTarget],
+  [themesSource, path.join(config.staticDir, 'themes')],
+  [config.loginBackground, path.join(imagesTarget, 'login.jpg')],
+  [markersSource, path.join(imagesTarget, 'markers')],
+]));
+console.log('Copying custom static files to', config.staticDir);
+// -------------
+// Static assets END
 
 
-  // Security best practices
-  // -----------------------
-  // https://expressjs.com/en/advanced/best-practice-security.html
+// Uploaded files
+// --------------
+app.use(config.uploadUrl, express.static(config.uploadDir));
+console.log('Serving uploaded files from', config.uploadUrl);
+app.use(config.tempUploadUrl, express.static(config.tempUploadDir));
+console.log('Serving temporary files from', config.tempUploadUrl);
+// --------------
+// Uploaded files END
 
-  // Do not tell we are using Express.
-  app.disable('x-powered-by');
 
-  // -----------------------
-  // Security best practices END
+// HTTP routes here
+app.use('/', router);
 
+// Socket.io routing
+io.get().on('connection', function () {
+  // Parameters:
+  //   socket
+  loggers.log('New connection.');
+});
 
-  // Request logging
-  // ---------------
-  if (config.env === 'production') {
-    app.use(loggers.http());
+// Override default error handler with a custom one to include date time.
+app.use(function (err, req, res, next) {
+  // Fall back to Express default error handler if error occurs during
+  // streaming. https://expressjs.com/en/guide/error-handling.html
+  if (res.headersSent) {
+    return next(err);
   }
-  // ---------------
-  // Request logging END
 
-  app.use(config.staticUrl, express.static(config.staticDir));
-  console.log('Serving static files from', config.staticUrl);
+  var datetime = (new Date()).toISOString();
+  var logEntry = datetime + ': ' + err.stack;
 
-  // Instance-specific static files are best copied without webpack
-  // because webpack does not support dynamic paths well.
-  var imagesSource = path.resolve(__dirname, '..', 'client', 'images');
-  var themesSource = path.resolve(__dirname, '..', 'client', 'themes');
-  var modulesSource = path.resolve(__dirname, '..', 'node_modules');
-  var bootstrapSource = path.resolve(modulesSource, 'bootstrap', 'dist');
-  var configSource = path.resolve(__dirname, '..', 'config');
-  var markersSource = path.join(configSource, 'images', 'markers');
-  // Target paths
-  var imagesTarget = path.join(config.staticDir, 'images');
-  var bootstrapTarget = path.join(config.staticDir, 'bootstrap');
-  // Copy
-  (function copyCustomStatic(copyPaths) {
-    copyPaths.forEach(function (pp) {
-      fse.copy(pp[0], pp[1]);
-    });
-  }([
-    [imagesSource, imagesTarget],
-    [bootstrapSource, bootstrapTarget],
-    [themesSource, path.join(config.staticDir, 'themes')],
-    [config.loginBackground, path.join(imagesTarget, 'login.jpg')],
-    [markersSource, path.join(imagesTarget, 'markers')],
-  ]));
-  console.log('Copying custom static files to', config.staticDir);
-  // -------------
-  // Static assets END
-
-
-  // Uploaded files
-  // --------------
-  app.use(config.uploadUrl, express.static(config.uploadDir));
-  console.log('Serving uploaded files from', config.uploadUrl);
-  app.use(config.tempUploadUrl, express.static(config.tempUploadDir));
-  console.log('Serving temporary files from', config.tempUploadUrl);
-  // --------------
-  // Uploaded files END
-
-
-  // HTTP routes here
-  app.use('/', router);
-
-  // Socket.io routing
-  io.get().on('connection', function () {
-    // Parameters:
-    //   socket
-    loggers.log('New connection.');
-  });
-
-  // Override default error handler with a custom one to include date time.
-  app.use(function (err, req, res, next) {
-    // Fall back to Express default error handler if error occurs during
-    // streaming. https://expressjs.com/en/guide/error-handling.html
-    if (res.headersSent) {
-      return next(err);
-    }
-
-    var datetime = (new Date()).toISOString();
-    var logEntry = datetime + ': ' + err.stack;
-
-    console.error(logEntry);
-    var INTERNAL_SERVER_ERROR = 500;
-    res.status(INTERNAL_SERVER_ERROR).send('Error: ' + err.message);
-  });
+  console.error(logEntry);
+  var INTERNAL_SERVER_ERROR = 500;
+  res.status(INTERNAL_SERVER_ERROR).send('Error: ' + err.message);
 });
