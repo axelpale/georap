@@ -90,5 +90,13 @@ exports.getMany = (keys, callback) => {
     key: {
       $in: keys,
     },
-  }).toArray(callback);
+  }).toArray(function (err, attachments) {
+    if (err) {
+      return callback(err);
+    }
+
+    // Sort by given keys
+    const sorted = keys.map(k => attachments.find(a => a.key === k));
+    return callback(null, sorted);
+  });
 };
