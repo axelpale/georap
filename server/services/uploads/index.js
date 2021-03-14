@@ -153,8 +153,11 @@ exports.createThumbnail = function (file, callback) {
   // Where thumb is object with properties:
   //   mimetype
   //   destination
+  //     absolute dir path to thumbnail dir
   //   filename
+  //     filename with extension
   //   path
+  //     absolute path to thumbnail
 
   // Let file.path = '/haha/foo.bar'
   var ext = path.extname(file.path);  // ext = '.bar'
