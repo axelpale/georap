@@ -112,7 +112,7 @@ exports.route = function () {
 
   page('/reset/:token', function (context) {
     import(
-      /* webpackChunkName: "reset-password-view" */
+      /* webpackChunkName: "reset-password" */
       '../components/ResetPassword'
     )
       .then(function (moduleWrap) {
@@ -212,7 +212,7 @@ exports.route = function () {
 
   page('/account/password', basicViewSetup(function () {
     return import(
-      /* webpackChunkName: "change-password-view" */
+      /* webpackChunkName: "change-password" */
       '../components/ChangePassword'
     );
   }));
@@ -240,7 +240,7 @@ exports.route = function () {
 
   page('/import/:batchId/outcome', function (ctx) {
     import(
-      /* webpackChunkName: "batch-outcome-view" */
+      /* webpackChunkName: "batch-outcome" */
       '../components/BatchOutcome'
     )
       .then(function (moduleWrap) {
@@ -319,14 +319,14 @@ exports.route = function () {
 
   page('/admin/users', adminOnly, basicViewSetup(function () {
     return import(
-      /* webpackChunkName: "admin-users-view" */
+      /* webpackChunkName: "admin-users" */
       '../components/Admin/Users'
     );
   }));
 
   page('/admin/users/:username', adminOnly, function (ctx) {
     import(
-      /* webpackChunkName: "admin-user-view" */
+      /* webpackChunkName: "admin-user" */
       '../components/Admin/Users/User'
     )
       .then(function (moduleWrap) {
@@ -346,7 +346,7 @@ exports.route = function () {
 
   page('/statistics', adminOnly, basicViewSetup(function () {
     return import(
-      /* webpackChunkName: "statistics-view" */
+      /* webpackChunkName: "statistics" */
       '../components/Statistics'
     );
   }));
