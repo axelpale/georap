@@ -14,6 +14,7 @@ module.exports = function (location, entry) {
   //     entry object
   //
 
+  var $mount = null;
   var listeners = {};
   var children = {};
 
@@ -21,7 +22,9 @@ module.exports = function (location, entry) {
   var isAdmin = account.isAdmin();
   var isAuthorOrAdmin = (isAuthor || isAdmin);
 
-  this.bind = function ($mount) {
+  this.bind = function ($mountEl) {
+    $mount = $mountEl;
+
     $mount.html(template({
       entryId: entry._id,
       username: entry.user,
@@ -65,6 +68,14 @@ module.exports = function (location, entry) {
           delete children.editform;
         }
       });
+    }
+  };
+
+  this.update = function (ev) {
+    if ($mount) {
+      entryModel.forward(entry, ev);
+      this.unbind();
+      this.bind($mount);
     }
   };
 

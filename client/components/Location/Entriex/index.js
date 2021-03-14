@@ -1,5 +1,6 @@
 var EntryView = require('./Entry');
 var ui = require('tresdb-ui');
+var bus = require('tresdb-bus');
 
 module.exports = function (location, entries) {
   // Parameters:
@@ -23,6 +24,13 @@ module.exports = function (location, entries) {
 
     entries.forEach(function (entry) {
       appendEntry(entry);
+    });
+
+    bus.on('location_entry_changed', function (ev) {
+      var id = ev.data.entryId;
+      if (id in children) {
+        children[id].update(ev);
+      }
     });
   };
 
