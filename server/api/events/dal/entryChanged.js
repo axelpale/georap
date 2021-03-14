@@ -56,8 +56,9 @@ module.exports = (params, callback) => {
     asyn.waterfall([
 
       (next) => {
-        if (params.original.attachments) {
-          attachmentsDal.getMany(params.original.attachments, (merr, cats) => {
+        const origAttachments = params.original.attachments;
+        if (origAttachments) {
+          attachmentsDal.getManyComplete(origAttachments, (merr, cats) => {
             if (merr) {
               return next(merr);
             }
@@ -71,8 +72,9 @@ module.exports = (params, callback) => {
       },
 
       (next) => {
-        if (params.delta.attachments) {
-          attachmentsDal.getMany(params.delta.attachments, (merr, cats) => {
+        const deltaAttachments = params.delta.attachments;
+        if (deltaAttachments) {
+          attachmentsDal.getManyComplete(deltaAttachments, (merr, cats) => {
             if (merr) {
               return next(merr);
             }
