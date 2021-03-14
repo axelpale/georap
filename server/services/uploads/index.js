@@ -206,16 +206,18 @@ exports.createThumbnail = function (file, callback) {
   }
 };
 
-exports.rotateImage = function (imagePath, degrees, callback) {
-  // Try to rotate image file and replace it.
+exports.rotateImage = function (imagePath, targetPath, degrees, callback) {
+  // Try to rotate image and save it with new name.
   //
   // Parameters
   //   imagePath
-  //     a file path to image file.
+  //     an absolute file path to the source image file.
+  //   targetPath
+  //     an absolute file path for the rotated image.
   //   degrees
   //     amount of rotation. Rounded to 90 deg steps.
   //   callback
-  //     function (err)
+  //     function (err, new)
   //
   var QUAD = 90;
   var roundedDegrees = QUAD * Math.round(degrees / QUAD);
@@ -227,7 +229,7 @@ exports.rotateImage = function (imagePath, degrees, callback) {
 
   sharp(imagePath)
     .rotate(roundedDegrees)
-    .toFile(imagePath, function (err) {
+    .toFile(targetPath, function (err) {
       if (err) {
         return callback(err);
       }
