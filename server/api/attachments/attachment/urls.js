@@ -7,3 +7,7 @@ exports.complete = function (attachment) {
     thumburl: urljoin(config.uploadUrl, attachment.thumbfilepath),
   });
 };
+
+exports.completeEach = function (attachments) {
+  return attachments.map(exports.complete);
+};
