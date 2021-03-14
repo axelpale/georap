@@ -50,8 +50,9 @@ module.exports = (params, callback) => {
       _id: newId,
     });
 
+    // Complete attachments.
     // Convert attachment keys to attachments.
-    // This prevents additional requests from clients.
+    // This prevents additional attachment requests from clients.
     asyn.waterfall([
 
       (next) => {
@@ -60,6 +61,7 @@ module.exports = (params, callback) => {
             if (merr) {
               return next(merr);
             }
+            // Replace
             eventForEmit.data.original.attachments = cats;
             return next();
           });
@@ -74,6 +76,7 @@ module.exports = (params, callback) => {
             if (merr) {
               return next(merr);
             }
+            // Replace
             eventForEmit.data.delta.attachments = cats;
             return next();
           });
@@ -90,7 +93,7 @@ module.exports = (params, callback) => {
       // Emit the extended version.
       lib.emitOne(eventForEmit);
 
-      // TODO maybe outside waterfall?
+      // TODO maybe callback earlier, place outside waterfall?
       return callback();
     });
   });
