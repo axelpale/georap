@@ -1,6 +1,7 @@
 const db = require('tresdb-db');
 const path = require('path');
 const keygen = require('tresdb-key');
+const urls = require('./attachment/urls');
 
 exports.count = (callback) => {
   // Count non-deleted attachments
@@ -98,5 +99,35 @@ exports.getMany = (keys, callback) => {
     // Sort by given keys
     const sorted = keys.map(k => attachments.find(a => a.key === k));
     return callback(null, sorted);
+  });
+};
+
+exports.getManyComplete = (keys, callback) => {
+  // Multiple attachments with urls with single query.
+  //
+  // Parameters:
+  //   keys: array of attachment keys
+  //   callback: function (err, attachments)
+  //
+
+  // No need to find none.
+  if (!keys || keys.length === 0) {
+    return callback(null, []);
+  }
+
+  db.collection('attachments').find({
+    key: {
+      $in: keys,
+    },
+  }).toArray(function (err, attachments) {
+    if (err) {
+      return callback(err);
+    }
+
+    // Sort by given keys
+    const sorted = keys.map(k => attachments.find(a => a.key === k));
+    const attachmentsWithUrls = urls.completeEach(sorted);
+
+    return callback(null, attachmentsWithUrls);
   });
 };
