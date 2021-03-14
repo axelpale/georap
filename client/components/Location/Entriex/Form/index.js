@@ -59,7 +59,7 @@ module.exports = function (location, entry) {
 
       var entryData = {
         markdown: children.markdown.getMarkdown(),
-        attachments: children.attachments.getAttachments(),
+        attachments: children.attachments.getAttachmentKeys(),
         flags: [], // TODO children.flags.getFlags(),
       };
 

@@ -73,7 +73,7 @@ module.exports = function (entry, attachments) {
     children.uploader.on('fileupload', appendAttachmentUpload);
   };
 
-  this.getAttachments = function () {
+  this.getAttachmentKeys = function () {
     // Return list of attachment keys
     // To ensure correct order, read from dom
     if ($mount) {
