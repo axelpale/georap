@@ -1,3 +1,6 @@
+// Root bus
+var bus = require('tresdb-bus');
+var socket = require('./connection/socket');
 
 // Collect data access API's under tresdb global.
 // This prevents cumbersome ../../../ requires.
@@ -37,6 +40,14 @@ tresdb.getCurrentPath = routes.getCurrentPath;  // query current page
 
 routes.route();
 
+// Emit socket events to bus.
+
+socket.on('tresdb_event', function (ev) {
+  // Emit all location events. Allow hooking to all location events or
+  // specific event type e.g. location_created, needed by main menu to
+  // determine when creation is successful.
+  bus.emit(ev.type, ev);
+});
 
 
 // Map init
