@@ -24,6 +24,17 @@ module.exports = function (entry, attachments) {
       $uploaderContainer.before($attContainer);
       children[att.key] = new AttachmentView(att);
       children[att.key].bind($attContainer);
+
+      children[att.key].on('up', function () {
+        $attContainer.insertBefore(
+          $attContainer.prev('.form-attachment-container')
+        );
+      });
+      children[att.key].on('down', function () {
+        $attContainer.insertAfter(
+          $attContainer.next('.form-attachment-container')
+        );
+      });
     };
 
     var appendAttachmentUpload = function (fileupload) {
