@@ -1,17 +1,18 @@
 
-var dal = require('./dal');
-var status = require('http-status-codes');
-var uploads = require('../../../services/uploads');
+const dal = require('./dal');
+const lib = require('./lib');
+const status = require('http-status-codes');
+const uploads = require('../../../services/uploads');
 
-exports.get = function (req, res) {
+exports.get = (req, res) => {
   // Fetch single attachment.
   // Already feched but here it is a good place to strip any unnecesary data.
   return res.json(req.attachment);
 };
 
-exports.rotateImage = function (req, res, next) {
+exports.rotateImage = (req, res, next) => {
   // Try to rotate photo attachment.
-
+  //
   const atta = req.attachment;
 
   // Detect if image
@@ -35,31 +36,54 @@ exports.rotateImage = function (req, res, next) {
     return res.send('Skipped unnecessary rotation of 0deg');
   }
 
+  const sourcePath = uploads.getAbsolutePath(atta.filepath);
+
+  // To bust caches, the new name is an easy way.
+  const targetPath = lib.appendToFilename(sourcePath, '-rot');
+
   // Rotate
-  uploads.rotateImage(atta.filepath, degrees, (err) => {
+  uploads.rotateImage(sourcePath, targetPath, degrees, (err) => {
     if (err) {
       return next(err);
     }
     // After rotate, recreate thumbnail.
     uploads.createThumbnail({
-      path: atta.filepath,
+      path: targetPath,
       mimetype: atta.mimetype,
-    }, (errt) => {
+    }, (errt, thumb) => {
       if (errt) {
         return next(errt);
       }
-      return res.send('Rotated ' + degrees + 'deg');
+
+      const updateParams = {
+        key: atta.key,
+        filepath: uploads.getRelativePath(targetPath),
+        mimetype: atta.mimetype,
+        thumbfilepath: uploads.getRelativePath(thumb.path),
+        thumbmimetype: thumb.mimetype,
+      };
+
+      // Update attachment
+      dal.change(updateParams, (errc) => {
+        if (errc) {
+          return next(errc);
+        }
+
+        return res.json({
+          attachment: Object.assign({}, atta, updateParams),
+        });
+      });
     });
   });
 };
 
-exports.remove = function (req, res, next) {
+exports.remove = (req, res, next) => {
   // Remove an attachment
-  var key = req.attachment.key;
+  const key = req.attachment.key;
 
   dal.remove({
     key: key,
-  }, function (err) {
+  }, (err) => {
     if (err) {
       return next(err);
     }
