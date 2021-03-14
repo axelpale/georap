@@ -1,17 +1,24 @@
 
 const dal = require('./dal');
 const lib = require('./lib');
+const urls = require('./urls');
 const status = require('http-status-codes');
 const uploads = require('../../../services/uploads');
 
 exports.get = (req, res) => {
   // Fetch single attachment.
   // Already feched but here it is a good place to strip any unnecesary data.
-  return res.json(req.attachment);
+  const attachmentWithUrls = urls.complete(req.attachment);
+  return res.json(attachmentWithUrls);
 };
 
 exports.rotateImage = (req, res, next) => {
   // Try to rotate photo attachment.
+  //
+  // Response with JSON
+  //   {
+  //     attachment: <attachment with full urls>
+  //   }
   //
   const atta = req.attachment;
 
@@ -69,8 +76,11 @@ exports.rotateImage = (req, res, next) => {
           return next(errc);
         }
 
+        const updatedAttachment = Object.assign({}, atta, updateParams);
+        const attachmentWithUrls = urls.complete(updatedAttachment);
+
         return res.json({
-          attachment: Object.assign({}, atta, updateParams),
+          attachment: attachmentWithUrls,
         });
       });
     });

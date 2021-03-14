@@ -3,6 +3,7 @@ const asyn = require('async');
 const status = require('http-status-codes');
 const keyPattern = require('./lib/keyPattern');
 const uploads = require('../../services/uploads');
+const urls = require('./attachment/urls');
 
 // Setup
 const MAX_FILES = 10;
@@ -22,6 +23,11 @@ exports.create = (req, res, next) => {
   // Create attachments.
   //
   // At least one file is required.
+  //
+  // Response with JSON
+  //   {
+  //     attachments: [<attachment with urls>]
+  //   }
   //
   const username = req.user.name;
 
@@ -67,8 +73,11 @@ exports.create = (req, res, next) => {
       if (errf) {
         return next(errf);
       }
+
+      const attachmentsWithUrls = attachments.map(att => urls.complete(att));
+
       return res.json({
-        attachments: attachments,
+        attachments: attachmentsWithUrls,
       });
     });
   });
@@ -79,8 +88,11 @@ exports.getAll = (req, res, next) => {
     if (err) {
       return next(err);
     }
+
+    const attachmentsWithUrls = attachments.map(att => urls.complete(att));
+
     return res.json({
-      attachments: attachments,
+      attachments: attachmentsWithUrls,
     });
   });
 };
@@ -104,8 +116,11 @@ exports.getMany = (req, res, next) => {
     if (err) {
       return next(err);
     }
+
+    const attachmentsWithUrls = attachments.map(att => urls.complete(att));
+
     return res.json({
-      attachments: attachments,
+      attachments: attachmentsWithUrls,
     });
   });
 };
