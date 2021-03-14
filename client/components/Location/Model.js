@@ -3,7 +3,6 @@
 var emitter = require('component-emitter');
 var models = require('tresdb-models');
 var EventsModel = require('./Events/Model');
-var entriesModel = require('./Entries/model');
 var locations = tresdb.stores.locations;
 
 module.exports = function (rawLoc) {
@@ -34,7 +33,7 @@ module.exports = function (rawLoc) {
 
     // For entries model
     if (ev.type.startsWith('location_entry_')) {
-      entriesModel.forward(rawLoc.entries, ev);
+      models.entries.forward(rawLoc.entries, ev);
       // self.emit('location_entry_event', ev);
     }
 
