@@ -14,7 +14,7 @@ module.exports = {
     // The name of the bundle and its source maps.
     filename: 'app.bundle.js',
     // The name of the chunks
-    chunkFilename: '[name].js'
+    chunkFilename: '[id]-[name].js'
   },
 
   module: {
