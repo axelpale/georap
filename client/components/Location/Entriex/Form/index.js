@@ -86,6 +86,9 @@ module.exports = function (location, entry) {
     $elems.cancelBtn.click(function () {
       self.emit('exit');
     });
+
+    // Focus
+    children.markdown.focus();
   };
 
   self.unbind = function () {

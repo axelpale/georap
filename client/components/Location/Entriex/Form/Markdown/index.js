@@ -36,6 +36,15 @@ module.exports = function (location, entry) {
     return '';
   };
 
+  this.focus = function () {
+    if ($elems.textarea) {
+      $elems.textarea.focus();
+      // Text cursor to text end.
+      $elems.textarea.prop('selectionStart', $elems.textarea.val().length);
+      $elems.textarea.prop('selectionEnd', $elems.textarea.val().length);
+    }
+  };
+
   this.unbind = function () {
     ui.offAll($elems);
   };
