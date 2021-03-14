@@ -24,12 +24,25 @@ exports.createAttachments = function (form, callback) {
 };
 
 exports.rotateImage = function (key, deg, callback) {
+  // Parameters:
+  //   key
+  //     attachment key
+  //   deg
+  //     integer, rotation in degrees
+  //   callback
+  //     function (err, updatedAttachment)
+  //
   return postJSON({
     url: '/api/attachments/' + key,
     data: {
       degrees: deg,
     },
-  }, callback);
+  }, function (err, response) {
+    if (err) {
+      return callback(err);
+    }
+    return callback(null, response.attachment);
+  });
 };
 
 exports.removeAttachment = function (key, callback) {
