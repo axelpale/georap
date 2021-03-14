@@ -17,6 +17,9 @@ module.exports = function (attachment) {
     $mount.find('.form-attachment-down').click(function () {
       self.emit('down');
     });
+    $mount.find('.form-attachment-remove').click(function () {
+      self.emit('remove');
+    });
   };
 
   this.unbind = function () {

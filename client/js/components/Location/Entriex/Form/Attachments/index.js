@@ -35,6 +35,11 @@ module.exports = function (entry, attachments) {
           $attContainer.next('.form-attachment-container')
         );
       });
+      children[att.key].on('remove', function () {
+        children[att.key].unbind();
+        delete children[att.key];
+        $attContainer.remove();
+      });
     };
 
     var appendAttachmentUpload = function (fileupload) {
