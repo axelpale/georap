@@ -1,5 +1,6 @@
 var template = require('./template.ejs');
 var entryModel = require('tresdb-models').entry;
+var AttachmentsView = require('./Attachments');
 var CommentsView = require('./Comments');
 var FormView = require('../Form');
 var FormAdminView = require('../FormAdmin');
@@ -36,6 +37,9 @@ module.exports = function (location, entry) {
       images: entryModel.getImages(entry),
       nonImages: entryModel.getNonImages(entry),
     }));
+
+    children.attachments = new AttachmentsView(entry, entry.attachments);
+    children.attachments.bind($mount.find('.entry-attachments-container'));
 
     children.comments = new CommentsView(entry);
     children.comments.bind($mount.find('.entry-comments-container'));
