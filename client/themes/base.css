@@ -309,6 +309,33 @@ html, body {
 
 /* Entries */
 
+.tresdb-disabled {
+  color: #999999;
+}
+
+.tresdb-entry .panel-body,
+.tresdb-entry .comment-message {
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+}
+
+.tresdb-entry .panel-body > p:last-child {
+  margin-bottom: 0px;
+}
+
+.tresdb-entry .pull-right button.entry-form-open,
+.tresdb-entry .pull-right button.comment-form-open {
+  margin: -5px -9px 0 0;
+}
+
+time {
+  text-decoration: underline;
+}
+
+.entry-markdown-group {
+  margin-bottom: 2.6rem;
+}
+
 .entry-image-body {
   position: relative;
   padding: 0px;
@@ -343,32 +370,27 @@ html, body {
   border-radius: 14px;
 }
 
-.tresdb-disabled {
-  color: #999999;
+.entry-images-viewer-container {
+  margin-bottom: 0.62rem;
 }
 
-.tresdb-entry .panel-body,
-.tresdb-entry .comment-message {
-  overflow-wrap: break-word;
-  word-wrap: break-word;
+.entry-images-browser img {
+  display: inline-block;
+  object-fit: cover;
+  width: 8.7rem;
+  height: 8.7rem;
+  cursor: pointer;
+  opacity: 0.62;
+}
+.entry-images-browser img.active {
+  width: 11rem;
+  height: 11rem;
+  opacity: 1;
 }
 
-.tresdb-entry .panel-body > p:last-child {
-  margin-bottom: 0px;
-}
+/* Entries END */
 
-.tresdb-entry .pull-right button.entry-form-open,
-.tresdb-entry .pull-right button.comment-form-open {
-  margin: -5px -9px 0 0;
-}
-
-time {
-  text-decoration: underline;
-}
-
-.entry-markdown-group {
-  margin-bottom: 2.6rem;
-}
+/* Entry Form and Uploader */
 
 .form-attachment img {
   object-fit: cover;
@@ -388,10 +410,6 @@ li.form-attachment-container:first-child img {
 .form-attachment .form-attachment-filename {
   margin-bottom: 1rem;
 }
-
-/* Entries END */
-
-/* Uploader */
 
 .uploader-container {
   background-color: #f5f5f5;
