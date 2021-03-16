@@ -1,0 +1,8 @@
+<div class="entry-images-browser">
+  <% attachments.forEach(function (attachment) { %>
+  <img
+    src="<%= attachment.thumburl %>"
+    title="<%= attachment.filename %>"
+    data-attachment-key="<%= attachment.key %>">
+  <% }); %>
+</div>

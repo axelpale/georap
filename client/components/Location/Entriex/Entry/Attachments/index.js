@@ -1,6 +1,8 @@
 // View for attachment browsing.
-var AttachmentView = require('./Attachment');
+var FilesView = require('./Files');
+var ImagesView = require('./Images');
 var template = require('./template.ejs');
+var attachmentsModel = require('tresdb-models').attachments;
 var ui = require('tresdb-ui');
 
 module.exports = function (entry, attachments) {
@@ -11,23 +13,25 @@ module.exports = function (entry, attachments) {
 
   this.bind = function ($mountEl) {
     $mount = $mountEl;
+
+    if (attachments.length === 0) {
+      // No need to render anything
+      return;
+    }
+
     $mount.html(template({}));
 
-    $elems.list = $mount.find('.entry-attachments-list');
+    $elems.files = $mount.find('.entry-files-container');
+    $elems.images = $mount.find('.entry-images-container');
 
-    var appendAttachment = function (att) {
-      // Container for attachment form
-      var $attContainer = $('<li></li>');
-      $attContainer.addClass([
-        'list-group-item',
-        'form-attachment-container',
-      ]);
-      $elems.list.append($attContainer);
-      children[att.key] = new AttachmentView(att);
-      children[att.key].bind($attContainer);
-    };
+    var files = attachmentsModel.getNonImages(attachments);
+    var images = attachmentsModel.getImages(attachments);
 
-    attachments.forEach(appendAttachment);
+    children.files = new FilesView(files);
+    children.files.bind($elems.files);
+
+    children.images = new ImagesView(images);
+    children.images.bind($elems.images);
   };
 
   this.unbind = function () {

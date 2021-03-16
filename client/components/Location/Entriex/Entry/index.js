@@ -34,8 +34,6 @@ module.exports = function (location, entry) {
       timestamp: ui.timestamp(entry.time),
       hasMarkdown: entryModel.hasMarkdown(entry),
       markdownHtml: ui.markdownToHtml(entry.markdown),
-      images: entryModel.getImages(entry),
-      nonImages: entryModel.getNonImages(entry),
     }));
 
     children.attachments = new AttachmentsView(entry, entry.attachments);

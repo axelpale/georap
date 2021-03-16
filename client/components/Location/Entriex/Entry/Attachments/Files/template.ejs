@@ -1,0 +1,17 @@
+<div class="entry-files <%= nonImages.length > 0 ? '' : 'hidden' %>">
+  <% attachments.forEach(function (attachment) { %>
+    <% if (attachment.mimetype === 'application/pdf') { %>
+      <div class="panel-body">
+        <span class="glyphicon glyphicon-paperclip"></span> <a href="<%= attachment.url %>" target="_blank"><%= attachment.filename %></a>
+      </div>
+    <% } else if (attachment.mimetype === 'text/plain') { %>
+      <div class="panel-body">
+        <span class="glyphicon glyphicon-paperclip"></span> <a href="<%= attachment.url %>" target="_blank"><%= attachment.filename %></a>
+      </div>
+    <% } else { %>
+      <div class="panel-body">
+        <span class="glyphicon glyphicon-paperclip"></span> <a href="<%= attachment.url %>" download="<%= attachment.filename %>"><%= attachment.filename %></a>
+      </div>
+    <% } %>
+  <% }); %>
+</div>

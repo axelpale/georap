@@ -6,15 +6,28 @@ module.exports = function (attachment) {
 
   emitter(this);
 
+  var $mount = null;
   var $elems = {};
 
-  this.bind = function ($mount) {
+  this.bind = function ($mountEl) {
+    $mount = $mountEl;
     $mount.html(template({
       attachment: attachment,
     }));
   };
 
+  this.update = function (att) {
+    if ($mount) {
+      $mount.html(template({
+        attachment: att,
+      }));
+    }
+  };
+
   this.unbind = function () {
-    ui.offAll($elems);
+    if ($mount) {
+      ui.offAll($elems);
+      $mount = null;
+    }
   };
 };
