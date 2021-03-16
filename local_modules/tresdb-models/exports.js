@@ -1,7 +1,8 @@
+/* eslint-disable no-var */
 // Indices for values in config arrays
-var NAME = 0;
-var COORD_SYS = 2;
-var BOUNDS = 3;
+var NAME = 0
+var COORD_SYS = 2
+var BOUNDS = 3
 
 exports.getSimplified = function (exportServices, urlTemplates) {
   // Exports services can be referenced by a link.
@@ -80,7 +81,7 @@ exports.getServiceUrls = function (simplifiedServices, geoms) {
   //   array of { name, url }
   //
   return simplifiedServices.map(function (es) {
-    var altCoords = geoms[es.system];
+    var altCoords = geoms[es.system]
 
     var url = es.template({
       longitude: altCoords[0],
