@@ -1,6 +1,7 @@
 /* eslint-disable no-var */
 
 exports.attachment = require('./attachment')
+exports.attachments = require('./attachments')
 exports.comment = require('./comment')
 exports.comments = require('./comments')
 exports.entries = require('./entries')

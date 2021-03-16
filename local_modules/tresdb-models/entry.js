@@ -2,6 +2,7 @@
 var bus = require('./lib/bus')
 var forward = require('./lib/forward')
 var commentsModel = require('./comments')
+var attachmentsModel = require('./attachments')
 
 var forwardComments = function (entry, ev) {
   commentsModel.forward(entry.comments, ev)
@@ -74,17 +75,11 @@ exports.getImage = function (entry) {
 }
 
 exports.getImages = function (entry) {
-  var HEAD = 6
-  return entry.attachments.filter(function (at) {
-    return at.mimetype.substr(0, HEAD) === 'image/'
-  })
+  return attachmentsModel.getImages(entry.attachments)
 }
 
 exports.getNonImages = function (entry) {
-  var HEAD = 6
-  return entry.attachments.filter(function (at) {
-    return at.mimetype.substr(0, HEAD) !== 'image/'
-  })
+  return attachmentsModel.getNonImages(entry.attachments)
 }
 
 exports.getComments = function (entry) {
