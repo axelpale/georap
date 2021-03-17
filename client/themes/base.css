@@ -374,6 +374,11 @@ time {
   margin-bottom: 0.62rem;
 }
 
+.entry-images-browser-container:focus {
+  /* Keyboard handling requires focus the outline is too much */
+  outline: none;
+}
+
 .entry-images-browser img {
   display: inline-block;
   object-fit: cover;
