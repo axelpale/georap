@@ -23,6 +23,10 @@ module.exports = function (attachments) {
     }));
 
     var selectImage = function (index) {
+      if (index === selectedIndex) {
+        return; // No need to reselect. Avoids flicker.
+      }
+
       if (index >= 0 && index < attachments.length) {
         selectedIndex = index;
         var selectedImage = attachments[selectedIndex];
@@ -34,8 +38,6 @@ module.exports = function (attachments) {
             el.className = '';
           }
         });
-        // Allow key events
-        $mount.focus();
         // Let Viewer know.
         self.emit('image_selected', selectedImage);
       }
@@ -55,6 +57,8 @@ module.exports = function (attachments) {
       if ('attachmentKey' in img.dataset) {
         selectImageByKey(img.dataset.attachmentKey);
       }
+      // Allow key events
+      $mount.focus();
     });
 
     // When mount has focus, enable arrow keys for navigation
