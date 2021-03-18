@@ -12,6 +12,11 @@ module.exports = function (attachments) {
 
   this.bind = function ($mountEl) {
     $mount = $mountEl;
+
+    if (attachments.length === 0) {
+      return; // No need to setup empty viewer
+    }
+
     $mount.html(template({}));
 
     $elems.viewer = $mount.find('.entry-images-viewer-container');
