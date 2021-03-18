@@ -43,7 +43,11 @@ module.exports = function (attachment) {
           ui.show($err);
           $err.html('Attachment rotation failed: ' + err.message);
         }
-        // Update image.
+        // Rotation creates a new attachment.
+        attachment = att;
+        // Update key in dom so that entry save can read it.
+        $mount.find('.form-attachment').attr('data-attachment-key', att.key);
+        // Update image. Filename stays the same.
         $mount.find('.form-attachment-thumbnail').html(thumbnailTemplate({
           attachment: att,
         }));
