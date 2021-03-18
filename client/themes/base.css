@@ -397,7 +397,10 @@ time {
 
 /* Entry Form and Uploader */
 
-.form-attachment img {
+.form-attachment-thumbnail {
+  display: inline;
+}
+.form-attachment-thumbnail img {
   object-fit: cover;
   width: 8.7rem;
   height: 8.7rem;

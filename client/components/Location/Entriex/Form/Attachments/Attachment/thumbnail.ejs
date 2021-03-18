@@ -1,0 +1,11 @@
+<% if (attachment.mimetype.startsWith('image/')) { %>
+<img src="<%= attachment.thumburl %>" title="<%= attachment.filename %>">
+<% } else if (attachment.mimetype === 'application/pdf') { %>
+<img src="/assets/images/thumbnails/pdf.png" title="<%= attachment.filename %>">
+<% } else if (attachment.mimetype === 'application/vnd.ms-excel') { %>
+<img src="/assets/images/thumbnails/xls.png" title="<%= attachment.filename %>">
+<% } else if (attachment.mimetype === 'text/plain') { %>
+<img src="/assets/images/thumbnails/txt.png" title="<%= attachment.filename %>">
+<% } else { %>
+<img src="/assets/images/thumbnails/file.png" title="<%= attachment.filename %>">
+<% } %>

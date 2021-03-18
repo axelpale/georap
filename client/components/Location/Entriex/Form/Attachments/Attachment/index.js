@@ -1,4 +1,5 @@
 var template = require('./template.ejs');
+var thumbnailTemplate = require('./thumbnail.ejs');
 var ui = require('tresdb-ui');
 var emitter = require('component-emitter');
 var attachmentsApi = tresdb.stores.attachments;
@@ -13,6 +14,9 @@ module.exports = function (attachment) {
   this.bind = function ($mount) {
     $mount.html(template({
       attachment: attachment,
+      thumbnailHtml: thumbnailTemplate({
+        attachment: attachment,
+      }),
     }));
 
     $elems.up = $mount.find('.form-attachment-up');
@@ -39,8 +43,10 @@ module.exports = function (attachment) {
           ui.show($err);
           $err.html('Attachment rotation failed: ' + err.message);
         }
-        // Update image. Leave filename as is.
-        $mount.find('img').attr('src', att.thumburl);
+        // Update image.
+        $mount.find('.form-attachment-thumbnail').html(thumbnailTemplate({
+          attachment: att,
+        }));
       });
     });
   };
