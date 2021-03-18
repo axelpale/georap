@@ -1,4 +1,5 @@
 const dal = require('./dal');
+const attachmentDal = require('./attachment/dal');
 const asyn = require('async');
 const status = require('http-status-codes');
 const keyPattern = require('./lib/keyPattern');
@@ -54,7 +55,7 @@ exports.create = (req, res, next) => {
           return finish(errt);
         }
 
-        dal.create({
+        attachmentDal.create({
           username: username,
           filepath: uploads.getRelativePath(file.path),
           mimetype: file.mimetype,

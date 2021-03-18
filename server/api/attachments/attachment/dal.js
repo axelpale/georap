@@ -1,4 +1,6 @@
-var db = require('tresdb-db');
+const path = require('path');
+const db = require('tresdb-db');
+const keygen = require('tresdb-key');
 
 exports.get = function (key, callback) {
   // Find single attachment
@@ -23,6 +25,55 @@ exports.get = function (key, callback) {
   });
 };
 
+exports.create = (params, callback) => {
+  // Parameters:
+  //   params:
+  //     username
+  //       string
+  //     time
+  //       optional ISO datetime string (see db.timestamp). Defaults to now.
+  //     filepath
+  //       string or null
+  //       The relative path of the file in the uploads dir
+  //     mimetype
+  //       string or null
+  //     thumbfilepath
+  //       string or null
+  //       The relative path of the thumbnail file in the uploads dir
+  //     thumbmimetype
+  //       string or null
+  //   callback
+  //     function (err, attachment)
+  //
+
+  if (typeof params.filepath !== 'string') {
+    // No attachment given
+    return callback(new Error('Missing attachment data'));
+  }
+
+  const attachment = {
+    key: keygen.generate(),
+    user: params.username,
+    time: params.time ? params.time : db.timestamp(),
+    deleted: false,
+    filename: path.basename(params.filepath),
+    filepath: params.filepath,
+    mimetype: params.mimetype,
+    thumbfilepath: params.thumbfilepath,
+    thumbmimetype: params.thumbmimetype,
+    data: {}, // For possible future metadata
+  };
+
+  db.collection('attachments').insertOne(attachment, (err) => {
+    if (err) {
+      // TODO key already exists
+      return callback(err);
+    }
+
+    return callback(null, attachment);
+  });
+};
+
 exports.change = function (params, callback) {
   // Parameters:
   //   params:
@@ -35,9 +86,9 @@ exports.change = function (params, callback) {
   //   callback
   //     function (err)
   //
-  var filter = { key: params.key };
+  const filter = { key: params.key };
 
-  var update = {
+  const update = {
     $set: {
       filepath: params.filepath,
       mimetype: params.mimetype,
