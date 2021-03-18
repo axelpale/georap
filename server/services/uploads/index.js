@@ -91,8 +91,10 @@ exports.getRelativePath = function (absolutePath) {
   return path.relative(config.uploadDir, absolutePath);
 };
 
-exports.makePermanent = function (filePath, callback) {
-  // Copy a file to the permanent upload directory.
+exports.preparePermanent = function (filePath, callback) {
+  // Generate a new permanent path and
+  // prepare an upload directory for the given file.
+  // Do not copy the file or alter it any way.
   //
   // Parameters:
   //   filePath
@@ -100,7 +102,6 @@ exports.makePermanent = function (filePath, callback) {
   //   callback
   //     function (err, newFilePath)
   //
-
   if (typeof filePath !== 'string') {
     throw new Error('invalid filePath:' + filePath);
   }
@@ -115,23 +116,43 @@ exports.makePermanent = function (filePath, callback) {
     var sanename = sanitizeFilename(fname);
     var newpath = path.resolve(absDirPath, sanename);
 
+    return callback(null, newpath);
+  });
+};
+
+exports.makePermanent = function (filePath, callback) {
+  // Copy a file to the permanent upload directory.
+  //
+  // Parameters:
+  //   filePath
+  //     absolute file path or URL to source file
+  //   callback
+  //     function (err, newFilePath)
+  //
+  exports.preparePermanent(filePath, function (err, newPath) {
+    if (err) {
+      return callback(err);
+    }
+
+    var dirPath = path.dirname(newPath);
+
     if (filePath.startsWith('http')) {
       console.log('downloading', filePath);
-      console.log('saving into', newpath);
-      download(filePath, absDirPath, {
+      console.log('saving into', newPath);
+      download(filePath, dirPath, {
         timeout: 5000, // ms
       }).then(function () {
-        return callback(null, newpath);
+        return callback(null, newPath);
       }).catch(function (errd) {
         return callback(errd);
       });
     } else {
-      fse.copy(filePath, newpath, function (errm) {
+      fse.copy(filePath, newPath, function (errm) {
         if (errm) {
           return callback(errm);
         }
 
-        return callback(null, newpath);
+        return callback(null, newPath);
       });
     }
   });
