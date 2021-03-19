@@ -59,6 +59,13 @@ var LocationView = function (id, query) {
       ui.hide($loading);
 
       if (err) {
+        if (err.message && err.message.toLowerCase() === 'not found') {
+          console.warn('Location ' + id + ' not found');
+          ui.show($mount.find('.location-missing-error'));
+          return;
+        }
+        console.log('error.message', err.message);
+        console.table(err);
         console.error(err);
         return;
       }
