@@ -50,6 +50,15 @@ module.exports = function (location, entries) {
         children[id].update(ev);
       }
     });
+
+    bus.on('location_entry_removed', function (ev) {
+      var id = ev.data.entryId;
+      if (id in children) {
+        children[id].unbind();
+        delete children[id];
+        $('#entry-' + id).remove();
+      }
+    });
   };
 
   this.unbind = function () {
