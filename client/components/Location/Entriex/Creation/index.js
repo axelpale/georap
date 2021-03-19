@@ -24,8 +24,7 @@ module.exports = function (location) {
       self.emit('exit');
     });
     children.form.on('success', function () {
-      // TODO
-      console.log('success');
+      self.emit('exit');
     });
   };
 

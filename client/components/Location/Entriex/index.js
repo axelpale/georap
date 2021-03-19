@@ -14,16 +14,34 @@ module.exports = function (location, entries) {
 
   this.bind = function ($mount) {
 
-    var appendEntry = function (entry) {
+    var appendEntry = function (entry, prepend) {
+      // Parameters
+      //   entry
+      //     entry object
+      //   prepend
+      //     set true to add to beginning, false to add to bottom
+      //
       var id = entry._id;
       children[id] = new EntryView(location, entry);
       // New container for entry
-      $mount.append('<div id="entry-' + id + '"></div>');
+      var tmpl = '<div id="entry-' + id + '"></div>';
+      if (prepend) {
+        $mount.prepend(tmpl);
+      } else {
+        $mount.append(tmpl);
+      }
       children[id].bind($('#entry-' + id));
     };
 
     entries.forEach(function (entry) {
-      appendEntry(entry);
+      appendEntry(entry, false);
+    });
+
+    bus.on('location_entry_created', function (ev) {
+      var id = ev.data.entryId;
+      if (!(id in children)) {
+        appendEntry(ev.data.entry, true);
+      }
     });
 
     bus.on('location_entry_changed', function (ev) {
