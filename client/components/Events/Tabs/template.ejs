@@ -1,0 +1,5 @@
+<ul class="nav nav-tabs latest-tabs">
+  <% Object.keys(tabs).forEach(function (tab) { %>
+  <li role="presentation" class="latest-tab-<%= tab %>"><a href="#<%= tab %>"><%= tab %></a></li>
+  <% }); %>
+</ul>

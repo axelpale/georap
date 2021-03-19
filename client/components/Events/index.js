@@ -2,6 +2,7 @@
 
 var emitter = require('component-emitter');
 var prettyEvents = require('pretty-events');
+var TabsView = require('./Tabs');
 var template = require('./template.ejs');
 var listTemplate = require('./list.ejs');
 var ui = require('tresdb-ui');
@@ -47,6 +48,13 @@ module.exports = function () {
   // Init
   var self = this;
   emitter(self);
+  var children = {};
+
+  // var tabs = {
+  //   'activity': 'activity view',
+  //   'locations': 'locations view',
+  //   'posts': 'posts view',
+  // };
 
   // Collect location data in events. Can be used to display
   // markers associated with the events.
@@ -119,6 +127,10 @@ module.exports = function () {
     // Update rendered on change
     events.on('events_changed', updateView);
 
+    // Set up tabs
+    children.tabs = new TabsView();
+    children.tabs.bind($mount.find('.latest-tabs-container'));
+
     // Select associated marker by clicking an event or hovering cursor on it.
     // Prevent duplicate binds
     var $list = $('#tresdb-events-list');
@@ -163,6 +175,8 @@ module.exports = function () {
     Object.keys(fetchedMarkerLocations).forEach(function (lid) {
       delete fetchedMarkerLocations[lid];
     });
+    // Other stuff
+    ui.unbindAll(children);
   };
 
 };
