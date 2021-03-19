@@ -8,6 +8,7 @@ module.exports = (params, callback) => {
   //     locationId
   //     locationName
   //     username
+  //     entry
   //   callback
   //     function (err)
   //
@@ -19,6 +20,7 @@ module.exports = (params, callback) => {
     locationName: params.locationName,
     data: {
       entryId: params.entryId,
+      entry: params.entry,
     },
   };
 

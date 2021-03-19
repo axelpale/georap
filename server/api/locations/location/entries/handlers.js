@@ -144,14 +144,15 @@ exports.remove = (req, res, next) => {
 
   const locationId = req.location._id;
   const locationName = req.location.name;
-  const entryId = req.entry._id;
   const username = req.user.name;
+  const entry = req.entry;
 
   dal.removeLocationEntry({
     locationId: locationId,
     locationName: locationName,
-    entryId: entryId,
+    entryId: entry._id,
     username: username,
+    entry: entry,
   }, (err) => {
     if (err) {
       return next(err);
