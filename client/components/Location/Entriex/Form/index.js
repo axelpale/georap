@@ -57,6 +57,8 @@ module.exports = function (location, entry) {
     children.error = new ErrorView();
     children.error.bind($mount.find('.form-error-container'));
 
+    $elems.progress = $mount.find('.form-progress');
+
     $elems.saveBtn = $mount.find('.entry-form-save');
     $elems.saveBtn.click(function () {
       // Create new entry or update the existing
@@ -71,6 +73,8 @@ module.exports = function (location, entry) {
       };
 
       var onError = function (msg) {
+        // Hide progress bar
+        ui.hide($elems.progress);
         // Show alert
         children.error.update(msg);
         // Enable save
@@ -78,6 +82,9 @@ module.exports = function (location, entry) {
       };
 
       var onSuccess = function () {
+        // Hide progress bar
+        ui.hide($elems.progress);
+        // Inform parents
         self.emit('success');
       };
 
@@ -85,6 +92,9 @@ module.exports = function (location, entry) {
       if (entryData.markdown.length + entryData.attachments.length === 0) {
         return onError('Empty posts are not allowed.');
       }
+
+      // Display progress bar
+      ui.show($elems.progress);
 
       if (isNew) {
         entries.create(location._id, entryData, function (err) {
