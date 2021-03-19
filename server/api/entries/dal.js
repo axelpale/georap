@@ -81,6 +81,8 @@ exports.createLocationEntry = (params, callback) => {
 
     newEntry._id = newEntryId;
     const eventParams = {
+      username: params.username,
+      locationId: params.locationId,
       locationName: params.locationName,
       entry: newEntry,
     };
