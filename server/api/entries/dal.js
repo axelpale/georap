@@ -27,6 +27,68 @@ const insertOne = (entry, callback) => {
 
 // Public methods
 
+exports.createLocationEntry = (params, callback) => {
+  // Parameters:
+  //   params:
+  //     locationId
+  //       ObjectId
+  //     locationName
+  //       string, for event
+  //     username
+  //       string
+  //     markdown
+  //       optional string or null
+  //     attachments
+  //       optional array of attachment keys
+  //     flags
+  //       optional array of instance-specific flags e.g. 'visit'
+  //   callback
+  //     function (err, insertedId)
+  //
+  const sanitizedMarkdown = purifyMarkdown(params.markdown).trim();
+
+  if (typeof params.markdown !== 'string') {
+    params.markdown = '';
+  }
+  if (typeof params.attachments !== 'object') {
+    params.attachments = [];
+  }
+  if (typeof params.flags !== 'object') {
+    params.flags = [];
+  }
+
+  const newEntry = {
+    user: params.username,
+    time: db.timestamp(),
+    locationId: params.locationId,
+    deleted: false,
+    published: false,
+    markdown: sanitizedMarkdown,
+    attachments: params.attachments,
+    comments: [],
+    flags: params.flags,
+  };
+
+  insertOne(newEntry, (err, newEntryId) => {
+    if (err) {
+      return callback(err);
+    }
+
+    newEntry._id = newEntryId;
+    const eventParams = {
+      locationName: params.locationName,
+      entry: newEntry,
+    };
+
+    eventsDal.createLocationEntryCreated(eventParams, (errr) => {
+      if (errr) {
+        return callback(errr);
+      }
+      return callback(null, newEntry);
+    });
+  });
+};
+
 exports.changeLocationEntry = (params, callback) => {
   // Modify entry markdown, attachments, or flags.
   //
@@ -95,69 +157,6 @@ exports.changeLocationEntry = (params, callback) => {
     });
   });
 };
-
-exports.createLocationEntry = (params, callback) => {
-  // Parameters:
-  //   params:
-  //     locationId
-  //       ObjectId
-  //     locationName
-  //       string, for event
-  //     username
-  //       string
-  //     markdown
-  //       optional string or null
-  //     attachments
-  //       optional array of attachment keys
-  //     flags
-  //       optional array of instance-specific flags e.g. 'visit'
-  //   callback
-  //     function (err, insertedId)
-  //
-  const sanitizedMarkdown = purifyMarkdown(params.markdown).trim();
-
-  if (typeof params.markdown !== 'string') {
-    params.markdown = '';
-  }
-  if (typeof params.attachments !== 'object') {
-    params.attachments = [];
-  }
-  if (typeof params.flags !== 'object') {
-    params.flags = [];
-  }
-
-  const newEntry = {
-    user: params.username,
-    time: db.timestamp(),
-    locationId: params.locationId,
-    deleted: false,
-    published: false,
-    markdown: sanitizedMarkdown,
-    attachments: params.attachments,
-    comments: [],
-    flags: params.flags,
-  };
-
-  insertOne(newEntry, (err, newEntryId) => {
-    if (err) {
-      return callback(err);
-    }
-
-    newEntry._id = newEntryId;
-    const eventParams = {
-      locationName: params.locationName,
-      entry: newEntry,
-    };
-
-    eventsDal.createLocationEntryCreated(eventParams, (errr) => {
-      if (errr) {
-        return callback(errr);
-      }
-      return callback(null, newEntry);
-    });
-  });
-};
-
 
 exports.filterUniqueLocationEntries = function (args, callback) {
   // Append given entries into the given location if they do not yet exist.
