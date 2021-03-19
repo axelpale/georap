@@ -34,10 +34,12 @@ module.exports = function (location, entry) {
   var self = this;
   emitter(self);
 
+  var $mount = null;
   var $elems = {};
   var children = {};
 
-  self.bind = function ($mount) {
+  self.bind = function ($mountEl) {
+    $mount = $mountEl;
 
     var isNew = !('_id' in entry);
 
@@ -64,11 +66,7 @@ module.exports = function (location, entry) {
       // Prevent double click
       $elems.saveBtn.attr('disabled', 'disabled');
 
-      var entryData = {
-        markdown: children.markdown.getMarkdown().trim(),
-        attachments: children.attachments.getAttachmentKeys(),
-        flags: [], // TODO children.flags.getFlags(),
-      };
+      var entryData = self.getEntryData();
 
       var onError = function (msg) {
         // Hide progress bar
@@ -120,8 +118,41 @@ module.exports = function (location, entry) {
     children.markdown.focus();
   };
 
+  self.getEntryData = function (opts) {
+    // Return entryData object collected from the form.
+    //
+    // Parameters
+    //   opts
+    //     complete
+    //       Set true to get complete attachments instead of keys.
+    //       False by default.
+    //
+    if (!opts) {
+      opts = {};
+    }
+
+    if ($mount) {
+      var attachments;
+      if (opts.complete) {
+        attachments = children.attachments.getAttachments();
+      } else {
+        attachments = children.attachments.getAttachmentKeys();
+      }
+
+      return {
+        markdown: children.markdown.getMarkdown().trim(),
+        attachments: attachments,
+        flags: [], // TODO children.flags.getFlags(),
+      };
+    }
+    return null;
+  };
+
   self.unbind = function () {
-    ui.offAll($elems);
-    ui.unbindAll(children);
+    if ($mount) {
+      ui.offAll($elems);
+      ui.unbindAll(children);
+      $mount = null;
+    }
   };
 };
