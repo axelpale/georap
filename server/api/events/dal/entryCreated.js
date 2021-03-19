@@ -43,7 +43,8 @@ module.exports = (params, callback) => {
 
     // Convert attachment keys to attachments.
     // This prevents additional requests from clients.
-    attachmentsDal.getMany(params.entry.attachments, (merr, completeAtts) => {
+    const attachmentKeys = params.entry.attachments;
+    attachmentsDal.getManyComplete(attachmentKeys, (merr, completeAtts) => {
       if (merr) {
         return callback(merr);
       }
