@@ -19,17 +19,10 @@
       <button type="button" class="btn btn-primary entry-form-save">Save</button>
     </div>
     <% if (!isNew) { %>
-    <button id="entry-<%= entry._id %>-delete-ensure" type="button" class="btn btn-danger">Delete post...</button>
+      <!-- Delete confirmation -->
+    <div class="form-remove-container"></div>
     <% } %>
   </div>
-
-  <% if (!isNew) { %>
-  <!-- Delete confirmation -->
-  <div id="entry-<%= entry._id %>-delete-final" class="form-group hidden">
-    Are you sure?
-    <button id="entry-<%= entry._id %>-delete" type="button" class="btn btn-danger">Yes, delete!</button>
-  </div>
-  <% } %>
 
   <% if (!isNew) { %>
   <hr>

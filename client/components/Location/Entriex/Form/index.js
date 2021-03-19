@@ -10,6 +10,7 @@ var template = require('./template.ejs');
 var AttachmentsView = require('./Attachments');
 var MarkdownView = require('./Markdown');
 var ErrorView = require('./Error');
+var RemoveView = require('./Remove');
 var ui = require('tresdb-ui');
 var emitter = require('component-emitter');
 var entries = tresdb.stores.entries;
@@ -109,13 +110,24 @@ module.exports = function (location, entry) {
       }
     });
 
+    // Focus to text input
+    children.markdown.focus();
+
     $elems.cancelBtn = $mount.find('.entry-form-cancel');
     $elems.cancelBtn.click(function () {
       self.emit('exit');
     });
 
-    // Focus
-    children.markdown.focus();
+    if (!isNew) {
+      children.remove = new RemoveView(location, entry);
+      children.remove.bind($mount.find('.form-remove-container'));
+      children.remove.on('error', function (err) {
+        children.error.update(err.message);
+      });
+      children.remove.once('success', function () {
+        self.emit('exit');
+      });
+    }
   };
 
   self.getEntryData = function (opts) {
