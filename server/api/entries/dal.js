@@ -45,6 +45,11 @@ exports.createLocationEntry = (params, callback) => {
   //   callback
   //     function (err, insertedId)
   //
+
+  if (!params.locationId || !params.username) {
+    throw new Error('Missing parameter: locationId or username');
+  }
+
   const sanitizedMarkdown = purifyMarkdown(params.markdown).trim();
 
   if (typeof params.markdown !== 'string') {
