@@ -25,25 +25,6 @@ const insertOne = (entry, callback) => {
   });
 };
 
-const removeOne = (entryId, callback) => {
-  // Parameters
-  //   entryId
-  //     object id
-  //   callback
-  //     function (err)
-
-  const coll = db.get().collection('entries');
-  const q = { _id: entryId };
-
-  coll.deleteOne(q, {}, (err) => {
-    if (err) {
-      return callback(err);
-    }
-    return callback();
-  });
-};
-
-
 // Public methods
 
 exports.changeLocationEntry = (params, callback) => {
@@ -372,16 +353,29 @@ exports.getAllOfUser = function (username, callback) {
 
 
 exports.removeLocationEntry = function (params, callback) {
+  // Mark entry as deleted. The worker or a migration step
+  // will remove deleted entries and their attachments at some point.
+  //
   // Parameters:
   //   params
   //     entryId
   //     locationId
   //     locationName
   //     username
+  //     entry
+  //       entry object
   //   callback
   //     function (err)
   //
-  removeOne(params.entryId, function (err) {
+
+  const q = { _id: params.entryId };
+  const u = {
+    $set: {
+      deleted: true,
+    },
+  };
+
+  db.collection('entries').updateOne(q, u, function (err) {
     if (err) {
       return callback(err);
     }
