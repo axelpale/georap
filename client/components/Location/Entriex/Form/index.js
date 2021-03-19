@@ -61,33 +61,44 @@ module.exports = function (location, entry) {
     $elems.saveBtn.click(function () {
       // Create new entry or update the existing
 
+      // Prevent double click
+      $elems.saveBtn.attr('disabled', 'disabled');
+
       var entryData = {
         markdown: children.markdown.getMarkdown().trim(),
         attachments: children.attachments.getAttachmentKeys(),
         flags: [], // TODO children.flags.getFlags(),
       };
 
+      var onError = function (msg) {
+        // Show alert
+        children.error.update(msg);
+        // Enable save
+        $elems.saveBtn.removeAttr('disabled');
+      };
+
+      var onSuccess = function () {
+        self.emit('success');
+      };
+
       // Ensure non-empty content
       if (entryData.markdown.length + entryData.attachments.length === 0) {
-        children.error.update('Empty posts are not allowed.');
-        return;
+        return onError('Empty posts are not allowed.');
       }
 
       if (isNew) {
         entries.create(location._id, entryData, function (err) {
           if (err) {
-            // TODO show submit error
-            return console.log(err);
+            return onError(err.message);
           }
-          self.emit('success');
+          onSuccess();
         });
       } else {
         entries.change(location._id, entry._id, entryData, function (err) {
           if (err) {
-            // TODO
-            return console.log(err);
+            return onError(err.message);
           }
-          self.emit('success');
+          onSuccess();
         });
       }
     });
