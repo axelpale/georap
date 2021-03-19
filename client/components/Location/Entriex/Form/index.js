@@ -12,7 +12,6 @@ var MarkdownView = require('./Markdown');
 var ErrorView = require('./Error');
 var ui = require('tresdb-ui');
 var emitter = require('component-emitter');
-var account = tresdb.stores.account;
 var entries = tresdb.stores.entries;
 
 module.exports = function (location, entry) {
@@ -26,7 +25,6 @@ module.exports = function (location, entry) {
   //
   if (!entry) {
     entry = {
-      user: account.getName(),
       markdown: '',
       attachments: [],
       flags: [],
