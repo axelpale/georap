@@ -9,6 +9,7 @@
 var template = require('./template.ejs');
 var AttachmentsView = require('./Attachments');
 var MarkdownView = require('./Markdown');
+var ErrorView = require('./Error');
 var ui = require('tresdb-ui');
 var emitter = require('component-emitter');
 var account = tresdb.stores.account;
@@ -53,15 +54,24 @@ module.exports = function (location, entry) {
     children.attachments = new AttachmentsView(entry, entry.attachments);
     children.attachments.bind($mount.find('.form-attachments-container'));
 
+    children.error = new ErrorView();
+    children.error.bind($mount.find('.form-error-container'));
+
     $elems.saveBtn = $mount.find('.entry-form-save');
     $elems.saveBtn.click(function () {
       // Create new entry or update the existing
 
       var entryData = {
-        markdown: children.markdown.getMarkdown(),
+        markdown: children.markdown.getMarkdown().trim(),
         attachments: children.attachments.getAttachmentKeys(),
         flags: [], // TODO children.flags.getFlags(),
       };
+
+      // Ensure non-empty content
+      if (entryData.markdown.length + entryData.attachments.length === 0) {
+        children.error.update('Empty posts are not allowed.');
+        return;
+      }
 
       if (isNew) {
         entries.create(location._id, entryData, function (err) {
