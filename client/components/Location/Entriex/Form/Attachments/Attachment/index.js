@@ -55,6 +55,10 @@ module.exports = function (attachment) {
     });
   };
 
+  this.getAttachment = function () {
+    return attachment;
+  };
+
   this.unbind = function () {
     ui.offAll($elems);
   };

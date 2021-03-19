@@ -73,6 +73,13 @@ module.exports = function (entry, attachments) {
     children.uploader.on('fileupload', appendAttachmentUpload);
   };
 
+  this.getAttachments = function () {
+    var keys = this.getAttachmentKeys();
+    return keys.map(function (key) {
+      return children[key].getAttachment();
+    });
+  };
+
   this.getAttachmentKeys = function () {
     // Return list of attachment keys
     // To ensure correct order, read from dom
