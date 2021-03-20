@@ -22,12 +22,24 @@ module.exports = function () {
   var self = this;
   emitter(self);
   var children = {};
+  var $elems = {};
 
-  // var tabs = {
-  //   'activity': 'activity view',
-  //   'locations': 'locations view',
-  //   'posts': 'posts view',
-  // };
+  // tabHash -> filter
+  var tabs = {
+    activity: function () {
+      return true;
+    },
+    locations: function (ev) {
+      return ev.type === 'location_created';
+    },
+    posts: function (ev) {
+      return [
+        'location_entry_created',
+        'location_entry_comment_created',
+      ].indexOf(ev.type) > -1;
+    },
+  };
+  var defaultTabHash = 'activity';
 
   // Public methods
 
@@ -38,10 +50,16 @@ module.exports = function () {
     // Set up tabs
     children.tabs = new TabsView();
     children.tabs.bind($mount.find('.latest-tabs-container'));
+    var tabHash = children.tabs.getTabHash();
+    if (!(tabHash in tabs)) {
+      console.warn('No tab found:', tabHash);
+      tabHash = defaultTabHash;
+    }
 
     // Set up events
     children.activity = new ActivityView();
-    children.activity.bind($mount.find('.latest-activity-container'));
+    $elems.activity = $mount.find('.latest-activity-container');
+    children.activity.bind($elems.activity, tabs[tabHash]);
 
     // Fetch events and then apply previously recorded scroll position.
     // Then, begin recording further scrolls.
@@ -51,11 +69,20 @@ module.exports = function () {
       // Record scroll positions
       scrollRecorder.startRecording();
     });
+
+    // Tab switch filters the events.
+    children.tabs.on('tab_switch', function (hash) {
+      // DEBUG console.log('tab_switch', hash);
+      children.activity.update(tabs[hash]);
+    });
   };
 
   this.unbind = function () {
     scrollRecorder.stopRecording();
     ui.unbindAll(children);
+    ui.offAll(children);
+    children = {};
+    ui.offAll($elems);
   };
 
 };

@@ -23,7 +23,7 @@ module.exports = function () {
 
   // Public methods
 
-  self.bind = function ($mountEl) {
+  self.bind = function ($mountEl, filter) {
     $mount = $mountEl;
     $mount.html(template());
 
@@ -38,14 +38,14 @@ module.exports = function () {
 
     // Update events on any new event
     localBus.on('socket_event', function () {
-      self.update();
+      self.update(filter);
     });
 
     // Initial event fetch and list render
-    self.update();
+    self.update(filter);
   };
 
-  self.update = function () {
+  self.update = function (filter) {
     if ($mount) {
       // Reload events and render
       eventsStore.getRecent(LIST_SIZE, function (err, events) {
@@ -66,7 +66,11 @@ module.exports = function () {
         compactEvs = prettyEvents.dropEntryCommentChanged(compactEvs);
         compactEvs = prettyEvents.mergeSimilar(compactEvs);
 
-        children.events.update(compactEvs);
+        // Then filter the compact with the filter argument
+        var filteredEvs = compactEvs.filter(filter);
+
+        // Refresh the events list
+        children.events.update(filteredEvs);
 
         // Signal that the list is rendered.
         // It seems that setTimeout is required to allow the fetched events
@@ -85,6 +89,7 @@ module.exports = function () {
       localBus.off();
       // Unbind events view
       ui.unbindAll(children);
+      children = {};
     }
   };
 };

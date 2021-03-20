@@ -27,9 +27,7 @@ module.exports = function () {
     }));
 
     // Make current tab active
-    var rawHash = window.location.hash || '#';
-    var hash = rawHash.substring(1);
-    var tabClass = tabs[hash] || tabs[defaultHash];
+    var tabClass = tabs[this.getTabHash()];
     $mount.find('.latest-tab-' + tabClass).addClass('active');
 
     // Click tab to change tab
@@ -37,7 +35,7 @@ module.exports = function () {
       return function () { // receives click ev
         $mount.find('li').removeClass('active');
         $mount.find('.latest-tab-' + tabs[tabHash]).addClass('active');
-        self.emit(tabHash);
+        self.emit('tab_switch', tabHash);
         // Setting the has is unnecessary because anchors do that by default.
         // Yet, it is possible to do so:
         // window.location.hash = '#' + tabHash;
@@ -46,6 +44,12 @@ module.exports = function () {
     Object.keys(tabs).forEach(function (tabHash) {
       $mount.find('.latest-tab-' + tabs[tabHash]).click(tabSwitcher(tabHash));
     });
+  };
+
+  this.getTabHash = function () {
+    var rawHash = window.location.hash || '#';
+    var hash = rawHash.substring(1);
+    return hash || defaultHash;
   };
 
   this.unbind = function () {
