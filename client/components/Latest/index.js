@@ -3,7 +3,7 @@
 var emitter = require('component-emitter');
 var TabsView = require('./Tabs');
 var template = require('./template.ejs');
-var ActivityView = require('./Activity');
+var EventsView = require('./Events');
 var ui = require('tresdb-ui');
 var createScrollRecorder = require('./createScrollRecorder');
 
@@ -57,13 +57,13 @@ module.exports = function () {
     }
 
     // Set up events
-    children.activity = new ActivityView();
-    $elems.activity = $mount.find('.latest-activity-container');
-    children.activity.bind($elems.activity, tabs[tabHash]);
+    children.events = new EventsView();
+    $elems.events = $mount.find('.latest-events-container');
+    children.events.bind($elems.events, tabs[tabHash]);
 
     // Fetch events and then apply previously recorded scroll position.
     // Then, begin recording further scrolls.
-    children.activity.on('idle', function () {
+    children.events.on('idle', function () {
       // Set scroll to where we previously left
       scrollRecorder.applyScroll();
       // Record scroll positions
@@ -73,7 +73,7 @@ module.exports = function () {
     // Tab switch filters the events.
     children.tabs.on('tab_switch', function (hash) {
       // DEBUG console.log('tab_switch', hash);
-      children.activity.update(tabs[hash]);
+      children.events.update(tabs[hash]);
     });
   };
 

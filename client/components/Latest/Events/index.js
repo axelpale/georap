@@ -1,4 +1,4 @@
-// Component to list latest events.
+// Component to list filtered lists of events.
 //
 var emitter = require('component-emitter');
 var prettyEvents = require('pretty-events');
