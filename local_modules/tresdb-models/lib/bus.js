@@ -50,7 +50,7 @@ module.exports = function (test) {
         routes.forEach(function (route) {
           sourceBus.off(route)
         })
-        routes = null // for garbage collector
+        routes = [] // for garbage collector
       }
 
     }
