@@ -1,4 +1,4 @@
-// Component to filter map markers.
+// Component to switch tabs.
 //
 var template = require('./template.ejs');
 var emitter = require('component-emitter');
