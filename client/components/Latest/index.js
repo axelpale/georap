@@ -4,9 +4,8 @@ var emitter = require('component-emitter');
 var prettyEvents = require('pretty-events');
 var TabsView = require('./Tabs');
 var template = require('./template.ejs');
-var listTemplate = require('../Events/list.ejs');
+var EventsView = require('../Events');
 var ui = require('tresdb-ui');
-var eventModel = require('../Events/Event/model');
 var models = require('tresdb-models');
 var events = tresdb.stores.events;
 var locations = tresdb.stores.locations;
@@ -66,7 +65,6 @@ module.exports = function () {
     //   callback: optional function ()
     //
     var $loading = $('#tresdb-events-loading');
-    var $list = $('#tresdb-events-list');
 
     // Fetch events for rendering.
     events.getRecent(LIST_SIZE, function (err, rawEvents) {
@@ -78,7 +76,7 @@ module.exports = function () {
         return;
       }
 
-      // Collect location data in events
+      // Collect location data in events. Use to emphasize map markers.
       rawEvents.forEach(function (rev) {
         if (rev.location) {
           var mloc = models.rawLocationToMarkerLocation(rev.location);
@@ -92,12 +90,7 @@ module.exports = function () {
       compactEvs = prettyEvents.dropEntryCommentChanged(compactEvs);
       compactEvs = prettyEvents.mergeSimilar(compactEvs);
 
-      $list.html(listTemplate({
-        pointstamp: ui.pointstamp,
-        timestamp: ui.timestamp,
-        getPoints: eventModel.getPoints,
-        events: compactEvs,
-      }));
+      children.events.update(compactEvs);
 
       if (callback) {
         return callback();
@@ -110,6 +103,14 @@ module.exports = function () {
   this.bind = function ($mount) {
     // Render initial page with visible loading bar
     $mount.html(template());
+
+    // Set up tabs
+    children.tabs = new TabsView();
+    children.tabs.bind($mount.find('.latest-tabs-container'));
+
+    // Set up events
+    children.events = new EventsView([]);
+    children.events.bind($mount.find('.latest-events-container'));
 
     // Fetch events and then apply previously recorded scroll position.
     // It seems that setTimeout is required to allow the fetched events
@@ -126,10 +127,6 @@ module.exports = function () {
 
     // Update rendered on change
     events.on('events_changed', updateView);
-
-    // Set up tabs
-    children.tabs = new TabsView();
-    children.tabs.bind($mount.find('.latest-tabs-container'));
 
     // Select associated marker by clicking an event or hovering cursor on it.
     // Prevent duplicate binds
