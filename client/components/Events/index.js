@@ -1,0 +1,34 @@
+// Component to filter map markers.
+//
+var template = require('./list.ejs');
+var emitter = require('component-emitter');
+var getPoints = require('tresdb-points');
+var ui = require('tresdb-ui');
+
+module.exports = function (events) {
+  // Parameters:
+  //   events
+  //     list of event objects
+  //
+
+  // Init
+  var self = this;
+  emitter(self);
+  var $mount = null;
+
+  // Public methods
+
+  this.bind = function ($mountEl) {
+    $mount = $mountEl;
+    $mount.html(template({
+      timestamp: ui.timestamp,
+      pointstamp: ui.pointstamp,
+      getPoints: getPoints,
+      events: events,
+    }));
+  };
+
+  this.unbind = function () {
+    $mount = null;
+  };
+};

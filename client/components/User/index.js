@@ -1,7 +1,6 @@
 
 var users = tresdb.stores.users;
-var eventsListTemplate = require('../Events/list.ejs');
-var eventModel = require('../Events/Event/model');
+var EventsView = require('../Events');
 var template = require('./template.ejs');
 var pointsTemplate = require('./points.ejs');
 var emitter = require('component-emitter');
@@ -13,11 +12,15 @@ module.exports = function (username) {
   //     string
 
   // Init
-  emitter(this);
+  var self = this;
+  emitter(self);
+  var children = {};
+  var $mount = null;
 
   // Public methods
 
-  this.bind = function ($mount) {
+  this.bind = function ($mountEl) {
+    $mount = $mountEl;
 
     $mount.html(template({
       username: username,
@@ -43,17 +46,13 @@ module.exports = function (username) {
         points: user.points,
       }));
 
-      $('#tresdb-user-events').html(eventsListTemplate({
-        timestamp: ui.timestamp,
-        pointstamp: ui.pointstamp,
-        getPoints: eventModel.getPoints,
-        events: user.events,
-      }));
+      children.events = new EventsView(user.events);
+      children.events.bind($('#tresdb-user-events'));
     });
   };
 
   this.unbind = function () {
-    // noop
+    ui.unbindAll(children);
   };
 
 };
