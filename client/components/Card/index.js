@@ -57,6 +57,11 @@ module.exports = function () {
     _$mount = null;
   };
 
+  self.isViewInstanceOf = function (View) {
+    // Test if the active view is of the class View.
+    return (_activeView instanceof View);
+  };
+
   self.open = function (view, cardClass) {
     // Open a card over the map and close any other open cards.
     // The bind() must be called before open().
