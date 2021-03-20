@@ -5,7 +5,7 @@
 var CardView = require('../components/Card');
 var Error401View = require('../components/Error401');
 var Error404View = require('../components/Error404');
-var EventsView = require('../components/Events');
+var LatestView = require('../components/Latest');
 var LoginView = require('../components/Login');
 var SearchView = require('../components/Search');
 var SupportFundView = require('../components/SupportFund');
@@ -263,7 +263,7 @@ exports.route = function () {
   });
 
   page('/latest', function () {
-    card.open(new EventsView());
+    card.open(new LatestView());
   });
 
   page('/locations/:id', function (ctx) {
