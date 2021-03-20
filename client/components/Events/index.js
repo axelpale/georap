@@ -28,6 +28,18 @@ module.exports = function (events) {
     }));
   };
 
+  this.update = function (updatedEvents) {
+    events = updatedEvents;
+    if ($mount) {
+      $mount.html(template({
+        timestamp: ui.timestamp,
+        pointstamp: ui.pointstamp,
+        getPoints: getPoints,
+        events: events,
+      }));
+    }
+  };
+
   this.unbind = function () {
     $mount = null;
   };

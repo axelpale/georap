@@ -1,8 +1,7 @@
 
 var ui = require('tresdb-ui');
 var template = require('./template.ejs');
-var eventListTemplate = require('../../Events/list.ejs');
-var eventModel = require('../../Events/Event/model');
+var EventsView = require('../../Events');
 var filters = require('pretty-events');
 
 var eventFilter = function (evs) {
@@ -15,33 +14,32 @@ module.exports = function (events) {
   //   events
   //     EventsModel
 
+  var $mount = null;
   var _handleCreated;
+  var children = {};
 
-  this.bind = function ($mount) {
+  this.bind = function ($mountEl) {
+    $mount = $mountEl;
+    $mount.html(template());
 
-    $mount.html(template({
-      eventList: eventListTemplate({
-        timestamp: ui.timestamp,
-        pointstamp: ui.pointstamp,
-        getPoints: eventModel.getPoints,
-        events: eventFilter(events.toRawArray()),
-      }),
-    }));
+    var filteredEvents = eventFilter(events.toRawArray());
+    children.events = new EventsView(filteredEvents);
+    children.events.bind($mount.find('.location-events-container'));
 
     _handleCreated = function () {
       // Refresh whole list
-      $mount.html(eventListTemplate({
-        timestamp: ui.timestamp,
-        pointstamp: ui.pointstamp,
-        getPoints: eventModel.getPoints,
-        events: eventFilter(events.toRawArray()),
-      }));
+      var updatedEvents = eventFilter(events.toRawArray());
+      children.events.update(updatedEvents);
     };
 
     events.on('location_event_created', _handleCreated);
   };
 
   this.unbind = function () {
-    events.off('location_event_created', _handleCreated);
+    if ($mount) {
+      ui.unbindAll(children);
+      children = {};
+      events.off('location_event_created', _handleCreated);
+    }
   };
 };
