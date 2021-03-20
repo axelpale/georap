@@ -494,6 +494,12 @@ li.form-attachment-container:first-child img {
 .latest-tabs li {
   text-transform: capitalize;
 }
+.latest-tabs-spacer {
+  padding: 10px 15px;
+  border-left: 1px solid #ddd;
+  border-right: 1px solid #ddd;
+  margin-bottom: -2px;
+}
 /* Latest events page END */
 
 /* Filter */
