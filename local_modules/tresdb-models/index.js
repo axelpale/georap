@@ -21,3 +21,25 @@ exports.rawLocationToMarkerLocation = function (rawLoc) {
     childLayer: rawLoc.layer
   }
 }
+
+exports.bus = function (sourceBus) {
+  // Return a local bus object that remembers the bound handlers
+  // and thus provides an easy way to off them.
+  //
+  var routes = []
+  return {
+
+    on: function (evName, handler) {
+      var route = sourceBus.on(evName, handler)
+      routes.push(route)
+    },
+
+    off: function () {
+      routes.forEach(function (route) {
+        sourceBus.off(route)
+      })
+      routes = [] // for garbage collector
+    }
+
+  }
+}
