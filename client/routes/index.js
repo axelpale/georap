@@ -262,7 +262,11 @@ exports.route = function () {
       .catch(importErrorHandler);
   });
 
-  page('/latest', function () {
+  page('/latest', function (ctx) {
+    // Prevent reopen on hash change
+    if (card.isViewInstanceOf(LatestView)) {
+      return;
+    }
     card.open(new LatestView());
   });
 
