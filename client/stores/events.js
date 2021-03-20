@@ -6,25 +6,11 @@
 // Call:
 //   events.getRecent(n, function (err, nEvs) { ... });
 //
-// Listen if events change:
-//   events.on('events_changed', function () {
-//     events.getRecent(n, function (err, nEvs) {
-//       ...
-//     });
-//   });
 
 var emitter = require('component-emitter');
-
-var socket = require('../connection/socket');
 var account = require('./account');
 
 emitter(exports);
-
-// Listen for new events and inform views that
-// new events are available.
-socket.on('tresdb_event', function () {
-  exports.emit('events_changed');
-});
 
 var fetch = function (n, beforeTime, callback) {
   // Parameters:

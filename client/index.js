@@ -47,6 +47,7 @@ socket.on('tresdb_event', function (ev) {
   // specific event type e.g. location_created, needed by main menu to
   // determine when creation is successful.
   bus.emit(ev.type, ev);
+  bus.emit('socket_event', ev);
 });
 
 
