@@ -1,0 +1,15 @@
+<ul class="list-group">
+<% if (locations.length === 0) { %>
+  <li class="list-group-item text-muted center-block">No results</li>
+<% } else { %>
+  <% locations.forEach(function (loc) { %>
+  <li class="list-group-item">
+      <a href="/locations/<%= loc._id %>"><%= loc.name %></a>
+      <span style="color: gray; font-style: italic; margin-left: 0.38em">
+        <%= loc.places.length > 0 ? loc.places[0] : '' %>,
+        <%= loc.places.length > 1 ? loc.places[loc.places.length - 1] : '' %>
+      </span>
+  </li>
+  <% }); %>
+<% } %>
+</ul>
