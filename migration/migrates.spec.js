@@ -347,7 +347,10 @@ describe('migrates.migrate', function () {
             assert.ifError(err3);
             assertFixtureEqual('events', 'v12', function (err4) {
               assert.ifError(err4);
-              done();
+              assertFixtureEqual('locations', 'v12', function (err5) {
+                assert.ifError(err5);
+                done();
+              });
             });
           });
         });

@@ -224,6 +224,7 @@ module.exports = {
 
     locations: [{
       _id: c.irbeneId,
+      createdAt: '2009-07-30T10:44:57.000Z', // NOTE
       creator: 'admin',
       deleted: false,
       published: false,

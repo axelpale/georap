@@ -7,6 +7,7 @@
 // 3. Drop possible 'attachments' collections from earlier failed migration.
 // 4. refactor entries and entry events
 // 5. refactor locations by adding published prop
+// 6. refactor locations by adding createdAt prop
 //
 // Also, new indices were made and thus 'npm run migrate' is needed.
 
@@ -103,6 +104,32 @@ const substeps = [
       loc.visits = [];
       loc.published = false;
       return iterNext(null, loc);
+    }, nextStep);
+  },
+
+  function addCreatedAt(nextStep) {
+    console.log('6. Add createdAt prop to each location...');
+
+    const coll = db.collection('locations');
+
+    iter.updateEach(coll, function (origLoc, iterNext) {
+      db.collection('events').findOne({
+        locationId: origLoc._id,
+        type: 'location_created',
+      }, (err, locEv) => {
+        if (err) {
+          return iterNext(err);
+        }
+
+        if (!locEv) {
+          const msg = 'Missing location_created event for ' + origLoc._id;
+          return iterNext(new Error(msg));
+        }
+
+        const loc = clone(origLoc);
+        loc.createdAt = locEv.time;
+        return iterNext(null, loc);
+      });
     }, nextStep);
   },
 
