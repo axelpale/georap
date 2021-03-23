@@ -5,13 +5,13 @@ var TabsView = require('./Tabs');
 var template = require('./template.ejs');
 var EventsView = require('./Events');
 var ui = require('tresdb-ui');
-var createScrollRecorder = require('./createScrollRecorder');
+var ScrollRecorder = require('./ScrollRecorder');
 
 // Record scroll position to help browsing through the list
 // and avoid scrolling in other views to affect the events list.
 // The state and the methods need to be placed outside of the view class
 // because the class is recreated every time.
-var scrollRecorder = createScrollRecorder();
+var scrollRecorder = new ScrollRecorder();
 
 module.exports = function () {
   // Parameters:
