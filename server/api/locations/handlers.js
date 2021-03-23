@@ -1,9 +1,9 @@
-var dal = require('./dal');
-var status = require('http-status-codes');
+const dal = require('./dal');
+const status = require('http-status-codes');
 
-exports.count = function (req, res, next) {
+exports.count = (req, res, next) => {
 
-  dal.count(function (err, numLocs) {
+  dal.count((err, numLocs) => {
     if (err) {
       return next(err);
     }
@@ -12,7 +12,7 @@ exports.count = function (req, res, next) {
   });
 };
 
-exports.create = function (req, res, next) {
+exports.create = (req, res, next) => {
 
   // Validate required arguments
 
@@ -45,7 +45,7 @@ exports.create = function (req, res, next) {
       latitude: lat,
       longitude: lng,
       username: username,
-    }, function (err) {
+    }, (err) => {
       if (err) {
         if (err.message === 'TOO_CLOSE') {
           return res.json('TOO_CLOSE');
@@ -57,7 +57,7 @@ exports.create = function (req, res, next) {
     return;
   }
 
-  dal.create(lat, lng, username, function (err, rawLoc) {
+  dal.create(lat, lng, username, (err, rawLoc) => {
     if (err) {
       if (err.message === 'TOO_CLOSE') {
         return res.json('TOO_CLOSE');
