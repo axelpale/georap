@@ -118,10 +118,10 @@ exports.latest = (n, callback) => {
   //
   db.collection('locations').find({
     deleted: false,
-  }, {
-    limit: n,
-    sort: {
-      time: 1,
-    },
-  }).toArray(callback);
+  })
+    .limit(n)
+    .sort({
+      _id: -1, // TODO createdAt: -1,
+    })
+    .toArray(callback);
 };
