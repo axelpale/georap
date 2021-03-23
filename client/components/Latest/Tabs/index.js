@@ -12,9 +12,9 @@ module.exports = function () {
 
   // mapping: tab hash to tab class
   var tabs = {
-    'activity': 'activity',
-    'locations': 'locations',
-    'posts': 'posts',
+    activity: 'activity',
+    locations: 'locations',
+    posts: 'posts',
   };
   var defaultHash = 'activity';
 
