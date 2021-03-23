@@ -10,6 +10,7 @@ var importerRouter = require('./importer/routes');
 
 // Location collection
 
+router.get('/', handlers.latest);
 router.post('/', jsonParser, handlers.create);
 router.get('/count', handlers.count);
 

@@ -68,3 +68,25 @@ exports.create = (req, res, next) => {
     return res.json(rawLoc);
   });
 };
+
+exports.latest = (req, res, next) => {
+  // Latest created locations. For this, we use locations collection
+  // instead of events because we get the name and thumbnail from the location.
+  //
+
+  // Validate arguments
+  const numLocs = parseInt(req.query.n, 10);
+  if (isNaN(numLocs) || numLocs < 0) {
+    return res.status(status.BAD_REQUEST).send('Invalid number of locations');
+  }
+
+  dal.latest(numLocs, (err, locs) => {
+    if (err) {
+      return next(err);
+    }
+
+    return res.json({
+      locations: locs,
+    });
+  });
+};

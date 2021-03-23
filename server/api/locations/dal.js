@@ -103,7 +103,7 @@ exports.create = function (lat, lng, username, callback) {
   //   username
   //   callback
   //     function (err, rawLocation)
-
+  //
 
   exports.createLocation({
     name: 'Unnamed ' + shortid.generate(),
@@ -111,4 +111,17 @@ exports.create = function (lat, lng, username, callback) {
     longitude: lng,
     username: username,
   }, callback);
+};
+
+exports.latest = (n, callback) => {
+  // Find n latest, non-deleted locations
+  //
+  db.collection('locations').find({
+    deleted: false,
+  }, {
+    limit: n,
+    sort: {
+      time: 1,
+    },
+  }).toArray(callback);
 };

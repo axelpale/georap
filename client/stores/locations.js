@@ -139,7 +139,7 @@ exports.createWithName = function (params, callback) {
 };
 
 exports.get = function (id, callback) {
-  // Fetch a location from server and return a models.Location instance.
+  // Fetch a location from server and return a location object.
   // Will call back with error if not found.
   //
   // Parameters:
@@ -156,6 +156,34 @@ exports.get = function (id, callback) {
     headers: { 'Authorization': 'Bearer ' + account.getToken() },
     success: function (rawLoc) {
       return callback(null, rawLoc);
+    },
+    error: function (jqxhr, status, statusMessage) {
+      return callback(new Error(statusMessage));
+    },
+  });
+};
+
+exports.getLatest = function (n, callback) {
+  // Fetch recent locations from server and return an array of locations objs.
+  // Will call back with error if not found.
+  //
+  // Parameters:
+  //   n
+  //     number of locations to fetch
+  //   callback
+  //     function (err, locations)
+  //
+
+  $.ajax({
+    url: '/api/locations/',
+    method: 'GET',
+    data: { // url params
+      n: n,
+    },
+    dataType: 'json', // response data type
+    headers: { 'Authorization': 'Bearer ' + account.getToken() },
+    success: function (response) {
+      return callback(null, response.locations);
     },
     error: function (jqxhr, status, statusMessage) {
       return callback(new Error(statusMessage));
