@@ -218,8 +218,8 @@ module.exports = {
       // points7days: created by worker
       // points30days: created by worker
       status: 'active',
-      createdAt: '2009-07-29T12:34:56.000Z', // NOTE
-      loginAt: '2009-10-05T12:34:56.000Z', // NOTE
+      createdAt: '2009-07-29T12:34:56.000Z',
+      loginAt: '2009-10-05T12:34:56.000Z',
     }],
 
     locations: [{
