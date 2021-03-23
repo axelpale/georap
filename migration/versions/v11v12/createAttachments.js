@@ -1,4 +1,4 @@
-const dal = require('../../../server/api/attachments/dal');
+const dal = require('../../../server/api/attachments/attachment/dal');
 
 module.exports = (attachmentData, callback) => {
   // Parameters
