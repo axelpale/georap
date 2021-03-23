@@ -25,6 +25,13 @@ module.exports = function () {
 
   self.bind = function ($mountEl, filter) {
     $mount = $mountEl;
+
+    if (!filter) {
+      filter = function () {
+        return true;
+      };
+    }
+
     $mount.html(template());
 
     // Set up view for events
