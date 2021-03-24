@@ -3,6 +3,7 @@
 var db = require('tresdb-db');
 var proj = require('../../../services/proj');
 var googlemaps = require('../../../services/googlemaps');
+var attachmentUrls = require('../../attachments/attachment/urls');
 var eventsDal = require('../../events/dal');
 var entriesDal = require('../../entries/dal');
 
@@ -269,6 +270,13 @@ exports.getOneComplete = (id, callback) => {
 
         // Compute additional coodinate systems
         doc.altGeom = proj.getAltPositions(doc.geom.coordinates);
+
+        // Complete thumbnail url
+        if (doc.thumb === '') {
+          doc.thumbUrl = '';
+        } else {
+          doc.thumbUrl = attachmentUrls.completeToUrl(doc.thumb);
+        }
 
         return callback(null, doc);
       });

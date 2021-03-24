@@ -1,5 +1,6 @@
 const dal = require('./dal');
 const status = require('http-status-codes');
+const attachmentUrls = require('../attachments/attachment/urls');
 
 exports.count = (req, res, next) => {
 
@@ -85,8 +86,18 @@ exports.latest = (req, res, next) => {
       return next(err);
     }
 
+    // Complete attachment URLs
+    const urledLocs = locs.map((loc) => {
+      if (loc.thumb === '') {
+        loc.thumbUrl = '';
+      } else {
+        loc.thumbUrl = attachmentUrls.completeToUrl(loc.thumb);
+      }
+      return loc;
+    });
+
     return res.json({
-      locations: locs,
+      locations: urledLocs,
     });
   });
 };
