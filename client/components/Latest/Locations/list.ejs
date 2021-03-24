@@ -16,6 +16,10 @@
       <div class="location-item-thumbnail">
         <img src="<%= loc.thumbUrl %>">
       </div>
+      <% } else { %>
+      <div class="location-item-thumbnail">
+        <img src="/assets/images/markers/symbols/<%= loc.type %>.png" class="location-type-symbol" title="<%= loc.type %>.png">
+      </div>
       <% } %>
   </li>
   <% }); %>
