@@ -240,6 +240,7 @@ module.exports = {
       places: [],
       status: 'abandoned',
       type: 'default',
+      thumb: '2009/RxRvKSlbl/radar_medium.jpg', // NOTE
       visits: [],
       text1: '',
       text2: '',

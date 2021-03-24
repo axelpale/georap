@@ -8,6 +8,7 @@
 // 4. refactor entries and entry events
 // 5. refactor locations by adding published prop
 // 6. refactor locations by adding createdAt prop
+// 7. select thumbnails for each location and add thumb prop
 //
 // Also, new indices were made and thus 'npm run migrate' is needed.
 
@@ -18,6 +19,7 @@ const schema = require('../../lib/schema');
 const iter = require('../../iter');
 const removeOrphanEvents = require('./removeOrphanEvents');
 const migrateEntry = require('./migrateEntry');
+const getThumbnail = require('./getThumbnail');
 
 const FROM_VERSION = 11;
 const TO_VERSION = FROM_VERSION + 1;
@@ -128,6 +130,31 @@ const substeps = [
 
         const loc = clone(origLoc);
         loc.createdAt = locEv.time;
+        return iterNext(null, loc);
+      });
+    }, nextStep);
+  },
+
+  function addThumbnail(nextStep) {
+    console.log('7. Add thumb path to each location...');
+
+    const coll = db.collection('locations');
+
+    iter.updateEach(coll, function (origLoc, iterNext) {
+      getThumbnail(origLoc._id, (err, attachment) => {
+        if (err) {
+          return iterNext(err);
+        }
+
+        const loc = clone(origLoc);
+
+        if (attachment) {
+          loc.thumb = attachment.thumbfilepath;
+        } else {
+          // No image attachment. Default path.
+          loc.thumb = '';
+        }
+
         return iterNext(null, loc);
       });
     }, nextStep);
