@@ -113,13 +113,14 @@ exports.create = function (lat, lng, username, callback) {
   }, callback);
 };
 
-exports.latest = (n, callback) => {
+exports.latest = (range, callback) => {
   // Find n latest, non-deleted locations
   //
   db.collection('locations').find({
     deleted: false,
   })
-    .limit(n)
+    .skip(range.skip)
+    .limit(range.limit)
     .sort({
       _id: -1, // TODO createdAt: -1,
     })

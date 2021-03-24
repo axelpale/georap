@@ -9,7 +9,7 @@ var rootBus = require('tresdb-bus');
 var models = require('tresdb-models');
 var locationsStore = tresdb.stores.locations;
 
-var LIST_SIZE = 100;
+var LIST_SIZE = 50;
 
 module.exports = function () {
   // Init
@@ -19,6 +19,9 @@ module.exports = function () {
   var children = {};
   var $elems = {};
   var localBus = models.bus(rootBus);
+
+  var skip = 0;
+  var limit = LIST_SIZE;
 
   // Public methods
 
@@ -37,6 +40,38 @@ module.exports = function () {
       console.log('update name to', ev.data.newName);
     });
 
+    // Setup load-more
+    $elems.progress = $mount.find('.latest-locations-progress');
+    $elems.loadMoreBtn = $mount.find('.latest-load-more');
+    ui.show($elems.loadMoreBtn);
+    $elems.loadMoreBtn.click(function () {
+      console.log('click');
+      ui.show($elems.progress);
+      ui.hide($elems.loadMoreBtn);
+      skip += limit;
+      locationsStore.getLatest({
+        skip: skip,
+        limit: limit,
+      }, function (errmore, latestResult) {
+        var morelocs = latestResult.locations;
+        var total = latestResult.locationCount;
+        ui.hide($elems.progress);
+        if (errmore) {
+          $mount.find('.latest-locations-error').html(errmore.message);
+          ui.show($mount.find('.latest-locations-error'));
+          return;
+        }
+        $elems.locations.append(listTemplate({
+          skip: skip,
+          limit: limit,
+          total: total,
+          locations: morelocs,
+          timestamp: ui.timestamp,
+        }));
+        ui.show($elems.loadMoreBtn);
+      });
+    });
+
     // Initial event fetch and list render
     self.update();
   };
@@ -44,20 +79,29 @@ module.exports = function () {
   self.update = function () {
     if ($mount) {
       // Reload events and render
-      locationsStore.getLatest(LIST_SIZE, function (err, locs) {
+      locationsStore.getLatest({
+        skip: skip,
+        limit: limit,
+      }, function (err, latestResult) {
+        var locs = latestResult.locations;
+        var total = latestResult.locationCount;
         // Ensure loading bar is hidden.
         ui.hide($mount.find('.latest-locations-progress'));
 
         if (err) {
-          console.error(err);
+          $mount.find('.latest-locations-error').html(err.message);
+          ui.show($mount.find('.latest-locations-error'));
           return;
         }
 
         // Collect location data in events. Use to emphasize map markers.
         // TODO children.selector.readMarkerLocationsFromLocations(locs);
 
-        // Refresh the events list
+        // Refresh the list
         $elems.locations.html(listTemplate({
+          skip: skip,
+          limit: limit,
+          total: total,
           locations: locs,
           timestamp: ui.timestamp,
         }));
@@ -79,6 +123,7 @@ module.exports = function () {
       localBus.off();
       // Unbind events view
       ui.unbindAll(children);
+      ui.offAll($elems);
       children = {};
     }
   };

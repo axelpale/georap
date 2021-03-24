@@ -163,13 +163,14 @@ exports.get = function (id, callback) {
   });
 };
 
-exports.getLatest = function (n, callback) {
+exports.getLatest = function (range, callback) {
   // Fetch recent locations from server and return an array of locations objs.
   // Will call back with error if not found.
   //
   // Parameters:
-  //   n
-  //     number of locations to fetch
+  //   range
+  //     skip: skip first locations
+  //     limit: number of locations to fetch
   //   callback
   //     function (err, locations)
   //
@@ -178,12 +179,16 @@ exports.getLatest = function (n, callback) {
     url: '/api/locations/',
     method: 'GET',
     data: { // url params
-      n: n,
+      skip: range.skip,
+      limit: range.limit,
     },
     dataType: 'json', // response data type
     headers: { 'Authorization': 'Bearer ' + account.getToken() },
     success: function (response) {
-      return callback(null, response.locations);
+      return callback(null, {
+        locations: response.locations,
+        locationCount: response.locationCount,
+      });
     },
     error: function (jqxhr, status, statusMessage) {
       return callback(new Error(statusMessage));

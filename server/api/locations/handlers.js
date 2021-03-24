@@ -76,12 +76,19 @@ exports.latest = (req, res, next) => {
   //
 
   // Validate arguments
-  const numLocs = parseInt(req.query.n, 10);
-  if (isNaN(numLocs) || numLocs < 0) {
-    return res.status(status.BAD_REQUEST).send('Invalid number of locations');
+  const skip = parseInt(req.query.skip, 10);
+  const limit = parseInt(req.query.limit, 10);
+  if (isNaN(skip) || skip < 0) {
+    return res.status(status.BAD_REQUEST).send('Invalid skip');
+  }
+  if (isNaN(limit) || limit < 0) {
+    return res.status(status.BAD_REQUEST).send('Invalid limit');
   }
 
-  dal.latest(numLocs, (err, locs) => {
+  dal.latest({
+    skip: skip,
+    limit: limit,
+  }, (err, locs) => {
     if (err) {
       return next(err);
     }
@@ -96,8 +103,16 @@ exports.latest = (req, res, next) => {
       return loc;
     });
 
-    return res.json({
-      locations: urledLocs,
+    // Provide location count
+    dal.count((errn, n) => {
+      if (errn) {
+        return next(err);
+      }
+
+      return res.json({
+        locations: urledLocs,
+        locationCount: n,
+      });
     });
   });
 };
