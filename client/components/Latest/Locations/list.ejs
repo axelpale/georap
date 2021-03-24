@@ -4,11 +4,19 @@
 <% } else { %>
   <% locations.forEach(function (loc) { %>
   <li class="list-group-item">
-      <a href="/locations/<%= loc._id %>"><%= loc.name %></a>
-      <span style="color: gray; font-style: italic; margin-left: 0.38em">
+      <h4><a href="/locations/<%= loc._id %>?&ref=latest"><%= loc.name %></a></h4>
+      <div style="color: gray; font-style: italic;">
+        <span class="location-status"><%= loc.status %></span>
+        <span class="location-type"><%= loc.type %></span> in
         <%= loc.places.length > 0 ? loc.places[0] : '' %>,
         <%= loc.places.length > 1 ? loc.places[loc.places.length - 1] : '' %>
-      </span>
+      </div>
+      <div>by <a href=""><%= loc.creator %></a> <%= timestamp(loc.createdAt) %></div>
+      <% if (loc.thumbUrl) { %>
+      <div class="location-item-thumbnail">
+        <img src="<%= loc.thumbUrl %>">
+      </div>
+      <% } %>
   </li>
   <% }); %>
 <% } %>

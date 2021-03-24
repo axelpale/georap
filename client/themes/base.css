@@ -500,6 +500,26 @@ li.form-attachment-container:first-child img {
   border-right: 1px solid #ddd;
   margin-bottom: -2px;
 }
+.latest-locations .list-group-item {
+  min-height: 11.1rem;
+}
+.latest-locations h4 {
+  margin-bottom: 2px;
+}
+.latest-locations .location-status,
+.latest-locations .location-type {
+  text-transform: capitalize;
+}
+.location-item-thumbnail {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+.location-item-thumbnail img {
+  object-fit: cover;
+  width: 11.1rem;
+  height: 11.1rem;
+}
 /* Latest events page END */
 
 /* Filter */

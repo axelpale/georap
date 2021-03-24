@@ -59,6 +59,7 @@ module.exports = function () {
         // Refresh the events list
         $elems.locations.html(listTemplate({
           locations: locs,
+          timestamp: ui.timestamp,
         }));
 
         // Signal that the list is rendered.
