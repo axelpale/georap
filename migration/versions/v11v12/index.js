@@ -37,7 +37,7 @@ const substeps = [
         return nextStep(err);
       }
 
-      console.log('Schema version tag created:', TO_VERSION);
+      console.log('  Schema version tag created:', TO_VERSION);
       return nextStep(null);
     });
   },
@@ -106,7 +106,19 @@ const substeps = [
       loc.visits = [];
       loc.published = false;
       return iterNext(null, loc);
-    }, nextStep);
+    }, (err, iterResults) => {
+      if (err) {
+        return nextStep(err);
+      }
+
+      console.log('  ' + iterResults.numDocuments + ' locations processed ' +
+        'successfully.');
+      console.log('  ' + iterResults.numUpdated + ' locations updated, ' +
+        (iterResults.numDocuments - iterResults.numUpdated) + ' did not ' +
+        'need an update');
+
+      return nextStep();
+    });
   },
 
   function addCreatedAt(nextStep) {
@@ -132,7 +144,19 @@ const substeps = [
         loc.createdAt = locEv.time;
         return iterNext(null, loc);
       });
-    }, nextStep);
+    }, (err, iterResults) => {
+      if (err) {
+        return nextStep(err);
+      }
+
+      console.log('  ' + iterResults.numDocuments + ' locations processed ' +
+        'successfully.');
+      console.log('  ' + iterResults.numUpdated + ' locations updated, ' +
+        (iterResults.numDocuments - iterResults.numUpdated) + ' did not ' +
+        'need an update');
+
+      return nextStep();
+    });
   },
 
   function addThumbnail(nextStep) {
@@ -157,7 +181,19 @@ const substeps = [
 
         return iterNext(null, loc);
       });
-    }, nextStep);
+    }, (err, iterResults) => {
+      if (err) {
+        return nextStep(err);
+      }
+
+      console.log('  ' + iterResults.numDocuments + ' locations processed ' +
+        'successfully.');
+      console.log('  ' + iterResults.numUpdated + ' locations updated, ' +
+        (iterResults.numDocuments - iterResults.numUpdated) + ' did not ' +
+        'need an update');
+
+      return nextStep();
+    });
   },
 
 ];

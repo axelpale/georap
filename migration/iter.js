@@ -18,7 +18,12 @@ exports.updateEach = function (collection, iteratee, callback) {
   //         next
   //           function (err, updatedDocument)
   //   callback
-  //     function (err)
+  //     function (err, stats), where stats is an object with props:
+  //       numDocuments
+  //         integer, num of read/processed documents
+  //       numUpdated
+  //         integer, num of changed documents i.e. where iteratee returned
+  //           other than null.
   //
   // Example:
   //
@@ -38,6 +43,9 @@ exports.updateEach = function (collection, iteratee, callback) {
     if (err) {
       return callback(err);
     }
+
+    const numDocs = allDocuments.length;
+    let numUpdated = 0;
 
     asyn.eachSeries(allDocuments, function (doc, eachNext) {
       var id = doc._id;  // Take before modification
@@ -65,6 +73,9 @@ exports.updateEach = function (collection, iteratee, callback) {
             if (err2) {
               return eachNext(err2);
             }
+
+            numUpdated += 1;
+
             return eachNext(null);
           });
         });
@@ -76,7 +87,10 @@ exports.updateEach = function (collection, iteratee, callback) {
         return callback(err3);
       }
 
-      return callback(null);
+      return callback(null, {
+        numDocuments: numDocs,
+        numUpdated: numUpdated,
+      });
     });
   });
 };
