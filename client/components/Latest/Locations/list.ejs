@@ -8,8 +8,7 @@
       <div style="color: gray; font-style: italic;">
         <span class="location-status"><%= loc.status %></span>
         <span class="location-type"><%= loc.type %></span> in
-        <%= loc.places.length > 0 ? loc.places[0] : '' %>,
-        <%= loc.places.length > 1 ? loc.places[loc.places.length - 1] : '' %>
+        <%= placestamp(loc.places) %>
       </div>
       <div>by <a href=""><%= loc.creator %></a> <%= timestamp(loc.createdAt) %></div>
       <% if (loc.thumbUrl) { %>

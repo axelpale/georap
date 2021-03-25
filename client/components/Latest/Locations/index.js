@@ -67,6 +67,7 @@ module.exports = function () {
           total: total,
           locations: morelocs,
           timestamp: ui.timestamp,
+          placestamp: ui.placestamp,
         }));
         ui.show($elems.loadMoreBtn);
       });
@@ -104,6 +105,7 @@ module.exports = function () {
           total: total,
           locations: locs,
           timestamp: ui.timestamp,
+          placestamp: ui.placestamp,
         }));
 
         // Signal that the list is rendered.

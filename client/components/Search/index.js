@@ -235,6 +235,7 @@ module.exports = function (query) {
         // page or not.
         $results.html(listTemplate({
           markers: l > limit ? results.slice(0, -1) : results,
+          placestamp: ui.placestamp,
         }));
       });
     }(query));
