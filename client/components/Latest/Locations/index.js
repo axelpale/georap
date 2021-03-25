@@ -36,8 +36,10 @@ module.exports = function () {
 
     // Update location name
     localBus.on('location_name_changed', function (ev) {
-      // TODO check if location in list and update name if so
-      console.log('update name to', ev.data.newName);
+      // Check if location in list and update name if so
+      var query = 'li[data-locationid="' + ev.locationId + '"]';
+      var $li = $elems.locations.find(query); // empty set if not found
+      $li.find('h4 > a').html(ev.data.newName);
     });
 
     // Setup load-more
