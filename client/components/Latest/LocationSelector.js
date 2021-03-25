@@ -56,7 +56,7 @@ module.exports = function () {
     // Collect location data in events. Use to emphasize map markers.
     evs.forEach(function (ev) {
       if (ev.location) {
-        var mloc = models.rawLocationToMarkerLocation(ev.location);
+        var mloc = models.location.toMarkerLocation(ev.location);
         fetchedMarkerLocations[mloc._id] = mloc;
       }
     });
