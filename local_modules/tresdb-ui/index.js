@@ -74,6 +74,17 @@ exports.pointstamp = function (points) {
   return h;
 };
 
+exports.placestamp = function (places) {
+  // String representation for location.places array
+  if (places.length > 1) {
+    return places[0] + ', ' + places[places.length - 1];
+  }
+  if (places.length > 0) {
+    return places[0];
+  }
+  return 'yet undefined area';
+};
+
 exports.markdownSyntax = function () {
   return '<strong>Syntax:</strong>' +
     '<p>' +
