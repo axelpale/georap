@@ -17,12 +17,18 @@ module.exports = function () {
 
     var _trySelectLocation = function (ev) {
       var locationId = null;
-      if (typeof ev.target.dataset.locationid === 'string') {
-        locationId = ev.target.dataset.locationid;
+      var el = ev.target;
+      if (typeof el.dataset.locationid === 'string') {
+        locationId = el.dataset.locationid;
       } else {
-        var parent = ev.target.parentElement;
-        if (typeof parent.dataset.locationid === 'string') {
-          locationId = parent.dataset.locationid;
+        el = el.parentElement;
+        if (typeof el.dataset.locationid === 'string') {
+          locationId = el.dataset.locationid;
+        } else {
+          el = el.parentElement;
+          if (typeof el.dataset.locationid === 'string') {
+            locationId = el.dataset.locationid;
+          }
         }
       }
       if (locationId) {
