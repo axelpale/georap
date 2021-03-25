@@ -115,7 +115,7 @@ module.exports = function (rawLoc) {
   };
 
   self.getMarkerLocation = function () {
-    return models.rawLocationToMarkerLocation(rawLoc);
+    return models.location.toMarkerLocation(rawLoc);
   };
 
   self.getPlaces = function () {
