@@ -3,6 +3,10 @@
 var template = require('./template.ejs');
 var emitter = require('component-emitter');
 
+// Remember which tab was open
+var defaultTabHash = 'activity';
+var tabHashMemory = null;
+
 module.exports = function () {
   // Init
 
@@ -16,7 +20,6 @@ module.exports = function () {
     locations: 'locations',
     posts: 'posts',
   };
-  var defaultHash = 'activity';
 
   // Public methods
 
@@ -32,13 +35,16 @@ module.exports = function () {
 
     // Click tab to change tab
     var tabSwitcher = function (tabHash) {
-      return function () { // receives click ev
+      return function (ev) { // receives click ev
+        // No link navigation needed.
+        ev.preventDefault();
+        // Display active tab
         $mount.find('li').removeClass('active');
         $mount.find('.latest-tab-' + tabs[tabHash]).addClass('active');
+        // Remember the tab for next time Tabs is bound.
+        tabHashMemory = tabHash;
+        // Inform about tab switch
         self.emit('tab_switch', tabHash);
-        // Setting the has is unnecessary because anchors do that by default.
-        // Yet, it is possible to do so:
-        // window.location.hash = '#' + tabHash;
       };
     };
     Object.keys(tabs).forEach(function (tabHash) {
@@ -47,9 +53,7 @@ module.exports = function () {
   };
 
   this.getTabHash = function () {
-    var rawHash = window.location.hash || '#';
-    var hash = rawHash.substring(1);
-    return hash || defaultHash;
+    return tabHashMemory || defaultTabHash;
   };
 
   this.unbind = function () {

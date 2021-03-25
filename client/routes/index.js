@@ -263,10 +263,11 @@ exports.route = function () {
   });
 
   page('/latest', function () {
-    // Prevent reopen on hash change
-    if (card.isViewInstanceOf(LatestView)) {
-      return;
-    }
+    // NOTE Code for future
+    // // Prevent reopen on hash change
+    // if (card.isViewInstanceOf(LatestView)) {
+    //   return;
+    // }
     card.open(new LatestView());
   });
 
