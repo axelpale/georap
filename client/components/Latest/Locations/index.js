@@ -42,7 +42,7 @@ module.exports = function () {
       $li.find('h4 > a').html(ev.data.newName);
     });
 
-    // Setup load-more
+    // Setup load-more button
     $elems.progress = $mount.find('.latest-locations-progress');
     $elems.loadMoreBtn = $mount.find('.latest-load-more');
     ui.show($elems.loadMoreBtn);

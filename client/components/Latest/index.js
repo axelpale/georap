@@ -68,6 +68,8 @@ module.exports = function () {
       if (children.list) {
         children.list.unbind();
         children.list.off('idle');
+        // Avoid scroll recording while the view loads
+        scrollRecorder.stopRecording();
       }
 
       // Open new view
