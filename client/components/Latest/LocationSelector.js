@@ -62,6 +62,14 @@ module.exports = function () {
     });
   };
 
+  this.readMarkerLocationsFromLocations = function (locs) {
+    // Collect location data in events. Use to emphasize map markers.
+    locs.forEach(function (loc) {
+      var mloc = models.location.toMarkerLocation(loc);
+      fetchedMarkerLocations[mloc._id] = mloc;
+    });
+  };
+
   this.unbind = function () {
     if ($mount) {
       // Prevent duplicate binds. Causes flicker.

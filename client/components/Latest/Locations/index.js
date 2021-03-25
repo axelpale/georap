@@ -96,7 +96,7 @@ module.exports = function () {
         }
 
         // Collect location data in events. Use to emphasize map markers.
-        // TODO children.selector.readMarkerLocationsFromLocations(locs);
+        children.selector.readMarkerLocationsFromLocations(locs);
 
         // Refresh the list
         $elems.locations.html(listTemplate({
