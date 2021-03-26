@@ -2,10 +2,12 @@
 
 var template = require('./template.ejs');
 var listTemplate = require('./list.ejs');
+var webResultsTemplate = require('./webresults.ejs');
 var emitter = require('component-emitter');
 var queryString = require('query-string');
 var ui = require('tresdb-ui');
 var markers = tresdb.stores.markers;
+var searchApi = tresdb.stores.search;
 
 var FOCUS_DELAY = 200;
 var BAD_REQUEST = 400;
@@ -194,7 +196,20 @@ module.exports = function (query) {
       //
       // Show progress bar
       ui.show($progress);
-      // Fetch search results.
+
+      // Fetch geocoder results when map has finished loading.
+      searchApi.geocode(q.text, function (err, results) {
+        if (err) {
+          ui.show($mount.find('.tresdb-web-error'));
+          return;
+        }
+        $mount.find('.tresdb-web-results').html(webResultsTemplate({
+          // array of { address_components: [ { long_name, short_name }] }
+          results: results,
+        }));
+      });
+
+      // Fetch location search results.
       // Fetch one more than the limit to see if there is next page.
       // Note that this artificially changes the query.
       q.limit = parseInt(q.limit, 10) + 1;

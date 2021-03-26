@@ -1,0 +1,19 @@
+<% if (results.length === 0) { %>
+
+  <ul class="list-group">
+    <li class="list-group-item tresdb-disabled" style="text-align: center">No results</li>
+  </ul>
+
+<% } else { %>
+
+  <ul class="list-group">
+  <% results.forEach(function (result) { %>
+    <% var comps = result.address_components %>
+    <li class="list-group-item">
+      <a href="#"><%= comps.map(function (comp) {
+         return comp.long_name;
+      }).join(', ') %></a>
+    </li>
+  <% }); %>
+  </ul>
+<% } %>
