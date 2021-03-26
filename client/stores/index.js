@@ -8,6 +8,7 @@ exports.geometry = require('./geometry');
 exports.locations = require('./locations');
 exports.mapstate = require('./mapstate');
 exports.markers = require('./markers');
+exports.search = require('./search');
 exports.statistics = require('./statistics');
 exports.theme = require('./theme');
 exports.users = require('./users');
