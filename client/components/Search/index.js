@@ -194,16 +194,19 @@ module.exports = function (query) {
       //
       // DEBUG console.log('q', q);
       //
-      // Show progress bar
+      // Show progress bars
       ui.show($progress);
+      var $searchProgress = $mount.find('.search-web-progress');
+      ui.show($searchProgress);
 
       // Fetch geocoder results when map has finished loading.
       searchApi.geocode(q.text, function (err, results) {
+        ui.hide($searchProgress);
         if (err) {
-          ui.show($mount.find('.tresdb-web-error'));
+          ui.show($mount.find('.search-web-error'));
           return;
         }
-        $mount.find('.tresdb-web-results').html(webResultsTemplate({
+        $mount.find('.search-web-results').html(webResultsTemplate({
           // array of { address_components: [ { long_name, short_name }] }
           results: results,
         }));

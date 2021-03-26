@@ -55,7 +55,26 @@
 
   <div class="row">
     <div class="col-md-12">
+
+      <h3>Web results</h3>
+      <div class="search-web-results"></div>
+      <div class="search-web-error hidden">
+        <div class="alert alert-danger" role="alert">Retrieving web results failed.</div>
+      </div>
+      <div class="search-web-progress progress hidden">
+        <div class="progress-bar progress-bar-striped active" role="progressbar" style="width: 100%">
+          <span class="sr-only">Waiting for geocoding API</span>
+        </div>
+      </div>
+
+      <h3>Database results</h3>
       <div id="tresdb-search-results"></div>
+      <div id="tresdb-search-400" class="hidden">
+        <div class="alert alert-danger" role="alert">Bad request. Please ensure the form values make sense.</div>
+      </div>
+      <div id="tresdb-search-500" class="hidden">
+        <div class="alert alert-danger" role="alert">Internal server error :(</div>
+      </div>
 
       <!-- Next/Prev navigation buttons -->
       <div class="row" style="margin-bottom: 5em">
@@ -65,21 +84,6 @@
         <div class="col-sm-6">
           <button id="tresdb-search-next" type="button" class="btn btn-default btn-block hidden">Next &rarr;</button>
         </div>
-      </div>
-
-      <h3>Web results</h3>
-      <div class="tresdb-web-results"></div>
-
-      <div class="tresdb-web-error hidden">
-        <div class="alert alert-danger" role="alert">Retrieving web results failed.</div>
-      </div>
-
-      <div id="tresdb-search-400" class="hidden">
-        <div class="alert alert-danger" role="alert">Bad request. Please ensure the form values make sense.</div>
-      </div>
-
-      <div id="tresdb-search-500" class="hidden">
-        <div class="alert alert-danger" role="alert">Internal server error :(</div>
       </div>
     </div>
   </div>
