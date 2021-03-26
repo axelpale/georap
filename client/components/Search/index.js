@@ -119,6 +119,7 @@ module.exports = function (query) {
       queryObj.skip = skip;
       queryObj.limit = limit;
 
+      // Reload view with new url.
       tresdb.go('/search?' + queryString.stringify(queryObj));
     };
 
@@ -182,6 +183,15 @@ module.exports = function (query) {
 
     // Do instant query.
     (function doQuery(q) {
+      // Parameters:
+      //   q
+      //     skip: <number>
+      //     limit: <number>
+      //     order: 'rel' | 'az' | 'za' | 'newest' | 'oldest'
+      //     search: <text>
+      //
+      // DEBUG console.log('q', q);
+      //
       // Show progress bar
       ui.show($progress);
       // Fetch search results.
