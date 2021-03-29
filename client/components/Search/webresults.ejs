@@ -9,8 +9,11 @@
   <ul class="list-group">
   <% results.forEach(function (result) { %>
     <% var comps = result.address_components %>
+    <% var geom = result.geometry %>
+    <% var latlng = geom.location %>
+    <% var zoom = boundsToZoom(geom.viewport) %>
     <li class="list-group-item">
-      <a href="#"><%= comps.map(function (comp) {
+      <a href="/?lat=<%= latlng.lat() %>&lng=<%= latlng.lng() %>&zoom=<%= zoom %>"><%= comps.map(function (comp) {
          return comp.long_name;
       }).join(', ') %></a>
     </li>

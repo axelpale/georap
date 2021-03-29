@@ -6,6 +6,7 @@ var webResultsTemplate = require('./webresults.ejs');
 var emitter = require('component-emitter');
 var queryString = require('query-string');
 var ui = require('tresdb-ui');
+var geometry = require('tresdb-models').geometry;
 var markers = tresdb.stores.markers;
 var searchApi = tresdb.stores.search;
 
@@ -209,6 +210,7 @@ module.exports = function (query) {
         $mount.find('.search-web-results').html(webResultsTemplate({
           // array of { address_components: [ { long_name, short_name }] }
           results: results,
+          boundsToZoom: geometry.boundsToZoom,
         }));
       });
 
