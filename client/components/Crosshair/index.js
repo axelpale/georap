@@ -55,11 +55,14 @@ module.exports = function () {
           if (err) {
             return console.error(err); // TODO
           }
-          children.coords.updateGeometry(geoms);
-          children.form.updateGeometry(geoms);
-          children.viewon.updateGeometry(geoms);
-          children.create.updateGeometry(geoms);
-
+          // Ensure view is still bound
+          if (children.title) {
+            children.title.updateGeometry(geoms);
+            children.coords.updateGeometry(geoms);
+            children.form.updateGeometry(geoms);
+            children.viewon.updateGeometry(geoms);
+            children.create.updateGeometry(geoms);
+          }
           return callback();
         });
       },
