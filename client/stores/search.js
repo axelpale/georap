@@ -1,22 +1,27 @@
-// https://maps.googleapis.com/maps/api/place/findplacefromtext/json
-//   ?key=<api key>
-//   &inputtype=textquery
-//   &locationbias=point:<lat>,<lng>
-//   &fields=formatted_address,name,geometry
-//   &input=<keywords>
 
 exports.geocode = function (address, callback) {
+  // Parameters:
+  //   address
+  //     string
+  //   callback
+  //     function (err, results) where
+  //       results
+  //         array of { address_components, geometry, ... }
+  //
+  // See https://developers.google.com/maps/documentation/javascript/geocoding
+  //
+
+  // Cancel empty or one-char addresses
+  if (typeof address !== 'string' || address.length < 2) {
+    return callback(null, []);
+  }
+
   // Wait recursively until google is available.
   if (!window.google) {
     var waitTime = 1000; // ms
     setTimeout(function () {
       exports.geocode(address, callback);
     }, waitTime);
-    return;
-  }
-
-  if (typeof address !== 'string') {
-    console.error('Invalid address: ', address);
     return;
   }
 
