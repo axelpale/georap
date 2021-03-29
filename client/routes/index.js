@@ -171,17 +171,27 @@ exports.route = function () {
     // Recenter map to possible query parameters.
     //
     var q = context.query;
+    var s, lat, lng, zoom;
 
     if (q.lat || q.lng || q.zoom) {
-      var s = {};
+      s = {};
       if (q.lat) {
-        s.lat = parseFloat(q.lat);
+        lat = parseFloat(q.lat);
+        if (!isNaN(lat)) {
+          s.lat = lat;
+        }
       }
       if (q.lng) {
-        s.lng = parseFloat(q.lng);
+        lng = parseFloat(q.lng);
+        if (!isNaN(lng)) {
+          s.lng = lng;
+        }
       }
       if (q.zoom) {
-        s.zoom = parseInt(q.zoom, 10);
+        zoom = parseInt(q.zoom, 10);
+        if (!isNaN(zoom)) {
+          s.zoom = zoom;
+        }
       }
       mapStateStore.update(s);
     }
