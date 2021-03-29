@@ -48,6 +48,13 @@ exports.getFiltered = function (params, callback) {
   //       optional string. A free-form search term.
   //   callback
   //     function (err, markerLocations)
+  //       err, with properties
+  //         message, equals to status text, 'error' on connection error
+  //         code
+  //           0 on connection error
+  //           200 on success
+  //           500 on internal server error
+  //           etc
 
   $.ajax({
     url: '/api/markers/search',

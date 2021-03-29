@@ -59,7 +59,7 @@
       <h3>Streets and Cities</h3>
       <div class="search-web-results"></div>
       <div class="search-web-error hidden">
-        <div class="alert alert-danger" role="alert">Retrieving web results failed.</div>
+        <div class="alert alert-danger" role="alert">Retrieving data failed. Press search to try again.</div>
       </div>
       <div class="search-web-progress progress hidden">
         <div class="progress-bar progress-bar-striped active" role="progressbar" style="width: 100%">
@@ -69,6 +69,10 @@
 
       <h3>Locations</h3>
       <div id="tresdb-search-results"></div>
+
+      <div id="tresdb-search-no-connection" class="hidden">
+        <div class="alert alert-danger" role="alert">No connection. Press search to try again.</div>
+      </div>
       <div id="tresdb-search-400" class="hidden">
         <div class="alert alert-danger" role="alert">Bad request. Please ensure the form values make sense.</div>
       </div>

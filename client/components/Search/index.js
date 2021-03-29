@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 // Component for search form and results.
 
 var template = require('./template.ejs');
@@ -11,6 +12,7 @@ var markers = tresdb.stores.markers;
 var searchApi = tresdb.stores.search;
 
 var FOCUS_DELAY = 200;
+var CONNECTION_ERROR = 0;
 var BAD_REQUEST = 400;
 
 var SKIP_DEFAULT = 0;
@@ -52,6 +54,7 @@ module.exports = function (query) {
     var $results = $('#tresdb-search-results');
     var $error400 = $('#tresdb-search-400');
     var $error500 = $('#tresdb-search-500');
+    var $errorNoConnection = $('#tresdb-search-no-connection');
     var $skip = $('#tresdb-search-skip');
     var $limit = $('#tresdb-search-limit');
     var $prevPage = $('#tresdb-search-prev');
@@ -224,11 +227,15 @@ module.exports = function (query) {
 
         if (err) {
           // Display error
-          console.error(err);
-          if (err.code === BAD_REQUEST) {
-            ui.show($error400);
-          } else {
-            ui.show($error500);
+          switch (err.code) {
+            case CONNECTION_ERROR:
+              ui.show($errorNoConnection);
+              break;
+            case BAD_REQUEST:
+              ui.show($error400);
+              break;
+            default:
+              ui.show($error500);
           }
           return;
         }
