@@ -567,3 +567,9 @@ button.tresdb-geolocation .tresdb-geolocation-icon {
   background-repeat: no-repeat;
 }
 /* Geolocation END */
+
+/* Pinpointer */
+.tresdb-crosshair .crosshair-zoom {
+  margin-bottom: 0.62rem;
+}
+/* Pinpointer END */
