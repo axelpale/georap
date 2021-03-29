@@ -14,7 +14,9 @@
     <% var zoom = boundsToZoom(geom.viewport) %>
     <li class="list-group-item">
       <a href="/?lat=<%= latlng.lat() %>&lng=<%= latlng.lng() %>&zoom=<%= zoom %>"><%= comps.map(function (comp) {
-         return comp.long_name;
+        var title = comp.types.join(', ');
+        var value = comp.long_name;
+        return '<span title="' + title + '">' + value + '</span>';
       }).join(', ') %></a>
     </li>
   <% }); %>
