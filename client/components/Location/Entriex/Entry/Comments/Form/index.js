@@ -2,6 +2,9 @@
 var ui = require('tresdb-ui');
 var template = require('./template.ejs');
 
+var MIN_LEN = tresdb.config.comments.minMessageLength;
+var MAX_LEN = tresdb.config.comments.maxMessageLength;
+
 module.exports = function () {
 
   // Setup
@@ -13,7 +16,10 @@ module.exports = function () {
   self.bind = function ($mountEl) {
     $mount = $mountEl;
 
-    $mount.html(template({}));
+    $mount.html(template({
+      MIN_LEN: MIN_LEN,
+      MAX_LEN: MAX_LEN,
+    }));
   };
 
   self.unbind = function () {

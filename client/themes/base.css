@@ -482,6 +482,9 @@ li.form-attachment-container:first-child img {
 /* Uploader END */
 
 /* Comments */
+.entry-comments-container > ul.list-group {
+  margin-bottom: 0;
+}
 .tresdb-entry .comment-photo-btn {
   margin-right: 1rem;
 }

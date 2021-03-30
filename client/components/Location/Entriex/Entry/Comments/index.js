@@ -1,5 +1,7 @@
 var template = require('./template.ejs');
+var emitter = require('component-emitter');
 var CommentView = require('./Comment');
+var CommentForm = require('./Form');
 var ui = require('tresdb-ui');
 
 module.exports = function (entry) {
@@ -11,6 +13,8 @@ module.exports = function (entry) {
   var $mount = null;
   var children = {};
   var $elems = {};
+  var self = this;
+  emitter(self);
 
   // Helper methods
 
@@ -32,7 +36,7 @@ module.exports = function (entry) {
 
   // Public methods
 
-  this.bind = function ($mountEl) {
+  self.bind = function ($mountEl) {
     $mount = $mountEl;
 
     $mount.html(template({
@@ -46,14 +50,19 @@ module.exports = function (entry) {
       $elems.comments.append($comment);
     });
 
-    // Setup comment form button
-    $elems.open = $mount.find('.entry-comment-form-open');
+    // Setup comment form
+    $elems.footer = $mount.find('.entry-footer');
+    $elems.form = $mount.find('.comment-form-container');
+    $elems.open = $mount.find('.comment-form-open');
     $elems.open.click(function () {
-      console.log('bind comment form');
+      ui.hide($elems.footer);
+      ui.show($elems.form);
+      children.form = new CommentForm();
+      children.form.bind($elems.form);
     });
   };
 
-  this.unbind = function () {
+  self.unbind = function () {
     if ($mount) {
       $mount = null;
       ui.unbindAll(children);
