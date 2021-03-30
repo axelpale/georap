@@ -15,7 +15,7 @@ module.exports = function (query) {
   //       skip: <number>
   //       limit: <number>
   //       order: 'rel' | 'az' | 'za' | 'newest' | 'oldest'
-  //       search: <text>
+  //       text: <text>
 
   // Init
   var self = this;
