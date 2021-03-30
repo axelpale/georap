@@ -13,6 +13,7 @@ module.exports = function (attachment) {
 
   this.bind = function ($mount) {
     $mount.html(template({
+      sizestamp: ui.sizestamp(attachment.filesize),
       attachment: attachment,
       thumbnailHtml: thumbnailTemplate({
         attachment: attachment,

@@ -1,7 +1,7 @@
 <div class="form-attachment" data-attachment-key="<%= attachment.key %>">
   <div class="form-attachment-thumbnail"><%= thumbnailHtml %></div>
   <div class="form-attachment-controls">
-    <div class="form-attachment-filename"><%= attachment.filename %></div>
+    <div class="form-attachment-filename"><%= attachment.filename %> (<span title="<%= attachment.filesize %> bytes"><%= sizestamp %></span>)</div>
     <div class="form-attachment-buttons">
       <button type="button" class="btn btn-sm btn-default form-attachment-up"><span class="glyphicon glyphicon-triangle-top" aria-hidden="true"></span> Up</button>
       <button type="button" class="btn btn-sm btn-default form-attachment-down"><span class="glyphicon glyphicon-triangle-bottom" aria-hidden="true"></span> Down</button>
