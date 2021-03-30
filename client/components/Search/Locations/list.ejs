@@ -7,7 +7,7 @@
 
 <% } else { %>
 
-  <ul class="list-group">
+  <ul class="list-group" style="margin-bottom: 0">
   <% markers.forEach(function (m) { %>
     <li class="list-group-item">
       <a href="/locations/<%= m._id %>?zoom=11"><%= m.name %></a>
@@ -17,4 +17,5 @@
     </li>
   <% }); %>
   </ul>
+  <div class="text-muted" style="margin-top: 0.38rem; margin-bottom: 1rem;">Showing results <%= skip %>–<%= skip + limit %></div>
 <% } %>

@@ -1,0 +1,27 @@
+<div class="search-locations"></div>
+
+<div class="search-progress progress hidden">
+  <div class="progress-bar progress-bar-striped active" role="progressbar" style="width: 100%">
+    <span class="sr-only">Waiting for server</span>
+  </div>
+</div>
+
+<div class="search-error-no-connection hidden">
+  <div class="alert alert-danger" role="alert">No connection. Press search to try again.</div>
+</div>
+<div class="search-error-400 hidden">
+  <div class="alert alert-danger" role="alert">Bad request. Please ensure the form values make sense.</div>
+</div>
+<div class="search-error-500 hidden">
+  <div class="alert alert-danger" role="alert">Internal server error :(</div>
+</div>
+
+<!-- Next/Prev navigation buttons -->
+<div class="row" style="margin-bottom: 5em">
+  <div class="col-sm-6">
+    <button type="button" class="search-prev btn btn-default btn-block hidden">&larr; Prev</button>
+  </div>
+  <div class="col-sm-6">
+    <button type="button" class="search-next btn btn-default btn-block hidden">Next &rarr;</button>
+  </div>
+</div>

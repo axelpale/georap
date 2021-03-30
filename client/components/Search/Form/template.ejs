@@ -1,0 +1,41 @@
+<form class="search-form form-horizontal">
+  <div class="form-group">
+    <label for="search-phrase-input" class="col-sm-3 control-label">Contains</label>
+    <div class="col-sm-9">
+      <input id="search-phrase-input" type="text" class="search-phrase form-control" placeholder="e.g. city, location name, or type">
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="search-creator-select" class="col-sm-3 control-label">Created by</label>
+    <div class="col-sm-5">
+      <select id="search-creator-select" class="search-creator form-control">
+        <option value="anyone">Anyone</option>
+        <option value="<%= username %>"><%= username %></option>
+        <!-- all members here -->
+      </select>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="search-order-select" class="col-sm-3 control-label">Order by</label>
+    <div class="col-sm-5">
+      <select id="search-order-select" class="search-order form-control">
+        <option value="rel">Relevance</option>
+        <option value="az">Alphabetic A-Z</option>
+        <option value="za">Alphabetic Z-A</option>
+        <option value="newest">Newest first</option>
+        <option value="oldest">Oldest first</option>
+      </select>
+    </div>
+  </div>
+  <div class="form-group hidden">
+    <div class="col-sm-5 col-sm-offset-3">
+      <input type="text" class="search-skip form-control">
+      <input type="text" class="search-limit form-control">
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-sm-5 col-sm-offset-3">
+      <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> Search</button>
+    </div>
+  </div>
+</form>
