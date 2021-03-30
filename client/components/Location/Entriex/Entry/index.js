@@ -76,13 +76,19 @@ module.exports = function (location, entry) {
   this.update = function (ev) {
     if ($mount) {
       entryModel.forward(entry, ev);
+      var $remount = $mount; // unbind nullifies mount
       this.unbind();
-      this.bind($mount);
+      this.bind($remount);
     }
   };
 
   this.unbind = function () {
-    ui.offAll(listeners);
-    ui.unbindAll(children);
+    if ($mount) {
+      $mount = null;
+      ui.offAll(listeners);
+      listeners = {};
+      ui.unbindAll(children);
+      children = {};
+    }
   };
 };

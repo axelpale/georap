@@ -8,7 +8,9 @@ module.exports = function (entry) {
   //     entry object
   //
 
+  var $mount = null;
   var children = {};
+  var $elems = {};
 
   // Helper methods
 
@@ -30,20 +32,34 @@ module.exports = function (entry) {
 
   // Public methods
 
-  this.bind = function ($mount) {
+  this.bind = function ($mountEl) {
+    $mount = $mountEl;
+
     $mount.html(template({
       entryId: entry._id,
     }));
 
-    var $commentsEl = $mount.find('.entry-comments');
-
+    // Render comments
+    $elems.comments = $mount.find('.entry-comments');
     entry.comments.forEach(function (comment) {
-      var $commentEl = buildComment(comment);
-      $commentsEl.append($commentEl);
+      var $comment = buildComment(comment);
+      $elems.comments.append($comment);
+    });
+
+    // Setup comment form button
+    $elems.open = $mount.find('.entry-comment-form-open');
+    $elems.open.click(function () {
+      console.log('bind comment form');
     });
   };
 
   this.unbind = function () {
-    ui.unbindAll(children);
+    if ($mount) {
+      $mount = null;
+      ui.unbindAll(children);
+      children = {};
+      ui.offAll($elems);
+      $elems = {};
+    }
   };
 };

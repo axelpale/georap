@@ -11,7 +11,13 @@ module.exports = function (entry, comment) {
   //     comment object
   //
 
-  this.bind = function ($mount) {
+  // Setup
+  var self = this;
+  var $mount = null;
+
+  self.bind = function ($mountEl) {
+    $mount = $mountEl;
+
     var isAuthor = account.isMe(comment.user);
     var isAdmin = account.isAdmin();
     var isAuthorOrAdmin = (isAuthor || isAdmin);
@@ -26,6 +32,9 @@ module.exports = function (entry, comment) {
     }));
   };
 
-  this.unbind = function () {
+  self.unbind = function () {
+    if ($mount) {
+      $mount = null;
+    }
   };
 };
