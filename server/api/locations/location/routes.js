@@ -1,6 +1,6 @@
 /* eslint-disable new-cap */
 
-var entriesRouter = require('./entries/routes');
+var entriesRouter = require('../../entries/routes');
 var handlers = require('./handlers');
 var express = require('express');
 var router = express.Router();

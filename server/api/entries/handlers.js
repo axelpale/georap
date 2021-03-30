@@ -1,6 +1,6 @@
 const _ = require('lodash');
 const status = require('http-status-codes');
-const dal = require('../../../entries/dal');
+const dal = require('./dal');
 
 // eslint-disable-next-line max-statements
 exports.change = (req, res, next) => {

@@ -1,4 +1,4 @@
-const entriesDal = require('../../../../entries/dal');
+const entriesDal = require('../dal');
 const purifyMarkdown = require('purify-markdown');
 const config = require('tresdb-config');
 const status = require('http-status-codes');

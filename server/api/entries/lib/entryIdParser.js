@@ -1,6 +1,6 @@
 // URL parser middleware
 
-var entriesDal = require('../../../../entries/dal');
+var entriesDal = require('../dal');
 var status = require('http-status-codes');
 var db = require('tresdb-db');
 
