@@ -1,3 +1,5 @@
+const fs = require('fs');
+const uploads = require('../../../server/services/uploads');
 
 module.exports = (entryCreatedEv, entryChangedEvs) => {
   // Parameters:
@@ -34,6 +36,25 @@ module.exports = (entryCreatedEv, entryChangedEvs) => {
           thumbmimetype: chev.data.newThumbmimetype,
         });
       }
+    }
+  });
+
+  // Append filesizes. This also checks the existence of the file
+  entryAttachments.forEach((atta) => {
+    const absFilepath = uploads.getAbsolutePath(atta.filepath);
+    try {
+      // eslint-disable-next-line no-sync
+      const status = fs.statSync(absFilepath);
+      atta.filesize = status.size;
+    } catch (err) {
+      if (err.code === 'ENOENT') {
+        console.warn('Missing attachment: ' + atta.filepath);
+        console.warn('Migrated with size of 0 bytes.');
+        atta.filesize = 0;
+        return;
+      }
+      // else
+      throw err;
     }
   });
 

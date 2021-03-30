@@ -59,6 +59,7 @@ exports.create = (req, res, next) => {
           username: username,
           filepath: uploads.getRelativePath(file.path),
           mimetype: file.mimetype,
+          filesize: file.size, // bytes
           thumbfilepath: uploads.getRelativePath(thumb.path),
           thumbmimetype: thumb.mimetype,
         }, (errc, attachment) => {

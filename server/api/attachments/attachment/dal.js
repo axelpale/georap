@@ -33,15 +33,17 @@ exports.create = (params, callback) => {
   //     time
   //       optional ISO datetime string (see db.timestamp). Defaults to now.
   //     filepath
-  //       string or null
+  //       string
   //       The relative path of the file in the uploads dir
   //     mimetype
-  //       string or null
+  //       string
+  //     filesize
+  //       integer, bytes
   //     thumbfilepath
-  //       string or null
+  //       string
   //       The relative path of the thumbnail file in the uploads dir
   //     thumbmimetype
-  //       string or null
+  //       string
   //   callback
   //     function (err, attachment)
   //
@@ -49,6 +51,12 @@ exports.create = (params, callback) => {
   if (typeof params.filepath !== 'string') {
     // No attachment given
     return callback(new Error('Missing attachment data'));
+  }
+  if (typeof params.mimetype !== 'string') {
+    return callback(new Error('Missing attachment mimetype'));
+  }
+  if (typeof params.filesize !== 'number') {
+    return callback(new Error('Missing attachment filesize'));
   }
 
   const attachment = {
@@ -59,6 +67,7 @@ exports.create = (params, callback) => {
     filename: path.basename(params.filepath),
     filepath: params.filepath,
     mimetype: params.mimetype,
+    filesize: params.filesize,
     thumbfilepath: params.thumbfilepath,
     thumbmimetype: params.thumbmimetype,
     data: {}, // For possible future metadata

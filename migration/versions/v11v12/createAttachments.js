@@ -1,4 +1,4 @@
-const dal = require('../../../server/api/attachments/attachment/dal');
+const attachmentDal = require('../../../server/api/attachments/attachment/dal');
 
 module.exports = (attachmentData, callback) => {
   // Parameters
@@ -7,13 +7,14 @@ module.exports = (attachmentData, callback) => {
   //     time
   //     filepath
   //     mimetype
+  //     filesize
   //     thumbfilepath
   //     thumbmimetype
   //   callback
   //     function (err, attachmentKeys)
   //
   if (attachmentData.filepath) {
-    dal.create(attachmentData, (err, attachment) => {
+    attachmentDal.create(attachmentData, (err, attachment) => {
       if (err) {
         return callback(err);
       }

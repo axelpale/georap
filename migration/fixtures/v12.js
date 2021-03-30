@@ -22,18 +22,20 @@ module.exports = {
         filename: 'radar.jpg',
         filepath: '2009/RxRvKSlbl/radar.jpg', // the uploads/ contains this...
         mimetype: 'image/jpeg',
+        filesize: 361485,
         thumbfilepath: '2009/RxRvKSlbl/radar_medium.jpg', // ...and this.
         thumbmimetype: 'image/jpeg',
         deleted: false,
         data: {}, // optional additional data e.g. overlay positions
       },
-      {
+      { // NOTE new attachment
         key: 'adebd2rq',
         user: 'admin',
         time: '2009-09-04T23:44:21.000Z',
         filename: 'tunnel-ground.jpg',
         filepath: '2021/EdvjkeEdf/tunnel-ground.jpg', // see uploads/
         mimetype: 'image/jpeg', /// small pic = same image
+        filesize: 78397,
         thumbfilepath: '2021/EdvjkeEdf/tunnel-ground.jpg',
         thumbmimetype: 'image/jpeg',
         deleted: false,
