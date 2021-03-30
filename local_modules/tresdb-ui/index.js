@@ -85,6 +85,30 @@ exports.placestamp = function (places) {
   return 'yet undefined area';
 };
 
+exports.sizestamp = function (bytes) {
+  // Return file size in human readable format.
+  // E.g.
+  //
+  var SEP = '&nbsp;';
+  var KB = 1024;
+  var MB = KB * KB;
+  if (bytes < KB) {
+    return bytes + SEP + 'B';
+  }
+  if (bytes < MB) {
+    var kbytes = bytes / KB;
+    if (kbytes < 10) {
+      return kbytes.toFixed(1) + SEP + 'kiB';
+    }
+    return Math.round(kbytes) + SEP + 'kiB';
+  }
+  var mbytes = bytes / MB;
+  if (mbytes < 10) {
+    return mbytes.toFixed(1) + SEP + 'MiB';
+  }
+  return Math.round(mbytes) + SEP + 'MiB';
+};
+
 exports.markdownSyntax = function () {
   return '<strong>Syntax:</strong>' +
     '<p>' +
