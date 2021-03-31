@@ -485,6 +485,9 @@ li.form-attachment-container:first-child img {
 .entry-comments-container > ul.list-group {
   margin-bottom: 0;
 }
+.entry-comments-container > ul.list-group li.list-group-item {
+  border-width: 1px 0 0 0;
+}
 .tresdb-entry .comment-photo-btn {
   margin-right: 1rem;
 }
