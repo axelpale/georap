@@ -1,10 +1,11 @@
 // Form for comment creation and edit
 var ui = require('tresdb-ui');
 var emitter = require('component-emitter');
+var updateHint = require('./updateHint');
 var template = require('./template.ejs');
 
-var MIN_LEN = tresdb.config.comments.minMessageLength;
-var MAX_LEN = tresdb.config.comments.maxMessageLength;
+// var MIN_LEN = tresdb.config.comments.minMessageLength;
+// var MAX_LEN = tresdb.config.comments.maxMessageLength;
 
 module.exports = function () {
 
@@ -19,14 +20,25 @@ module.exports = function () {
     $mount = $mountEl;
 
     $mount.html(template({
-      MIN_LEN: MIN_LEN,
-      MAX_LEN: MAX_LEN,
     }));
 
     $elems.cancel = $mount.find('.comment-form-cancel');
     $elems.cancel.click(function () {
       self.emit('exit');
     });
+
+    // Focus to message
+    $elems.message = $mount.find('.comment-form-message');
+    $elems.message.focus();
+
+    // Setup hint
+    $elems.hint = $mount.find('.comment-form-hint');
+    var handleHint = function () {
+      var len = $elems.message.val().length;
+      updateHint($elems.hint, len);
+    };
+    handleHint(); // init
+    $elems.message.on('input', handleHint); // on text input
   };
 
   self.unbind = function () {
