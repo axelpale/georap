@@ -59,6 +59,14 @@ module.exports = function (entry) {
       ui.show($elems.form);
       children.form = new CommentForm();
       children.form.bind($elems.form);
+
+      // React to cancel button
+      children.form.once('exit', function () {
+        ui.show($elems.footer);
+        ui.hide($elems.form); // contents could be removed?
+        children.form.unbind();
+        delete children.form;
+      });
     });
   };
 
