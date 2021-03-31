@@ -373,7 +373,9 @@ time {
 .entry-images-viewer-container {
   margin-bottom: 0.62rem;
 }
-
+.entry-images-browser-container {
+  margin-bottom: 0.62rem;
+}
 .entry-images-browser-container:focus {
   /* Keyboard handling requires focus the outline is too much */
   outline: none;
