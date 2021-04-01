@@ -22,6 +22,7 @@ module.exports = function () {
     $mount.html(template({
     }));
 
+    // Cancel button
     $elems.cancel = $mount.find('.comment-form-cancel');
     $elems.cancel.click(function () {
       self.emit('exit');
@@ -31,7 +32,7 @@ module.exports = function () {
     $elems.message = $mount.find('.comment-form-message');
     $elems.message.focus();
 
-    // Setup hint
+    // Setup message hint
     $elems.hint = $mount.find('.comment-form-hint');
     var handleHint = function () {
       var len = $elems.message.val().length;
@@ -39,6 +40,14 @@ module.exports = function () {
     };
     handleHint(); // init
     $elems.message.on('input', handleHint); // on text input
+
+    // Submit
+    $elems.form = $mount.find('.entry-comment-form');
+    $elems.form.submit(function (ev) {
+      ev.preventDefault();
+
+      console.log('form submitted');
+    });
   };
 
   self.unbind = function () {
