@@ -2,6 +2,7 @@ var template = require('./template.ejs');
 var emitter = require('component-emitter');
 var CommentView = require('./Comment');
 var ui = require('tresdb-ui');
+var rootBus = require('tresdb-bus');
 
 module.exports = function (entry) {
   // Parameters:
@@ -12,6 +13,7 @@ module.exports = function (entry) {
   var $mount = null;
   var children = {};
   var $elems = {};
+  var bus = rootBus.sub();
   var self = this;
   emitter(self);
 
@@ -49,11 +51,22 @@ module.exports = function (entry) {
       var $comment = buildComment(comment);
       $elems.comments.append($comment);
     });
+
+    // On comment creation
+    bus.on('location_entry_comment_created', function (ev) {
+      // The server sent a new comment.
+      // Append to the list of comments.
+      var $commentEl = buildComment(ev.data.comment);
+      $elems.comments.append($commentEl);
+      // Flash in green
+      ui.flash($commentEl);
+    });
   };
 
   self.unbind = function () {
     if ($mount) {
       $mount = null;
+      bus.off();
       ui.unbindAll(children);
       children = {};
       ui.offAll($elems);
