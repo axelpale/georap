@@ -3,11 +3,16 @@ var ui = require('tresdb-ui');
 var emitter = require('component-emitter');
 var updateHint = require('./updateHint');
 var template = require('./template.ejs');
+var entryApi = tresdb.stores.entries;
 
-// var MIN_LEN = tresdb.config.comments.minMessageLength;
-// var MAX_LEN = tresdb.config.comments.maxMessageLength;
+var MIN_LEN = tresdb.config.comments.minMessageLength;
+var MAX_LEN = tresdb.config.comments.maxMessageLength;
 
-module.exports = function () {
+module.exports = function (entry) {
+  // Parameters
+  //   entry
+  //     entry object
+  //
 
   // Setup
   var $mount = null;
@@ -41,12 +46,50 @@ module.exports = function () {
     handleHint(); // init
     $elems.message.on('input', handleHint); // on text input
 
+    // Prepare progress bar and error for submission
+    $elems.progress = $mount.find('.comment-form-progress');
+    $elems.error = $mount.find('.comment-form-error');
+
     // Submit
     $elems.form = $mount.find('.entry-comment-form');
     $elems.form.submit(function (ev) {
       ev.preventDefault();
 
-      console.log('form submitted');
+      var markdown = $elems.message.val().trim();
+      var len = markdown.length;
+
+      if (len < MIN_LEN || len > MAX_LEN) {
+        // Do not submit if too short or long
+        return;
+      }
+
+      // TODO Purge cache of unfinished comment
+
+      // Hide form and reveal progress
+      ui.hide($elems.form);
+      ui.show($elems.progress);
+      // Hide possible previous messages
+      ui.hide($elems.error);
+
+      var locId = entry.locationId;
+      var entryId = entry._id;
+      entryApi.createComment(locId, entryId, markdown, function (err) {
+        // Show form and hide progress
+        ui.show($elems.form);
+        ui.hide($elems.progress);
+
+        if (err) {
+          // Display error
+          $elems.error.html(err.message);
+          ui.show($elems.error);
+        } else {
+          // Success.
+          // Empty the message input for next comment
+          $elems.message.val('');
+          // Inform parent for example to unbind the form.
+          self.emit('success');
+        }
+      });
     });
   };
 

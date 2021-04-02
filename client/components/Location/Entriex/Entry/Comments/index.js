@@ -57,13 +57,20 @@ module.exports = function (entry) {
     $elems.open.click(function () {
       ui.hide($elems.footer);
       ui.show($elems.form);
-      children.form = new CommentForm();
+      children.form = new CommentForm(entry);
       children.form.bind($elems.form);
 
       // React to cancel button
       children.form.once('exit', function () {
         ui.show($elems.footer);
-        ui.hide($elems.form); // contents could be removed?
+        ui.hide($elems.form); // contents could be removed but we lazy
+        children.form.unbind();
+        delete children.form;
+      });
+      // React to successful form submission
+      children.form.once('success', function () {
+        ui.show($elems.footer);
+        ui.hide($elems.form); // contents could be removed but we lazy
         children.form.unbind();
         delete children.form;
       });
