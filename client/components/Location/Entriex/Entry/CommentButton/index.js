@@ -17,10 +17,10 @@ module.exports = function () {
     $mount.html(template());
 
     $elems.open = $mount.find('.comment-form-open');
-    $elems.open.click(function () {
-      $elems.open.off(); // prevent double click
+    var waitMs = 500;
+    $elems.open.click(ui.throttle(waitMs, function () {
       self.emit('open');
-    });
+    }));
   };
 
   self.unbind = function () {
