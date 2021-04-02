@@ -1,7 +1,6 @@
 var template = require('./template.ejs');
 var emitter = require('component-emitter');
 var CommentView = require('./Comment');
-var CommentForm = require('./Form');
 var ui = require('tresdb-ui');
 
 module.exports = function (entry) {
@@ -25,8 +24,9 @@ module.exports = function (entry) {
 
     children[commentId] = v;
 
-    var commentEl = document.createElement('div');
+    var commentEl = document.createElement('li');
     commentEl.id = 'comment-' + commentId;
+    commentEl.className = 'list-group-item';
 
     var $commentEl = $(commentEl);
     v.bind($commentEl);
@@ -48,32 +48,6 @@ module.exports = function (entry) {
     entry.comments.forEach(function (comment) {
       var $comment = buildComment(comment);
       $elems.comments.append($comment);
-    });
-
-    // Setup comment form
-    $elems.footer = $mount.find('.entry-footer');
-    $elems.form = $mount.find('.comment-form-container');
-    $elems.open = $mount.find('.comment-form-open');
-    $elems.open.click(function () {
-      ui.hide($elems.footer);
-      ui.show($elems.form);
-      children.form = new CommentForm(entry);
-      children.form.bind($elems.form);
-
-      // React to cancel button
-      children.form.once('exit', function () {
-        ui.show($elems.footer);
-        ui.hide($elems.form); // contents could be removed but we lazy
-        children.form.unbind();
-        delete children.form;
-      });
-      // React to successful form submission
-      children.form.once('success', function () {
-        ui.show($elems.footer);
-        ui.hide($elems.form); // contents could be removed but we lazy
-        children.form.unbind();
-        delete children.form;
-      });
     });
   };
 

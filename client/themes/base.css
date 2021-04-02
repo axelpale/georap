@@ -484,13 +484,10 @@ li.form-attachment-container:first-child img {
 /* Uploader END */
 
 /* Comments */
-.entry-comments-container > ul.list-group {
-  margin-bottom: 0;
+.panel > .list-group.entry-comments-container {
+  margin-bottom: -1px; /* hide double border */
 }
-.entry-comments-container > ul.list-group li.list-group-item {
-  border-width: 1px 0 0 0;
-}
-.tresdb-entry .comment-photo-btn {
+.comment-form-photo-btn {
   margin-right: 1rem;
 }
 .comment-edit-form-container {

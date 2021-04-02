@@ -2,6 +2,8 @@ var template = require('./template.ejs');
 var entryModel = require('tresdb-models').entry;
 var AttachmentsView = require('./Attachments');
 var CommentsView = require('./Comments');
+var CommentForm = require('./CommentForm');
+var CommentButton = require('./CommentButton');
 var FormView = require('../Form');
 var FormAdminView = require('../FormAdmin');
 var ui = require('tresdb-ui');
@@ -16,7 +18,7 @@ module.exports = function (location, entry) {
   //
 
   var $mount = null;
-  var listeners = {};
+  var $elems = {};
   var children = {};
 
   var isAuthor = account.isMe(entry.user);
@@ -36,15 +38,44 @@ module.exports = function (location, entry) {
       markdownHtml: ui.markdownToHtml(entry.markdown),
     }));
 
+    // Attachment viewer
     children.attachments = new AttachmentsView(entry, entry.attachments);
     children.attachments.bind($mount.find('.entry-attachments-container'));
 
+    // Comment list
     children.comments = new CommentsView(entry);
     children.comments.bind($mount.find('.entry-comments-container'));
 
+    // Comment form
+    $elems.footer = $mount.find('.entry-footer');
+    $elems.commentForm = $mount.find('.comment-form-container');
+    children.commentButton = new CommentButton();
+    children.commentButton.bind($mount.find('.comment-button-container'));
+    children.commentButton.on('open', function () {
+      ui.hide($elems.footer);
+      ui.show($elems.commentForm);
+      children.commentForm = new CommentForm(entry);
+      children.commentForm.bind($elems.commentForm);
+
+      // React to cancel button
+      children.commentForm.once('exit', function () {
+        ui.show($elems.footer);
+        ui.hide($elems.commentForm); // contents could be removed but we lazy
+        children.commentForm.unbind();
+        delete children.commentForm;
+      });
+      // React to successful form submission
+      children.commentForm.once('success', function () {
+        ui.show($elems.footer);
+        ui.hide($elems.commentForm); // contents could be removed but we lazy
+        children.commentForm.unbind();
+        delete children.commentForm;
+      });
+    });
+
     if (isAuthorOrAdmin) {
-      listeners.openBtn = $mount.find('.entry-form-open');
-      listeners.openBtn.click(function () {
+      $elems.openBtn = $mount.find('.entry-form-open');
+      $elems.openBtn.click(function () {
         var $formContainer = $mount.find('.entry-form-container');
         if (ui.isHidden($formContainer)) {
           ui.show($formContainer);
@@ -85,8 +116,8 @@ module.exports = function (location, entry) {
   this.unbind = function () {
     if ($mount) {
       $mount = null;
-      ui.offAll(listeners);
-      listeners = {};
+      ui.offAll($elems);
+      $elems = {};
       ui.unbindAll(children);
       children = {};
     }

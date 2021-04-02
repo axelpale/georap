@@ -1,10 +1,8 @@
-<li class="list-group-item">
-  <% if (isAuthorOrAdmin) { %>
-  <div class="pull-right comment-meta">
-    <button type="button" class="btn btn-default btn-sm comment-edit-open">&hellip;</button>
-  </div>
-  <% } %>
+<% if (isAuthorOrAdmin) { %>
+<div class="pull-right comment-meta">
+  <button type="button" class="btn btn-default btn-sm comment-edit-open">&hellip;</button>
+</div>
+<% } %>
 
-  <%= author %> <%= timestamp %>:
-  <span class="comment-message"><%= htmlMessage %></span>
-</li>
+<%= author %> <%= timestamp %>:
+<span class="comment-message"><%= htmlMessage %></span>

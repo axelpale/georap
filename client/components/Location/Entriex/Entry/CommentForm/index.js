@@ -24,8 +24,7 @@ module.exports = function (entry) {
   self.bind = function ($mountEl) {
     $mount = $mountEl;
 
-    $mount.html(template({
-    }));
+    $mount.html(template());
 
     // Cancel button
     $elems.cancel = $mount.find('.comment-form-cancel');
