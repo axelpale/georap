@@ -157,3 +157,23 @@ exports.isAdvancedUpload = function () {
     ('ondragstart' in div && 'ondrop' in div)
   ) && 'FormData' in window && 'FileReader' in window;
 };
+
+exports.throttle = function (duration, iteratee) {
+  // Simple throttle without trailing call.
+  // Useful to prevent double clicks.
+  var timeout = 0;
+
+  var resetTimeout = function () {
+    timeout = 0;
+  };
+
+  return function (a, b, c, d) {
+    if (timeout) {
+      return;
+    }
+
+    // NOTE timeout is a positive integer
+    timeout = setTimeout(resetTimeout, duration);
+    return iteratee(a, b, c, d);
+  };
+};
