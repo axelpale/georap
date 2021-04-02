@@ -61,6 +61,13 @@ module.exports = function (entry) {
       // Flash in green
       ui.flash($commentEl);
     });
+
+    bus.on('location_entry_comment_changed', function (ev) {
+      var commentId = ev.data.commentId;
+      if (children[commentId]) {
+        children[commentId].update(ev);
+      }
+    });
   };
 
   self.unbind = function () {

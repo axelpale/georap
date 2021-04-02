@@ -32,6 +32,18 @@ module.exports = function (entry, comment) {
     }));
   };
 
+  self.update = function (ev) {
+    // Parameters:
+    //   ev
+    //     a location_entry_comment_changed event
+    //
+    if ($mount) {
+      commentModel.forward(comment, ev);
+    }
+    // HACK rebind without unbind
+    self.bind($mount);
+  };
+
   self.unbind = function () {
     if ($mount) {
       $mount = null;
