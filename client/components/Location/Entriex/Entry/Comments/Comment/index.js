@@ -1,4 +1,5 @@
 var template = require('./template.ejs');
+var CommentForm = require('../../CommentForm');
 var commentModel = require('tresdb-models').comment;
 var ui = require('tresdb-ui');
 var account = tresdb.stores.account;
@@ -13,6 +14,8 @@ module.exports = function (entry, comment) {
 
   // Setup
   var self = this;
+  var $elems = {};
+  var children = {};
   var $mount = null;
 
   self.bind = function ($mountEl) {
@@ -30,6 +33,27 @@ module.exports = function (entry, comment) {
       isFresh: commentModel.isFresh(comment),
       isAuthorOrAdmin: isAuthorOrAdmin,
     }));
+
+    if (isAuthorOrAdmin) {
+      $elems.form = $mount.find('.comment-form-container');
+      $elems.open = $mount.find('.comment-form-open');
+      $elems.open.click(function () {
+        if (children.form) {
+          children.form.unbind();
+          $elems.form.empty();
+          delete children.form;
+        } else {
+          children.form = new CommentForm(entry, comment);
+          children.form.bind($elems.form);
+
+          children.form.on('exit', function () {
+            children.form.unbind();
+            $elems.form.empty();
+            delete children.form;
+          });
+        }
+      });
+    }
   };
 
   self.update = function (ev) {
@@ -47,6 +71,11 @@ module.exports = function (entry, comment) {
   self.unbind = function () {
     if ($mount) {
       $mount = null;
+      ui.offAll($elems);
+      $elems = {};
+      ui.offAll(children);
+      ui.unbindAll(children);
+      children = {};
     }
   };
 };
