@@ -1,9 +1,13 @@
 <form class="entry-comment-form form">
   <div class="form-group">
     <label class="control-label">
+      <% if (isNew) { %>
       <span class="glyphicon glyphicon-comment"></span> Add Comment:
+      <% } else { %>
+      <span class="glyphicon glyphicon-pencil"></span> Edit Comment:
+      <% } %>
     </label>
-    <textarea class="comment-form-message form-control" rows="2" placeholder="message..."></textarea>
+    <textarea class="comment-form-message form-control" rows="2" placeholder="message..."><%= markdown %></textarea>
   </div>
 
   <div class="comment-form-hint text-info pull-left"></div>

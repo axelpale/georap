@@ -8,10 +8,12 @@ var entryApi = tresdb.stores.entries;
 var MIN_LEN = tresdb.config.comments.minMessageLength;
 var MAX_LEN = tresdb.config.comments.maxMessageLength;
 
-module.exports = function (entry) {
+module.exports = function (entry, comment) {
   // Parameters
   //   entry
   //     entry object
+  //   comment
+  //     optional comment object. Leave empty for comment creation.
   //
 
   // Setup
@@ -21,10 +23,23 @@ module.exports = function (entry) {
   var self = this;
   emitter(self);
 
+  // Comment creation vs comment edit
+  var isNew = false;
+  if (!comment) {
+    isNew = true;
+    comment = {
+      markdown: '',
+      attachments: [],
+    };
+  }
+
   self.bind = function ($mountEl) {
     $mount = $mountEl;
 
-    $mount.html(template());
+    $mount.html(template({
+      isNew: isNew,
+      markdown: comment.markdown,
+    }));
 
     // Cancel button
     $elems.cancel = $mount.find('.comment-form-cancel');
