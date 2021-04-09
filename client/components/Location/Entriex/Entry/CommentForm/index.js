@@ -60,6 +60,11 @@ module.exports = function (entry, comment) {
     handleHint(); // init
     $elems.message.on('input', handleHint); // on text input
 
+    // Delete button
+    if (!isNew) {
+      children.delete = { unbind: function () {} };
+    }
+
     // Prepare progress bar and error for submission
     $elems.progress = $mount.find('.comment-form-progress');
     $elems.error = $mount.find('.comment-form-error');

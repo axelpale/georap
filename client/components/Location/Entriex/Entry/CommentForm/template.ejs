@@ -10,12 +10,17 @@
     <textarea class="comment-form-message form-control" rows="2" placeholder="message..."><%= markdown %></textarea>
   </div>
 
-  <div class="comment-form-hint text-info pull-left"></div>
-
   <div class="form-group pull-right">
     <button type="button" class="comment-form-photo-btn btn btn-default" title="Add Photo"><span class="glyphicon glyphicon-plus" aria-label="Add"></span> <span class="glyphicon glyphicon-picture" aria-label="Photo"></span></button>
     <button class="comment-form-cancel btn btn-default" type="button">Cancel</button>
     <button class="comment-form-submit btn btn-primary" type="submit">Comment</button>
+  </div>
+
+  <div class="form-group">
+    <% if (!isNew) { %>
+    <button class="comment-form-delete btn btn-danger" type="button" style="margin-right: 0.6rem;">Delete</button>
+    <% } %>
+    <span class="comment-form-hint text-info"></span>
   </div>
 
   <div class="clearfix"></div>
