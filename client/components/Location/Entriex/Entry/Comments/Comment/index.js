@@ -40,16 +40,19 @@ module.exports = function (entry, comment) {
       $elems.open.click(function () {
         if (children.form) {
           children.form.unbind();
-          $elems.form.empty();
           delete children.form;
+          $elems.form.empty();
+          ui.hide($elems.form);
         } else {
+          ui.show($elems.form);
           children.form = new CommentForm(entry, comment);
           children.form.bind($elems.form);
 
           children.form.on('exit', function () {
             children.form.unbind();
-            $elems.form.empty();
             delete children.form;
+            $elems.form.empty();
+            ui.hide($elems.form);
           });
         }
       });
