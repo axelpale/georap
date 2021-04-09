@@ -35,8 +35,8 @@ module.exports = function (entry, comment) {
     }));
 
     if (isAuthorOrAdmin) {
-      $elems.form = $mount.find('.comment-form-container');
-      $elems.open = $mount.find('.comment-form-open');
+      $elems.form = $mount.find('.comment-edit-container');
+      $elems.open = $mount.find('.comment-edit-open');
       $elems.open.click(function () {
         if (children.form) {
           children.form.unbind();
