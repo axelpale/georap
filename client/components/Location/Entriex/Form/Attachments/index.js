@@ -6,7 +6,7 @@ var UploaderView = require('./Uploader');
 var template = require('./template.ejs');
 var ui = require('tresdb-ui');
 
-module.exports = function (entry, attachments) {
+module.exports = function (attachments) {
 
   var children = {};
   var $mount = null;
