@@ -4,12 +4,10 @@ var emitter = require('component-emitter');
 var ui = require('tresdb-ui');
 var entries = tresdb.stores.entries;
 
-module.exports = function (location, entry) {
+module.exports = function (entry) {
   // Entry removal button and confirmation.
   //
   // Parameters:
-  //   location
-  //     location object
   //   entry
   //     entry object
   //
@@ -34,7 +32,7 @@ module.exports = function (location, entry) {
     $elems.removeBtn.click(function () {
       ui.hide($elems.confirmation);
       ui.show($elems.progress);
-      entries.remove(location._id, entry._id, function (err) {
+      entries.remove(entry.locationId, entry._id, function (err) {
         ui.hide($elems.progress);
         if (err) {
           // Handle with form error view

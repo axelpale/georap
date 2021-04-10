@@ -119,7 +119,7 @@ module.exports = function (location, entry) {
     });
 
     if (!isNew) {
-      children.remove = new RemoveView(location, entry);
+      children.remove = new RemoveView(entry);
       children.remove.bind($mount.find('.form-remove-container'));
       children.remove.on('error', function (err) {
         children.error.update(err.message);
