@@ -56,15 +56,25 @@ exports.remove = function (locationId, entryId, callback) {
 
 // Entry comments
 
-exports.createComment = function (locationId, entryId, markdown, callback) {
+exports.createComment = function (params, callback) {
+  // Create a comment
+  //
   // Parameters:
-  //   locationId
-  //   entryId
-  //   markdown
-  //     comment content string in Markdown
+  //   params, object with props
+  //     locationId
+  //     entryId
+  //     markdown
+  //       comment content string in Markdown
+  //     attachments
+  //       array of attachment keys
   //   callback
   //     function (err)
   //
+  var locationId = params.locationId;
+  var entryId = params.entryId;
+  var markdown = params.markdown;
+  var attachments = params.attachments;
+
   if (typeof markdown !== 'string' || markdown.length === 0) {
     return callback(new Error('Invalid comment message'));
   }
@@ -73,7 +83,7 @@ exports.createComment = function (locationId, entryId, markdown, callback) {
     url: '/api/locations/' + locationId + '/entries/' + entryId + '/comments',
     data: {
       markdown: markdown,
-      attachments: [], // future proof
+      attachments: attachments,
     },
   }, callback);
 };
@@ -81,24 +91,55 @@ exports.createComment = function (locationId, entryId, markdown, callback) {
 exports.changeComment = function (params, callback) {
   // Update comment
   //
+  // Parameters:
+  //   params, object with props
+  //     locationId
+  //       id string
+  //     entryId
+  //       id string
+  //     commentId
+  //       id string
+  //     markdown
+  //       string
+  //     attachments
+  //       array of attachment keys
+  //   callback
+  //     function (err)
+  //
   var locationId = params.locationId;
   var entryId = params.entryId;
   var commentId = params.commentId;
-  var markdown = params.newMessage;
+  var markdown = params.markdown;
+  var attachments = params.attachments;
 
   var entryUrl = '/api/locations/' + locationId + '/entries/' + entryId;
   return request.postJSON({
     url: entryUrl + '/comments/' + commentId,
     data: {
       markdown: markdown,
-      // attachments: attachments,
+      attachments: attachments,
     },
   }, callback);
 };
 
-exports.removeComment = function (locationId, entryId, commentId, callback) {
+exports.removeComment = function (params, callback) {
   // Delete a comment
   //
+  // Parameters:
+  //   params, object with props
+  //     locationId
+  //       id string
+  //     entryId
+  //       id string
+  //     commentId
+  //       id string
+  //   callback
+  //     function (err)
+  //
+  var locationId = params.locationId;
+  var entryId = params.entryId;
+  var commentId = params.commentId;
+
   var entryUrl = '/api/locations/' + locationId + '/entries/' + entryId;
   return request.deleteJSON({
     url: entryUrl + '/comments/' + commentId,
