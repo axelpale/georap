@@ -15,12 +15,12 @@ var ui = require('tresdb-ui');
 var emitter = require('component-emitter');
 var entries = tresdb.stores.entries;
 
-module.exports = function (location, entry) {
+module.exports = function (locationId, entry) {
   // Entry form View.
   //
   // Parameters:
-  //   location
-  //     location object
+  //   locationId
+  //     location id string
   //   entry
   //     optional entry object. If not given, a blank entry form is shown.
   //
@@ -94,14 +94,14 @@ module.exports = function (location, entry) {
       ui.show($elems.progress);
 
       if (isNew) {
-        entries.create(location._id, entryData, function (err) {
+        entries.create(locationId, entryData, function (err) {
           if (err) {
             return onError(err.message);
           }
           onSuccess();
         });
       } else {
-        entries.change(location._id, entry._id, entryData, function (err) {
+        entries.change(locationId, entry._id, entryData, function (err) {
           if (err) {
             return onError(err.message);
           }

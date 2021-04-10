@@ -22,7 +22,7 @@ module.exports = function (location, entries) {
       //     set true to add to beginning, false to add to bottom
       //
       var id = entry._id;
-      children[id] = new EntryView(location, entry);
+      children[id] = new EntryView(entry);
       // New container for entry
       var tmpl = '<div id="entry-' + id + '"></div>';
       if (prepend) {

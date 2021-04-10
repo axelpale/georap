@@ -6,12 +6,12 @@ var ui = require('tresdb-ui');
 var emitter = require('component-emitter');
 var entries = tresdb.stores.entries;
 
-module.exports = function (location, entry) {
+module.exports = function (locationId, entry) {
   // Entry deletion form View.
   //
   // Parameters:
-  //   location
-  //     location object
+  //   locationId
+  //     location id string
   //   entry
   //     entry object
   //
@@ -35,7 +35,7 @@ module.exports = function (location, entry) {
 
     listeners.deleteYesBtn = $mount.find('.entry-form-delete-yes');
     listeners.deleteYesBtn.click(function () {
-      entries.remove(location._id, entry._id, function (err) {
+      entries.remove(locationId, entry._id, function (err) {
         if (err) {
           // TODO show submit error
           return console.log(err);

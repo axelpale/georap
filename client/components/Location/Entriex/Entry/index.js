@@ -9,10 +9,8 @@ var FormAdminView = require('../FormAdmin');
 var ui = require('tresdb-ui');
 var account = tresdb.stores.account;
 
-module.exports = function (location, entry) {
+module.exports = function (entry) {
   // Parameters:
-  //   location
-  //     location object
   //   entry
   //     entry object
   //
@@ -81,11 +79,11 @@ module.exports = function (location, entry) {
           ui.show($formContainer);
 
           if (isAuthor) {
-            children.editform = new FormView(location, entry);
+            children.editform = new FormView(entry.locationId, entry);
             children.editform.bind($formContainer);
           } else {
             // The user is non-author admin. Show reduced form.
-            children.editform = new FormAdminView(location, entry);
+            children.editform = new FormAdminView(entry.locationId, entry);
             children.editform.bind($formContainer);
           }
 

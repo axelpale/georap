@@ -14,37 +14,40 @@ module.exports = function (location) {
   // Parameters:
   //   location
   //     location object
+  //       NOTE only location id is needed but the view generalization in
+  //            Location/Forms forces location argument
   //
   var self = this;
   emitter(self);
-
   var children = {};
 
+  var locationId = location._id;
+
   var startFormMemory = function () {
-    formMemory[location._id] = {};
+    formMemory[locationId] = {};
   };
   var getFormMemory = function () {
-    return formMemory[location._id];
+    return formMemory[locationId];
   };
   var setFormMemory = function (entryData) {
-    if (entryData && location._id in formMemory) {
-      formMemory[location._id] = entryData;
+    if (entryData && locationId in formMemory) {
+      formMemory[locationId] = entryData;
     }
   };
   var hasFormMemory = function () {
-    return (location._id in formMemory);
+    return (locationId in formMemory);
   };
   var stopFormMemory = function () {
-    delete formMemory[location._id];
+    delete formMemory[locationId];
   };
 
   self.bind = function ($mount) {
     $mount.html(template({}));
 
     if (hasFormMemory()) {
-      children.form = new FormView(location, getFormMemory());
+      children.form = new FormView(locationId, getFormMemory());
     } else {
-      children.form = new FormView(location);
+      children.form = new FormView(locationId);
       startFormMemory();
     }
 
