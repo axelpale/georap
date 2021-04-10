@@ -49,7 +49,7 @@ module.exports = function (location, entry) {
       isNew: isNew,
     }));
 
-    children.markdown = new MarkdownView(location, entry);
+    children.markdown = new MarkdownView(entry.markdown);
     children.markdown.bind($mount.find('.form-markdown-container'));
 
     children.attachments = new AttachmentsView(entry.attachments);

@@ -2,21 +2,19 @@
 var template = require('./template.ejs');
 var ui = require('tresdb-ui');
 
-module.exports = function (location, entry) {
+module.exports = function (markdown) {
   // Entry form markdown section.
   //
   // Parameters:
-  //   location
-  //     location object
-  //   entry
-  //     entry object with at least the markdown prop set
+  //   markdown
+  //     string, markdown
   //
 
   var $elems = {};
 
   this.bind = function ($mount) {
     $mount.html(template({
-      markdown: entry.markdown,
+      markdown: markdown,
       markdownSyntax: ui.markdownSyntax(),
     }));
 
