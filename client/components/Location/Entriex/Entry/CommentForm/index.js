@@ -33,6 +33,28 @@ module.exports = function (entry, comment) {
     };
   }
 
+  var submit = function (markdown, attachments, callback) {
+    var locId = entry.locationId;
+    var entryId = entry._id;
+
+    if (isNew) {
+      entryApi.createComment({
+        locationId: locId,
+        entryId: entryId,
+        markdown: markdown,
+        attachments: attachments,
+      }, callback);
+    } else {
+      entryApi.changeComment({
+        locationId: locId,
+        entryId: entryId,
+        commentId: comment.id,
+        markdown: markdown,
+        attachments: attachments,
+      }, callback);
+    }
+  };
+
   self.bind = function ($mountEl) {
     $mount = $mountEl;
 
@@ -74,6 +96,7 @@ module.exports = function (entry, comment) {
     $elems.form.submit(function (ev) {
       ev.preventDefault();
 
+      // Read message
       var markdown = $elems.message.val().trim();
       var len = markdown.length;
 
@@ -81,6 +104,9 @@ module.exports = function (entry, comment) {
         // Do not submit if too short or long
         return;
       }
+
+      // Read attachments
+      var attachments = [];
 
       // TODO Purge cache of unfinished comment
 
@@ -90,9 +116,7 @@ module.exports = function (entry, comment) {
       // Hide possible previous messages
       ui.hide($elems.error);
 
-      var locId = entry.locationId;
-      var entryId = entry._id;
-      entryApi.createComment(locId, entryId, markdown, function (err) {
+      submit(markdown, attachments, function (err) {
         // Show form and hide progress
         ui.show($elems.form);
         ui.hide($elems.progress);
