@@ -50,5 +50,11 @@ module.exports = (params, callback) => {
     },
   };
 
-  lib.insertAndEmit(newEvent, callback);
+  // Insert the basic version and emit an extended version
+  // with complete attachments (if needed).
+  const attachmentProps = [
+    'data.original.attachments',
+    'data.delta.attachments',
+  ];
+  lib.insertAndCompleteAndEmit(newEvent, attachmentProps, callback);
 };

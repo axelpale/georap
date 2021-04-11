@@ -24,5 +24,8 @@ module.exports = (params, callback) => {
     },
   };
 
-  lib.insertAndEmit(newEvent, callback);
+  // Insert the basic version and emit an extended version
+  // with complete attachments.
+  const attachmentProps = ['data.comment.attachments'];
+  lib.insertAndCompleteAndEmit(newEvent, attachmentProps, callback);
 };
