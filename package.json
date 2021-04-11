@@ -63,6 +63,7 @@
     "express-jwt": "^6.0.0",
     "extract-zip": "^1.6.5",
     "fs-extra": "^4.0.2",
+    "georap-prop": "file:local_modules/georap-prop",
     "georap-throttle": "file:local_modules/georap-throttle",
     "geostamp": "file:local_modules/geostamp",
     "glob": "^7.1.2",
