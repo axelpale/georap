@@ -1,6 +1,7 @@
 // Form for comment creation and edit
 var ui = require('tresdb-ui');
 var emitter = require('component-emitter');
+var AttachmentsForm = require('../Form/Attachments');
 var updateHint = require('./updateHint');
 var template = require('./template.ejs');
 var entryApi = tresdb.stores.entries;
@@ -13,7 +14,8 @@ module.exports = function (entry, comment) {
   //   entry
   //     entry object
   //   comment
-  //     optional comment object. Leave empty for comment creation.
+  //     optional comment object with complete attachments.
+  //     Leave empty for comment creation.
   //
 
   // Setup
@@ -87,6 +89,21 @@ module.exports = function (entry, comment) {
       children.delete = { unbind: function () {} };
     }
 
+    // Attachment button
+    // Show/hide attachments form.
+    $elems.attach = $mount.find('.comment-form-attachments-container');
+    $elems.attachBtn = $mount.find('.comment-form-photo-btn');
+    $elems.attachBtn.click(function () {
+      if (children.attach) {
+        children.attach.unbind();
+        delete children.attach;
+        $elems.attach.empty();
+      } else {
+        children.attach = new AttachmentsForm(comment.attachments);
+        children.attach.bind($elems.attach);
+      }
+    });
+
     // Prepare progress bar and error for submission
     $elems.progress = $mount.find('.comment-form-progress');
     $elems.error = $mount.find('.comment-form-error');
@@ -107,6 +124,9 @@ module.exports = function (entry, comment) {
 
       // Read attachments
       var attachments = [];
+      if (children.attach) {
+        attachments = children.attach.getAttachments();
+      }
 
       // TODO Purge cache of unfinished comment
 
