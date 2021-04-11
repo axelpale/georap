@@ -296,12 +296,38 @@ exports.getAllOfLocationComplete = (locationId, callback) => {
           time: -1, // most recent first
         },
       },
+      // Collect attachment keys from comments for further processing.
+      // NOTE $concatArrays cannot be used to concatenate already nested arrays
+      // such as the one returned by '$comments.attachments'
+      {
+        $addFields: {
+          commentAttachments: {
+            $reduce: {
+              input: '$comments.attachments',
+              initialValue: [],
+              in: {
+                $concatArrays: ['$$value', '$$this'],
+              },
+            },
+          },
+        },
+      },
+      // Replace attachment keys with attachment objects
       {
         $lookup: {
           from: 'attachments',
           localField: 'attachments',
           foreignField: 'key',
           as: 'attachments',
+        },
+      },
+      // Replace gathered comment attachment keys with attachment objects
+      {
+        $lookup: {
+          from: 'attachments',
+          localField: 'commentAttachments',
+          foreignField: 'key',
+          as: 'commentAttachments',
         },
       },
     ]).toArray((err, entries) => {
@@ -312,6 +338,26 @@ exports.getAllOfLocationComplete = (locationId, callback) => {
       // Complete attachment URLs
       entries.forEach(entry => {
         entry.attachments = entry.attachments.map(attachmentUrls.complete);
+      });
+
+      // Complete comment attachment objects and their URLs
+      const catReducer = (dict, cat) => {
+        dict[cat.key] = cat;
+        return dict;
+      };
+      entries.forEach(entry => {
+        // Gather comment attachments to a fast-access dict
+        const cats = entry.commentAttachments.reduce(catReducer, {});
+        // Replace in-comment attachment keys with attachment objects.
+        entry.comments.forEach((comment) => {
+          comment.attachments = comment.attachments.map((catKey) => {
+            const cat = cats[catKey];
+            // Complete url
+            return attachmentUrls.complete(cat);
+          });
+        });
+        // Forget the temporary cats array
+        delete entry.commentAttachments;
       });
 
       return callback(null, entries);
