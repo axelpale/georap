@@ -1,7 +1,7 @@
 var ui = require('tresdb-ui');
 var emitter = require('component-emitter');
 var template = require('./template.ejs');
-var FormView = require('../Form');
+var FormView = require('../../../Entry/Form');
 
 // Remember contents of unsubmitted forms during the session.
 // Cases where necessary:

@@ -4,8 +4,8 @@ var AttachmentsView = require('./Attachments');
 var CommentsView = require('./Comments');
 var CommentForm = require('./CommentForm');
 var CommentButton = require('./CommentButton');
-var FormView = require('../Form');
-var FormAdminView = require('../FormAdmin');
+var FormView = require('./Form');
+var FormAdminView = require('./FormAdmin');
 var ui = require('tresdb-ui');
 var account = tresdb.stores.account;
 

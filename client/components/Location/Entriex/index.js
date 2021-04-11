@@ -1,4 +1,4 @@
-var EntryView = require('./Entry');
+var EntryView = require('../../Entry');
 var ui = require('tresdb-ui');
 var bus = require('tresdb-bus');
 
