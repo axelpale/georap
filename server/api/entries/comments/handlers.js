@@ -29,7 +29,7 @@ exports.create = (req, res, next) => {
     attachments = attachments.slice(0, 1);
   }
 
-  if (!attachments.every(atta => typeof atta === 'string')) {
+  if (!attachments.every(key => typeof key === 'string')) {
     const msg = 'Invalid attachments array: ' + attachments;
     return res.status(status.BAD_REQUEST).send(msg);
   }
@@ -78,6 +78,11 @@ exports.change = function (req, res, next) {
   // Cut excess
   if (attachments.length > 1) {
     attachments = attachments.slice(0, 1);
+  }
+  // Ensure has only keys
+  if (!attachments.every(key => typeof key === 'string')) {
+    const msg = 'Invalid attachments array: ' + attachments;
+    return res.status(status.BAD_REQUEST).send(msg);
   }
 
   // Keep delta minimal
