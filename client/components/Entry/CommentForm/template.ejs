@@ -1,21 +1,23 @@
-<form class="entry-comment-form form">
-  <div class="form-group">
-    <label class="control-label">
-      <% if (isNew) { %>
-      <span class="glyphicon glyphicon-comment"></span> Add Comment:
-      <% } else { %>
-      <span class="glyphicon glyphicon-pencil"></span> Edit Comment:
-      <% } %>
-    </label>
-    <textarea class="comment-form-message form-control" rows="2" placeholder="message..."><%= markdown %></textarea>
-  </div>
+<div class="comment-form-group">
+  <form class="comment-form form">
+    <div class="form-group">
+      <label class="control-label">
+        <% if (isNew) { %>
+        <span class="glyphicon glyphicon-comment"></span> Add Comment:
+        <% } else { %>
+        <span class="glyphicon glyphicon-pencil"></span> Edit Comment:
+        <% } %>
+      </label>
+      <textarea class="comment-form-message form-control" rows="2" placeholder="message..."><%= markdown %></textarea>
+    </div>
+  </form>
 
   <div class="comment-form-attachments-container"></div>
 
   <div class="form-group pull-right">
     <button type="button" class="comment-form-photo-btn btn btn-default" title="Add Photo"><span class="glyphicon glyphicon-plus" aria-label="Add"></span> <span class="glyphicon glyphicon-picture" aria-label="Photo"></span></button>
     <button class="comment-form-cancel btn btn-default" type="button">Cancel</button>
-    <button class="comment-form-submit btn btn-primary" type="submit"><%
+    <button class="comment-form-submit btn btn-primary" type="button"><%
       if (isNew) {
         %>Comment<%
       } else {
@@ -32,7 +34,7 @@
   </div>
 
   <div class="clearfix"></div>
-</form>
+</div>
 
 <div class="comment-form-error hidden">Error</div>
 

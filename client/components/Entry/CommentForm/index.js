@@ -109,10 +109,9 @@ module.exports = function (entry, comment) {
     $elems.error = $mount.find('.comment-form-error');
 
     // Submit
-    $elems.form = $mount.find('.entry-comment-form');
-    $elems.form.submit(function (ev) {
-      ev.preventDefault();
-
+    $elems.form = $mount.find('.comment-form');
+    $elems.submit = $mount.find('.comment-form-submit');
+    $elems.submit.click(function () {
       // Read message
       var markdown = $elems.message.val().trim();
       var len = markdown.length;
@@ -130,7 +129,7 @@ module.exports = function (entry, comment) {
 
       // TODO Purge cache of unfinished comment
 
-      // Hide form and reveal progress
+      // Hide form and reveal progress. This also prevents double click.
       ui.hide($elems.form);
       ui.show($elems.progress);
       // Hide possible previous messages

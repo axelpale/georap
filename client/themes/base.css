@@ -397,7 +397,7 @@ time {
 
 /* Entries END */
 
-/* Entry Form and Uploader */
+/* Attachments Form and Uploader */
 
 .form-attachment-thumbnail {
   display: inline;
@@ -481,7 +481,7 @@ li.form-attachment-container:first-child img {
   display: none;
 }
 
-/* Uploader END */
+/* Attachments Form and Uploader END */
 
 /* Comments */
 .panel > .list-group.entry-comments-container {
