@@ -27,8 +27,9 @@ module.exports = function (entry, comment) {
 
     $mount.html(template({
       author: comment.user,
-      htmlMessage: ui.markdownToHtml(comment.markdown),
       timestamp: ui.timestamp(comment.time),
+      htmlMessage: ui.markdownToHtml(comment.markdown),
+      attachments: comment.attachments,
       isAuthor: isAuthor,
       isFresh: commentModel.isFresh(comment),
       isAuthorOrAdmin: isAuthorOrAdmin,
