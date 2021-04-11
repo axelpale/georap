@@ -397,15 +397,23 @@ time {
 
 /* Entries END */
 
-/* Attachments Form and Uploader */
+/* Attachment Thumbnail */
 
-.form-attachment-thumbnail {
+.attachment-thumbnail {
   display: inline;
 }
-.form-attachment-thumbnail img {
+
+.attachment-thumbnail img {
   object-fit: cover;
   width: 8.7rem;
   height: 8.7rem;
+}
+
+/* Attachment Thumbnail END */
+
+/* Attachments Form and Uploader */
+
+.form-attachment-thumbnail img {
   border-right: 1px solid #ddd;
   margin: -10px 0 -10px -15px;
   vertical-align: top;

@@ -10,10 +10,8 @@
 <%
   if (attachments.length > 0) {
     var att = attachments[0];
+    %><span class="comment-attachment-thumbnail"></span><%
+  }
 %>
-<span class="comment-attachment">
-  <a href="<%= att.url %>"><img src="<%= att.thumburl %>"></a>
-</span>
-<% } %>
 
 <div class="comment-edit-container hidden"></div>

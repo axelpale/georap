@@ -1,24 +1,28 @@
 var template = require('./template.ejs');
-var thumbnailTemplate = require('./thumbnail.ejs');
+var Thumbnail = require('../../../../Thumbnail');
 var ui = require('tresdb-ui');
 var emitter = require('component-emitter');
 var attachmentsApi = tresdb.stores.attachments;
 
 module.exports = function (attachment) {
 
+  var $mount = null;
+  var children = {};
+  var $elems = {};
   var self = this;
   emitter(this);
 
-  var $elems = {};
+  this.bind = function ($mountEl) {
+    $mount = $mountEl;
 
-  this.bind = function ($mount) {
     $mount.html(template({
       sizestamp: ui.sizestamp(attachment.filesize),
       attachment: attachment,
-      thumbnailHtml: thumbnailTemplate({
-        attachment: attachment,
-      }),
     }));
+
+    $elems.thumb = $mount.find('.form-attachment-thumbnail');
+    children.thumb = new Thumbnail(attachment);
+    children.thumb.bind($elems.thumb);
 
     $elems.up = $mount.find('.form-attachment-up');
     $elems.up.click(function () {
@@ -49,9 +53,7 @@ module.exports = function (attachment) {
         // Update key in dom so that entry save can read it.
         $mount.find('.form-attachment').attr('data-attachment-key', att.key);
         // Update image. Filename stays the same.
-        $mount.find('.form-attachment-thumbnail').html(thumbnailTemplate({
-          attachment: att,
-        }));
+        children.thumb.update(att);
       });
     });
   };
@@ -61,6 +63,12 @@ module.exports = function (attachment) {
   };
 
   this.unbind = function () {
-    ui.offAll($elems);
+    if ($mount) {
+      $mount = null;
+      ui.unbindAll(children);
+      children = {};
+      ui.offAll($elems);
+      $elems = {};
+    }
   };
 };

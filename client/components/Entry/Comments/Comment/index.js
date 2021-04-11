@@ -1,5 +1,6 @@
 var template = require('./template.ejs');
 var CommentForm = require('../../CommentForm');
+var Thumbnail = require('../../../Thumbnail');
 var commentModel = require('tresdb-models').comment;
 var ui = require('tresdb-ui');
 var account = tresdb.stores.account;
@@ -34,6 +35,12 @@ module.exports = function (entry, comment) {
       isFresh: commentModel.isFresh(comment),
       isAuthorOrAdmin: isAuthorOrAdmin,
     }));
+
+    if (comment.attachments.length > 0) {
+      $elems.thumb = $mount.find('.comment-attachment-thumbnail');
+      children.thumb = new Thumbnail(comment.attachments[0]);
+      children.thumb.bind($elems.thumb);
+    }
 
     if (isAuthorOrAdmin) {
       $elems.form = $mount.find('.comment-edit-container');
