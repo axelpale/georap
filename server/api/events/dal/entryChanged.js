@@ -1,6 +1,4 @@
 const db = require('tresdb-db');
-const asyn = require('async');
-const attachmentsDal = require('../../attachments/dal');
 const lib = require('./lib');
 
 module.exports = (params, callback) => {
@@ -39,64 +37,10 @@ module.exports = (params, callback) => {
   };
 
   // Insert the basic version and emit an extended version
-  // with complete attachments (if needed).
-  lib.insertOne(newEvent, (err, newId) => {
-    if (err) {
-      return callback(err);
-    }
-
-    // Clone and fill id
-    const eventForEmit = Object.assign({}, newEvent, {
-      _id: newId,
-    });
-
-    // Complete attachments.
-    // Convert attachment keys to attachments.
-    // This prevents additional attachment requests from clients.
-    asyn.waterfall([
-
-      (next) => {
-        const origAttachments = params.original.attachments;
-        if (origAttachments) {
-          attachmentsDal.getManyComplete(origAttachments, (merr, cats) => {
-            if (merr) {
-              return next(merr);
-            }
-            // Replace
-            eventForEmit.data.original.attachments = cats;
-            return next();
-          });
-        } else {
-          return next();
-        }
-      },
-
-      (next) => {
-        const deltaAttachments = params.delta.attachments;
-        if (deltaAttachments) {
-          attachmentsDal.getManyComplete(deltaAttachments, (merr, cats) => {
-            if (merr) {
-              return next(merr);
-            }
-            // Replace
-            eventForEmit.data.delta.attachments = cats;
-            return next();
-          });
-        } else {
-          return next();
-        }
-      },
-
-    ], (finalErr) => {
-      if (finalErr) {
-        return callback(finalErr);
-      }
-
-      // Emit the extended version.
-      lib.emitOne(eventForEmit);
-
-      // TODO maybe callback earlier, place outside waterfall?
-      return callback();
-    });
-  });
+  // with complete attachments (if any).
+  const attachmentProps = [
+    'data.original.attachments',
+    'data.delta.attachments',
+  ];
+  lib.insertAndCompleteAndEmit(newEvent, attachmentProps, callback);
 };

@@ -1,6 +1,5 @@
 const db = require('tresdb-db');
 const lib = require('./lib');
-const attachmentsDal = require('../../attachments/dal');
 
 module.exports = (params, callback) => {
   // Parameters:
@@ -31,31 +30,6 @@ module.exports = (params, callback) => {
 
   // Insert the basic version and emit an extended version
   // with complete attachments.
-  lib.insertOne(newEvent, (err, newId) => {
-    if (err) {
-      return callback(err);
-    }
-
-    // Clone and fill id
-    const eventForEmit = Object.assign({}, newEvent, {
-      _id: newId,
-    });
-
-    // Convert attachment keys to attachments.
-    // This prevents additional requests from clients.
-    const attachmentKeys = params.entry.attachments;
-    attachmentsDal.getManyComplete(attachmentKeys, (merr, completeAtts) => {
-      if (merr) {
-        return callback(merr);
-      }
-
-      // Replace keys
-      eventForEmit.data.entry.attachments = completeAtts;
-
-      // Emit the extended version.
-      lib.emitOne(eventForEmit);
-
-      return callback();
-    });
-  });
+  const attachmentProps = ['data.entry.attachments'];
+  lib.insertAndCompleteAndEmit(newEvent, attachmentProps, callback);
 };
