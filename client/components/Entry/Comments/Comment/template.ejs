@@ -1,17 +1,18 @@
-<% if (isAuthorOrAdmin) { %>
+<%
+  if (attachments.length > 0) {
+    %><span class="comment-attachment-thumbnail"></span><%
+  }
+
+  if (isAuthorOrAdmin) {
+%>
 <div class="pull-right comment-meta">
   <button type="button" class="btn btn-default btn-sm comment-edit-open">&hellip;</button>
 </div>
-<% } %>
+<%
+  }
+%>
 
 <%= author %> <%= timestamp %>:
 <span class="comment-message"><%= htmlMessage %></span>
-
-<%
-  if (attachments.length > 0) {
-    var att = attachments[0];
-    %><span class="comment-attachment-thumbnail"></span><%
-  }
-%>
 
 <div class="comment-edit-container hidden"></div>

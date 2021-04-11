@@ -28,7 +28,7 @@ module.exports = function (entry) {
 
     var commentEl = document.createElement('li');
     commentEl.id = 'comment-' + commentId;
-    commentEl.className = 'list-group-item';
+    commentEl.className = 'list-group-item entry-comment';
 
     var $commentEl = $(commentEl);
     v.bind($commentEl);

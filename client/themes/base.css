@@ -400,9 +400,8 @@ time {
 /* Attachment Thumbnail */
 
 .attachment-thumbnail {
-  display: inline;
+  display: inline-block;
 }
-
 .attachment-thumbnail img {
   object-fit: cover;
   width: 8.7rem;
@@ -413,10 +412,13 @@ time {
 
 /* Attachments Form and Uploader */
 
+.form-attachment-thumbnail {
+  display: inline-block;
+  vertical-align: top;
+}
 .form-attachment-thumbnail img {
   border-right: 1px solid #ddd;
   margin: -10px 0 -10px -15px;
-  vertical-align: top;
 }
 li.form-attachment-container:first-child img {
   border-top-left-radius: 4px;
@@ -495,6 +497,9 @@ li.form-attachment-container:first-child img {
 .panel > .list-group.entry-comments-container {
   margin-bottom: -1px; /* hide double border */
 }
+.entry-comment {
+  overflow: auto; /* contain floated thumbnails */
+}
 .comment-form-photo-btn {
   margin-right: 1rem;
 }
@@ -502,6 +507,11 @@ li.form-attachment-container:first-child img {
   border-top: 1px dashed #CCC;
   margin-top: 1rem;
   padding-top: 1rem;
+}
+.comment-attachment-thumbnail {
+  display: inline-block;
+  margin: -10px -15px -10px 10px;
+  float: right;
 }
 /* Comments END */
 
