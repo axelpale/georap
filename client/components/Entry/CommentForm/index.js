@@ -124,7 +124,7 @@ module.exports = function (entry, comment) {
       // Read attachments
       var attachments = [];
       if (children.attach) {
-        attachments = children.attach.getAttachments();
+        attachments = children.attach.getAttachmentKeys();
       }
 
       // TODO Purge cache of unfinished comment
