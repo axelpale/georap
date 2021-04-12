@@ -1,4 +1,4 @@
-// module EntryFormError
+// General Error component
 //
 var template = require('./template.ejs');
 var ui = require('tresdb-ui');
