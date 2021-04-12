@@ -119,10 +119,10 @@ module.exports = function (entry, comment) {
     $elems.attach = $mount.find('.comment-form-attachments-container');
     $elems.attachBtn = $mount.find('.comment-form-photo-btn');
     if (comment.attachments.length > 0) {
-      children.attach = new AttachmentsForm(comment.attachments);
-      children.attach.bind($elems.attach);
       // Hide the form opening button as unnecessary
       ui.hide($elems.attachBtn);
+      children.attach = new AttachmentsForm(comment.attachments);
+      children.attach.bind($elems.attach);
     } else {
       // Show a button to open the attachment form
       $elems.attachBtn.click(function () {
