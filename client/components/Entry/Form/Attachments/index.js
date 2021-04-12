@@ -128,7 +128,9 @@ module.exports = function (attachments, opts) {
   };
 
   self.unbind = function () {
+    ui.offAll(children);
     ui.unbindAll(children);
+    children = {};
     $mount = null;
   };
 };
