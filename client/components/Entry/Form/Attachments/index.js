@@ -26,6 +26,7 @@ module.exports = function (attachments, opts) {
   }, opts);
 
   var self = this;
+  var $elems = {};
   var children = {};
   var $mount = null;
 
@@ -35,7 +36,7 @@ module.exports = function (attachments, opts) {
       label: opts.label,
     }));
 
-    var $uploaderContainer = $mount.find('.uploader-container');
+    $elems.uploader = $mount.find('.uploader-container');
 
     var appendAttachment = function (att) {
       // Container for attachment form
@@ -44,7 +45,7 @@ module.exports = function (attachments, opts) {
         'list-group-item',
         'form-attachment-container',
       ]);
-      $uploaderContainer.before($attContainer);
+      $elems.uploader.before($attContainer);
       children[att.key] = new AttachmentView(att);
       children[att.key].bind($attContainer);
 
@@ -62,6 +63,9 @@ module.exports = function (attachments, opts) {
         children[att.key].unbind();
         delete children[att.key];
         $attContainer.remove();
+        // This might free limited space,
+        // so ensure the uploader form is visible.
+        ui.show($elems.uploader);
       });
     };
 
@@ -71,7 +75,7 @@ module.exports = function (attachments, opts) {
         'list-group-item',
         'form-attachment-upload-container',
       ]);
-      $uploaderContainer.before($attContainer);
+      $elems.uploader.before($attContainer);
       children[fileupload.id] = new AttachmentUploadView(fileupload);
       children[fileupload.id].bind($attContainer);
       // Convert to attachment if success
@@ -94,14 +98,35 @@ module.exports = function (attachments, opts) {
         // which creates a .form-attachment-upload
         // and create an element so that getAttachmentKeys
         // keeps on track at each filter step.
-        var numUploaded = $mount.find('.form-attachment').length;
-        var numUploading = $mount.find('.form-attachment-upload').length;
-        return numUploaded + numUploading < opts.limit;
+        var numAttachments = self.count();
+        var isFull = numAttachments >= opts.limit;
+        var willBeFull = numAttachments + 1 >= opts.limit;
+        if (willBeFull) {
+          // Prevent further uploads. Delete should show hidden uploader.
+          ui.hide($elems.uploader);
+        }
+        return !isFull;
       },
     });
-    children.uploader.bind($mount.find('.uploader-container'));
+    children.uploader.bind($elems.uploader);
     // For each file uploaded, create a progress bar.
     children.uploader.on('fileupload', appendAttachmentUpload);
+    // Hide the uploader if the limit is reached.
+    // Requires rendered form-attachment elements.
+    if (self.count() >= opts.limit) {
+      ui.hide($elems.uploader);
+    }
+  };
+
+  self.count = function () {
+    // Return total number of uploaded and uploading attachments.
+    //
+    if ($mount) {
+      var numUploaded = $mount.find('.form-attachment').length;
+      var numUploading = $mount.find('.form-attachment-upload').length;
+      return numUploaded + numUploading;
+    }
+    return 0;
   };
 
   self.getAttachments = function () {
