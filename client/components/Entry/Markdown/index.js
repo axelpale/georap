@@ -77,6 +77,12 @@ module.exports = function (markdown, opts) {
     }
   };
 
+  this.clear = function () {
+    if ($elems.textarea) {
+      $elems.textarea.val('');
+    }
+  };
+
   this.getMarkdown = function () {
     if ($elems.textarea) {
       return $elems.textarea.val().trim();

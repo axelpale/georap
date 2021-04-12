@@ -173,7 +173,7 @@ module.exports = function (entry, comment) {
         } else {
           // Success.
           // Empty the message input for next comment
-          $elems.message.val('');
+          children.markdown.clear();
           // Inform parent for example to unbind the form.
           self.emit('success');
         }
