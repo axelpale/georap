@@ -11,6 +11,13 @@ module.exports = function (markdown, opts) {
   //   opts
   //     label
   //       input label text
+  //     glyphicon
+  //       string, glyphicon class name.
+  //       Can contain additional class names separated by spaces.
+  //       Set null to '' to disable glyphicon. Defaults to ''.
+  //       Example value:
+  //         'glyphicon-comment'
+  //         'glyphicon-pencil horizontal-flip'
   //     placeholder
   //       textarea placeholder
   //     rows
@@ -25,6 +32,7 @@ module.exports = function (markdown, opts) {
   }
   opts = Object.assign({
     label: 'Message:',
+    glyphicon: '',
     placeholder: '',
     rows: 3,
     minLength: 0,
@@ -38,6 +46,7 @@ module.exports = function (markdown, opts) {
       markdown: markdown,
       markdownSyntax: ui.markdownSyntax(),
       label: opts.label,
+      glyphicon: opts.glyphicon,
       placeholder: opts.placeholder,
       rows: opts.rows,
     }));
