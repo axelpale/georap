@@ -4,7 +4,17 @@ var FileUpload = require('./FileUpload');
 var emitter = require('component-emitter');
 var ui = require('tresdb-ui');
 
-module.exports = function () {
+var any = function () {
+  return true;
+};
+
+module.exports = function (opts) {
+  if (!opts) {
+    opts = {};
+  }
+  opts = Object.assign({
+    filter: any,
+  }, opts);
 
   var self = this;
   emitter(self);
@@ -73,14 +83,19 @@ module.exports = function () {
       droppedFiles = false;
 
       // Emit each new file to upload so that parent can build views.
+      // Filter with opts.filter parameter and validate within FileUpload.
       var fileuploads = [];
       var someInvalid = false;
       ajaxData.getAll(inputEl.name).forEach(function (file) {
         var fileupload = new FileUpload(file);
-        // Emit so that a view becomes built.
-        self.emit('fileupload', fileupload);
-        if (fileupload.valid) {
-          fileuploads.push(fileupload);
+        if (opts.filter(fileupload)) {
+          // Emit so that a view becomes built, error or no.
+          self.emit('fileupload', fileupload);
+          if (fileupload.valid) {
+            fileuploads.push(fileupload);
+          } else {
+            someInvalid = true;
+          }
         } else {
           someInvalid = true;
         }

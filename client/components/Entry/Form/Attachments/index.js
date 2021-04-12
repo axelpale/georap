@@ -87,7 +87,18 @@ module.exports = function (attachments, opts) {
     attachments.forEach(appendAttachment);
 
     // Upload form
-    children.uploader = new UploaderView();
+    children.uploader = new UploaderView({
+      filter: function () {
+        // HACK filtered (accepted) upload will emit 'fileupload'
+        // which calls appendAttachmentUpload
+        // which creates a .form-attachment-upload
+        // and create an element so that getAttachmentKeys
+        // keeps on track at each filter step.
+        var numUploaded = $mount.find('.form-attachment').length;
+        var numUploading = $mount.find('.form-attachment-upload').length;
+        return numUploaded + numUploading < opts.limit;
+      },
+    });
     children.uploader.bind($mount.find('.uploader-container'));
     // For each file uploaded, create a progress bar.
     children.uploader.on('fileupload', appendAttachmentUpload);
