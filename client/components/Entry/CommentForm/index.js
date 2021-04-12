@@ -115,20 +115,19 @@ module.exports = function (entry, comment) {
     // attachment form hidden and show only a button to open it.
     $elems.attach = $mount.find('.comment-form-attachments-container');
     $elems.attachBtn = $mount.find('.comment-form-photo-btn');
-    if (comment.attachments.length > 0) {
+    var openAttachmentsForm = function () {
       // Hide the form opening button as unnecessary
       ui.hide($elems.attachBtn);
       children.attach = new AttachmentsForm(comment.attachments);
       children.attach.bind($elems.attach);
+    };
+    // Form or Button
+    if (comment.attachments.length > 0) {
+      openAttachmentsForm();
     } else {
       // Show a button to open the attachment form
-      $elems.attachBtn.click(function () {
-        ui.hide($elems.attachBtn); // hide button; closing feature not needed
-        children.attach = new AttachmentsForm(comment.attachments);
-        children.attach.bind($elems.attach);
-      });
+      $elems.attachBtn.click(openAttachmentsForm);
     }
-
 
     // Prepare progress bar for submission
     $elems.progress = $mount.find('.comment-form-progress');
