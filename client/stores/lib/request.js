@@ -3,6 +3,33 @@ var account = require('../account');
 var HTTP_OK = 200;
 var HTTP_PAYLOAD_TOO_LARGE = 413;
 
+var createError = function (jqxhr) {
+  // Build error object from jQuery ajax http request
+  //
+  var message;
+  var name;
+  var status = jqxhr.status;
+  if (status === 0) {
+    name = 'NO_CONNECTION';
+    message = 'No connection';
+  } else if (status === HTTP_PAYLOAD_TOO_LARGE) {
+    name = 'REQUEST_TOO_LONG';
+    message = 'Request payload is too large';
+  } else if (status === HTTP_OK) {
+    name = jqxhr.statusText;
+    message = jqxhr.responseText;
+  } else {
+    name = jqxhr.statusText;
+    message = jqxhr.responseText;
+  }
+
+  var err = new Error(message);
+  err.name = name;
+  err.code = status;
+
+  return err;
+};
+
 exports.deleteJSON = function (params, callback) {
   // General JSON DELETE AJAX request.
   //
@@ -12,6 +39,7 @@ exports.deleteJSON = function (params, callback) {
   //     data
   //   callback
   //     function (err, jsonResponse)
+  //
   $.ajax({
     url: params.url,
     type: 'DELETE',
@@ -21,8 +49,8 @@ exports.deleteJSON = function (params, callback) {
     success: function (responseData) {
       return callback(null, responseData);
     },
-    error: function (jqxhr, status, statusMessage) {
-      return callback(new Error(statusMessage));
+    error: function (jqxhr) {
+      return callback(createError(jqxhr));
     },
   });
 };
@@ -36,8 +64,8 @@ exports.getJSON = function (url, callback) {
     success: function (result) {
       return callback(null, result);
     },
-    error: function (jqxhr, statusCode, statusMessage) {
-      return callback(new Error(statusMessage));
+    error: function (jqxhr) {
+      return callback(createError(jqxhr));
     },
   });
 };
@@ -53,7 +81,7 @@ exports.postFile = function (params, callback) {
   //       jQuery instance of the file upload form.
   //   callback
   //     function (err, jsonResponse)
-
+  //
 
   var formData = new FormData(params.form[0]);
 
@@ -75,20 +103,8 @@ exports.postFile = function (params, callback) {
     success: function (jsonResp) {
       return callback(null, jsonResp);
     },
-    error: function (jqxhr, errorName, errorMessage) {
-      var err = new Error(jqxhr.statusText);
-      err.code = jqxhr.status;
-
-      if (jqxhr.status === HTTP_PAYLOAD_TOO_LARGE) {
-        err.name = 'REQUEST_TOO_LONG';
-      } else if (jqxhr.status === HTTP_OK) {
-        err.name = errorName;
-        err.message = errorMessage;
-      } else {
-        err.name = jqxhr.responseText;
-      }
-
-      return callback(err);
+    error: function (jqxhr) {
+      return callback(createError(jqxhr));
     },
   });
 };
@@ -112,8 +128,8 @@ exports.postJSON = function (params, callback) {
     success: function (responseData) {
       return callback(null, responseData);
     },
-    error: function (jqxhr, status, statusMessage) {
-      return callback(new Error(statusMessage));
+    error: function (jqxhr) {
+      return callback(createError(jqxhr));
     },
   });
 };
