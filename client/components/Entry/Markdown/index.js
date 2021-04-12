@@ -38,6 +38,7 @@ module.exports = function (markdown, opts) {
     rows: 3,
     minLength: 0,
     maxLength: Infinity,
+    focus: true,
   }, opts);
 
   var $elems = {};
@@ -69,6 +70,11 @@ module.exports = function (markdown, opts) {
       ev.preventDefault();
       ui.toggleHidden($mount.find('.markdown-syntax'));
     });
+
+    // Focus to message
+    if (opts.focus) {
+      $elems.textarea.focus();
+    }
   };
 
   this.getMarkdown = function () {
