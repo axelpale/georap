@@ -38,7 +38,9 @@ module.exports = function (entry, comment) {
 
     if (comment.attachments.length > 0) {
       $elems.thumb = $mount.find('.comment-attachment-thumbnail');
-      children.thumb = new Thumbnail(comment.attachments[0]);
+      children.thumb = new Thumbnail(comment.attachments[0], {
+        makeLink: true,
+      });
       children.thumb.bind($elems.thumb);
     }
 
