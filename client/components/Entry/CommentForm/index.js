@@ -1,3 +1,5 @@
+/* eslint-disable max-statements */
+
 // Form for comment creation and edit
 var ui = require('tresdb-ui');
 var emitter = require('component-emitter');
@@ -112,20 +114,24 @@ module.exports = function (entry, comment) {
       });
     }
 
-    // Attachment button
-    // Show/hide attachments form.
+    // If comment contains attachments, show them. Otherwise keep
+    // attachment form hidden and show only a button to open it.
     $elems.attach = $mount.find('.comment-form-attachments-container');
     $elems.attachBtn = $mount.find('.comment-form-photo-btn');
-    $elems.attachBtn.click(function () {
-      if (children.attach) {
-        children.attach.unbind();
-        delete children.attach;
-        $elems.attach.empty();
-      } else {
+    if (comment.attachments.length > 0) {
+      children.attach = new AttachmentsForm(comment.attachments);
+      children.attach.bind($elems.attach);
+      // Hide the form opening button as unnecessary
+      ui.hide($elems.attachBtn);
+    } else {
+      // Show a button to open the attachment form
+      $elems.attachBtn.click(function () {
+        ui.hide($elems.attachBtn); // hide button; closing feature not needed
         children.attach = new AttachmentsForm(comment.attachments);
         children.attach.bind($elems.attach);
-      }
-    });
+      });
+    }
+
 
     // Prepare progress bar for submission
     $elems.progress = $mount.find('.comment-form-progress');
