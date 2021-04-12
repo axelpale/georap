@@ -1,5 +1,6 @@
 
 var template = require('./template.ejs');
+var updateHint = require('./updateHint');
 var ui = require('tresdb-ui');
 
 module.exports = function (markdown, opts) {
@@ -53,6 +54,16 @@ module.exports = function (markdown, opts) {
 
     $elems.textarea = $mount.find('textarea');
 
+    // Display message hint
+    $elems.hint = $mount.find('.markdown-hint');
+    var handleHint = function () {
+      var len = $elems.textarea.val().length;
+      updateHint($elems.hint, len);
+    };
+    handleHint(); // init
+    $elems.textarea.on('input', handleHint); // on text input
+
+    // Open markdown syntax
     $elems.syntaxOpen = $mount.find('.markdown-syntax-open');
     $elems.syntaxOpen.click(function (ev) {
       ev.preventDefault();
