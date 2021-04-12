@@ -3,10 +3,10 @@
 // Form for comment creation and edit
 var ui = require('tresdb-ui');
 var emitter = require('component-emitter');
+var MarkdownView = require('../Markdown');
 var AttachmentsForm = require('../Form/Attachments');
 var RemoveView = require('../Remove');
 var ErrorView = require('../Error');
-var updateHint = require('./updateHint');
 var template = require('./template.ejs');
 var entryApi = tresdb.stores.entries;
 
@@ -75,23 +75,20 @@ module.exports = function (entry, comment) {
       self.emit('exit');
     });
 
-    // Focus to message
-    $elems.message = $mount.find('.comment-form-message');
-    $elems.message.focus();
+    // Setup message input
+    $elems.markdown = $mount.find('.comment-form-markdown-container');
+    children.markdown = new MarkdownView(comment.markdown, {
+      label: isNew ? 'Add Comment:' : 'Edit Comment:',
+      glyphicon: isNew ? 'glyphicon-comment' : 'glyphicon-pencil flip-x',
+      placeholder: 'message...',
+      rows: 2,
+    });
+    children.markdown.bind($elems.markdown);
 
     // Init error view
     $elems.error = $mount.find('.comment-form-error');
     children.error = new ErrorView();
     children.error.bind($elems.error);
-
-    // Setup message hint
-    $elems.hint = $mount.find('.comment-form-hint');
-    var handleHint = function () {
-      var len = $elems.message.val().length;
-      updateHint($elems.hint, len);
-    };
-    handleHint(); // init
-    $elems.message.on('input', handleHint); // on text input
 
     // Delete button
     if (!isNew) {
@@ -141,7 +138,7 @@ module.exports = function (entry, comment) {
     $elems.submit = $mount.find('.comment-form-submit');
     $elems.submit.click(function () {
       // Read message
-      var markdown = $elems.message.val().trim();
+      var markdown = children.markdown.getMarkdown();
       var len = markdown.length;
 
       if (len < MIN_LEN || len > MAX_LEN) {
