@@ -88,9 +88,14 @@ module.exports = function (entry) {
           }
 
           children.editform.once('exit', function () {
-            ui.hide($formContainer);
-            children.editform.unbind();
-            delete children.editform;
+            // Close the form if entry not already unbound.
+            // For example entry removal might remove the entry view before
+            // form exits.
+            if ($mount) {
+              ui.hide($formContainer);
+              children.editform.unbind();
+              delete children.editform;
+            }
           });
         } else {
           ui.hide($formContainer);
