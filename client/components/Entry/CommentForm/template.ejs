@@ -10,6 +10,8 @@
       </label>
       <textarea class="comment-form-message form-control" rows="2" placeholder="message..."><%= markdown %></textarea>
     </div>
+
+    <span class="comment-form-hint text-info"></span>
   </form>
 
   <div class="comment-form-attachments-container"></div>
@@ -28,9 +30,9 @@
 
   <div class="form-group">
     <% if (!isNew) { %>
-    <button class="comment-form-delete btn btn-danger" type="button" style="margin-right: 0.6rem;">Delete</button>
+      <!-- Delete confirmation -->
+    <div class="comment-remove-container"></div>
     <% } %>
-    <span class="comment-form-hint text-info"></span>
   </div>
 
   <div class="clearfix"></div>

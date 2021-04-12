@@ -2,6 +2,7 @@
 var ui = require('tresdb-ui');
 var emitter = require('component-emitter');
 var AttachmentsForm = require('../Form/Attachments');
+var RemoveView = require('../Remove');
 var updateHint = require('./updateHint');
 var template = require('./template.ejs');
 var entryApi = tresdb.stores.entries;
@@ -86,7 +87,11 @@ module.exports = function (entry, comment) {
 
     // Delete button
     if (!isNew) {
-      children.delete = { unbind: function () {} };
+      children.remove = new RemoveView();
+      children.remove.bind($mount.find('.comment-remove-container'));
+      children.remove.on('submit', function () {
+        console.log('delete comment');
+      });
     }
 
     // Attachment button
