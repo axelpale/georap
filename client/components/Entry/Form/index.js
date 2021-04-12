@@ -98,6 +98,9 @@ module.exports = function (locationId, entry) {
       if (isNew) {
         entries.create(locationId, entryData, function (err) {
           if (err) {
+            if (!err.message) {
+              return onError('Failed to send. Check connection.');
+            }
             return onError(err.message);
           }
           onSuccess();
@@ -105,6 +108,9 @@ module.exports = function (locationId, entry) {
       } else {
         entries.change(locationId, entry._id, entryData, function (err) {
           if (err) {
+            if (!err.message) {
+              return onError('Failed to save. Check connection.');
+            }
             return onError(err.message);
           }
           onSuccess();
