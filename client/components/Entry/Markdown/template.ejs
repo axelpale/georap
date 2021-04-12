@@ -1,0 +1,13 @@
+<form class="form-markdown">
+  <div class="form-group form-markdown-group">
+    <label for="form-markdown-input"><%= label %></label>
+    <textarea id="form-markdown-input" name="markdown-text" class="form-control" rows="<%= rows %>" placeholder="<%= placeholder %>"><%= markdown %></textarea>
+    <div class="pull-right">
+      <a class="markdown-syntax-open" href="#">Formatting Help</a>
+    </div>
+  </div>
+</form>
+
+<div class="markdown-syntax well hidden">
+  <%= markdownSyntax %>
+</div>

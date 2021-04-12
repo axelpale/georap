@@ -2,13 +2,34 @@
 var template = require('./template.ejs');
 var ui = require('tresdb-ui');
 
-module.exports = function (markdown) {
+module.exports = function (markdown, opts) {
   // Entry form markdown section.
   //
   // Parameters:
   //   markdown
   //     string, markdown
+  //   opts
+  //     label
+  //       input label text
+  //     placeholder
+  //       textarea placeholder
+  //     rows
+  //       integer, initial rows in textarea
+  //     minLength
+  //       integer, 0 by default
+  //     maxLength
+  //       integer, Infinity by default
   //
+  if (!opts) {
+    opts = {};
+  }
+  opts = Object.assign({
+    label: 'Message:',
+    placeholder: '',
+    rows: 3,
+    minLength: 0,
+    maxLength: Infinity,
+  }, opts);
 
   var $elems = {};
 
@@ -16,6 +37,9 @@ module.exports = function (markdown) {
     $mount.html(template({
       markdown: markdown,
       markdownSyntax: ui.markdownSyntax(),
+      label: opts.label,
+      placeholder: opts.placeholder,
+      rows: opts.rows,
     }));
 
     $elems.textarea = $mount.find('textarea');
@@ -37,7 +61,7 @@ module.exports = function (markdown) {
   this.focus = function () {
     if ($elems.textarea) {
       $elems.textarea.focus();
-      // Text cursor to text end.
+      // Move text cursor to text end.
       $elems.textarea.prop('selectionStart', $elems.textarea.val().length);
       $elems.textarea.prop('selectionEnd', $elems.textarea.val().length);
     }

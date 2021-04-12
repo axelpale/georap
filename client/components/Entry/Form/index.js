@@ -8,7 +8,7 @@
 //
 var template = require('./template.ejs');
 var AttachmentsView = require('./Attachments');
-var MarkdownView = require('./Markdown');
+var MarkdownView = require('../Markdown');
 var ErrorView = require('./Error');
 var RemoveView = require('../Remove');
 var ui = require('tresdb-ui');
@@ -49,7 +49,9 @@ module.exports = function (locationId, entry) {
       isNew: isNew,
     }));
 
-    children.markdown = new MarkdownView(entry.markdown);
+    children.markdown = new MarkdownView(entry.markdown, {
+      label: 'Tell something about the location:',
+    });
     children.markdown.bind($mount.find('.form-markdown-container'));
 
     children.attachments = new AttachmentsView(entry.attachments);
