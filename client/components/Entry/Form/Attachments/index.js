@@ -25,10 +25,11 @@ module.exports = function (attachments, opts) {
     limit: 100, // Artificial value ~ Infinity
   }, opts);
 
+  var self = this;
   var children = {};
   var $mount = null;
 
-  this.bind = function ($mountEl) {
+  self.bind = function ($mountEl) {
     $mount = $mountEl;
     $mount.html(template({
       label: opts.label,
@@ -92,14 +93,14 @@ module.exports = function (attachments, opts) {
     children.uploader.on('fileupload', appendAttachmentUpload);
   };
 
-  this.getAttachments = function () {
+  self.getAttachments = function () {
     var keys = this.getAttachmentKeys();
     return keys.map(function (key) {
       return children[key].getAttachment();
     });
   };
 
-  this.getAttachmentKeys = function () {
+  self.getAttachmentKeys = function () {
     // Return list of attachment keys
     // To ensure correct order, read from dom
     if ($mount) {
@@ -111,11 +112,11 @@ module.exports = function (attachments, opts) {
     return [];
   };
 
-  this.setAttachmentKeys = function () {
+  self.setAttachmentKeys = function () {
     // Fetch?
   };
 
-  this.unbind = function () {
+  self.unbind = function () {
     ui.unbindAll(children);
     $mount = null;
   };
