@@ -3,6 +3,7 @@ var ui = require('tresdb-ui');
 var emitter = require('component-emitter');
 var AttachmentsForm = require('../Form/Attachments');
 var RemoveView = require('../Remove');
+var ErrorView = require('../Error');
 var updateHint = require('./updateHint');
 var template = require('./template.ejs');
 var entryApi = tresdb.stores.entries;
@@ -76,6 +77,11 @@ module.exports = function (entry, comment) {
     $elems.message = $mount.find('.comment-form-message');
     $elems.message.focus();
 
+    // Init error view
+    $elems.error = $mount.find('.comment-form-error');
+    children.error = new ErrorView();
+    children.error.bind($elems.error);
+
     // Setup message hint
     $elems.hint = $mount.find('.comment-form-hint');
     var handleHint = function () {
@@ -96,8 +102,8 @@ module.exports = function (entry, comment) {
           commentId: comment.id,
         }, function (err) {
           if (err) {
-            // TODO
-            console.log(err);
+            children.remove.reset(); // hide progress
+            children.error.update(err.message);
             return;
           }
           // Global location_entry_comment_removed will cause unbind
@@ -121,9 +127,8 @@ module.exports = function (entry, comment) {
       }
     });
 
-    // Prepare progress bar and error for submission
+    // Prepare progress bar for submission
     $elems.progress = $mount.find('.comment-form-progress');
-    $elems.error = $mount.find('.comment-form-error');
 
     // Submit
     $elems.form = $mount.find('.comment-form');
@@ -150,7 +155,7 @@ module.exports = function (entry, comment) {
       ui.hide($elems.form);
       ui.show($elems.progress);
       // Hide possible previous messages
-      ui.hide($elems.error);
+      children.error.reset();
 
       submit(markdown, attachments, function (err) {
         // Show form and hide progress
@@ -159,8 +164,7 @@ module.exports = function (entry, comment) {
 
         if (err) {
           // Display error
-          $elems.error.html(err.message);
-          ui.show($elems.error);
+          children.error.update(err.message);
         } else {
           // Success.
           // Empty the message input for next comment

@@ -134,6 +134,7 @@ module.exports = function (locationId, entry) {
       children.remove.on('submit', function () {
         entries.remove(entry.locationId, entry._id, function (err) {
           if (err) {
+            children.remove.reset(); // hide progress and confirmation
             children.error.update(err.message);
             return;
           }

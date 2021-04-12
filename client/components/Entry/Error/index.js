@@ -1,7 +1,6 @@
 // General Error component
 //
 var template = require('./template.ejs');
-var ui = require('tresdb-ui');
 var emitter = require('component-emitter');
 
 module.exports = function () {
@@ -11,7 +10,6 @@ module.exports = function () {
   emitter(self);
 
   var $mount = null;
-  var $elems = {};
 
   self.bind = function ($mountEl) {
     $mount = $mountEl;
@@ -26,9 +24,14 @@ module.exports = function () {
     }
   };
 
+  self.reset = function () {
+    if ($mount) {
+      $mount.empty();
+    }
+  };
+
   self.unbind = function () {
     if ($mount) {
-      ui.offAll($elems);
       $mount = null;
     }
   };
