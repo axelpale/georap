@@ -90,7 +90,19 @@ module.exports = function (entry, comment) {
       children.remove = new RemoveView();
       children.remove.bind($mount.find('.comment-remove-container'));
       children.remove.on('submit', function () {
-        console.log('delete comment');
+        entryApi.removeComment({
+          locationId: entry.locationId,
+          entryId: entry._id,
+          commentId: comment.id,
+        }, function (err) {
+          if (err) {
+            // TODO
+            console.log(err);
+            return;
+          }
+          // Global location_entry_comment_removed will cause unbind
+          // and $mount removal.
+        });
       });
     }
 

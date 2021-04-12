@@ -68,6 +68,15 @@ module.exports = function (entry) {
         children[commentId].update(ev);
       }
     });
+
+    bus.on('location_entry_comment_removed', function (ev) {
+      var commentId = ev.data.commentId;
+      if (children[commentId]) {
+        children[commentId].unbind();
+        delete children[commentId];
+        $mount.find('#comment-' + commentId).remove();
+      }
+    });
   };
 
   self.unbind = function () {
