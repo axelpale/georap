@@ -6,14 +6,33 @@ var UploaderView = require('./Uploader');
 var template = require('./template.ejs');
 var ui = require('tresdb-ui');
 
-module.exports = function (attachments) {
+module.exports = function (attachments, opts) {
+  // Parameters:
+  //   attachments
+  //     sdf
+  //   opts, object with props
+  //     label
+  //       String label above drag-n-drop box. Set null or '' to disable.
+  //       Default ''.
+  //     limit
+  //       zero or positive number. Defaults to 100.
+  //
+  if (!opts) {
+    opts = {};
+  }
+  opts = Object.assign({
+    label: '',
+    limit: 100, // Artificial value ~ Infinity
+  }, opts);
 
   var children = {};
   var $mount = null;
 
   this.bind = function ($mountEl) {
     $mount = $mountEl;
-    $mount.html(template({}));
+    $mount.html(template({
+      label: opts.label,
+    }));
 
     var $uploaderContainer = $mount.find('.uploader-container');
 

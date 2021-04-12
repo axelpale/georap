@@ -54,7 +54,9 @@ module.exports = function (locationId, entry) {
     });
     children.markdown.bind($mount.find('.form-markdown-container'));
 
-    children.attachments = new AttachmentsView(entry.attachments);
+    children.attachments = new AttachmentsView(entry.attachments, {
+      label: 'Photos and attachments:',
+    });
     children.attachments.bind($mount.find('.form-attachments-container'));
 
     children.error = new ErrorView();

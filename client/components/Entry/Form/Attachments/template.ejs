@@ -1,4 +1,9 @@
 <div class="form-attachments">
+  <%
+    if (label) {
+      %><label><%= label %></label><%
+    }
+  %>
   <ul class="form-attachments-list list-group">
     <li class="list-group-item uploader-container"></li>
   </ul>
