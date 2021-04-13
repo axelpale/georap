@@ -529,6 +529,10 @@ li.form-attachment-container:first-child img {
 .markdown-hint {
   padding-left: 1px;
 }
+.markdown-syntax .close {
+  margin-top: -9px;
+  margin-right: -2px;
+}
 /* Markdown Component END */
 
 /* Latest events page */

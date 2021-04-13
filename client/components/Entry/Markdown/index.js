@@ -68,10 +68,15 @@ module.exports = function (markdown, opts) {
     $elems.textarea.on('input', handleHint); // on text input
 
     // Open markdown syntax
+    $elems.syntax = $mount.find('.markdown-syntax');
     $elems.syntaxOpen = $mount.find('.markdown-syntax-open');
     $elems.syntaxOpen.click(function (ev) {
-      ev.preventDefault();
-      ui.toggleHidden($mount.find('.markdown-syntax'));
+      ev.preventDefault(); // prevent link opening
+      ui.toggleHidden($elems.syntax);
+    });
+    $elems.syntaxClose = $mount.find('.markdown-syntax .close');
+    $elems.syntaxClose.click(function () {
+      ui.hide($elems.syntax);
     });
 
     // Focus to message
