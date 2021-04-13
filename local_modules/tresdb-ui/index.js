@@ -109,18 +109,6 @@ exports.sizestamp = function (bytes) {
   return Math.round(mbytes) + SEP + 'MiB';
 };
 
-exports.markdownSyntax = function () {
-  return '<strong>Syntax:</strong>' +
-    '<p>' +
-    '**bold** = <strong>bold</strong><br>' +
-    '*emphasize* = <em>emphasize</em><br>' +
-    '[this is a link](http://example.com) =' +
-    ' <a href="http://example.com">this is a link</a><br>' +
-    '<a href="https://en.support.wordpress.com/markdown-quick-reference/"' +
-    ' target="_blank">See more...</a>' +
-    '</p>';
-};
-
 exports.onBy = function (emitter, listeners) {
   // Call emitter.on(key, value) for each key-value pair in listeners.
   Object.keys(listeners).forEach(function (k) {

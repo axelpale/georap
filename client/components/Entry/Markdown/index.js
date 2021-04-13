@@ -1,6 +1,7 @@
 
 var template = require('./template.ejs');
 var updateHint = require('./updateHint');
+var markdownSyntax = require('./markdownSyntax');
 var ui = require('tresdb-ui');
 
 module.exports = function (markdown, opts) {
@@ -46,7 +47,7 @@ module.exports = function (markdown, opts) {
   this.bind = function ($mount) {
     $mount.html(template({
       markdown: markdown,
-      markdownSyntax: ui.markdownSyntax(),
+      markdownSyntax: markdownSyntax(),
       label: opts.label,
       glyphicon: opts.glyphicon,
       placeholder: opts.placeholder,
