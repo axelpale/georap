@@ -525,6 +525,12 @@ li.form-attachment-container:first-child img {
 }
 /* Comments END */
 
+/* Markdown Component */
+.markdown-hint {
+  padding-left: 1px;
+}
+/* Markdown Component END */
+
 /* Latest events page */
 .latest-tabs li {
   text-transform: capitalize;
