@@ -123,7 +123,7 @@ module.exports = function (entry, comment) {
       // Hide the form opening button as unnecessary
       ui.hide($elems.attachBtn);
       children.attach = new AttachmentsForm(comment.attachments, {
-        label: 'Photo or document',
+        label: 'Photo or document:',
         limit: 1,
       });
       children.attach.bind($elems.attach);
