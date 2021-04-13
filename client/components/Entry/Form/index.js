@@ -7,7 +7,7 @@
 // - temporary store of content for interrupted creation or edit
 //
 var template = require('./template.ejs');
-var AttachmentsView = require('./Attachments');
+var AttachmentsForm = require('../AttachmentsForm');
 var MarkdownView = require('../Markdown');
 var ErrorView = require('../Error');
 var RemoveView = require('../Remove');
@@ -54,7 +54,7 @@ module.exports = function (locationId, entry) {
     });
     children.markdown.bind($mount.find('.form-markdown-container'));
 
-    children.attachments = new AttachmentsView(entry.attachments, {
+    children.attachments = new AttachmentsForm(entry.attachments, {
       label: 'Photos and attachments:',
     });
     children.attachments.bind($mount.find('.form-attachments-container'));
