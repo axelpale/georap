@@ -149,6 +149,7 @@ module.exports = function (entry, comment) {
 
       if (len < MIN_LEN || len > MAX_LEN) {
         // Do not submit if too short or long
+        children.error.update('Message is too short or long.');
         return;
       }
 
