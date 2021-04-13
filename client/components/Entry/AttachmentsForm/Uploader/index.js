@@ -140,7 +140,6 @@ module.exports = function (opts) {
         },
       })
         .done(function (data, textStatus, xhr) {
-          console.log('success');
           var SUCCESS = 200;
           if (xhr.status === SUCCESS) {
             fileuploads.forEach(function (fileupload, i) {
