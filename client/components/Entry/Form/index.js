@@ -51,6 +51,7 @@ module.exports = function (locationId, entry) {
 
     children.markdown = new MarkdownView(entry.markdown, {
       label: 'Tell something about the location:',
+      rows: 3,
     });
     children.markdown.bind($mount.find('.form-markdown-container'));
 

@@ -82,6 +82,8 @@ module.exports = function (entry, comment) {
       glyphicon: isNew ? 'glyphicon-comment' : 'glyphicon-pencil flip-x',
       placeholder: 'message...',
       rows: 2,
+      minLength: MIN_LEN,
+      maxLength: MAX_LEN,
     });
     children.markdown.bind($elems.markdown);
 

@@ -58,8 +58,10 @@ module.exports = function (markdown, opts) {
     // Display message hint
     $elems.hint = $mount.find('.markdown-hint');
     var handleHint = function () {
-      var len = $elems.textarea.val().length;
-      updateHint($elems.hint, len);
+      updateHint($elems.hint, $elems.textarea.val(), {
+        minLength: opts.minLength,
+        maxLength: opts.maxLength,
+      });
     };
     handleHint(); // init
     $elems.textarea.on('input', handleHint); // on text input
