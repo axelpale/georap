@@ -137,8 +137,11 @@ exports.offBy = function (emitter, listeners) {
 
 exports.offAll = function (obj) {
   // Call .off() for each value in obj.
+  // Skip values that do not have off() method
   Object.keys(obj).forEach(function (k) {
-    obj[k].off();
+    if (obj[k].off) {
+      obj[k].off();
+    }
   });
 };
 
