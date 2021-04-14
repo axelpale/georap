@@ -7,30 +7,29 @@ var status = require('http-status-codes');
 exports.getRecent = function (req, res, next) {
   // HTTP request handler
 
-  var n = req.query.n;
-  var beforeTime = req.query.beforeTime;
+  const MAX_LIMIT = 100;
+  const params = Object.assign({
+    skip: 0,
+    limit: 10,
+  }, req.query);
 
-  try {
+  const skip = parseInt(params.skip, 10);
+  const limit = parseInt(params.limit, 10);
 
-    // Turns n to NaN if not integer
-    n = parseInt(n, 10);
-    if (Number.isNaN(n)) {
-      throw new Error('Not a number');
-    }
-
-    // Allow beforeTime to be empty string, meaning server now time.
-    if (beforeTime === '') {
-      beforeTime = (new Date()).toISOString();
-    } else {
-      // Throws RangeError if not valid time
-      beforeTime = new Date(beforeTime).toISOString();
-    }
-
-  } catch (e) {
-    return res.sendStatus(status.BAD_REQUEST);
+  if (isNaN(skip)) {
+    return res.status(status.BAD_REQUEST).send('Invalid argument: skip');
+  }
+  if (isNaN(limit)) {
+    return res.status(status.BAD_REQUEST).send('Invalid argument: limit');
+  }
+  if (limit > MAX_LIMIT) {
+    return res.status(status.BAD_REQUEST).send('Too large limit: ' + limit);
   }
 
-  dal.getRecent(n, beforeTime, function (err, events) {
+  dal.getRecent({
+    skip: skip,
+    limit: limit,
+  }, function (err, events) {
     if (err) {
       return next(err);
     }

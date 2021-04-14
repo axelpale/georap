@@ -1,58 +1,33 @@
 // Event API
 //
+const request = require('./lib/request');
 
-var emitter = require('component-emitter');
-var account = require('./account');
-
-emitter(exports);
-
-var fetch = function (n, beforeTime, callback) {
-  // Parameters:
-  //   n
-  //     max number of events to fetch
-  //   beforeTime
-  //     fetch only events before this time. Null = no time limit.
-  //   callback
-  //     function (err, arrayEvents)
+exports.getRecent = function (params, callback) {
+  // Get recent events.
   //
-  $.ajax({
-    url: '/api/events',
-    method: 'GET',
-    data: {
-      n: n,
-      beforeTime: beforeTime,  // can be null, meaning "before now"
-    },
-    dataType: 'json',
-    headers: { 'Authorization': 'Bearer ' + account.getToken() },
-    success: function (data) {
-      // Parameters:
-      //   data
-      //     array of events, most recent first
-      return callback(null, data);
-    },
-    error: function (jqxhr, statusCode, statusMessage) {
-      return callback(new Error(statusMessage));
-    },
-  });
-};
-
-exports.getRecent = function (n, callback) {
   // Parameters:
-  //   n
-  //     integer
+  //   params
+  //     skip
+  //       integer, how many to skip before results. Default 0.
+  //     limit
+  //       integer, how many to include into the results. Default 50.
   //   callback
   //     function (err, events)
   //       Parameters:
   //         err
   //         events
   //           array, most recent event first
+  //
+  params = Object.assign({
+    skip: 0,
+    limit: 50,
+  }, params);
 
-  var beforeTime = null; // null equals now
-
-  fetch(n, beforeTime, function (err, items) {
-    if (err) {
-      return callback(err);
-    }
-    return callback(null, items);
-  });
+  request.getJSON({
+    url: '/api/events',
+    data: {
+      skip: params.skip,
+      limit: params.limit,
+    },
+  }, callback);
 };

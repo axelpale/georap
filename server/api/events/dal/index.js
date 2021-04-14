@@ -57,15 +57,51 @@ exports.getAllOfLocationComplete = (locationId, callback) => {
   });
 };
 
-exports.getRecent = (n, beforeTime, callback) => {
+exports.getRecent = (params, callback) => {
+  // Get recent location events
+  //
   // Parameters
-  //   n
-  //     number of events to return
-  //   beforeTime
-  //     time as ISOString
+  //   params
+  //     skip
+  //       skip over this many hits until result
+  //     limit
+  //       max number of events to return
   //   callback
   //     function (err, events)
-  return exports.getRecentFiltered({}, n, beforeTime, callback);
+  //
+  db.collection('events').aggregate([
+    {
+      $sort: {
+        time: -1,
+      },
+    },
+    {
+      // MongoDB engine optimizes this extended limit with the sort
+      $limit: params.skip + params.limit,
+    },
+    {
+      // Skip sorted results
+      $skip: params.skip,
+    },
+    {
+      // Join with location data
+      $lookup: {
+        from: 'locations',
+        localField: 'locationId',
+        foreignField: '_id',
+        as: 'location',
+      },
+    },
+    {
+      // Change the location array to the single location (the first item).
+      $unwind: '$location',
+    },
+  ]).toArray((err, docs) => {
+    if (err) {
+      return callback(err);
+    }
+    return callback(null, docs);
+  });
 };
 
 exports.getRecentOfUser = (username, n, beforeTime, callback) => {

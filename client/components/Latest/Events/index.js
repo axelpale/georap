@@ -10,7 +10,7 @@ var rootBus = require('tresdb-bus');
 var models = require('tresdb-models');
 var eventsStore = tresdb.stores.events;
 
-var LIST_SIZE = 200;
+var LIST_SIZE = 100;
 
 module.exports = function () {
   // Init
@@ -55,7 +55,10 @@ module.exports = function () {
   self.update = function (filter) {
     if ($mount) {
       // Reload events and render
-      eventsStore.getRecent(LIST_SIZE, function (err, events) {
+      eventsStore.getRecent({
+        skip: 0,
+        limit: LIST_SIZE,
+      }, function (err, events) {
         // Ensure loading bar is hidden.
         ui.hide($mount.find('.latest-events-progress'));
 
