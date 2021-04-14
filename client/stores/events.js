@@ -1,10 +1,4 @@
-// Event store. Caching and automatically updating.
-//
-// Init:
-//   var events = require('./events');
-//
-// Call:
-//   events.getRecent(n, function (err, nEvs) { ... });
+// Event API
 //
 
 var emitter = require('component-emitter');

@@ -20,12 +20,14 @@ exports.createLocationTypeChanged = require('./locationTypeChanged');
 exports.createLocationRemoved = require('./locationRemoved');
 
 exports.getAllOfUser = (username, callback) => {
+  // WARNING possibly computationally heavy if lots of events
+  //
   // Parameters
   //   username
   //     string
   //   callback
   //     function (err, events)
-
+  //
   const coll = db.collection('events');
 
   coll.find({ user: username }).toArray(callback);
