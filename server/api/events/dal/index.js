@@ -2,6 +2,8 @@
 // Events
 //
 const db = require('tresdb-db');
+const urls = require('tresdb-urls');
+const attachmentUrls = require('../../attachments/attachment/urls');
 
 // Public methods
 
@@ -57,8 +59,8 @@ exports.getAllOfLocationComplete = (locationId, callback) => {
   });
 };
 
-exports.getRecent = (params, callback) => {
-  // Get recent location events
+exports.getRecentComplete = (params, callback) => {
+  // Get recent location events, urls completed.
   //
   // Parameters
   //   params
@@ -96,11 +98,22 @@ exports.getRecent = (params, callback) => {
       // Change the location array to the single location (the first item).
       $unwind: '$location',
     },
-  ]).toArray((err, docs) => {
+  ]).toArray((err, events) => {
     if (err) {
       return callback(err);
     }
-    return callback(null, docs);
+
+    // Complete location thumbnail urls
+    events.forEach((ev) => {
+      if (ev.location.thumb) {
+        ev.location.thumburl = attachmentUrls.completeToUrl(ev.location.thumb);
+      } else {
+        ev.location.thumburl = urls.locationTypeToSymbolUrl(ev.location.type);
+      }
+      delete ev.location.thumb;
+    });
+
+    return callback(null, events);
   });
 };
 

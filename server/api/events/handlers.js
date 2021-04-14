@@ -26,7 +26,7 @@ exports.getRecent = function (req, res, next) {
     return res.status(status.BAD_REQUEST).send('Too large limit: ' + limit);
   }
 
-  dal.getRecent({
+  dal.getRecentComplete({
     skip: skip,
     limit: limit,
   }, function (err, events) {
