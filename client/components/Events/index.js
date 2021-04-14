@@ -1,4 +1,4 @@
-// Component to filter map markers.
+// Component to list location events
 //
 var template = require('./list.ejs');
 var emitter = require('component-emitter');
@@ -41,6 +41,8 @@ module.exports = function (events) {
   };
 
   this.unbind = function () {
-    $mount = null;
+    if ($mount) {
+      $mount = null;
+    }
   };
 };
