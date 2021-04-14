@@ -73,13 +73,13 @@ exports.getRecentOfUser = (username, n, beforeTime, callback) => {
   return exports.getRecentFiltered(filter, n, beforeTime, callback);
 };
 
-exports.getRecentFiltered = (filter, n, beforeTime, callback) => {
+exports.getRecentFiltered = (filter, limit, beforeTime, callback) => {
   // Parameters
   //   filter
   //     the value of $match operator. See
   //     https://docs.mongodb.com/manual/reference/operator/aggregation/match/
   //     Use {} to filter nothing.
-  //   n
+  //   limit
   //     number of events to return
   //   beforeTime
   //     time as ISOString. Only events before this time are selected.
@@ -107,7 +107,7 @@ exports.getRecentFiltered = (filter, n, beforeTime, callback) => {
     },
     {
       // Specify last document to return
-      $limit: n,
+      $limit: limit,
     },
     {
       // Join with location data
