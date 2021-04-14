@@ -19,13 +19,17 @@ exports.getUsers = function (callback) {
   //   callback
   //     function (err, users)
   //
-  request.getJSON('/api/admin/users', callback);
+  request.getJSON({
+    url: '/api/admin/users',
+  }, callback);
 };
 
 
 exports.getUser = function (username, callback) {
   // Fetch one user with admin-only data.
-  request.getJSON('/api/admin/users/' + username, callback);
+  request.getJSON({
+    url: '/api/admin/users/' + username,
+  }, callback);
 };
 
 

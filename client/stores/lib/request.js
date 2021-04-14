@@ -30,6 +30,34 @@ var createError = function (jqxhr) {
   return err;
 };
 
+exports.getJSON = function (params, callback) {
+  // Parameters
+  //   params
+  //     url
+  //       request url
+  //     data
+  //       optional object, request url parameters
+  //   callback
+  //
+  if (!params.data || typeof params.data !== 'object') {
+    params.data = {};
+  }
+
+  $.ajax({
+    url: params.url,
+    method: 'GET',
+    data: params.data,
+    dataType: 'json',
+    headers: { 'Authorization': 'Bearer ' + account.getToken() },
+    success: function (result) {
+      return callback(null, result);
+    },
+    error: function (jqxhr) {
+      return callback(createError(jqxhr));
+    },
+  });
+};
+
 exports.deleteJSON = function (params, callback) {
   // General JSON DELETE AJAX request.
   //
@@ -54,22 +82,6 @@ exports.deleteJSON = function (params, callback) {
     },
   });
 };
-
-exports.getJSON = function (url, callback) {
-  $.ajax({
-    url: url,
-    method: 'GET',
-    dataType: 'json',
-    headers: { 'Authorization': 'Bearer ' + account.getToken() },
-    success: function (result) {
-      return callback(null, result);
-    },
-    error: function (jqxhr) {
-      return callback(createError(jqxhr));
-    },
-  });
-};
-
 
 exports.postFile = function (params, callback) {
   // Send a form with file input.

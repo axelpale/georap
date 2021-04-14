@@ -21,7 +21,9 @@ exports.getAll = function (callback) {
   //   callback
   //     function (err, users)
   //
-  request.getJSON('/api/users', callback);
+  request.getJSON({
+    url: '/api/users',
+  }, callback);
 };
 
 exports.getOneWithEvents = function (username, callback) {
@@ -34,7 +36,9 @@ exports.getOneWithEvents = function (username, callback) {
   //   callback
   //     function (err, user)
   //
-  request.getJSON('/api/users/' + username, callback);
+  request.getJSON({
+    url: '/api/users/' + username,
+  }, callback);
 };
 
 exports.getVisitedLocationIds = function (username, callback) {
@@ -42,7 +46,9 @@ exports.getVisitedLocationIds = function (username, callback) {
   //   username
   //   callback
   //     function (err, arrayOfLocationIds)
-  request.getJSON('/api/users/' + username + '/visited', function (err, ids) {
+  request.getJSON({
+    url: '/api/users/' + username + '/visited',
+  }, function (err, ids) {
     if (err) {
       console.error(err);
       return callback(err, null);

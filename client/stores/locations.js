@@ -210,11 +210,15 @@ exports.importFile = function (form, callback) {
 };
 
 exports.getBatch = function (batchId, callback) {
-  return getJSON('/api/locations/import/' + batchId, callback);
+  return getJSON({
+    url: '/api/locations/import/' + batchId,
+  }, callback);
 };
 
 exports.getOutcome = function (batchId, callback) {
-  return getJSON('/api/locations/import/' + batchId + '/outcome', callback);
+  return getJSON({
+    url: '/api/locations/import/' + batchId + '/outcome',
+  }, callback);
 };
 
 exports.importBatch = function (data, callback) {

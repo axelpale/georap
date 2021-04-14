@@ -13,5 +13,7 @@ exports.getAll = function (callback) {
   //   callback
   //     function (err, stats)
   //
-  request.getJSON('/api/statistics', callback);
+  request.getJSON({
+    url: '/api/statistics',
+  }, callback);
 };

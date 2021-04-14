@@ -15,9 +15,13 @@ exports.createCorrection = function (callback) {
 };
 
 exports.getAll = function (callback) {
-  return request.getJSON('/api/payments', callback);
+  return request.getJSON({
+    url: '/api/payments',
+  }, callback);
 };
 
 exports.getBalances = function (callback) {
-  return request.getJSON('/api/payments/balances', callback);
+  return request.getJSON({
+    url: '/api/payments/balances',
+  }, callback);
 };
