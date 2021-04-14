@@ -36,7 +36,9 @@ module.exports = function () {
 
     // Set up view for events
     $elems.events = $mount.find('.latest-events');
-    children.events = new EventsView([]);
+    children.events = new EventsView([], {
+      showThumbnails: true,
+    });
     children.events.bind($elems.events);
 
     // Select associated marker by clicking an event or hovering cursor on it.

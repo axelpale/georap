@@ -6,7 +6,12 @@
     <% name = ev.locationName; %>
     <% locUrl = '/locations/' + ev.locationId + '?zoom=11&ref=latest' %>
     <% name = (name === '' ? 'Untitled' : name) %>
-    <li class="list-group-item" data-locationid="<%= ev.locationId %>">
+    <li class="list-group-item event-item" data-locationid="<%= ev.locationId %>">
+      <% if (showThumbnails) { %>
+        <div class="pull-right event-item-thumbnail">
+          <img src="<%= ev.location.thumburl %>" title="<%= ev.location.name %>">
+        </div>
+      <% } %>
       <% if (typeof pointstamp !== 'undefined') { %>
         <div class="pull-right"><%= pointstamp(getPoints(ev)) %></div>
       <% } %>

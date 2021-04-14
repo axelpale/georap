@@ -5,11 +5,22 @@ var emitter = require('component-emitter');
 var getPoints = require('tresdb-points');
 var ui = require('tresdb-ui');
 
-module.exports = function (events) {
+module.exports = function (events, opts) {
   // Parameters:
   //   events
   //     list of event objects
+  //   opts, optional object with props
+  //     showThumbnails
+  //       boolean, default false,
   //
+
+  // Handle parameters
+  if (!opts) {
+    opts = {};
+  }
+  opts = Object.assign({
+    showThumbnails: false,
+  }, opts);
 
   // Init
   var self = this;
@@ -25,6 +36,7 @@ module.exports = function (events) {
       pointstamp: ui.pointstamp,
       getPoints: getPoints,
       events: events,
+      showThumbnails: opts.showThumbnails,
     }));
   };
 
@@ -36,6 +48,7 @@ module.exports = function (events) {
         pointstamp: ui.pointstamp,
         getPoints: getPoints,
         events: events,
+        showThumbnails: opts.showThumbnails,
       }));
     }
   };

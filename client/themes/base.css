@@ -545,6 +545,19 @@ li.form-attachment-container:first-child img {
   border-right: 1px solid #ddd;
   margin-bottom: -2px;
 }
+
+.latest-events .list-group-item {
+  min-height: 8.7rem;
+}
+.event-item-thumbnail {
+  margin: -10px -15px -10px 0;
+}
+.event-item-thumbnail img {
+  object-fit: cover;
+  width: 8.7rem;
+  height: 8.7rem;
+}
+
 .latest-locations .list-group-item {
   min-height: 11.1rem;
 }
