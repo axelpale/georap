@@ -1,3 +1,5 @@
+// Attachment thumbnail component
+//
 var template = require('./template.ejs');
 
 module.exports = function (attachment, opts) {
