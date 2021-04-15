@@ -3,6 +3,7 @@
 var ThumbnailView = require('./Thumbnail');
 var models = require('tresdb-models');
 var rootBus = require('tresdb-bus');
+var ui = require('tresdb-ui');
 
 module.exports = function (location, entries) {
   // Parameters:
@@ -10,11 +11,13 @@ module.exports = function (location, entries) {
   //   entries: an array of entry objects
   //
 
+  var $mount = null;
   // Keep track of created views and handlers for easy unbind.
   var _thumbnailViews = {};  // id -> thumbnailView
   var bus = models.location.bus(location, rootBus);
 
-  this.bind = function ($mount) {
+  this.bind = function ($mountEl) {
+    $mount = $mountEl;
 
     // Select first few images
     var N = 3;
@@ -83,10 +86,12 @@ module.exports = function (location, entries) {
   };
 
   this.unbind = function () {
-    // Unbind each child
-    Object.keys(_thumbnailViews).forEach(function (k) {
-      _thumbnailViews[k].unbind();
-    });
-    bus.off();
+    if ($mount) {
+      $mount = null;
+      // Unbind each child
+      ui.unbindAll(_thumbnailViews);
+      _thumbnailViews = {};
+      bus.off();
+    }
   };
 };
