@@ -105,9 +105,9 @@ exports.getRecentComplete = (params, callback) => {
     // Complete location thumbnail urls
     events.forEach((ev) => {
       if (ev.location.thumb) {
-        ev.location.thumburl = urls.attachmentUrl(ev.location.thumb);
+        ev.location.thumbUrl = urls.attachmentUrl(ev.location.thumb);
       } else {
-        ev.location.thumburl = urls.locationTypeToSymbolUrl(ev.location.type);
+        ev.location.thumbUrl = urls.locationTypeToSymbolUrl(ev.location.type);
       }
       delete ev.location.thumb;
     });

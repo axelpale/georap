@@ -6,7 +6,7 @@ const uploadUrl = config.uploadUrl
 exports.completeAttachment = (attachment) => {
   return Object.assign({}, attachment, {
     url: urljoin(uploadUrl, attachment.filepath),
-    thumburl: urljoin(uploadUrl, attachment.thumbfilepath)
+    thumbUrl: urljoin(uploadUrl, attachment.thumbfilepath)
   })
 }
 

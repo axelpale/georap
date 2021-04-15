@@ -18,7 +18,7 @@ module.exports = function (entry) {
       if (firstImage) {
         $mount.html(template({
           entryId: entry._id,
-          thumbUrl: firstImage.thumburl,
+          thumbUrl: firstImage.thumbUrl,
           fileName: firstImage.filename,
         }));
       } else {
