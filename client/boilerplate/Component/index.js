@@ -51,6 +51,10 @@
 //   self
 //     = this, but works within event handlers and other inner functions.
 //
+// Template. Almost every component has a template.ejs that is called
+// at bind() and sometimes if the component needs to refresh DOM.
+//   template.ejs
+//
 var emitter = require('component-emitter');
 var ui = require('tresdb-ui');
 var template = require('./template.ejs');
