@@ -27,7 +27,7 @@ module.exports = function (location, entries) {
       _thumbnailViews[id] = v;
 
       $mount.append('<div id="thumbnail-' + id + '" ' +
-        'class="tresdb-location-thumbnail"></div>');
+        'class="location-thumbnail"></div>');
       v.bind($('#thumbnail-' + id));
     });
 
@@ -60,7 +60,7 @@ module.exports = function (location, entries) {
         _thumbnailViews[id] = v;
 
         $mount.prepend('<div id="thumbnail-' + id + '" ' +
-          'class="tresdb-location-thumbnail"></div>');
+          'class="location-thumbnail"></div>');
         v.bind($('#thumbnail-' + id));
       }
     });

@@ -224,7 +224,7 @@ html, body {
   margin-bottom: 1.6rem;
   line-height: 1;
 }
-#tresdb-location-thumbnails .tresdb-location-thumbnail {
+#tresdb-location-thumbnails .location-thumbnail {
   position: relative;
   display: inline-block;
   margin-right: 0.6rem;
