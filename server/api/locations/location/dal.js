@@ -245,40 +245,40 @@ exports.getOneComplete = (id, callback) => {
   //
   const locColl = db.collection('locations');
 
-  locColl.findOne({ _id: id }, (err, doc) => {
+  locColl.findOne({ _id: id }, (err, loc) => {
     if (err) {
       return callback(err);
     }
 
-    if (!doc) {
+    if (!loc) {
       return callback(null, null);
     }
 
-    eventsDal.getAllOfLocationComplete(id, (err2, docs) => {
+    eventsDal.getAllOfLocationComplete(id, (err2, evs) => {
       if (err2) {
         return callback(err2);
       }
 
-      doc.events = docs;
+      loc.events = evs;
 
-      entriesDal.getAllOfLocationComplete(id, (err3, docs2) => {
+      entriesDal.getAllOfLocationComplete(id, (err3, entries) => {
         if (err3) {
           return callback(err3);
         }
 
-        doc.entries = docs2;
+        loc.entries = entries;
 
         // Compute additional coodinate systems
-        doc.altGeom = proj.getAltPositions(doc.geom.coordinates);
+        loc.altGeom = proj.getAltPositions(loc.geom.coordinates);
 
         // Complete thumbnail url
-        if (doc.thumb === '') {
-          doc.thumbUrl = '';
+        if (loc.thumb === '') {
+          loc.thumbUrl = '';
         } else {
-          doc.thumbUrl = urls.attachmentUrl(doc.thumb);
+          loc.thumbUrl = urls.attachmentUrl(loc.thumb);
         }
 
-        return callback(null, doc);
+        return callback(null, loc);
       });
     });
   });
