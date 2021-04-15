@@ -8,10 +8,6 @@ module.exports = {
     // Const, let, arrow functions...
     'es6': true,
   },
-  'globals': {
-    // place settings for globals here
-    '$': true,
-  },
 
   // For available rules, see http://eslint.org/docs/rules/
   'extends': 'eslint:recommended',
