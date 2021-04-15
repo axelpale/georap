@@ -1,6 +1,7 @@
 // A list of images from entries.
 
 var ThumbnailView = require('./Thumbnail');
+var template = require('./template.ejs');
 var models = require('tresdb-models');
 var rootBus = require('tresdb-bus');
 var ui = require('tresdb-ui');
@@ -12,30 +13,34 @@ module.exports = function (location, entries) {
   //
 
   var $mount = null;
-  // Keep track of created views and handlers for easy unbind.
-  var _thumbnailViews = {};  // id -> thumbnailView
+  var $elems = {};
+  var children = {};  // id -> thumbnailView
   var bus = models.location.bus(location, rootBus);
 
   this.bind = function ($mountEl) {
     $mount = $mountEl;
 
+    $mount.html(template());
+
     // Select first few images
     var N = 3;
     var imageEntries = models.entries.getImageEntries(entries).slice(0, N);
+
+    $elems.thumbnails = $mount.find('.location-thumbnails');
 
     imageEntries.forEach(function (entry) {
       var id = entry._id;
       var v = new ThumbnailView(entry);
 
-      _thumbnailViews[id] = v;
+      children[id] = v;
 
-      $mount.append('<div id="thumbnail-' + id + '" ' +
+      $elems.thumbnails.append('<div id="thumbnail-' + id + '" ' +
         'class="location-thumbnail"></div>');
       v.bind($('#thumbnail-' + id));
     });
 
     // Click to scroll to the entry
-    $mount.click(function (ev) {
+    $elems.thumbnails.click(function (ev) {
       // Prevent link behavior and avoid reloading the view.
       ev.preventDefault();
       // If everything okay, scroll to entry.
@@ -60,21 +65,21 @@ module.exports = function (location, entries) {
       if (firstImage) {
         var id = newEntry._id;
         var v = new ThumbnailView(newEntry);
-        _thumbnailViews[id] = v;
+        children[id] = v;
 
-        $mount.prepend('<div id="thumbnail-' + id + '" ' +
+        $elems.thumbnails.prepend('<div id="thumbnail-' + id + '" ' +
           'class="location-thumbnail"></div>');
         v.bind($('#thumbnail-' + id));
       }
     });
 
     bus.on('location_entry_removed', function (ev) {
-      // Remove entry from _thumbnailViews.
+      // Remove entry from children.
       var id = ev.data.entryId;
 
-      if (id in _thumbnailViews) {
-        var v = _thumbnailViews[id];
-        delete _thumbnailViews[id];
+      if (id in children) {
+        var v = children[id];
+        delete children[id];
 
         // Remove entry's HTML and unbind view.
         v.unbind();
@@ -89,8 +94,10 @@ module.exports = function (location, entries) {
     if ($mount) {
       $mount = null;
       // Unbind each child
-      ui.unbindAll(_thumbnailViews);
-      _thumbnailViews = {};
+      ui.unbindAll(children);
+      children = {};
+      ui.offAll($elems);
+      $elems = {};
       bus.off();
     }
   };

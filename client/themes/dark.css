@@ -135,7 +135,7 @@ hr {
   filter: invert(1);
 }
 
-#tresdb-location-thumbnails img {
+#location-thumbnails-container img {
   border: 1px solid #333;
 }
 

@@ -220,35 +220,35 @@ html, body {
   margin-bottom: 1.6rem;
 }
 
-#tresdb-location-thumbnails {
+#location-thumbnails-container {
   margin-bottom: 1.6rem;
   line-height: 1;
 }
-#tresdb-location-thumbnails .location-thumbnail {
+#location-thumbnails-container .location-thumbnail {
   position: relative;
   display: inline-block;
   margin-right: 0.6rem;
   margin-bottom: 0.6rem;
   overflow: hidden;
 }
-#tresdb-location-thumbnails a:hover,
-#tresdb-location-thumbnails a:active {
+#location-thumbnails-container a:hover,
+#location-thumbnails-container a:active {
   opacity: 0.7;
 }
-#tresdb-location-thumbnails img {
+#location-thumbnails-container img {
   object-fit: cover;
   width: 11.1rem;
   height: 11.1rem;
   border: 1px solid #ddd;
 }
 @media (max-width: 500px) {
-  #tresdb-location-thumbnails img {
+  #location-thumbnails-container img {
     width: 8.7rem;
     height: 8.7rem;
   }
 }
 @media (max-width: 400px) {
-  #tresdb-location-thumbnails img {
+  #location-thumbnails-container img {
     width: 6.9rem;
     height: 6.9rem;
   }
