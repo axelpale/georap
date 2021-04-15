@@ -1,13 +1,13 @@
 
 const dal = require('./dal');
-const urls = require('./urls');
+const urls = require('georap-urls-server');
 const status = require('http-status-codes');
 const uploads = require('../../../services/uploads');
 
 exports.get = (req, res) => {
   // Fetch single attachment.
   // Already feched but here it is a good place to strip any unnecesary data.
-  const attachmentWithUrls = urls.complete(req.attachment);
+  const attachmentWithUrls = urls.completeAttachment(req.attachment);
   return res.json(attachmentWithUrls);
 };
 
@@ -94,7 +94,7 @@ exports.rotateImage = (req, res, next) => {
           }
 
           return res.json({
-            attachment: urls.complete(newAttachment),
+            attachment: urls.completeAttachment(newAttachment),
           });
         });
       });

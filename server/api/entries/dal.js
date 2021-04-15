@@ -1,11 +1,11 @@
 /* eslint-disable max-lines,no-magic-numbers */
 
 const db = require('tresdb-db');
-const eventsDal = require('../events/dal');
-const attachmentUrls = require('../attachments/attachment/urls');
+const urls = require('georap-urls-server');
 const path = require('path');
 const _ = require('lodash');
 const purifyMarkdown = require('purify-markdown');
+const eventsDal = require('../events/dal');
 
 // Private methods
 
@@ -242,7 +242,7 @@ exports.getOneComplete = function (entryId, callback) {
       const entry = entries[0];
 
       // Complete attachment URLs
-      entry.attachments = entry.attachments.map(attachmentUrls.complete);
+      entry.attachments = entry.attachments.map(urls.completeAttachment);
 
       return callback(null, entry);
     });
@@ -337,7 +337,7 @@ exports.getAllOfLocationComplete = (locationId, callback) => {
 
       // Complete attachment URLs
       entries.forEach(entry => {
-        entry.attachments = entry.attachments.map(attachmentUrls.complete);
+        entry.attachments = entry.attachments.map(urls.completeAttachment);
       });
 
       // Complete comment attachment objects and their URLs
@@ -353,7 +353,7 @@ exports.getAllOfLocationComplete = (locationId, callback) => {
           comment.attachments = comment.attachments.map((catKey) => {
             const cat = cats[catKey];
             // Complete url
-            return attachmentUrls.complete(cat);
+            return urls.completeAttachment(cat);
           });
         });
         // Forget the temporary cats array

@@ -1,5 +1,18 @@
-const config = require('tresdb-config');
-const staticUrl = config.staticUrl;
+const config = require('tresdb-config')
+const urljoin = require('url-join')
+const staticUrl = config.staticUrl
+const uploadUrl = config.uploadUrl
+
+exports.completeAttachment = (attachment) => {
+  return Object.assign({}, attachment, {
+    url: urljoin(uploadUrl, attachment.filepath),
+    thumburl: urljoin(uploadUrl, attachment.thumbfilepath)
+  })
+}
+
+exports.attachmentUrl = (filepath) => {
+  return urljoin(uploadUrl, filepath)
+}
 
 exports.locationTypeToSymbolUrl = (type) => {
   const baseUrl = staticUrl + '/images/markers/symbols/'

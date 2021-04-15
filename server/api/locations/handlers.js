@@ -1,6 +1,6 @@
 const dal = require('./dal');
 const status = require('http-status-codes');
-const attachmentUrls = require('../attachments/attachment/urls');
+const urls = require('georap-urls-server');
 
 exports.count = (req, res, next) => {
 
@@ -98,7 +98,7 @@ exports.latest = (req, res, next) => {
       if (loc.thumb === '') {
         loc.thumbUrl = '';
       } else {
-        loc.thumbUrl = attachmentUrls.completeToUrl(loc.thumb);
+        loc.thumbUrl = urls.attachmentUrl(loc.thumb);
       }
       return loc;
     });

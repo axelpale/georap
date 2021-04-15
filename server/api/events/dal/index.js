@@ -3,7 +3,6 @@
 //
 const db = require('tresdb-db');
 const urls = require('georap-urls-server');
-const attachmentUrls = require('../../attachments/attachment/urls');
 
 // Public methods
 
@@ -106,7 +105,7 @@ exports.getRecentComplete = (params, callback) => {
     // Complete location thumbnail urls
     events.forEach((ev) => {
       if (ev.location.thumb) {
-        ev.location.thumburl = attachmentUrls.completeToUrl(ev.location.thumb);
+        ev.location.thumburl = urls.attachmentUrl(ev.location.thumb);
       } else {
         ev.location.thumburl = urls.locationTypeToSymbolUrl(ev.location.type);
       }

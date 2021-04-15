@@ -1,10 +1,10 @@
-const dal = require('./dal');
-const attachmentDal = require('./attachment/dal');
 const asyn = require('async');
 const status = require('http-status-codes');
+const urls = require('georap-urls-server');
+const dal = require('./dal');
+const attachmentDal = require('./attachment/dal');
 const keyPattern = require('./lib/keyPattern');
 const uploads = require('../../services/uploads');
-const urls = require('./attachment/urls');
 
 // Setup
 const MAX_FILES = 10;
@@ -76,7 +76,7 @@ exports.create = (req, res, next) => {
         return next(errf);
       }
 
-      const attachmentsWithUrls = attachments.map(att => urls.complete(att));
+      const attachmentsWithUrls = attachments.map(urls.completeAttachment);
 
       return res.json({
         attachments: attachmentsWithUrls,
@@ -91,7 +91,7 @@ exports.getAll = (req, res, next) => {
       return next(err);
     }
 
-    const attachmentsWithUrls = attachments.map(att => urls.complete(att));
+    const attachmentsWithUrls = attachments.map(urls.completeAttachment);
 
     return res.json({
       attachments: attachmentsWithUrls,
@@ -119,7 +119,7 @@ exports.getMany = (req, res, next) => {
       return next(err);
     }
 
-    const attachmentsWithUrls = attachments.map(att => urls.complete(att));
+    const attachmentsWithUrls = attachments.map(urls.completeAttachment);
 
     return res.json({
       attachments: attachmentsWithUrls,

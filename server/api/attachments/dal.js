@@ -1,5 +1,5 @@
 const db = require('tresdb-db');
-const urls = require('./attachment/urls');
+const urls = require('georap-urls-server');
 
 exports.count = (callback) => {
   // Count non-deleted attachments
@@ -75,7 +75,7 @@ exports.getManyComplete = (keys, callback) => {
 
     // Sort by given keys
     const sorted = keys.map(k => attachments.find(a => a.key === k));
-    const attachmentsWithUrls = urls.completeEach(sorted);
+    const attachmentsWithUrls = sorted.map(urls.completeAttachment);
 
     return callback(null, attachmentsWithUrls);
   });

@@ -1,9 +1,9 @@
 /* eslint-disable max-lines */
 
 var db = require('tresdb-db');
+var urls = require('georap-urls-server');
 var proj = require('../../../services/proj');
 var googlemaps = require('../../../services/googlemaps');
-var attachmentUrls = require('../../attachments/attachment/urls');
 var eventsDal = require('../../events/dal');
 var entriesDal = require('../../entries/dal');
 
@@ -275,7 +275,7 @@ exports.getOneComplete = (id, callback) => {
         if (doc.thumb === '') {
           doc.thumbUrl = '';
         } else {
-          doc.thumbUrl = attachmentUrls.completeToUrl(doc.thumb);
+          doc.thumbUrl = urls.attachmentUrl(doc.thumb);
         }
 
         return callback(null, doc);
