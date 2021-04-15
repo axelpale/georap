@@ -1,5 +1,3 @@
-/* eslint-disable no-var */
-
 if (!tresdb.config) {
   throw new Error(
     'No client-side configuration detected. ' +

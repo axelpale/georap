@@ -2,7 +2,7 @@
 // Events
 //
 const db = require('tresdb-db');
-const urls = require('tresdb-urls');
+const urls = require('georap-urls-server');
 const attachmentUrls = require('../../attachments/attachment/urls');
 
 // Public methods

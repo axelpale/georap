@@ -66,6 +66,8 @@
     "fs-extra": "^4.0.2",
     "georap-prop": "file:local_modules/georap-prop",
     "georap-throttle": "file:local_modules/georap-throttle",
+    "georap-urls-client": "file:local_modules/georap-urls-client",
+    "georap-urls-server": "file:local_modules/georap-urls-server",
     "geostamp": "file:local_modules/geostamp",
     "glob": "^7.1.2",
     "http-status-codes": "^1.1.6",
@@ -101,7 +103,6 @@
     "tresdb-models": "file:local_modules/tresdb-models",
     "tresdb-points": "file:local_modules/tresdb-points",
     "tresdb-ui": "file:local_modules/tresdb-ui",
-    "tresdb-urls": "file:local_modules/tresdb-urls",
     "turndown": "^7.0.0",
     "url-join": "^4.0.1",
     "zpad": "^0.5.0"

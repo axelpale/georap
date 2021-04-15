@@ -1,6 +1,6 @@
 /* eslint-disable max-statements */
 var icons = require('../lib/icons');
-var urls = require('tresdb-urls');
+var urls = require('georap-urls-client');
 var templates = tresdb.config.markerTemplates;
 
 // Map size to a marker specification generating function.

@@ -2,7 +2,7 @@
 
 var ui = require('tresdb-ui');
 var cap = require('tresdb-cap');
-var urls = require('tresdb-urls');
+var urls = require('georap-urls-client');
 var emitter = require('component-emitter');
 var statusListTemplate = require('../Location/StatusType/statusFormList.ejs');
 var typeListTemplate = require('../Location/StatusType/typeFormList.ejs');

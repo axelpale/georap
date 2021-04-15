@@ -1,5 +1,5 @@
 // Tools
-var urls = require('tresdb-urls');
+var urls = require('georap-urls-client');
 var cap = require('tresdb-cap');
 var ui = require('tresdb-ui');
 // Templates
