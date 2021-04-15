@@ -12,9 +12,15 @@ var locationStatuses = tresdb.config.locationStatuses;
 var locationTypes = tresdb.config.locationTypes;
 
 module.exports = function (location) {
-  var self = this;
 
-  this.bind = function ($mount) {
+  // Setup
+  var $mount = null;
+  var self = this;
+  var $elems = {};
+
+  this.bind = function ($mountEl) {
+    $mount = $mountEl;
+
     $mount.html(template({
       // The current status and type
       statusTypeHtml: statusTypeTemplate({
@@ -38,57 +44,59 @@ module.exports = function (location) {
       }),
     }));
 
-    var $show = $('#tresdb-location-statustype-form-show');
-    var $form = $('#tresdb-location-statustype-form');
-    var $cancel = $('#tresdb-location-statustype-form-cancel');
-    var $progress = $('#tresdb-location-statustype-form-progress');
-    var $error = $('#tresdb-location-statustype-form-error');
-    var $statusList = $('#tresdb-location-status-list');
-    var $typeList = $('#tresdb-location-type-list');
+    $elems.show = $mount.find('.location-statustype-form-show');
+    $elems.form = $mount.find('.location-statustype-form');
+    $elems.cancel = $mount.find('.location-statustype-form-cancel');
+    $elems.progress = $mount.find('.location-statustype-form-progress');
+    $elems.error = $mount.find('.location-statustype-form-error');
+    $elems.statusList = $mount.find('.location-status-list');
+    $elems.typeList = $mount.find('.location-type-list');
 
     // Update if status or type is changed externally.
     location.on('location_status_changed', function () {
       $mount.empty();
+      var $remount = $mount;
       self.unbind(); // without unbind, exponential growth in num of calls
-      self.bind($mount);
+      self.bind($remount);
     });
     location.on('location_type_changed', function () {
       $mount.empty();
+      var $remount = $mount;
       self.unbind(); // without unbind, exponential growth in num of calls
-      self.bind($mount);
+      self.bind($remount);
     });
 
     // Form toggle
-    $show.click(function (ev) {
+    $elems.show.click(function (ev) {
       ev.preventDefault();
 
       // Remove possible previous error messages
-      ui.hide($error);
+      ui.hide($elems.error);
 
-      if (ui.isHidden($form)) {
-        ui.show($form);
+      if (ui.isHidden($elems.form)) {
+        ui.show($elems.form);
       } else {
-        ui.hide($form);
+        ui.hide($elems.form);
       }
     });
 
     // Form cancel
-    $cancel.click(function (ev) {
+    $elems.cancel.click(function (ev) {
       ev.preventDefault();
-      ui.hide($form);
+      ui.hide($elems.form);
     });
 
     var submitStatus = function (newStatus) {
-      ui.show($progress);
-      ui.hide($form);
+      ui.show($elems.progress);
+      ui.hide($elems.form);
 
       location.setStatus(newStatus, function (err) {
-        ui.hide($progress);
+        ui.hide($elems.progress);
 
         if (err) {
           console.error(err);
           // Show error message
-          ui.show($error);
+          ui.show($elems.error);
           return;
         }
         // Everything ok
@@ -96,15 +104,15 @@ module.exports = function (location) {
     };
 
     var submitType = function (newType) {
-      ui.show($progress);
-      ui.hide($form);
+      ui.show($elems.progress);
+      ui.hide($elems.form);
 
       location.setType(newType, function (err) {
-        ui.hide($progress);
+        ui.hide($elems.progress);
 
         if (err) {
           console.error(err);
-          ui.show($error);
+          ui.show($elems.error);
           return;
         }
         // Everything ok
@@ -112,7 +120,7 @@ module.exports = function (location) {
     };
 
     // Click on a status button
-    $statusList.click(function (ev) {
+    $elems.statusList.click(function (ev) {
       ev.preventDefault(); // Avoid page reload.
       var btnValue = ev.target.dataset.status;
       if (typeof btnValue === 'string' && btnValue.length > 0) {
@@ -121,7 +129,7 @@ module.exports = function (location) {
     });
 
     // Click on a type button
-    $typeList.click(function (ev) {
+    $elems.typeList.click(function (ev) {
       ev.preventDefault(); // Avoid page reload.
       var btnValue = ev.target.dataset.type;
       if (typeof btnValue === 'string' && btnValue.length > 0) {
@@ -131,12 +139,14 @@ module.exports = function (location) {
   };
 
   this.unbind = function () {
-    location.off('location_status_changed');
-    location.off('location_type_changed');
+    if ($mount) {
+      $mount = null;
 
-    $('#tresdb-location-statustype-form-show').off();
-    $('#tresdb-location-statustype-form-cancel').off();
-    $('#tresdb-location-status-list').off();
-    $('#tresdb-location-type-list').off();
+      location.off('location_status_changed');
+      location.off('location_type_changed');
+
+      ui.offAll($elems);
+      $elems = {};
+    }
   };
 };

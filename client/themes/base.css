@@ -219,9 +219,6 @@ html, body {
 #tresdb-location-statustype-container {
   margin-bottom: 1.6rem;
 }
-#tresdb-location-statustype-container .form-group {
-  margin-bottom: 0;
-}
 
 #tresdb-location-thumbnails {
   margin-bottom: 1.6rem;
@@ -276,33 +273,33 @@ html, body {
 
 /* Status & Type */
 
-.tresdb-location-status,
-.tresdb-location-type {
+.location-status,
+.location-type {
   font-size: 1.38em;
 }
-
-#tresdb-location-statustype-form {
+.location-statustype {
+  margin-bottom: 0.6rem;
+}
+.location-statustype-form {
   margin-bottom: 1.6rem;
 }
-
-#tresdb-location-statustype-viewer img {
+.location-statustype-viewer img {
   margin-top: -4px;
   margin-bottom: -18px;
 }
-
-.tresdb-location-status-list button,
-.tresdb-location-type-list button {
+.location-status-list button,
+.location-type-list button {
   margin: 0.16rem;
   padding: 0.38rem;
   border-radius: 0.5rem;
   background-color: transparent;
 }
-.tresdb-location-type-list button {
+.location-type-list button {
   width: 3rem;
   height: 3rem;
   overflow: hidden;
 }
-.tresdb-location-type-list button img {
+.location-type-list button img {
   /* Make the button ev.target because data attribute is in the button */
   pointer-events: none;
   vertical-align: top;
@@ -596,8 +593,8 @@ li.form-attachment-container:first-child img {
   background-color: #D9534F;
 }
 
-.tresdb-location-status-list button.tresdb-filter-any,
-.tresdb-location-type-list button.tresdb-filter-any {
+.location-status-list button.location-filter-any,
+.location-type-list button.location-filter-any {
   width: 6rem;
 }
 /* Filter END */

@@ -123,14 +123,14 @@ hr {
 .tresdb-tag-active {
   border: 1px solid #e5e5e5;
 }
-.tresdb-tag.tresdb-filter-any {
+.tresdb-tag.location-filter-any {
   border: 1px solid #666;
 }
-.tresdb-tag-active.tresdb-filter-any {
+.tresdb-tag-active.location-filter-any {
   border: 1px solid #e5e5e5;
 }
 
-#tresdb-location-statustype-viewer img,
+.location-statustype-viewer img,
 .tresdb-tag img {
   filter: invert(1);
 }

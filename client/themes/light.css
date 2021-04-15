@@ -4,9 +4,9 @@
 .tresdb-tag-active {
   border: 1px solid #111;
 }
-.tresdb-tag.tresdb-filter-any {
+.tresdb-tag.location-filter-any {
   border: 1px solid #bbb;
 }
-.tresdb-tag-active.tresdb-filter-any {
+.tresdb-tag-active.location-filter-any {
   border: 1px solid #111;
 }

@@ -10,15 +10,15 @@
 
       <h3>Filter by Status</h3>
 
-      <div id="tresdb-filter-status-list" class="tresdb-location-status-list">
-        <button data-status="any" class="tresdb-filter-any tresdb-tag <%= currentStatus === 'any' ? 'tresdb-tag-active' : '' %>">Any</button>
+      <div id="tresdb-filter-status-list" class="location-status-list">
+        <button data-status="any" class="location-filter-any tresdb-tag <%= currentStatus === 'any' ? 'tresdb-tag-active' : '' %>">Any</button>
         <%= statusListHtml %>
       </div>
 
       <h3>Filter by Type</h3>
 
-      <div id="tresdb-filter-type-list" class="tresdb-location-type-list">
-        <button data-type="any" class="tresdb-filter-any tresdb-tag <%= currentType === 'any' ? 'tresdb-tag-active' : '' %>">Any</button>
+      <div id="tresdb-filter-type-list" class="location-type-list">
+        <button data-type="any" class="location-filter-any tresdb-tag <%= currentType === 'any' ? 'tresdb-tag-active' : '' %>">Any</button>
         <%= typeListHtml %>
       </div>
 

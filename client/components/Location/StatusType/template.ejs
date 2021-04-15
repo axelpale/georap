@@ -1,38 +1,38 @@
 
-<div class="tresdb-location-statustype form-group">
+<div class="location-statustype form-group">
 
-  <span id="tresdb-location-statustype-viewer">
+  <span class="location-statustype-viewer">
     <%= statusTypeHtml %>
   </span>
 
-  <button id="tresdb-location-statustype-form-show" type="button" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-pencil"></span></button>
+  <button type="button" class="location-statustype-form-show btn btn-default btn-sm"><span class="glyphicon glyphicon-pencil"></span></button>
 
 </div>
 
-<form id="tresdb-location-statustype-form" class="hidden panel panel-primary">
+<form class="location-statustype-form hidden panel panel-primary">
   <div class="panel-body">
 
-    <div id="tresdb-location-status-list" class="tresdb-location-status-list">
+    <div class="location-status-list">
       <%= statusFormListHtml %>
     </div>
 
-    <div id="tresdb-location-type-list" class="tresdb-location-type-list">
+    <div class="location-type-list">
       <%= typeFormListHtml %>
     </div>
 
     <div class="pull-right">
-      <button id="tresdb-location-statustype-form-cancel" type="button" class="btn btn-default">Close</button>
+      <button type="button" class="location-statustype-form-cancel btn btn-default">Close</button>
     </div>
 
   </div>
 </form>
 
-<div id="tresdb-location-statustype-form-progress" class="progress hidden">
+<div class="location-statustype-form-progress progress hidden">
   <div class="progress-bar progress-bar-striped active" role="progressbar" style="width: 100%">
     <span class="sr-only">Waiting for server</span>
   </div>
 </div>
 
-<div id="tresdb-location-statustype-form-error" class="hidden">
+<div class="location-statustype-form-error hidden">
   <div class="alert alert-danger" role="alert">Sorry, updating status or type failed. Try again later.</div>
 </div>

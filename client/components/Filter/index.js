@@ -34,9 +34,9 @@ module.exports = function () {
       ui.hide(dot);
       offbtn.attr('class', 'btn btn-default disabled');
       // Activate any
-      $('#tresdb-filter-status-list .tresdb-filter-any')
+      $('#tresdb-filter-status-list .location-filter-any')
         .addClass('tresdb-tag-active');
-      $('#tresdb-filter-type-list .tresdb-filter-any')
+      $('#tresdb-filter-type-list .location-filter-any')
         .addClass('tresdb-tag-active');
     } else {
       // Show red stuff
