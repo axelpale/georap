@@ -273,12 +273,12 @@ html, body {
 
 /* Status & Type */
 
-.location-status,
-.location-type {
-  font-size: 1.38em;
-}
 .location-statustype {
   margin-bottom: 0.6rem;
+}
+.location-statustype-viewer .location-status,
+.location-statustype-viewer .location-type {
+  font-size: 1.38em;
 }
 .location-statustype-form {
   margin-bottom: 1.6rem;
