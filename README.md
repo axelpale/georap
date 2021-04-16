@@ -322,22 +322,22 @@ Create an administrator that can add other users. Create the admin user into `ad
     $ mongo
     > use admin
     > db.createUser({
-      user: 'foodmin',
-      pwd: 'barword',
+      user: 'mongoadmin',
+      pwd: 'mongoadminpwd',
       roles: ['userAdminAnyDatabase', 'backup']
     })
 
 Next, create a user with permission to access only `tresdb`. Note that this user needs to be created into `tresdb` database instead of `admin`. Thus, authenticate first on `admin`, and then switch to `tresdb` to create.
 
     > use admin
-    > db.auth('foodmin', 'barword')
+    > db.auth('mongoadmin', 'mongoadminpwd')
     > use tresdb
-    > db.createUser({ user: 'foo', pwd: 'bar', roles: ['readWrite'] })
+    > db.createUser({ user: 'mongouser', pwd: 'mongouserpwd', roles: ['readWrite'] })
 
 Then in similar manner, create the test user that can access only 'test':
 
     > use test
-    > db.createUser({ user: 'foo', pwd: 'bar', roles: ['readWrite'] })
+    > db.createUser({ user: 'mongouser', pwd: 'mongouserpwd', roles: ['readWrite'] })
 
 Press `ctrl + d` to quit `mongo` client.
 
@@ -345,8 +345,8 @@ Modify `mongo.url` and `mongo.testUrl` properties in `config/index.js` to includ
 
     ...
     mongo: {
-      url: 'mongodb://foo:bar@localhost:27017/tresdb',
-      testUrl: 'mongodb://foo:bar@localhost:27017/test'
+      url: 'mongodb://mongouser:mongouserpwd@localhost:27017/tresdb',
+      testUrl: 'mongodb://mongouser:mongouserpwd@localhost:27017/test'
     }
     ...
 
