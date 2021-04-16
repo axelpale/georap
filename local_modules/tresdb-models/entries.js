@@ -25,6 +25,19 @@ exports.forward = forward({
   }
 })
 
+exports.getAttachments = function (entries) {
+  // Return all attachments as array
+  //
+  var i
+  var atts = []
+
+  for (i = 0; i < entries.length; i += 1) {
+    atts = atts.concat(entries[i].attachments)
+  }
+
+  return atts
+}
+
 exports.getImageEntries = function (entries) {
   // Return entries that have one or more image attachments.
   //
