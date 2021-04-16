@@ -1,6 +1,7 @@
 // A list of images from entries.
 
 var ThumbnailView = require('./Thumbnail');
+var ThumbnailForm = require('./Form');
 var template = require('./template.ejs');
 var models = require('tresdb-models');
 var rootBus = require('tresdb-bus');
@@ -120,6 +121,25 @@ module.exports = function (location, entries) {
             $('#thumbnail-' + id).remove();
           });
         }
+      }
+    });
+
+    // Setup form
+    $elems.open.click(function () {
+      if (children.form) {
+        children.form.unbind();
+        children.form.off('exit');
+        delete children.form;
+      } else {
+        var atts = models.entries.getAttachments(entries);
+        var imgs = models.attachments.getImages(atts);
+        var locId = location._id;
+        children.form = new ThumbnailForm(locId, location.thumbnail, imgs);
+        children.form.bind($mount.find('.location-thumbnails-form-container'));
+        children.form.once('exit', function () {
+          children.form.unbind();
+          delete children.form;
+        });
       }
     });
   };
