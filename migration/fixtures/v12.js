@@ -242,7 +242,7 @@ module.exports = {
       places: [],
       status: 'abandoned',
       type: 'default',
-      thumb: '2009/RxRvKSlbl/radar_medium.jpg', // NOTE
+      thumbnail: 'ewdsf3kk', // NOTE new. Set null if no thumbnail
       visits: [],
       text1: '',
       text2: '',

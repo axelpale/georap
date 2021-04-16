@@ -8,7 +8,7 @@
 // 4. refactor entries and entry events
 // 5. refactor locations by adding published prop
 // 6. refactor locations by adding createdAt prop
-// 7. select thumbnails for each location and add thumb prop
+// 7. select thumbnails for each location and add thumbnail prop
 //
 // Also, new indices were made and thus 'npm run migrate' is needed.
 
@@ -160,7 +160,7 @@ const substeps = [
   },
 
   function addThumbnail(nextStep) {
-    console.log('7. Add thumb path to each location...');
+    console.log('7. Add thumbnail to each location...');
 
     const coll = db.collection('locations');
 
@@ -173,10 +173,10 @@ const substeps = [
         const loc = clone(origLoc);
 
         if (attachment) {
-          loc.thumb = attachment.thumbfilepath;
+          loc.thumbnail = attachment.key;
         } else {
           // No image attachment. Default path.
-          loc.thumb = '';
+          loc.thumbnail = null;
         }
 
         return iterNext(null, loc);
