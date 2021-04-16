@@ -306,7 +306,7 @@ After restoring it might be necessary to run migrate and worker:
     $ npm run migrate
     $ npm run worker
 
-
+In rare cases, restore can leave indices in odd state. If this happens, execute `db.<collection>.reIndex()` for each collection. However, `reIndex` requires the user to have role `dbAdmin` on the database. For development purposes `db.grantRolesToUser('mongoadmin',[{ db: 'tresdb', role: 'dbAdmin' }])` will do the trick.
 
 ## MongoDB user setup
 
