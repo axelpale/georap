@@ -224,35 +224,6 @@ html, body {
   margin-bottom: 1.6rem;
   line-height: 1;
 }
-#location-thumbnails-container .location-thumbnail {
-  position: relative;
-  display: inline-block;
-  margin-right: 0.6rem;
-  margin-bottom: 0.6rem;
-  overflow: hidden;
-}
-#location-thumbnails-container a:hover,
-#location-thumbnails-container a:active {
-  opacity: 0.7;
-}
-#location-thumbnails-container img {
-  object-fit: cover;
-  width: 11.1rem;
-  height: 11.1rem;
-  border: 1px solid #ddd;
-}
-@media (max-width: 500px) {
-  #location-thumbnails-container img {
-    width: 8.7rem;
-    height: 8.7rem;
-  }
-}
-@media (max-width: 400px) {
-  #location-thumbnails-container img {
-    width: 6.9rem;
-    height: 6.9rem;
-  }
-}
 
 #tresdb-location-forms {
   margin-bottom: 1rem;
@@ -268,11 +239,9 @@ html, body {
 #tresdb-location-events {
   margin-bottom: 2.68em;
 }
-
 /* Location page END */
 
-/* Status & Type */
-
+/* Location Status & Type */
 .location-statustype {
   margin-bottom: 0.6rem;
 }
@@ -308,8 +277,39 @@ html, body {
 .tresdb-coords {
   font-size: 1.38em;
 }
+/* Location Status & Type END */
 
-/* Status & Type END */
+/* Location Thumbnails */
+.location-thumbnails .location-thumbnail {
+  position: relative;
+  display: inline-block;
+  margin-right: 0.6rem;
+  margin-bottom: 0.6rem;
+  overflow: hidden;
+}
+.location-thumbnails a:hover,
+.location-thumbnails a:active {
+  opacity: 0.7;
+}
+.location-thumbnails img {
+  object-fit: cover;
+  width: 11.1rem;
+  height: 11.1rem;
+  border: 1px solid #ddd;
+}
+@media (max-width: 500px) {
+  .location-thumbnails img {
+    width: 8.7rem;
+    height: 8.7rem;
+  }
+}
+@media (max-width: 400px) {
+  .location-thumbnails img {
+    width: 6.9rem;
+    height: 6.9rem;
+  }
+}
+/* Location Thumbnails END */
 
 /* Entries */
 
