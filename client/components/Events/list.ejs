@@ -9,7 +9,7 @@
     <li class="list-group-item event-item" data-locationid="<%= ev.locationId %>">
       <% if (showThumbnails) { %>
         <div class="pull-right event-item-thumbnail">
-          <img src="<%= ev.location.thumbUrl %>" title="<%= ev.location.name %>">
+          <img src="<%= ev.location.thumbnail.thumbUrl %>" title="<%= ev.location.name %>">
         </div>
       <% } %>
       <% if (typeof pointstamp !== 'undefined') { %>

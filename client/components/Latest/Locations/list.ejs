@@ -11,9 +11,9 @@
       <%= placestamp(loc.places) %>
     </div>
     <div>by <a href=""><%= loc.creator %></a> <%= timestamp(loc.createdAt) %></div>
-    <% if (loc.thumbUrl) { %>
+    <% if (loc.thumbnail) { %>
     <div class="location-item-thumbnail">
-      <img src="<%= loc.thumbUrl %>">
+      <img src="<%= loc.thumbnail.thumbUrl %>">
     </div>
     <% } else { %>
     <div class="location-item-thumbnail">
