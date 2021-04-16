@@ -143,6 +143,10 @@ exports.changeType = function (req, res, next) {
   });
 };
 
+exports.changeThumbnail = (req, res) => {
+  res.sendStatus(status.OK);
+};
+
 exports.getOne = function (req, res, next) {
   // Fetch single location with entries and events
 

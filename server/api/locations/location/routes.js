@@ -14,6 +14,7 @@ router.post('/name', jsonParser, handlers.changeName);
 router.post('/tags', jsonParser, handlers.changeTags); // TODO remove
 router.post('/status', jsonParser, handlers.changeStatus);
 router.post('/type', jsonParser, handlers.changeType);
+router.post('/thumbnail', jsonParser, handlers.changeThumbnail);
 
 router.use('/entries', entriesRouter);
 
