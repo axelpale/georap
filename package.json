@@ -64,6 +64,7 @@
     "express-jwt": "^6.0.0",
     "extract-zip": "^1.6.5",
     "fs-extra": "^4.0.2",
+    "georap-components": "file:local_modules/georap-components",
     "georap-prop": "file:local_modules/georap-prop",
     "georap-throttle": "file:local_modules/georap-throttle",
     "georap-urls-client": "file:local_modules/georap-urls-client",
