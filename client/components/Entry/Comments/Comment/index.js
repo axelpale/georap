@@ -1,6 +1,6 @@
 var template = require('./template.ejs');
 var CommentForm = require('../../CommentForm');
-var Thumbnail = require('../../../Thumbnail');
+var Thumbnail = require('georap-components').Thumbnail;
 var commentModel = require('tresdb-models').comment;
 var ui = require('tresdb-ui');
 var account = tresdb.stores.account;

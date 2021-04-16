@@ -1,5 +1,5 @@
 var template = require('./template.ejs');
-var Thumbnail = require('../../../Thumbnail');
+var Thumbnail = require('georap-components').Thumbnail;
 var ui = require('tresdb-ui');
 var emitter = require('component-emitter');
 var attachmentsApi = tresdb.stores.attachments;
