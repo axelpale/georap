@@ -47,7 +47,6 @@ module.exports = function () {
     $elems.loadMoreBtn = $mount.find('.latest-load-more');
     ui.show($elems.loadMoreBtn);
     $elems.loadMoreBtn.click(function () {
-      console.log('click');
       ui.show($elems.progress);
       ui.hide($elems.loadMoreBtn);
       skip += limit;
