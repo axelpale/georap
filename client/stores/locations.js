@@ -324,6 +324,28 @@ exports.setType = function (id, newType, callback) {
   }, callback);
 };
 
+exports.setThumbnail = function (id, attachmentKey, callback) {
+  // Replaces the current thumbnail.
+  //
+  // Parameters
+  //   id
+  //     location id
+  //   attachmentKey
+  //     string, attachment key of the new thumbnail
+  //   callback
+  //     function (err)
+
+  // Validate to catch bugs.
+  if (typeof attachmentKey !== 'string' || attachmentKey.length === 0) {
+    throw new Error('Invalid attachmentKey: ' + attachmentKey);
+  }
+
+  return postJSON({
+    url: '/api/locations/' + id + '/thumbnail',
+    data: { attachmentKey: attachmentKey },
+  }, callback);
+};
+
 exports.removeOne = function (id, callback) {
   // Delete a location
   //
