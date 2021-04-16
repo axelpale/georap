@@ -280,6 +280,10 @@ html, body {
 /* Location Status & Type END */
 
 /* Location Thumbnails */
+.location-thumbnails {
+  display: inline-block;
+  vertical-align: bottom;
+}
 .location-thumbnails .location-thumbnail {
   position: relative;
   display: inline-block;
@@ -308,6 +312,10 @@ html, body {
     width: 6.9rem;
     height: 6.9rem;
   }
+}
+.location-thumbnails-open {
+  margin-bottom: 0.8rem;
+  margin-left: -0.1rem;
 }
 /* Location Thumbnails END */
 
