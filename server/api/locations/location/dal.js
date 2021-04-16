@@ -243,12 +243,32 @@ exports.getOneComplete = (id, callback) => {
   //     function (err, loc)
   //       err null and loc null if no loc found
   //
-  const locColl = db.collection('locations');
-
-  locColl.findOne({ _id: id }, (err, loc) => {
+  db.collection('locations').aggregate([
+    {
+      $match: {
+        _id: id,
+      },
+    },
+    {
+      $lookup: {
+        from: 'attachments',
+        localField: 'thumbnail',
+        foreignField: 'key',
+        as: 'thumbnail',
+      },
+    },
+    // NOTE instead of unwind with preserveNullAndEmptyArrays:true
+    // we unwind the thumbnail array afterwards.
+  ]).toArray((err, locs) => {
     if (err) {
       return callback(err);
     }
+
+    if (locs.length === 0) {
+      return callback(null, null);
+    }
+
+    const loc = locs[0];
 
     if (!loc) {
       return callback(null, null);
@@ -272,10 +292,11 @@ exports.getOneComplete = (id, callback) => {
         loc.altGeom = proj.getAltPositions(loc.geom.coordinates);
 
         // Complete thumbnail url
-        if (loc.thumb === '') {
-          loc.thumbUrl = '';
+        // Also, unwind the lookup array.
+        if (loc.thumbnail.length > 0) {
+          loc.thumbnail = urls.completeAttachment(loc.thumbnail[0]);
         } else {
-          loc.thumbUrl = urls.attachmentUrl(loc.thumb);
+          loc.thumbnail = null;
         }
 
         return callback(null, loc);
