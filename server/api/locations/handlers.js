@@ -85,7 +85,7 @@ exports.latest = (req, res, next) => {
     return res.status(status.BAD_REQUEST).send('Invalid limit');
   }
 
-  dal.latest({
+  dal.latestComplete({
     skip: skip,
     limit: limit,
   }, (err, locs) => {
@@ -95,10 +95,8 @@ exports.latest = (req, res, next) => {
 
     // Complete attachment URLs
     const urledLocs = locs.map((loc) => {
-      if (loc.thumb === '') {
-        loc.thumbUrl = '';
-      } else {
-        loc.thumbUrl = urls.attachmentUrl(loc.thumb);
+      if (loc.thumbnail) {
+        loc.thumbnail = urls.completeAttachment(loc.thumbnail);
       }
       return loc;
     });

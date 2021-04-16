@@ -58,63 +58,7 @@ exports.getAllOfLocationComplete = (locationId, callback) => {
   });
 };
 
-exports.getRecentComplete = (params, callback) => {
-  // Get recent location events, urls completed.
-  //
-  // Parameters
-  //   params
-  //     skip
-  //       skip over this many hits until result
-  //     limit
-  //       max number of events to return
-  //   callback
-  //     function (err, events)
-  //
-  db.collection('events').aggregate([
-    {
-      $sort: {
-        time: -1,
-      },
-    },
-    {
-      // MongoDB engine optimizes this extended limit with the sort
-      $limit: params.skip + params.limit,
-    },
-    {
-      // Skip sorted results
-      $skip: params.skip,
-    },
-    {
-      // Join with location data
-      $lookup: {
-        from: 'locations',
-        localField: 'locationId',
-        foreignField: '_id',
-        as: 'location',
-      },
-    },
-    {
-      // Change the location array to the single location (the first item).
-      $unwind: '$location',
-    },
-  ]).toArray((err, events) => {
-    if (err) {
-      return callback(err);
-    }
-
-    // Complete location thumbnail urls
-    events.forEach((ev) => {
-      if (ev.location.thumb) {
-        ev.location.thumbUrl = urls.attachmentUrl(ev.location.thumb);
-      } else {
-        ev.location.thumbUrl = urls.locationTypeToSymbolUrl(ev.location.type);
-      }
-      delete ev.location.thumb;
-    });
-
-    return callback(null, events);
-  });
-};
+exports.getRecentComplete = require('./getRecentComplete');
 
 exports.getRecentOfUser = (username, n, beforeTime, callback) => {
   const filter = { user: username };

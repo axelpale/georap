@@ -113,16 +113,45 @@ exports.create = function (lat, lng, username, callback) {
   }, callback);
 };
 
-exports.latest = (range, callback) => {
+exports.latestComplete = (range, callback) => {
   // Find n latest, non-deleted locations
   //
-  db.collection('locations').find({
-    deleted: false,
-  })
-    .skip(range.skip)
-    .limit(range.limit)
-    .sort({
-      _id: -1, // TODO createdAt: -1,
-    })
-    .toArray(callback);
+  // Parameters:
+  //   range
+  //     skip
+  //       integer
+  //     limit
+  //       integer
+  //   callback
+  //     function (err, array of locations)
+  //
+  db.collection('locations').aggregate([
+    {
+      $match: {
+        deleted: false,
+      },
+    },
+    {
+      $sort: {
+        createdAt: -1,
+      },
+    },
+    {
+      $skip: range.skip,
+    },
+    {
+      $limit: range.limit,
+    },
+    {
+      $lookup: {
+        from: 'attachments',
+        localField: 'thumbnail',
+        foreignField: 'key',
+        as: 'thumbnail',
+      },
+    },
+    {
+      $unwind: '$thumbnail',
+    }
+  ]).toArray(callback);
 };
