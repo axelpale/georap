@@ -16,8 +16,9 @@ module.exports = function (location, entries) {
   var $elems = {};
   var children = {};  // id -> thumbnailView
   var bus = models.location.bus(location, rootBus);
+  var self = this;
 
-  this.bind = function ($mountEl) {
+  self.bind = function ($mountEl) {
     $mount = $mountEl;
 
     $mount.html(template());
@@ -25,6 +26,11 @@ module.exports = function (location, entries) {
     // Select first few images
     var N = 3;
     var imageEntries = models.entries.getImageEntries(entries).slice(0, N);
+
+    // Hide if no thumbnails to show
+    if (imageEntries.length === 0) {
+      ui.hide($mount);
+    }
 
     $elems.thumbnails = $mount.find('.location-thumbnails');
 
@@ -39,7 +45,7 @@ module.exports = function (location, entries) {
       v.bind($('#thumbnail-' + id));
     });
 
-    // Click to scroll to the entry
+    // Click image to scroll to the entry
     $elems.thumbnails.click(function (ev) {
       // Prevent link behavior and avoid reloading the view.
       ev.preventDefault();
@@ -57,40 +63,75 @@ module.exports = function (location, entries) {
       }
     });
 
+    // Reveal pick-thumbnail button if there are more than one image.
+    $elems.open = $mount.find('.location-thumbnails-open');
+    if (imageEntries.length > 1) {
+      ui.show($elems.open);
+    }
+
     bus.on('location_entry_created', function (ev) {
-      // Create view and store it among others
-      var newEntry = ev.data.entry;
+      if ($mount) {
+        // Create view and store it among others
+        var newEntry = ev.data.entry;
 
-      var firstImage = models.entry.getImage(newEntry);
-      if (firstImage) {
-        var id = newEntry._id;
-        var v = new ThumbnailView(newEntry);
-        children[id] = v;
+        var firstImage = models.entry.getImage(newEntry);
+        if (firstImage) {
+          var id = newEntry._id;
+          var v = new ThumbnailView(newEntry);
+          children[id] = v;
 
-        $elems.thumbnails.prepend('<div id="thumbnail-' + id + '" ' +
+          var lenBefore = self.numThumbnails();
+
+          $elems.thumbnails.prepend('<div id="thumbnail-' + id + '" ' +
           'class="location-thumbnail"></div>');
-        v.bind($('#thumbnail-' + id));
+          v.bind($('#thumbnail-' + id));
+
+          // Ensure mount is visible. Will be hidden if no images beforehand.
+          ui.show($mount);
+
+          // Reveal/ensure pick-thumbnail button if enough thumbnails
+          if (lenBefore > 0) {
+            ui.show($elems.open);
+          }
+        }
       }
     });
 
     bus.on('location_entry_removed', function (ev) {
-      // Remove entry from children.
-      var id = ev.data.entryId;
+      if ($mount) {
+        // Remove entry from children.
+        var id = ev.data.entryId;
 
-      if (id in children) {
-        var v = children[id];
-        delete children[id];
+        if (id in children) {
+          children[id].unbind();
+          delete children[id];
 
-        // Remove entry's HTML and unbind view.
-        v.unbind();
-        $('#thumbnail-' + id).fadeOut('slow', function () {
-          $('#thumbnail-' + id).remove();
-        });
+          // If this is the only one, hide the component.
+          var len = self.numThumbnails();
+          if (len === 1) {
+            ui.hide($mount);
+          } else if (len === 2) {
+            // If this is the second last, hide the select button
+            ui.hide($elems.open);
+          }
+
+          // Remove entry's HTML.
+          $('#thumbnail-' + id).fadeOut('slow', function () {
+            $('#thumbnail-' + id).remove();
+          });
+        }
       }
     });
   };
 
-  this.unbind = function () {
+  self.numThumbnails = function () {
+    if ($mount) {
+      return $elems.thumbnails.find('.location-thumbnail').length;
+    }
+    return 0;
+  };
+
+  self.unbind = function () {
     if ($mount) {
       $mount = null;
       // Unbind each child
