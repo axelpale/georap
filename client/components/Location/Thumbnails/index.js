@@ -124,6 +124,12 @@ module.exports = function (location, entries) {
       }
     });
 
+    bus.on('location_thumbnail_changed', function () {
+      if ($mount) {
+        console.log('thumbnail_changed');
+      }
+    });
+
     // Setup form
     $elems.open.click(function () {
       if (children.form) {

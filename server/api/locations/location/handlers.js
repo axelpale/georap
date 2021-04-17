@@ -143,8 +143,32 @@ exports.changeType = function (req, res, next) {
   });
 };
 
-exports.changeThumbnail = (req, res) => {
-  res.sendStatus(status.OK);
+exports.changeThumbnail = (req, res, next) => {
+  // Validate thumbnail key
+  const newKey = req.body.attachmentKey;
+  if (typeof newKey !== 'string' || newKey.length < 1) {
+    return res.status(status.BAD_REQUEST).send('Invalid thumbnail key');
+  }
+
+  // If no change, everything ok already
+  var oldKey = req.location.thumbnail;
+  if (oldKey === newKey) {
+    return res.status(status.OK).send('Same thumbnail already selected.');
+  }
+
+  locationDal.changeThumbnail({
+    username: req.user.name,
+    locationId: req.location._id,
+    locationName: req.location.name,
+    newThumbnail: newKey,
+    oldThumbnail: oldKey,
+  }, (err) => {
+    if (err) {
+      return next(err);
+    }
+
+    return res.sendStatus(status.OK);
+  });
 };
 
 exports.getOne = function (req, res, next) {

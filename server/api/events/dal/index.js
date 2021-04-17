@@ -17,6 +17,7 @@ exports.createLocationGeomChanged = require('./locationGeomChanged');
 exports.createLocationNameChanged = require('./locationNameChanged');
 exports.createLocationStatusChanged = require('./locationStatusChanged');
 exports.createLocationTypeChanged = require('./locationTypeChanged');
+exports.createLocationThumbnailChanged = require('./locationThumbnailChanged');
 exports.createLocationRemoved = require('./locationRemoved');
 
 exports.getAllOfUser = (username, callback) => {
