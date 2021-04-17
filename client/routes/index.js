@@ -312,6 +312,13 @@ exports.route = function () {
     card.open(view);
   });
 
+  page('/statistics', basicViewSetup(function () {
+    return import(
+      /* webpackChunkName: "statistics" */
+      '../components/Statistics'
+    );
+  }));
+
   page('/fund', function () {
     var view = new SupportFundView();
     card.open(view);
@@ -356,13 +363,6 @@ exports.route = function () {
     return import(
       /* webpackChunkName: "invite-view" */
       '../components/Invite'
-    );
-  }));
-
-  page('/statistics', adminOnly, basicViewSetup(function () {
-    return import(
-      /* webpackChunkName: "statistics" */
-      '../components/Statistics'
     );
   }));
 
