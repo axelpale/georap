@@ -1,5 +1,22 @@
 const db = require('tresdb-db');
 
+exports.count = (callback) => {
+  // Count users
+  //
+  // Parameters:
+  //   callback
+  //     function (err, number)
+  //
+  db.collection('users')
+    .countDocuments({})
+    .then((number) => {
+      return callback(null, number);
+    })
+    .catch((err) => {
+      return callback(err);
+    });
+};
+
 exports.getAll = (callback) => {
   // Get all users, ordered by points, descending
   //
