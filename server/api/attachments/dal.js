@@ -8,9 +8,8 @@ exports.count = (callback) => {
   //   callback
   //     function (err, number)
   //
-  db.collection('attachments').countDocuments({
-    deleted: false,
-  })
+  db.collection('attachments')
+    .countDocuments({ deleted: false })
     .then((number) => {
       return callback(null, number);
     })
