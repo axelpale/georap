@@ -51,6 +51,10 @@ module.exports = function (selectedImage, images) {
         // Add class here
         $elems[img.key]
           .addClass('thumbnail-selected');
+        // Notify parent with the selected attachment to update current
+        // thumbnail temporarily. It gives better visual feedback than
+        // mere borders.
+        self.emit('pick', img);
       });
     });
   };

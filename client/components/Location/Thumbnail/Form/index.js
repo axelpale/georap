@@ -52,6 +52,11 @@ module.exports = function (locationId, selectedImage, images) {
     children.palette = new Palette(selectedImage, images);
     children.palette.bind($elems.palette);
 
+    // Palette pick
+    children.palette.on('pick', function (att) {
+      self.emit('pick', att);
+    });
+
     // Form submit
     $elems.form = $mount.find('.location-thumbnails-form');
     $elems.form.submit(function (ev) {

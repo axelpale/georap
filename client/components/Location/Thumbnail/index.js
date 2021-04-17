@@ -66,11 +66,20 @@ module.exports = function (location, entries) {
           children.form.unbind();
           children.form.off('success');
           delete children.form;
+          // Return thumbnail to original
+          if (children.thumbnail) {
+            children.thumbnail.update(location.thumbnail);
+          }
         });
         children.form.once('success', function () {
           children.form.unbind();
           children.form.off('cancel');
           delete children.form;
+        });
+        children.form.on('pick', function (att) {
+          if (children.thumbnail) {
+            children.thumbnail.update(att);
+          }
         });
       }
     });
