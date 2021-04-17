@@ -99,7 +99,7 @@ exports.insertAndCompleteAndEmit = (ev, attachmentProps, callback) => {
           return next(merr);
         }
         if (single) {
-          atts = atts[0]
+          atts = atts[0];
         }
         // Replace
         proptools.set(eventForEmit, propPath, atts);
