@@ -135,7 +135,7 @@ These helpful scripts are defined in `package.json`. See it for details.
 
 Alias for [npm run server:production](#npm-run-server-production)
 
-### npm run watchstart
+### npm run start:watch
 
 For development. Lint and re-run the server each time server code is modified.
 
@@ -145,7 +145,7 @@ Builds the client with webpack.
 
 Webpack chunks the bundle. Usually a chunk contains a View. The chunk names are defined in client/routes.
 
-### npm run watchbuild
+### npm run build:watch
 
 For development. Lint and rebuild the client code bundle each time client code is modified.
 
