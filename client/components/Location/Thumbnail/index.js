@@ -90,7 +90,10 @@ module.exports = function (location, entries) {
         if (children.thumbnail) {
           children.thumbnail.update(location.thumbnail);
         } else {
-          children.thumbnail = new Thumbnail(location.thumbnail);
+          children.thumbnail = new Thumbnail(location.thumbnail, {
+            size: 'xl',
+            makeLink: true,
+          });
           children.thumbnail.bind($elems.thumbnail);
         }
       } else {
