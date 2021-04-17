@@ -1,10 +1,23 @@
 <table class="table">
   <tbody>
-  <% Object.keys(stats).forEach(function (key) { %>
+<%
+  var order = [
+    { key: 'usersCount', label: 'Users' },
+    { key: 'locationCount', label: 'Locations' },
+    { key: 'entriesCount', label: 'Posts' },
+    { key: 'attachmentsCount', label: 'Attachments' },
+    { key: 'eventsCount', label: 'Actions' },
+    { key: 'clientVersion', label: 'Client version' },
+    { key: 'serverVersion', label: 'Server version' },
+  ];
+  order.forEach(function (item) {
+%>
     <tr>
-      <td><%= key %></td>
-      <td><%= stats[key] %></td>
+      <td title="<%= item.key %>"><%= item.label %></td>
+      <td><%= stats[item.key] %></td>
     </tr>
-  <% }); %>
+<%
+  });
+%>
   </tbody>
 </table>
