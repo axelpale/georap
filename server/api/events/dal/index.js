@@ -3,7 +3,26 @@
 //
 const db = require('tresdb-db');
 
-// Public methods
+// Statistics
+
+exports.count = (callback) => {
+  // Count events
+  //
+  // Parameters:
+  //   callback
+  //     function (err, number)
+  //
+  db.collection('events')
+    .countDocuments({})
+    .then((number) => {
+      return callback(null, number);
+    })
+    .catch((err) => {
+      return callback(err);
+    });
+};
+
+// Event creation
 
 exports.createLocationEntryChanged = require('./entryChanged');
 exports.createLocationEntryCreated = require('./entryCreated');
@@ -19,6 +38,8 @@ exports.createLocationStatusChanged = require('./locationStatusChanged');
 exports.createLocationTypeChanged = require('./locationTypeChanged');
 exports.createLocationThumbnailChanged = require('./locationThumbnailChanged');
 exports.createLocationRemoved = require('./locationRemoved');
+
+// Event retrieval
 
 exports.getAllOfUser = (username, callback) => {
   // WARNING possibly computationally heavy if lots of events
