@@ -53,7 +53,7 @@ exports.insertAndCompleteAndEmit = (ev, attachmentProps, callback) => {
   //     event object to insert
   //   attachmentProps
   //     array of strings. Each string is property name or a path to property
-  //     of attachment keys in the given event. Examples:
+  //     of attachment key or keyss in the given event. Examples:
   //       ['data.entry.attachments']
   //       ['data.original.attachments', 'data.delta.attachments']
   //     If the property does not exist, it is skipped.
@@ -77,19 +77,34 @@ exports.insertAndCompleteAndEmit = (ev, attachmentProps, callback) => {
     // Convert attachment keys to attachments.
     // This prevents additional attachment requests from clients.
     asyn.eachSeries(attachmentProps, (propPath, next) => {
-      const attachmentKeys = proptools.get(eventForEmit, propPath);
-      if (attachmentKeys) {
-        attachmentsDal.getManyComplete(attachmentKeys, (merr, atts) => {
-          if (merr) {
-            return next(merr);
-          }
-          // Replace
-          proptools.set(eventForEmit, propPath, atts);
-          return next();
-        });
-      } else {
+      const value = proptools.get(eventForEmit, propPath);
+
+      if (!value) {
+        // No such property at path
         return next();
       }
+
+      let single = false;
+      if (typeof value === 'string') {
+        single = true;
+      }
+
+      let attachmentKeys = value;
+      if (single) {
+        attachmentKeys = [value];
+      }
+
+      attachmentsDal.getManyComplete(attachmentKeys, (merr, atts) => {
+        if (merr) {
+          return next(merr);
+        }
+        if (single) {
+          atts = atts[0]
+        }
+        // Replace
+        proptools.set(eventForEmit, propPath, atts);
+        return next();
+      });
     }, (finalErr) => {
       if (finalErr) {
         return callback(finalErr);
