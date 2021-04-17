@@ -2,7 +2,6 @@
 // Events
 //
 const db = require('tresdb-db');
-const urls = require('georap-urls-server');
 
 // Public methods
 

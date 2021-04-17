@@ -152,6 +152,6 @@ exports.latestComplete = (range, callback) => {
     },
     {
       $unwind: '$thumbnail',
-    }
+    },
   ]).toArray(callback);
 };
