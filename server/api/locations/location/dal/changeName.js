@@ -1,5 +1,5 @@
 const db = require('tresdb-db');
-const eventsDal = require('../../../../events/dal');
+const eventsDal = require('../../../events/dal');
 
 module.exports = function (params, callback) {
   // Parameters

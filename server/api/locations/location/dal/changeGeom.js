@@ -1,6 +1,6 @@
 const db = require('tresdb-db');
 const googlemaps = require('../../../../services/googlemaps');
-const eventsDal = require('../../../../events/dal');
+const eventsDal = require('../../../events/dal');
 
 module.exports = function (params, callback) {
   // Change geom but do not recompute layer.

@@ -1,8 +1,8 @@
 const db = require('tresdb-db');
 const urls = require('georap-urls-server');
 const proj = require('../../../../services/proj');
-const eventsDal = require('../../../../events/dal');
-const entriesDal = require('../../../../entries/dal');
+const eventsDal = require('../../../events/dal');
+const entriesDal = require('../../../entries/dal');
 
 module.exports = (id, callback) => {
   // Get single location with additional coordinate systems, events,
