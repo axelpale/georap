@@ -33,6 +33,7 @@ var LocationView = function (id, query) {
   //     when model emits "removed"
 
   // Init
+  var $mount = null;
   var self = this;
   emitter(self);
 
@@ -44,7 +45,8 @@ var LocationView = function (id, query) {
 
   // Public methods
 
-  self.bind = function ($mount) {
+  self.bind = function ($mountEl) {
+    $mount = $mountEl;
 
     // Loading
     $mount.html(locationTemplate({
@@ -138,20 +140,24 @@ var LocationView = function (id, query) {
   };  // end bind
 
   self.unbind = function () {
-    if (_location) {
-      nameView.unbind();
-      placesView.unbind();
-      geomView.unbind();
-      statusTypeView.unbind();
-      formsView.unbind();
-      thumbnailView.unbind();
-      entriesView.unbind();
-      eventsView.unbind();
-      removeView.unbind();
-      _location.off();
-      locations.deselectLocation(_location.getId());
+    if ($mount) {
+      if (_location) {
+        nameView.unbind();
+        placesView.unbind();
+        geomView.unbind();
+        statusTypeView.unbind();
+        formsView.unbind();
+        thumbnailView.unbind();
+        entriesView.unbind();
+        eventsView.unbind();
+        removeView.unbind();
+        _location.off();
+        locations.deselectLocation(_location.getId());
+      }
+      _location = null;
+      $mount.empty();
+      $mount = null;
     }
-    _location = null;
   };
 
 };
