@@ -1,5 +1,6 @@
 /* eslint-disable no-var */
 var entryModel = require('./entry')
+var attachmentsModel = require('./attachments')
 var dropOne = require('./lib/dropOne')
 var forward = require('./lib/forward')
 var forwardOne = require('./lib/forwardOne')
@@ -36,6 +37,13 @@ exports.getAttachments = function (entries) {
   }
 
   return atts
+}
+
+exports.getImages = function (entries) {
+  // Return all image attachments as array
+  //
+  var atts = exports.getAttachments(entries)
+  return attachmentsModel.getImages(atts);
 }
 
 exports.getImageEntries = function (entries) {
