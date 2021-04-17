@@ -317,6 +317,20 @@ html, body {
   margin-bottom: 0.8rem;
   margin-left: -0.1rem;
 }
+.location-form-thumbnail {
+  display: inline-block;
+  margin: 4px;
+  opacity: 1;
+}
+.location-form-thumbnail.thumbnail-selected {
+  margin: 0;
+  border: 4px solid black;
+  opacity: 1;
+}
+.location-form-thumbnail:hover {
+  opacity: 0.7;
+  cursor: pointer;
+}
 /* Location Thumbnails END */
 
 /* Entries */

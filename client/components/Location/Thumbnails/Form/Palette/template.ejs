@@ -1,3 +1,5 @@
-<% images.forEach(function (att) { %>
-  <img src="<%= att.thumbUrl %>" data-attachment-key="<%= att.key %>">
-<% }) %>
+<div class="palette">
+  <% images.forEach(function (img) { %>
+  <span class="location-form-thumbnail thumbnail-<%= img.key %>"></span>
+  <% }); %>
+</div>

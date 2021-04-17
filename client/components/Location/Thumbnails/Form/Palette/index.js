@@ -1,6 +1,8 @@
 var emitter = require('component-emitter');
+var uic = require('georap-components');
 var ui = require('tresdb-ui');
 var template = require('./template.ejs');
+var Thumbnail = uic.Thumbnail;
 
 module.exports = function (selectedImage, images) {
   // Parameters:
@@ -28,10 +30,28 @@ module.exports = function (selectedImage, images) {
       images: images,
     }));
 
-    $mount.on('click', function (ev) {
-      if (ev.target.dataset.attachmentKey) {
-        selectedKey = ev.target.dataset.attachmentKey;
+    $elems.palette = $mount.find('.palette');
+
+    images.forEach(function (img) {
+      $elems[img.key] = $elems.palette.find('.thumbnail-' + img.key);
+      children[img.key] = new Thumbnail(img);
+      children[img.key].bind($elems[img.key]);
+
+      if (selectedImage.key === img.key) {
+        $elems[img.key].addClass('thumbnail-selected');
       }
+
+      // Click to select
+      $elems[img.key].on('click', function () {
+        selectedKey = img.key;
+        // Remove class elsewhere
+        $elems.palette
+          .find('.thumbnail-selected')
+          .removeClass('thumbnail-selected');
+        // Add class here
+        $elems[img.key]
+          .addClass('thumbnail-selected');
+      });
     });
   };
 
