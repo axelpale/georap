@@ -129,6 +129,7 @@ module.exports = function (location, entries) {
       if (children.form) {
         children.form.unbind();
         children.form.off('exit');
+        children.form.off('success');
         delete children.form;
       } else {
         var atts = models.entries.getAttachments(entries);
@@ -138,6 +139,12 @@ module.exports = function (location, entries) {
         children.form.bind($mount.find('.location-thumbnails-form-container'));
         children.form.once('exit', function () {
           children.form.unbind();
+          children.form.off('success');
+          delete children.form;
+        });
+        children.form.once('success', function () {
+          children.form.unbind();
+          children.form.off('exit');
           delete children.form;
         });
       }
