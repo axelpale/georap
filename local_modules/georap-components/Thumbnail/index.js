@@ -2,17 +2,34 @@
 //
 var template = require('./template.ejs');
 
+var sizeToClass = {
+  'xs': 'thumb-xs',
+  'sm': 'thumb-sm',
+  'md': 'thumb-md',
+  'lg': 'thumb-lg',
+  'xl': 'thumb-xl',
+};
+
 module.exports = function (attachment, opts) {
+  // Parameters:
+  //   attachment
+  //     attachment object
+  //   opts, object with properties
+  //     size
+  //       optional string in ['xs', 'sm', 'md', 'lg', 'xl'].
+  //       Size of the thumbnail. Default 'md'.
+  //     makeLink
+  //       optional boolean. True to make thumbnail a link.
+  //
 
   if (!opts) {
-    opts = {
-      makeLink: false,
-    };
+    opts = {};
   }
 
-  if (typeof opts.makeLink !== 'boolean') {
-    opts.makeLink = false;
-  }
+  opts = Object.assign({
+    size: 'md',
+    makeLink: false,
+  }, opts);
 
   // Setup
   var $mount = null;
@@ -23,6 +40,7 @@ module.exports = function (attachment, opts) {
 
     $mount.html(template({
       attachment: attachment,
+      sizeClass: sizeToClass[opts.size],
       makeLink: opts.makeLink,
     }));
   };
@@ -33,6 +51,7 @@ module.exports = function (attachment, opts) {
 
       $mount.html(template({
         attachment: attachment,
+        sizeClass: sizeToClass[opts.size],
         makeLink: opts.makeLink,
       }));
     }

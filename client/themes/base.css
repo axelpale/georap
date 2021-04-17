@@ -398,7 +398,7 @@ time {
 
 /* Entries END */
 
-/* Attachment Thumbnail */
+/* Thumbnail */
 
 .attachment-thumbnail {
   display: inline-block;
@@ -408,8 +408,24 @@ time {
   width: 8.7rem;
   height: 8.7rem;
 }
+.attachment-thumbnail.thumb-xs img {
+  width: 5.4rem;
+  height: 5.4rem;
+}
+.attachment-thumbnail.thumb-sm img {
+  width: 6.9rem;
+  height: 6.9rem;
+}
+.attachment-thumbnail.thumb-lg img {
+  width: 11.1rem;
+  height: 11.1rem;
+}
+.attachment-thumbnail.thumb-xl img {
+  width: 14.1rem;
+  height: 14.1rem;
+}
 
-/* Attachment Thumbnail END */
+/* Thumbnail END */
 
 /* Attachments Form and Uploader */
 

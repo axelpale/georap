@@ -1,9 +1,9 @@
 <%
 
 if (makeLink) {
-  %><a href="<%= attachment.url %>" target="_blank" class="attachment-thumbnail"><%
+  %><a href="<%= attachment.url %>" target="_blank" class="attachment-thumbnail <%= sizeClass %>"><%
 } else {
-  %><span class="attachment-thumbnail"><%
+  %><span class="attachment-thumbnail <%= sizeClass %>"><%
 }
 
 if (attachment.mimetype.startsWith('image/')) {
