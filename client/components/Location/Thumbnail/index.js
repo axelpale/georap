@@ -53,7 +53,7 @@ module.exports = function (location, entries) {
     $elems.open.click(function () {
       if (children.form) {
         children.form.unbind();
-        children.form.off('exit');
+        children.form.off('cancel');
         children.form.off('success');
         delete children.form;
       } else {
@@ -62,14 +62,14 @@ module.exports = function (location, entries) {
         var locId = location._id;
         children.form = new ThumbnailForm(locId, location.thumbnail, imgs);
         children.form.bind($mount.find('.location-thumbnail-form-container'));
-        children.form.once('exit', function () {
+        children.form.once('cancel', function () {
           children.form.unbind();
           children.form.off('success');
           delete children.form;
         });
         children.form.once('success', function () {
           children.form.unbind();
-          children.form.off('exit');
+          children.form.off('cancel');
           delete children.form;
         });
       }

@@ -44,7 +44,7 @@ module.exports = function (locationId, selectedImage, images) {
     $elems.cancel = $mount.find('.form-cancel');
     $elems.cancel.click(function () {
       $elems.cancel.off(); // Prevent double click
-      self.emit('exit');
+      self.emit('cancel');
     });
 
     // Palette of thumbnails
