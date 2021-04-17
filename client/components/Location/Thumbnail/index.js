@@ -95,8 +95,10 @@ module.exports = function (location, entries) {
         }
       } else {
         ui.hide($mount);
-        children.thumbnail.unbind();
-        delete children.thumbnail;
+        if (location.thumbnail) {
+          children.thumbnail.unbind();
+          delete children.thumbnail;
+        }
       }
     }
   };
