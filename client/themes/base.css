@@ -220,7 +220,7 @@ html, body {
   margin-bottom: 1.6rem;
 }
 
-#location-thumbnails-container {
+#location-thumbnail-container {
   margin-bottom: 1.6rem;
   line-height: 1;
 }
@@ -279,42 +279,17 @@ html, body {
 }
 /* Location Status & Type END */
 
-/* Location Thumbnails */
-.location-thumbnails {
-  display: inline-block;
-  vertical-align: bottom;
-}
-.location-thumbnails .location-thumbnail {
+/* Location Thumbnail */
+.location-thumbnail {
   position: relative;
   display: inline-block;
   margin-right: 0.6rem;
   margin-bottom: 0.6rem;
   overflow: hidden;
+  vertical-align: bottom;
 }
-.location-thumbnails a:hover,
-.location-thumbnails a:active {
-  opacity: 0.7;
-}
-.location-thumbnails img {
-  object-fit: cover;
-  width: 11.1rem;
-  height: 11.1rem;
-  border: 1px solid #ddd;
-}
-@media (max-width: 500px) {
-  .location-thumbnails img {
-    width: 8.7rem;
-    height: 8.7rem;
-  }
-}
-@media (max-width: 400px) {
-  .location-thumbnails img {
-    width: 6.9rem;
-    height: 6.9rem;
-  }
-}
-.location-thumbnails-open {
-  margin-bottom: 0.8rem;
+.location-thumbnail-open {
+  margin-bottom: 0.6rem;
   margin-left: -0.1rem;
 }
 .location-form-thumbnail {
@@ -331,7 +306,7 @@ html, body {
   opacity: 0.7;
   cursor: pointer;
 }
-/* Location Thumbnails END */
+/* Location Thumbnail END */
 
 /* Entries */
 
