@@ -1,6 +1,6 @@
 
 var templates = require('./templates');
-var dal = require('./dal');
+var locationDal = require('./dal');
 var loggers = require('../../../services/logs/loggers');
 var config = require('tresdb-config');
 var status = require('http-status-codes');
@@ -21,7 +21,7 @@ exports.changeGeom = function (req, res, next) {
   lng = req.body.lng;
   u = req.user.name;
 
-  dal.changeGeom({
+  locationDal.changeGeom({
     locationId: loc._id,
     locationName: loc.name,
     locationGeom: loc.geom,
@@ -62,7 +62,7 @@ exports.changeName = function (req, res, next) {
     username: req.user.name,
   };
 
-  dal.changeName(params, function (err) {
+  locationDal.changeName(params, function (err) {
     if (err) {
       return next(err);
     }
@@ -95,7 +95,7 @@ exports.changeStatus = function (req, res, next) {
     return res.status(status.OK).send('Status not changed. Same already.');
   }
 
-  dal.changeStatus({
+  locationDal.changeStatus({
     locationId: req.location._id,
     locationName: req.location.name,
     locationStatus: oldStatus,
@@ -128,7 +128,7 @@ exports.changeType = function (req, res, next) {
     return res.status(status.OK).send('Type not changed. Same already.');
   }
 
-  dal.changeType({
+  locationDal.changeType({
     locationId: req.location._id,
     locationName: req.location.name,
     locationType: oldType,
@@ -151,7 +151,7 @@ exports.getOne = function (req, res, next) {
   // Fetch single location with entries and events
 
   // eslint-disable-next-line max-statements
-  dal.getOneComplete(req.location._id, function (err, rawLoc) {
+  locationDal.getOneComplete(req.location._id, function (err, rawLoc) {
     if (err) {
       return next(err);
     }
@@ -209,7 +209,7 @@ exports.getOne = function (req, res, next) {
 exports.removeOne = function (req, res, next) {
   // Delete single location
 
-  dal.removeOne(req.location._id, req.user.name, function (err) {
+  locationDal.removeOne(req.location._id, req.user.name, function (err) {
     if (err) {
       return next(err);
     }
