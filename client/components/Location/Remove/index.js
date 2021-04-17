@@ -5,7 +5,12 @@ var ui = require('tresdb-ui');
 
 module.exports = function (location) {
 
-  this.bind = function ($mount) {
+  var $mount = null;
+  var $elems = {};
+  var self = this;
+
+  self.bind = function ($mountEl) {
+    $mount = $mountEl;
 
     // Allow only admins and creators to delete.
     if (!account.isAdmin() && location.getCreator() !== account.getName()) {
@@ -16,31 +21,31 @@ module.exports = function (location) {
       location: location,
     }));
 
-    var $ensure = $('#tresdb-location-delete-ensure');
-    var $final = $('#tresdb-location-delete-final');
-    var $del = $('#tresdb-location-delete');
-    var $error = $('#tresdb-location-delete-error');
-    var $progress = $('#tresdb-location-delete-progress');
+    $elems.ensure = $('#tresdb-location-delete-ensure');
+    $elems.final = $('#tresdb-location-delete-final');
+    $elems.del = $('#tresdb-location-delete');
+    $elems.error = $('#tresdb-location-delete-error');
+    $elems.progress = $('#tresdb-location-delete-progress');
 
-    $ensure.click(function (ev) {
+    $elems.ensure.click(function (ev) {
       ev.preventDefault();
-      ui.toggleHidden($final);
+      ui.toggleHidden($elems.final);
     });
 
-    $del.click(function (ev) {
+    $elems.del.click(function (ev) {
       ev.preventDefault();
 
       // Prevent user clicking the deletion again
-      ui.hide($final);
+      ui.hide($elems.final);
       // Show progress bar
-      ui.show($progress);
+      ui.show($elems.progress);
 
       location.remove(function (err) {
         if (err) {
           // Remove progress
-          ui.hide($progress);
+          ui.hide($elems.progress);
           // Show deletion failed error message
-          ui.show($error);
+          ui.show($elems.error);
         }
         // ON successful removal the location will emit "location_removed" event
         // and the card will close the Location component.
@@ -48,9 +53,12 @@ module.exports = function (location) {
     });
   };
 
-  this.unbind = function () {
-    $('#tresdb-location-delete-ensure').off();
-    $('#tresdb-location-delete').off();
+  self.unbind = function () {
+    if ($mount) {
+      ui.offAll($elems);
+      $elems = {};
+      $mount = null;
+    }
   };
 
 };
