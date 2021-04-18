@@ -167,6 +167,14 @@ module.exports = function (locationId, entry) {
       children.move.on('success', function () {
         console.log('move success detected');
       });
+
+      // Hide on cancel
+      children.remove.on('exit', function () {
+        ui.hide($elems.remove);
+      });
+      children.move.on('exit', function () {
+        ui.hide($elems.move);
+      });
     }
   };
 
