@@ -178,7 +178,7 @@ module.exports = function (locationId, entry) {
       }
 
       return {
-        markdown: children.markdown.getMarkdown().trim(),
+        markdown: children.markdown.getMarkdown(),
         attachments: attachments,
         flags: [], // TODO children.flags.getFlags(),
       };
