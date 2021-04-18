@@ -45,6 +45,29 @@ exports.change = function (locId, entryId, entryData, callback) {
   }, callback);
 };
 
+exports.move = function (params, callback) {
+  // Move entry and all its content from a location to another.
+  //
+  // Parameters
+  //   params
+  //     entryId
+  //     fromLocationId
+  //     toLocationId
+  //   callback
+  //     function (err)
+  //
+  var entryId = params.entryId;
+  var fromLocationId = params.fromLocationId;
+  var toLocationId = params.toLocationId;
+
+  return request.postJSON({
+    url: '/api/locations/' + fromLocationId + '/entries/' + entryId + '/move',
+    data: {
+      toLocationId: toLocationId,
+    },
+  }, callback);
+};
+
 exports.remove = function (locationId, entryId, callback) {
   // Delete an entry
   //

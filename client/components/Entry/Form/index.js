@@ -150,9 +150,7 @@ module.exports = function (locationId, entry) {
       });
 
       // Move entry
-      children.move = new MoveView({
-        label: 'Move post...',
-      });
+      children.move = new MoveView(entry);
       children.move.bind($mount.find('.form-move-container'));
       children.move.on('success', function () {
         console.log('move success detected');

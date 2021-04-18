@@ -13,6 +13,7 @@ router.use('/:entryId', entryIdParser);
 router.post('/:entryId', jsonParser, handlers.change);
 router.delete('/:entryId', handlers.remove);
 
+router.post('/:entryId/move', jsonParser, handlers.move);
 router.use('/:entryId/comments', commentsRouter);
 
 module.exports = router;

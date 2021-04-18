@@ -26,6 +26,7 @@ exports.count = (callback) => {
 
 exports.createLocationEntryChanged = require('./entryChanged');
 exports.createLocationEntryCreated = require('./entryCreated');
+exports.createLocationEntryMoved = require('./entryMoved');
 exports.createLocationEntryRemoved = require('./entryRemoved');
 exports.createLocationEntryCommentCreated = require('./commentCreated');
 exports.createLocationEntryCommentChanged = require('./commentChanged');

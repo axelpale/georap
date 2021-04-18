@@ -1,19 +1,24 @@
-<div class="form-group">
-  <button type="button" class="entry-move-open btn btn-default">Move post...</button>
+<div class="panel panel-default">
+  <div class="panel-body">
+    <div class="form-group">
+      <button type="button" class="entry-move-open btn btn-default">Move post...</button>
+    </div>
+
+    <form class="entry-move-form hidden">
+
+      <div class="form-group">Move the post to another location. Search and select one.</div>
+
+      <div class="select-location-container form-group"></div>
+
+      <div class="form-group">
+        <div class="pull-right">
+          <button type="button" class="entry-move-cancel btn btn-default">Cancel</button>
+          <button type="submit" class="entry-move-submit btn btn-warning" disabled="disabled">Move</button>
+        </div>
+        <strong class="entry-move-hint hidden">Move entry to the selected location?</strong>
+      </div>
+    </form>
+
+    <div class="entry-move-progress"></div>
+  </div>
 </div>
-
-<form class="entry-move-form form-group hidden">
-
-  Move the post to the following location.
-
-  <label>Find one:</label>
-  <input type="text" class="location-search-query">
-
-  <div>location search results</div>
-
-  Move to location LOCATION_NAME?
-  <button type="button" class="entry-move-cancel btn btn-default">Cancel</button>
-  <button type="submit" class="entry-move-submit btn btn-danger">Move</button>
-</form>
-
-<div class="entry-move-progress"></div>
