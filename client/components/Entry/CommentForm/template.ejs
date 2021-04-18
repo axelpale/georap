@@ -16,8 +16,11 @@
 
   <div class="form-group">
     <% if (!isNew) { %>
-      <!-- Delete confirmation -->
-    <div class="comment-remove-container"></div>
+    <!-- Delete confirmation -->
+    <div class="form-group">
+      <button type="button" class="comment-remove-open btn btn-danger">Delete comment...</button>
+    </div>
+    <div class="comment-remove-container hidden"></div>
     <% } %>
   </div>
 

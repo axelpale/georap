@@ -94,10 +94,16 @@ module.exports = function (entry, comment) {
 
     // Comment deletion button and form
     if (!isNew) {
+      $elems.remove = $mount.find('.comment-remove-container');
+      $elems.removeOpen = $mount.find('.comment-remove-open');
+      $elems.removeOpen.click(function () {
+        ui.toggleHidden($elems.remove);
+      });
+
       children.remove = new RemoveView({
         info: 'This will delete the comment and its attachments if any.',
       });
-      children.remove.bind($mount.find('.comment-remove-container'));
+      children.remove.bind($elems.remove);
       children.remove.on('submit', function () {
         entryApi.removeComment({
           locationId: entry.locationId,

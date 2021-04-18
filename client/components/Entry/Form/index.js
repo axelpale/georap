@@ -1,3 +1,4 @@
+/* eslint-disable max-statements */
 // module EntryForm
 //
 // Features
@@ -10,7 +11,7 @@ var template = require('./template.ejs');
 var AttachmentsForm = require('../AttachmentsForm');
 var MarkdownView = require('../Markdown');
 var ErrorView = require('../Error');
-var RemoveView = require('../Remove');
+var RemoveForm = require('../Remove');
 var MoveForm = require('../MoveForm');
 var ui = require('tresdb-ui');
 var emitter = require('component-emitter');
@@ -128,12 +129,25 @@ module.exports = function (locationId, entry) {
     });
 
     if (!isNew) {
+      $elems.removeOpen = $mount.find('.entry-remove-open');
+      $elems.remove = $mount.find('.entry-remove-container');
+      $elems.moveOpen = $mount.find('.entry-move-open');
+      $elems.move = $mount.find('.entry-move-container');
+
+      var pauseMs = 500;
+      $elems.removeOpen.click(ui.throttle(pauseMs, function () {
+        ui.toggleHidden($elems.remove);
+      }));
+      $elems.moveOpen.click(ui.throttle(pauseMs, function () {
+        ui.toggleHidden($elems.move);
+      }));
+
       // Remove entry
-      children.remove = new RemoveView({
+      children.remove = new RemoveForm({
         info: 'This will delete the post and ' +
           'all its attachments and comments if any.',
       });
-      children.remove.bind($mount.find('.form-remove-container'));
+      children.remove.bind($elems.remove);
       children.remove.on('submit', function () {
         entries.remove(entry.locationId, entry._id, function (err) {
           if (err) {
@@ -148,8 +162,8 @@ module.exports = function (locationId, entry) {
       });
 
       // Move entry
-      children.move = new MoveView(entry);
-      children.move.bind($mount.find('.form-move-container'));
+      children.move = new MoveForm(entry);
+      children.move.bind($elems.move);
       children.move.on('success', function () {
         console.log('move success detected');
       });

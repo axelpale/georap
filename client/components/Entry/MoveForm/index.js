@@ -27,15 +27,9 @@ module.exports = function (entry) {
 
     $elems.form = $mount.find('.entry-move-form');
 
-    $elems.open = $mount.find('.entry-move-open');
-    var pauseMs = 500;
-    $elems.open.click(ui.throttle(pauseMs, function () {
-      ui.toggleHidden($elems.form);
-    }));
-
     $elems.cancel = $mount.find('.entry-move-cancel');
     $elems.cancel.click(function () {
-      ui.hide($elems.form);
+      self.emit('exit');
     });
 
     $elems.select = $mount.find('.select-location-container');
