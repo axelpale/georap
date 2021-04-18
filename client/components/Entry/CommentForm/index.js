@@ -92,7 +92,7 @@ module.exports = function (entry, comment) {
     children.error = new ErrorView();
     children.error.bind($elems.error);
 
-    // Delete button
+    // Comment deletion button and form
     if (!isNew) {
       children.remove = new RemoveView({
         info: 'This will delete the comment and its attachments if any.',
