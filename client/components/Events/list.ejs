@@ -42,6 +42,9 @@
       <% } else if (t === 'location_tags_changed') { %>
         tagged <a href="<%= locUrl %>"><%= name %></a> as <%= ev.data.newTags.join(', ') %> <%= timestamp(ev.time) %>
 
+      <% } else if (t === 'location_thumbnail_changed') { %>
+        changed thumbnail of <a href="<%= locUrl %>"><%= name %></a> <%= timestamp(ev.time) %>
+
       <% } else if (t === 'location_entry_created') { %>
         posted <%=
           ev.data.entry.flags.length > 0
