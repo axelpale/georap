@@ -11,6 +11,7 @@ var AttachmentsForm = require('../AttachmentsForm');
 var MarkdownView = require('../Markdown');
 var ErrorView = require('../Error');
 var RemoveView = require('../Remove');
+var MoveView = require('./Move');
 var ui = require('tresdb-ui');
 var emitter = require('component-emitter');
 var entries = tresdb.stores.entries;
@@ -130,6 +131,7 @@ module.exports = function (locationId, entry) {
     });
 
     if (!isNew) {
+      // Remove entry
       children.remove = new RemoveView({
         label: 'Delete post...',
       });
@@ -145,6 +147,15 @@ module.exports = function (locationId, entry) {
           // Success. The server will emit location_entry_removed
           self.emit('exit');
         });
+      });
+
+      // Move entry
+      children.move = new MoveView({
+        label: 'Move post...',
+      });
+      children.move.bind($mount.find('.form-move-container'));
+      children.move.on('success', function () {
+        console.log('move success detected');
       });
     }
   };
