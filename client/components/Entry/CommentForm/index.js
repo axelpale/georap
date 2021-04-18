@@ -95,7 +95,7 @@ module.exports = function (entry, comment) {
     // Delete button
     if (!isNew) {
       children.remove = new RemoveView({
-        label: 'Delete comment...',
+        info: 'This will delete the comment and its attachments if any.',
       });
       children.remove.bind($mount.find('.comment-remove-container'));
       children.remove.on('submit', function () {

@@ -8,8 +8,8 @@ module.exports = function (opts) {
   //
   // Parameters:
   //   opts, with optional props
-  //     label
-  //       string, button label
+  //     info
+  //       string
   //
   // Emit
   //   submit
@@ -19,7 +19,7 @@ module.exports = function (opts) {
     opts = {};
   }
   opts = Object.assign({
-    label: 'Delete...',
+    info: 'Delete',
   }, opts);
 
   var $mount = null;
@@ -31,7 +31,7 @@ module.exports = function (opts) {
     $mount = $mountEl;
 
     $mount.html(template({
-      label: opts.label,
+      info: opts.info,
     }));
 
     $elems.confirmation = $mount.find('.form-remove-confirmation');

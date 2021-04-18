@@ -133,7 +133,8 @@ module.exports = function (locationId, entry) {
     if (!isNew) {
       // Remove entry
       children.remove = new RemoveView({
-        label: 'Delete post...',
+        info: 'This will delete the post and ' +
+          'all its attachments and comments if any.',
       });
       children.remove.bind($mount.find('.form-remove-container'));
       children.remove.on('submit', function () {
