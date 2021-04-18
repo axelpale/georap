@@ -175,7 +175,7 @@ exports.move = (req, res, next) => {
 };
 
 exports.remove = (req, res, next) => {
-  // Remove entry from db
+  // Remove entry by setting deleted:true
 
   const locationId = req.location._id;
   const locationName = req.location.name;
