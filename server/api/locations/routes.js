@@ -13,6 +13,7 @@ var importerRouter = require('./importer/routes');
 router.get('/', handlers.latest);
 router.post('/', jsonParser, handlers.create);
 router.get('/count', handlers.count);
+router.get('/search', handlers.search);
 
 router.use('/import', importerRouter);
 router.use('/:locationId', locationIdParser, locationRouter);

@@ -155,3 +155,21 @@ exports.latestComplete = (range, callback) => {
     },
   ]).toArray(callback);
 };
+
+exports.search = (params, callback) => {
+  // Find locations. If more detailed queries are needed, see
+  // /api/markers/dal.getFiltered
+
+  const q = {
+    $text: {
+      $search: params.phrase,
+    },
+    deleted: false,
+  };
+
+  db.collection('locations')
+    .find(q)
+    .skip(params.skip)
+    .limit(params.limit)
+    .toArray(callback);
+};

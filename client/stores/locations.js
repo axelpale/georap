@@ -238,6 +238,18 @@ exports.importBatch = function (data, callback) {
   }, callback);
 };
 
+exports.search = function (params, callback) {
+  // Search for non-deleted locations
+  return getJSON({
+    url: '/api/locations/search',
+    data: {
+      phrase: params.phrase,
+      skip: params.skip,
+      limit: params.limit,
+    },
+  }, callback);
+};
+
 exports.setGeom = function (id, lng, lat, callback) {
   // Parameters:
   //   id

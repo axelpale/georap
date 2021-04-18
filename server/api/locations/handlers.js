@@ -114,3 +114,34 @@ exports.latest = (req, res, next) => {
     });
   });
 };
+
+exports.search = (req, res, next) => {
+  // Validate arguments
+  const skip = parseInt(req.query.skip, 10);
+  const limit = parseInt(req.query.limit, 10);
+  if (isNaN(skip) || skip < 0) {
+    return res.status(status.BAD_REQUEST).send('Invalid skip');
+  }
+  if (isNaN(limit) || limit < 0) {
+    return res.status(status.BAD_REQUEST).send('Invalid limit');
+  }
+  const phrase = req.query.phrase;
+  if (phrase.length < 1) {
+    return res.json({
+      locations: [],
+    });
+  }
+
+  dal.search({
+    phrase: phrase,
+    skip: skip,
+    limit: limit,
+  }, (err, locs) => {
+    if (err) {
+      return next(err);
+    }
+    return res.json({
+      locations: locs,
+    });
+  });
+};
