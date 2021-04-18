@@ -122,9 +122,6 @@ module.exports = function (locationId, entry) {
       }
     });
 
-    // Focus to text input
-    children.markdown.focus();
-
     $elems.cancelBtn = $mount.find('.entry-form-cancel');
     $elems.cancelBtn.click(function () {
       self.emit('exit');
