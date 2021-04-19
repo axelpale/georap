@@ -66,6 +66,7 @@ exports.createLocation = function (args, callback) {
       places: [],
       status: config.locationStatuses[0],
       type: config.locationTypes[0],
+      thumbnail: null,
       visits: [],
     };
 
