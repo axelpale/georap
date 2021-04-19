@@ -7,7 +7,7 @@
     <% locUrl = '/locations/' + ev.locationId + '?zoom=11&ref=latest' %>
     <% name = (name === '' ? 'Untitled' : name) %>
     <li class="list-group-item event-item" data-locationid="<%= ev.locationId %>">
-      <% if (showThumbnails) { %>
+      <% if (showThumbnails && ev.location.thumbnail) { %>
         <div class="pull-right event-item-thumbnail">
           <img src="<%= ev.location.thumbnail.thumbUrl %>" title="<%= ev.location.name %>">
         </div>

@@ -2,7 +2,7 @@ const db = require('tresdb-db');
 const urls = require('georap-urls-server');
 
 module.exports = (params, callback) => {
-  // Get recent location events, urls completed.
+  // Get recent location events, location thumbnail completed.
   //
   // Parameters
   //   params
@@ -51,7 +51,10 @@ module.exports = (params, callback) => {
     },
     {
       // Change the location array to the single location (the first item).
-      $unwind: '$location.thumbnail',
+      $unwind: {
+        path: '$location.thumbnail',
+        preserveNullAndEmptyArrays: true, // TODO not needed after v12 migr.
+      },
     },
   ]).toArray((err, events) => {
     if (err) {
