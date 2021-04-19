@@ -38,7 +38,11 @@ exports.reverseGeocode = function (latlng, callback) {
       var result, places;
 
       if (mapsResponse.data.results.length === 0) {
-        places = [];
+        // NOTE Here was a bug prior to 2021-04-20 such that we
+        // set unknown places back to []. This caused worker to
+        // query Google API endlessly because worker tries to find
+        // places for locations with places prop equal to []
+        places = ['Unknown'];
       } else {
         // First of the multiple results seems to be the most accurate.
         result = mapsResponse.data.results[0];
