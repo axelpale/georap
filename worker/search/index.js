@@ -40,8 +40,8 @@ exports.run = (callback) => {
       const entryTexts = entries.map((en) => {
         let r = en.user;
 
-        if (en.data.markdown) {
-          r += ' ' + lib.normalize(en.data.markdown);
+        if (en.markdown) {
+          r += ' ' + lib.normalize(en.markdown);
         }
 
         return r;
