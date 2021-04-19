@@ -54,6 +54,16 @@
       <% } else if (t === 'location_entry_changed') { %>
         edited a post in <a href="<%= locUrl %>"><%= name %></a> <%= timestamp(ev.time) %>
 
+      <% } else if (t === 'location_entry_moved_out') { %>
+        moved a post from
+        <a href="<%= locUrl %>"><%= name %></a> to
+        <a href="<%= '/locations/' + ev.data.toLocationId + '?ref=latest' %>"><%= ev.data.toLocationName %></a> <%= timestamp(ev.time) %>
+
+      <% } else if (t === 'location_entry_moved_in') { %>
+        moved a post to
+        <a href="<%= locUrl %>"><%= name %></a> from
+        <a href="<%= '/locations/' + ev.data.fromLocationId + '?ref=latest' %>"><%= ev.data.fromLocationName %></a> <%= timestamp(ev.time) %>
+
       <% } else if (t === 'location_entry_removed') { %>
         deleted a post from <a href="<%= locUrl %>"><%= name %></a> <%= timestamp(ev.time) %>
 
