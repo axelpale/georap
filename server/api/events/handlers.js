@@ -1,10 +1,10 @@
 
-var dal = require('./dal'); // Data access layer
-var loggers = require('../../services/logs/loggers');
+const dal = require('./dal'); // Data access layer
+const loggers = require('../../services/logs/loggers');
 
-var status = require('http-status-codes');
+const status = require('http-status-codes');
 
-exports.getRecent = function (req, res, next) {
+exports.getRecent = (req, res, next) => {
   // HTTP request handler
 
   const MAX_LIMIT = 100;
@@ -29,7 +29,7 @@ exports.getRecent = function (req, res, next) {
   dal.getRecentComplete({
     skip: skip,
     limit: limit,
-  }, function (err, events) {
+  }, (err, events) => {
     if (err) {
       return next(err);
     }
