@@ -57,7 +57,7 @@ module.exports = function (entry) {
           children.error.bind($mount.find('move-error'));
           return;
         }
-        // Success. The server will emit location_entry_moved
+        // Success. The server will emit location_entry_moved_in and _out
         self.emit('success');
       });
     });

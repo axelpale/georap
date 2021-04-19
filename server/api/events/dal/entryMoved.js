@@ -13,10 +13,12 @@ module.exports = (params, callback) => {
   //   callback
   //     function (err)
   //
-  const newEvent = {
-    type: 'location_entry_moved',
+  const timestamp = db.timestamp();
+
+  const eventForSource = {
+    type: 'location_entry_moved_out',
     user: params.username,
-    time: db.timestamp(),
+    time: timestamp,
     locationId: params.locationId,
     locationName: params.locationName,
     data: {
@@ -26,5 +28,20 @@ module.exports = (params, callback) => {
     },
   };
 
-  lib.insertAndEmit(newEvent, callback);
+  // Double event so that the move shows in the event history of
+  // the both locations.
+  const eventForTarget = {
+    type: 'location_entry_moved_in',
+    user: params.username,
+    time: timestamp,
+    locationId: params.toLocationId,
+    locationName: params.toLocationName,
+    data: {
+      entryId: params.entryId,
+      fromLocationId: params.locationId,
+      fromLocationName: params.locationName,
+    },
+  };
+
+  lib.insertAndEmitMany([eventForSource, eventForTarget], callback);
 };
