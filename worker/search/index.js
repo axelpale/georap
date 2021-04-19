@@ -1,6 +1,6 @@
 
 const db = require('tresdb-db');
-const dal = require('./dal');
+const searchDal = require('./dal');
 const lib = require('./lib');
 
 exports.run = (callback) => {
@@ -23,7 +23,7 @@ exports.run = (callback) => {
   const q = { deleted: false };
   const loCursor = loColl.find(q);
 
-  dal.forEach(loCursor, (loc, next) => {
+  searchDal.forEach(loCursor, (loc, next) => {
 
     const eq = {
       locationId: loc._id,
