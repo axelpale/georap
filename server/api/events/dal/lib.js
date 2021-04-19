@@ -43,6 +43,18 @@ exports.insertAndEmit = (ev, callback) => {
   });
 };
 
+exports.insertAndEmitMany = (evs, callback) => {
+  // Parameters:
+  //   evs
+  //     array of event objects to be inserted and emitted.
+  //   callback
+  //     function (err)
+  //
+  asyn.eachSeries(evs, (ev, then) => {
+    exports.insertAndEmit(ev, then);
+  }, callback);
+};
+
 exports.insertAndCompleteAndEmit = (ev, attachmentProps, callback) => {
   // Insert the event and complete attachments in the given event
   // before emitting and then emit the completed event.
