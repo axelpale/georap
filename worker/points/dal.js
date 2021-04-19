@@ -61,22 +61,22 @@ exports.computePoints = function (username, callback) {
   });
 };
 
-exports.computePointsAndStore = function (username, callback) {
+exports.computePointsAndStore = (username, callback) => {
   //
   // Parameters:
   //   username
   //   callback
   //     function (err)
   //
-  exports.computePoints(username, function (err, pointCategories) {
+  exports.computePoints(username, (err, pointCategories) => {
     if (err) {
       return callback(err);
     }
 
-    var coll = db.get().collection('users');
+    const coll = db.collection('users');
 
-    var q = { name: username };
-    var u = {
+    const q = { name: username };
+    const u = {
       $set: {
         locationsVisited: pointCategories.locationsVisited,
         locationsCreated: pointCategories.locationsCreated,
@@ -89,7 +89,7 @@ exports.computePointsAndStore = function (username, callback) {
       },
     };
 
-    coll.updateOne(q, u, function (err2) {
+    coll.updateOne(q, u, (err2) => {
       if (err2) {
         return callback(err2);
       }
