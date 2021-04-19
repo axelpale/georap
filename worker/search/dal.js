@@ -1,5 +1,5 @@
 
-exports.forEach = function (cursor, iteratee, callback) {
+exports.forEach = (cursor, iteratee, callback) => {
   // Execute iteratee for each item in cursor in series.
   //
   // Parameters:
@@ -12,6 +12,7 @@ exports.forEach = function (cursor, iteratee, callback) {
   //         function (err)
   //   callback
   //     function (err)
+  //
 
   (function step(err) {
     if (err) {
@@ -19,7 +20,7 @@ exports.forEach = function (cursor, iteratee, callback) {
       return callback(err);
     }
 
-    cursor.next(function (err2, r) {
+    cursor.next((err2, r) => {
       if (err2) {
         cursor.close();
         return callback(err2);
