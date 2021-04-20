@@ -45,20 +45,26 @@ module.exports = function (entry) {
       var selectedLocId = children.select.getSelectedLocationId();
 
       children.progress.bind($elems.progress);
+      ui.hide($elems.form);
 
       entryApi.move({
         entryId: entry._id,
         fromLocationId: entry.locationId,
         toLocationId: selectedLocId,
       }, function (err) {
-        children.progress.unbind();
-        if (err) {
-          children.error = new ErrorView(err.message);
-          children.error.bind($mount.find('move-error'));
-          return;
+        if ($mount) { // ensure not unbind already
+          if (err) {
+            children.progress.unbind(); // hide progress bar
+            ui.show($elems.form); // return the form
+            children.error = new ErrorView(err.message);
+            children.error.bind($mount.find('.entry-move-error'));
+            return;
+          }
+          // Success. The server will emit location_entry_moved_in and _out
+          // No need to hide progress bar because Entries will remove
+          // the entry view.
+          self.emit('success');
         }
-        // Success. The server will emit location_entry_moved_in and _out
-        self.emit('success');
       });
     });
 

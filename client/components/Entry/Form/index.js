@@ -164,9 +164,6 @@ module.exports = function (locationId, entry) {
       // Move entry
       children.move = new MoveForm(entry);
       children.move.bind($elems.move);
-      children.move.on('success', function () {
-        console.log('move success detected');
-      });
 
       // Hide on cancel
       children.remove.on('exit', function () {
