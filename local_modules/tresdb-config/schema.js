@@ -147,6 +147,13 @@ module.exports = {
       },
       additionalProperties: false,
     },
+    entryFlags: {
+      type: 'array',
+      items: {
+        type: 'string',
+      },
+      uniqueItems: true,
+    },
     locationStatuses: {
       type: 'array',
       items: {
