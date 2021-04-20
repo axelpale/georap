@@ -30,7 +30,7 @@ exports.reverseGeocode = function (latlng, callback) {
         key: config.googleMapsKey,
         latlng: latlng,
         language: 'en', // 'fi',
-        'result_type': 'political',
+        'result_type': 'political|natural_feature',
       },
       timeout: 1000, // ms
     })
@@ -42,7 +42,7 @@ exports.reverseGeocode = function (latlng, callback) {
         // set unknown places back to []. This caused worker to
         // query Google API endlessly because worker tries to find
         // places for locations with places prop equal to []
-        places = ['Unknown'];
+        places = ['Remote territory'];
       } else {
         // First of the multiple results seems to be the most accurate.
         result = mapsResponse.data.results[0];
