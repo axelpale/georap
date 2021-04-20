@@ -142,11 +142,9 @@ module.exports = function (entry, comment) {
       $elems.attachBtn.click(openAttachmentsForm);
     }
 
-    // Prepare progress bar for submission
+    // Submission
     $elems.progress = $mount.find('.comment-form-progress');
-
-    // Submit
-    $elems.form = $mount.find('.comment-form');
+    $elems.form = $mount.find('.comment-form-group');
     $elems.submit = $mount.find('.comment-form-submit');
     $elems.submit.click(function () {
       // Read message
@@ -174,18 +172,19 @@ module.exports = function (entry, comment) {
       children.error.reset();
 
       submit(markdown, attachments, function (err) {
-        // Show form and hide progress
-        ui.show($elems.form);
+        // Hide progress
         ui.hide($elems.progress);
 
         if (err) {
+          // Show form again
+          ui.show($elems.form);
           // Display error
           children.error.update(err.message);
         } else {
           // Success.
           // Empty the message input for next comment
           children.markdown.clear();
-          // Inform parent for example to unbind the form.
+          // Inform parent, for example to unbind the form.
           self.emit('success');
         }
       });
@@ -194,11 +193,12 @@ module.exports = function (entry, comment) {
 
   self.unbind = function () {
     if ($mount) {
-      $mount = null;
       ui.unbindAll(children);
       children = {};
       ui.offAll($elems);
       $elems = {};
+      $mount.empty();
+      $mount = null;
     }
   };
 };
