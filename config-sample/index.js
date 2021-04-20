@@ -109,6 +109,16 @@ module.exports = {
     sender: 'admin@example.com',
   },
 
+  // Flags for Entries.
+  // Flags are used to classify entries (aka posts) or give them perks.
+  // An example of a flag is 'visit' that can denote that the entry is
+  // about a visitation on the location instead of just general info.
+  // Flags also accumulate to the location of the flagged entry, so
+  // that a user can filter locations based on flags in their own entries.
+  // For example the 'visit' flag allows a user to browse all locations
+  // she has visited.
+  entryFlags: ['visit'],
+
   // Location classification: status.
   // The first in the list is used as the default.
   // The list order defines the button order on the location page.
@@ -176,10 +186,30 @@ module.exports = {
   ],
 
   // Marker templates.
-  // A mapping: status -> marking -> size -> template name without ext
-  // You can add or edit the templates at config/images/markers/templates
-  // NOTE template name must contain only lowercase letters and/or underscores
-  // NOTE for the server to parse it correctly.
+  // Marker template is a background image for the marker without a symbol.
+  // It determines the shape and color for the combined marker icons.
+  // The configuration here is a mapping:
+  //   status -> flag -> size -> template_name.
+  // where:
+  //   status
+  //     Location status.
+  //   flag
+  //     Entry flag. The locations where the user has posted
+  //     an entry with a flag will show as markers
+  //     built with these templates. For example, locations with entries
+  //     flagged as 'visit' can be configured to show in special color
+  //     for the user who posted the visits.
+  //     Locations where the user has not posted any flagged entries
+  //     will use templates configured as 'default' for the given status.
+  //   size
+  //     There are three sizes: 'sm', 'md', and 'lg'. Emphasized locations
+  //     will show up with large markers.
+  //   template_name:
+  //     A template file name without file extension. You can add or edit
+  //     template images at config/images/markers/templates
+  //     NOTE template name must contain only lowercase letters and/or
+  //     underscores for the server to parse it correctly.
+  //
   markerTemplates: {
     'unknown': {
       'default': {
