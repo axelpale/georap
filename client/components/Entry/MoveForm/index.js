@@ -81,11 +81,12 @@ module.exports = function (entry) {
 
   self.unbind = function () {
     if ($mount) {
-      $mount = null;
       ui.unbindAll(children);
       children = {};
       ui.offAll($elems);
       $elems = {};
+      $mount.empty();
+      $mount = null;
     }
   };
 };
