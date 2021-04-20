@@ -54,12 +54,14 @@ module.exports = function (entry) {
 
     // On comment creation
     bus.on('location_entry_comment_created', function (ev) {
-      // The server sent a new comment.
-      // Append to the list of comments.
-      var $commentEl = buildComment(ev.data.comment);
-      $elems.comments.append($commentEl);
-      // Flash in green
-      ui.flash($commentEl);
+      // The server sent a new comment. Append if correct entry.
+      if (ev.data.entryId === entry._id) {
+        // Append to the list of comments.
+        var $commentEl = buildComment(ev.data.comment);
+        $elems.comments.append($commentEl);
+        // Flash in green
+        ui.flash($commentEl);
+      }
     });
 
     bus.on('location_entry_comment_changed', function (ev) {
@@ -81,12 +83,12 @@ module.exports = function (entry) {
 
   self.unbind = function () {
     if ($mount) {
-      $mount = null;
       bus.off();
       ui.unbindAll(children);
       children = {};
       ui.offAll($elems);
       $elems = {};
+      $mount = null;
     }
   };
 };
