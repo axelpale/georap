@@ -1,6 +1,6 @@
 var EntryView = require('../../Entry');
 var ui = require('tresdb-ui');
-var bus = require('tresdb-bus');
+var rootBus = require('tresdb-bus');
 
 module.exports = function (location, entries) {
   // Parameters:
@@ -10,9 +10,13 @@ module.exports = function (location, entries) {
   //     an array of entries
   //
 
+  var $mount = null;
   var children = {};  // id -> entryView
+  var bus = rootBus.sub();
+  var self = this;
 
-  this.bind = function ($mount) {
+  self.bind = function ($mountEl) {
+    $mount = $mountEl;
 
     var appendEntry = function (entry, prepend) {
       // Parameters
@@ -61,7 +65,12 @@ module.exports = function (location, entries) {
     });
   };
 
-  this.unbind = function () {
-    ui.unbindAll(children);
+  self.unbind = function () {
+    if ($mount) {
+      bus.off();
+      ui.unbindAll(children);
+      children = {};
+      $mount = null;
+    }
   };
 };
