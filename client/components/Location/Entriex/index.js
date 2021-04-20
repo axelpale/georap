@@ -63,6 +63,15 @@ module.exports = function (location, entries) {
         $('#entry-' + id).remove();
       }
     });
+
+    bus.on('location_entry_moved_out', function (ev) {
+      var id = ev.data.entryId;
+      if (id in children) {
+        children[id].unbind();
+        delete children[id];
+        $('#entry-' + id).remove();
+      }
+    });
   };
 
   self.unbind = function () {
