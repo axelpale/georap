@@ -10,7 +10,7 @@ var filterStore = tresdb.stores.filter;
 var emitter = require('component-emitter');
 var rawEventToMarkerLocation = require('./lib/rawEventToMarkerLocation');
 var getBoundsDiagonal = require('./lib/getBoundsDiagonal');
-var VisitedManager = require('./VisitedManager');
+var FlagManager = require('./FlagManager');
 var getGroupRadius = require('./getGroupRadius');
 var chooseIcon = require('./chooseIcon');
 var labels = require('./lib/labels');
@@ -34,9 +34,9 @@ module.exports = function (map) {
   // then load the markers immediately when called, otherwise wait for idle.
   var _mapReady = false;
 
-  // Array of ids of locations that the user has visited.
+  // Keep track of user's flags for markers.
   // Fetch them as soon as possible.
-  var _visitedIds = new VisitedManager();
+  var _flagsMan = new FlagManager();
 
   // Array of ids of locations currently selected ON MAP not in store.
   // The array is used to find the previously selected locations quickly.
@@ -51,8 +51,8 @@ module.exports = function (map) {
   var _chooseIcon = function (mloc) {
     var zoomLevel = map.getZoom();
     var isSelected = locationsStore.isSelected(mloc._id);
-    var isVisited = _visitedIds.isVisited(mloc._id);
-    return chooseIcon(mloc, zoomLevel, isSelected, isVisited);
+    var flags = _flagsMan.get(mloc._id);
+    return chooseIcon(mloc, zoomLevel, isSelected, flags);
   };
 
   var _updateIcon = function (locId) {
@@ -316,11 +316,11 @@ module.exports = function (map) {
   });
 
   markerStore.on('location_entry_created', function (ev) {
-    if (ev.data.isVisit && account.isMe(ev.user)) {
-      // Add loc among visited locations if not visited before by this user.
-      _visitedIds.add(ev.locationId);
+    if (ev.data.entry.flags.length > 0 && account.isMe(ev.user)) {
+      // Register possible new flags
+      _flagsMan.add(ev.locationId, ev.data.entry.flags);
 
-      // Update marker icon to visited
+      // Update marker icon
       if (_markers[ev.locationId]) {
         var m = _markers[ev.locationId];
         var mloc = m.get('location');
@@ -330,17 +330,15 @@ module.exports = function (map) {
   });
 
   markerStore.on('location_entry_changed', function (ev) {
-    // Change from non-visit to visit
-    if (ev.data.newIsVisit && !ev.data.oldIsVisit && account.isMe(ev.user)) {
-      // Add loc among visited locations if not visited before by this user.
-      _visitedIds.add(ev.locationId);
-      // Update marker icon to visited
-      _updateIcon(ev.locationId);
-    } else {
-      // From visit to non-visit
-      if (ev.data.oldIsVisit && !ev.data.newIsVisit) {
-        _visitedIds.remove(ev.locationId);
-        // Update marker icon to unvisited
+    // Add or remove flags according to how the entry has changed.
+    // NOTE this is not perfect as it does not consider if there
+    // were multiple entries with similar flags. Yet, it is good enough.
+    if (account.isMe(ev.user)) {
+      if (ev.data.delta.flags) {
+        if (ev.data.original.flags) {
+          _flagsMan.remove(ev.locationId, ev.data.original.flags);
+        }
+        _flagsMan.add(ev.locationId, ev.data.delta.flags);
         _updateIcon(ev.locationId);
       }
     }
@@ -459,14 +457,17 @@ module.exports = function (map) {
     // Each time filter changes, fetch.
     filterStore.on('updated', _loadMarkers);
 
-    // Fetch the list of visited locations as soon as possible.
-    account.getVisitedLocationIds(function (err, ids) {
+    // Fetch the list of location flags as soon as possible
+    // to render the markers with correct templates.
+    account.getFlags(function (err, flagsObj) {
       if (err) {
         console.error(err);
         return;
       }
 
-      _visitedIds.set(ids);
+      _flagsMan.setAll(flagsObj);
+
+      // TODO update markers?
     });
   };
 
