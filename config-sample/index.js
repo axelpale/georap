@@ -217,7 +217,7 @@ module.exports = {
         'md': 'red_default_md',
         'lg': 'red_default_lg',
       },
-      'visited': {
+      'visit': {
         'sm': 'yellow_default_sm',
         'md': 'yellow_default_md',
         'lg': 'yellow_default_lg',
@@ -229,7 +229,7 @@ module.exports = {
         'md': 'red_light_md',
         'lg': 'red_light_lg',
       },
-      'visited': {
+      'visit': {
         'sm': 'yellow_light_sm',
         'md': 'yellow_light_md',
         'lg': 'yellow_light_lg',
@@ -241,7 +241,7 @@ module.exports = {
         'md': 'red_light_md',
         'lg': 'red_light_lg',
       },
-      'visited': {
+      'visit': {
         'sm': 'yellow_light_sm',
         'md': 'yellow_light_md',
         'lg': 'yellow_light_lg',
@@ -253,7 +253,7 @@ module.exports = {
         'md': 'red_light_md',
         'lg': 'red_light_lg',
       },
-      'visited': {
+      'visit': {
         'sm': 'yellow_light_sm',
         'md': 'yellow_light_md',
         'lg': 'yellow_light_lg',
@@ -265,7 +265,7 @@ module.exports = {
         'md': 'red_default_md',
         'lg': 'red_default_lg',
       },
-      'visited': {
+      'visit': {
         'sm': 'yellow_default_sm',
         'md': 'yellow_default_md',
         'lg': 'yellow_default_lg',
@@ -277,7 +277,7 @@ module.exports = {
         'md': 'red_dark_md',
         'lg': 'red_dark_lg',
       },
-      'visited': {
+      'visit': {
         'sm': 'yellow_dark_sm',
         'md': 'yellow_dark_md',
         'lg': 'yellow_dark_lg',
@@ -289,7 +289,7 @@ module.exports = {
         'md': 'red_darker_md',
         'lg': 'red_darker_lg',
       },
-      'visited': {
+      'visit': {
         'sm': 'yellow_darker_sm',
         'md': 'yellow_darker_md',
         'lg': 'yellow_darker_lg',
@@ -301,7 +301,7 @@ module.exports = {
         'md': 'red_darker_md',
         'lg': 'red_darker_lg',
       },
-      'visited': {
+      'visit': {
         'sm': 'yellow_darker_sm',
         'md': 'yellow_darker_md',
         'lg': 'yellow_darker_lg',
@@ -313,7 +313,7 @@ module.exports = {
         'md': 'red_default_md',
         'lg': 'red_default_lg',
       },
-      'visited': {
+      'visit': {
         'sm': 'yellow_default_sm',
         'md': 'yellow_default_md',
         'lg': 'yellow_default_lg',
