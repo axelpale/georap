@@ -1,4 +1,5 @@
 var db = require('tresdb-db');
+const config = require('tresdb-config');
 var entriesDal = require('../../entries/dal');
 var eventsDal = require('../../events/dal');
 var paymentsDal = require('../../payments/dal');
@@ -130,4 +131,67 @@ exports.getVisitedLocationIds = function (username, callback) {
 
     return callback(null, Array.from(visits));
   });
+};
+
+exports.getFlags = (username, callback) => {
+  // Parameters
+  //   username
+  //   callback
+  //     fn (err, flagsObj) where
+  //       flagsObj: loc id -> flags by the user
+  //
+
+  db.collection('entries').aggregate([
+    {
+      $match: {
+        user: username,
+        deleted: false,
+        flags: {
+          $ne: [],
+        },
+      },
+    },
+    {
+      $project: {
+        locationId: 1,
+        flags: 1,
+      },
+    },
+    {
+      // Deconstruct flags
+      $unwind: '$flags',
+    },
+    {
+      $group: {
+        _id: '$locationId',
+        flags: {
+          $addToSet: '$flags',
+        },
+      },
+    },
+  ]).toArray((err, flags) => {
+      if (err) {
+        return callback(err);
+      }
+
+      // // Init
+      // const flags = config.entryFlags.reduce((acc, flag) => {
+      //   acc[flag] = [];
+      //   return acc;
+      // }, {});
+      //
+      // // Collect
+      // entries.forEach((entry) => {
+      //   for (let i = 0; i < entry.flags.length; i += 1) {
+      //     flags[entry.flags[i]].push(entry.locationId);
+      //   }
+      // });
+
+      const idToFlags = flags.reduce((acc, flag) => {
+        acc[flag._id] = flag.flags;
+        return acc;
+      }, {});
+
+      return callback(null, idToFlags);
+    });
 };

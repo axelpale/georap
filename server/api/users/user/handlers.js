@@ -61,3 +61,23 @@ exports.getVisitedLocationIds = function (req, res, next) {
     return res.json(ids);
   });
 };
+
+exports.getFlags = (req, res, next) => {
+  // Response:
+  //   {
+  //     flags: {
+  //       <locationId>: <array of flags by the user>,
+  //       ...
+  //     }
+  //   }
+  //
+  dal.getFlags(req.username, (err, flagsObj) => {
+    if (err) {
+      return next(err);
+    }
+
+    return res.json({
+      flags: flagsObj,
+    });
+  });
+};

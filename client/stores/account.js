@@ -284,3 +284,11 @@ exports.getVisitedLocationIds = function (callback) {
   // Return array of ids of locations that the user has visited.
   return users.getVisitedLocationIds(exports.getName(), callback);
 };
+exports.getFlags = function (callback) {
+  // Parameters:
+  //   callback
+  //     fn (err, flags) where
+  //       flags is a mapping locationId -> array of flags set by the user
+  //
+  return users.getFlags(exports.getName(), callback);
+};
