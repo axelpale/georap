@@ -147,13 +147,6 @@ module.exports = {
       },
       additionalProperties: false,
     },
-    entryFlags: {
-      type: 'array',
-      items: {
-        type: 'string',
-      },
-      uniqueItems: true,
-    },
     locationStatuses: {
       type: 'array',
       items: {
@@ -168,6 +161,13 @@ module.exports = {
         type: 'string',
       },
       minItems: 1,
+      uniqueItems: true,
+    },
+    entryFlags: {
+      type: 'array',
+      items: {
+        type: 'string',
+      },
       uniqueItems: true,
     },
     markerTemplates: {
@@ -280,9 +280,9 @@ module.exports = {
     'mongo',
     'smtp',
     'mail',
-    'entryFlags',
     'locationStatuses',
     'locationTypes',
+    'entryFlags',
     'markerTemplates',
     'comments',
     'coordinateSystems',
