@@ -15,8 +15,6 @@ module.exports = function (selectedFlags) {
   self.bind = function ($mountEl) {
     $mount = $mountEl;
 
-    console.log('selectedFlags', selectedFlags);
-
     $mount.html(template({
       flagBoxes: flagConfig.map(function (flagName) {
         return {
