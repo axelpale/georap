@@ -549,6 +549,19 @@ li.form-attachment-container:first-child img {
 }
 /* Markdown Component END */
 
+/* Flags Component */
+.form-flags.form-group {
+  margin-top: -1rem;
+  margin-bottom: 1.6rem;
+}
+.form-flags .flag-checkbox:first-child {
+  margin-top: 1px;
+}
+.form-flags .flag-checkbox label {
+  text-transform: capitalize;
+}
+/* Flags Component END */
+
 /* Latest events page */
 .latest-tabs li {
   text-transform: capitalize;

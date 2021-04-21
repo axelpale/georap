@@ -1,0 +1,13 @@
+<div class="form-flags form-group">
+  <label>Flag the post as:</label>
+  <div class="checkboxes">
+  <% flagBoxes.forEach(function (flagBox) { %>
+    <div class="flag-checkbox checkbox-inline">
+      <label>
+        <input type="checkbox" value="<%= flagBox.flag %>"<%= flagBox.checked ? ' checked="checked"' : '' %>>
+        <%= flagBox.flag %>
+      </label>
+    </div>
+  <% }) %>
+  </div>
+</div>

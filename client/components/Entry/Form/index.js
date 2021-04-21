@@ -10,6 +10,7 @@
 var template = require('./template.ejs');
 var AttachmentsForm = require('../AttachmentsForm');
 var MarkdownView = require('../Markdown');
+var FlagsForm = require('../FlagsForm');
 var ErrorView = require('../Error');
 var RemoveForm = require('../Remove');
 var MoveForm = require('../MoveForm');
@@ -61,6 +62,9 @@ module.exports = function (locationId, entry) {
       label: 'Photos and documents:',
     });
     children.attachments.bind($mount.find('.form-attachments-container'));
+
+    children.flags = new FlagsForm(entry.flags);
+    children.flags.bind($mount.find('.form-flags-container'));
 
     children.error = new ErrorView();
     children.error.bind($mount.find('.form-error-container'));
@@ -199,7 +203,7 @@ module.exports = function (locationId, entry) {
       return {
         markdown: children.markdown.getMarkdown(),
         attachments: attachments,
-        flags: [], // TODO children.flags.getFlags(),
+        flags: children.flags.getFlags(),
       };
     }
     return null;
