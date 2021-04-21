@@ -554,11 +554,11 @@ li.form-attachment-container:first-child img {
   margin-top: -1rem;
   margin-bottom: 1.6rem;
 }
+.form-flags .flag-checkbox {
+  text-transform: capitalize;
+}
 .form-flags .flag-checkbox:first-child {
   margin-top: 1px;
-}
-.form-flags .flag-checkbox label {
-  text-transform: capitalize;
 }
 /* Flags Component END */
 
