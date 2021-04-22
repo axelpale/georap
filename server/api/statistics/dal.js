@@ -1,11 +1,11 @@
 //var db = require('tresdb-db');
-var pjson = require('../../../package.json');
-var locationsDal = require('../locations/dal');
-var entriesDal = require('../entries/dal');
-var eventsDal = require('../events/dal');
-var attachmentsDal = require('../attachments/dal');
-var usersDal = require('../users/dal');
-var asyn = require('async');
+const pjson = require('../../../package.json');
+const locationsDal = require('../locations/dal');
+const entriesDal = require('../entries/dal');
+const eventsDal = require('../events/dal');
+const attachmentsDal = require('../attachments/dal');
+const usersDal = require('../users/dal');
+const asyn = require('async');
 
 exports.getServerVersion = function (callback) {
   // Callback with error and version tag
@@ -24,7 +24,7 @@ exports.getAll = function (callback) {
   //   locationCount
   //     integer
 
-  var steps = {
+  const steps = {
     serverVersion: exports.getServerVersion,
     locationCount: locationsDal.count,
     entriesCount: entriesDal.count,
@@ -33,9 +33,9 @@ exports.getAll = function (callback) {
     usersCount: usersDal.count,
   };
 
-  asyn.mapValues(steps, function iteratee(fn, key, done) {
+  asyn.mapValues(steps, (fn, key, done) => {
     fn(done);
-  }, function (err, results) {
+  }, (err, results) => {
     if (err) {
       return callback(err);
     }
