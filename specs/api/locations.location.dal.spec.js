@@ -9,24 +9,24 @@ const unit = require('../../server/api/locations/location/dal');
 const fixture = require('../../migration/fixtures/example');
 const common = require('../../migration/fixtures/common');
 
-describe('server.api.locations.location.dal', function () {
+describe('server.api.locations.location.dal', () => {
 
-  before(function (done) {
+  before((done) => {
     db.init(config.mongo.testUrl, done);
   });
 
-  after(function (done) {
+  after((done) => {
     db.close();
     done();
   });
 
-  describe('.getOneComplete', function () {
+  describe('.getOneComplete', () => {
 
-    beforeEach(function (done) {
+    beforeEach((done) => {
       loadFixture(fixture, done);
     });
 
-    it('should return null if not found', function (done) {
+    it('should return null if not found', (done) => {
       unit.getOneComplete(common.missingId, (err, loc) => {
         assert.ifError(err);
         assert.strictEqual(loc, null, 'nil doc');
@@ -34,8 +34,8 @@ describe('server.api.locations.location.dal', function () {
       });
     });
 
-    it('should fetch attachments', function (done) {
-      unit.getOneComplete(common.irbeneId, function (err, loc) {
+    it('should fetch attachments', (done) => {
+      unit.getOneComplete(common.irbeneId, (err, loc) => {
         assert.ifError(err);
         assert.equal(loc.entries.length, 2);
         assert.equal(loc.entries[0].attachments.length, 1, 'ensure length');
