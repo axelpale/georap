@@ -11,9 +11,9 @@ module.exports = function (id, callback) {
   //       err null and loc null if no loc found
   //
 
-  var locColl = db.collection('locations');
+  const locColl = db.collection('locations');
 
-  locColl.findOne({ _id: id }, function (err, doc) {
+  locColl.findOne({ _id: id }, (err, doc) => {
     if (err) {
       return callback(err);
     }

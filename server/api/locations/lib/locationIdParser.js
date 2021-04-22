@@ -1,15 +1,15 @@
 // URL parser middleware
 
-var dal = require('../location/dal');
+const dal = require('../location/dal');
 
-var status = require('http-status-codes');
-var db = require('tresdb-db');
+const status = require('http-status-codes');
+const db = require('tresdb-db');
 
 module.exports = function (req, res, next) {
   // Converts string object id to ObjectId and fetches the location.
 
-  var stringId = req.params.locationId;
-  var objId;
+  const stringId = req.params.locationId;
+  let objId;
 
   try {
     objId = db.id(stringId);
@@ -17,7 +17,7 @@ module.exports = function (req, res, next) {
     return res.sendStatus(status.NOT_FOUND);
   }
 
-  dal.getRaw(objId, function (err, loc) {
+  dal.getRaw(objId, (err, loc) => {
     if (err) {
       return next(err);
     }

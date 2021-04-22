@@ -1,13 +1,13 @@
 // Normalizes overlay data.
 
-var sanitizeDescription = require('./sanitizeDescription');
+const sanitizeDescription = require('./sanitizeDescription');
 
 module.exports = function (loc) {
   if (!('overlays' in loc)) {
     return [];
   }
 
-  return loc.overlays.map(function (ol) {
+  return loc.overlays.map((ol) => {
     return {
       name: ol.name,
       description: sanitizeDescription(ol.description),

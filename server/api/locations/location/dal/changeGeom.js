@@ -22,16 +22,16 @@ module.exports = function (params, callback) {
   //     longitude
   //       number
   //
-  var lat = params.latitude;
-  var lng = params.longitude;
+  const lat = params.latitude;
+  const lng = params.longitude;
 
-  googlemaps.reverseGeocode([lat, lng], function (err, newPlaces) {
+  googlemaps.reverseGeocode([lat, lng], (err, newPlaces) => {
     // Places is an array of strings
     if (err) {
       return callback(err);
     }
 
-    var newGeom = {
+    const newGeom = {
       type: 'Point',
       coordinates: [lng, lat],  // note different order to google
     };
@@ -43,10 +43,10 @@ module.exports = function (params, callback) {
     // for. So we do not find new layer here but use the same layer as
     // before.
 
-    var locColl = db.collection('locations');
-    var q = { _id: params.locationId };
+    const locColl = db.collection('locations');
+    const q = { _id: params.locationId };
 
-    var u = {
+    const u = {
       $set: {
         geom: newGeom,
         places: newPlaces,
@@ -54,12 +54,12 @@ module.exports = function (params, callback) {
       },
     };
 
-    locColl.updateOne(q, u, function (err2) {
+    locColl.updateOne(q, u, (err2) => {
       if (err2) {
         return callback(err2);
       }
 
-      var oldGeom = params.locationGeom;
+      const oldGeom = params.locationGeom;
 
       eventsDal.createLocationGeomChanged({
         locationId: params.locationId,
@@ -67,7 +67,7 @@ module.exports = function (params, callback) {
         username: params.username,
         newGeom: newGeom,
         oldGeom: oldGeom,
-      }, function (err3) {
+      }, (err3) => {
         if (err3) {
           return callback(err3);
         }

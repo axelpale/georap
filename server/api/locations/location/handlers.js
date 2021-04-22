@@ -1,25 +1,24 @@
 
-var templates = require('./templates');
-var locationDal = require('./dal');
-var loggers = require('../../../services/logs/loggers');
-var config = require('tresdb-config');
-var status = require('http-status-codes');
-var sanitizeFilename = require('sanitize-filename');
-var slugify = require('slugify');
+const templates = require('./templates');
+const locationDal = require('./dal');
+const loggers = require('../../../services/logs/loggers');
+const config = require('tresdb-config');
+const status = require('http-status-codes');
+const sanitizeFilename = require('sanitize-filename');
+const slugify = require('slugify');
 
 exports.changeGeom = function (req, res, next) {
 
-  var u, lat, lng;
-  var loc = req.location;
+  const loc = req.location;
 
   if (typeof req.body.lat !== 'number' ||
       typeof req.body.lng !== 'number') {
     return res.sendStatus(status.BAD_REQUEST);
   }
 
-  lat = req.body.lat;
-  lng = req.body.lng;
-  u = req.user.name;
+  const lat = req.body.lat;
+  const lng = req.body.lng;
+  const u = req.user.name;
 
   locationDal.changeGeom({
     locationId: loc._id,
@@ -29,7 +28,7 @@ exports.changeGeom = function (req, res, next) {
     username: u,
     latitude: lat,
     longitude: lng,
-  }, function (err) {
+  }, (err) => {
     if (err) {
       return next(err);
     }
@@ -55,14 +54,14 @@ exports.changeName = function (req, res, next) {
     return res.status(status.BAD_REQUEST).send('Too short or too long name');
   }
 
-  var params = {
+  const params = {
     locationId: req.location._id,
     locationName: req.location.name,
     newName: req.body.newName,
     username: req.user.name,
   };
 
-  locationDal.changeName(params, function (err) {
+  locationDal.changeName(params, (err) => {
     if (err) {
       return next(err);
     }
@@ -73,7 +72,7 @@ exports.changeName = function (req, res, next) {
 
 exports.changeTags = function (req, res) {
   // TODO Remove at some point
-  var msg = 'Tags API is not available anymore. Update your client.';
+  const msg = 'Tags API is not available anymore. Update your client.';
   return res.status(status.GONE).send(msg);
 };
 
@@ -81,7 +80,7 @@ exports.changeStatus = function (req, res, next) {
   // Validate status
   if (typeof req.body.status === 'string') {
     if (config.locationStatuses.indexOf(req.body.status) < 0) {
-      var msg = 'Invalid location status: ' + req.body.status;
+      const msg = 'Invalid location status: ' + req.body.status;
       return res.status(status.BAD_REQUEST).send(msg);
     }
   } else {
@@ -89,8 +88,8 @@ exports.changeStatus = function (req, res, next) {
   }
 
   // If no change, everything ok already
-  var oldStatus = req.location.status;
-  var newStatus = req.body.status;
+  const oldStatus = req.location.status;
+  const newStatus = req.body.status;
   if (oldStatus === newStatus) {
     return res.status(status.OK).send('Status not changed. Same already.');
   }
@@ -101,7 +100,7 @@ exports.changeStatus = function (req, res, next) {
     locationStatus: oldStatus,
     username: req.user.name,
     status: newStatus,
-  }, function (err) {
+  }, (err) => {
     if (err) {
       return next(err);
     }
@@ -114,7 +113,7 @@ exports.changeType = function (req, res, next) {
   // Validate type
   if (typeof req.body.type === 'string') {
     if (config.locationTypes.indexOf(req.body.type) < 0) {
-      var msg = 'Invalid location type: ' + req.body.type;
+      const msg = 'Invalid location type: ' + req.body.type;
       return res.status(status.BAD_REQUEST).send(msg);
     }
   } else {
@@ -122,8 +121,8 @@ exports.changeType = function (req, res, next) {
   }
 
   // If no change, everything ok already
-  var oldType = req.location.type;
-  var newType = req.body.type;
+  const oldType = req.location.type;
+  const newType = req.body.type;
   if (oldType === newType) {
     return res.status(status.OK).send('Type not changed. Same already.');
   }
@@ -134,7 +133,7 @@ exports.changeType = function (req, res, next) {
     locationType: oldType,
     username: req.user.name,
     type: newType,
-  }, function (err) {
+  }, (err) => {
     if (err) {
       return next(err);
     }
@@ -151,7 +150,7 @@ exports.changeThumbnail = (req, res, next) => {
   }
 
   // If no change, everything ok already
-  var oldKey = req.location.thumbnail;
+  const oldKey = req.location.thumbnail;
   if (oldKey === newKey) {
     return res.status(status.OK).send('Same thumbnail already selected.');
   }
@@ -175,7 +174,7 @@ exports.getOne = function (req, res, next) {
   // Fetch single location with entries and events
 
   // eslint-disable-next-line max-statements
-  locationDal.getOneComplete(req.location._id, function (err, rawLoc) {
+  locationDal.getOneComplete(req.location._id, (err, rawLoc) => {
     if (err) {
       return next(err);
     }
@@ -184,8 +183,8 @@ exports.getOne = function (req, res, next) {
       return res.sendStatus(status.NOT_FOUND);
     }
 
-    var responseStr, filename, mime;
-    var format = req.query.format;
+    let responseStr, filename, mime;
+    let format = req.query.format;
 
     if (typeof format === 'string') {
       format = format.toLowerCase();
@@ -233,7 +232,7 @@ exports.getOne = function (req, res, next) {
 exports.removeOne = function (req, res, next) {
   // Delete single location
 
-  locationDal.removeOne(req.location._id, req.user.name, function (err) {
+  locationDal.removeOne(req.location._id, req.user.name, (err) => {
     if (err) {
       return next(err);
     }

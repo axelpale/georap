@@ -15,18 +15,18 @@ module.exports = function (params, callback) {
   //   callback
   //     function (err)
 
-  var locColl = db.collection('locations');
+  const locColl = db.collection('locations');
 
-  var q = { _id: params.locationId };
-  var newStatus = params.status;
-  var u = { $set: { status: newStatus } };
+  const q = { _id: params.locationId };
+  const newStatus = params.status;
+  const u = { $set: { status: newStatus } };
 
-  locColl.updateOne(q, u, function (err) {
+  locColl.updateOne(q, u, (err) => {
     if (err) {
       return callback(err);
     }
 
-    var oldStatus = params.locationStatus;
+    const oldStatus = params.locationStatus;
 
     eventsDal.createLocationStatusChanged({
       locationId: params.locationId,
@@ -34,7 +34,7 @@ module.exports = function (params, callback) {
       username: params.username,
       newStatus: newStatus,
       oldStatus: oldStatus,
-    }, function (err2) {
+    }, (err2) => {
       if (err2) {
         return callback(err2);
       }

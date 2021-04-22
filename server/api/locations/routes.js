@@ -1,12 +1,12 @@
 /* eslint-disable new-cap */
 
-var router = require('express').Router();
-var jsonParser = require('body-parser').json();
+const router = require('express').Router();
+const jsonParser = require('body-parser').json();
 
-var handlers = require('./handlers');
-var locationIdParser = require('./lib/locationIdParser');
-var locationRouter = require('./location/routes');
-var importerRouter = require('./importer/routes');
+const handlers = require('./handlers');
+const locationIdParser = require('./lib/locationIdParser');
+const locationRouter = require('./location/routes');
+const importerRouter = require('./importer/routes');
 
 // Location collection
 

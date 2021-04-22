@@ -24,7 +24,7 @@ module.exports = (params, callback) => {
     },
   };
 
-  db.collection('locations').updateOne(q, u, function (err) {
+  db.collection('locations').updateOne(q, u, (err) => {
     if (err) {
       return callback(err);
     }
@@ -35,7 +35,7 @@ module.exports = (params, callback) => {
       username: params.username,
       newThumbnail: params.newThumbnail,
       oldThumbnail: params.oldThumbnail,
-    }, function (err2) {
+    }, (err2) => {
       if (err2) {
         return callback(err2);
       }

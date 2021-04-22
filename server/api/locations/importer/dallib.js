@@ -1,12 +1,12 @@
 
-var uploads = require('../../../services/uploads');
-var entriesDal = require('../../entries/dal');
-var locationsDal = require('../dal');
-var asyn = require('async');
-var mime = require('mime');
-var path = require('path');
+const uploads = require('../../../services/uploads');
+const entriesDal = require('../../entries/dal');
+const locationsDal = require('../dal');
+const asyn = require('async');
+const mime = require('mime');
+const path = require('path');
 
-var NOT_FOUND = 404;
+const NOT_FOUND = 404;
 
 exports.createEntries = function (args, callback) {
   // Parameters:
@@ -20,11 +20,11 @@ exports.createEntries = function (args, callback) {
   //     function (err)
   //
 
-  asyn.eachSeries(args.entries, function (entry, next) {
+  asyn.eachSeries(args.entries, (entry, next) => {
     // Null entry.filepath gives mimetype of null.
     // If we do not know the type of the file to download,
     // maybe it is best to not download it.
-    var mimetype = mime.getType(entry.filepath);
+    const mimetype = mime.getType(entry.filepath);
 
     if (mimetype === null) {
       entriesDal.createLocationEntry({
@@ -45,7 +45,7 @@ exports.createEntries = function (args, callback) {
 
     // copy the image files and create thumbnails.
     // Might require downloading of URLs.
-    uploads.makePermanent(entry.filepath, function (errp, newPath) {
+    uploads.makePermanent(entry.filepath, (errp, newPath) => {
       // Parameters:
       //   errp
       //   newhref
@@ -53,7 +53,7 @@ exports.createEntries = function (args, callback) {
       //
       if (errp) {
         if (errp.code === 'ENOENT') {
-          var dirname = path.basename(path.dirname(errp.path));
+          const dirname = path.basename(path.dirname(errp.path));
           console.log('Importer: NO_FILE',
                       path.join(dirname, path.basename(errp.path)),
                       'for location', args.locationName);
@@ -79,7 +79,7 @@ exports.createEntries = function (args, callback) {
       uploads.createThumbnail({
         path: newPath,
         mimetype: mimetype,
-      }, function (errt, thumb) {
+      }, (errt, thumb) => {
         if (errt) {
           // TODO what situations cause this error?
           // Should we decide to continue somewhere else?
@@ -132,7 +132,7 @@ exports.createLocation = function (loc, username, callback) {
     latitude: loc.latitude,
     longitude: loc.longitude,
     username: username,
-  }, function (errc, rawLoc) {
+  }, (errc, rawLoc) => {
     if (errc) {
       return callback(errc);
     }
@@ -142,7 +142,7 @@ exports.createLocation = function (loc, username, callback) {
       locationName: rawLoc.name,
       username: rawLoc.creator,
       entries: loc.entries,
-    }, function (err1) {
+    }, (err1) => {
       if (err1) {
         return callback(err1);
       }

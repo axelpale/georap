@@ -1,8 +1,8 @@
-var findExtendedValue = require('./findExtendedValue');
+const findExtendedValue = require('./findExtendedValue');
 
 module.exports = function (loc) {
   // For special extended data
-  var extType, extNumber, extCounty;
+  let extType, extNumber, extCounty;
 
   // Replace empty names with something
   if (typeof loc.name !== 'string' || loc.name.trim() === '') {

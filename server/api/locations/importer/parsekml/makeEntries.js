@@ -1,9 +1,9 @@
-var imageLinks = require('./imageLinks');
+const imageLinks = require('./imageLinks');
 
 module.exports = function (overlays, descriptions) {
-  var entries = [];
+  const entries = [];
 
-  overlays.forEach(function (ol) {
+  overlays.forEach((ol) => {
     entries.push({
       markdown: ol.name + ': ' + ol.description,
       filepath: ol.href,
@@ -14,10 +14,10 @@ module.exports = function (overlays, descriptions) {
     });
   });
 
-  descriptions.forEach(function (desc) {
-    var imgUrls = imageLinks.find(desc);
-    var textContent = imageLinks.strip(desc);
-    var i;
+  descriptions.forEach((desc) => {
+    const imgUrls = imageLinks.find(desc);
+    const textContent = imageLinks.strip(desc);
+    let i;
 
     if (imgUrls.length === 0) {
       // No images, single entry
