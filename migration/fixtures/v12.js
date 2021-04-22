@@ -2,8 +2,8 @@
 // NOTE This file is an important documentation of the data structure at v12.
 // NOTE The properties changed from the prev version are marked with NOTE
 
-var c = require('./common');
-var db = require('tresdb-db');
+const c = require('./common');
+const db = require('tresdb-db');
 
 module.exports = {
   collections: {

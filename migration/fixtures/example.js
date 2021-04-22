@@ -9,29 +9,29 @@
 // This fixture is aimed to be used as a demo and for experimenting
 // in development.
 
-var config = require('tresdb-config');
-var db = require('tresdb-db');
-var bcrypt = require('bcryptjs');
-var common = require('./common');
+const config = require('tresdb-config');
+const db = require('tresdb-db');
+const bcrypt = require('bcryptjs');
+const common = require('./common');
 
-var NOW = (new Date()).toISOString();
+const NOW = (new Date()).toISOString();
 
-var admin = config.admin.username;
+const admin = config.admin.username;
 
-var luznaId = db.id('581f266110a1482dd0b7cd14');
-var rummuId = db.id('581f166130a1482dd0b7cd15');
-var irbeneId = common.irbeneId;
+const luznaId = db.id('581f266110a1482dd0b7cd14');
+const rummuId = db.id('581f166130a1482dd0b7cd15');
+const irbeneId = common.irbeneId;
 
 // Temporary names of locations before they are titled
-var luznaBaby = 'rkVdAtjYg';
-var rummuBaby = 'ByX6eQoYe';
-var irbeneBaby = 'SkdplmsFx';
+const luznaBaby = 'rkVdAtjYg';
+const rummuBaby = 'ByX6eQoYe';
+const irbeneBaby = 'SkdplmsFx';
 // Location titles
-var luznaName = 'Luzna';
-var rummuName = 'Rummu';
-var irbeneName = 'Irbene';
+const luznaName = 'Luzna';
+const rummuName = 'Rummu';
+const irbeneName = 'Irbene';
 // Duplicated content
-var irbeneInfo = 'It is a soviet union ghost town.';
+const irbeneInfo = 'It is a soviet union ghost town.';
 
 module.exports = {
   collections: {
