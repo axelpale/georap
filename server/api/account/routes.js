@@ -1,20 +1,20 @@
 /* eslint-disable new-cap */
 
-var config = require('tresdb-config');
-var handlers = require('./handlers');
+const config = require('tresdb-config');
+const handlers = require('./handlers');
 
-var jsonParser = require('body-parser').json();
+const jsonParser = require('body-parser').json();
 
 // Token middleware. User can access the routes only with valid token.
 // Token contents are stored in req.user.
 // See https://github.com/auth0/express-jwt
-var jwt = require('express-jwt');
-var jwtParser = jwt({
+const jwt = require('express-jwt');
+const jwtParser = jwt({
   secret: config.secret,
   algorithms: ['HS256'],
 });
 
-var router = require('express').Router();
+const router = require('express').Router();
 
 
 // Authentication
