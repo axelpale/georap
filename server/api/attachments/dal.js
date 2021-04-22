@@ -39,7 +39,7 @@ exports.getMany = (keys, callback) => {
     key: {
       $in: keys,
     },
-  }).toArray(function (err, attachments) {
+  }).toArray((err, attachments) => {
     if (err) {
       return callback(err);
     }
@@ -67,7 +67,7 @@ exports.getManyComplete = (keys, callback) => {
     key: {
       $in: keys,
     },
-  }).toArray(function (err, attachments) {
+  }).toArray((err, attachments) => {
     if (err) {
       return callback(err);
     }
