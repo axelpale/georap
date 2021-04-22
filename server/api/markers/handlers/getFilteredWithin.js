@@ -1,15 +1,15 @@
-var dal = require('../dal');
-var status = require('http-status-codes');
-var Ajv = require('ajv');
-var config = require('tresdb-config');
+const dal = require('../dal');
+const status = require('http-status-codes');
+const Ajv = require('ajv');
+const config = require('tresdb-config');
 
 // Schema validator
-var ajv = new Ajv({
+const ajv = new Ajv({
   coerceTypes: true,
   useDefaults: true,
 });
 
-var schemaFilteredWithin = {
+const schemaFilteredWithin = {
   type: 'object',
   properties: {
     east: {
@@ -41,7 +41,7 @@ var schemaFilteredWithin = {
   },
   additionalProperties: false,
 };
-var validateFilteredWithin = ajv.compile(schemaFilteredWithin);
+const validateFilteredWithin = ajv.compile(schemaFilteredWithin);
 
 module.exports = function (req, res, next) {
   // Validate the request to prevent injection.
@@ -62,7 +62,7 @@ module.exports = function (req, res, next) {
     type: req.query.type,
     layer: req.query.layer,
     groupRadius: req.query.groupRadius,
-  }, function (err, markers) {
+  }, (err, markers) => {
     if (err) {
       return next(err);
     }

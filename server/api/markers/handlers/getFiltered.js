@@ -1,16 +1,16 @@
-var dal = require('../dal');
-var status = require('http-status-codes');
-var Ajv = require('ajv');
-var loggers = require('../../../services/logs/loggers');
+const dal = require('../dal');
+const status = require('http-status-codes');
+const Ajv = require('ajv');
+const loggers = require('../../../services/logs/loggers');
 
 // Schema validator
-var ajv = new Ajv({
+const ajv = new Ajv({
   coerceTypes: true,
   useDefaults: true,
 });
 
 // Schema for getFiltered query
-var querySchema = {
+const querySchema = {
   type: 'object',
   properties: {
     creator: {
@@ -41,7 +41,7 @@ var querySchema = {
   },
   additionalProperties: false,
 };
-var validateQuery = ajv.compile(querySchema);
+const validateQuery = ajv.compile(querySchema);
 
 module.exports = function (req, res, next) {
   // Parameters:
@@ -59,7 +59,7 @@ module.exports = function (req, res, next) {
     return res.sendStatus(status.BAD_REQUEST);
   }
 
-  dal.getFiltered(req.query, function (err, markers) {
+  dal.getFiltered(req.query, (err, markers) => {
     if (err) {
       return next(err);
     }

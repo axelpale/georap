@@ -1,5 +1,5 @@
-var dal = require('../dal');
-var status = require('http-status-codes');
+const dal = require('../dal');
+const status = require('http-status-codes');
 
 module.exports = function (req, res, next) {
   // Parameters:
@@ -33,10 +33,10 @@ module.exports = function (req, res, next) {
   //     integer
   //   childLayer
   //     integer, the zoom level after there is no child hidden
-  var lat, lng, radius, layer;
+  let lat, lng, radius, layer;
 
   // Validate the request to prevent injection
-  var validRequest = ('lat' in req.query &&
+  let validRequest = ('lat' in req.query &&
                       'lng' in req.query &&
                       'radius' in req.query &&
                       'layer' in req.query);
@@ -62,7 +62,7 @@ module.exports = function (req, res, next) {
     radius: radius,
     layer: layer,
     query: {},
-  }, function (err, markers) {
+  }, (err, markers) => {
     if (err) {
       return next(err);
     }
