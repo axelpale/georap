@@ -1,10 +1,10 @@
 /* eslint-disable no-magic-numbers, no-sync, max-lines */
 
-var config = require('tresdb-config');
-var db = require('tresdb-db');
-var bcrypt = require('bcryptjs');
+const config = require('tresdb-config');
+const db = require('tresdb-db');
+const bcrypt = require('bcryptjs');
 
-var admin = config.admin.username;
+const admin = config.admin.username;
 
 module.exports = {
   collections: {

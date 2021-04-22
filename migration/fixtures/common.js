@@ -1,6 +1,6 @@
-var config = require('tresdb-config');
-var bcrypt = require('bcryptjs');
-var db = require('tresdb-db');
+const config = require('tresdb-config');
+const bcrypt = require('bcryptjs');
+const db = require('tresdb-db');
 
 // eslint-disable-next-line no-sync
 exports.PASSWORD = bcrypt.hashSync('admin_password', config.bcrypt.rounds);

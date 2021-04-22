@@ -30,7 +30,7 @@ module.exports = (params, callback) => {
       return callback(err);
     }
 
-    var eventParams = params;
+    const eventParams = params;
     eventsDal.createLocationEntryCommentRemoved(eventParams, callback);
   });
 };

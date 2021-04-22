@@ -1,8 +1,8 @@
 // Tools to find out and update the current database schema version.
 
-var pjson = require('../../package.json');
-var db = require('tresdb-db');
-var semver = require('semver');
+const pjson = require('../../package.json');
+const db = require('tresdb-db');
+const semver = require('semver');
 
 exports.getDesiredVersion = function () {
   // Return desired version as integer. Equals to package major version.
@@ -21,9 +21,9 @@ exports.getVersion = function (callback) {
   //         version
   //           integer, -1 if no schema found.
 
-  var configColl = db.collection('config');
+  const configColl = db.collection('config');
 
-  configColl.findOne({ key: 'schemaVersion' }, function (err, doc) {
+  configColl.findOne({ key: 'schemaVersion' }, (err, doc) => {
     if (err) {
       return callback(err, null);
     }
@@ -33,7 +33,7 @@ exports.getVersion = function (callback) {
     }  // else
 
     // No schema found. Schema v1 had no config. Test for v1 by users.
-    db.collection('users').findOne({}, function (errr, userdoc) {
+    db.collection('users').findOne({}, (errr, userdoc) => {
       if (errr) {
         return callback(errr);
       }
@@ -52,13 +52,13 @@ exports.getVersion = function (callback) {
 exports.setVersion = function (version, callback) {
   // Update database schema version.
 
-  var configColl = db.collection('config');
+  const configColl = db.collection('config');
 
   configColl.updateOne({ key: 'schemaVersion' }, {
     $set: { value: version },
-  }, { upsert: true }).then(function () {
+  }, { upsert: true }).then(() => {
     return callback(null);
-  }).catch(function (err) {
+  }).catch((err) => {
     return callback(err);
   });
 };

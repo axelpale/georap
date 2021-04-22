@@ -1,14 +1,14 @@
 /* eslint-disable max-lines */
 
-var db = require('tresdb-db');
-var layersDal = require('../../../worker/layers/dal');
-var eventsDal = require('../events/dal');
-var config = require('tresdb-config');
+const db = require('tresdb-db');
+const layersDal = require('../../../worker/layers/dal');
+const eventsDal = require('../events/dal');
+const config = require('tresdb-config');
 
-var shortid = require('shortid');
+const shortid = require('shortid');
 
 // Do not allow locations to be closer to each other.
-var MIN_DISTANCE_METERS = 10;
+const MIN_DISTANCE_METERS = 10;
 
 exports.count = function (callback) {
   // Count non-deleted locations
@@ -17,11 +17,11 @@ exports.count = function (callback) {
   //   callback
   //     function (err, number)
   //
-  var coll = db.get().collection('locations');
+  const coll = db.get().collection('locations');
 
-  coll.countDocuments({ deleted: false }).then(function (number) {
+  coll.countDocuments({ deleted: false }).then((number) => {
     return callback(null, number);
-  }).catch(function (err) {
+  }).catch((err) => {
     return callback(err);
   });
 };
@@ -37,12 +37,12 @@ exports.createLocation = function (args, callback) {
   //     function (err, rawLocation)
   //
 
-  var geom = {
+  const geom = {
     type: 'Point',
     coordinates: [args.longitude, args.latitude],
   };
 
-  layersDal.findLayerForPoint(geom, function (errl, layer, distance, nearest) {
+  layersDal.findLayerForPoint(geom, (errl, layer, distance, nearest) => {
     // Gives distance to the closest point in addition to layer number.
     if (errl) {
       console.error(errl);
@@ -50,12 +50,12 @@ exports.createLocation = function (args, callback) {
     }
 
     if (distance < MIN_DISTANCE_METERS) {
-      var errclose = new Error('TOO_CLOSE');
+      const errclose = new Error('TOO_CLOSE');
       errclose.data = nearest;
       return callback(errclose);
     }
 
-    var newLoc = {
+    const newLoc = {
       creator: args.username,
       deleted: false,
       published: false,
@@ -70,9 +70,9 @@ exports.createLocation = function (args, callback) {
       visits: [],
     };
 
-    var coll = db.collection('locations');
+    const coll = db.collection('locations');
 
-    coll.insertOne(newLoc, function (err, result) {
+    coll.insertOne(newLoc, (err, result) => {
       if (err) {
         return callback(err);
       }
@@ -85,7 +85,7 @@ exports.createLocation = function (args, callback) {
         lat: args.latitude,
         lng: args.longitude,
         username: newLoc.creator,
-      }, function (err2) {
+      }, (err2) => {
         if (err2) {
           return callback(err2);
         }

@@ -13,20 +13,20 @@ module.exports = function (id, username, callback) {
   //     function (err)
   //
 
-  var coll = db.collection('locations');
+  const coll = db.collection('locations');
 
   // Prevent deletion of already deleted location.
-  var q = {
+  const q = {
     _id: id,
     deleted: false,
   };
-  var u = {
+  const u = {
     $set: {
       deleted: true,
     },
   };
 
-  coll.findOneAndUpdate(q, u, function (err, result) {
+  coll.findOneAndUpdate(q, u, (err, result) => {
     if (err) {
       return callback(err);
     }
@@ -36,7 +36,7 @@ module.exports = function (id, username, callback) {
       return callback();
     }
 
-    var loc = result.value;
+    const loc = result.value;
 
     eventsDal.createLocationRemoved({
       locationId: loc._id,

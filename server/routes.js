@@ -1,8 +1,8 @@
 /* eslint-disable new-cap */
 
-var apiRouter = require('./api/routes');
-var clientRouter = require('./client/routes');
-var router = require('express').Router();
+const apiRouter = require('./api/routes');
+const clientRouter = require('./client/routes');
+const router = require('express').Router();
 
 router.use('/api', apiRouter);
 

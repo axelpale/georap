@@ -16,31 +16,31 @@
 // - If egg is dropped on the soft splats, their splat becomes smaller.
 // - Then you look the result from below of the glass.
 
-var dal = require('./dal');
-var asyn = require('async');
+const dal = require('./dal');
+const asyn = require('async');
 
 exports.run = function (callback) {
 
-  dal.markAllAsUnlayered(function (err) {
+  dal.markAllAsUnlayered((err) => {
     if (err) {
       return callback(err);
     }
 
-    dal.findAll(function (err2, locs) {
+    dal.findAll((err2, locs) => {
       if (err2) {
         return callback(err2);
       }
 
-      asyn.eachSeries(locs, function iteratee(loc, cb) {
+      asyn.eachSeries(locs, (loc, cb) => {
         // This step marks each location as layered.
         dal.findLayerAndStore(loc, cb);
-      }, function (err3) {
+      }, (err3) => {
         if (err3) {
           return callback(err3);
         }
 
-        var msg = 'layers: Layers of locations (' + locs.length + ') ' +
-        'computed and stored.';
+        const msg = 'layers: Layers of locations (' + locs.length + ') ' +
+                    'computed and stored.';
         console.log(msg);
 
         return callback();

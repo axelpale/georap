@@ -15,9 +15,9 @@
 // - require db where you need it. No need to pass it around.
 // - after success, do console.log('<jobname>: <human readable results>')
 
-var db = require('tresdb-db');
+const db = require('tresdb-db');
 
-var jobs = [
+const jobs = [
   require('./search'),
   require('./points'),
   require('./locpoints'),
@@ -26,18 +26,18 @@ var jobs = [
   require('./places'),
 ];
 
-var async = require('async');
+const async = require('async');
 
-db.init(function (dbErr) {
+db.init((dbErr) => {
   if (dbErr) {
     console.error('Failed to connect to MongoDB.');
     console.error(dbErr);
     return;
   }
 
-  async.eachSeries(jobs, function iteratee(job, cb) {
+  async.eachSeries(jobs, (job, cb) => {
     job.run(cb);
-  }, function (err) {
+  }, (err) => {
     if (err) {
       console.error(err);
     } else {

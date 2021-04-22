@@ -1,8 +1,8 @@
 
 module.exports = function () {
 
-  var didSendMail = false;
-  var isBroken = false;
+  let didSendMail = false;
+  let isBroken = false;
 
   this.sendMail = function (options, callback) {
     if (isBroken) {

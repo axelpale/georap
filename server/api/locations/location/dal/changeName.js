@@ -10,17 +10,17 @@ module.exports = function (params, callback) {
   //     username
   //
 
-  var locColl = db.collection('locations');
+  const locColl = db.collection('locations');
 
-  var q = { _id: params.locationId };
-  var u = { $set: { name: params.newName } };
+  const q = { _id: params.locationId };
+  const u = { $set: { name: params.newName } };
 
-  locColl.updateOne(q, u, function (err) {
+  locColl.updateOne(q, u, (err) => {
     if (err) {
       return callback(err);
     }
 
-    var oldName = params.locationName;
+    const oldName = params.locationName;
 
     eventsDal.createLocationNameChanged({
       locationId: params.locationId,
@@ -28,7 +28,7 @@ module.exports = function (params, callback) {
       username: params.username,
       newName: params.newName,
       oldName: oldName,
-    }, function (err2) {
+    }, (err2) => {
       if (err2) {
         return callback(err2);
       }

@@ -1,22 +1,22 @@
-var config = require('tresdb-config');
-var uploads = require('../../../services/uploads');
-var dal = require('./dal');
+const config = require('tresdb-config');
+const uploads = require('../../../services/uploads');
+const dal = require('./dal');
 
-var status = require('http-status-codes');
-var urljoin = require('url-join');
-var path = require('path');
+const status = require('http-status-codes');
+const urljoin = require('url-join');
+const path = require('path');
 
-var uploadHandler = uploads.tempUploader.single('importfile');
+const uploadHandler = uploads.tempUploader.single('importfile');
 
 
-var buildUrls = function (locs) {
+const buildUrls = function (locs) {
   // Modifies given locations.
   // Convert absolute file paths to URLs.
   // This is most correct to do in handler because it is a REST thing.
   // Absolute filepaths are needed internally more often.
-  locs.forEach(function (loc) {
-    loc.entries.forEach(function (entry) {
-      var rel, url;
+  locs.forEach((loc) => {
+    loc.entries.forEach((entry) => {
+      let rel, url;
       if (entry.filepath !== null) {
         if (entry.filepath.startsWith('/')) {
           rel = path.relative(config.tempUploadDir, entry.filepath);
@@ -33,7 +33,7 @@ exports.import = function (req, res, next) {
   // Import locations from KML, KMZ, or GPX file.
   // importfile is required.
 
-  uploadHandler(req, res, function (err) {
+  uploadHandler(req, res, (err) => {
     if (err) {
       if (err.code === 'LIMIT_FILE_SIZE') {
         return res.sendStatus(status.REQUEST_TOO_LONG);
@@ -47,18 +47,18 @@ exports.import = function (req, res, next) {
       return res.send('no file given');
     }
 
-    var ext = path.extname(req.file.originalname);
+    const ext = path.extname(req.file.originalname);
 
-    var ext2methodName = {
+    const ext2methodName = {
       '.xml': 'readKML',
       '.kml': 'readKML',
       '.kmz': 'readKMZ',
     };
-    var methodName = null;
+    let methodName = null;
 
     if (ext2methodName[ext]) {
       methodName = ext2methodName[ext];
-      return dal[methodName](req.file.path, function (errr, result) {
+      return dal[methodName](req.file.path, (errr, result) => {
         if (errr) {
           if (errr.message === 'INVALID_KMZ') {
             res.status(status.BAD_REQUEST);
@@ -71,7 +71,7 @@ exports.import = function (req, res, next) {
           throw new Error('invalid batchId');
         }
 
-        var batchId = result.batchId;
+        const batchId = result.batchId;
 
         return res.json({
           batchId: batchId,
@@ -87,9 +87,9 @@ exports.import = function (req, res, next) {
 
 exports.getBatch = function (req, res, next) {
 
-  var batchId = req.params.batchId;
+  const batchId = req.params.batchId;
 
-  dal.getBatch(batchId, function (err, locs) {
+  dal.getBatch(batchId, (err, locs) => {
     if (err) {
       if (err.code === 'ENOENT') {
         return res.sendStatus(status.NOT_FOUND);
@@ -104,8 +104,8 @@ exports.getBatch = function (req, res, next) {
 };
 
 exports.getOutcome = function (req, res, next) {
-  var batchId = req.params.batchId;
-  dal.getOutcome(batchId, function (err, outcome) {
+  const batchId = req.params.batchId;
+  dal.getOutcome(batchId, (err, outcome) => {
     if (err) {
       return next(err);
     }
@@ -116,15 +116,15 @@ exports.getOutcome = function (req, res, next) {
 
 
 exports.importBatch = function (req, res, next) {
-  var batchId = req.params.batchId;
-  var indices = req.body.indices;
-  var username = req.user.name;
+  const batchId = req.params.batchId;
+  const indices = req.body.indices;
+  const username = req.user.name;
 
   dal.importBatch({
     batchId: batchId,
     indices: indices,
     username: username,
-  }, function (err, batchResult) {
+  }, (err, batchResult) => {
     if (err) {
       return next(err);
     }
@@ -132,19 +132,19 @@ exports.importBatch = function (req, res, next) {
     dal.mergeEntries({
       locations: batchResult.skipped,
       username: username,
-    }, function (errm, mergeResult) {
+    }, (errm, mergeResult) => {
       if (errm) {
         return next(errm);
       }
 
-      var outcomeData = {
+      const outcomeData = {
         batchId: batchId,
         created: batchResult.created,
         skipped: mergeResult.locationsSkipped,
         modified: mergeResult.locationsModified,
       };
 
-      dal.writeBatchOutcome(outcomeData, function (errw) {
+      dal.writeBatchOutcome(outcomeData, (errw) => {
         if (errw) {
           return next(errw);
         }

@@ -1,9 +1,9 @@
 // Singleton wrapper around nodemailer
 
-var nodemailer = require('nodemailer');
-var config = require('tresdb-config');
+const nodemailer = require('nodemailer');
+const config = require('tresdb-config');
 
-var mailer = null;
+let mailer = null;
 
 exports.init = function () {
   // Email transporter setup and verification.
@@ -12,7 +12,7 @@ exports.init = function () {
 
     mailer = nodemailer.createTransport(config.smtp);
 
-    mailer.verify(function (err) {
+    mailer.verify((err) => {
       if (err) {
         console.log('Connection to mail server failed:');
         console.log(err);

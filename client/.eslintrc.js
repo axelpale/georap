@@ -21,6 +21,11 @@ module.exports = {
   parserOptions: {
     sourceType: 'module',
   },
+  rules: {
+    'no-var': 'off',
+    'prefer-arrow-callback': 'off',
+    'prefer-const': 'off',
+  },
 
   globals: {
     tresdb: true,

@@ -13,7 +13,7 @@ module.exports = function (loc, stringify) {
     stringify = false;
   }
 
-  var geo = {
+  const geo = {
     'type': 'Feature',
     'geometry': loc.geom,
     'properties': {

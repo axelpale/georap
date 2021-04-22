@@ -3,12 +3,12 @@
 // - Create _id for each content entry
 // - Remove neighborsAvgDist property
 
-var iter = require('../iter');
-var schema = require('../lib/schema');
-var db = require('tresdb-db');
+const iter = require('../iter');
+const schema = require('../lib/schema');
+const db = require('tresdb-db');
 
-var FROM_VERSION = 4;
-var TO_VERSION = FROM_VERSION + 1;
+const FROM_VERSION = 4;
+const TO_VERSION = FROM_VERSION + 1;
 
 exports.run = function (callback) {
   // Parameters
@@ -21,7 +21,7 @@ exports.run = function (callback) {
   // 1. Schema version tag update
   console.log('Setting schema version tag...');
 
-  schema.setVersion(TO_VERSION, function (err) {
+  schema.setVersion(TO_VERSION, (err) => {
     if (err) {
       return callback(err);
     }  // else
@@ -46,23 +46,23 @@ exports.run = function (callback) {
     console.log('Deleting locations\' locatorId property.');
     console.log('Changing tag "heavy-industry" to "factory".');
 
-    var locsColl = db.collection('locations');
+    const locsColl = db.collection('locations');
 
-    iter.updateEach(locsColl, function (loc, next) {
+    iter.updateEach(locsColl, (loc, next) => {
 
       // Some locatorId's might still exist
       delete loc.locatorId;
 
       // Update tags
-      loc.tags = loc.tags.map(function (tag) {
+      loc.tags = loc.tags.map((tag) => {
         if (tag === 'heavy-industry') {
           return 'factory';
         }
         return tag;
       });
 
-      loc.content = loc.content.map(function (entry) {
-        var year, key, filename, filepath;
+      loc.content = loc.content.map((entry) => {
+        let year, key, filename, filepath;
         if (entry.type === 'attachment') {
           // Old
           year = (new Date(entry.time)).getFullYear().toString();
@@ -88,7 +88,7 @@ exports.run = function (callback) {
       });
 
       return next(null, loc);
-    }, function (err2) {
+    }, (err2) => {
 
       if (err2) {
         return callback(err2);

@@ -1,10 +1,10 @@
 
-var geojson = require('./geojson');
-var fs = require('fs');
-var path = require('path');
-var ejs = require('ejs');
+const geojson = require('./geojson');
+const fs = require('fs');
+const path = require('path');
+const ejs = require('ejs');
 
-var precompile = function (templatePath) {
+const precompile = function (templatePath) {
   // Precompile template.
   //
   // Parameters:
@@ -14,14 +14,14 @@ var precompile = function (templatePath) {
   // Return:
   //   function
   //
-  var p = path.resolve(__dirname, templatePath);
-  var f = fs.readFileSync(p, 'utf8');  // eslint-disable-line no-sync
+  const p = path.resolve(__dirname, templatePath);
+  const f = fs.readFileSync(p, 'utf8');  // eslint-disable-line no-sync
 
   return ejs.compile(f);
 };
 
-var toGpx = precompile('./gpx.ejs');
-var toKml = precompile('./kml.ejs');
+const toGpx = precompile('./gpx.ejs');
+const toKml = precompile('./kml.ejs');
 
 
 exports.geojson = geojson;

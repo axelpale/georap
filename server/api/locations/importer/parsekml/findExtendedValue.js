@@ -1,7 +1,7 @@
-var _ = require('lodash');
+const _ = require('lodash');
 
 module.exports = function (extendedDataArray, extendedDataName) {
-  var item = _.find(extendedDataArray, function (x) {
+  const item = _.find(extendedDataArray, (x) => {
     return x.name === extendedDataName;
   });
   // item is undefined if not found

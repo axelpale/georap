@@ -1,5 +1,5 @@
 
-var db = require('tresdb-db');
+const db = require('tresdb-db');
 
 exports.getUsersForAdmin = function (callback) {
   // Fetch an array of users with admin-only information such as email.
@@ -8,11 +8,11 @@ exports.getUsersForAdmin = function (callback) {
   //   callback
   //     function (err, arrayOfUsers)
 
-  var coll = db.collection('users');
-  var q = {};
-  var proj = { hash: false };
+  const coll = db.collection('users');
+  const q = {};
+  const proj = { hash: false };
 
-  coll.find(q).project(proj).toArray(function (err, users) {
+  coll.find(q).project(proj).toArray((err, users) => {
     if (err) {
       return callback(err);
     }

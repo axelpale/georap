@@ -1,5 +1,5 @@
 // Collects paths from markdown links [name](path)
-var COLLECT_IMAGE_URLS = /(?:!\[)[^\]]*\]\(([^)]+)\)/g;
+const COLLECT_IMAGE_URLS = /(?:!\[)[^\]]*\]\(([^)]+)\)/g;
 
 exports.find = function (markdown) {
   // Find url paths from markdown links
@@ -8,9 +8,9 @@ exports.find = function (markdown) {
   //   list of path strings, relative file paths or absolute urls
   //
   // See https://stackoverflow.com/a/432503/638546
-  var urls = [];
-  var collector = new RegExp(COLLECT_IMAGE_URLS);
-  var match = collector.exec(markdown);
+  const urls = [];
+  const collector = new RegExp(COLLECT_IMAGE_URLS);
+  let match = collector.exec(markdown);
   while (match !== null) {
     // match[0] is the entire matched string
     // match[1] is the first captured string

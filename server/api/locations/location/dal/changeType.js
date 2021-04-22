@@ -15,18 +15,18 @@ module.exports = function (params, callback) {
   //   callback
   //     function (err)
 
-  var locColl = db.collection('locations');
+  const locColl = db.collection('locations');
 
-  var q = { _id: params.locationId };
-  var newType = params.type;
-  var u = { $set: { type: newType } };
+  const q = { _id: params.locationId };
+  const newType = params.type;
+  const u = { $set: { type: newType } };
 
-  locColl.updateOne(q, u, function (err) {
+  locColl.updateOne(q, u, (err) => {
     if (err) {
       return callback(err);
     }
 
-    var oldType = params.locationType;
+    const oldType = params.locationType;
 
     eventsDal.createLocationTypeChanged({
       locationId: params.locationId,
@@ -34,7 +34,7 @@ module.exports = function (params, callback) {
       username: params.username,
       newType: newType,
       oldType: oldType,
-    }, function (err2) {
+    }, (err2) => {
       if (err2) {
         return callback(err2);
       }

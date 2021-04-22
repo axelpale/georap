@@ -12,7 +12,7 @@ exports.get = function (key, callback) {
   //
   db.collection('attachments').findOne({
     key: key,
-  }, function (err, doc) {
+  }, (err, doc) => {
     if (err) {
       return callback(err);
     }
@@ -106,7 +106,7 @@ exports.change = function (params, callback) {
     },
   };
 
-  db.collection('attachments').updateOne(filter, update, function (err) {
+  db.collection('attachments').updateOne(filter, update, (err) => {
     if (err) {
       return callback(err);
     }
@@ -123,7 +123,7 @@ exports.remove = function (key, callback) {
   //
   db.collection('attachments').deleteOne({
     key: key,
-  }, {}, function (err) {
+  }, {}, (err) => {
     if (err) {
       return callback(err);
     }

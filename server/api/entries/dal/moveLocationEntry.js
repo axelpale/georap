@@ -39,7 +39,7 @@ module.exports = function (params, callback) {
       };
 
       db.collection('entries')
-        .updateOne(q, u, function (erru) {
+        .updateOne(q, u, (erru) => {
           if (erru) {
             return callback(erru);
           }

@@ -105,6 +105,12 @@ module.exports = {
     'no-void': 'error',
     // disallow with statements
     'no-with': 'error',
+    // require using arrow functions for callbacks
+    'prefer-arrow-callback': ['error', {
+      'allowUnboundThis': false
+    }],
+    // suggest using const
+    'prefer-const': 'error',
     // enforce the consistent use of the radix argument when using parseInt()
     'radix': 'error',
     // require var declarations be placed at the top of their containing scope
@@ -125,6 +131,8 @@ module.exports = {
     'no-undefined': 'error',
     // disallow the use of variables before they are defined
     'no-use-before-define': 'error',
+    // require let or const instead of var
+    'no-var': 'error',
 
     //// Node.js and Common.js
 

@@ -1,18 +1,18 @@
 
-var db = require('tresdb-db');
-var eventsDal = require('../../server/api/events/dal');
-var pointSums = require('../points/sums');
+const db = require('tresdb-db');
+const eventsDal = require('../../server/api/events/dal');
+const pointSums = require('../points/sums');
 
 exports.computePoints = function (locationId, callback) {
   // Compute scenepoints for single location. Scenepoints are computed
   // from events.
 
-  eventsDal.getAllOfLocation(locationId, function (err, evs) {
+  eventsDal.getAllOfLocation(locationId, (err, evs) => {
     if (err) {
       return callback(err);
     }
 
-    var points = pointSums.sumPoints(evs);
+    const points = pointSums.sumPoints(evs);
 
     return callback(null, points);
   });
@@ -24,21 +24,21 @@ exports.computePointsAndStore = function (locationId, callback) {
   //   callback
   //     function (err)
 
-  exports.computePoints(locationId, function (err, points) {
+  exports.computePoints(locationId, (err, points) => {
     if (err) {
       return callback(err);
     }
 
-    var coll = db.collection('locations');
+    const coll = db.collection('locations');
 
-    var q = { _id: locationId };
-    var u = {
+    const q = { _id: locationId };
+    const u = {
       $set: {
         points: points,
       },
     };
 
-    coll.updateOne(q, u, function (err2) {
+    coll.updateOne(q, u, (err2) => {
       if (err2) {
         return callback(err2);
       }

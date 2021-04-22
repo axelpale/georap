@@ -18,8 +18,8 @@ exports.create = (req, res, next) => {
   // Validate required arguments
 
   const valid = (typeof req.body === 'object' &&
-               typeof req.body.lat === 'number' &&
-               typeof req.body.lng === 'number');
+                 typeof req.body.lat === 'number' &&
+                 typeof req.body.lng === 'number');
 
   if (!valid) {
     return res.status(status.BAD_REQUEST).send('Invalid loc name');

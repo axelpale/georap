@@ -1,10 +1,10 @@
 /* eslint-disable new-cap */
 
-var handlers = require('./handlers');
-var usernameParser = require('./lib/usernameParser.js');
-var userRouter = require('./user/routes');
-var express = require('express');
-var router = express.Router();
+const handlers = require('./handlers');
+const usernameParser = require('./lib/usernameParser.js');
+const userRouter = require('./user/routes');
+const express = require('express');
+const router = express.Router();
 
 // User collection
 

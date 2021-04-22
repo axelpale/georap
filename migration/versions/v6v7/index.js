@@ -4,24 +4,24 @@
 // 1. set schema version to 7
 // 2. add text1 and text2 properties for each location
 
-var db = require('tresdb-db');
-var schema = require('../../lib/schema');
-var iter = require('../../iter');
-var async = require('async');
-var clone = require('clone');
+const db = require('tresdb-db');
+const schema = require('../../lib/schema');
+const iter = require('../../iter');
+const async = require('async');
+const clone = require('clone');
 
-var FROM_VERSION = 6;
-var TO_VERSION = FROM_VERSION + 1;
+const FROM_VERSION = 6;
+const TO_VERSION = FROM_VERSION + 1;
 
 // Steps to be executed with async.eachSeries in the given order.
 // The parameter 'next' is function (err) that must be called in the end of
 // each step.
-var substeps = [
+const substeps = [
 
   function updateSchema(next) {
     console.log('1. Updating schema version tag...');
 
-    schema.setVersion(TO_VERSION, function (err) {
+    schema.setVersion(TO_VERSION, (err) => {
       if (err) {
         return next(err);
       }
@@ -35,10 +35,10 @@ var substeps = [
     console.log('2. Adding properties \'text1\' and \'text2\' ' +
                 'to each location...');
 
-    var coll = db.collection('locations');
+    const coll = db.collection('locations');
 
-    iter.updateEach(coll, function (origLoc, iterNext) {
-      var loc = clone(origLoc);
+    iter.updateEach(coll, (origLoc, iterNext) => {
+      const loc = clone(origLoc);
       loc.text1 = '';
       loc.text2 = '';
       return iterNext(null, loc);
@@ -55,7 +55,7 @@ exports.run = function (callback) {
   console.log();
   console.log('### Step v' + FROM_VERSION + ' to v' + TO_VERSION + ' ###');
 
-  async.series(substeps, function (err) {
+  async.series(substeps, (err) => {
     if (err) {
       console.error(err);
       return callback(err);

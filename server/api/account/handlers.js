@@ -1,20 +1,20 @@
 /* eslint max-lines: 'off' */
 
-var status = require('http-status-codes');
-var config = require('tresdb-config');
-var db = require('tresdb-db');
+const status = require('http-status-codes');
+const config = require('tresdb-config');
+const db = require('tresdb-db');
 
-var hostname = require('../../services/hostname');
-var mailer = require('../../services/mailer');
-var loggers = require('../../services/logs/loggers');
+const hostname = require('../../services/hostname');
+const mailer = require('../../services/mailer');
+const loggers = require('../../services/logs/loggers');
 
-var dal = require('./dal');
-var bcrypt = require('bcryptjs');
-var jwt = require('jsonwebtoken');
-var validator = require('email-validator');
+const dal = require('./dal');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const validator = require('email-validator');
 
 // Precompiled email templates
-var templates = require('./templates');
+const templates = require('./templates');
 
 
 exports.login = function (req, res, next) {
@@ -25,8 +25,8 @@ exports.login = function (req, res, next) {
   //       password: <string>
   //
 
-  var email = req.body.email;
-  var password = req.body.password;
+  const email = req.body.email;
+  const password = req.body.password;
 
   // If injection attempted or no email or password provided.
   if (typeof email !== 'string' || typeof password !== 'string' ||
@@ -34,17 +34,17 @@ exports.login = function (req, res, next) {
     return res.sendStatus(status.BAD_REQUEST);
   }
 
-  var users = db.collection('users');
+  const users = db.collection('users');
 
   // Also allow login with username.
-  var q = {
+  const q = {
     $or: [
       { name: email },
       { email: email },
     ],
   };
 
-  users.findOne(q, function (err, user) {
+  users.findOne(q, (err, user) => {
 
     if (err) {
       return next(err);
@@ -54,9 +54,7 @@ exports.login = function (req, res, next) {
       return res.sendStatus(status.UNAUTHORIZED);
     }
 
-    bcrypt.compare(password, user.hash, function (err2, match) {
-      var tokenPayload, tokenOptions, token, msg;
-
+    bcrypt.compare(password, user.hash, (err2, match) => {
       if (err2) {
         // Hash comparison failed. Password might still be correct, though.
         return next(err2);
@@ -71,7 +69,7 @@ exports.login = function (req, res, next) {
 
       // Check if user is deactivated
       if (user.status !== 'active') {
-        msg = 'Your account is deactivated. ' +
+        const msg = 'Your account is deactivated. ' +
           'This can happen for prolonged inactivity or other security-' +
           'related reasons. Contact site administration for futher ' +
           'assistance.';
@@ -80,7 +78,7 @@ exports.login = function (req, res, next) {
 
       // else, build jwt token
 
-      tokenPayload = {
+      const tokenPayload = {
         name: user.name,
         email: user.email,
         admin: user.admin,
@@ -88,14 +86,14 @@ exports.login = function (req, res, next) {
 
       // The following will add 'exp' property to payload.
       // For time formatting, see https://github.com/zeit/ms
-      tokenOptions = {
+      const tokenOptions = {
         expiresIn: '60d',  // two months,
       };
 
-      token = jwt.sign(tokenPayload, config.secret, tokenOptions);
+      const token = jwt.sign(tokenPayload, config.secret, tokenOptions);
 
       // Register login time.
-      dal.markLogin(user.name, function (errl) {
+      dal.markLogin(user.name, (errl) => {
         if (errl) {
           return next(errl);
         }
@@ -116,9 +114,9 @@ exports.changePassword = function (req, res, next) {
   //       currentPassword
   //       newPassword
 
-  var currentPassword = req.body.currentPassword;
-  var newPassword = req.body.newPassword;
-  var email = req.user.email;
+  const currentPassword = req.body.currentPassword;
+  const newPassword = req.body.newPassword;
+  const email = req.user.email;
 
   // Validate data
   if (typeof currentPassword !== 'string' || typeof newPassword !== 'string') {
@@ -126,9 +124,9 @@ exports.changePassword = function (req, res, next) {
   }
 
   // User is logged in. Good. Find if user with this email still exists.
-  var users = db.collection('users');
+  const users = db.collection('users');
 
-  users.findOne({ email: email }, function (err, user) {
+  users.findOne({ email: email }, (err, user) => {
 
     if (err) {
       // User fetch for email and password check failed.
@@ -142,7 +140,7 @@ exports.changePassword = function (req, res, next) {
     }  // else
 
     // Test if the given current password is correct
-    bcrypt.compare(currentPassword, user.hash, function (err2, match) {
+    bcrypt.compare(currentPassword, user.hash, (err2, match) => {
 
       if (err2) {
         return next(err2);
@@ -154,19 +152,19 @@ exports.changePassword = function (req, res, next) {
 
       // Success, current passwords match
       // Hash the new password before storing it to database.
-      var r = config.bcrypt.rounds;
+      const r = config.bcrypt.rounds;
 
-      bcrypt.hash(newPassword, r, function (err3, newHash) {
+      bcrypt.hash(newPassword, r, (err3, newHash) => {
 
         if (err3) {
           return next(err3);
         }  // else
 
-        var q = { email: email };
-        var u = { $set: { hash: newHash } };
+        const q = { email: email };
+        const u = { $set: { hash: newHash } };
 
         // Ready to change password. Update hash in database.
-        users.findOneAndUpdate(q, u, function (err4, updatedUser) {
+        users.findOneAndUpdate(q, u, (err4, updatedUser) => {
 
           if (err4) {
             return next(err4);
@@ -194,7 +192,7 @@ exports.sendResetPasswordEmail = function (req, res, next) {
   //       email
   //         string
 
-  var email = req.body.email;
+  const email = req.body.email;
 
   if (!validator.validate(email)) {
     // Only client should inform the user that especially the email is invalid.
@@ -203,9 +201,9 @@ exports.sendResetPasswordEmail = function (req, res, next) {
 
   // Fetch user from database to ensure the email exists.
   // First get collection.
-  var users = db.collection('users');
+  const users = db.collection('users');
 
-  users.findOne({ email: email }, function (err, user) {
+  users.findOne({ email: email }, (err, user) => {
 
     if (err) {
       return next(err);
@@ -223,19 +221,19 @@ exports.sendResetPasswordEmail = function (req, res, next) {
     // We will send an email. The email contains a link that allows user
     // to reset his or her password during the next 30 minutes.
 
-    var tokenPayload = {
+    const tokenPayload = {
       name: user.name,
       email: user.email,
       admin: user.admin,
       passwordReset: true,
     };
-    var token = jwt.sign(tokenPayload, config.secret, {
+    const token = jwt.sign(tokenPayload, config.secret, {
       expiresIn: '30m',
     });
-    var host = hostname.get();
-    var url = config.publicProtocol + '://' + host + '/reset/' + token;
+    const host = hostname.get();
+    const url = config.publicProtocol + '://' + host + '/reset/' + token;
 
-    var mailOptions = {
+    const mailOptions = {
       from: config.mail.sender,
       to: user.email,
       subject: config.title + ' password reset requested for your account',
@@ -247,7 +245,7 @@ exports.sendResetPasswordEmail = function (req, res, next) {
     };
 
     // Send the mail
-    mailer.get().sendMail(mailOptions, function (err2) {
+    mailer.get().sendMail(mailOptions, (err2) => {
       // Params: err2, info
       //
       if (err2) {
@@ -269,28 +267,28 @@ exports.resetPassword = function (req, res, next) {
   //     Properties:
   //       password
 
-  var password = req.body.password;
-  var email = req.user.email;
+  const password = req.body.password;
+  const email = req.user.email;
 
   if (typeof password !== 'string' || typeof email !== 'string') {
     return res.sendStatus(status.BAD_REQUEST);
   }
 
   // Hash the new password before storing it to database.
-  bcrypt.hash(password, config.bcrypt.rounds, function (err, newHash) {
+  bcrypt.hash(password, config.bcrypt.rounds, (err, newHash) => {
 
     if (err) {
       return next(err);
     }
 
     // Construct the query.
-    var q = { email: email };
-    var u = { $set: { hash: newHash } };
+    const q = { email: email };
+    const u = { $set: { hash: newHash } };
 
     // Collection
-    var users = db.get().collection('users');
+    const users = db.get().collection('users');
 
-    users.findOneAndUpdate(q, u, function (err2, user) {
+    users.findOneAndUpdate(q, u, (err2, user) => {
 
       if (err2) {
         return next(err2);
@@ -320,8 +318,8 @@ exports.sendInviteEmail = function (req, res, next) {
   //       email
   //         The email address where to send the invite.
 
-  var email = req.body.email;
-  var isAdmin = req.user.admin;
+  const email = req.body.email;
+  const isAdmin = req.user.admin;
 
   if (isAdmin !== true) {
     return res.sendStatus(status.UNAUTHORIZED);
@@ -336,9 +334,9 @@ exports.sendInviteEmail = function (req, res, next) {
   }
 
   // Ensure that no account with this email exists already
-  var users = db.collection('users');
+  const users = db.collection('users');
 
-  users.findOne({ email: email }, function (err, user) {
+  users.findOne({ email: email }, (err, user) => {
 
     if (err) {
       return next(err);
@@ -351,22 +349,22 @@ exports.sendInviteEmail = function (req, res, next) {
 
     // Okay, everything good. Create email with a secure sign up link.
 
-    var tokenPayload = {
+    const tokenPayload = {
       email: email,
       invite: true,
     };
-    var token = jwt.sign(tokenPayload, config.secret, {
+    const token = jwt.sign(tokenPayload, config.secret, {
       expiresIn: '7d',
     });
-    var host = hostname.get();
-    var url = config.publicProtocol + '://' + host + '/signup/' + token;
+    const host = hostname.get();
+    const url = config.publicProtocol + '://' + host + '/signup/' + token;
 
     // Make first letter lowercase, so that nice after comma.
     // ...welcome to My Site, my description.
-    var desc = config.description;
+    let desc = config.description;
     desc = desc.charAt(0).toLowerCase() + desc.slice(1);
 
-    var mailOptions = {
+    const mailOptions = {
       from: config.mail.sender,
       to: email,
       subject: 'Invite to ' + config.title,
@@ -379,7 +377,7 @@ exports.sendInviteEmail = function (req, res, next) {
     };
 
     // Send the mail.
-    mailer.get().sendMail(mailOptions, function (err2) {
+    mailer.get().sendMail(mailOptions, (err2) => {
       // Params:
       //   err2
       //   info
@@ -411,13 +409,13 @@ exports.signup = function (req, res, next) {
   //     Properties:
   //       email
 
-  var email = req.user.email;
-  var username = req.body.username;
-  var password = req.body.password;
+  const email = req.user.email;
+  const username = req.body.username;
+  const password = req.body.password;
 
   // Ensure username and password are strings.
   // This prevents Mongo injection.
-  var validRequest = (
+  const validRequest = (
     typeof username === 'string' &&
     typeof password === 'string' &&
     validator.validate(email)
@@ -432,11 +430,11 @@ exports.signup = function (req, res, next) {
   // username index violation and email index violation.
   // We also avoid computing password hash.
 
-  var users = db.collection('users');
+  const users = db.collection('users');
 
   users.findOne({
     $or: [ { name: username }, { email: email } ],
-  }, function (err, user) {
+  }, (err, user) => {
 
     if (err) {
       return next(err);
@@ -450,7 +448,7 @@ exports.signup = function (req, res, next) {
     // Note: there is a tiny risk that such user is created after
     // the check but before insert.
 
-    dal.createUser(username, email, password, function (err2) {
+    dal.createUser(username, email, password, (err2) => {
       if (err2) {
         return next(err2);
       }

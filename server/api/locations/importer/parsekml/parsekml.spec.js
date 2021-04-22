@@ -1,15 +1,15 @@
 /* global describe, it, */
 /* eslint-disable handle-callback-err */
 
-var unit = require('./index');
-var should = require('should');  // eslint-disable-line no-unused-vars
+const unit = require('./index');
+const should = require('should');  // eslint-disable-line no-unused-vars
 
 
-describe('parsekml', function () {
+describe('parsekml', () => {
 
-  it('should detect Placemark', function (done) {
+  it('should detect Placemark', (done) => {
 
-    var xmlIn = '<?xml version="1.0" encoding="utf-8"?>' +
+    const xmlIn = '<?xml version="1.0" encoding="utf-8"?>' +
       '<kml xmlns="http://www.opengis.net/kml/2.2">' +
         '<Document>' +
           '<Placemark>' +
@@ -21,7 +21,7 @@ describe('parsekml', function () {
         '</Document>' +
       '</kml>';
 
-    unit(xmlIn, function (err, locs) {
+    unit(xmlIn, (err, locs) => {
       locs.should.deepEqual([
         {
           name: 'Portland',
@@ -36,9 +36,9 @@ describe('parsekml', function () {
 
   });
 
-  it('should extract Folder', function (done) {
+  it('should extract Folder', (done) => {
 
-    var xmlIn = '<?xml version="1.0" encoding="utf-8"?>' +
+    const xmlIn = '<?xml version="1.0" encoding="utf-8"?>' +
       '<kml xmlns="http://www.opengis.net/kml/2.2">' +
         '<Document>' +
           '<Placemark>' +
@@ -74,7 +74,7 @@ describe('parsekml', function () {
         '</Document>' +
       '</kml>';
 
-    unit(xmlIn, function (err, locs) {
+    unit(xmlIn, (err, locs) => {
       locs.should.deepEqual([
         {
           name: 'Rio de Janeiro',

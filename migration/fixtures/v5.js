@@ -1,7 +1,7 @@
 /* eslint-disable no-magic-numbers */
 // NOTE This file is an important documentation of the data structure of v5.
 
-var c = require('./common');
+const c = require('./common');
 
 module.exports = {
   collections: {

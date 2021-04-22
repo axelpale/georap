@@ -1,6 +1,6 @@
 /* eslint-disable no-magic-numbers */
 
-var db = require('tresdb-db');
+const db = require('tresdb-db');
 
 module.exports = {
   collections: {
@@ -64,7 +64,7 @@ module.exports = {
       },
     ],
   },
-  indices: db.INDICES.filter(function (index) {
+  indices: db.INDICES.filter((index) => {
     return index.collection === 'locations';
   }),
 };

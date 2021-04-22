@@ -1,14 +1,14 @@
-var config = require('tresdb-config');
+const config = require('tresdb-config');
 
-var has = function (arr, el) {
+const has = function (arr, el) {
   return arr.indexOf(el) >= 0;
 };
 
 exports.splitTags = function (tags) {
   // Separate tags list into two lists: statuses and types.
-  var statuses = [];
-  var types = [];
-  tags.forEach(function (tag) {
+  const statuses = [];
+  const types = [];
+  tags.forEach((tag) => {
     if (has(config.locationStatuses, tag)) {
       statuses.push(tag);
     }
@@ -28,13 +28,13 @@ exports.tagsToStatusType = function (tags) {
   // Return { status, type }
 
   // Init with defaults
-  var result = {
+  const result = {
     status: config.locationStatuses[0],
     type: config.locationTypes[0],
   };
 
   // Split
-  var splitted = exports.splitTags(tags);
+  const splitted = exports.splitTags(tags);
 
   // Test if empty and if not, pick first
   if (splitted.statuses.length > 0) {

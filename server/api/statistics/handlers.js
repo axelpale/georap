@@ -1,8 +1,8 @@
-var dal = require('./dal');
+const dal = require('./dal');
 
 exports.getAll = function (req, res, next) {
 
-  dal.getAll(function (err, data) {
+  dal.getAll((err, data) => {
     if (err) {
       return next(err);
     }

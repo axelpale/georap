@@ -1,11 +1,11 @@
 // Camaro XML template
 
-var extendedDataTemplate = ['ExtendedData//SimpleData', {
+const extendedDataTemplate = ['ExtendedData//SimpleData', {
   name: '@name',
   value: '.',
 }];
 
-var placemarkTemplate = {
+const placemarkTemplate = {
   name: 'name',
   extendedData: extendedDataTemplate,
   description: 'description',
@@ -14,7 +14,7 @@ var placemarkTemplate = {
   polygon: 'Polygon//coordinates',
 };
 
-var overlayTemplate = {
+const overlayTemplate = {
   name: 'name',
   description: 'description',
   href: './Icon/href',

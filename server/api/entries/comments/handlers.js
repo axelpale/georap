@@ -41,7 +41,7 @@ exports.create = (req, res, next) => {
     username: username,
     markdown: purifyMarkdown(markdown).trim(),
     attachments: attachments,
-  }, function (err) {
+  }, (err) => {
     if (err) {
       return next(err);
     }
@@ -135,7 +135,7 @@ exports.change = function (req, res, next) {
     commentId: req.comment.id,
     original: original,
     delta: delta,
-  }, function (err) {
+  }, (err) => {
     if (err) {
       return next(err);
     }
@@ -144,15 +144,15 @@ exports.change = function (req, res, next) {
 };
 
 exports.remove = function (req, res, next) {
-  var locationId = req.location._id;
-  var locationName = req.location.name;
-  var entryId = req.entryId;
-  var username = req.user.name;
-  var commentId = req.commentId;
+  const locationId = req.location._id;
+  const locationName = req.location.name;
+  const entryId = req.entryId;
+  const username = req.user.name;
+  const commentId = req.commentId;
 
   // Allow only owners and admins to delete
-  var isAdmin = req.user.admin;
-  var isOwner = req.user.name === req.comment.user;
+  const isAdmin = req.user.admin;
+  const isOwner = req.user.name === req.comment.user;
 
   if (isAdmin || isOwner) {
     entriesDal.removeLocationEntryComment({
@@ -161,14 +161,14 @@ exports.remove = function (req, res, next) {
       entryId: entryId,
       username: username,
       commentId: commentId,
-    }, function (err) {
+    }, (err) => {
       if (err) {
         return next(err);
       }
       return res.sendStatus(status.OK);
     });
   } else {
-    var info = 'Only admins and comment author can edit the comment.';
+    const info = 'Only admins and comment author can edit the comment.';
     return res.status(status.FORBIDDEN).send(info);
   }
 };

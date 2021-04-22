@@ -1,11 +1,11 @@
 /* eslint-disable new-cap */
 
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 
-var handlers = require('./handlers');
-var commentIdParser = require('./lib/commentIdParser');
-var jsonParser = require('body-parser').json();
+const handlers = require('./handlers');
+const commentIdParser = require('./lib/commentIdParser');
+const jsonParser = require('body-parser').json();
 
 router.post('/', jsonParser, handlers.create);
 

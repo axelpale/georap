@@ -1,8 +1,8 @@
 /* eslint-disable no-magic-numbers */
 // NOTE This file is an important documentation of the data structure of v9.
 
-var c = require('./common');
-var db = require('tresdb-db');
+const c = require('./common');
+const db = require('tresdb-db');
 
 module.exports = {
   collections: {

@@ -1,9 +1,9 @@
 // Singleton wrapper around socket.io
 
-var socketio = require('socket.io');
-var hostname = require('./hostname');
+const socketio = require('socket.io');
+const hostname = require('./hostname');
 
-var io = null;
+let io = null;
 
 exports.init = function (server) {
   // Parameters:
@@ -19,7 +19,7 @@ exports.init = function (server) {
     // when a link is sent via email. It does not matter if
     // the connection is transported via polling or websockets,
     // the host stays the same.
-    io.use(function (socket, next) {
+    io.use((socket, next) => {
       if (socket.request.headers.host) {
         hostname.init(socket.request.headers.host);
       }

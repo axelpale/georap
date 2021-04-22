@@ -1,6 +1,6 @@
-var status = require('http-status-codes');
-var dal = require('./dal');
-var loggers = require('../../../services/logs/loggers');
+const status = require('http-status-codes');
+const dal = require('./dal');
+const loggers = require('../../../services/logs/loggers');
 
 exports.getOneWithEvents = function (req, res, next) {
   // Fetch single user
@@ -9,7 +9,7 @@ exports.getOneWithEvents = function (req, res, next) {
   //   req.username
   //     string
 
-  dal.getOneWithEvents(req.username, function (err, user) {
+  dal.getOneWithEvents(req.username, (err, user) => {
     if (err) {
       return next(err);
     }
@@ -31,7 +31,7 @@ exports.getOneWithBalanceAndPayments = function (req, res, next) {
   //   req.username
   //     string
 
-  dal.getOneWithBalanceAndPayments(req.username, function (err, user) {
+  dal.getOneWithBalanceAndPayments(req.username, (err, user) => {
     if (err) {
       return next(err);
     }
@@ -48,7 +48,7 @@ exports.getVisitedLocationIds = function (req, res, next) {
   // Response with an array of _id:s of all locations visited by the user.
   // If no locations or users found, responses with empty array [].
 
-  dal.getVisitedLocationIds(req.username, function (err, ids) {
+  dal.getVisitedLocationIds(req.username, (err, ids) => {
     if (err) {
       return next(err);
     }

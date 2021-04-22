@@ -1,10 +1,10 @@
 /* eslint-disable new-cap */
 
-var entriesRouter = require('../../entries/routes');
-var handlers = require('./handlers');
-var express = require('express');
-var router = express.Router();
-var jsonParser = require('body-parser').json();
+const entriesRouter = require('../../entries/routes');
+const handlers = require('./handlers');
+const express = require('express');
+const router = express.Router();
+const jsonParser = require('body-parser').json();
 
 router.get('/', handlers.getOne);
 router.delete('/', handlers.removeOne);

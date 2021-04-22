@@ -71,7 +71,7 @@ exports.getAllOfLocationComplete = (locationId, callback) => {
   const q = { locationId: locationId };
   const opt = { sort: { time: -1 } };
 
-  db.collection('events').find(q, opt).toArray(function (err, evs) {
+  db.collection('events').find(q, opt).toArray((err, evs) => {
     if (err) {
       return callback(err);
     }

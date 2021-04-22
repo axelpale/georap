@@ -1,22 +1,22 @@
 /* global describe, it, beforeEach, afterEach, before, after */
 
 // The Unit
-var iter = require('./iter');
+const iter = require('./iter');
 
-var db = require('tresdb-db');
-var config = require('tresdb-config');
-var dropCollections = require('./lib/dropCollections');
+const db = require('tresdb-db');
+const config = require('tresdb-config');
+const dropCollections = require('./lib/dropCollections');
 // Enable should api
 // eslint-disable-next-line no-unused-vars
-var should = require('should');
-var assert = require('assert');
+const should = require('should');
+const assert = require('assert');
 
 
-var TEST_COLLECTION_NAME = 'test_collection';
+const TEST_COLLECTION_NAME = 'test_collection';
 
 
 // Test data
-var fixture = [
+const fixture = [
   {
     name: 'Harrison',
   },
@@ -28,11 +28,11 @@ var fixture = [
   },
 ];
 
-describe('iter.updateEach', function () {
-  var collection;
+describe('iter.updateEach', () => {
+  let collection;
 
-  before(function (done) {
-    db.init(config.mongo.testUrl, function (err) {
+  before((done) => {
+    db.init(config.mongo.testUrl, (err) => {
       if (err) {
         return done(err);
       }
@@ -42,34 +42,34 @@ describe('iter.updateEach', function () {
     });
   });
 
-  after(function (done) {
+  after((done) => {
     db.close();
     return done();
   });
 
-  beforeEach(function (done) {
+  beforeEach((done) => {
     collection = db.collection(TEST_COLLECTION_NAME);
     collection.insertMany(fixture, done);
   });
 
-  afterEach(function (done) {
+  afterEach((done) => {
     collection.drop(done);
   });
 
-  it('should add Dr. prefix', function (done) {
-    iter.updateEach(collection, function (person, next) {
+  it('should add Dr. prefix', (done) => {
+    iter.updateEach(collection, (person, next) => {
       person.name = 'Dr. ' + person.name;
       return next(null, person);
-    }, function (err) {
+    }, (err) => {
       assert.ok(!err);
 
-      var q = {
+      const q = {
         name: {
           $regex: (/^Dr\./),
         },
       };
 
-      collection.find(q).toArray(function (err2, doctors) {
+      collection.find(q).toArray((err2, doctors) => {
         if (err2) {
           return done(err2);
         }
@@ -79,12 +79,12 @@ describe('iter.updateEach', function () {
     });
   });
 
-  it('should replace instead of extend', function (done) {
-    iter.updateEach(collection, function (person, next) {
+  it('should replace instead of extend', (done) => {
+    iter.updateEach(collection, (person, next) => {
       return next(null, { username: person.name });
-    }, function (err) {
+    }, (err) => {
       assert.ifError(err);
-      collection.find().toArray(function (err2, users) {
+      collection.find().toArray((err2, users) => {
         if (err2) {
           return done(err2);
         }
@@ -95,28 +95,28 @@ describe('iter.updateEach', function () {
     });
   });
 
-  it('should detect error', function (done) {
-    iter.updateEach(collection, function (person, next) {
+  it('should detect error', (done) => {
+    iter.updateEach(collection, (person, next) => {
       return next(new Error('foobar'));
-    }, function (err) {
+    }, (err) => {
       assert.equal(err.message, 'foobar');
       return done();
     });
   });
 
-  it('should detect thrown error', function (done) {
-    iter.updateEach(collection, function () {
+  it('should detect thrown error', (done) => {
+    iter.updateEach(collection, () => {
       throw new Error('foobar');
-    }, function (err) {
+    }, (err) => {
       assert.equal(err.message, 'foobar');
       return done();
     });
   });
 
-  it('should skip nulls', function (done) {
-    iter.updateEach(collection, function (person, next) {
+  it('should skip nulls', (done) => {
+    iter.updateEach(collection, (person, next) => {
       return next(null, null);
-    }, function (err) {
+    }, (err) => {
       assert.ifError(err);
       return done();
     });

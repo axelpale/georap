@@ -1,5 +1,5 @@
-var asyn = require('async');
-var db = require('tresdb-db');
+const asyn = require('async');
+const db = require('tresdb-db');
 
 exports.updateEach = function (collection, iteratee, callback) {
   // Replace each document in a MongoDB collection. Iteratee is the update
@@ -39,7 +39,7 @@ exports.updateEach = function (collection, iteratee, callback) {
   //   });
   //
 
-  collection.find().toArray(function (err, allDocuments) {
+  collection.find().toArray((err, allDocuments) => {
     if (err) {
       return callback(err);
     }
@@ -47,8 +47,8 @@ exports.updateEach = function (collection, iteratee, callback) {
     const numDocs = allDocuments.length;
     let numUpdated = 0;
 
-    asyn.eachSeries(allDocuments, function (doc, eachNext) {
-      var id = doc._id;  // Take before modification
+    asyn.eachSeries(allDocuments, (doc, eachNext) => {
+      let id = doc._id;  // Take before modification
 
       // Ensure ObjectID.
       if (typeof id === 'string') {
@@ -56,7 +56,7 @@ exports.updateEach = function (collection, iteratee, callback) {
       }
 
       try {
-        iteratee(doc, function next(iterateeError, updatedDoc) {
+        iteratee(doc, (iterateeError, updatedDoc) => {
           if (iterateeError) {
             return eachNext(iterateeError);
           }
@@ -69,7 +69,7 @@ exports.updateEach = function (collection, iteratee, callback) {
           // Ensure _id is not replaced by an _id literal.
           delete updatedDoc._id;
 
-          collection.replaceOne({ _id: id }, updatedDoc, {}, function (err2) {
+          collection.replaceOne({ _id: id }, updatedDoc, {}, (err2) => {
             if (err2) {
               return eachNext(err2);
             }
@@ -82,7 +82,7 @@ exports.updateEach = function (collection, iteratee, callback) {
       } catch (e) {
         return eachNext(e);
       }
-    }, function afterEachNexts(err3) {
+    }, (err3) => {
       if (err3) {
         return callback(err3);
       }

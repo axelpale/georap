@@ -1,20 +1,20 @@
 // File upload request parser
 
-var config = require('tresdb-config');
-var sharp = require('sharp');
-var multer = require('multer');
-var mime = require('mime');
-var path = require('path');
-var fse = require('fs-extra');
-var shortid = require('shortid');
-var sanitize = require('sanitize-filename');
-var moment = require('moment');
-var download = require('download');
+const config = require('tresdb-config');
+const sharp = require('sharp');
+const multer = require('multer');
+const mime = require('mime');
+const path = require('path');
+const fse = require('fs-extra');
+const shortid = require('shortid');
+const sanitize = require('sanitize-filename');
+const moment = require('moment');
+const download = require('download');
 
-var sanitizeFilename = function (fname) {
+const sanitizeFilename = function (fname) {
   // Convert filename to a universally compatible one.
   // Remove suspicious characters. Might end up with empty filename.
-  var safeButMaybeEmpty = sanitize(fname);
+  const safeButMaybeEmpty = sanitize(fname);
 
   // If empty, come up with a filename.
   if (safeButMaybeEmpty.length < 1) {
@@ -22,20 +22,20 @@ var sanitizeFilename = function (fname) {
   }
 
   // Convert spaces to _
-  var safe = safeButMaybeEmpty.replace(/\s+/g, '_');
+  const safe = safeButMaybeEmpty.replace(/\s+/g, '_');
 
   return safe;
 };
 
-var sanitizedOriginal = function (req, file, cb) {
+const sanitizedOriginal = function (req, file, cb) {
   return cb(null, sanitizeFilename(file.originalname));
 };
 
-var dateShortId = function (req, file, cb) {
-  var name = moment().format('YYYY-MM-DD') + '-' + shortid.generate();
-  var absDir = path.resolve(config.tempUploadDir, name);
+const dateShortId = function (req, file, cb) {
+  const name = moment().format('YYYY-MM-DD') + '-' + shortid.generate();
+  const absDir = path.resolve(config.tempUploadDir, name);
 
-  fse.mkdirs(absDir, function (err) {
+  fse.mkdirs(absDir, (err) => {
     if (err) {
       return cb(err);
     }
@@ -43,17 +43,17 @@ var dateShortId = function (req, file, cb) {
   });
 };
 
-var yearShortId = function (req, file, cb) {
+const yearShortId = function (req, file, cb) {
   // Parameters
   //   req (not needed)
   //   file (not needed)
   //   cb
   //     function (err, absoluteDirPath)
-  var year = (new Date()).getFullYear().toString();
-  var key = shortid.generate();
-  var absDir = path.resolve(config.uploadDir, year, key);
+  const year = (new Date()).getFullYear().toString();
+  const key = shortid.generate();
+  const absDir = path.resolve(config.uploadDir, year, key);
 
-  fse.mkdirs(absDir, function (err) {
+  fse.mkdirs(absDir, (err) => {
     if (err) {
       return cb(err);
     }
@@ -106,15 +106,15 @@ exports.preparePermanent = function (filePath, callback) {
     throw new Error('invalid filePath:' + filePath);
   }
 
-  var fname = path.basename(filePath);
+  const fname = path.basename(filePath);
 
-  yearShortId(null, null, function (err, absDirPath) {
+  yearShortId(null, null, (err, absDirPath) => {
     if (err) {
       return callback(err);
     }
 
-    var sanename = sanitizeFilename(fname);
-    var newpath = path.resolve(absDirPath, sanename);
+    const sanename = sanitizeFilename(fname);
+    const newpath = path.resolve(absDirPath, sanename);
 
     return callback(null, newpath);
   });
@@ -129,25 +129,25 @@ exports.makePermanent = function (filePath, callback) {
   //   callback
   //     function (err, newFilePath)
   //
-  exports.preparePermanent(filePath, function (err, newPath) {
+  exports.preparePermanent(filePath, (err, newPath) => {
     if (err) {
       return callback(err);
     }
 
-    var dirPath = path.dirname(newPath);
+    const dirPath = path.dirname(newPath);
 
     if (filePath.startsWith('http')) {
       console.log('downloading', filePath);
       console.log('saving into', newPath);
       download(filePath, dirPath, {
         timeout: 5000, // ms
-      }).then(function () {
+      }).then(() => {
         return callback(null, newPath);
-      }).catch(function (errd) {
+      }).catch((errd) => {
         return callback(errd);
       });
     } else {
-      fse.copy(filePath, newPath, function (errm) {
+      fse.copy(filePath, newPath, (errm) => {
         if (errm) {
           return callback(errm);
         }
@@ -181,16 +181,16 @@ exports.createThumbnail = function (file, callback) {
   //     absolute path to thumbnail
 
   // Let file.path = '/haha/foo.bar'
-  var ext = path.extname(file.path);  // ext = '.bar'
-  var dir = path.dirname(file.path);  // dir = '/haha'
-  var base = path.basename(file.path, ext);  // base = 'foo'
+  const ext = path.extname(file.path);  // ext = '.bar'
+  const dir = path.dirname(file.path);  // dir = '/haha'
+  const base = path.basename(file.path, ext);  // base = 'foo'
 
-  var fix = '_medium';
-  var thumbname = base + fix + '.jpg';
-  var thumbpath = path.join(dir, thumbname);
+  const fix = '_medium';
+  const thumbname = base + fix + '.jpg';
+  const thumbpath = path.join(dir, thumbname);
 
   // Often the mimetype can be deducted from extension
-  var mimetype;
+  let mimetype;
   if (typeof file.mimetype === 'string') {
     mimetype = file.mimetype;
   } else {
@@ -198,7 +198,7 @@ exports.createThumbnail = function (file, callback) {
   }
 
   // max width and height of the thumbnail image in pixels
-  var size = config.uploadThumbSize;
+  const size = config.uploadThumbSize;
 
   // eslint-disable-next-line no-magic-numbers
   if (mimetype.substr(0, 6) === 'image/') {
@@ -211,7 +211,7 @@ exports.createThumbnail = function (file, callback) {
     sharp(file.path, { failOnError: false })
       .rotate() // No parameters indicate to use EXIF data
       .resize(size, null, { withoutEnlargement: true })
-      .toFile(thumbpath, function (err) {
+      .toFile(thumbpath, (err) => {
         if (err) {
           console.log(file);
           return callback(err);
@@ -243,8 +243,8 @@ exports.rotateImage = function (imagePath, targetPath, degrees, callback) {
   //   callback
   //     function (err, new)
   //
-  var QUAD = 90;
-  var roundedDegrees = QUAD * Math.round(degrees / QUAD);
+  const QUAD = 90;
+  const roundedDegrees = QUAD * Math.round(degrees / QUAD);
 
   if (roundedDegrees === 0) {
     // Rotated equals the original
@@ -253,7 +253,7 @@ exports.rotateImage = function (imagePath, targetPath, degrees, callback) {
 
   sharp(imagePath)
     .rotate(roundedDegrees)
-    .toFile(targetPath, function (err) {
+    .toFile(targetPath, (err) => {
       if (err) {
         return callback(err);
       }
