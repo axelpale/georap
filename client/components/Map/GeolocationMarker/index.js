@@ -126,6 +126,8 @@ module.exports = function (map) {
             }
           }, function geoError(err) {
             console.error(err);
+          }, {
+            enableHighAccuracy: true,
           });
         } else {
           searchAnimation.stop();
