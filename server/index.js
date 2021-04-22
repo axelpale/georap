@@ -1,27 +1,27 @@
 /* eslint-disable max-statements */
 
-var config = require('tresdb-config');
-var http = require('http');
-var path = require('path');
-var fse = require('fs-extra');
-var express = require('express');
+const config = require('tresdb-config');
+const http = require('http');
+const path = require('path');
+const fse = require('fs-extra');
+const express = require('express');
 
-var app = express();
-var server = http.createServer(app);
+const app = express();
+const server = http.createServer(app);
 
-var io = require('./services/io');
+const io = require('./services/io');
 io.init(server);
 
-var mailer = require('./services/mailer');
+const mailer = require('./services/mailer');
 mailer.init();
 
-var db = require('tresdb-db');
+const db = require('tresdb-db');
 
 // Logging
-var loggers = require('./services/logs/loggers');
+const loggers = require('./services/logs/loggers');
 
 // Routes
-var router = require('./routes');
+const router = require('./routes');
 
 // Log environment
 console.log('Starting TresDB in environment:', config.env);
@@ -29,7 +29,7 @@ console.log('Starting TresDB in environment:', config.env);
 
 // Database connection first
 
-db.init(function (dbErr) {
+db.init((dbErr) => {
   if (dbErr) {
     console.error('Failed to connect to MongoDB.');
     console.error(dbErr);
@@ -41,7 +41,7 @@ db.init(function (dbErr) {
 
 // Start the server.
 
-server.listen(config.port, function () {
+server.listen(config.port, () => {
   console.log('Express listening on port ' + config.port + '...');
 });
 
@@ -70,18 +70,18 @@ console.log('Serving static files from', config.staticUrl);
 
 // Instance-specific static files are best copied without webpack
 // because webpack does not support dynamic paths well.
-var imagesSource = path.resolve(__dirname, '..', 'client', 'images');
-var themesSource = path.resolve(__dirname, '..', 'client', 'themes');
-var modulesSource = path.resolve(__dirname, '..', 'node_modules');
-var bootstrapSource = path.resolve(modulesSource, 'bootstrap', 'dist');
-var configSource = path.resolve(__dirname, '..', 'config');
-var markersSource = path.join(configSource, 'images', 'markers');
+const imagesSource = path.resolve(__dirname, '..', 'client', 'images');
+const themesSource = path.resolve(__dirname, '..', 'client', 'themes');
+const modulesSource = path.resolve(__dirname, '..', 'node_modules');
+const bootstrapSource = path.resolve(modulesSource, 'bootstrap', 'dist');
+const configSource = path.resolve(__dirname, '..', 'config');
+const markersSource = path.join(configSource, 'images', 'markers');
 // Target paths
-var imagesTarget = path.join(config.staticDir, 'images');
-var bootstrapTarget = path.join(config.staticDir, 'bootstrap');
+const imagesTarget = path.join(config.staticDir, 'images');
+const bootstrapTarget = path.join(config.staticDir, 'bootstrap');
 // Copy
 (function copyCustomStatic(copyPaths) {
-  copyPaths.forEach(function (pp) {
+  copyPaths.forEach((pp) => {
     fse.copy(pp[0], pp[1]);
   });
 }([
@@ -110,24 +110,24 @@ console.log('Serving temporary files from', config.tempUploadUrl);
 app.use('/', router);
 
 // Socket.io routing
-io.get().on('connection', function () {
+io.get().on('connection', () => {
   // Parameters:
   //   socket
   loggers.log('New connection.');
 });
 
 // Override default error handler with a custom one to include date time.
-app.use(function (err, req, res, next) {
+app.use((err, req, res, next) => {
   // Fall back to Express default error handler if error occurs during
   // streaming. https://expressjs.com/en/guide/error-handling.html
   if (res.headersSent) {
     return next(err);
   }
 
-  var datetime = (new Date()).toISOString();
-  var logEntry = datetime + ': ' + err.stack;
+  const datetime = (new Date()).toISOString();
+  const logEntry = datetime + ': ' + err.stack;
 
   console.error(logEntry);
-  var INTERNAL_SERVER_ERROR = 500;
+  const INTERNAL_SERVER_ERROR = 500;
   res.status(INTERNAL_SERVER_ERROR).send('Error: ' + err.message);
 });
