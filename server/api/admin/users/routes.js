@@ -1,10 +1,10 @@
 /* eslint-disable new-cap */
 
-var router = require('express').Router();
-var handlers = require('./handlers');
-var userRouter = require('./user/routes');
+const router = require('express').Router();
+const handlers = require('./handlers');
+const userRouter = require('./user/routes');
 
-var usernameParser = function (req, res, next) {
+const usernameParser = function (req, res, next) {
   // Username parser middleware.
   // Finds the username.
   // We need to define the parser in this routing level, because

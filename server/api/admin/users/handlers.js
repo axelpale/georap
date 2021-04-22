@@ -1,9 +1,9 @@
-var dal = require('./dal');
+const dal = require('./dal');
 
 exports.get = function (req, res, next) {
   // Response with JSON array of users with admin-only information
 
-  dal.getUsersForAdmin(function (err, users) {
+  dal.getUsersForAdmin((err, users) => {
     if (err) {
       return next(err);
     }
