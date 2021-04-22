@@ -1,10 +1,10 @@
-var dal = require('./dal');
-var loggers = require('../../services/logs/loggers');
+const dal = require('./dal');
+const loggers = require('../../services/logs/loggers');
 
 exports.getAll = function (req, res, next) {
   // Fetch all users
 
-  dal.getAll(function (err, users) {
+  dal.getAll((err, users) => {
     if (err) {
       return next(err);
     }
