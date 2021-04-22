@@ -1,24 +1,24 @@
 
-var shortid = require('shortid');
-var moment = require('moment');
-var fs = require('fs-extra');
-var path = require('path');
-var asyn = require('async');
+const shortid = require('shortid');
+const moment = require('moment');
+const fs = require('fs-extra');
+const path = require('path');
+const asyn = require('async');
 
-var FORMAT = 'YYYY-MM-DD';
+const FORMAT = 'YYYY-MM-DD';
 
-var generateName = function () {
+const generateName = function () {
   return moment().format(FORMAT) + '_' + shortid.generate();
 };
 
-var validateName = function (name) {
+const validateName = function (name) {
   // Ensure the name has correct syntax
   return moment(name.substr(0, FORMAT.length), FORMAT).isValid();
 };
 
 
 
-var TempDir = function (abs) {
+const TempDir = function (abs) {
   this.abs = abs;
 };
 
@@ -36,12 +36,12 @@ TempDir.prototype.getAgeSec = function (callback) {
   // Parameters
   //   callback
   //     function (err, seconds)
-  fs.stat(this.abs, function (err, stat) {
+  fs.stat(this.abs, (err, stat) => {
     if (err) {
       return callback(err);
     }
-    var changeTime = moment(stat.ctime);
-    var age = moment().diff(changeTime, 'seconds');
+    const changeTime = moment(stat.ctime);
+    const age = moment().diff(changeTime, 'seconds');
     return callback(null, age);
   });
 };
@@ -53,15 +53,15 @@ TempDir.prototype.remove = function (maxAgeSec, callback) {
   //   callback
   //     function (err, wasRemoved)
   //
-  var self = this;
+  const self = this;
 
-  this.getAgeSec(function (err, age) {
+  this.getAgeSec((err, age) => {
     if (err) {
       return callback(err);
     }
 
     if (age > maxAgeSec) {
-      fs.remove(self.abs, function (errr) {
+      fs.remove(self.abs, (errr) => {
         if (errr) {
           return callback(errr);
         }
@@ -76,17 +76,17 @@ TempDir.prototype.remove = function (maxAgeSec, callback) {
 
 
 exports.getDirs = function (root, callback) {
-  fs.readdir(root, function (err, files) {
+  fs.readdir(root, (err, files) => {
     if (err) {
       return callback(err);
     }
 
     // Prevent listing files and directories not created by tempdirs.js
-    var validFiles = files.filter(function (fname) {
+    const validFiles = files.filter((fname) => {
       return validateName(fname);
     });
 
-    var tempDirs = validFiles.map(function (fname) {
+    const tempDirs = validFiles.map((fname) => {
       return new TempDir(path.join(root, fname));
     });
 
@@ -113,9 +113,9 @@ exports.getDir = function (root, name, callback) {
     return callback(new Error('Invalid name format'));
   }
 
-  var abs = path.resolve(root, name);
+  const abs = path.resolve(root, name);
 
-  fs.ensureDir(abs, function (err) {
+  fs.ensureDir(abs, (err) => {
     if (err) {
       return callback(err);
     }
@@ -136,15 +136,15 @@ exports.removeOlderThan = function (root, maxAgeSec, callback) {
   //   callback
   //     function (err, removedTempDirNames)
   //
-  exports.getDirs(root, function (err, tempDirs) {
+  exports.getDirs(root, (err, tempDirs) => {
     if (err) {
       return callback(err);
     }
 
-    var removedNames = [];
+    const removedNames = [];
 
-    asyn.eachSeries(tempDirs, function iteratee(item, next) {
-      item.remove(maxAgeSec, function (errr, wasRemoved) {
+    asyn.eachSeries(tempDirs, (item, next) => {
+      item.remove(maxAgeSec, (errr, wasRemoved) => {
         if (errr) {
           return next(errr);
         }
@@ -155,7 +155,7 @@ exports.removeOlderThan = function (root, maxAgeSec, callback) {
 
         return next();
       });
-    }, function then(erra) {
+    }, (erra) => {
       if (erra) {
         return callback(erra);
       }

@@ -1,8 +1,8 @@
-var config = require('tresdb-config');
-var path = require('path');
-var morgan = require('morgan');
-var fse = require('fs-extra');
-var fs = require('fs');
+const config = require('tresdb-config');
+const path = require('path');
+const morgan = require('morgan');
+const fse = require('fs-extra');
+const fs = require('fs');
 
 // Setup
 
@@ -22,8 +22,8 @@ exports.http = function () {
   //
 
   // Log requests to a file. For that, create a write stream (in append mode)
-  var p = path.join(config.logDir, 'access.log');
-  var accessLogStream = fs.createWriteStream(p, { flags: 'a' });
+  const p = path.join(config.logDir, 'access.log');
+  const accessLogStream = fs.createWriteStream(p, { flags: 'a' });
 
   return morgan('common', {
     stream: accessLogStream,
@@ -31,6 +31,6 @@ exports.http = function () {
 };
 
 exports.log = function (msg) {
-  var datetime = (new Date()).toISOString();
+  const datetime = (new Date()).toISOString();
   console.log(datetime + ': ' + msg);
 };
