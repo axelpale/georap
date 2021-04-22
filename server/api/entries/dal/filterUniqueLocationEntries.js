@@ -37,7 +37,7 @@ module.exports = (args, callback) => {
         if (re.attachments.length > 0) {
           reBase = path.basename(re.attachments[0].filepath);
         }
-        var ecBase = ec.filepath ? path.basename(ec.filepath) : null;
+        const ecBase = ec.filepath ? path.basename(ec.filepath) : null;
         return (re.user !== ec.username ||
                 re.markdown !== ec.markdown ||
                 reBase !== ecBase);

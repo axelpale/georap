@@ -1,11 +1,11 @@
 // URL parser middleware
 
-var entriesDal = require('../dal');
-var status = require('http-status-codes');
-var db = require('tresdb-db');
+const entriesDal = require('../dal');
+const status = require('http-status-codes');
+const db = require('tresdb-db');
 
 module.exports = function (req, res, next) {
-  var stringId = req.params.entryId;
+  const stringId = req.params.entryId;
 
   try {
     req.entryId = db.id(stringId);
@@ -13,7 +13,7 @@ module.exports = function (req, res, next) {
     return res.sendStatus(status.NOT_FOUND);
   }
 
-  entriesDal.getOneRaw(req.entryId, function (err, entry) {
+  entriesDal.getOneRaw(req.entryId, (err, entry) => {
     if (err) {
       return next(err);
     }

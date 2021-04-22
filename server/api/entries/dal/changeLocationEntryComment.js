@@ -27,7 +27,7 @@ module.exports = (params, callback) => {
   };
 
   // Sanitize input and build update
-  let update = {
+  const update = {
     $set: {},
   };
   if (params.delta.markdown) {
@@ -37,7 +37,7 @@ module.exports = (params, callback) => {
     update.$set['comments.$.attachments'] = params.delta.attachments;
   }
 
-  coll.updateOne(filter, update, function (err) {
+  coll.updateOne(filter, update, (err) => {
     if (err) {
       return callback(err);
     }
