@@ -1,14 +1,14 @@
-var migrates = require('../migration/migrates');
-var db = require('tresdb-db');
-var readline = require('readline');
+const migrates = require('../migration/migrates');
+const db = require('tresdb-db');
+const readline = require('readline');
 
-db.init(function (dbErr) {
+db.init((dbErr) => {
   if (dbErr) {
     return console.error('Failed to connect to MongoDB.');
   }
 
   // Prompt about backups
-  var rl = readline.createInterface({
+  const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout,
   });
@@ -18,7 +18,7 @@ db.init(function (dbErr) {
   console.log('become corrupted. Backing up with \'mongodump\' is');
   console.log('highly recommended.');
   console.log();
-  rl.question('Is the database backed up? [Y/n] ', function (answer) {
+  rl.question('Is the database backed up? [Y/n] ', (answer) => {
     // Close the console interface. Prevents program to exit.
     rl.close();
 
@@ -30,7 +30,7 @@ db.init(function (dbErr) {
     }
 
     // Answer is YES.
-    migrates.migrate(function (err) {
+    migrates.migrate((err) => {
       if (err) {
         console.error(err);
       }
