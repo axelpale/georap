@@ -85,9 +85,12 @@ module.exports = function (query) {
       // Reselect correct creator because these were just loaded.
       if ('creator' in query) {
         // Ensure that creator exists in list. User can typo
-        var foundUser = users.find(function (user) {
-          return query.creator === user.name;
-        });
+        var foundUser = null;
+        for (var i = 0; i < users.length; i += 1) {
+          if (query.creator === users[i].name) {
+            foundUser = users[i];
+          }
+        }
         if (foundUser) {
           $elems.creator.val(query.creator);
         }
