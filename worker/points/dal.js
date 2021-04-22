@@ -1,39 +1,40 @@
-var db = require('tresdb-db');
-var eventsDal = require('../../server/api/events/dal');
-var sums = require('./sums');
+const db = require('tresdb-db');
+const eventsDal = require('../../server/api/events/dal');
+const sums = require('./sums');
 
 exports.computePoints = function (username, callback) {
   // Compute scenepoints for single user. Scenepoints are computed
   // from events.
 
-  eventsDal.getAllOfUser(username, function (err, evs) {
+  eventsDal.getAllOfUser(username, (err, evs) => {
     if (err) {
       return callback(err);
     }
 
     // Compute UNIX timestamp and ensure order most recent first.
-    var evsTimeUnix = evs.map(function (ev) {
+    const evsTimeUnix = evs.map((ev) => {
       return Object.assign({}, ev, {
         timeUnix: (new Date(ev.time)).getTime(),
       });
-    }).sort(function (eva, evb) {
+    }).sort((eva, evb) => {
       return evb.timeUnix - eva.timeUnix;
     });
 
     // Event time frames
-    var d30 = 30 * 24 * 60 * 60 * 1000; // eslint-disable-line no-magic-numbers
-    var d7 = 7 * 24 * 60 * 60 * 1000; // eslint-disable-line no-magic-numbers
-    var unix30daysAgo = Date.now() - d30;
-    var unix7daysAgo = Date.now() - d7;
-    var evs30days = evsTimeUnix.filter(function (ev) {
+    // eslint-disable-next-line no-magic-numbers
+    const d30 = 30 * 24 * 60 * 60 * 1000;
+    const d7 = 7 * 24 * 60 * 60 * 1000; // eslint-disable-line no-magic-numbers
+    const unix30daysAgo = Date.now() - d30;
+    const unix7daysAgo = Date.now() - d7;
+    const evs30days = evsTimeUnix.filter((ev) => {
       return ev.timeUnix > unix30daysAgo;
     });
-    var evs7days = evsTimeUnix.filter(function (ev) {
+    const evs7days = evsTimeUnix.filter((ev) => {
       return ev.timeUnix > unix7daysAgo;
     });
 
     // Point Categories
-    var ps = {
+    const ps = {
       // Scene points
       allTime: sums.sumPoints(evsTimeUnix),
       days30: sums.sumPoints(evs30days),
@@ -46,12 +47,12 @@ exports.computePoints = function (username, callback) {
       commentsCreated: sums.sumComments(evsTimeUnix),
     };
 
-    var isOk = function (num) {
+    const isOk = function (num) {
       return typeof num === 'number' && !isNaN(num);
     };
 
     // Assert
-    var typerr;
+    let typerr;
     if (!isOk(ps.allTime) || !isOk(ps.days30) || !isOk(ps.days7)) {
       typerr = new Error('Invalid scene points sum: ' + JSON.stringify(ps));
       return callback(typerr);
