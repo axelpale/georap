@@ -1,11 +1,11 @@
-var iter = require('../iter');
-var schema = require('../lib/schema');
-var db = require('tresdb-db');
+const iter = require('../iter');
+const schema = require('../lib/schema');
+const db = require('tresdb-db');
 
-var LNG_MAX = 180;
-var LNG_MIN = -180;
-var LAT_MAX = 90;
-var LAT_MIN = -90;
+const LNG_MAX = 180;
+const LNG_MIN = -180;
+const LAT_MAX = 90;
+const LAT_MIN = -90;
 
 exports.run = function (callback) {
   // Parameters
@@ -20,7 +20,7 @@ exports.run = function (callback) {
   // 1. Create schema version tag
   console.log('Creating schema version tag...');
 
-  schema.setVersion(2, function (err) {
+  schema.setVersion(2, (err) => {
     if (err) {
       return callback(err);
     }  // else
@@ -29,9 +29,9 @@ exports.run = function (callback) {
     // 2. Transform locations to have a geometry in GeoJSON
     console.log('Transforming locations to have GeoJSON geometry...');
 
-    var locsColl = db.collection('locations');
+    const locsColl = db.collection('locations');
 
-    iter.updateEach(locsColl, function (loc, next) {
+    iter.updateEach(locsColl, (loc, next) => {
 
       // MongoDB requires coordinates to be in valid ranges.
       // Let us mod them between.
@@ -46,7 +46,7 @@ exports.run = function (callback) {
       delete loc.lat;
 
       return next(null, loc);
-    }, function (err2) {
+    }, (err2) => {
       if (err2) {
         return callback(err2);
       }  // else
@@ -55,7 +55,7 @@ exports.run = function (callback) {
       // 3. Create 2dsphere index
       console.log('Creating 2dsphere index for locations...');
 
-      locsColl.createIndex({ 'geom': '2dsphere' }, function (err3) {
+      locsColl.createIndex({ 'geom': '2dsphere' }, (err3) => {
         if (err3) {
           return callback(err3);
         }

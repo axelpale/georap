@@ -3,13 +3,13 @@
 // - Create _id for each content entry
 // - Remove neighborsAvgDist property
 
-var iter = require('../iter');
-var schema = require('../lib/schema');
-var shortid = require('shortid');
-var db = require('tresdb-db');
+const iter = require('../iter');
+const schema = require('../lib/schema');
+const shortid = require('shortid');
+const db = require('tresdb-db');
 
-var FROM_VERSION = 3;
-var TO_VERSION = FROM_VERSION + 1;
+const FROM_VERSION = 3;
+const TO_VERSION = FROM_VERSION + 1;
 
 exports.run = function (callback) {
   // Parameters
@@ -22,7 +22,7 @@ exports.run = function (callback) {
   // 1. Schema version tag update
   console.log('Setting schema version tag...');
 
-  schema.setVersion(TO_VERSION, function (err) {
+  schema.setVersion(TO_VERSION, (err) => {
     if (err) {
       return callback(err);
     }  // else
@@ -33,11 +33,11 @@ exports.run = function (callback) {
     console.log('Transforming locations\' content to have _id and');
     console.log('lose neighborsAvgDist field...');
 
-    var locsColl = db.collection('locations');
+    const locsColl = db.collection('locations');
 
-    iter.updateEach(locsColl, function (loc, next) {
+    iter.updateEach(locsColl, (loc, next) => {
 
-      loc.content = loc.content.map(function (entry) {
+      loc.content = loc.content.map((entry) => {
         entry._id = shortid.generate();
         return entry;
       });
@@ -45,7 +45,7 @@ exports.run = function (callback) {
       delete loc.neighborsAvgDist;
 
       return next(null, loc);
-    }, function (err2) {
+    }, (err2) => {
 
       if (err2) {
         return callback(err2);

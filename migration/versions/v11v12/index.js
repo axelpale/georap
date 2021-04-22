@@ -32,7 +32,7 @@ const substeps = [
   function updateSchema(nextStep) {
     console.log('1. Updating schema version tag...');
 
-    schema.setVersion(TO_VERSION, function (err) {
+    schema.setVersion(TO_VERSION, (err) => {
       if (err) {
         return nextStep(err);
       }
@@ -101,8 +101,8 @@ const substeps = [
 
     const coll = db.collection('locations');
 
-    iter.updateEach(coll, function (origLoc, iterNext) {
-      var loc = clone(origLoc);
+    iter.updateEach(coll, (origLoc, iterNext) => {
+      const loc = clone(origLoc);
       loc.visits = [];
       loc.published = false;
       return iterNext(null, loc);
@@ -126,7 +126,7 @@ const substeps = [
 
     const coll = db.collection('locations');
 
-    iter.updateEach(coll, function (origLoc, iterNext) {
+    iter.updateEach(coll, (origLoc, iterNext) => {
       db.collection('events').findOne({
         locationId: origLoc._id,
         type: 'location_created',
@@ -164,7 +164,7 @@ const substeps = [
 
     const coll = db.collection('locations');
 
-    iter.updateEach(coll, function (origLoc, iterNext) {
+    iter.updateEach(coll, (origLoc, iterNext) => {
       getThumbnail(origLoc._id, (err, attachment) => {
         if (err) {
           return iterNext(err);
@@ -206,7 +206,7 @@ exports.run = (callback) => {
   console.log();
   console.log('### Step v' + FROM_VERSION + ' to v' + TO_VERSION + ' ###');
 
-  asyn.series(substeps, function (err) {
+  asyn.series(substeps, (err) => {
     if (err) {
       console.error(err);
       return callback(err);

@@ -1,9 +1,9 @@
-var iter = require('../iter');
-var schema = require('../lib/schema');
-var db = require('tresdb-db');
+const iter = require('../iter');
+const schema = require('../lib/schema');
+const db = require('tresdb-db');
 
-var FROM_VERSION = 2;
-var TO_VERSION = FROM_VERSION + 1;
+const FROM_VERSION = 2;
+const TO_VERSION = FROM_VERSION + 1;
 
 exports.run = function (callback) {
   // Parameters
@@ -16,7 +16,7 @@ exports.run = function (callback) {
   // 1. Schema version tag update
   console.log('Setting schema version tag...');
 
-  schema.setVersion(TO_VERSION, function (err) {
+  schema.setVersion(TO_VERSION, (err) => {
     if (err) {
       return callback(err);
     }  // else
@@ -27,9 +27,9 @@ exports.run = function (callback) {
     // and fields for tags, content, deleted, layer, and neighborsAvgDist
     console.log('Transforming locations to have new fields...');
 
-    var locsColl = db.collection('locations');
+    const locsColl = db.collection('locations');
 
-    iter.updateEach(locsColl, function (loc, next) {
+    iter.updateEach(locsColl, (loc, next) => {
 
       loc.locatorId = loc.locator_id;
       delete loc.locator_id;
@@ -41,7 +41,7 @@ exports.run = function (callback) {
       loc.neighborsAvgDist = 1000;
 
       return next(null, loc);
-    }, function (err2) {
+    }, (err2) => {
 
       if (err2) {
         return callback(err2);

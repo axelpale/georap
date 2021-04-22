@@ -1,4 +1,4 @@
-var db = require('tresdb-db');
+const db = require('tresdb-db');
 
 module.exports = function (username, callback) {
   // Find earliest and latest event of an user.
@@ -15,8 +15,8 @@ module.exports = function (username, callback) {
   //       last
   //         the latest event
   //
-  var evs = db.collection('events');
-  var query = {
+  const evs = db.collection('events');
+  const query = {
     user: username,
     type: {
       $ne: 'location_unproved_visit_created',
@@ -27,7 +27,7 @@ module.exports = function (username, callback) {
     .find(query)
     .sort({ time: 1 })
     .limit(1)
-    .toArray(function (erre, earliestEvs) {
+    .toArray((erre, earliestEvs) => {
       if (erre) {
         return callback(erre);
       }
@@ -36,7 +36,7 @@ module.exports = function (username, callback) {
         .find(query)
         .sort({ time: -1 })
         .limit(1)
-        .toArray(function (errl, latestEvs) {
+        .toArray((errl, latestEvs) => {
           if (errl) {
             return callback(errl);
           }

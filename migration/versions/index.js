@@ -1,7 +1,7 @@
 /* eslint-disable global-require */
-var asyn = require('async');
+const asyn = require('async');
 
-var v = {
+const v = {
   0: require('./v0v1'),
   1: require('./v1v2'),
   2: require('./v2v3'),
@@ -17,11 +17,11 @@ var v = {
 };
 
 
-var getSteps = function (currentVersion, targetVersion) {
+const getSteps = function (currentVersion, targetVersion) {
   // Returns array of migration functions
 
-  var i;
-  var steps = [];
+  let i;
+  const steps = [];
 
   for (i = currentVersion; i !== targetVersion; i += 1) {
     if (typeof v[i].run === 'function') {
@@ -46,7 +46,7 @@ exports.run = function (currentVersion, targetVersion, callback) {
   //   callback
   //     function (err)
 
-  var steps;
+  let steps;
 
   // Load steps
   try {
@@ -56,9 +56,9 @@ exports.run = function (currentVersion, targetVersion, callback) {
   }
 
   // Run steps in series
-  asyn.eachSeries(steps, function (step, next) {
+  asyn.eachSeries(steps, (step, next) => {
     return step(next);
-  }, function (err) {
+  }, (err) => {
     // Finally
     return callback(err);
   });
