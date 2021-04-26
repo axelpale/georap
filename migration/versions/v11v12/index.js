@@ -9,6 +9,7 @@
 // 5. refactor locations by adding published prop
 // 6. refactor locations by adding createdAt prop
 // 7. select thumbnails for each location and add thumbnail prop
+// 8. remove visits-related user properties
 //
 // Also, new indices were made and thus 'npm run migrate' is needed.
 
@@ -191,6 +192,30 @@ const substeps = [
       console.log('  ' + iterResults.numUpdated + ' locations updated, ' +
         (iterResults.numDocuments - iterResults.numUpdated) + ' did not ' +
         'need an update');
+
+      return nextStep();
+    });
+  },
+
+  function removeVisitStatistics(nextStep) {
+    console.log('8. Remove visit statistics from users...');
+
+    const coll = db.collection('useres');
+
+    iter.updateEach(coll, (origUser, iterNext) => {
+      const user = clone(origUser);
+      delete user.locationsVisited;
+      if (!user.flagsCreated) {
+        user.flagsCreated = []; // init
+      }
+      return iterNext(null, user);
+    }, (err, iterResults) => {
+      if (err) {
+        return nextStep(err);
+      }
+
+      console.log('  ' + iterResults.numDocuments + ' users processed ' +
+        'successfully.');
 
       return nextStep();
     });
