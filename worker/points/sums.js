@@ -17,6 +17,19 @@ exports.sumPoints = function (evs) {
 };
 
 exports.sumFlags = function (evs) {
+  // Flag statistics
+  //
+  // Parameters
+  //   evs
+  //     array of events
+  //
+  // Return
+  //   array of flagCount objects
+  //     name
+  //       flag name
+  //     count
+  //       integer
+  //
   const initFlagCounts = config.entryFlags.reduce((acc, flagName) => {
     acc[flagName] = 0;
     return acc;

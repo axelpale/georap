@@ -184,7 +184,7 @@ module.exports = {
   // For example the 'visit' flag allows a user to browse all locations
   // she has visited.
   entryFlags: ['visit'],
-  // TODO name, plural, reward, glyphicon, requirements
+  // TODO name, plural, hint, reward, glyphicon, requirements
 
   // Marker templates.
   // Marker template is a background image for the marker without a symbol.

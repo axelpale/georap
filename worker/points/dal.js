@@ -40,7 +40,7 @@ exports.computePoints = function (username, callback) {
       days30: sums.sumPoints(evs30days),
       days7: sums.sumPoints(evs7days),
       // Statistics
-      flagsCreated: sums.sumFlags(evsTimeUnix), // object, not int
+      flagsCreated: sums.sumFlags(evsTimeUnix), // array of objs, not int
       locationsCreated: sums.sumCreations(evsTimeUnix), // int
       postsCreated: sums.sumPosts(evsTimeUnix),
       locationsClassified: sums.sumClassifications(evsTimeUnix),
