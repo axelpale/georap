@@ -7,6 +7,7 @@ const assert = require('assert');
 const config = require('tresdb-config');
 const migrates = require('./migrates');
 const schema = require('./lib/schema');
+const assertEvery = require('./lib/assertEvery');
 const assertFixtureEqual = require('./lib/assertFixtureEqual');
 const dropCollections = require('./lib/dropCollections');
 const fixtures = require('./fixtures');
@@ -30,7 +31,6 @@ const loadFixtureByTag = function (versionTag, callback) {
 
   loadFixture(fixtures[versionTag], callback);
 };
-
 
 describe('migrates.migrate', () => {
 
@@ -347,7 +347,14 @@ describe('migrates.migrate', () => {
             assert.ifError(err3);
             assertFixtureEqual('events', 'v12', (err4) => {
               assert.ifError(err4);
-              assertFixtureEqual('locations', 'v12', (err5) => {
+              // Ensure location have createdAt and thumbnail
+              assertEvery('locations', (loc, then) => {
+                return then(
+                  null,
+                  typeof loc.createdAt === 'string' &&
+                  typeof loc.thumbnail === 'object' // null is an object
+                );
+              }, (err5) => {
                 assert.ifError(err5);
                 done();
               });
