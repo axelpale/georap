@@ -2,6 +2,10 @@ const _ = require('lodash');
 const status = require('http-status-codes');
 const dal = require('./dal');
 const db = require('tresdb-db');
+const config = require('tresdb-config');
+
+// Gather allowed flag names here for simpler validation code in handlers.
+const allowedFlagNames = config.entryFlags.map(flag => flag.name);
 
 // eslint-disable-next-line max-statements
 exports.change = (req, res, next) => {
@@ -54,6 +58,15 @@ exports.change = (req, res, next) => {
   // Do not allow empty posts
   if (markdown === '' && attachments.length === 0) {
     return res.status(status.BAD_REQUEST).send('Empty posts are not allowed.');
+  }
+
+  // Do not allow non-configured flags. Ensure every flag is configured.
+  const flagsValid = flags.every((flagName) => {
+    return allowedFlagNames.indexOf(flagName) >= 0;
+  });
+  if (!flagsValid) {
+    const msg = 'Unknown flags detected in ' + JSON.stringify(flags);
+    return res.status(status.BAD_REQUEST).send(msg);
   }
 
   // Check possible conditions for flags
@@ -113,6 +126,15 @@ exports.create = (req, res, next) => {
   // Do not allow empty posts
   if (markdown === '' && attachments.length === 0) {
     return res.status(status.BAD_REQUEST).send('Empty posts are not allowed.');
+  }
+
+  // Do not allow non-configured flags. Ensure every flag is configured.
+  const flagsValid = flags.every((flagName) => {
+    return allowedFlagNames.indexOf(flagName) >= 0;
+  });
+  if (!flagsValid) {
+    const msg = 'Unknown flags detected in ' + JSON.stringify(flags);
+    return res.status(status.BAD_REQUEST).send(msg);
   }
 
   // Check possible conditions for flags
