@@ -24,26 +24,6 @@ exports.getOneWithEvents = function (req, res, next) {
   });
 };
 
-exports.getOneWithBalanceAndPayments = function (req, res, next) {
-  // Fetch single user and patch it with balance and payments properties.
-  //
-  // Parameters:
-  //   req.username
-  //     string
-
-  dal.getOneWithBalanceAndPayments(req.username, (err, user) => {
-    if (err) {
-      return next(err);
-    }
-
-    if (!user) {
-      return res.sendStatus(status.NOT_FOUND);
-    }
-
-    return res.json(user);
-  });
-};
-
 exports.getVisitedLocationIds = function (req, res, next) {
   // Response with an array of _id:s of all locations visited by the user.
   // If no locations or users found, responses with empty array [].

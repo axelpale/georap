@@ -69,40 +69,6 @@ exports.getOneWithEvents = function (username, callback) {
   });
 };
 
-exports.getOneWithBalanceAndPayments = function (username, callback) {
-
-  exports.getOne(username, (err, doc) => {
-    if (err) {
-      return callback(err);
-    }
-
-    if (!doc) {
-      return callback(null, null);
-    }
-
-    // Clone to avoid cache modification
-    const user = clone(doc);
-
-    paymentsDal.getBalanceOfUser(doc._id, (err2, balance) => {
-      if (err2) {
-        return callback(err2);
-      }
-
-      user.balance = balance;
-
-      paymentsDal.getPaymentsOfUser(doc._id, (err3, payments) => {
-        if (err3) {
-          return callback(err3);
-        }
-
-        user.payments = payments;
-
-        return callback(null, user);
-      });
-    });
-  });
-};
-
 exports.getVisitedLocationIds = function (username, callback) {
   //
 
