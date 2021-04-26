@@ -241,7 +241,10 @@ exports.rotateImage = function (imagePath, targetPath, degrees, callback) {
   //   degrees
   //     amount of rotation. Rounded to 90 deg steps.
   //   callback
-  //     function (err, new)
+  //     function (err, info)
+  //       info
+  //         object returned from toFile method
+  //         { format, size, width, height, ... }
   //
   const QUAD = 90;
   const roundedDegrees = QUAD * Math.round(degrees / QUAD);
@@ -253,11 +256,11 @@ exports.rotateImage = function (imagePath, targetPath, degrees, callback) {
 
   sharp(imagePath)
     .rotate(roundedDegrees)
-    .toFile(targetPath, (err) => {
+    .toFile(targetPath, (err, info) => {
       if (err) {
         return callback(err);
       }
 
-      return callback(null);
+      return callback(null, info);
     });
 };
