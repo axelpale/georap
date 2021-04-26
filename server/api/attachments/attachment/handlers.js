@@ -65,7 +65,7 @@ exports.rotateImage = (req, res, next) => {
     }
 
     // Rotate
-    uploads.rotateImage(sourcePath, targetPath, degrees, (err) => {
+    uploads.rotateImage(sourcePath, targetPath, degrees, (err, info) => {
       if (err) {
         return next(err);
       }
@@ -83,6 +83,7 @@ exports.rotateImage = (req, res, next) => {
           username: atta.user, // TODO should be current user?
           filepath: uploads.getRelativePath(targetPath),
           mimetype: atta.mimetype,
+          filesize: info.size,
           thumbfilepath: uploads.getRelativePath(thumb.path),
           thumbmimetype: thumb.mimetype,
         };
