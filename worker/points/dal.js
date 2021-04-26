@@ -40,8 +40,8 @@ exports.computePoints = function (username, callback) {
       days30: sums.sumPoints(evs30days),
       days7: sums.sumPoints(evs7days),
       // Statistics
-      locationsVisited: sums.sumVisits(evsTimeUnix),
-      locationsCreated: sums.sumCreations(evsTimeUnix),
+      flagsCreated: sums.sumFlags(evsTimeUnix), // object, not int
+      locationsCreated: sums.sumCreations(evsTimeUnix), // int
       postsCreated: sums.sumPosts(evsTimeUnix),
       locationsClassified: sums.sumClassifications(evsTimeUnix),
       commentsCreated: sums.sumComments(evsTimeUnix),
@@ -79,7 +79,7 @@ exports.computePointsAndStore = (username, callback) => {
     const q = { name: username };
     const u = {
       $set: {
-        locationsVisited: pointCategories.locationsVisited,
+        flagsCreated: pointCategories.flagsCreated,
         locationsCreated: pointCategories.locationsCreated,
         postsCreated: pointCategories.postsCreated,
         locationsClassified: pointCategories.locationsClassified,

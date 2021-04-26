@@ -38,7 +38,7 @@ module.exports = function (username) {
 
       // User statistics
       $('#tresdb-user-points').html(pointsTemplate({
-        visits: user.locationsVisited,
+        flags: user.flagsCreated,
         adds: user.locationsCreated,
         posts: user.postsCreated,
         classifications: user.locationsClassified,
