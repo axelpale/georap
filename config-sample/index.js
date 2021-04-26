@@ -190,10 +190,19 @@ module.exports = {
       description: 'A photo is required for proof.',
       glyphicon: 'flag',
       reward: 15,
+      // Precondition allows a flag to be used only if the entry content
+      // fulfills a condition. Entry content consists of
+      // entry properties { markdown, attachments, flags }.
+      // The condition is represented as JSON schema.
       precondition: {
-        attachments: {
-          minItems: 1,
+        type: 'object',
+        properties: {
+          attachments: {
+            type: 'array',
+            minItems: 1,
+          },
         },
+        required: ['attachments'],
       },
     },
   ],

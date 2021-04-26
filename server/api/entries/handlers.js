@@ -1,11 +1,24 @@
-const _ = require('lodash');
 const status = require('http-status-codes');
 const dal = require('./dal');
 const db = require('tresdb-db');
 const config = require('tresdb-config');
+const Ajv = require('ajv');
 
-// Gather allowed flag names here for simpler validation code in handlers.
-const allowedFlagNames = config.entryFlags.map(flag => flag.name);
+// Precompile flag precondition validators.
+// The preconditions use json schemas.
+const ajv = new Ajv();
+const compiledEntryFlags = config.entryFlags.map((flagConfig) => {
+  return {
+    name: flagConfig.name,
+    validatePrecondition: ajv.compile(flagConfig.precondition),
+  };
+});
+
+// Gather flags into object for simpler validation code in handlers.
+const flagMap = compiledEntryFlags.reduce((acc, flag) => {
+  acc[flag.name] = flag;
+  return acc;
+}, {});
 
 // eslint-disable-next-line max-statements
 exports.change = (req, res, next) => {
@@ -20,26 +33,27 @@ exports.change = (req, res, next) => {
     return res.sendStatus(status.FORBIDDEN);
   }
 
-  const entryData = req.body.entryData;
-  if (!entryData) {
+  const dirtyDelta = req.body.entryData;
+  if (!dirtyDelta) {
     return res.status(status.BAD_REQUEST).send('Missing entryData');
   }
 
+  // Gather sanitized entry data here
   const delta = {};
   let diff = false; // if delta has some content
 
-  if ('markdown' in entryData) {
-    delta.markdown = entryData.markdown.trim();
+  if ('markdown' in dirtyDelta) {
+    delta.markdown = dirtyDelta.markdown.trim();
     diff = true;
   }
 
-  if ('attachments' in entryData && Array.isArray(entryData.attachments)) {
-    delta.attachments = entryData.attachments;
+  if ('attachments' in dirtyDelta && Array.isArray(dirtyDelta.attachments)) {
+    delta.attachments = dirtyDelta.attachments;
     diff = true;
   }
 
-  if ('flags' in entryData && typeof entryData.flags === 'object') {
-    delta.flags = entryData.flags;
+  if ('flags' in dirtyDelta && typeof dirtyDelta.flags === 'object') {
+    delta.flags = dirtyDelta.flags;
     diff = true;
   }
 
@@ -48,32 +62,37 @@ exports.change = (req, res, next) => {
   }
 
   // Preassign for validation only. Pass only delta to dal.
-  const markdown = ('markdown' in delta)
-    ? delta.markdown : oldEntry.markdown;
-  const attachments = ('attachments' in delta)
-    ? delta.attachments : oldEntry.attachments;
-  const flags = ('flags' in delta)
-    ? delta.flags : oldEntry.flags;
+  const entryData = {
+    markdown: ('markdown' in delta)
+      ? delta.markdown : oldEntry.markdown,
+    attachments: ('attachments' in delta)
+      ? delta.attachments : oldEntry.attachments,
+    flags: ('flags' in delta)
+      ? delta.flags : oldEntry.flags,
+  };
 
   // Do not allow empty posts
-  if (markdown === '' && attachments.length === 0) {
+  if (entryData.markdown === '' && entryData.attachments.length === 0) {
     return res.status(status.BAD_REQUEST).send('Empty posts are not allowed.');
   }
 
   // Do not allow non-configured flags. Ensure every flag is configured.
-  const flagsValid = flags.every((flagName) => {
-    return allowedFlagNames.indexOf(flagName) >= 0;
+  const flagsValid = entryData.flags.every((flagName) => {
+    return flagName in flagMap;
   });
   if (!flagsValid) {
-    const msg = 'Unknown flags detected in ' + JSON.stringify(flags);
+    const msg = 'Unknown flags detected in ' + JSON.stringify(entryData.flags);
     return res.status(status.BAD_REQUEST).send(msg);
   }
 
-  // Check possible conditions for flags
-  // TODO make configurable
-  // Visit is only regarded with a file for proof.
-  if (flags.indexOf('visit') >= 0 && attachments.length === 0) {
-    delta.flags = _.without(flags, 'visit');
+  // Check flag preconditions against the entryData
+  const preconditionsMet = entryData.flags.every((flagName) => {
+    const validate = flagMap[flagName].validatePrecondition;
+    return validate(entryData);
+  });
+  if (!preconditionsMet) {
+    const msg = 'Requirements of some flags were not met.';
+    return res.status(status.BAD_REQUEST).send(msg);
   }
 
   dal.changeLocationEntry({
@@ -98,59 +117,62 @@ exports.create = (req, res, next) => {
   const locationName = req.location.name;
   const username = req.user.name;
 
-  let markdown, attachments, flags;
-
   const entryData = req.body.entryData;
   if (!entryData) {
     return res.status(status.BAD_REQUEST).send('Missing entryData');
   }
 
+  // Complete and sanitize entryData
   if ('markdown' in entryData) {
-    markdown = entryData.markdown.trim();
+    entryData.markdown = entryData.markdown.trim();
   } else {
-    markdown = '';
+    entryData.markdown = '';
   }
 
   if ('attachments' in entryData && typeof entryData.attachments === 'object') {
-    attachments = entryData.attachments;
+    // noop. Maybe sanitize here in future.
   } else {
-    attachments = [];
+    entryData.attachments = [];
   }
 
   if ('flags' in entryData && typeof entryData.flags === 'object') {
-    flags = entryData.flags;
+    // noop. Maybe sanitize here in future.
   } else {
-    flags = [];
+    entryData.flags = [];
   }
 
   // Do not allow empty posts
-  if (markdown === '' && attachments.length === 0) {
+  if (entryData.markdown === '' && entryData.attachments.length === 0) {
     return res.status(status.BAD_REQUEST).send('Empty posts are not allowed.');
   }
 
   // Do not allow non-configured flags. Ensure every flag is configured.
-  const flagsValid = flags.every((flagName) => {
-    return allowedFlagNames.indexOf(flagName) >= 0;
+  // NOTE [].every(...) is always true
+  const flagsValid = entryData.flags.every((flagName) => {
+    return flagName in flagMap;
   });
   if (!flagsValid) {
-    const msg = 'Unknown flags detected in ' + JSON.stringify(flags);
+    const msg = 'Unknown flags detected in ' + JSON.stringify(entryData.flags);
     return res.status(status.BAD_REQUEST).send(msg);
   }
 
-  // Check possible conditions for flags
-  // TODO make configurable
-  // Visit is only regarded with a file for proof.
-  if (flags.indexOf('visit') >= 0 && attachments.length === 0) {
-    flags = _.without(flags, 'visit');
+  // Check flag preconditions against the entryData
+  const preconditionsMet = entryData.flags.every((flagName) => {
+    const validate = flagMap[flagName].validatePrecondition;
+    return validate(entryData);
+  });
+  if (!preconditionsMet) {
+    const msg = 'Requirements of some flags were not met.';
+    return res.status(status.BAD_REQUEST).send(msg);
   }
 
   dal.createLocationEntry({
     locationId: locationId,
     locationName: locationName,
     username: username,
-    markdown: markdown,
-    attachments: attachments,
-    flags: flags,
+    markdown: entryData.markdown,
+    attachments: entryData.attachments,
+    flags: entryData.flags,
   }, (err, entry) => {
     if (err) {
       return next(err);
