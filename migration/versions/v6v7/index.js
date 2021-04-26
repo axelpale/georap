@@ -6,7 +6,7 @@
 
 const db = require('tresdb-db');
 const schema = require('../../lib/schema');
-const iter = require('../../iter');
+const iter = require('../../lib/iter');
 const async = require('async');
 const clone = require('clone');
 

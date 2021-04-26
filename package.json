@@ -27,7 +27,7 @@
     "test": "npm run lint && npm run test:parsekml",
     "test:api": "NODE_ENV=test mocha specs/api/*.spec.js",
     "test:migration": "NODE_ENV=test mocha migration/*.spec.js",
-    "test:migration:iter": "NODE_ENV=test mocha migration/iter.spec.js",
+    "test:migration:iter": "NODE_ENV=test mocha migration/lib/iter.spec.js",
     "test:parsekml": "NODE_ENV=test mocha server/api/locations/importer/parsekml/parsekml.spec.js",
     "lint": "npm run lint:client && npm run lint:server && npm run lint:others",
     "lint:config": "eslint \"config/**/*.js\" && echo 'OK'",
