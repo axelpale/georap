@@ -26,6 +26,10 @@ exports.get = function (key, callback) {
 };
 
 exports.create = (params, callback) => {
+  // Create file attachment document.
+  // NOTE The existence of the file is not ensured to enable
+  // migration of missing files.
+  //
   // Parameters:
   //   params:
   //     username
@@ -50,7 +54,7 @@ exports.create = (params, callback) => {
 
   if (typeof params.filepath !== 'string') {
     // No attachment given
-    return callback(new Error('Missing attachment data'));
+    return callback(new Error('Missing attachment filepath'));
   }
   if (typeof params.mimetype !== 'string') {
     return callback(new Error('Missing attachment mimetype'));

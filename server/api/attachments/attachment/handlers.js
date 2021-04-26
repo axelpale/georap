@@ -1,5 +1,5 @@
 
-const dal = require('./dal');
+const attachmentDal = require('./dal');
 const urls = require('georap-urls-server');
 const status = require('http-status-codes');
 const uploads = require('../../../services/uploads');
@@ -88,7 +88,7 @@ exports.rotateImage = (req, res, next) => {
         };
 
         // Create new attachment
-        dal.create(creationParams, (errc, newAttachment) => {
+        attachmentDal.create(creationParams, (errc, newAttachment) => {
           if (errc) {
             return next(errc);
           }
@@ -106,7 +106,7 @@ exports.remove = (req, res, next) => {
   // Remove an attachment
   const key = req.attachment.key;
 
-  dal.remove({
+  attachmentDal.remove({
     key: key,
   }, (err) => {
     if (err) {
