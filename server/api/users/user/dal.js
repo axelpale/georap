@@ -1,8 +1,5 @@
 const db = require('tresdb-db');
-const entriesDal = require('../../entries/dal');
 const eventsDal = require('../../events/dal');
-const paymentsDal = require('../../payments/dal');
-const clone = require('clone');
 
 exports.getOne = function (username, callback) {
   // Get single user without anything extra. The result does not have
@@ -66,35 +63,6 @@ exports.getOneWithEvents = function (username, callback) {
       return callback(null, doc);
     });
 
-  });
-};
-
-exports.getVisitedLocationIds = function (username, callback) {
-  //
-
-  if (typeof username !== 'string') {
-    return callback(new Error('invalid username:' + username));
-  }
-
-  entriesDal.getAllOfUser(username, (err, ents) => {
-
-    if (err) {
-      return callback(err);
-    }
-
-    // Mapping from location ids to the number of visits.
-    const visits = new Set();
-
-    ents.filter((ent) => {
-      // Deleted visits do not count.
-      return ent.deleted === false;
-    }).forEach((ent) => {
-      if (ent.flags.indexOf('visit') >= 0) {
-        visits.add(ent.locationId);
-      }
-    });
-
-    return callback(null, Array.from(visits));
   });
 };
 

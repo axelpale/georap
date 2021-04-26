@@ -7,7 +7,6 @@ const router = express.Router();
 // Single user
 
 router.get('/', handlers.getOneWithEvents);
-router.get('/visited', handlers.getVisitedLocationIds);
 router.get('/flags', handlers.getFlags);
 
 module.exports = router;

@@ -24,24 +24,6 @@ exports.getOneWithEvents = function (req, res, next) {
   });
 };
 
-exports.getVisitedLocationIds = function (req, res, next) {
-  // Response with an array of _id:s of all locations visited by the user.
-  // If no locations or users found, responses with empty array [].
-
-  dal.getVisitedLocationIds(req.username, (err, ids) => {
-    if (err) {
-      return next(err);
-    }
-
-    // Assert
-    if (!Array.isArray(ids)) {
-      throw new Error('invalid location id array');
-    }
-
-    return res.json(ids);
-  });
-};
-
 exports.getFlags = (req, res, next) => {
   // Response:
   //   {
