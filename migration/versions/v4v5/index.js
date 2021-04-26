@@ -3,8 +3,8 @@
 // - Create _id for each content entry
 // - Remove neighborsAvgDist property
 
-const iter = require('../lib/iter');
-const schema = require('../lib/schema');
+const iter = require('../../lib/iter');
+const schema = require('../../lib/schema');
 const db = require('tresdb-db');
 
 const FROM_VERSION = 4;
