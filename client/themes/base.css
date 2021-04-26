@@ -554,7 +554,7 @@ li.form-attachment-container:first-child img {
   margin-top: -1rem;
   margin-bottom: 1.6rem;
 }
-.form-flags .flag-checkbox {
+.form-flags .flag-checkbox .entry-flag-name {
   text-transform: capitalize;
 }
 .form-flags .flag-checkbox:first-child {
