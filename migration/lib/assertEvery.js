@@ -79,7 +79,7 @@ module.exports = function (collectionName, iteratee, callback) {
           return next(null, isValid);
         });
       } catch (e) {
-        return eachNext(e);
+        return next(e);
       }
     }, (err3, everyResult) => {
       if (err3) {

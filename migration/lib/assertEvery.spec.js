@@ -1,3 +1,4 @@
+/* eslint-disable no-magic-numbers */
 const test = require('tape');
 const assertEvery = require('./assertEvery');
 const config = require('tresdb-config');
@@ -6,8 +7,8 @@ const loadFixture = require('./loadFixture');
 const dropCollections = require('./dropCollections');
 
 // Ensure we are in test mode before loading fixture
-if (process.env.NODE_ENV !== 'test') {
-  throw new Error('Tests not allowed in NODE_ENV ' + process.env.NODE_ENV);
+if (config.env !== 'test') {
+  throw new Error('Tests not allowed in NODE_ENV ' + config.env);
 }
 
 const before = (fixture, done) => {
