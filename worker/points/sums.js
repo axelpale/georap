@@ -30,8 +30,8 @@ exports.sumFlags = function (evs) {
   //     count
   //       integer
   //
-  const initFlagCounts = config.entryFlags.reduce((acc, flagName) => {
-    acc[flagName] = 0;
+  const initFlagCounts = config.entryFlags.reduce((acc, flagConf) => {
+    acc[flagConf.name] = 0;
     return acc;
   }, {});
 
@@ -65,10 +65,12 @@ exports.sumFlags = function (evs) {
   }, initFlagCounts);
 
   // Convert to ordered array
-  return config.entryFlags.map((flagName) => {
+  return config.entryFlags.map((flagConf) => {
     return {
-      name: flagName,
-      count: flagCounts[flagName],
+      name: flagConf.name,
+      plural: flagConf.plural,
+      glyphicon: flagConf.glyphicon,
+      count: flagCounts[flagConf.name],
     };
   });
 };

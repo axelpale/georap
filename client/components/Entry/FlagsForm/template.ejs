@@ -4,7 +4,12 @@
   <% flagBoxes.forEach(function (flagBox) { %>
     <label class="flag-checkbox checkbox-inline">
       <input type="checkbox" value="<%= flagBox.flag %>"<%= flagBox.checked ? ' checked="checked"' : '' %>>
-      <%= flagBox.flag %>
+      <span class="entry-flag-name"><%= flagBox.name %></span>
+      <%
+        if (flagBox.description) {
+      %><span class="text-muted">– <%= flagBox.description %></span><%
+        }
+      %>
     </label>
   <% }) %>
   </div>

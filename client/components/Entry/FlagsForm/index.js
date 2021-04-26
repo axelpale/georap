@@ -16,10 +16,11 @@ module.exports = function (selectedFlags) {
     $mount = $mountEl;
 
     $mount.html(template({
-      flagBoxes: flagConfig.map(function (flagName) {
+      flagBoxes: flagConfig.map(function (flagConf) {
         return {
-          flag: flagName,
-          checked: selectedFlags.indexOf(flagName) > -1,
+          name: flagConf.name,
+          description: flagConf.description,
+          checked: selectedFlags.indexOf(flagConf.name) > -1,
         };
       }),
     }));
