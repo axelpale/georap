@@ -183,8 +183,20 @@ module.exports = {
   // that a user can filter locations based on flags in their own entries.
   // For example the 'visit' flag allows a user to browse all locations
   // she has visited.
-  entryFlags: ['visit'],
-  // TODO name, plural, hint, reward, glyphicon, requirements
+  entryFlags: [
+    {
+      name: 'visit',
+      plural: 'visits',
+      description: 'A photo is required for proof.',
+      glyphicon: 'flag',
+      reward: 15,
+      precondition: {
+        attachments: {
+          minItems: 1,
+        },
+      },
+    },
+  ],
 
   // Marker templates.
   // Marker template is a background image for the marker without a symbol.

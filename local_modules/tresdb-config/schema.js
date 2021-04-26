@@ -166,7 +166,36 @@ module.exports = {
     entryFlags: {
       type: 'array',
       items: {
-        type: 'string',
+        type: 'object',
+        properties: {
+          name: {
+            type: 'string',
+          },
+          plural: {
+            type: 'string',
+          },
+          description: {
+            type: 'string',
+          },
+          glyphicon: {
+            type: 'string',
+          },
+          reward: {
+            type: 'integer',
+          },
+          precondition: {
+            type: 'object',
+          },
+        },
+        required: [
+          'name',
+          'plural',
+          'description',
+          'glyphicon',
+          'reward',
+          'precondition',
+        ],
+        additionalProperties: false,
       },
       uniqueItems: true,
     },
