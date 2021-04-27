@@ -24,7 +24,9 @@ module.exports = function () {
   var appendEntries = function (entries) {
     if ($mount) {
       entries.forEach(function (entry) {
-        var view = new EntryView(entry);
+        var view = new EntryView(entry, {
+          displayLocation: true,
+        });
         var $container = $('<div id="entry-' + entry._id + '"></div>');
         $elems.entries.append($container);
         view.bind($container);
