@@ -40,19 +40,16 @@ module.exports = function (entry, comment) {
   }
 
   var submit = function (markdown, attachments, callback) {
-    var locId = entry.locationId;
     var entryId = entry._id;
 
     if (isNew) {
       entryApi.createComment({
-        locationId: locId,
         entryId: entryId,
         markdown: markdown,
         attachments: attachments,
       }, callback);
     } else {
       entryApi.changeComment({
-        locationId: locId,
         entryId: entryId,
         commentId: comment.id,
         markdown: markdown,
@@ -106,7 +103,6 @@ module.exports = function (entry, comment) {
       children.remove.bind($elems.remove);
       children.remove.on('submit', function () {
         entryApi.removeComment({
-          locationId: entry.locationId,
           entryId: entry._id,
           commentId: comment.id,
         }, function (err) {

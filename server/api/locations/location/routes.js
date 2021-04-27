@@ -1,6 +1,5 @@
 /* eslint-disable new-cap */
 
-const entriesRouter = require('../../entries/routes');
 const handlers = require('./handlers');
 const express = require('express');
 const router = express.Router();
@@ -15,7 +14,5 @@ router.post('/tags', jsonParser, handlers.changeTags); // TODO remove
 router.post('/status', jsonParser, handlers.changeStatus);
 router.post('/type', jsonParser, handlers.changeType);
 router.post('/thumbnail', jsonParser, handlers.changeThumbnail);
-
-router.use('/entries', entriesRouter);
 
 module.exports = router;

@@ -4,9 +4,10 @@ const jsonParser = require('body-parser').json();
 
 const handlers = require('./handlers');
 const entryIdParser = require('./lib/entryIdParser');
+const locationIdParser = require('./lib/locationIdParser');
 const commentsRouter = require('./comments/routes');
 
-router.post('/', jsonParser, handlers.create);
+router.post('/', jsonParser, locationIdParser, handlers.create);
 
 router.use('/:entryId', entryIdParser);
 

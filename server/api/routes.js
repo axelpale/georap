@@ -5,6 +5,7 @@ const config = require('tresdb-config');
 const accountRouter = require('./account/routes');
 const adminRouter = require('./admin/routes');
 const attachmentsRouter = require('./attachments/routes');
+const entriesRouter = require('./entries/routes');
 const eventsRouter = require('./events/routes');
 const geometryRouter = require('./geometry/routes');
 const iconsRouter = require('./icons/routes');
@@ -79,6 +80,7 @@ router.use((req, res, next) => {
 });
 
 router.use('/admin', adminRouter);
+router.use('/entries', entriesRouter);
 router.use('/events', eventsRouter);
 router.use('/geometry', geometryRouter);
 router.use('/locations', locationsRouter);

@@ -49,7 +49,6 @@ module.exports = function (entry) {
 
       entryApi.move({
         entryId: entry._id,
-        fromLocationId: entry.locationId,
         toLocationId: selectedLocId,
       }, function (err) {
         if ($mount) { // ensure not unbind already
