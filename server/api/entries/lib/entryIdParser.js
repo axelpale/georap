@@ -1,6 +1,7 @@
 // URL parser middleware
+// Fetches entry and its location and places them
+// to req.location and req.entry for further use.
 
-const entriesDal = require('../dal');
 const status = require('http-status-codes');
 const db = require('tresdb-db');
 
@@ -13,16 +14,36 @@ module.exports = function (req, res, next) {
     return res.sendStatus(status.NOT_FOUND);
   }
 
-  entriesDal.getOneRaw(req.entryId, (err, entry) => {
+  db.collection('entries').aggregate([
+    {
+      $match: {
+        _id: req.entryId,
+      },
+    },
+    {
+      $limit: 1,
+    },
+    {
+      $lookup: {
+        from: 'locations',
+        localField: 'locationId',
+        foreignField: '_id',
+        as: 'location',
+      },
+    },
+  ]).toArray((err, results) => {
     if (err) {
       return next(err);
     }
 
-    if (!entry) {
+    if (results.length < 1) {
       return res.sendStatus(status.NOT_FOUND);
     }
 
-    req.entry = entry;
+    req.entry = results[0];
+    req.location = req.entry.location;
+    delete req.entry.location;
+
     return next();
   });
 };
