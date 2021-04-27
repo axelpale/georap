@@ -46,10 +46,10 @@
         changed thumbnail of <a href="<%= locUrl %>"><%= name %></a> <%= timestamp(ev.time) %>
 
       <% } else if (t === 'location_entry_created') { %>
-        posted <%=
+        posted<%=
           ev.data.entry.flags.length > 0
-            ? 'a ' + ev.data.entry.flags.join(' ') : ''
-        %>to <a href="<%= locUrl %>"><%= name %></a> <%= timestamp(ev.time) %>
+            ? ' a ' + ev.data.entry.flags.join(' ') : ''
+        %> to <a href="<%= locUrl %>"><%= name %></a> <%= timestamp(ev.time) %>
 
       <% } else if (t === 'location_entry_changed') { %>
         edited a post in <a href="<%= locUrl %>"><%= name %></a> <%= timestamp(ev.time) %>
