@@ -375,15 +375,17 @@ time {
   border-radius: 14px;
 }
 
-.entry-images-viewer-container {
-  margin-bottom: 0.62rem;
-}
 .entry-images-browser-container {
-  margin-bottom: 0.62rem;
+  margin-top: 0.6rem;
+  margin-bottom: 0.7rem;
 }
 .entry-images-browser-container:focus {
   /* Keyboard handling requires focus the outline is too much */
   outline: none;
+}
+.entry-images-browser-container:empty {
+  margin-top: 0;
+  margin-bottom: 0;
 }
 
 .entry-images-browser img {
