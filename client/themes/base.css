@@ -430,6 +430,11 @@ time {
   width: 14.1rem;
   height: 14.1rem;
 }
+.attachment-thumbnail img.location-type-symbol {
+  object-fit: none;
+  position: relative;
+  top: 0.7rem;
+}
 
 /* Thumbnail END */
 

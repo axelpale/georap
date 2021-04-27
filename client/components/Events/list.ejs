@@ -7,11 +7,17 @@
     <% locUrl = '/locations/' + ev.locationId + '?zoom=11&ref=latest' %>
     <% name = (name === '' ? 'Untitled' : name) %>
     <li class="list-group-item event-item clearfix" data-locationid="<%= ev.locationId %>">
-      <% if (showThumbnails && ev.location.thumbnail) { %>
-        <div class="pull-right event-item-thumbnail attachment-thumbnail thumb-xs">
-          <img src="<%= ev.location.thumbnail.thumbUrl %>" title="<%= ev.location.name %>">
-        </div>
-      <% } %>
+      <%
+        if (showThumbnails) {
+          %><div class="pull-right event-item-thumbnail attachment-thumbnail thumb-xs"><%
+          if (ev.location.thumbnail) {
+            %><img src="<%= ev.location.thumbnail.thumbUrl %>" title="<%= ev.location.name %>"><%
+          } else {
+            %><img src="/assets/images/markers/symbols/<%= ev.location.type %>.png" class="location-type-symbol" title="<%= ev.location.type %>"><%
+          }
+          %></div><%
+        }
+      %>
       <% if (typeof pointstamp !== 'undefined') { %>
         <div class="pull-right"><%= pointstamp(getPoints(config, ev)) %></div>
       <% } %>
