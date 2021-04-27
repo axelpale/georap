@@ -12,7 +12,7 @@ exports.sumPoints = function (evs) {
   const filteredEvs = eventFilters.mergeSimilar(evs);
 
   return filteredEvs.reduce((acc, ev) => {
-    return acc + getPoints(ev);
+    return acc + getPoints(config, ev);
   }, 0);
 };
 

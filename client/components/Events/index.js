@@ -4,6 +4,7 @@ var template = require('./list.ejs');
 var emitter = require('component-emitter');
 var getPoints = require('tresdb-points');
 var ui = require('tresdb-ui');
+var config = tresdb.config;
 
 module.exports = function (events, opts) {
   // Parameters:
@@ -35,6 +36,7 @@ module.exports = function (events, opts) {
       timestamp: ui.timestamp,
       pointstamp: ui.pointstamp,
       getPoints: getPoints,
+      config: config,
       events: events,
       showThumbnails: opts.showThumbnails,
     }));
@@ -47,6 +49,7 @@ module.exports = function (events, opts) {
         timestamp: ui.timestamp,
         pointstamp: ui.pointstamp,
         getPoints: getPoints,
+        config: config,
         events: events,
         showThumbnails: opts.showThumbnails,
       }));

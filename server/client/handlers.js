@@ -30,6 +30,7 @@ const indexHtml = (function precompile() {
       tempUploadSizeLimit: config.tempUploadSizeLimit,
       locationStatuses: config.locationStatuses,
       locationTypes: config.locationTypes,
+      rewards: config.rewards,
       entryFlags: config.entryFlags,
       markerTemplates: config.markerTemplates,
       comments: config.comments,

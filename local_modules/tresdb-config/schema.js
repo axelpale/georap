@@ -163,6 +163,10 @@ module.exports = {
       minItems: 1,
       uniqueItems: true,
     },
+    rewards: {
+      type: 'object',
+      required: ['eventBased', 'attachmentBased'],
+    },
     entryFlags: {
       type: 'object',
       // To ensure the value of each property follows the same schema
@@ -317,6 +321,7 @@ module.exports = {
     'mail',
     'locationStatuses',
     'locationTypes',
+    'rewards',
     'entryFlags',
     'markerTemplates',
     'comments',

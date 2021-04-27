@@ -13,7 +13,7 @@
         </div>
       <% } %>
       <% if (typeof pointstamp !== 'undefined') { %>
-        <div class="pull-right"><%= pointstamp(getPoints(ev)) %></div>
+        <div class="pull-right"><%= pointstamp(getPoints(config, ev)) %></div>
       <% } %>
       <a href="/users/<%= ev.user %>"><%= ev.user %></a>
       <% if (t === 'location_created') { %>
