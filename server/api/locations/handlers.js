@@ -75,19 +75,11 @@ exports.latest = (req, res, next) => {
   // instead of events because we get the name and thumbnail from the location.
   //
 
-  // Validate arguments
-  const skip = parseInt(req.query.skip, 10);
-  const limit = parseInt(req.query.limit, 10);
-  if (isNaN(skip) || skip < 0) {
-    return res.status(status.BAD_REQUEST).send('Invalid skip');
-  }
-  if (isNaN(limit) || limit < 0) {
-    return res.status(status.BAD_REQUEST).send('Invalid limit');
-  }
+  // NOTE Skip and limit are validated by middleware.
 
   dal.latestComplete({
-    skip: skip,
-    limit: limit,
+    skip: req.query.skip,
+    limit: req.query.limit,
   }, (err, locs) => {
     if (err) {
       return next(err);
@@ -116,15 +108,7 @@ exports.latest = (req, res, next) => {
 };
 
 exports.search = (req, res, next) => {
-  // Validate arguments
-  const skip = parseInt(req.query.skip, 10);
-  const limit = parseInt(req.query.limit, 10);
-  if (isNaN(skip) || skip < 0) {
-    return res.status(status.BAD_REQUEST).send('Invalid skip');
-  }
-  if (isNaN(limit) || limit < 0) {
-    return res.status(status.BAD_REQUEST).send('Invalid limit');
-  }
+  // Validate phrase. Skip and limit are validated by middleware.
   const phrase = req.query.phrase;
   if (phrase.length < 1) {
     return res.json({
@@ -134,8 +118,8 @@ exports.search = (req, res, next) => {
 
   dal.search({
     phrase: phrase,
-    skip: skip,
-    limit: limit,
+    skip: req.query.skip,
+    limit: req.query.limit,
   }, (err, locs) => {
     if (err) {
       return next(err);
