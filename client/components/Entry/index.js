@@ -9,11 +9,21 @@ var FormAdminView = require('./FormAdmin');
 var ui = require('tresdb-ui');
 var account = tresdb.stores.account;
 
-module.exports = function (entry) {
+module.exports = function (entry, opts) {
   // Parameters:
   //   entry
   //     entry object
+  //   opts
+  //     displayLocation
+  //       show location name in the entry heading. Default false.
+  //       If true, the entry object must contain joined 'location' property.
   //
+  if (!opts) {
+    opts = {};
+  }
+  opts = Object.assign({
+    displayLocation: false,
+  }, opts);
 
   var $mount = null;
   var $elems = {};
@@ -34,6 +44,8 @@ module.exports = function (entry) {
       timestamp: ui.timestamp(entry.time),
       hasMarkdown: entryModel.hasMarkdown(entry),
       markdownHtml: ui.markdownToHtml(entry.markdown),
+      locationstamp: opts.displayLocation
+        ? ui.locationstamp(entry.location) : null,
     }));
 
     // Attachment viewer
