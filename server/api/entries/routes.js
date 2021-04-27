@@ -8,7 +8,7 @@ const entryIdParser = require('./lib/entryIdParser');
 const locationIdParser = require('./lib/locationIdParser');
 const commentsRouter = require('./comments/routes');
 
-router.get('/', middlewares.skipLimitParser, handlers.getLatest);
+router.get('/', middlewares.skipLimitParser, handlers.latest);
 router.post('/', jsonParser, locationIdParser, handlers.create);
 
 router.use('/:entryId', entryIdParser);
