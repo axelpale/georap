@@ -31,6 +31,10 @@ module.exports = function (req, res, next) {
         as: 'location',
       },
     },
+    {
+      // Take location out of array
+      $unwind: '$location',
+    },
   ]).toArray((err, results) => {
     if (err) {
       return next(err);
@@ -42,6 +46,9 @@ module.exports = function (req, res, next) {
 
     req.entry = results[0];
     req.location = req.entry.location;
+
+    // Keep the entry object original because it might
+    // be stored with the events.
     delete req.entry.location;
 
     return next();
