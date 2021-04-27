@@ -183,8 +183,8 @@ module.exports = {
   // that a user can filter locations based on flags in their own entries.
   // For example the 'visit' flag allows a user to browse all locations
   // she has visited.
-  entryFlags: [
-    {
+  entryFlags: {
+    visit: {
       name: 'visit',
       plural: 'visits',
       description: 'A photo is required for proof.',
@@ -205,7 +205,7 @@ module.exports = {
         required: ['attachments'],
       },
     },
-  ],
+  },
 
   // Marker templates.
   // Marker template is a background image for the marker without a symbol.

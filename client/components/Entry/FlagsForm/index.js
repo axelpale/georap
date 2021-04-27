@@ -1,7 +1,7 @@
 var emitter = require('component-emitter');
 var ui = require('tresdb-ui');
 var template = require('./template.ejs');
-var flagConfig = tresdb.config.entryFlags;
+var entryFlags = tresdb.config.entryFlags;
 
 module.exports = function (selectedFlags) {
 
@@ -16,11 +16,11 @@ module.exports = function (selectedFlags) {
     $mount = $mountEl;
 
     $mount.html(template({
-      flagBoxes: flagConfig.map(function (flagConf) {
+      flagBoxes: Object.keys(entryFlags).map(function (flagName) {
         return {
-          name: flagConf.name,
-          description: flagConf.description,
-          checked: selectedFlags.indexOf(flagConf.name) > -1,
+          name: flagName,
+          description: entryFlags[flagName].description,
+          checked: selectedFlags.indexOf(flagName) > -1,
         };
       }),
     }));

@@ -6,17 +6,14 @@ const Ajv = require('ajv');
 
 // Precompile flag precondition validators.
 // The preconditions use json schemas.
+// Also gather flags into object for simpler validation code in handlers.
 const ajv = new Ajv();
-const compiledEntryFlags = config.entryFlags.map((flagConfig) => {
-  return {
-    name: flagConfig.name,
-    validatePrecondition: ajv.compile(flagConfig.precondition),
+const flagMap = Object.keys(config.entryFlags).reduce((acc, flagName) => {
+  const schema = config.entryFlags[flagName].precondition;
+  acc[flagName] = {
+    name: flagName,
+    validatePrecondition: ajv.compile(schema),
   };
-});
-
-// Gather flags into object for simpler validation code in handlers.
-const flagMap = compiledEntryFlags.reduce((acc, flag) => {
-  acc[flag.name] = flag;
   return acc;
 }, {});
 
