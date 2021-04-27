@@ -152,7 +152,10 @@ exports.latestComplete = (range, callback) => {
       },
     },
     {
-      $unwind: '$thumbnail',
+      $unwind: {
+        path: '$thumbnail',
+        preserveNullAndEmptyArrays: true, // include locs without thumbnail
+      },
     },
   ]).toArray(callback);
 };
