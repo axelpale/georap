@@ -59,19 +59,21 @@ exports.flagstamp = function (flags) {
 
 exports.pointstamp = function (points) {
   var p = points;
-  var h = '<span class="glyphicon glyphicon-star" aria-hidden="true"></span>';
+  var h = '<span class="georap-pointstamp">';
 
   if (p > 0) {
     // Plus sign
-    h += ' <span>+' + p + '</span>';
+    h += '<span>+' + p + '</span> ';
   } else if (p < 0) {
     // Special, wide minus sign
-    h += ' <span>–' + Math.abs(p) + '</span>';
+    h += '<span>–' + Math.abs(p) + '</span> ';
   } else {
     return ''; // No points
   }
 
-  return h;
+  var g = '<span class="glyphicon glyphicon-star" aria-label="stars"></span>';
+
+  return h + g + '</span>';
 };
 
 exports.placestamp = function (places) {
