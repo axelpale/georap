@@ -14,18 +14,13 @@ exports.getLatest = function (range, callback) {
   //   callback
   //     function (err, entries)
   //
-  // TODO
-  // return request.getJSON({
-  //   url: '/api/entries',
-  //   data: {
-  //     skip: range.skip,
-  //     limit: range.limit,
-  //   },
-  // }, callback);
-  return callback(null, {
-    entries: [],
-    count: 100,
-  });
+  return request.getJSON({
+    url: '/api/entries',
+    data: {
+      skip: range.skip,
+      limit: range.limit,
+    },
+  }, callback);
 };
 
 exports.create = function (locId, entryData, callback) {

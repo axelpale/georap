@@ -17,6 +17,13 @@ const flagMap = Object.keys(config.entryFlags).reduce((acc, flagName) => {
   return acc;
 }, {});
 
+exports.getLatest = (req, res) => {
+  return res.json({
+    entries: [],
+    count: 0,
+  });
+};
+
 // eslint-disable-next-line max-statements
 exports.change = (req, res, next) => {
   // Update entry.
