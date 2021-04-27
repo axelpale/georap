@@ -12,5 +12,9 @@ module.exports = (range, callback) => {
   //
   return getManyComplete({
     deleted: false,
-  }, range, callback);
+  }, {
+    skip: range.skip,
+    limit: range.limit,
+    withLocations: true,
+  }, callback);
 };
