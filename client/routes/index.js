@@ -5,7 +5,6 @@
 var CardView = require('../components/Card');
 var Error401View = require('../components/Error401');
 var Error404View = require('../components/Error404');
-var LatestView = require('../components/Latest');
 var LoginView = require('../components/Login');
 var SearchView = require('../components/Search');
 var SupportFundView = require('../components/SupportFund');
@@ -278,7 +277,15 @@ exports.route = function () {
     // if (card.isViewInstanceOf(LatestView)) {
     //   return;
     // }
-    card.open(new LatestView());
+    import(
+      /* webpackChunkName: "latest-view" */
+      '../components/Latest'
+    )
+      .then(function (moduleWrap) {
+        var LatestView = moduleWrap.default;
+        card.open(new LatestView());
+      })
+      .catch(importErrorHandler);
   });
 
   page('/locations/:id', function (ctx) {
