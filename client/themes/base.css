@@ -586,6 +586,9 @@ li.form-attachment-container:first-child img {
 .event-item-thumbnail {
   margin: -10px -15px -10px 10px;
 }
+.georap-pointstamp .glyphicon {
+  top: 2px;
+}
 
 .latest-locations .list-group-item {
   min-height: 11.1rem;
