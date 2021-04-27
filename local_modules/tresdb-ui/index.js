@@ -44,6 +44,11 @@ exports.markdownToHtml = function (markdown) {
   return marked(markdown);
 };
 
+exports.locationstamp = function (location) {
+  var url = '/locations/' + location._id;
+  return '<a href="' + url + '">' + location.name + '</a>';
+};
+
 exports.timestamp = function (time) {
   return timestamp(time);
 };
