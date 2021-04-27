@@ -5,6 +5,7 @@ var TabsView = require('./Tabs');
 var template = require('./template.ejs');
 var EventsView = require('./Events');
 var LocationsView = require('./Locations');
+var EntriesView = require('./Entries');
 var ui = require('tresdb-ui');
 var ScrollRecorder = require('./ScrollRecorder');
 
@@ -30,12 +31,7 @@ module.exports = function () {
   var tabs = {
     activity: EventsView,
     locations: LocationsView,
-    // posts: function (ev) {
-    //   return [
-    //     'location_entry_created',
-    //     'location_entry_comment_created',
-    //   ].indexOf(ev.type) > -1;
-    // },
+    posts: EntriesView,
   };
 
   // Public methods

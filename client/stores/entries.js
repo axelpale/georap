@@ -2,6 +2,32 @@
 //
 var request = require('./lib/request');
 
+exports.getLatest = function (range, callback) {
+  // Fetch latest non-deleted entries
+  //
+  // Parameters
+  //   range
+  //     skip
+  //       integer, skip this many before results
+  //     limit
+  //       integer, max number of entries to fetch
+  //   callback
+  //     function (err, entries)
+  //
+  // TODO
+  // return request.getJSON({
+  //   url: '/api/entries',
+  //   data: {
+  //     skip: range.skip,
+  //     limit: range.limit,
+  //   },
+  // }, callback);
+  return callback(null, {
+    entries: [],
+    count: 100,
+  });
+};
+
 exports.create = function (locId, entryData, callback) {
   // Create new entry.
   //
