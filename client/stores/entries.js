@@ -12,7 +12,9 @@ exports.getLatest = function (range, callback) {
   //     limit
   //       integer, max number of entries to fetch
   //   callback
-  //     function (err, entries)
+  //     function (err, result) where result has
+  //       entries
+  //       count
   //
   return request.getJSON({
     url: '/api/entries',
