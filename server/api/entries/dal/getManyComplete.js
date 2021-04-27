@@ -1,71 +1,129 @@
 const db = require('tresdb-db');
 const urls = require('georap-urls-server');
 
-module.exports = (query, range, callback) => {
+module.exports = (query, options, callback) => {
   // Get many entries completed with their attachments,
   // their comments' attachments, and urls.
+  // Add also locationName prop.
   //
   // Parameters:
   //   query
   //     an object passed to $match aggregation phase.
-  //   range
+  //   options, required object with optional properties:
   //     skip
+  //       integer. Default to 0.
   //     limit
+  //       integer. Default to 100.
+  //     withLocations
+  //       boolean. Join location for each entry. Default false.
   //   callback
   //     function (err, entries)
   //
+  options = Object.assign({
+    skip: 0,
+    limit: 100,
+    withLocations: false,
+  }, options);
 
-  return db.collection('entries')
-    .aggregate([
-      {
-        $match: query,
-      },
-      {
-        $sort: {
-          time: -1, // most recent first
+  // Piece-wise construction
+  const pipeline = [];
+
+  // Filter
+  pipeline.push({
+    $match: query,
+  });
+
+  // Sort
+  pipeline.push({
+    $sort: {
+      time: -1, // most recent first
+    },
+  });
+
+  // Skip & limit
+  if (typeof options.skip === 'number' && typeof options.limit === 'number') {
+    pipeline.push({
+      // With pipelines, limit must contain skip
+      $limit: options.skip + options.limit,
+    }, {
+      $skip: options.skip,
+    });
+  }
+
+  // Join locations if wanted. Strip most fields to keep the response small.
+  if (options.withLocations) {
+    pipeline.push({
+      $lookup: {
+        from: 'locations',
+        let: {
+          locationId: '$locationId',
         },
-      },
-      {
-        $limit: range.skip + range.limit, // pipeline limit must contain skip
-      },
-      {
-        $skip: range.skip,
-      },
-      // Collect attachment keys from comments for further processing.
-      // NOTE $concatArrays cannot be used to concatenate already nested arrays
-      // such as the one returned by '$comments.attachments'
-      {
-        $addFields: {
-          commentAttachments: {
-            $reduce: {
-              input: '$comments.attachments',
-              initialValue: [],
-              in: {
-                $concatArrays: ['$$value', '$$this'],
+        pipeline: [
+          {
+            $match: {
+              // $expr is required to use $$<variable> syntax
+              $expr: {
+                $eq: ['$_id', '$$locationId'],
               },
+            },
+          },
+          {
+            $project: {
+              name: true,
+            },
+          },
+        ],
+        as: 'location',
+      },
+    }, {
+      // Extract the single location from the array
+      $unwind: {
+        path: '$location',
+        // DEBUG preserveNullAndEmptyArrays: true,
+      },
+    });
+  }
+
+  pipeline.push(
+    // Collect attachment keys from comments for further processing.
+    // NOTE $concatArrays cannot be used to concatenate already nested arrays
+    // such as the one returned by '$comments.attachments'
+    {
+      $addFields: {
+        commentAttachments: {
+          $reduce: {
+            input: '$comments.attachments',
+            initialValue: [],
+            in: {
+              $concatArrays: ['$$value', '$$this'],
             },
           },
         },
       },
-      // Replace attachment keys with attachment objects
-      {
-        $lookup: {
-          from: 'attachments',
-          localField: 'attachments',
-          foreignField: 'key',
-          as: 'attachments',
-        },
+    },
+    // Replace attachment keys with attachment objects
+    {
+      $lookup: {
+        from: 'attachments',
+        localField: 'attachments',
+        foreignField: 'key',
+        as: 'attachments',
       },
-      // Replace gathered comment attachment keys with attachment objects
-      {
-        $lookup: {
-          from: 'attachments',
-          localField: 'commentAttachments',
-          foreignField: 'key',
-          as: 'commentAttachments',
-        },
+    },
+    // Replace gathered comment attachment keys with attachment objects
+    {
+      $lookup: {
+        from: 'attachments',
+        localField: 'commentAttachments',
+        foreignField: 'key',
+        as: 'commentAttachments',
       },
-    ]).toArray((err, entries) => {
+    }
+  );
+
+  return db.collection('entries')
+    .aggregate(pipeline)
+    .toArray((err, entries) => {
       if (err) {
         return callback(err);
       }
