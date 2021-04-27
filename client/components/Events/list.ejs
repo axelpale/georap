@@ -9,13 +9,14 @@
     <li class="list-group-item event-item clearfix" data-locationid="<%= ev.locationId %>">
       <%
         if (showThumbnails) {
-          %><div class="pull-right event-item-thumbnail attachment-thumbnail thumb-xs"><%
+          %><div class="pull-right event-item-thumbnail attachment-thumbnail thumb-xs">
+            <a href="<%= locUrl %>"><%
           if (ev.location.thumbnail) {
             %><img src="<%= ev.location.thumbnail.thumbUrl %>" title="<%= ev.location.name %>"><%
           } else {
             %><img src="/assets/images/markers/symbols/<%= ev.location.type %>.png" class="location-type-symbol" title="<%= ev.location.type %>"><%
           }
-          %></div><%
+          %></a></div><%
         }
       %>
       <a href="/users/<%= ev.user %>"><%= ev.user %></a>
