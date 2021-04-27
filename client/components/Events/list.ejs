@@ -6,9 +6,9 @@
     <% name = ev.locationName; %>
     <% locUrl = '/locations/' + ev.locationId + '?zoom=11&ref=latest' %>
     <% name = (name === '' ? 'Untitled' : name) %>
-    <li class="list-group-item event-item" data-locationid="<%= ev.locationId %>">
+    <li class="list-group-item event-item clearfix" data-locationid="<%= ev.locationId %>">
       <% if (showThumbnails && ev.location.thumbnail) { %>
-        <div class="pull-right event-item-thumbnail">
+        <div class="pull-right event-item-thumbnail attachment-thumbnail thumb-xs">
           <img src="<%= ev.location.thumbnail.thumbUrl %>" title="<%= ev.location.name %>">
         </div>
       <% } %>
@@ -17,71 +17,73 @@
       <% } %>
       <a href="/users/<%= ev.user %>"><%= ev.user %></a>
       <% if (t === 'location_created') { %>
-        created <a href="<%= locUrl %>"><%= name %></a> <%= timestamp(ev.time) %>
+        created <a href="<%= locUrl %>"><%= name %></a>
 
       <% } else if (t === 'location_removed') { %>
-        deleted <span title="/locations/<%= ev.locationId %>"><%= name %></span> <%= timestamp(ev.time) %>
+        deleted <span title="/locations/<%= ev.locationId %>"><%= name %></span>
 
       <% } else if (t === 'location_geom_changed') { %>
-        edited coords of <a href="<%= locUrl %>"><%= name %></a> <%= timestamp(ev.time) %>
+        edited coords of <a href="<%= locUrl %>"><%= name %></a>
 
       <% } else if (t === 'location_name_changed') { %>
         <% a = ev.data.oldName; %>
         <% if (a === '') { %>
-          named <a href="<%= locUrl %>"><%= ev.data.newName %></a> <%= timestamp(ev.time) %>
+          named <a href="<%= locUrl %>"><%= ev.data.newName %></a>
         <% } else { %>
-          renamed <a href="<%= locUrl %>"><%= ev.data.oldName %></a> to <a href="<%= locUrl %>"><%= ev.data.newName %></a> <%= timestamp(ev.time) %>
+          renamed <a href="<%= locUrl %>"><%= ev.data.oldName %></a> to <a href="<%= locUrl %>"><%= ev.data.newName %></a>
         <% } %>
 
       <% } else if (t === 'location_status_changed') { %>
-        marked <a href="<%= locUrl %>"><%= name %></a> as <%= ev.data.newStatus %> <%= timestamp(ev.time) %>
+        marked <a href="<%= locUrl %>"><%= name %></a> as <%= ev.data.newStatus %>
 
       <% } else if (t === 'location_type_changed') { %>
-        marked <a href="<%= locUrl %>"><%= name %></a> as <%= ev.data.newType %> <%= timestamp(ev.time) %>
+        marked <a href="<%= locUrl %>"><%= name %></a> as <%= ev.data.newType %>
 
       <% } else if (t === 'location_tags_changed') { %>
-        tagged <a href="<%= locUrl %>"><%= name %></a> as <%= ev.data.newTags.join(', ') %> <%= timestamp(ev.time) %>
+        tagged <a href="<%= locUrl %>"><%= name %></a> as <%= ev.data.newTags.join(', ') %>
 
       <% } else if (t === 'location_thumbnail_changed') { %>
-        changed thumbnail of <a href="<%= locUrl %>"><%= name %></a> <%= timestamp(ev.time) %>
+        changed thumbnail of <a href="<%= locUrl %>"><%= name %></a>
 
       <% } else if (t === 'location_entry_created') { %>
         posted<%=
           ev.data.entry.flags.length > 0
             ? ' a ' + ev.data.entry.flags.join(' ') : ''
-        %> to <a href="<%= locUrl %>"><%= name %></a> <%= timestamp(ev.time) %>
+        %> to <a href="<%= locUrl %>"><%= name %></a>
 
       <% } else if (t === 'location_entry_changed') { %>
-        edited a post in <a href="<%= locUrl %>"><%= name %></a> <%= timestamp(ev.time) %>
+        edited a post in <a href="<%= locUrl %>"><%= name %></a>
 
       <% } else if (t === 'location_entry_moved_out') { %>
         moved a post from
         <a href="<%= locUrl %>"><%= name %></a> to
-        <a href="<%= '/locations/' + ev.data.toLocationId + '?ref=latest' %>"><%= ev.data.toLocationName %></a> <%= timestamp(ev.time) %>
+        <a href="<%= '/locations/' + ev.data.toLocationId + '?ref=latest' %>"><%= ev.data.toLocationName %></a>
 
       <% } else if (t === 'location_entry_moved_in') { %>
         moved a post to
         <a href="<%= locUrl %>"><%= name %></a> from
-        <a href="<%= '/locations/' + ev.data.fromLocationId + '?ref=latest' %>"><%= ev.data.fromLocationName %></a> <%= timestamp(ev.time) %>
+        <a href="<%= '/locations/' + ev.data.fromLocationId + '?ref=latest' %>"><%= ev.data.fromLocationName %></a>
 
       <% } else if (t === 'location_entry_removed') { %>
-        deleted a post from <a href="<%= locUrl %>"><%= name %></a> <%= timestamp(ev.time) %>
+        deleted a post from <a href="<%= locUrl %>"><%= name %></a>
 
       <% } else if (t === 'location_unproved_visit_created') { %>
-        maybe visited <a href="<%= locUrl %>"><%= name %></a> <%= timestamp(ev.time) %> :)
+        maybe visited <a href="<%= locUrl %>"><%= name %></a>
 
       <% } else if (t === 'location_entry_comment_created') { %>
-        commented a post in <a href="<%= locUrl %>#comment-<%= ev.data.commentId %>"><%= name %></a> <%= timestamp(ev.time) %>
+        commented a post in <a href="<%= locUrl %>#comment-<%= ev.data.commentId %>"><%= name %></a>
 
       <% } else if (t === 'location_entry_comment_changed') { %>
-        edited a comment in <a href="<%= locUrl %>#comment-<%= ev.data.commentId %>"><%= name %></a> <%= timestamp(ev.time) %>
+        edited a comment in <a href="<%= locUrl %>#comment-<%= ev.data.commentId %>"><%= name %></a>
 
       <% } else if (t === 'location_entry_comment_removed') { %>
-        deleted a comment in <a href="<%= locUrl %>"><%= name %></a> <%= timestamp(ev.time) %>
+        deleted a comment in <a href="<%= locUrl %>"><%= name %></a>
 
       <% } else { %>
         <%= ev.type %>
       <% } %>
+
+      <%= timestamp(ev.time) %>
     </li>
   <% } %>
 </ul>

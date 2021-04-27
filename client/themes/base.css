@@ -576,15 +576,10 @@ li.form-attachment-container:first-child img {
 }
 
 .latest-events .list-group-item {
-  min-height: 8.7rem;
+  min-height: 5.4rem; /* match xs thumbnail */
 }
 .event-item-thumbnail {
-  margin: -10px -15px -10px 0;
-}
-.event-item-thumbnail img {
-  object-fit: cover;
-  width: 8.7rem;
-  height: 8.7rem;
+  margin: -10px -15px -10px 10px;
 }
 
 .latest-locations .list-group-item {
