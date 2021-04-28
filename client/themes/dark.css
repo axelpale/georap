@@ -1,4 +1,5 @@
 /* Bootstrap specific */
+
 body {
   color: #e5e5e5;
   background-color: #111;
@@ -57,24 +58,42 @@ hr {
   border-color: #444;
 }
 
+.nav-tabs {
+  border-bottom: 1px solid #444;
+}
+.nav-tabs>li.active>a,
+.nav-tabs>li.active>a:focus,
+.nav-tabs>li.active>a:hover {
+  color: #AAA; /* Orig #555 */
+  border: 1px solid #444; /* Orig 1px solid #ddd */
+  border-bottom: 1px solid #111;
+  background-color: #111; /* Orig #fff */
+}
+.nav-tabs>li>a:hover {
+  border-color: #111 #111 #444; /* Orig #eee #eee #ddd */
+}
+.nav>li>a:focus, .nav>li>a:hover {
+  background-color: #111; /* Orig #eee */
+}
+
 .panel {
-  background-color: transparent;
+  background-color: #111;
 }
 .panel-default {
   border-color: #444;
 }
 .panel-default > .panel-heading {
-  color: #999999;
-  background-color: rgba(0,0,0,0.5);
+  color: #e5e5e5;
+  background-color: #333;
   border-color: #444;
 }
 .panel-footer {
-  background-color: rgba(0,0,0,0.3);
+  background-color: #333;
   border-top: 1px solid #444;
 }
 
 .list-group-item {
-  background-color: transparent;
+  background-color: #0C0C0C;
   border: 1px solid #333;
 }
 
@@ -114,7 +133,7 @@ hr {
 }
 
 #card-layer {
-  background-color: rgba(17, 17, 17, 0.95);
+  background-color: #111; /* Bad rgba(17, 17, 17, 0.95); */
 }
 
 .tresdb-tag {
