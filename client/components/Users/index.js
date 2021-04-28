@@ -31,6 +31,7 @@ module.exports = function () {
         return Object.assign({}, u, {
           points7days: u.points7days ? u.points7days : 0,
           points30days: u.points30days ? u.points30days : 0,
+          points365days: u.points365days ? u.points365days : 0,
         });
       });
 
@@ -45,8 +46,11 @@ module.exports = function () {
       var bestUsersAllTime = activeUsers.sort(function (ua, ub) {
         return ub.points - ua.points;
       });
-      var VIEW_TOP = 5;
+      var VIEW_TOP = 10;
       // Slice to copy because sort manipulates the original.
+      var bestUsersOf365days = activeUsers.slice().sort(function (ua, ub) {
+        return ub.points365days - ua.points365days;
+      }).slice(0, VIEW_TOP);
       var bestUsersOf30days = activeUsers.slice().sort(function (ua, ub) {
         return ub.points30days - ua.points30days;
       }).slice(0, VIEW_TOP);
@@ -62,6 +66,14 @@ module.exports = function () {
       // Reveal list
       $('#tresdb-users-alltime').html(listTemplate({
         users: bestUsersAllTime,
+      }));
+
+      $('#tresdb-users-365days').html(listTemplate({
+        users: bestUsersOf365days.map(function (u) {
+          // Template uses u.points
+          return Object.assign({}, u, { points: u.points365days });
+        }).filter(hasPoints),
+        prefix: '+',
       }));
 
       $('#tresdb-users-30days').html(listTemplate({

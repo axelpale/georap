@@ -1,3 +1,4 @@
+/* eslint-disable no-magic-numbers */
 const db = require('tresdb-db');
 const eventsDal = require('../../server/api/events/dal');
 const sums = require('./sums');
@@ -21,11 +22,17 @@ exports.computePoints = function (username, callback) {
     });
 
     // Event time frames
-    // eslint-disable-next-line no-magic-numbers
-    const d30 = 30 * 24 * 60 * 60 * 1000;
-    const d7 = 7 * 24 * 60 * 60 * 1000; // eslint-disable-line no-magic-numbers
+
+    const day = 24 * 60 * 60 * 1000;
+    const d365 = 365 * day;
+    const d30 = 30 * day;
+    const d7 = 7 * day;
+    const unix365daysAgo = Date.now() - d365;
     const unix30daysAgo = Date.now() - d30;
     const unix7daysAgo = Date.now() - d7;
+    const evs365days = evsTimeUnix.filter((ev) => {
+      return ev.timeUnix > unix365daysAgo;
+    });
     const evs30days = evsTimeUnix.filter((ev) => {
       return ev.timeUnix > unix30daysAgo;
     });
@@ -37,6 +44,7 @@ exports.computePoints = function (username, callback) {
     const ps = {
       // Scene points
       allTime: sums.sumPoints(evsTimeUnix),
+      days365: sums.sumPoints(evs365days),
       days30: sums.sumPoints(evs30days),
       days7: sums.sumPoints(evs7days),
       // Statistics
@@ -85,6 +93,7 @@ exports.computePointsAndStore = (username, callback) => {
         locationsClassified: pointCategories.locationsClassified,
         commentsCreated: pointCategories.commentsCreated,
         points: pointCategories.allTime,
+        points365days: pointCategories.days365,
         points30days: pointCategories.days30,
         points7days: pointCategories.days7,
       },
