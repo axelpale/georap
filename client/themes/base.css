@@ -8,18 +8,27 @@ html, body {
   height: 100%;
 }
 
-/* Effects */
+/* Effects et General */
 
 .tresdb-flash {
   background-color: #76E68C !important;
 }
-
 .flip-x {
   -moz-transform: scale(-1, 1);
   -o-transform: scale(-1, 1);
   -webkit-transform: scale(-1, 1);
   transform: scale(-1, 1);
 }
+time {
+  text-decoration: underline;
+}
+.tresdb-disabled {
+  color: #999999;
+}
+.tresdb-coords {
+  font-size: 1.38em;
+}
+/* END Effect et General */
 
 /* Card */
 
@@ -278,10 +287,6 @@ html, body {
   pointer-events: none;
   vertical-align: top;
 }
-
-.tresdb-coords {
-  font-size: 1.38em;
-}
 /* Location Status & Type END */
 
 /* Location Thumbnail */
@@ -315,10 +320,6 @@ html, body {
 
 /* Entries */
 
-.tresdb-disabled {
-  color: #999999;
-}
-
 .tresdb-entry .panel-body,
 .tresdb-entry .comment-message {
   overflow-wrap: break-word;
@@ -332,10 +333,6 @@ html, body {
 .tresdb-entry .pull-right button.entry-form-open,
 .tresdb-entry .pull-right button.comment-form-open {
   margin: -5px -9px 0 0;
-}
-
-time {
-  text-decoration: underline;
 }
 
 .form-markdown-group {
@@ -633,7 +630,7 @@ li.form-attachment-container:first-child img {
 .location-type-list button.location-filter-any {
   width: 6rem;
 }
-/* Filter END */
+/* END Filter */
 
 /* Geolocation */
 button.tresdb-geolocation {
@@ -657,10 +654,10 @@ button.tresdb-geolocation .tresdb-geolocation-icon {
   background-position: 0 0;
   background-repeat: no-repeat;
 }
-/* Geolocation END */
+/* END Geolocation */
 
 /* Pinpointer */
 .tresdb-crosshair .crosshair-zoom {
   margin-bottom: 0.62rem;
 }
-/* Pinpointer END */
+/* END Pinpointer */

@@ -126,16 +126,20 @@ hr {
   filter: invert(1);
 }
 
-/* TresDB specific */
+/* Georap specific, most generic first */
 
+/* Georap generic */
+.tresdb-disabled {
+  color: #777;
+}
 .tresdb-flash {
   background-color: #10C48A !important;
 }
-
+/* Georap card */
 #card-layer {
   background-color: #111; /* Bad rgba(17, 17, 17, 0.95); */
 }
-
+/* Georap tags */
 .tresdb-tag {
   border: 0px solid gray;
 }
@@ -148,16 +152,14 @@ hr {
 .tresdb-tag-active.location-filter-any {
   border: 1px solid #e5e5e5;
 }
-
 .location-statustype-viewer img,
 .tresdb-tag img {
   filter: invert(1);
 }
-
+/* Georap location */
 #location-thumbnails-container img {
   border: 1px solid #333;
 }
-
 #tresdb-location-return {
   color: #666;
   border-bottom: 1px solid #333;
@@ -165,14 +167,14 @@ hr {
 #tresdb-location-return:hover h1 {
   color: #999;
 }
-
+/* Geolocation */
 button.tresdb-geolocation {
   background-color: #111;
 }
 button.tresdb-geolocation .tresdb-geolocation-icon {
   filter: invert(1);
 }
-
+/* Attachments */
 .uploader-container {
   background-color: #2d2d2d;
 }
@@ -180,11 +182,10 @@ button.tresdb-geolocation .tresdb-geolocation-icon {
   color: #ddd;
   outline: 2px dashed #444;
 }
-
 .form-attachment img {
   border-color: #333;
 }
-
+/* Thumbnails */
 img.location-type-symbol {
   filter: invert(1); /* Make type symbols white */
 }
