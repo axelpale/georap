@@ -189,3 +189,7 @@ button.tresdb-geolocation .tresdb-geolocation-icon {
 img.location-type-symbol {
   filter: invert(1); /* Make type symbols white */
 }
+/* Users */
+.points-equality-line {
+  border-bottom: 3px double white;
+}

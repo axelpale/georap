@@ -661,3 +661,11 @@ button.tresdb-geolocation .tresdb-geolocation-icon {
   margin-bottom: 0.62rem;
 }
 /* END Pinpointer */
+
+/* Users */
+.points-equality-line {
+  height: 0.62em;
+  margin-top: 0.38em;
+  border-bottom: 3px double black;
+}
+/* END Users */
