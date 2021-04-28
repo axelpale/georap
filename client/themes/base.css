@@ -573,11 +573,11 @@ li.form-attachment-container:first-child img {
 .latest-tabs li {
   text-transform: capitalize;
 }
+.latest-tabs li:first-child {
+  margin-left: 1.6rem;
+}
 .latest-tabs-spacer {
   padding: 10px 15px;
-  border-left: 1px solid #ddd;
-  border-right: 1px solid #ddd;
-  margin-bottom: -2px;
 }
 
 .latest-events .list-group-item {
