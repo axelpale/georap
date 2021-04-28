@@ -3,8 +3,9 @@
   <li class="list-group-item text-muted center-block">No results</li>
 <% } else { %>
   <% locations.forEach(function (loc) { %>
+    <% var locUrl = '/locations/' + loc._id + '?&ref=latest'; %>
   <li class="list-group-item" data-locationid="<%= loc._id %>">
-    <h4><a href="/locations/<%= loc._id %>?&ref=latest"><%= loc.name %></a></h4>
+    <h4><a href="<%= locUrl %>"><%= loc.name %></a></h4>
     <div class="location-description">
       <span class="location-status"><%= loc.status %></span>
       <span class="location-type"><%= loc.type %></span> in
@@ -13,11 +14,11 @@
     <div>by <a href=""><%= loc.creator %></a> <%= timestamp(loc.createdAt) %></div>
     <% if (loc.thumbnail) { %>
     <div class="location-item-thumbnail">
-      <img src="<%= loc.thumbnail.thumbUrl %>">
+      <a href="<%= locUrl %>"><img src="<%= loc.thumbnail.thumbUrl %>"></a>
     </div>
     <% } else { %>
     <div class="location-item-thumbnail">
-      <img src="/assets/images/markers/symbols/<%= loc.type %>.png" class="location-type-symbol" title="<%= loc.type %>.png">
+      <a href="<%= locUrl %>"><img src="/assets/images/markers/symbols/<%= loc.type %>.png" class="location-type-symbol" title="<%= loc.type %>.png"></a>
     </div>
     <% } %>
   </li>
