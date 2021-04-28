@@ -5,7 +5,7 @@
   <% locations.forEach(function (loc) { %>
   <li class="list-group-item" data-locationid="<%= loc._id %>">
     <h4><a href="/locations/<%= loc._id %>?&ref=latest"><%= loc.name %></a></h4>
-    <div style="color: gray; font-style: italic;">
+    <div class="location-description">
       <span class="location-status"><%= loc.status %></span>
       <span class="location-type"><%= loc.type %></span> in
       <%= placestamp(loc.places) %>

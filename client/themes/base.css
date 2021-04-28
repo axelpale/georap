@@ -587,7 +587,7 @@ li.form-attachment-container:first-child img {
 .georap-pointstamp .glyphicon {
   top: 2px;
 }
-
+/* Latest locations page */
 .latest-locations .list-group-item {
   min-height: 11.1rem;
 }
@@ -611,7 +611,11 @@ li.form-attachment-container:first-child img {
 .location-item-thumbnail img.location-type-symbol {
   object-fit: none;
 }
-/* Latest events page END */
+/* Latest entries */
+.latest-entries .tresdb-entry {
+  margin-bottom: 6.8rem;
+}
+/* END Latest */
 
 /* Filter */
 #tresdb-filter-title-dot {
