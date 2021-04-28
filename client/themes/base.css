@@ -33,7 +33,7 @@ html, body {
   box-shadow: 0px 0px 2.62em black;
   z-index: 3;
   overflow: visible;
-  background: rgba(255,255,255,0.95);
+  background: white;
 }
 
 #card-layer.tresdb-card-full {
