@@ -666,6 +666,11 @@ button.tresdb-geolocation .tresdb-geolocation-icon {
 }
 /* END Pinpointer */
 
+/* Statistics */
+.georap-credits {
+  text-align: right;
+}
+
 /* Users */
 .points-equality-line {
   height: 0.62em;
