@@ -173,6 +173,14 @@ button.tresdb-geolocation .tresdb-geolocation-icon {
   filter: invert(1);
 }
 
+.uploader-container {
+  background-color: #2d2d2d;
+}
+.uploader-box {
+  color: #ddd;
+  outline: 2px dashed #444;
+}
+
 .form-attachment img {
   border-color: #333;
 }
