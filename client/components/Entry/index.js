@@ -106,6 +106,15 @@ module.exports = function (entry, opts) {
             if ($mount) {
               ui.hide($formContainer);
               children.editform.unbind();
+              children.editform.off(); // for once
+              delete children.editform;
+            }
+          });
+          children.editform.once('success', function () {
+            if ($mount) {
+              ui.hide($formContainer);
+              children.editform.unbind();
+              children.editform.off(); // for once
               delete children.editform;
             }
           });
