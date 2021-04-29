@@ -147,8 +147,9 @@ module.exports = function (entry, comment) {
     $elems.submit.click(function () {
       // Read form
       var commentData = self.getCommentData();
-      var len = commentData.markdown.length;
 
+      // Validate
+      var len = commentData.markdown.length;
       if (len < MIN_LEN || len > MAX_LEN) {
         // Do not submit if too short or long
         children.error.update('Message is too short or long.');
@@ -172,8 +173,6 @@ module.exports = function (entry, comment) {
           children.error.update(err.message);
         } else {
           // Success.
-          // Empty the message input for next comment NOTE maybe not needed
-          children.markdown.clear();
           // End saving drafts and clear any saved drafts.
           drafting.stop(entryId);
           // Inform parent, for example to unbind the form.
