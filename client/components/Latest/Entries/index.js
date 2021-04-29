@@ -71,7 +71,6 @@ module.exports = function () {
     $elems.loadMoreBtn = $mount.find('.latest-load-more');
     $elems.error = $mount.find('.latest-entries-error');
 
-    ui.show($elems.loadMoreBtn);
     // Click to load more
     $elems.loadMoreBtn.click(function () {
       skip += limit;
@@ -91,13 +90,16 @@ module.exports = function () {
 
   self.unbind = function () {
     if ($mount) {
-      $mount = null;
       // Stop listening events
       bus.off();
       // Unbind events view
       ui.unbindAll(children);
-      ui.offAll($elems);
       children = {};
+      ui.offAll($elems);
+      $elems = {};
+      // Clear
+      $mount.empty();
+      $mount = null;
     }
   };
 };
