@@ -188,6 +188,43 @@ module.exports = function (entry, comment) {
     });
   };
 
+  self.getCommentData = function (opts) {
+    // Return entryData object collected from the form.
+    //
+    // Parameters
+    //   opts
+    //     complete
+    //       Set true to get complete attachments instead of keys.
+    //       False by default.
+    //
+    if (!opts) {
+      opts = {};
+    }
+    opts = Object.assign({
+      complete: false,
+    }, opts);
+
+    if ($mount) {
+      // Read message
+      var markdown = children.markdown.getMarkdown();
+      // Read attachments if available
+      var attachments = [];
+      if (children.attach) {
+        if (opts.complete) {
+          attachments = children.attach.getAttachments();
+        } else {
+          attachments = children.attach.getAttachmentKeys();
+        }
+      }
+
+      return {
+        markdown: markdown,
+        attachments: attachments,
+      };
+    }
+    return null;
+  };
+
   self.unbind = function () {
     if ($mount) {
       ui.unbindAll(children);
