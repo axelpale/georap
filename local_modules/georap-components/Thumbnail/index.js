@@ -8,6 +8,7 @@ var sizeToClass = {
   'md': 'thumb-md',
   'lg': 'thumb-lg',
   'xl': 'thumb-xl',
+  'xxl': 'thumb-xxl',
 };
 
 module.exports = function (attachment, opts) {
@@ -16,7 +17,7 @@ module.exports = function (attachment, opts) {
   //     attachment object
   //   opts, object with properties
   //     size
-  //       optional string in ['xs', 'sm', 'md', 'lg', 'xl'].
+  //       optional string in ['xs', 'sm', 'md', 'lg', 'xl', 'xxl'].
   //       Size of the thumbnail. Default 'md'.
   //     makeLink
   //       optional boolean. True to make thumbnail a link.
