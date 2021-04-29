@@ -35,7 +35,7 @@ module.exports = function () {
     }
   };
 
-  var fetchAndAppend = function () {
+  var fetchAndAppend = function (callback) {
     if ($mount) {
       ui.show($elems.progress);
       ui.hide($elems.loadMoreBtn);
@@ -56,6 +56,10 @@ module.exports = function () {
         appendEntries(entries);
 
         ui.show($elems.loadMoreBtn);
+
+        if (callback) {
+          return callback();
+        }
       });
     }
   };
@@ -78,14 +82,14 @@ module.exports = function () {
     });
 
     // Initial event fetch and list render
-    fetchAndAppend();
-
-    // Signal that the list is rendered.
-    // It seems that setTimeout is required to allow the fetched events
-    // to fill the scrollable container.
-    setTimeout(function () {
-      self.emit('idle');
-    }, 0);
+    fetchAndAppend(function () {
+      // Signal that the list is rendered.
+      // It seems that setTimeout is required to allow the fetched events
+      // to fill the scrollable container.
+      setTimeout(function () {
+        self.emit('idle');
+      }, 0);
+    });
   };
 
   self.unbind = function () {
