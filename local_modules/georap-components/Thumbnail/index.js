@@ -21,6 +21,9 @@ module.exports = function (attachment, opts) {
   //       Size of the thumbnail. Default 'md'.
   //     makeLink
   //       optional boolean. True to make thumbnail a link.
+  //     url
+  //       optional string. If makeLink then use this url instead
+  //       of the url to full-size attachment.
   //
 
   if (!opts) {
@@ -30,6 +33,7 @@ module.exports = function (attachment, opts) {
   opts = Object.assign({
     size: 'md',
     makeLink: false,
+    url: attachment.url,
   }, opts);
 
   // Setup
@@ -43,6 +47,7 @@ module.exports = function (attachment, opts) {
       attachment: attachment,
       sizeClass: sizeToClass[opts.size],
       makeLink: opts.makeLink,
+      url: opts.url,
     }));
   };
 
@@ -54,6 +59,7 @@ module.exports = function (attachment, opts) {
         attachment: attachment,
         sizeClass: sizeToClass[opts.size],
         makeLink: opts.makeLink,
+        url: opts.url,
       }));
     }
   };
