@@ -1,7 +1,7 @@
 
 var ExportComponent = require('./Export');
 var ViewOnComponent = require('./ViewOn');
-var EntryCreationComponent = require('../Entriex/Creation');
+var EntryCreationComponent = require('../Entries/Creation');
 var template = require('./template.ejs');
 var emitter = require('component-emitter');
 var ui = require('tresdb-ui');
