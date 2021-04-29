@@ -6,7 +6,6 @@ var template = require('./template.ejs');
 var listTemplate = require('./list.ejs');
 var LocationSelector = require('../LocationSelector');
 var rootBus = require('tresdb-bus');
-var models = require('tresdb-models');
 var locationsStore = tresdb.stores.locations;
 
 var LIST_SIZE = 50;
@@ -18,7 +17,7 @@ module.exports = function () {
   var $mount = null;
   var children = {};
   var $elems = {};
-  var localBus = models.bus(rootBus);
+  var bus = rootBus.sub();
 
   var skip = 0;
   var limit = LIST_SIZE;
@@ -35,7 +34,7 @@ module.exports = function () {
     children.selector.bind($elems.locations);
 
     // Update location name
-    localBus.on('location_name_changed', function (ev) {
+    bus.on('location_name_changed', function (ev) {
       // Check if location in list and update name if so
       var query = 'li[data-locationid="' + ev.locationId + '"]';
       var $li = $elems.locations.find(query); // empty set if not found
@@ -45,7 +44,8 @@ module.exports = function () {
     // Setup load-more button
     $elems.progress = $mount.find('.latest-locations-progress');
     $elems.loadMoreBtn = $mount.find('.latest-load-more');
-    ui.show($elems.loadMoreBtn);
+    $elems.error = $mount.find('.latest-locations-error');
+
     $elems.loadMoreBtn.click(function () {
       ui.show($elems.progress);
       ui.hide($elems.loadMoreBtn);
@@ -121,13 +121,16 @@ module.exports = function () {
 
   self.unbind = function () {
     if ($mount) {
-      $mount = null;
       // Stop listening events
-      localBus.off();
+      bus.off();
       // Unbind events view
       ui.unbindAll(children);
-      ui.offAll($elems);
       children = {};
+      ui.offAll($elems);
+      $elems = {};
+      // Clear
+      $mount.empty();
+      $mount = null;
     }
   };
 };
