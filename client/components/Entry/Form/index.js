@@ -14,6 +14,7 @@ var FlagsForm = require('../FlagsForm');
 var ErrorView = require('../Error');
 var RemoveForm = require('../Remove');
 var MoveForm = require('../MoveForm');
+var drafting = require('./drafting');
 var ui = require('tresdb-ui');
 var emitter = require('component-emitter');
 var entries = tresdb.stores.entries;
@@ -28,11 +29,9 @@ module.exports = function (locationId, entry) {
   //     optional entry object. If not given, a blank entry form is shown.
   //
   if (!entry) {
-    entry = {
-      markdown: '',
-      attachments: [],
-      flags: [],
-    };
+    // Init with empty entry or previously saved draft.
+    drafting.start(locationId);
+    entry = drafting.load(locationId);
   }
 
   var $mount = null;
@@ -91,6 +90,8 @@ module.exports = function (locationId, entry) {
       var onSuccess = function () {
         // Hide progress bar
         ui.hide($elems.progress);
+        // End drafting and clear stored draft
+        drafting.stop(locationId);
         // Inform parents
         self.emit('success');
       };
@@ -210,6 +211,12 @@ module.exports = function (locationId, entry) {
 
   self.unbind = function () {
     if ($mount) {
+      // Save draft if allowed
+      if (drafting.started(locationId)) {
+        var draftData = self.getEntryData({ complete: true });
+        drafting.save(locationId, draftData);
+      }
+      // Then unbind
       ui.offAll($elems);
       $elems = {};
       ui.unbindAll(children);
