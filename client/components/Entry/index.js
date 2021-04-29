@@ -1,4 +1,5 @@
 var template = require('./template.ejs');
+var headingTemplate = require('./heading.ejs');
 var entryModel = require('tresdb-models').entry;
 var AttachmentsView = require('./Attachments');
 var CommentsView = require('./Comments');
@@ -37,20 +38,33 @@ module.exports = function (entry, opts) {
     $mount = $mountEl;
 
     $mount.html(template({
-      entryId: entry._id,
-      username: entry.user,
       isAuthorOrAdmin: isAuthorOrAdmin,
+    }));
+
+    // Heading text
+    // NOTE form open button is rendered in the root template
+    // to avoid button rebind if heading text changes.
+    $elems.heading = $mount.find('.entry-heading');
+    $elems.heading.html(headingTemplate({
+      username: entry.user,
       flagstamp: ui.flagstamp(entry.flags),
       timestamp: ui.timestamp(entry.time),
-      hasMarkdown: entryModel.hasMarkdown(entry),
-      markdownHtml: ui.markdownToHtml(entry.markdown),
       locationstamp: opts.displayLocation
         ? ui.locationstamp(entry.location) : null,
     }));
 
+    // Markdown viewer
+    $elems.markdown = $mount.find('.entry-body');
+    if (entryModel.hasMarkdown(entry)) {
+      $elems.markdown.html(ui.markdownToHtml(entry.markdown));
+    } else {
+      ui.hide($elems.markdown);
+    }
+
     // Attachment viewer
+    $elems.attachments = $mount.find('.entry-attachments-container');
     children.attachments = new AttachmentsView(entry, entry.attachments);
-    children.attachments.bind($mount.find('.entry-attachments-container'));
+    children.attachments.bind($elems.attachments);
 
     // Comment list
     children.comments = new CommentsView(entry);
@@ -130,10 +144,27 @@ module.exports = function (entry, opts) {
 
   this.update = function (ev) {
     if ($mount) {
+      // Update entry object
       entryModel.forward(entry, ev);
-      var $remount = $mount; // unbind nullifies mount
-      this.unbind();
-      this.bind($remount);
+      // Update flags in heading
+      $elems.heading.html(headingTemplate({
+        username: entry.user,
+        flagstamp: ui.flagstamp(entry.flags),
+        timestamp: ui.timestamp(entry.time),
+        locationstamp: opts.displayLocation
+          ? ui.locationstamp(entry.location) : null,
+      }));
+      // Update markdown
+      if (entryModel.hasMarkdown(entry)) {
+        $elems.markdown.html(ui.markdownToHtml(entry.markdown));
+      } else {
+        $elems.markdown.empty();
+        ui.hide($elems.markdown);
+      }
+      // Update attachments
+      children.attachments.unbind();
+      children.attachments = new AttachmentsView(entry, entry.attachments);
+      children.attachments.bind($elems.attachments);
     }
   };
 
