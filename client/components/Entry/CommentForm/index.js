@@ -29,6 +29,9 @@ module.exports = function (entry, comment) {
   var self = this;
   emitter(self);
 
+  // Short alias
+  var entryId = entry._id;
+
   // Comment creation vs comment edit
   var isNew = false;
   if (!comment) {
@@ -40,8 +43,6 @@ module.exports = function (entry, comment) {
   }
 
   var submit = function (markdown, attachments, callback) {
-    var entryId = entry._id;
-
     if (isNew) {
       entryApi.createComment({
         entryId: entryId,
@@ -103,7 +104,7 @@ module.exports = function (entry, comment) {
       children.remove.bind($elems.remove);
       children.remove.on('submit', function () {
         entryApi.removeComment({
-          entryId: entry._id,
+          entryId: entryId,
           commentId: comment.id,
         }, function (err) {
           if (err) {
