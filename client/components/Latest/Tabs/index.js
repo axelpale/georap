@@ -5,7 +5,17 @@ var emitter = require('component-emitter');
 
 // Remember which tab was open
 var defaultTabHash = 'activity';
-var tabHashMemory = null;
+
+var loadTabHash = function () {
+  var hash = window.localStorage.getItem('georap-tab');
+  if (hash) {
+    return hash;
+  }
+  return defaultTabHash;
+};
+var saveTabHash = function (hash) {
+  window.localStorage.setItem('georap-tab', hash);
+};
 
 module.exports = function () {
   // Init
@@ -30,7 +40,7 @@ module.exports = function () {
     }));
 
     // Make current tab active
-    var tabClass = tabs[this.getTabHash()];
+    var tabClass = tabs[loadTabHash()];
     $mount.find('.latest-tab-' + tabClass).addClass('active');
 
     // Click tab to change tab
@@ -42,7 +52,7 @@ module.exports = function () {
         $mount.find('li').removeClass('active');
         $mount.find('.latest-tab-' + tabs[tabHash]).addClass('active');
         // Remember the tab for next time Tabs is bound.
-        tabHashMemory = tabHash;
+        saveTabHash(tabHash);
         // Inform about tab switch
         self.emit('tab_switch', tabHash);
       };
@@ -53,7 +63,7 @@ module.exports = function () {
   };
 
   this.getTabHash = function () {
-    return tabHashMemory || defaultTabHash;
+    return loadTabHash();
   };
 
   this.unbind = function () {
