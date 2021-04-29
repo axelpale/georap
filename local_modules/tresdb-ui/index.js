@@ -68,10 +68,10 @@ exports.pointstamp = function (points) {
 
   if (p > 0) {
     // Plus sign
-    h += '<span>+' + p + '</span> ';
+    h += '<span>+' + p + '</span>&nbsp;';
   } else if (p < 0) {
     // Special, wide minus sign
-    h += '<span>–' + Math.abs(p) + '</span> ';
+    h += '<span>–' + Math.abs(p) + '</span>&nbsp;';
   } else {
     return ''; // No points
   }

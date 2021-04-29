@@ -586,6 +586,7 @@ li.form-attachment-container:first-child img {
 }
 .georap-pointstamp .glyphicon {
   top: 2px;
+  display: inline; /* to enable &nbsp; */
 }
 /* Latest locations page */
 .latest-locations .list-group-item {
