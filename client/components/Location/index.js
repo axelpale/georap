@@ -88,10 +88,10 @@ var LocationView = function (id, query) {
       removeView = new RemoveView(_location);
 
       nameView.bind($('#tresdb-location-name'));
-      thumbnailView.bind($('#location-thumbnail-container'));
       placesView.bind($('#tresdb-location-places'));
       geomView.bind($('#tresdb-location-geom'));
       statusTypeView.bind($('#tresdb-location-statustype-container'));
+      thumbnailView.bind($('#location-thumbnail-container'));
       formsView.bind($('#tresdb-location-forms'));
       entriesView.bind($('#tresdb-location-entries'));
       eventsView.bind($('#tresdb-location-events'));
