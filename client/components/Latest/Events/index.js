@@ -19,7 +19,7 @@ module.exports = function () {
   var $mount = null;
   var children = {};
   var $elems = {};
-  var localBus = models.bus(rootBus);
+  var bus = rootBus.sub();
 
   // Public methods
 
@@ -46,7 +46,7 @@ module.exports = function () {
     children.selector.bind($elems.events);
 
     // Update events on any new event
-    localBus.on('socket_event', function () {
+    bus.on('socket_event', function () {
       self.update(filter);
     });
 
@@ -98,7 +98,7 @@ module.exports = function () {
     if ($mount) {
       $mount = null;
       // Stop listening events
-      localBus.off();
+      bus.off();
       // Unbind events view
       ui.unbindAll(children);
       children = {};
