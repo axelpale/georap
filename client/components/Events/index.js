@@ -1,6 +1,7 @@
 // Component to list location events
 //
 var template = require('./list.ejs');
+var eventTemplate = require('./event.ejs');
 var emitter = require('component-emitter');
 var getPoints = require('tresdb-points');
 var ui = require('tresdb-ui');
@@ -24,35 +25,46 @@ module.exports = function (events, opts) {
   }, opts);
 
   // Init
+  var $mount = null;
+  var $elems = {};
   var self = this;
   emitter(self);
-  var $mount = null;
 
   // Public methods
 
   this.bind = function ($mountEl) {
     $mount = $mountEl;
-    $mount.html(template({
-      timestamp: ui.timestamp,
-      pointstamp: ui.pointstamp,
-      getPoints: getPoints,
-      config: config,
-      events: events,
-      showThumbnails: opts.showThumbnails,
-    }));
+    $mount.html(template());
+
+    $elems.events = $mount.find('.events-group');
+
+    events.forEach(function (ev) {
+      $elems.events.append(eventTemplate({
+        ev: ev,
+        timestamp: ui.timestamp,
+        pointstamp: ui.pointstamp,
+        getPoints: getPoints,
+        config: config,
+        showThumbnail: opts.showThumbnails,
+      }));
+    });
   };
 
   this.update = function (updatedEvents) {
     events = updatedEvents;
     if ($mount) {
-      $mount.html(template({
-        timestamp: ui.timestamp,
-        pointstamp: ui.pointstamp,
-        getPoints: getPoints,
-        config: config,
-        events: events,
-        showThumbnails: opts.showThumbnails,
-      }));
+      $elems.events.empty();
+
+      events.forEach(function (ev) {
+        $elems.events.append(eventTemplate({
+          ev: ev,
+          timestamp: ui.timestamp,
+          pointstamp: ui.pointstamp,
+          getPoints: getPoints,
+          config: config,
+          showThumbnail: opts.showThumbnails,
+        }));
+      });
     }
   };
 
