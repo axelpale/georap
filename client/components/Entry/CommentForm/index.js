@@ -8,6 +8,7 @@ var AttachmentsForm = require('../AttachmentsForm');
 var RemoveView = require('../Remove');
 var ErrorView = require('../Error');
 var template = require('./template.ejs');
+var drafting = require('./drafting');
 var entryApi = tresdb.stores.entries;
 
 var MIN_LEN = tresdb.config.comments.minMessageLength;
@@ -36,10 +37,10 @@ module.exports = function (entry, comment) {
   var isNew = false;
   if (!comment) {
     isNew = true;
-    comment = {
-      markdown: '',
-      attachments: [],
-    };
+    // Begin saving drafts until successful submit
+    drafting.start(entryId);
+    // Init with stored data or blank comment
+    comment = drafting.load(entryId);
   }
 
   var submit = function (commentData, callback) {
@@ -154,8 +155,6 @@ module.exports = function (entry, comment) {
         return;
       }
 
-      // TODO Purge cache of unfinished comment
-
       // Hide form and reveal progress. This also prevents double click.
       ui.hide($elems.form);
       ui.show($elems.progress);
@@ -173,8 +172,10 @@ module.exports = function (entry, comment) {
           children.error.update(err.message);
         } else {
           // Success.
-          // Empty the message input for next comment
+          // Empty the message input for next comment NOTE maybe not needed
           children.markdown.clear();
+          // End saving drafts and clear any saved drafts.
+          drafting.stop(entryId);
           // Inform parent, for example to unbind the form.
           self.emit('success');
         }
@@ -221,6 +222,10 @@ module.exports = function (entry, comment) {
 
   self.unbind = function () {
     if ($mount) {
+      if (drafting.started(entryId)) {
+        var draftData = self.getCommentData({ complete: true });
+        drafting.save(entryId, draftData);
+      }
       ui.unbindAll(children);
       children = {};
       ui.offAll($elems);
