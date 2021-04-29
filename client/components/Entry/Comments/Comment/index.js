@@ -29,19 +29,22 @@ module.exports = function (entry, comment) {
     $mount.html(template({
       author: comment.user,
       timestamp: ui.timestamp(comment.time),
-      htmlMessage: ui.markdownToHtml(comment.markdown),
-      attachments: comment.attachments,
-      isAuthor: isAuthor,
-      isFresh: commentModel.isFresh(comment),
       isAuthorOrAdmin: isAuthorOrAdmin,
     }));
 
+    // Message
+    $elems.message = $mount.find('.comment-message');
+    $elems.message.html(ui.markdownToHtml(comment.markdown));
+
+    // Attachment
+    $elems.thumb = $mount.find('.comment-attachment-thumbnail');
     if (comment.attachments.length > 0) {
-      $elems.thumb = $mount.find('.comment-attachment-thumbnail');
       children.thumb = new Thumbnail(comment.attachments[0], {
         makeLink: true,
       });
       children.thumb.bind($elems.thumb);
+    } else {
+      ui.hide($elems.thumb);
     }
 
     if (isAuthorOrAdmin) {
@@ -57,8 +60,15 @@ module.exports = function (entry, comment) {
           children.form = new CommentForm(entry, comment);
           children.form.bind($elems.form);
 
-          children.form.on('exit', function () {
+          children.form.once('exit', function () {
             children.form.unbind();
+            children.form.off(); // onces
+            delete children.form;
+            ui.hide($elems.form);
+          });
+          children.form.once('success', function () {
+            children.form.unbind();
+            children.form.off(); // onces
             delete children.form;
             ui.hide($elems.form);
           });
@@ -74,9 +84,22 @@ module.exports = function (entry, comment) {
     //
     if ($mount) {
       commentModel.forward(comment, ev);
+      // Refresh message
+      $elems.message.html(ui.markdownToHtml(comment.markdown));
+      // Refresh attachment
+      if (children.thumb) {
+        children.thumb.unbind();
+        delete children.thumb;
+        ui.hide($elems.thumb);
+      }
+      if (comment.attachments.length > 0) {
+        children.thumb = new Thumbnail(comment.attachments[0], {
+          makeLink: true,
+        });
+        children.thumb.bind($elems.thumb);
+        ui.show($elems.thumb);
+      }
     }
-    // HACK rebind without unbind
-    self.bind($mount);
   };
 
   self.unbind = function () {
