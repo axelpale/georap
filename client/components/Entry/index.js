@@ -70,14 +70,14 @@ module.exports = function (entry, opts) {
       // React to cancel button
       children.commentForm.once('exit', function () {
         ui.show($elems.footer);
-        ui.hide($elems.commentForm); // contents could be removed but we lazy
+        ui.hide($elems.commentForm);
         children.commentForm.unbind();
         delete children.commentForm;
       });
       // React to successful form submission
       children.commentForm.once('success', function () {
         ui.show($elems.footer);
-        ui.hide($elems.commentForm); // contents could be removed but we lazy
+        ui.hide($elems.commentForm);
         children.commentForm.unbind();
         delete children.commentForm;
       });
