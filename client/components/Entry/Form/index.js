@@ -28,7 +28,9 @@ module.exports = function (locationId, entry) {
   //   entry
   //     optional entry object. If not given, a blank entry form is shown.
   //
+  var isNew = false;
   if (!entry) {
+    isNew = true;
     // Init with empty entry or previously saved draft.
     drafting.start(locationId);
     entry = drafting.load(locationId);
@@ -42,8 +44,6 @@ module.exports = function (locationId, entry) {
 
   self.bind = function ($mountEl) {
     $mount = $mountEl;
-
-    var isNew = !('_id' in entry);
 
     $mount.html(template({
       entry: entry,
