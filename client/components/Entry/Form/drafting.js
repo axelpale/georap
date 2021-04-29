@@ -20,6 +20,7 @@ exports.start = function (locId) {
 
 exports.stop = function (locId) {
   // Stop drafting and prevent any further saves.
+  // Idempotent operation.
   var itemKey = 'georap-form-' + locId;
   window.sessionStorage.removeItem(itemKey);
 };
