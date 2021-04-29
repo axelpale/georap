@@ -35,12 +35,11 @@ module.exports = function (locationId, entry) {
     };
   }
 
-  var self = this;
-  emitter(self);
-
   var $mount = null;
   var $elems = {};
   var children = {};
+  var self = this;
+  emitter(self);
 
   self.bind = function ($mountEl) {
     $mount = $mountEl;
@@ -212,7 +211,9 @@ module.exports = function (locationId, entry) {
   self.unbind = function () {
     if ($mount) {
       ui.offAll($elems);
+      $elems = {};
       ui.unbindAll(children);
+      children = {};
       $mount = null;
     }
   };
