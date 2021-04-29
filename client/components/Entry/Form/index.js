@@ -194,6 +194,9 @@ module.exports = function (locationId, entry) {
     if (!opts) {
       opts = {};
     }
+    opts = Object.assign({
+      complete: false,
+    }, opts);
 
     if ($mount) {
       var attachments;
