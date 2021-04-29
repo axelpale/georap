@@ -68,6 +68,19 @@ module.exports = function (events, opts) {
     }
   };
 
+  this.prepend = function (newEvent) {
+    if ($mount) {
+      $elems.events.prepend(eventTemplate({
+        ev: newEvent,
+        timestamp: ui.timestamp,
+        pointstamp: ui.pointstamp,
+        getPoints: getPoints,
+        config: config,
+        showThumbnail: opts.showThumbnails,
+      }));
+    }
+  };
+
   this.unbind = function () {
     if ($mount) {
       $mount = null;
