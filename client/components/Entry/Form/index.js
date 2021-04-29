@@ -90,8 +90,6 @@ module.exports = function (locationId, entry) {
       var onSuccess = function () {
         // Hide progress bar
         ui.hide($elems.progress);
-        // End drafting and clear stored draft
-        drafting.stop(locationId);
         // Inform parents
         self.emit('success');
       };
@@ -112,6 +110,11 @@ module.exports = function (locationId, entry) {
             }
             return onError(err.message);
           }
+          // End drafting and clear stored draft.
+          // Do it here instead of onSuccess handler to prevent
+          // an entry edit clearing the new draft.
+          drafting.stop(locationId);
+          // Stuff to do after either creation or change
           onSuccess();
         });
       } else {
