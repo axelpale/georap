@@ -51,7 +51,6 @@ module.exports = function (entry, comment) {
         if (children.form) {
           children.form.unbind();
           delete children.form;
-          $elems.form.empty();
           ui.hide($elems.form);
         } else {
           ui.show($elems.form);
@@ -61,7 +60,6 @@ module.exports = function (entry, comment) {
           children.form.on('exit', function () {
             children.form.unbind();
             delete children.form;
-            $elems.form.empty();
             ui.hide($elems.form);
           });
         }
