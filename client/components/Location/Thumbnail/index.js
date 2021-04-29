@@ -100,7 +100,7 @@ module.exports = function (location, entries) {
           children.thumbnail.update(location.thumbnail);
         } else {
           children.thumbnail = new Thumbnail(location.thumbnail, {
-            size: 'xl',
+            size: 'xxl',
             makeLink: true,
           });
           children.thumbnail.bind($elems.thumbnail);
