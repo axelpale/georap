@@ -218,7 +218,7 @@ module.exports = function (locationId, entry) {
   self.unbind = function () {
     if ($mount) {
       // Save draft if allowed
-      if (drafting.started(locationId)) {
+      if (drafting.started(locationId) && isNew) {
         var draftData = self.getEntryData({ complete: true });
         drafting.save(locationId, draftData);
       }
