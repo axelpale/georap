@@ -22,6 +22,52 @@ module.exports = function () {
   var skip = 0;
   var limit = LIST_SIZE;
 
+  var appendLocations = function (locs, total) {
+    if ($mount) {
+      // Collect location data in events. Use to emphasize map markers.
+      children.selector.readMarkerLocationsFromLocations(locs);
+      // Append to bottom
+      $elems.locations.append(listTemplate({
+        skip: skip,
+        limit: limit,
+        total: total,
+        locations: locs,
+        timestamp: ui.timestamp,
+        placestamp: ui.placestamp,
+      }));
+    }
+  };
+
+  var fetchAndAppend = function (callback) {
+    if ($mount) {
+      ui.show($elems.progress);
+      ui.hide($elems.loadMoreBtn);
+
+      locationsStore.getLatest({
+        skip: skip,
+        limit: limit,
+      }, function (errmore, latestResult) {
+        ui.hide($elems.progress);
+        if (errmore) {
+          $elems.error.html(errmore.message);
+          ui.show($elems.error);
+          return;
+        }
+
+        var morelocs = latestResult.locations;
+        var total = latestResult.locationCount;
+
+        appendLocations(morelocs, total);
+
+        ui.show($elems.loadMoreBtn);
+
+        if (callback) {
+          return callback();
+        }
+      });
+    }
+  };
+
   // Public methods
 
   self.bind = function ($mountEl) {
@@ -47,77 +93,25 @@ module.exports = function () {
     $elems.error = $mount.find('.latest-locations-error');
 
     $elems.loadMoreBtn.click(function () {
-      ui.show($elems.progress);
-      ui.hide($elems.loadMoreBtn);
       skip += limit;
-      locationsStore.getLatest({
-        skip: skip,
-        limit: limit,
-      }, function (errmore, latestResult) {
-        var morelocs = latestResult.locations;
-        var total = latestResult.locationCount;
-        ui.hide($elems.progress);
-        if (errmore) {
-          $mount.find('.latest-locations-error').html(errmore.message);
-          ui.show($mount.find('.latest-locations-error'));
-          return;
-        }
-        $elems.locations.append(listTemplate({
-          skip: skip,
-          limit: limit,
-          total: total,
-          locations: morelocs,
-          timestamp: ui.timestamp,
-          placestamp: ui.placestamp,
-        }));
-        ui.show($elems.loadMoreBtn);
-      });
+      fetchAndAppend();
     });
 
     // Initial event fetch and list render
-    self.update();
+    fetchAndAppend(function () {
+      // Signal that the list is rendered.
+      // It seems that setTimeout is required to allow the fetched events
+      // to fill the scrollable container.
+      setTimeout(function () {
+        self.emit('idle');
+      }, 0);
+    });
   };
 
-  self.update = function () {
-    if ($mount) {
-      // Reload events and render
-      locationsStore.getLatest({
-        skip: skip,
-        limit: limit,
-      }, function (err, latestResult) {
-        var locs = latestResult.locations;
-        var total = latestResult.locationCount;
-        // Ensure loading bar is hidden.
-        ui.hide($mount.find('.latest-locations-progress'));
-
-        if (err) {
-          $mount.find('.latest-locations-error').html(err.message);
-          ui.show($mount.find('.latest-locations-error'));
-          return;
-        }
-
-        // Collect location data in events. Use to emphasize map markers.
-        children.selector.readMarkerLocationsFromLocations(locs);
-
-        // Refresh the list
-        $elems.locations.html(listTemplate({
-          skip: skip,
-          limit: limit,
-          total: total,
-          locations: locs,
-          timestamp: ui.timestamp,
-          placestamp: ui.placestamp,
-        }));
-
-        // Signal that the list is rendered.
-        // It seems that setTimeout is required to allow the fetched events
-        // to fill the scrollable container.
-        setTimeout(function () {
-          self.emit('idle');
-        }, 0);
-      });
-    }
-  };
+  // self.update = function () {
+  //   if ($mount) {
+  //
+  // };
 
   self.unbind = function () {
     if ($mount) {
