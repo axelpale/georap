@@ -42,19 +42,19 @@ module.exports = function (entry, comment) {
     };
   }
 
-  var submit = function (markdown, attachments, callback) {
+  var submit = function (commentData, callback) {
     if (isNew) {
       entryApi.createComment({
         entryId: entryId,
-        markdown: markdown,
-        attachments: attachments,
+        markdown: commentData.markdown,
+        attachments: commentData.attachments,
       }, callback);
     } else {
       entryApi.changeComment({
         entryId: entryId,
         commentId: comment.id,
-        markdown: markdown,
-        attachments: attachments,
+        markdown: commentData.markdown,
+        attachments: commentData.attachments,
       }, callback);
     }
   };
@@ -144,9 +144,9 @@ module.exports = function (entry, comment) {
     $elems.form = $mount.find('.comment-form-group');
     $elems.submit = $mount.find('.comment-form-submit');
     $elems.submit.click(function () {
-      // Read message
-      var markdown = children.markdown.getMarkdown();
-      var len = markdown.length;
+      // Read form
+      var commentData = self.getCommentData();
+      var len = commentData.markdown.length;
 
       if (len < MIN_LEN || len > MAX_LEN) {
         // Do not submit if too short or long
@@ -154,21 +154,15 @@ module.exports = function (entry, comment) {
         return;
       }
 
-      // Read attachments
-      var attachments = [];
-      if (children.attach) {
-        attachments = children.attach.getAttachmentKeys();
-      }
-
       // TODO Purge cache of unfinished comment
 
       // Hide form and reveal progress. This also prevents double click.
       ui.hide($elems.form);
       ui.show($elems.progress);
-      // Hide possible previous messages
+      // Hide possible previous error messages
       children.error.reset();
 
-      submit(markdown, attachments, function (err) {
+      submit(commentData, function (err) {
         // Hide progress
         ui.hide($elems.progress);
 
