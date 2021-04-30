@@ -65,7 +65,6 @@ module.exports = function (entry, comment) {
 
     $mount.html(template({
       isNew: isNew,
-      markdown: comment.markdown,
     }));
 
     // Cancel button
