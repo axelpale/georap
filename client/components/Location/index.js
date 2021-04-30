@@ -107,7 +107,6 @@ var LocationView = function (id, query) {
       });
 
       // Scroll down to possibly referred entry or comment
-      // eslint-disable-next-line no-magic-numbers
       if (window.location.hash.substring(0, 9) === '#comment-') {
         var scrollerEl = document.getElementById('card-layer-content');
         var commentEl = document.querySelector(window.location.hash);

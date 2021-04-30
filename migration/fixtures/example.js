@@ -1,4 +1,4 @@
-/* eslint-disable no-magic-numbers, no-sync, max-lines */
+/* eslint-disable no-sync, max-lines */
 
 // Latest v12 schema. Tedious to migrate, but is the most complete
 // representation of the available data structures yet easy to modify

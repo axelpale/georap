@@ -1,4 +1,3 @@
-/* eslint-disable no-magic-numbers */
 const db = require('georap-db');
 const eventsDal = require('../../server/api/events/dal');
 const sums = require('./sums');

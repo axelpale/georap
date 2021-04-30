@@ -1,4 +1,3 @@
-/* eslint-disable no-magic-numbers */
 // NOTE This file documents the data structure of v4.
 
 const c = require('./common');

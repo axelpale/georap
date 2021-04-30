@@ -200,7 +200,6 @@ exports.createThumbnail = function (file, callback) {
   // max width and height of the thumbnail image in pixels
   const size = config.uploadThumbSize;
 
-  // eslint-disable-next-line no-magic-numbers
   if (mimetype.substr(0, 6) === 'image/') {
 
     // Shrink with sharp.

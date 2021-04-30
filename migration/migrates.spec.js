@@ -1,4 +1,4 @@
-/* eslint-disable no-magic-numbers, max-lines */
+/* eslint-disable max-lines */
 /* global describe, it, beforeEach, before, after */
 
 const db = require('georap-db');

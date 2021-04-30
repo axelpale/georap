@@ -1,4 +1,4 @@
-/* eslint-disable no-magic-numbers, no-sync, max-lines */
+/* eslint-disable no-sync, max-lines */
 
 const config = require('georap-config');
 const db = require('georap-db');

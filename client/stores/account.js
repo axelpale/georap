@@ -226,7 +226,6 @@ exports.isLoggedIn = function () {
 
   if (token) {
     var decoded = jwtDecode(token);
-    // eslint-disable-next-line no-magic-numbers
     if (decoded.exp > Date.now() / 1000) {
       return true;
     }

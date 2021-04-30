@@ -1,5 +1,4 @@
 /* global google */
-/* eslint-disable no-magic-numbers */
 
 // Map marker icon definitions. The icons can be used only after google maps
 // api has been loaded. Therefore, call the methods after initMap.

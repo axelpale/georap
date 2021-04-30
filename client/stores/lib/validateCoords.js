@@ -1,4 +1,4 @@
-/* eslint-disable no-magic-numbers,yoda */
+/* eslint-disable yoda */
 
 exports.isValidLatitude = function (lat) {
   // Parameters

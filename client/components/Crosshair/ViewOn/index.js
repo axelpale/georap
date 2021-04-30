@@ -1,4 +1,3 @@
-/* eslint-disable no-magic-numbers */
 var template = require('./template.ejs');
 var emitter = require('component-emitter');
 var exportsModel = require('georap-models').exports;

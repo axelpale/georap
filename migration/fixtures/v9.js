@@ -1,4 +1,3 @@
-/* eslint-disable no-magic-numbers */
 // NOTE This file is an important documentation of the data structure of v9.
 
 const c = require('./common');

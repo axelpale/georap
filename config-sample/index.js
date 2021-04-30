@@ -1,5 +1,3 @@
-/* eslint-disable no-magic-numbers */
-
 var path = require('path');
 
 module.exports = {

@@ -1,4 +1,3 @@
-/* eslint-disable no-magic-numbers */
 const path = require('path');
 const fse = require('fs-extra');
 const sharp = require('sharp');

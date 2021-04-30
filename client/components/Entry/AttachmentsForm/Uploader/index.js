@@ -1,4 +1,3 @@
-/* eslint-disable no-magic-numbers */
 var template = require('./template.ejs');
 var FileUpload = require('./FileUpload');
 var emitter = require('component-emitter');

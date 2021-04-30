@@ -1,4 +1,3 @@
-/* eslint-disable no-magic-numbers */
 const test = require('tape');
 const assertEvery = require('./assertEvery');
 const config = require('georap-config');

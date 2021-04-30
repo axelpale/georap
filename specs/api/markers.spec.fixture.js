@@ -1,5 +1,3 @@
-/* eslint-disable no-magic-numbers */
-
 const db = require('georap-db');
 
 module.exports = {

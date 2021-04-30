@@ -1,4 +1,3 @@
-/* eslint-disable no-magic-numbers */
 // NOTE This file is an important documentation of the data structure at v12.
 // NOTE The properties changed from the prev version are marked with NOTE
 
