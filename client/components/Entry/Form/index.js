@@ -50,25 +50,30 @@ module.exports = function (locationId, entry) {
       isNew: isNew,
     }));
 
+    // Markdown form
     children.markdown = new MarkdownView(entry.markdown, {
       label: 'Tell something about the location:',
       rows: 3,
     });
     children.markdown.bind($mount.find('.form-markdown-container'));
 
+    // Attachments form
     children.attachments = new AttachmentsForm(entry.attachments, {
       label: 'Photos and documents:',
     });
     children.attachments.bind($mount.find('.form-attachments-container'));
 
+    // Flags form
     children.flags = new FlagsForm(entry.flags);
     children.flags.bind($mount.find('.form-flags-container'));
 
+    // Error
     children.error = new ErrorView();
     children.error.bind($mount.find('.form-error-container'));
-
+    // Progress bar
     $elems.progress = $mount.find('.form-progress');
 
+    // Save button
     $elems.saveBtn = $mount.find('.entry-form-save');
     $elems.saveBtn.click(function () {
       // Create new entry or update the existing
