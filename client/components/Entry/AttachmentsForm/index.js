@@ -9,13 +9,13 @@ var ui = require('tresdb-ui');
 module.exports = function (attachments, opts) {
   // Parameters:
   //   attachments
-  //     sdf
+  //     array of attachment objects
   //   opts, object with props
   //     label
   //       String label above drag-n-drop box. Set null or '' to disable.
   //       Default ''.
   //     limit
-  //       zero or positive number. Defaults to 100.
+  //       zero or positive number. Max number of attachments. Defaults to 100.
   //
   if (!opts) {
     opts = {};
@@ -48,7 +48,7 @@ module.exports = function (attachments, opts) {
       $elems.uploader.before($attContainer);
       children[att.key] = new AttachmentView(att);
       children[att.key].bind($attContainer);
-
+      // Ordering
       children[att.key].on('up', function () {
         $attContainer.insertBefore(
           $attContainer.prev('.form-attachment-container')
@@ -59,6 +59,7 @@ module.exports = function (attachments, opts) {
           $attContainer.next('.form-attachment-container')
         );
       });
+      // Remove
       children[att.key].on('remove', function () {
         children[att.key].unbind();
         delete children[att.key];
