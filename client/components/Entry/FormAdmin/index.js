@@ -1,9 +1,11 @@
 // Entry form for non-owner admins.
 // Admins can only delete other's entries.
 //
-var template = require('./template.ejs');
 var ui = require('tresdb-ui');
 var emitter = require('component-emitter');
+var template = require('./template.ejs');
+var RemoveForm = require('../Remove');
+var MoveForm = require('../MoveForm');
 var entries = tresdb.stores.entries;
 
 module.exports = function (locationId, entry) {
@@ -15,43 +17,78 @@ module.exports = function (locationId, entry) {
   //   entry
   //     entry object
   //
+  var $mount = null;
+  var $elems = {};
+  var children = {};
   var self = this;
   emitter(self);
 
-  var listeners = {};
-  var children = {};
 
-  self.bind = function ($mount) {
+  self.bind = function ($mountEl) {
+    $mount = $mountEl;
 
     $mount.html(template({
       entry: entry,
     }));
 
-    listeners.deleteBtn = $mount.find('.entry-form-delete');
-    listeners.deleteBtn.click(function () {
-      // Confirm before delete
-      ui.toggleHidden($mount.find('.entry-form-delete-confirm'));
+    $elems.cancelBtn = $mount.find('.entry-form-cancel');
+    $elems.cancelBtn.click(function () {
+      self.emit('exit');
     });
 
-    listeners.deleteYesBtn = $mount.find('.entry-form-delete-yes');
-    listeners.deleteYesBtn.click(function () {
-      entries.remove(locationId, entry._id, function (err) {
+    $elems.removeOpen = $mount.find('.entry-remove-open');
+    $elems.remove = $mount.find('.entry-remove-container');
+    $elems.moveOpen = $mount.find('.entry-move-open');
+    $elems.move = $mount.find('.entry-move-container');
+
+    var pauseMs = 500;
+    $elems.removeOpen.click(ui.throttle(pauseMs, function () {
+      ui.toggleHidden($elems.remove);
+    }));
+    $elems.moveOpen.click(ui.throttle(pauseMs, function () {
+      ui.toggleHidden($elems.move);
+    }));
+
+    // Remove entry
+    children.remove = new RemoveForm({
+      info: 'This will delete the post and ' +
+        'all its attachments and comments if any.',
+    });
+    children.remove.bind($elems.remove);
+    children.remove.on('submit', function () {
+      entries.remove(entry.locationId, entry._id, function (err) {
         if (err) {
-          // TODO show submit error
-          return console.log(err);
+          children.remove.reset(); // hide progress and confirmation
+          children.error.update(err.message);
+          return;
         }
-        self.emit('success');
+
+        // Success. The server will emit location_entry_removed
+        self.emit('exit');
       });
     });
 
-    listeners.cancelBtn = $mount.find('.entry-form-cancel');
-    listeners.cancelBtn.click(function () {
-      self.emit('exit');
+    // Move entry
+    children.move = new MoveForm(entry);
+    children.move.bind($elems.move);
+
+    // Hide on cancel
+    children.remove.on('exit', function () {
+      ui.hide($elems.remove);
+    });
+    children.move.on('exit', function () {
+      ui.hide($elems.move);
     });
   };
 
   self.unbind = function () {
-    ui.offAll(listeners);
-    ui.unbindAll(children);
+    if ($mount) {
+      ui.offAll($elems);
+      $elems = {};
+      ui.unbindAll(children);
+      children = {};
+      $mount.empty();
+      $mount = null;
+    }
   };
 };

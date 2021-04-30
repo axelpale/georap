@@ -4,16 +4,15 @@
     <div class="pull-right">
       <button type="button" class="btn btn-default entry-form-cancel">Cancel</button>
     </div>
-    <button type="button" class="btn btn-danger entry-form-delete">Delete post...</button>
+    <div class="form-group">
+      <button type="button" class="entry-remove-open btn btn-danger">Delete post...</button>
+      <button type="button" class="entry-move-open btn btn-default">Move post...</button>
+    </div>
+    <div class="entry-remove-container hidden"></div>
+    <div class="entry-move-container hidden"></div>
   </div>
 
-  <!-- Delete confirmation -->
-  <div class="form-group hidden entry-form-delete-confirm">
-    Are you sure?
-    <button type="button" class="btn btn-danger entry-form-delete-yes">Yes, delete!</button>
-  </div>
-
-  <div id="tresdb-entry-progress" class="progress hidden">
+  <div class="form-progress progress hidden">
     <div class="progress-bar progress-bar-striped active" role="progressbar" style="width: 100%">
       <span class="sr-only">Waiting for server</span>
     </div>
