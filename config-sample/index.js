@@ -377,6 +377,7 @@ module.exports = {
 
   // Commenting
   comments: {
+    secondsEditable: 360,
     minMessageLength: 2,
     maxMessageLength: 600,
   },

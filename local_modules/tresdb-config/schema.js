@@ -215,6 +215,9 @@ module.exports = {
     comments: {
       type: 'object',
       properties: {
+        secondsEditable: {
+          type: 'integer',
+        },
         minMessageLength: {
           type: 'integer',
         },
@@ -222,6 +225,11 @@ module.exports = {
           type: 'integer',
         },
       },
+      required: [
+        'secondsEditable',
+        'minMessageLength',
+        'maxMessageLength',
+      ],
       additionalProperties: false,
     },
     coordinateSystems: {
