@@ -1,6 +1,5 @@
 // Tools
 var urls = require('georap-urls-client');
-var cap = require('tresdb-cap');
 var ui = require('tresdb-ui');
 // Templates
 var template = require('./template.ejs');
@@ -28,13 +27,13 @@ module.exports = function (location) {
         currentType: location.getType(),
         toSymbolUrl: urls.locationTypeToSymbolUrl,
         defaultType: locationTypes[0],
-        cap: cap,
+        cap: ui.cap,
       }),
       // List of available statuses
       statusFormListHtml: statusFormListTemplate({
         locationStatuses: locationStatuses,
         currentStatus: location.getStatus(),
-        cap: cap,
+        cap: ui.cap,
       }),
       // List of available types
       typeFormListHtml: typeFormListTemplate({
