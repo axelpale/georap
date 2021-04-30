@@ -96,6 +96,9 @@ hr {
   background-color: #0C0C0C;
   border: 1px solid #333;
 }
+a.list-group-item, button.list-group-item {
+  color: #ddd; /* orig #555 */
+}
 
 .well {
   background-color: #121212;
