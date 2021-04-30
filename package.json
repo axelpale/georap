@@ -100,7 +100,7 @@
     "georap-bus": "file:local_modules/georap-bus",
     "georap-config": "file:local_modules/georap-config",
     "georap-db": "file:local_modules/georap-db",
-    "tresdb-key": "file:local_modules/tresdb-key",
+    "georap-key": "file:local_modules/georap-key",
     "tresdb-models": "file:local_modules/tresdb-models",
     "tresdb-points": "file:local_modules/tresdb-points",
     "tresdb-ui": "file:local_modules/tresdb-ui",

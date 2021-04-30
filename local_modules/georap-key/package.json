@@ -1,5 +1,5 @@
 {
-  "name": "tresdb-key",
+  "name": "georap-key",
   "private": true,
   "version": "1.0.0",
   "description": "Random key generation",

@@ -1,6 +1,6 @@
 const path = require('path');
 const db = require('georap-db');
-const keygen = require('tresdb-key');
+const keygen = require('georap-key');
 
 exports.get = function (key, callback) {
   // Find single attachment
