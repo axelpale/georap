@@ -1,5 +1,5 @@
 {
-  "name": "tresdb-bus",
+  "name": "georap-bus",
   "private": true,
   "version": "1.0.0",
   "description": "Client-side event bus",

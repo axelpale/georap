@@ -5,7 +5,7 @@ var ui = require('tresdb-ui');
 var template = require('./template.ejs');
 var listTemplate = require('./list.ejs');
 var LocationSelector = require('../LocationSelector');
-var rootBus = require('tresdb-bus');
+var rootBus = require('georap-bus');
 var locationsStore = tresdb.stores.locations;
 
 var LIST_SIZE = 50;

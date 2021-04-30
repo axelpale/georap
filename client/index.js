@@ -1,5 +1,5 @@
 // Root bus
-var bus = require('tresdb-bus');
+var bus = require('georap-bus');
 var socket = require('./connection/socket');
 
 // Collect data access API's under tresdb global.

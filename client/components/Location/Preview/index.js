@@ -2,7 +2,7 @@
 
 var template = require('./template.ejs');
 var models = require('tresdb-models');
-var rootBus = require('tresdb-bus');
+var rootBus = require('georap-bus');
 var Thumbnail = require('georap-components').Thumbnail;
 var ui = require('tresdb-ui');
 

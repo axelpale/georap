@@ -4,7 +4,7 @@ var Thumbnail = require('georap-components').Thumbnail;
 var ThumbnailForm = require('./Form');
 var template = require('./template.ejs');
 var models = require('tresdb-models');
-var rootBus = require('tresdb-bus');
+var rootBus = require('georap-bus');
 var ui = require('tresdb-ui');
 
 module.exports = function (location, entries) {

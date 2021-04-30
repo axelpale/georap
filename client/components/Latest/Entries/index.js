@@ -4,7 +4,7 @@ var emitter = require('component-emitter');
 var ui = require('tresdb-ui');
 var template = require('./template.ejs');
 var EntryView = require('../../Entry');
-var rootBus = require('tresdb-bus');
+var rootBus = require('georap-bus');
 var entriesStore = tresdb.stores.entries;
 
 var LIST_SIZE = 10;

@@ -3,7 +3,7 @@
 var icons = require('../lib/icons');
 var getVisibleCenter = require('../lib/getVisibleCenter');
 var setVisibleCenter = require('../lib/setVisibleCenter');
-var bus = require('tresdb-bus');
+var bus = require('georap-bus');
 
 module.exports = function (map) {
 

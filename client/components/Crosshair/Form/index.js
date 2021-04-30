@@ -1,6 +1,6 @@
 var template = require('./template.ejs');
 var ui = require('tresdb-ui');
-var bus = require('tresdb-bus');
+var bus = require('georap-bus');
 var defaultSystemName = tresdb.config.coordinateSystems[0][0];
 
 // Coordinate decimals

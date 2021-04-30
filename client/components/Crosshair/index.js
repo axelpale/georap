@@ -11,7 +11,7 @@ var ViewOnView = require('./ViewOn');
 var CreateView = require('./Create');
 var geometryApi = tresdb.stores.geometry;
 var geometryModel = require('tresdb-models').geometry;
-var bus = require('tresdb-bus');
+var bus = require('georap-bus');
 var throttle = require('georap-throttle');
 
 module.exports = function () {
