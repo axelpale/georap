@@ -101,13 +101,13 @@ module.exports = (query, options, callback) => {
         },
       },
     },
-    // Replace attachment keys with attachment objects
+    // Gather attachment objects. NOTE lookup does not preserve order.
     {
       $lookup: {
         from: 'attachments',
         localField: 'attachments',
         foreignField: 'key',
-        as: 'attachments',
+        as: 'entryAttachments',
       },
     },
     // Replace gathered comment attachment keys with attachment objects
@@ -128,19 +128,29 @@ module.exports = (query, options, callback) => {
         return callback(err);
       }
 
-      // Complete attachment URLs
-      entries.forEach(entry => {
-        entry.attachments = entry.attachments.map(urls.completeAttachment);
-      });
-
-      // Complete comment attachment objects and their URLs
-      const catReducer = (dict, cat) => {
-        dict[cat.key] = cat;
+      // Reducer to convert arrays to fast access dict
+      const attReducer = (dict, att) => {
+        dict[att.key] = att;
         return dict;
       };
+
+      // Preserve attachment order and complete attachment URLs
+      entries.forEach(entry => {
+        // Gather entry attachments to a fast-access dict
+        const atts = entry.entryAttachments.reduce(attReducer, {});
+        entry.attachments = entry.attachments.map((attKey) => {
+          const att = atts[attKey];
+          // Complete url
+          return urls.completeAttachment(att);
+        });
+        // Forget the temporary entry attachment array
+        delete entry.entryAttachments;
+      });
+
+      // Complete comment attachment objects (cats) and their URLs
       entries.forEach(entry => {
         // Gather comment attachments to a fast-access dict
-        const cats = entry.commentAttachments.reduce(catReducer, {});
+        const cats = entry.commentAttachments.reduce(attReducer, {});
         // Replace in-comment attachment keys with attachment objects.
         entry.comments.forEach((comment) => {
           comment.attachments = comment.attachments.map((catKey) => {

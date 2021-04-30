@@ -13,11 +13,12 @@ module.exports = (entryId, callback) => {
         },
       },
       {
+        // NOTE lookup does not preserve local array order
         $lookup: {
           from: 'attachments',
           localField: 'attachments',
           foreignField: 'key',
-          as: 'attachments',
+          as: 'entryAttachments',
         },
       },
     ])
@@ -30,10 +31,22 @@ module.exports = (entryId, callback) => {
         return callback(null, null);
       }
 
+      // Unwrap the single entry.
       const entry = entries[0];
 
-      // Complete attachment URLs
-      entry.attachments = entry.attachments.map(urls.completeAttachment);
+      // Preserve attachment order and complete attachment URLs.
+      // First, put attachments into fast-access dict.
+      const attDict = entry.entryAttachments.reduce((acc, att) => {
+        acc[att.key] = att;
+        return acc;
+      }, {});
+      // Then replace the keys with objects and also complete url.
+      entry.attachments = entry.attachments.map((attKey) => {
+        const att = attDict[attKey];
+        return urls.completeAttachment(att);
+      });
+      // Finally, forget the temporary array
+      delete entry.entryAttachments;
 
       return callback(null, entry);
     });
