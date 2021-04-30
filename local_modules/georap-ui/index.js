@@ -1,3 +1,5 @@
+// Intended for client-side only.
+
 var marked = require('marked');
 var timestamp = require('timestamp');
 
