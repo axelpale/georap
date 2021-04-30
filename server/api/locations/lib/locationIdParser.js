@@ -3,7 +3,7 @@
 const dal = require('../location/dal');
 
 const status = require('http-status-codes');
-const db = require('tresdb-db');
+const db = require('georap-db');
 
 module.exports = function (req, res, next) {
   // Converts string object id to ObjectId and fetches the location.

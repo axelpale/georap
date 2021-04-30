@@ -1,6 +1,6 @@
 const iter = require('../../lib/iter');
 const schema = require('../../lib/schema');
-const db = require('tresdb-db');
+const db = require('georap-db');
 
 const LNG_MAX = 180;
 const LNG_MIN = -180;

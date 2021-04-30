@@ -1,6 +1,6 @@
 const config = require('georap-config');
 const bcrypt = require('bcryptjs');
-const db = require('tresdb-db');
+const db = require('georap-db');
 
 // eslint-disable-next-line no-sync
 exports.PASSWORD = bcrypt.hashSync('admin_password', config.bcrypt.rounds);

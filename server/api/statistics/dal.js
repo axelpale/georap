@@ -1,4 +1,4 @@
-//var db = require('tresdb-db');
+//var db = require('georap-db');
 const pjson = require('../../../package.json');
 const locationsDal = require('../locations/dal');
 const entriesDal = require('../entries/dal');

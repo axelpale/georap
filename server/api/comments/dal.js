@@ -1,4 +1,4 @@
-const db = require('tresdb-db');
+const db = require('georap-db');
 
 exports.count = (callback) => {
   // Count comments in non-deleted entries

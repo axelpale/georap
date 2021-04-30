@@ -1,5 +1,5 @@
 const path = require('path');
-const db = require('tresdb-db');
+const db = require('georap-db');
 const keygen = require('tresdb-key');
 
 exports.get = function (key, callback) {

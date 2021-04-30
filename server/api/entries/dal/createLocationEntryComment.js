@@ -1,5 +1,5 @@
 /* eslint-disable no-magic-numbers */
-const db = require('tresdb-db');
+const db = require('georap-db');
 const eventsDal = require('../../events/dal');
 
 module.exports = (params, callback) => {

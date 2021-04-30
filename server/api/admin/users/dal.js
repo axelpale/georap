@@ -1,5 +1,5 @@
 
-const db = require('tresdb-db');
+const db = require('georap-db');
 
 exports.getUsersForAdmin = function (callback) {
   // Fetch an array of users with admin-only information such as email.

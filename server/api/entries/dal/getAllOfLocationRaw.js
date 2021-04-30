@@ -1,4 +1,4 @@
-const db = require('tresdb-db');
+const db = require('georap-db');
 
 module.exports = (locationId, callback) => {
   // Get all non-deleted entries of a location, most recent first.

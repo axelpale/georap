@@ -12,7 +12,7 @@ const config = require('georap-config');
 const fixture = require('./fixtures/example');
 const loadFixture = require('./lib/loadFixture');
 
-const db = require('tresdb-db');
+const db = require('georap-db');
 const fse = require('fs-extra');
 const path = require('path');
 

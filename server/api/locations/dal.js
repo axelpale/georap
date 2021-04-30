@@ -1,6 +1,6 @@
 /* eslint-disable max-lines */
 
-const db = require('tresdb-db');
+const db = require('georap-db');
 const layersDal = require('../../../worker/layers/dal');
 const eventsDal = require('../events/dal');
 const config = require('georap-config');

@@ -1,6 +1,6 @@
 /* eslint-disable no-magic-numbers */
 
-const db = require('tresdb-db');
+const db = require('georap-db');
 
 module.exports = {
   collections: {

@@ -1,6 +1,6 @@
 /* global describe, it, beforeEach, before, after */
 
-const db = require('tresdb-db');
+const db = require('georap-db');
 const config = require('georap-config');
 const loadFixture = require('../../migration/lib/loadFixture');
 const assert = require('assert');

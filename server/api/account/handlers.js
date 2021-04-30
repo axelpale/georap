@@ -2,7 +2,7 @@
 
 const status = require('http-status-codes');
 const config = require('georap-config');
-const db = require('tresdb-db');
+const db = require('georap-db');
 
 const hostname = require('../../services/hostname');
 const mailer = require('../../services/mailer');

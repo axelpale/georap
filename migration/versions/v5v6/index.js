@@ -18,7 +18,7 @@
 // 8. remove deprecated entries
 // 9. normalize entries: combine entry types to single location_entry
 
-const db = require('tresdb-db');
+const db = require('georap-db');
 const uploads = require('../../../server/services/uploads');
 //var googlemaps = require('../../../server/services/googlemaps');
 const schema = require('../../lib/schema');

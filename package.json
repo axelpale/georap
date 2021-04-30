@@ -99,7 +99,7 @@
     "striptags": "^3.1.0",
     "georap-bus": "file:local_modules/georap-bus",
     "georap-config": "file:local_modules/georap-config",
-    "tresdb-db": "file:local_modules/tresdb-db",
+    "georap-db": "file:local_modules/georap-db",
     "tresdb-key": "file:local_modules/tresdb-key",
     "tresdb-models": "file:local_modules/tresdb-models",
     "tresdb-points": "file:local_modules/tresdb-points",

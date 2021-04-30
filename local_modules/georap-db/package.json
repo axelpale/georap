@@ -1,5 +1,5 @@
 {
-  "name": "tresdb-db",
+  "name": "georap-db",
   "private": true,
   "version": "1.0.0",
   "description": "Provide tresdb database access as a package",

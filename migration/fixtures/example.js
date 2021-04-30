@@ -10,7 +10,7 @@
 // in development.
 
 const config = require('georap-config');
-const db = require('tresdb-db');
+const db = require('georap-db');
 const bcrypt = require('bcryptjs');
 const common = require('./common');
 

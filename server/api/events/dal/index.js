@@ -1,7 +1,7 @@
 //
 // Events
 //
-const db = require('tresdb-db');
+const db = require('georap-db');
 
 // Statistics
 

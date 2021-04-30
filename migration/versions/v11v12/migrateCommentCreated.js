@@ -1,7 +1,7 @@
 // Migrate given location_entry_comment_created
 //
 const asyn = require('async');
-const db = require('tresdb-db');
+const db = require('georap-db');
 
 module.exports = (evs, callback) => {
   const newEvs = evs.map((ev) => {

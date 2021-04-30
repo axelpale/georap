@@ -2,7 +2,7 @@
 // A tool to test if a collection is equal to a fixture.
 // Currently this can test only collections with single document.
 
-const db = require('tresdb-db');
+const db = require('georap-db');
 const fixtures = require('../fixtures');
 const _ = require('lodash');
 const clone = require('clone');

@@ -2,7 +2,7 @@
 const test = require('tape');
 const assertEvery = require('./assertEvery');
 const config = require('georap-config');
-const db = require('tresdb-db');
+const db = require('georap-db');
 const loadFixture = require('./loadFixture');
 const dropCollections = require('./dropCollections');
 

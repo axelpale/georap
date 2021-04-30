@@ -15,7 +15,7 @@ io.init(server);
 const mailer = require('./services/mailer');
 mailer.init();
 
-const db = require('tresdb-db');
+const db = require('georap-db');
 
 // Logging
 const loggers = require('./services/logs/loggers');

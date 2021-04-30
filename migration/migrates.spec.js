@@ -1,7 +1,7 @@
 /* eslint-disable no-magic-numbers, max-lines */
 /* global describe, it, beforeEach, before, after */
 
-const db = require('tresdb-db');
+const db = require('georap-db');
 const assert = require('assert');
 
 const config = require('georap-config');

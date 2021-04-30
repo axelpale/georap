@@ -1,4 +1,4 @@
-const db = require('tresdb-db');
+const db = require('georap-db');
 
 module.exports = (locationId, callback) => {
   // Search and select a thumbnail for location.

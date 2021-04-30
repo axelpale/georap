@@ -3,7 +3,7 @@
 // to req.location and req.entry for further use.
 
 const status = require('http-status-codes');
-const db = require('tresdb-db');
+const db = require('georap-db');
 
 module.exports = function (req, res, next) {
   const stringId = req.params.entryId;

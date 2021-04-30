@@ -1,4 +1,4 @@
-const db = require('tresdb-db');
+const db = require('georap-db');
 const lib = require('./lib');
 
 module.exports = (params, callback) => {

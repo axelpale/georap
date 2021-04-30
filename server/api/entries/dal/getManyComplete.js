@@ -1,4 +1,4 @@
-const db = require('tresdb-db');
+const db = require('georap-db');
 const urls = require('georap-urls-server');
 
 module.exports = (query, options, callback) => {

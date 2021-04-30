@@ -5,7 +5,7 @@
 
 const iter = require('../../lib/iter');
 const schema = require('../../lib/schema');
-const db = require('tresdb-db');
+const db = require('georap-db');
 
 const FROM_VERSION = 4;
 const TO_VERSION = FROM_VERSION + 1;

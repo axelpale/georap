@@ -1,4 +1,4 @@
-const db = require('tresdb-db');
+const db = require('georap-db');
 
 module.exports = (username, callback) => {
   // Return all non-deleted entries created by user,

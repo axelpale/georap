@@ -4,7 +4,7 @@
 // 1. set schema version to 9
 // 2. replace tags property with status and type for each location
 
-const db = require('tresdb-db');
+const db = require('georap-db');
 const schema = require('../../lib/schema');
 const iter = require('../../lib/iter');
 const tagdog = require('./tagdog');

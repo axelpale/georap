@@ -1,5 +1,5 @@
 const asyn = require('async');
-const db = require('tresdb-db');
+const db = require('georap-db');
 
 module.exports = function (collectionName, iteratee, callback) {
   // Validates each document in a MongoDB collection. Iteratee is the validator

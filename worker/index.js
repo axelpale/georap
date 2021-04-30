@@ -15,7 +15,7 @@
 // - require db where you need it. No need to pass it around.
 // - after success, do console.log('<jobname>: <human readable results>')
 
-const db = require('tresdb-db');
+const db = require('georap-db');
 
 const jobs = [
   require('./search'),

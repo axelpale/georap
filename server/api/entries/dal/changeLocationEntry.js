@@ -1,4 +1,4 @@
-const db = require('tresdb-db');
+const db = require('georap-db');
 const purifyMarkdown = require('purify-markdown');
 const _ = require('lodash');
 const eventsDal = require('../../events/dal');

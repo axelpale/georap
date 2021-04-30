@@ -6,7 +6,7 @@
 //
 // Also, new indices were made and thus 'npm run migrate' is needed.
 
-const db = require('tresdb-db');
+const db = require('georap-db');
 const schema = require('../../lib/schema');
 const iter = require('../../lib/iter');
 const asyn = require('async');

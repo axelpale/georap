@@ -1,4 +1,4 @@
-const db = require('tresdb-db');
+const db = require('georap-db');
 const usersDal = require('../users/dal');
 const _ = require('lodash');
 const clone = require('clone');

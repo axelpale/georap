@@ -1,5 +1,5 @@
 const migrates = require('../migration/migrates');
-const db = require('tresdb-db');
+const db = require('georap-db');
 const readline = require('readline');
 
 db.init((dbErr) => {

@@ -1,4 +1,4 @@
-const db = require('tresdb-db');
+const db = require('georap-db');
 
 module.exports = (entryId, callback) => {
   // Find single entry

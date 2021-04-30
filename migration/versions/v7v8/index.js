@@ -6,7 +6,7 @@
 // 3. write a status property for each user according to the blacklist
 // 4. remove the blacklist
 
-const db = require('tresdb-db');
+const db = require('georap-db');
 const schema = require('../../lib/schema');
 const iter = require('../../lib/iter');
 const async = require('async');

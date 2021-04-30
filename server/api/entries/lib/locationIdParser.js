@@ -1,6 +1,6 @@
 // Fetches location from req.body.locationId
 const status = require('http-status-codes');
-const db = require('tresdb-db');
+const db = require('georap-db');
 
 module.exports = function (req, res, next) {
   const locationIdString = req.body.locationId;

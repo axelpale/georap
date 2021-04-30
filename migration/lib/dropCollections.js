@@ -5,7 +5,7 @@ module.exports = (db, callback) => {
   //
   // Parameters:
   //   db
-  //     tresdb-db instance
+  //     georap-db instance
   //
   db.get()
     .listCollections({})

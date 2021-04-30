@@ -3,7 +3,7 @@
 // NOTE The properties changed from the prev version are marked with NOTE
 
 const c = require('./common');
-const db = require('tresdb-db');
+const db = require('georap-db');
 
 module.exports = {
   collections: {

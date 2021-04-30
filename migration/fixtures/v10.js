@@ -2,7 +2,7 @@
 // NOTE This file is an important documentation of the data structure at v10.
 
 const c = require('./common');
-const db = require('tresdb-db');
+const db = require('georap-db');
 
 module.exports = {
   collections: {

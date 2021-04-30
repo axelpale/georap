@@ -1,5 +1,5 @@
 const asyn = require('async');
-const db = require('tresdb-db');
+const db = require('georap-db');
 
 exports.updateEach = function (collection, iteratee, callback) {
   // Replace each document in a MongoDB collection. Iteratee is the update

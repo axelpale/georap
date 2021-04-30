@@ -3,7 +3,7 @@
 // The Unit
 const iter = require('./iter');
 
-const db = require('tresdb-db');
+const db = require('georap-db');
 const config = require('georap-config');
 const dropCollections = require('./dropCollections');
 // Enable should api

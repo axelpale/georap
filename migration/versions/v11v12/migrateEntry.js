@@ -7,7 +7,7 @@ const transformChangedEvent = require('./transformChangedEvent');
 const transformComments = require('./transformComments');
 const replayEntry = require('./replayEntry');
 const asyn = require('async');
-const db = require('tresdb-db');
+const db = require('georap-db');
 const _ = require('lodash');
 
 module.exports = (entryId, callback) => {

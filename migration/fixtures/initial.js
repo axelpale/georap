@@ -1,7 +1,7 @@
 /* eslint-disable no-magic-numbers, no-sync, max-lines */
 
 const config = require('georap-config');
-const db = require('tresdb-db');
+const db = require('georap-db');
 const bcrypt = require('bcryptjs');
 
 const admin = config.admin.username;

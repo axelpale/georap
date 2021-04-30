@@ -4,7 +4,7 @@
 // 1. set schema version to 7
 // 2. add text1 and text2 properties for each location
 
-const db = require('tresdb-db');
+const db = require('georap-db');
 const schema = require('../../lib/schema');
 const iter = require('../../lib/iter');
 const async = require('async');

@@ -1,7 +1,7 @@
 // Tools to find out and update the current database schema version.
 
 const pjson = require('../../package.json');
-const db = require('tresdb-db');
+const db = require('georap-db');
 const semver = require('semver');
 
 exports.getDesiredVersion = function () {

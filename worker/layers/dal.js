@@ -1,4 +1,4 @@
-const db = require('tresdb-db');
+const db = require('georap-db');
 
 const TOP_LAYER = 1;
 const BOTTOM_LAYER = 15;

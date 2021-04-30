@@ -1,4 +1,4 @@
-const db = require('tresdb-db');
+const db = require('georap-db');
 const proptools = require('georap-prop');
 const asyn = require('async');
 const io = require('../../../services/io');

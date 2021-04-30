@@ -1,4 +1,4 @@
-const db = require('tresdb-db');
+const db = require('georap-db');
 
 module.exports = function (username, callback) {
   // Find earliest and latest event of an user.

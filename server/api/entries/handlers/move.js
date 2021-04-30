@@ -1,6 +1,6 @@
 const status = require('http-status-codes');
 const entriesDal = require('../dal');
-const db = require('tresdb-db');
+const db = require('georap-db');
 
 module.exports = (req, res, next) => {
   // Move entry to another location

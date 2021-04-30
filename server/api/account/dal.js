@@ -1,6 +1,6 @@
 
 const config = require('georap-config');
-const db = require('tresdb-db');
+const db = require('georap-db');
 const bcrypt = require('bcryptjs');
 
 exports.createUser = function (username, email, password, callback) {

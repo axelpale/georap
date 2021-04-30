@@ -1,4 +1,4 @@
-const db = require('tresdb-db');
+const db = require('georap-db');
 const loadFixture = require('./lib/loadFixture');
 
 module.exports = function (callback) {

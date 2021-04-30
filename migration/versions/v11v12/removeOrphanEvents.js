@@ -1,6 +1,6 @@
 // Until now, we have removed entries by deleting them from the database.
 //
-const db = require('tresdb-db');
+const db = require('georap-db');
 const asyn = require('async');
 
 module.exports = (callback) => {

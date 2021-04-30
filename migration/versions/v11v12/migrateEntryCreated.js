@@ -1,6 +1,6 @@
 // Migrate given location_entry_created
 //
-const db = require('tresdb-db');
+const db = require('georap-db');
 
 module.exports = (crev, filepathToAttachments, entryTime, callback) => {
   // Parameters
