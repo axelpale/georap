@@ -9,7 +9,7 @@
 // This fixture is aimed to be used as a demo and for experimenting
 // in development.
 
-const config = require('tresdb-config');
+const config = require('georap-config');
 const db = require('tresdb-db');
 const bcrypt = require('bcryptjs');
 const common = require('./common');

@@ -1,7 +1,7 @@
 // Provides service for coordinate projections.
 //
 const proj4 = require('proj4');
-const config = require('tresdb-config');
+const config = require('georap-config');
 
 // Init
 config.coordinateSystems.forEach((cordsys) => {

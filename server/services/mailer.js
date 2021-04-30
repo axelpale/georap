@@ -1,7 +1,7 @@
 // Singleton wrapper around nodemailer
 
 const nodemailer = require('nodemailer');
-const config = require('tresdb-config');
+const config = require('georap-config');
 
 let mailer = null;
 

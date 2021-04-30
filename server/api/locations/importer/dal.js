@@ -1,6 +1,6 @@
 /* eslint-disable max-lines */
 
-const config = require('tresdb-config');
+const config = require('georap-config');
 const entriesDal = require('../../entries/dal');
 const parsekml = require('./parsekml');
 const dallib = require('./dallib');

@@ -98,7 +98,7 @@
     "socket.io-client": "^2.3.0",
     "striptags": "^3.1.0",
     "georap-bus": "file:local_modules/georap-bus",
-    "tresdb-config": "file:local_modules/tresdb-config",
+    "georap-config": "file:local_modules/georap-config",
     "tresdb-db": "file:local_modules/tresdb-db",
     "tresdb-key": "file:local_modules/tresdb-key",
     "tresdb-models": "file:local_modules/tresdb-models",

@@ -1,4 +1,4 @@
-const config = require('tresdb-config');
+const config = require('georap-config');
 const tempdirs = require('../../server/services/tempdirs');
 
 exports.run = function (callback) {

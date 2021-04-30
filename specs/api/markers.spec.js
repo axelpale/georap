@@ -2,7 +2,7 @@
 /* eslint-disable handle-callback-err */
 
 const db = require('tresdb-db');
-const config = require('tresdb-config');
+const config = require('georap-config');
 const loadFixture = require('../../migration/lib/loadFixture');
 const assert = require('assert');
 

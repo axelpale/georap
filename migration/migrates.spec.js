@@ -4,7 +4,7 @@
 const db = require('tresdb-db');
 const assert = require('assert');
 
-const config = require('tresdb-config');
+const config = require('georap-config');
 const migrates = require('./migrates');
 const schema = require('./lib/schema');
 const assertEvery = require('./lib/assertEvery');

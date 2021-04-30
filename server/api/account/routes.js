@@ -1,6 +1,6 @@
 /* eslint-disable new-cap */
 
-const config = require('tresdb-config');
+const config = require('georap-config');
 const handlers = require('./handlers');
 
 const jsonParser = require('body-parser').json();

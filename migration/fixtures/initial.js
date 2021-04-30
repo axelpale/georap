@@ -1,6 +1,6 @@
 /* eslint-disable no-magic-numbers, no-sync, max-lines */
 
-const config = require('tresdb-config');
+const config = require('georap-config');
 const db = require('tresdb-db');
 const bcrypt = require('bcryptjs');
 

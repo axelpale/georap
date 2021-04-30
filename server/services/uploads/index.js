@@ -1,6 +1,6 @@
 // File upload request parser
 
-const config = require('tresdb-config');
+const config = require('georap-config');
 const sharp = require('sharp');
 const multer = require('multer');
 const mime = require('mime');

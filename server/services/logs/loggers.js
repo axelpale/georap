@@ -1,4 +1,4 @@
-const config = require('tresdb-config');
+const config = require('georap-config');
 const path = require('path');
 const morgan = require('morgan');
 const fse = require('fs-extra');

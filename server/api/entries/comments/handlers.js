@@ -1,7 +1,7 @@
 const entriesDal = require('../dal');
 const purifyMarkdown = require('purify-markdown');
 const commentModel = require('tresdb-models').comment;
-const config = require('tresdb-config');
+const config = require('georap-config');
 const status = require('http-status-codes');
 
 exports.create = (req, res, next) => {

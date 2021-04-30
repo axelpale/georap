@@ -1,7 +1,7 @@
 /* eslint max-lines: 'off' */
 
 const status = require('http-status-codes');
-const config = require('tresdb-config');
+const config = require('georap-config');
 const db = require('tresdb-db');
 
 const hostname = require('../../services/hostname');

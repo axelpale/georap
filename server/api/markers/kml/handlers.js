@@ -1,5 +1,5 @@
 
-const config = require('tresdb-config');
+const config = require('georap-config');
 const markersDal = require('../dal');
 const templates = require('./templates');
 const status = require('http-status-codes');

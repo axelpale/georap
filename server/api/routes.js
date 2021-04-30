@@ -1,6 +1,6 @@
 /* eslint-disable new-cap */
 
-const config = require('tresdb-config');
+const config = require('georap-config');
 
 const accountRouter = require('./account/routes');
 const adminRouter = require('./admin/routes');

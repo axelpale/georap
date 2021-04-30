@@ -1,6 +1,6 @@
 /* eslint-disable max-statements */
 
-const config = require('tresdb-config');
+const config = require('georap-config');
 const http = require('http');
 const path = require('path');
 const fse = require('fs-extra');

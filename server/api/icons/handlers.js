@@ -3,7 +3,7 @@ const path = require('path');
 const fse = require('fs-extra');
 const sharp = require('sharp');
 const status = require('http-status-codes');
-const config = require('tresdb-config');
+const config = require('georap-config');
 
 const markersBase = path.join(config.staticDir, 'images', 'markers');
 const templatesBase = path.join(markersBase, 'templates');

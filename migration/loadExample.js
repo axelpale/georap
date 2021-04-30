@@ -8,7 +8,7 @@
 //  OR
 //   node migration/loadExample.js
 
-const config = require('tresdb-config');
+const config = require('georap-config');
 const fixture = require('./fixtures/example');
 const loadFixture = require('./lib/loadFixture');
 

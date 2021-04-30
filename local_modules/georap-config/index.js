@@ -9,7 +9,7 @@ var Ajv = require('ajv');
 // by checking the global var window.
 if (typeof window !== 'undefined') {
   throw new Error('Unsecure exposal of server configuration on client side. ' +
-    'Ensure that tresdb-config module is used only in server-side code.');
+    'Ensure that georap-config module is used only in server-side code.');
 }
 
 // Validate against JSON schema

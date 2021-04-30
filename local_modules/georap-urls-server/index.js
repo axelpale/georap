@@ -1,4 +1,4 @@
-const config = require('tresdb-config')
+const config = require('georap-config')
 const urljoin = require('url-join')
 const staticUrl = config.staticUrl
 const uploadUrl = config.uploadUrl

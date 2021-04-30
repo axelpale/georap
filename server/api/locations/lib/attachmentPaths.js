@@ -1,5 +1,5 @@
 
-const config = require('tresdb-config');
+const config = require('georap-config');
 const path = require('path');
 const urljoin = require('url-join');
 

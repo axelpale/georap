@@ -4,7 +4,7 @@
 const iter = require('./iter');
 
 const db = require('tresdb-db');
-const config = require('tresdb-config');
+const config = require('georap-config');
 const dropCollections = require('./dropCollections');
 // Enable should api
 // eslint-disable-next-line no-unused-vars

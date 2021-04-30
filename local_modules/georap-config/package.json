@@ -1,5 +1,5 @@
 {
-  "name": "tresdb-config",
+  "name": "georap-config",
   "private": true,
   "version": "1.0.0",
   "description": "Provide tresdb configuration as a package",

@@ -1,4 +1,4 @@
-const config = require('tresdb-config');
+const config = require('georap-config');
 const Ajv = require('ajv');
 
 // Precompile flag precondition validators.

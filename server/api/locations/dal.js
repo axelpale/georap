@@ -3,7 +3,7 @@
 const db = require('tresdb-db');
 const layersDal = require('../../../worker/layers/dal');
 const eventsDal = require('../events/dal');
-const config = require('tresdb-config');
+const config = require('georap-config');
 
 const shortid = require('shortid');
 

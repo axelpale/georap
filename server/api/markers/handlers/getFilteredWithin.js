@@ -1,7 +1,7 @@
 const dal = require('../dal');
 const status = require('http-status-codes');
 const Ajv = require('ajv');
-const config = require('tresdb-config');
+const config = require('georap-config');
 
 // Schema validator
 const ajv = new Ajv({

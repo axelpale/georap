@@ -1,4 +1,4 @@
-const config = require('tresdb-config');
+const config = require('georap-config');
 
 const has = function (arr, el) {
   return arr.indexOf(el) >= 0;

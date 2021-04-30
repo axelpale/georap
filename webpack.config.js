@@ -1,4 +1,4 @@
-const config = require('tresdb-config');
+const config = require('georap-config');
 
 // compile js assets into a single bundle file
 module.exports = {

@@ -1,7 +1,7 @@
 // Singleton wrapper around mongodb with
 // some handy server-side functions.
 
-const config = require('tresdb-config')
+const config = require('georap-config')
 const mongodb = require('mongodb')
 const mongoClient = mongodb.MongoClient
 const ObjectId = mongodb.ObjectId

@@ -6,7 +6,7 @@
 //   https://googlemaps.github.io/google-maps-services-js
 //   /docs/GoogleMapsClient.html
 
-const config = require('tresdb-config');
+const config = require('georap-config');
 const api = require('@googlemaps/google-maps-services-js');
 const _ = require('lodash');
 

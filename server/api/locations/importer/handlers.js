@@ -1,4 +1,4 @@
-const config = require('tresdb-config');
+const config = require('georap-config');
 const uploads = require('../../../services/uploads');
 const dal = require('./dal');
 

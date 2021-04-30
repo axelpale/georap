@@ -15,7 +15,7 @@
   "author": "Akseli Palén <akseli.palen@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "tresdb-config": "file:../tresdb-config",
+    "georap-config": "file:../georap-config",
     "url-join": "^4.0.1"
   },
   "devDependencies": {

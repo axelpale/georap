@@ -1,6 +1,6 @@
 const eventFilters = require('pretty-events');
 const getPoints = require('tresdb-points');
-const config = require('tresdb-config');
+const config = require('georap-config');
 
 exports.sumPoints = function (evs) {
   // Return sum of points of given events.

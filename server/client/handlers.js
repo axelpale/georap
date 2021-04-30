@@ -1,6 +1,6 @@
 
 const pjson = require('../../package.json');
-const config = require('tresdb-config');
+const config = require('georap-config');
 const ejs = require('ejs');
 const _ = require('lodash');
 const fs = require('fs');
