@@ -1,4 +1,4 @@
-# tresdb-models
+# georap-models
 
 Helpers to manipulate, process, and retrieve georap data structures.
 

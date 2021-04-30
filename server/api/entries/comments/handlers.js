@@ -1,6 +1,6 @@
 const entriesDal = require('../dal');
 const purifyMarkdown = require('purify-markdown');
-const commentModel = require('tresdb-models').comment;
+const commentModel = require('georap-models').comment;
 const config = require('georap-config');
 const status = require('http-status-codes');
 

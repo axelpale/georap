@@ -1,7 +1,7 @@
 /* eslint-disable max-statements, max-lines */
 
 var emitter = require('component-emitter');
-var models = require('tresdb-models');
+var models = require('georap-models');
 var EventsModel = require('./Events/Model');
 var locations = tresdb.stores.locations;
 

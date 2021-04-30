@@ -1,7 +1,7 @@
 // A list of images from entries.
 
 var template = require('./template.ejs');
-var models = require('tresdb-models');
+var models = require('georap-models');
 var rootBus = require('georap-bus');
 var Thumbnail = require('georap-components').Thumbnail;
 var ui = require('tresdb-ui');

@@ -2,7 +2,7 @@ var template = require('./template.ejs');
 var CommentForm = require('../../CommentForm');
 var CommentFormAdmin = require('../../CommentFormAdmin');
 var Thumbnail = require('georap-components').Thumbnail;
-var commentModel = require('tresdb-models').comment;
+var commentModel = require('georap-models').comment;
 var ui = require('tresdb-ui');
 var account = tresdb.stores.account;
 

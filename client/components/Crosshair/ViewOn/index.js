@@ -1,7 +1,7 @@
 /* eslint-disable no-magic-numbers */
 var template = require('./template.ejs');
 var emitter = require('component-emitter');
-var exportsModel = require('tresdb-models').exports;
+var exportsModel = require('georap-models').exports;
 
 // Services that can be referenced by a link.
 // Collect the templates here for simpler code.

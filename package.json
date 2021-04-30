@@ -101,7 +101,7 @@
     "georap-config": "file:local_modules/georap-config",
     "georap-db": "file:local_modules/georap-db",
     "georap-key": "file:local_modules/georap-key",
-    "tresdb-models": "file:local_modules/tresdb-models",
+    "georap-models": "file:local_modules/georap-models",
     "tresdb-points": "file:local_modules/tresdb-points",
     "tresdb-ui": "file:local_modules/tresdb-ui",
     "turndown": "^7.0.0",

@@ -1,6 +1,6 @@
 var template = require('./template.ejs');
 var headingTemplate = require('./heading.ejs');
-var entryModel = require('tresdb-models').entry;
+var entryModel = require('georap-models').entry;
 var AttachmentsView = require('./Attachments');
 var CommentsView = require('./Comments');
 var CommentForm = require('./CommentForm');

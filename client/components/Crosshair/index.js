@@ -10,7 +10,7 @@ var FormView = require('./Form');
 var ViewOnView = require('./ViewOn');
 var CreateView = require('./Create');
 var geometryApi = tresdb.stores.geometry;
-var geometryModel = require('tresdb-models').geometry;
+var geometryModel = require('georap-models').geometry;
 var bus = require('georap-bus');
 var throttle = require('georap-throttle');
 

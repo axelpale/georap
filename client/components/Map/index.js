@@ -15,7 +15,7 @@ var GeolocationMarker = require('./GeolocationMarker');
 var Panner = require('./Panner');
 var LocationMarkers = require('./LocationMarkers');
 var emitter = require('component-emitter');
-var geometryModel = require('tresdb-models').geometry;
+var geometryModel = require('georap-models').geometry;
 var mapStateStore = tresdb.stores.mapstate;
 var bus = require('georap-bus');
 

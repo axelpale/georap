@@ -2,7 +2,7 @@
 var FilesView = require('./Files');
 var ImagesView = require('./Images');
 var template = require('./template.ejs');
-var attachmentsModel = require('tresdb-models').attachments;
+var attachmentsModel = require('georap-models').attachments;
 var ui = require('tresdb-ui');
 
 module.exports = function (entry, attachments) {
