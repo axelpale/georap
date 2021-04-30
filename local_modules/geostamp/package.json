@@ -7,7 +7,7 @@
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "git://github.com/axelpale/tresdb.git"
+    "url": "git://github.com/axelpale/georap.git"
   },
   "scripts": {
     "lint": "standard"

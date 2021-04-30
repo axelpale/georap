@@ -11,7 +11,7 @@
   "main": "server/index.js",
   "repository": {
     "type": "git",
-    "url": "git://github.com/axelpale/tresdb.git"
+    "url": "git://github.com/axelpale/georap.git"
   },
   "scripts": {
     "start": "npm run server:production",
