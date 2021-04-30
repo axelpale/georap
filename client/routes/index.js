@@ -7,8 +7,6 @@ var Error401View = require('../components/Error401');
 var Error404View = require('../components/Error404');
 var LoginView = require('../components/Login');
 var SupportFundView = require('../components/SupportFund');
-var UsersView = require('../components/Users');
-var UserView = require('../components/User');
 
 // Help in remembering original url if redirect to login page is required.
 var AfterLogin = require('./lib/AfterLogin');
@@ -337,14 +335,23 @@ exports.route = function () {
     card.open(view);
   });
 
-  page('/users', function () {
-    var view = new UsersView();
-    card.open(view);
-  });
+  page('/users', basicViewSetup(function () {
+    return import(
+      /* webpackChunkName: "users" */
+      '../components/Users'
+    );
+  }));
 
   page('/users/:username', function (ctx) {
-    var view = new UserView(ctx.params.username);
-    card.open(view);
+    import(
+      /* webpackChunkName: "user" */
+      '../components/User'
+    )
+      .then(function (moduleWrap) {
+        var UserView = moduleWrap.default;
+        card.open(new UserView(ctx.params.username));
+      })
+      .catch(importErrorHandler);
   });
 
 
