@@ -2,7 +2,7 @@
 // View for location
 
 var emitter = require('component-emitter');
-var ui = require('tresdb-ui');
+var ui = require('georap-ui');
 var LocationModel = require('./Model');
 var NameView = require('./Name');
 var ThumbnailView = require('./Thumbnail');

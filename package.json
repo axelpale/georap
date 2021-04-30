@@ -103,7 +103,7 @@
     "georap-key": "file:local_modules/georap-key",
     "georap-models": "file:local_modules/georap-models",
     "georap-points": "file:local_modules/georap-points",
-    "tresdb-ui": "file:local_modules/tresdb-ui",
+    "georap-ui": "file:local_modules/georap-ui",
     "turndown": "^7.0.0",
     "url-join": "^4.0.1",
     "zpad": "^0.5.0"

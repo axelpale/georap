@@ -1,6 +1,6 @@
 // Component to filter map markers.
 
-var ui = require('tresdb-ui');
+var ui = require('georap-ui');
 var urls = require('georap-urls-client');
 var emitter = require('component-emitter');
 var statusListTemplate = require('../Location/StatusType/statusFormList.ejs');

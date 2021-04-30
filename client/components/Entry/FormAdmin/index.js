@@ -1,7 +1,7 @@
 // Entry form for non-owner admins.
 // Admins can only delete other's entries.
 //
-var ui = require('tresdb-ui');
+var ui = require('georap-ui');
 var emitter = require('component-emitter');
 var template = require('./template.ejs');
 var RemoveForm = require('../Remove');

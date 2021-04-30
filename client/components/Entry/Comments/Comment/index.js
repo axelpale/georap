@@ -3,7 +3,7 @@ var CommentForm = require('../../CommentForm');
 var CommentFormAdmin = require('../../CommentFormAdmin');
 var Thumbnail = require('georap-components').Thumbnail;
 var commentModel = require('georap-models').comment;
-var ui = require('tresdb-ui');
+var ui = require('georap-ui');
 var account = tresdb.stores.account;
 
 module.exports = function (entry, comment) {

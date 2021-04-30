@@ -4,7 +4,7 @@ var admin = tresdb.stores.admin;
 var template = require('./template.ejs');
 var tableTemplate = require('./table.ejs');
 var emitter = require('component-emitter');
-var ui = require('tresdb-ui');
+var ui = require('georap-ui');
 
 module.exports = function () {
 

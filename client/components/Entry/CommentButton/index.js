@@ -1,4 +1,4 @@
-var ui = require('tresdb-ui');
+var ui = require('georap-ui');
 var emitter = require('component-emitter');
 var template = require('./template.ejs');
 

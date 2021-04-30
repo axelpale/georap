@@ -1,6 +1,6 @@
 // Tools
 var urls = require('georap-urls-client');
-var ui = require('tresdb-ui');
+var ui = require('georap-ui');
 // Templates
 var template = require('./template.ejs');
 var statusTypeTemplate = require('./statusType.ejs');

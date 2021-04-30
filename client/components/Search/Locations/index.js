@@ -1,7 +1,7 @@
 var template = require('./template.ejs');
 var listTemplate = require('./list.ejs');
 var emitter = require('component-emitter');
-var ui = require('tresdb-ui');
+var ui = require('georap-ui');
 var markers = tresdb.stores.markers;
 
 var CONNECTION_ERROR = 0;

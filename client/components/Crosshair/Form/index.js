@@ -1,5 +1,5 @@
 var template = require('./template.ejs');
-var ui = require('tresdb-ui');
+var ui = require('georap-ui');
 var bus = require('georap-bus');
 var defaultSystemName = tresdb.config.coordinateSystems[0][0];
 

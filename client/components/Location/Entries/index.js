@@ -1,5 +1,5 @@
 var EntryView = require('../../Entry');
-var ui = require('tresdb-ui');
+var ui = require('georap-ui');
 var rootBus = require('georap-bus');
 
 module.exports = function (location, entries) {

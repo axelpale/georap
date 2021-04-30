@@ -1,7 +1,7 @@
 
 var account = tresdb.stores.account;
 var loginTemplate = require('./template.ejs');
-var ui = require('tresdb-ui');
+var ui = require('georap-ui');
 var emitter = require('component-emitter');
 var validator = require('email-validator');
 

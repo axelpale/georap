@@ -1,5 +1,5 @@
 var template = require('./template.ejs');
-var ui = require('tresdb-ui');
+var ui = require('georap-ui');
 var account = tresdb.stores.account;
 var admin = tresdb.stores.admin;
 

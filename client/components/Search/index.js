@@ -6,7 +6,7 @@ var LocationsView = require('./Locations');
 var template = require('./template.ejs');
 var emitter = require('component-emitter');
 var queryString = require('query-string');
-var ui = require('tresdb-ui');
+var ui = require('georap-ui');
 
 module.exports = function (query) {
   // Parameters

@@ -7,7 +7,7 @@ var StatusComponent = require('./Status');
 var EventsComponent = require('./Events');
 var RoleComponent = require('./Role');
 var emitter = require('component-emitter');
-var ui = require('tresdb-ui');
+var ui = require('georap-ui');
 
 module.exports = function (username) {
 

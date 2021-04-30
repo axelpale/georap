@@ -15,7 +15,7 @@ var ErrorView = require('../Error');
 var RemoveForm = require('../Remove');
 var MoveForm = require('../MoveForm');
 var drafting = require('./drafting');
-var ui = require('tresdb-ui');
+var ui = require('georap-ui');
 var emitter = require('component-emitter');
 var entries = tresdb.stores.entries;
 

@@ -1,6 +1,6 @@
 // Component to filter map markers.
 //
-var ui = require('tresdb-ui');
+var ui = require('georap-ui');
 var emitter = require('component-emitter');
 var template = require('./template.ejs');
 var TitleView = require('./Title');

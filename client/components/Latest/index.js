@@ -6,7 +6,7 @@ var template = require('./template.ejs');
 var EventsView = require('./Events');
 var LocationsView = require('./Locations');
 var EntriesView = require('./Entries');
-var ui = require('tresdb-ui');
+var ui = require('georap-ui');
 var ScrollRecorder = require('./ScrollRecorder');
 
 // Record scroll position to help browsing through the list

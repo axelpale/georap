@@ -1,4 +1,4 @@
-var ui = require('tresdb-ui');
+var ui = require('georap-ui');
 var searchApi = tresdb.stores.search;
 var geometry = require('georap-models').geometry;
 var template = require('./template.ejs');

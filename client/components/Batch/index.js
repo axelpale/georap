@@ -3,7 +3,7 @@ var messageTemplate = require('./message.ejs');
 var template = require('./template.ejs');
 var ListComp = require('./List');
 var emitter = require('component-emitter');
-var ui = require('tresdb-ui');
+var ui = require('georap-ui');
 
 var DEC = 10;
 

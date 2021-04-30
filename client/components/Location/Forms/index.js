@@ -4,7 +4,7 @@ var ViewOnComponent = require('./ViewOn');
 var EntryCreationComponent = require('../Entries/Creation');
 var template = require('./template.ejs');
 var emitter = require('component-emitter');
-var ui = require('tresdb-ui');
+var ui = require('georap-ui');
 
 module.exports = function (location) {
   // Parameters:

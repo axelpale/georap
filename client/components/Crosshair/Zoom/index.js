@@ -1,7 +1,7 @@
 // Component to filter map markers.
 //
 var template = require('./template.ejs');
-var ui = require('tresdb-ui');
+var ui = require('georap-ui');
 var mapStateStore = tresdb.stores.mapstate;
 
 module.exports = function () {

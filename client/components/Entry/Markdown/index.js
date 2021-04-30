@@ -2,7 +2,7 @@
 var template = require('./template.ejs');
 var updateHint = require('./updateHint');
 var markdownSyntax = require('./markdownSyntax');
-var ui = require('tresdb-ui');
+var ui = require('georap-ui');
 
 module.exports = function (markdown, opts) {
   // Entry form markdown section.

@@ -4,7 +4,7 @@ var template = require('./list.ejs');
 var eventTemplate = require('./event.ejs');
 var emitter = require('component-emitter');
 var getPoints = require('georap-points');
-var ui = require('tresdb-ui');
+var ui = require('georap-ui');
 var config = tresdb.config;
 
 module.exports = function (events, opts) {

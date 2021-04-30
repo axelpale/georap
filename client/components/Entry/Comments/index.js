@@ -1,7 +1,7 @@
 var template = require('./template.ejs');
 var emitter = require('component-emitter');
 var CommentView = require('./Comment');
-var ui = require('tresdb-ui');
+var ui = require('georap-ui');
 var rootBus = require('georap-bus');
 
 module.exports = function (entry) {

@@ -2,7 +2,7 @@
 //
 var emitter = require('component-emitter');
 var prettyEvents = require('pretty-events');
-var ui = require('tresdb-ui');
+var ui = require('georap-ui');
 var template = require('./template.ejs');
 var EventsView = require('../../Events');
 var LocationSelector = require('../LocationSelector');

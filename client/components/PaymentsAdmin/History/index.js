@@ -3,7 +3,7 @@
 var template = require('./template.ejs');
 var tableTemplate = require('./table.ejs');
 var emitter = require('component-emitter');
-var ui = require('tresdb-ui');
+var ui = require('georap-ui');
 var payments = tresdb.stores.payments;
 
 module.exports = function () {

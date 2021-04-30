@@ -1,7 +1,7 @@
 
 var account = tresdb.stores.account;
 var template = require('./template.ejs');
-var ui = require('tresdb-ui');
+var ui = require('georap-ui');
 
 module.exports = function (location) {
 

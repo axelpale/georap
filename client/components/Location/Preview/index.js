@@ -4,7 +4,7 @@ var template = require('./template.ejs');
 var models = require('georap-models');
 var rootBus = require('georap-bus');
 var Thumbnail = require('georap-components').Thumbnail;
-var ui = require('tresdb-ui');
+var ui = require('georap-ui');
 
 module.exports = function (location, entries) {
   // Parameters:

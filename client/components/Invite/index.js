@@ -1,7 +1,7 @@
 // Form to invite new users.
 
 var inviteTemplate = require('./template.ejs');
-var ui = require('tresdb-ui');
+var ui = require('georap-ui');
 var emitter = require('component-emitter');
 var validator = require('email-validator');
 var account = tresdb.stores.account;

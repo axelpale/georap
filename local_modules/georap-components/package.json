@@ -15,7 +15,7 @@
   "author": "Akseli Palén <akseli.palen@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "tresdb-ui": "file:../tresdb-ui"
+    "georap-ui": "file:../georap-ui"
   },
   "devDependencies": {
     "standard": "^16.0.3"

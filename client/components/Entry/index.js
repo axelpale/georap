@@ -7,7 +7,7 @@ var CommentForm = require('./CommentForm');
 var CommentButton = require('./CommentButton');
 var FormView = require('./Form');
 var FormAdminView = require('./FormAdmin');
-var ui = require('tresdb-ui');
+var ui = require('georap-ui');
 var account = tresdb.stores.account;
 
 module.exports = function (entry, opts) {

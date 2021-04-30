@@ -1,7 +1,7 @@
 // Component to list filtered lists of events.
 //
 var emitter = require('component-emitter');
-var ui = require('tresdb-ui');
+var ui = require('georap-ui');
 var template = require('./template.ejs');
 var listTemplate = require('./list.ejs');
 var LocationSelector = require('../LocationSelector');

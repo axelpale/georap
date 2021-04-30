@@ -24,7 +24,7 @@
 var emitter = require('component-emitter');
 var closeButton = require('./closeButton');
 var contentView = require('./contentView');
-var ui = require('tresdb-ui');
+var ui = require('georap-ui');
 
 module.exports = function () {
 

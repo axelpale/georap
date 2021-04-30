@@ -2,7 +2,7 @@
 var template = require('./template.ejs');
 var detailsTemplate = require('./details.ejs');
 var emitter = require('component-emitter');
-var markdownToHtml = require('tresdb-ui').markdownToHtml;
+var markdownToHtml = require('georap-ui').markdownToHtml;
 
 var BatchList = function () {
   // Parameters

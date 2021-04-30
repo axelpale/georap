@@ -2,7 +2,7 @@
 var ViewerView = require('./Viewer');
 var BrowserView = require('./Browser');
 var template = require('./template.ejs');
-var ui = require('tresdb-ui');
+var ui = require('georap-ui');
 
 module.exports = function (attachments) {
 

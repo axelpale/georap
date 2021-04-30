@@ -4,7 +4,7 @@ var AttachmentView = require('./Attachment');
 var AttachmentUploadView = require('./AttachmentUpload');
 var UploaderView = require('./Uploader');
 var template = require('./template.ejs');
-var ui = require('tresdb-ui');
+var ui = require('georap-ui');
 
 module.exports = function (attachments, opts) {
   // Parameters:

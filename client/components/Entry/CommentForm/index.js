@@ -1,7 +1,7 @@
 /* eslint-disable max-statements */
 
 // Form for comment creation and edit
-var ui = require('tresdb-ui');
+var ui = require('georap-ui');
 var emitter = require('component-emitter');
 var MarkdownView = require('../Markdown');
 var AttachmentsForm = require('../AttachmentsForm');

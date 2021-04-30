@@ -3,7 +3,7 @@
 var geostamp = require('geostamp');
 var template = require('./template.ejs');
 var AdditionMarker = require('../../Map/AdditionMarker');
-var ui = require('tresdb-ui');
+var ui = require('georap-ui');
 var mapStateStore = tresdb.stores.mapstate;
 
 // Reuse the map instance after first use to avoid memory leaks.

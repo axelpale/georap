@@ -7,7 +7,7 @@ var messageTemplate = require('./message.ejs');
 var listTemplate = require('./list.ejs');
 var template = require('./template.ejs');
 var emitter = require('component-emitter');
-var ui = require('tresdb-ui');
+var ui = require('georap-ui');
 
 module.exports = function (batchId) {
   // Parameters

@@ -12,7 +12,7 @@
 
 var emitter = require('component-emitter');
 var uic = require('georap-components');
-var ui = require('tresdb-ui');
+var ui = require('georap-ui');
 var template = require('./template.ejs');
 var Palette = require('./Palette');
 var locationApi = tresdb.stores.locations;
