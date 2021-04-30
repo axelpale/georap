@@ -6,7 +6,7 @@ module.exports = {
 
   // Title and description of the site. Used in many places,
   // including html and emails.
-  title: 'My TresDB App',
+  title: 'My Georap App',
   description: 'A secret geographical portal',
 
   // Initial viewport location. Initial sample locations are here.
@@ -67,7 +67,7 @@ module.exports = {
   logDir: path.resolve(__dirname, '../.data/logs'),
 
   // HTTPS
-  // TresDB itself uses only HTTP. However if TresDB is running behind
+  // Georap itself uses only HTTP. However if Georap is running behind
   // a TLS-endpoint reverse-proxy like Nginx, the protocol appears to be
   // HTTPS for the users. Hyperlinks in emails such as invites and password
   // resets should then use HTTPS instead HTTP.
@@ -88,7 +88,7 @@ module.exports = {
   // Mongo database settings
   mongo: {
     // Main database for persistent data.
-    url: 'mongodb://mongouser:mongouserpwd@localhost:27017/tresdb',
+    url: 'mongodb://mongouser:mongouserpwd@localhost:27017/georap',
     // Database for testing and development. You may leave it null.
     testUrl: 'mongodb://testuser:testuserpwd@localhost:27017/test',
   },
