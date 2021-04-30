@@ -1,5 +1,6 @@
 var template = require('./template.ejs');
 var CommentForm = require('../../CommentForm');
+var CommentFormAdmin = require('../../CommentFormAdmin');
 var Thumbnail = require('georap-components').Thumbnail;
 var commentModel = require('tresdb-models').comment;
 var ui = require('tresdb-ui');
@@ -57,7 +58,16 @@ module.exports = function (entry, comment) {
           ui.hide($elems.form);
         } else {
           ui.show($elems.form);
-          children.form = new CommentForm(entry, comment);
+
+          // Do not allow comment to be edited if the comment is old
+          // or the user is not the author of the comment.
+          var ageMs = commentModel.getAgeMs(comment);
+          var maxAgeMs = tresdb.config.comments.secondsEditable * 1000;
+          if (isAuthor && ageMs < maxAgeMs) {
+            children.form = new CommentForm(entry, comment);
+          } else {
+            children.form = new CommentFormAdmin(entry, comment);
+          }
           children.form.bind($elems.form);
 
           children.form.once('exit', function () {
