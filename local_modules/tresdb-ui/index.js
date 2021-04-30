@@ -20,6 +20,14 @@ exports.toggleHidden = function ($el) {
   $el.toggleClass('hidden');
 };
 
+exports.cap = function (s) {
+  // Capitalize the first letter of string s.
+  if (typeof s !== 'string') {
+    return '';
+  }
+  return s.charAt(0).toUpperCase() + s.slice(1);
+};
+
 exports.flash = function ($el) {
   // Change element background color temporarily.
   // Useful to highlight things.
