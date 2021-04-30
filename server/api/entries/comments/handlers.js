@@ -1,5 +1,6 @@
 const entriesDal = require('../dal');
 const purifyMarkdown = require('purify-markdown');
+const commentModel = require('tresdb-models').comment;
 const config = require('tresdb-config');
 const status = require('http-status-codes');
 
@@ -61,6 +62,19 @@ exports.change = function (req, res, next) {
   // Allow only owners edit.
   if (req.user.name !== req.comment.user) {
     const info = 'Only owners can edit their comments.';
+    return res.status(status.FORBIDDEN).send(info);
+  }
+
+  // Allow only fresh comments to be edited.
+  const ageMs = commentModel.getAgeMs(req.comment);
+  // Add two minutes to the configured limit so that a user who
+  // is still allowed to open the edit form is also allowed
+  // to submit the work with high probability.
+  const second = 1000;
+  const ageMargin = 120 * second;
+  const maxAgeMs = ageMargin + (config.comments.secondsEditable * second);
+  if (ageMs > maxAgeMs) {
+    const info = 'Only fresh comments can be edited.';
     return res.status(status.FORBIDDEN).send(info);
   }
 
