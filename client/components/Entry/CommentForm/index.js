@@ -84,6 +84,10 @@ module.exports = function (entry, comment) {
       maxLength: MAX_LEN,
     });
     children.markdown.bind($elems.markdown);
+    // Focus to textarea and move cursor to message end
+    setTimeout(function () {
+      children.markdown.focus();
+    }, 0);
 
     // Init error view
     $elems.error = $mount.find('.comment-form-error');

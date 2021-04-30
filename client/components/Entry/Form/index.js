@@ -56,6 +56,10 @@ module.exports = function (locationId, entry) {
       rows: 3,
     });
     children.markdown.bind($mount.find('.form-markdown-container'));
+    // Focus to textarea and move cursor to message end
+    setTimeout(function () {
+      children.markdown.focus();
+    }, 0);
 
     // Attachments form
     children.attachments = new AttachmentsForm(entry.attachments, {
