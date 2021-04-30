@@ -4,7 +4,22 @@ var ui = require('tresdb-ui');
 var emitter = require('component-emitter');
 var attachmentsApi = tresdb.stores.attachments;
 
-module.exports = function (attachment) {
+module.exports = function (attachment, opts) {
+  // Parameters:
+  //   attachment
+  //     attachment object
+  //   opts
+  //     optional object with props
+  //       showUp: boolean. Display MoveUp button. Default true.
+  //       showDown: boolean. Display MoveDown button. Default true.
+  //
+  if (!opts) {
+    opts = {};
+  }
+  opts = Object.assign({
+    showUp: true,
+    showDown: true,
+  }, opts);
 
   var $mount = null;
   var children = {};
@@ -28,11 +43,17 @@ module.exports = function (attachment) {
     $elems.up.click(function () {
       self.emit('up');
     });
+    if (!opts.showUp) {
+      ui.hide($elems.up);
+    }
 
     $elems.down = $mount.find('.form-attachment-down');
     $elems.down.click(function () {
       self.emit('down');
     });
+    if (!opts.showDown) {
+      ui.hide($elems.down);
+    }
 
     $elems.remove = $mount.find('.form-attachment-remove');
     $elems.remove.click(function () {

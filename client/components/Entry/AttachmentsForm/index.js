@@ -46,7 +46,11 @@ module.exports = function (attachments, opts) {
         'form-attachment-container',
       ]);
       $elems.uploader.before($attContainer);
-      children[att.key] = new AttachmentView(att);
+      // Attachment. Hide up/down buttons if limit === 1
+      children[att.key] = new AttachmentView(att, {
+        showUp: opts.limit > 1,
+        showDown: opts.limit > 1,
+      });
       children[att.key].bind($attContainer);
       // Ordering
       children[att.key].on('up', function () {
