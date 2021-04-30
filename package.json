@@ -102,7 +102,7 @@
     "georap-db": "file:local_modules/georap-db",
     "georap-key": "file:local_modules/georap-key",
     "georap-models": "file:local_modules/georap-models",
-    "tresdb-points": "file:local_modules/tresdb-points",
+    "georap-points": "file:local_modules/georap-points",
     "tresdb-ui": "file:local_modules/tresdb-ui",
     "turndown": "^7.0.0",
     "url-join": "^4.0.1",
