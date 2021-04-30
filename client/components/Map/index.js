@@ -33,7 +33,7 @@ module.exports = function () {
   var _map = null;
   var _geolocationMarker = null;
   var _additionMarker = null;
-  var _crosshairMarker = null;
+  var _crosshairMarker = null; // eslint-disable-line no-unused-vars
   var _panner = null;
   var _manager = null;
 
@@ -84,7 +84,6 @@ module.exports = function () {
     // the new location is to be created.
     _additionMarker = new AdditionMarker(_map);
     // Crosshair marker. Shown during crosshair page.
-    // eslint-disable-next-line no-unused-vars
     _crosshairMarker = new CrosshairMarker(_map);
     // When location page opens, map pans so that location becomes visible
     // on the background. After location page is closed, this pan is being
