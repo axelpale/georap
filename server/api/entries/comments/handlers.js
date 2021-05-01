@@ -160,7 +160,7 @@ exports.change = function (req, res, next) {
 exports.remove = function (req, res, next) {
   const locationId = req.location._id;
   const locationName = req.location.name;
-  const entryId = req.entryId;
+  const entry = req.entry;
   const username = req.user.name;
   const commentId = req.commentId;
 
@@ -168,21 +168,29 @@ exports.remove = function (req, res, next) {
   const isAdmin = req.user.admin;
   const isOwner = req.user.name === req.comment.user;
 
-  if (isAdmin || isOwner) {
-    entriesDal.removeLocationEntryComment({
-      locationId: locationId,
-      locationName: locationName,
-      entryId: entryId,
-      username: username,
-      commentId: commentId,
-    }, (err) => {
-      if (err) {
-        return next(err);
-      }
-      return res.sendStatus(status.OK);
-    });
-  } else {
+  if (!isAdmin && !isOwner) {
     const info = 'Only admins and comment author can edit the comment.';
     return res.status(status.FORBIDDEN).send(info);
   }
+
+  // Check if such comment exists. Consider it already removed if not.
+  const commentToRemove = entry.comments.find((comment) => {
+    return comment.id === commentId;
+  });
+  if (!commentToRemove) {
+    return res.sendStatus(status.OK);
+  }
+
+  entriesDal.removeLocationEntryComment({
+    locationId: locationId,
+    locationName: locationName,
+    entry: entry, // NOTE full entry needed to determine activeAt
+    username: username,
+    commentId: commentId,
+  }, (err) => {
+    if (err) {
+      return next(err);
+    }
+    return res.sendStatus(status.OK);
+  });
 };
