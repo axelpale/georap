@@ -197,6 +197,7 @@ exports.importBatch = function (args, callback) {
   //           array of raw db locations
   //         locationsSkipped
   //           array of import locations
+  //
 
   const indices = args.indices;
   const username = args.username;
