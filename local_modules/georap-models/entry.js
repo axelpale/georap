@@ -81,3 +81,14 @@ exports.getNonImages = function (entry) {
 exports.getComments = function (entry) {
   return entry.comments
 }
+
+exports.activeAt = function (entry) {
+  // Latest timestamp of the entry or its comment
+  var activeAt = entry.time
+  entry.comments.forEach(function (comment) {
+    if (comment.time > activeAt) {
+      activeAt = comment.time
+    }
+  })
+  return activeAt
+}
