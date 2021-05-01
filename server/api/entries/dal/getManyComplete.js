@@ -16,6 +16,8 @@ module.exports = (query, options, callback) => {
   //       integer. Default to 100.
   //     withLocations
   //       boolean. Join location for each entry. Default false.
+  //     sort
+  //       object to pass to $sort aggregation stage. Default { time: -1 }.
   //   callback
   //     function (err, entries)
   //
@@ -23,6 +25,9 @@ module.exports = (query, options, callback) => {
     skip: 0,
     limit: 100,
     withLocations: false,
+    sort: {
+      time: -1, // most recent first
+    },
   }, options);
 
   // Piece-wise construction
@@ -35,9 +40,7 @@ module.exports = (query, options, callback) => {
 
   // Sort
   pipeline.push({
-    $sort: {
-      time: -1, // most recent first
-    },
+    $sort: options.sort,
   });
 
   // Skip & limit
