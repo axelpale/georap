@@ -10,9 +10,8 @@ module.exports = {
   collections: {
     config: [
       {
-        _id: db.id('58092312bbba430a35fb4139'),
         key: 'schemaVersion',
-        value: 9,
+        value: 12,
       },
     ],
     attachments: [],
@@ -21,13 +20,17 @@ module.exports = {
     locations: [],
     users: [
       {
-        _id: db.id('5867bdf00a5a9e18d7755e4f'),
         admin: true,
         email: config.admin.email,
         hash: bcrypt.hashSync(config.admin.password, config.bcrypt.rounds),
         name: admin,
         points: 0, // points are updated by worker
+        // points7days: created by worker
+        // points30days: created by worker
+        // points365days: created by worker
         status: 'active',
+        createdAt: db.timestamp(),
+        loginAt: db.timestamp(),
       },
     ],
   },
