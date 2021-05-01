@@ -1,6 +1,7 @@
 const imageLinks = require('./imageLinks');
 
-module.exports = function (overlays, descriptions) {
+module.exports = (overlays, descriptions) => {
+  // Make batch entries from captured overlays and descriptions.
   const entries = [];
 
   overlays.forEach((ol) => {

@@ -8,7 +8,7 @@ const camaro = require('camaro');
 
 // Interface
 
-module.exports = function (kmlBuffer, callback) {
+module.exports = (kmlBuffer, callback) => {
   // Find an array of locations from a KML file.
   //
   // Parameters

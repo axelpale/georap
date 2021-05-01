@@ -10,37 +10,39 @@ const glob = require('glob');
 const path = require('path');
 const fs = require('fs-extra');
 
+// Helper functions
 
-const batchIdFromPath = function (p) {
+const batchIdFromPath = (p) => {
   // Handlers provide the absolute path but we need the directory name.
   return path.basename(path.dirname(p));
 };
 
-const cachePathFromBatchId = function (batchId) {
+const cachePathFromBatchId = (batchId) => {
   // For example
   //   '2017-10-13-weivd32'
   //   => '/home/...../tempUploads/2017-10-13-weivd32/2017-10-13-weivd32.json
   return path.resolve(config.tempUploadDir, batchId, batchId + '.json');
 };
 
-const outcomePathFromBatchId = function (batchId) {
+const outcomePathFromBatchId = (batchId) => {
   return path.resolve(config.tempUploadDir, batchId, batchId + '_outcome.json');
 };
 
+// Public functions
 
-exports.getBatch = function (batchId, callback) {
+exports.getBatch = (batchId, callback) => {
   // Return batch as array of locations.
   const cachePath = cachePathFromBatchId(batchId);
   fs.readJSON(cachePath, callback);
 };
 
-exports.getOutcome = function (batchId, callback) {
+exports.getOutcome = (batchId, callback) => {
   const p = outcomePathFromBatchId(batchId);
   fs.readJSON(p, callback);
 };
 
 
-exports.readKML = function (kmlpath, callback) {
+exports.readKML = (kmlpath, callback) => {
 
   fs.readFile(kmlpath, (err, content) => {
     if (err) {
@@ -70,7 +72,7 @@ exports.readKML = function (kmlpath, callback) {
   });
 };
 
-exports.readKMZ = function (kmzpath, callback) {
+exports.readKMZ = (kmzpath, callback) => {
   // KMZ is a zipped collection of resources and KML files.
   // The collection contains images and therefore we must temporarily
   // store them.
@@ -78,7 +80,7 @@ exports.readKMZ = function (kmzpath, callback) {
   const targetPath = path.dirname(kmzpath);
 
   // Fight against the pyramid of doom
-  const andThenRead = function (mainKmlPath) {
+  const andThenRead = (mainKmlPath) => {
     exports.readKML(mainKmlPath, (errk, result) => {
       if (errk) {
         return callback(errk);
@@ -112,6 +114,7 @@ exports.readKMZ = function (kmzpath, callback) {
       //   entries: [{
       //     markdown: <string>
       //     filepath: <string>
+      //     overlay: <optional object>
       //   }]
 
       const cachePath = cachePathFromBatchId(batchId);
@@ -173,7 +176,7 @@ exports.readKMZ = function (kmzpath, callback) {
 };
 
 
-exports.runBatch = function (args, callback) {
+exports.runBatch = (args, callback) => {
   // After a user has first uploaded a KML or other importable file,
   // then the user selects which locations to import. The uploaded and
   // parsed locations are stored as an array in a JSON file on server-side.
@@ -260,7 +263,7 @@ exports.runBatch = function (args, callback) {
 };
 
 
-exports.mergeEntries = function (args, callback) {
+exports.mergeEntries = (args, callback) => {
   // Description by algorithm:
   // 1. For each given batch location with entries,
   //    find a nearest existing location.
@@ -353,7 +356,7 @@ exports.mergeEntries = function (args, callback) {
 };
 
 
-exports.writeBatchOutcome = function (outcome, cb) {
+exports.writeBatchOutcome = (outcome, cb) => {
   // Write a JSON file about the outcome of an batch run.
   //
   // Parameters

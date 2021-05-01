@@ -8,9 +8,9 @@ const path = require('path');
 
 const uploadHandler = uploads.tempUploader.single('importfile');
 
-const buildUrls = function (batchLocs) {
-  // Modifies given batch locations.
-  // Convert absolute file paths to URLs.
+const buildUrls = (batchLocs) => {
+  // Modifies given batch locations and batch entries.
+  // Convert absolute file paths in batch entries to URLs.
   // This is most correct to do in handler because it is a REST thing.
   // Absolute filepaths are needed internally more often.
   batchLocs.forEach((loc) => {
@@ -27,7 +27,7 @@ const buildUrls = function (batchLocs) {
   });
 };
 
-exports.import = function (req, res, next) {
+exports.import = (req, res, next) => {
   // Import locations from KML, KMZ, or GPX file.
   // A file to import is required.
   //
@@ -57,13 +57,12 @@ exports.import = function (req, res, next) {
       '.kml': 'readKML',
       '.kmz': 'readKMZ',
     };
-    let methodName = null;
 
     if (!ext2methodName[ext]) {
       return res.status(status.BAD_REQUEST).send('unknown filetype');
     }
 
-    methodName = ext2methodName[ext];
+    const methodName = ext2methodName[ext];
     return importerDal[methodName](req.file.path, (errr, result) => {
       if (errr) {
         if (errr.message === 'INVALID_KMZ') {
@@ -83,7 +82,7 @@ exports.import = function (req, res, next) {
   });
 };
 
-exports.getBatch = function (req, res, next) {
+exports.getBatch = (req, res, next) => {
   // Import creates a batch for preview.
   // The get batch handler provides means to fetch the batch for preview.
   //
@@ -103,7 +102,7 @@ exports.getBatch = function (req, res, next) {
   });
 };
 
-exports.runBatch = function (req, res, next) {
+exports.runBatch = (req, res, next) => {
   // After a file is imported and parsed and a batch is created
   // the user can first preview and then run the batch.
   // This handler creates the locations and other data captured in the batch.
@@ -148,7 +147,7 @@ exports.runBatch = function (req, res, next) {
   });
 };
 
-exports.getOutcome = function (req, res, next) {
+exports.getOutcome = (req, res, next) => {
   // After successful batch run, a temporary outcome JSON is created.
   // This outcome contains a report data how the batch ran.
   const batchId = req.params.batchId;
