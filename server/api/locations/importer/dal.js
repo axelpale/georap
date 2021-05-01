@@ -85,13 +85,13 @@ exports.readKMZ = function (kmzpath, callback) {
       }
 
       const batchId = result.batchId;
-      const locs = result.locations;
+      const batchLocs = result.locations;
 
       // Turn relative file paths to absolute paths.
       // Detect URLs from http prefix.
       // We will download the URLs later.
-      locs.forEach((loc) => {
-        loc.entries.forEach((entry) => {
+      batchLocs.forEach((batchLoc) => {
+        batchLoc.entries.forEach((entry) => {
           const fp = entry.filepath;
 
           // Filepath is null when entry does not have an image
@@ -104,7 +104,7 @@ exports.readKMZ = function (kmzpath, callback) {
         });
       });
 
-      // Structure of loc at this point
+      // Structure of a batchLoc at this point
       // {
       //   name: <string>
       //   latitude: <number>
@@ -116,14 +116,14 @@ exports.readKMZ = function (kmzpath, callback) {
 
       const cachePath = cachePathFromBatchId(batchId);
 
-      fs.writeJSON(cachePath, locs, (errw) => {
+      fs.writeJSON(cachePath, batchLocs, (errw) => {
         if (errw) {
           return callback(errw);
         }
 
         return callback(null, {
           batchId: batchId,
-          locations: locs,
+          locations: batchLocs,
         });
       });
     });
@@ -173,7 +173,7 @@ exports.readKMZ = function (kmzpath, callback) {
 };
 
 
-exports.importBatch = function (args, callback) {
+exports.runBatch = function (args, callback) {
   // After a user has first uploaded a KML or other importable file,
   // then the user selects which locations to import. The uploaded and
   // parsed locations are stored as an array in a JSON file on server-side.
@@ -185,7 +185,7 @@ exports.importBatch = function (args, callback) {
   //     batchId
   //       string
   //     indices
-  //       array of integers
+  //       array of integers. Array indices of selected batch locations.
   //     username
   //       string, who is importing
   //   callback
@@ -196,13 +196,13 @@ exports.importBatch = function (args, callback) {
   //         locationsCreated
   //           array of raw db locations
   //         locationsSkipped
-  //           array of import locations
+  //           array of batch locations
   //
 
   const indices = args.indices;
   const username = args.username;
 
-  exports.getBatch(args.batchId, (err, locs) => {
+  exports.getBatch(args.batchId, (err, batchLocs) => {
     if (err) {
       return callback(err);
     }
@@ -215,18 +215,18 @@ exports.importBatch = function (args, callback) {
 
     asyn.mapSeries(indices, (index, next) => {
 
-      const loc = locs[index];
+      const batchLoc = batchLocs[index];
 
-      if (typeof loc === 'undefined') {
+      if (typeof batchLoc === 'undefined') {
         console.log('Index not found');
         return next();
       }
 
-      dallib.createLocation(loc, username, (errc, newRawLoc) => {
+      dallib.createLocation(batchLoc, username, (errc, newRawLoc) => {
         if (errc) {
           if (errc.message === 'TOO_CLOSE') {
-            loc.existing = errc.data;
-            locsSkipped.push(loc);
+            batchLoc.existing = errc.data;
+            locsSkipped.push(batchLoc);
             return next();
           }
           return next(errc);
@@ -262,7 +262,7 @@ exports.importBatch = function (args, callback) {
 
 exports.mergeEntries = function (args, callback) {
   // Description by algorithm:
-  // 1. For each given location with entries,
+  // 1. For each given batch location with entries,
   //    find a nearest existing location.
   //   1.1. Get all existing entries of the existing location.
   //   1.2. For each new entry, compare it to the existing entries.
@@ -271,7 +271,7 @@ exports.mergeEntries = function (args, callback) {
   // Parameters
   //   args
   //     locations
-  //       array of import locations:
+  //       array of batch locations:
   //         entries
   //         existing
   //           _id
@@ -293,14 +293,14 @@ exports.mergeEntries = function (args, callback) {
   const locationsModified = [];
   const locationsSkipped = [];
 
-  asyn.eachSeries(args.locations, (loc, next) => {
+  asyn.eachSeries(args.locations, (batchLoc, next) => {
 
     // Finding of unique entries requires following properties
     //   username
     //   markdown
     //   filepath
     // Therefore we map import entries into this format
-    const entryCandidates = loc.entries.map((entry) => {
+    const entryCandidates = batchLoc.entries.map((entry) => {
       return {
         username: args.username,
         markdown: entry.markdown,
@@ -312,7 +312,7 @@ exports.mergeEntries = function (args, callback) {
     numEntryCandidates += entryCandidates.length;
 
     // We like to merge the entries into target location.
-    const targetId = loc.existing._id;
+    const targetId = batchLoc.existing._id;
 
     // We first get the unique entries...
     entriesDal.filterUniqueLocationEntries({
@@ -325,15 +325,15 @@ exports.mergeEntries = function (args, callback) {
 
       if (uniqueEntries.length > 0) {
         numEntriesCreated += uniqueEntries.length;
-        locationsModified.push(loc.existing);
+        locationsModified.push(batchLoc.existing);
       } else {
-        locationsSkipped.push(loc.existing);
+        locationsSkipped.push(batchLoc.existing);
       }
 
       // ...and then create them.
       dallib.createEntries({
-        locationId: loc.existing._id,
-        locationName: loc.existing.name,
+        locationId: batchLoc.existing._id,
+        locationName: batchLoc.existing.name,
         username: args.username,
         entries: uniqueEntries,
       }, next);
@@ -354,7 +354,7 @@ exports.mergeEntries = function (args, callback) {
 
 
 exports.writeBatchOutcome = function (outcome, cb) {
-  // Write a JSON file about the outcome of an import.
+  // Write a JSON file about the outcome of an batch run.
   //
   // Parameters
   //   outcome

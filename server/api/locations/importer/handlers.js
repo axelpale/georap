@@ -112,7 +112,7 @@ exports.runBatch = function (req, res, next) {
   const indices = req.body.indices;
   const username = req.user.name;
 
-  importerDal.importBatch({
+  importerDal.runBatch({
     batchId: batchId,
     indices: indices,
     username: username,
