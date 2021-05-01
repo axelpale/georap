@@ -28,7 +28,8 @@ exports.get = function (key, callback) {
 exports.create = (params, callback) => {
   // Create file attachment document.
   // NOTE The existence of the file is not ensured to enable
-  // migration of missing files.
+  // migration of missing files. Create files to the given
+  // locations beforehand if possible.
   //
   // Parameters:
   //   params:
@@ -48,6 +49,8 @@ exports.create = (params, callback) => {
   //       The relative path of the thumbnail file in the uploads dir
   //     thumbmimetype
   //       string
+  //     data
+  //       optional data object for future use.
   //   callback
   //     function (err, attachment)
   //
@@ -63,6 +66,10 @@ exports.create = (params, callback) => {
     return callback(new Error('Missing attachment filesize'));
   }
 
+  if (typeof params.data !== 'object') {
+    params.data = {};
+  }
+
   const attachment = {
     key: keygen.generate(),
     user: params.username,
@@ -74,7 +81,7 @@ exports.create = (params, callback) => {
     filesize: params.filesize,
     thumbfilepath: params.thumbfilepath,
     thumbmimetype: params.thumbmimetype,
-    data: {}, // For possible future metadata
+    data: params.data, // For possible future metadata
   };
 
   db.collection('attachments').insertOne(attachment, (err) => {
