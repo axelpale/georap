@@ -6,7 +6,7 @@ const assert = require('assert');
 
 const config = require('georap-config');
 const migrates = require('./migrates');
-const schema = require('./lib/schema');
+const schemaVersion = require('./lib/schema');
 const assertEvery = require('./lib/assertEvery');
 const assertFixtureEqual = require('./lib/assertFixtureEqual');
 const dropCollections = require('./lib/dropCollections');
@@ -69,7 +69,7 @@ describe('migrates.migrate', () => {
       migrates.migrate(targetV, (err) => {
         assert.ifError(err);
 
-        schema.getVersion((err2, vers) => {
+        schemaVersion.getVersion((err2, vers) => {
           assert.ifError(err2);
           assert.equal(vers, targetV);
           done();
@@ -91,7 +91,7 @@ describe('migrates.migrate', () => {
       migrates.migrate(targetV, (err) => {
         assert.ifError(err);
 
-        schema.getVersion((err2, vers) => {
+        schemaVersion.getVersion((err2, vers) => {
           assert.ifError(err2);
           assert.equal(vers, targetV);
           done();
@@ -113,7 +113,7 @@ describe('migrates.migrate', () => {
       migrates.migrate(targetV, (err) => {
         assert.ifError(err);
 
-        schema.getVersion((err2, vers) => {
+        schemaVersion.getVersion((err2, vers) => {
           assert.ifError(err2);
           assert.equal(vers, targetV);
           done();
