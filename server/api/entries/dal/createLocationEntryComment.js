@@ -18,13 +18,10 @@ module.exports = (params, callback) => {
   // Precondition:
   //   markdown is sanitized
   //
-  const time = db.timestamp();
+  const createdAt = db.timestamp();
   const rand1 = Math.random().toString().substr(2, 10);
   const rand2 = Math.random().toString().substr(2, 10);
-  const commentId = time.substr(0, 4) + rand1 + rand2; // 24 chars
-
-  const coll = db.collection('entries');
-  const filter = { _id: params.entryId };
+  const commentId = createdAt.substr(0, 4) + rand1 + rand2; // 24 chars
 
   let attachments = [];
   if (params.attachments) {
@@ -33,13 +30,19 @@ module.exports = (params, callback) => {
 
   const comment = {
     id: commentId,
-    time: time,
+    time: createdAt,
     user: params.username,
     markdown: params.markdown,
     attachments: attachments,
   };
 
+  const coll = db.collection('entries');
+  const filter = { _id: params.entryId };
+
   const update = {
+    $set: {
+      activeAt: createdAt,
+    },
     $push: {
       comments: comment,
     },

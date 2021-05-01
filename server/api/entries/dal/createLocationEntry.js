@@ -37,10 +37,12 @@ module.exports = (params, callback) => {
     params.flags = [];
   }
 
+  const createdAt = db.timestamp();
   const newEntry = {
     user: params.username,
-    time: db.timestamp(),
     locationId: params.locationId,
+    time: createdAt,
+    activeAt: createdAt,
     deleted: false,
     published: false,
     markdown: sanitizedMarkdown,
