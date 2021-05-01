@@ -16,5 +16,8 @@ module.exports = (range, callback) => {
     skip: range.skip,
     limit: range.limit,
     withLocations: true,
+    sort: {
+      activeAt: -1,
+    },
   }, callback);
 };
