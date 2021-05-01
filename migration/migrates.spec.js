@@ -7,6 +7,7 @@ const assert = require('assert');
 const config = require('georap-config');
 const migrates = require('./migrates');
 const schemaVersion = require('./lib/schema');
+const schemas = require('./schemas');
 const assertEvery = require('./lib/assertEvery');
 const assertFixtureEqual = require('./lib/assertFixtureEqual');
 const dropCollections = require('./lib/dropCollections');
@@ -14,6 +15,8 @@ const fixtures = require('./fixtures');
 const loadFixture = require('./lib/loadFixture');
 const fse = require('fs-extra');
 const path = require('path');
+const Ajv = require('ajv');
+const ajv = new Ajv();
 
 const loadFixtureByTag = function (versionTag, callback) {
   // Load fixture into the database.
@@ -31,6 +34,34 @@ const loadFixtureByTag = function (versionTag, callback) {
 
   loadFixture(fixtures[versionTag], callback);
 };
+
+describe('fixtures', () => {
+  describe('example', () => {
+    it('should follow schema', (done) => {
+      const schema = schemas.v12;
+      const fixture = fixtures.example;
+      const isValid = ajv.validate(schema, fixture);
+      if (!isValid) {
+        console.log(ajv.errors);
+      }
+      assert.ok(isValid);
+      return done();
+    });
+  });
+
+  describe('v12', () => {
+    it('should follow schema', (done) => {
+      const schema = schemas.v12;
+      const fixture = fixtures.v12;
+      const isValid = ajv.validate(schema, fixture);
+      if (!isValid) {
+        console.log(ajv.errors);
+      }
+      assert.ok(isValid);
+      return done();
+    });
+  });
+});
 
 describe('migrates.migrate', () => {
 
