@@ -104,6 +104,7 @@ module.exports = {
           entryId: db.id('581f166110a1482dd0b7ea01'),
           entry: { // NOTE full entry
             _id: db.id('581f166110a1482dd0b7ea01'),
+            activeAt: '2009-09-04T23:44:21.000Z', // NOTE
             attachments: [], // NOTE
             comments: [], // NOTE
             deleted: false,
@@ -137,6 +138,7 @@ module.exports = {
           entryId: c.locatorEntryId,
           entry: { // NOTE full entry state
             _id: c.locatorEntryId,
+            activeAt: '2009-10-02T11:11:01.000Z',
             locationId: c.irbeneId,
             time: '2009-10-02T11:11:01.000Z',
             user: 'admin',

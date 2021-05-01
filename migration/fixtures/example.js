@@ -72,6 +72,7 @@ module.exports = {
       {
         // A brief description about location
         _id: db.id('58092312bbba420a35fb4201'),
+        activeAt: '2009-09-04T23:44:21.000Z',
         attachments: [],
         comments: [],
         deleted: false,
@@ -85,6 +86,7 @@ module.exports = {
       {
         // A visit with attachment
         _id: db.id('58092312bebc430a35fb4102'),
+        activeAt: '2009-10-05T12:23:34.000Z',
         attachments: ['ewdsf3s'],
         comments: [],
         deleted: false,
@@ -136,6 +138,7 @@ module.exports = {
           entryId: db.id('58092312bbba420a35fb4201'),
           entry: {
             _id: db.id('58092312bbba420a35fb4201'),
+            activeAt: '2009-09-04T23:44:21.000Z',
             attachments: [],
             comments: [],
             deleted: false,
@@ -161,6 +164,7 @@ module.exports = {
           entry: {
             _id: db.id('58092312bebc430a35fb4102'),
             locationId: irbeneId,
+            activeAt: '2009-10-05T12:23:34.000Z',
             time: '2009-10-05T12:23:34.000Z',
             user: admin,
             deleted: false,

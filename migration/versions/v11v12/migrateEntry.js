@@ -218,6 +218,7 @@ module.exports = (entryId, callback) => {
 
       const newEntry = {
         _id: oldEntry._id,
+        activeAt: oldEntry.time, // correct activeAt set later in migration
         locationId: oldEntry.locationId,
         time: oldEntry.time,
         user: oldEntry.user,

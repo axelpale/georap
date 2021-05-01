@@ -24,6 +24,7 @@ module.exports = (crev, filepathToAttachments, entryTime, callback) => {
     _id: crev.data.entryId,
     locationId: crev.locationId,
     time: entryTime,
+    activeAt: entryTime,
     user: crev.user,
     deleted: false,
     published: false,
