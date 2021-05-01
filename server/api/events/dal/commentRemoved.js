@@ -9,7 +9,9 @@ module.exports = (params, callback) => {
   //     locationName
   //     entryId
   //     commentId
-  //     commentUsername
+  //       id of the removed comment
+  //     comment
+  //       removed comment
   //   callback
   //     function (err)
 
@@ -22,6 +24,7 @@ module.exports = (params, callback) => {
     data: {
       entryId: params.entryId,
       commentId: params.commentId,
+      comment: params.comment,
     },
   };
 
