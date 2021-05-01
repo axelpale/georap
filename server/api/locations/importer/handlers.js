@@ -1,6 +1,6 @@
 const config = require('georap-config');
 const uploads = require('../../../services/uploads');
-const dal = require('./dal');
+const importerDal = require('./dal');
 
 const status = require('http-status-codes');
 const urljoin = require('url-join');
@@ -58,7 +58,7 @@ exports.import = function (req, res, next) {
 
     if (ext2methodName[ext]) {
       methodName = ext2methodName[ext];
-      return dal[methodName](req.file.path, (errr, result) => {
+      return importerDal[methodName](req.file.path, (errr, result) => {
         if (errr) {
           if (errr.message === 'INVALID_KMZ') {
             res.status(status.BAD_REQUEST);
@@ -89,7 +89,7 @@ exports.getBatch = function (req, res, next) {
 
   const batchId = req.params.batchId;
 
-  dal.getBatch(batchId, (err, locs) => {
+  importerDal.getBatch(batchId, (err, locs) => {
     if (err) {
       if (err.code === 'ENOENT') {
         return res.sendStatus(status.NOT_FOUND);
@@ -105,7 +105,7 @@ exports.getBatch = function (req, res, next) {
 
 exports.getOutcome = function (req, res, next) {
   const batchId = req.params.batchId;
-  dal.getOutcome(batchId, (err, outcome) => {
+  importerDal.getOutcome(batchId, (err, outcome) => {
     if (err) {
       return next(err);
     }
@@ -120,7 +120,7 @@ exports.importBatch = function (req, res, next) {
   const indices = req.body.indices;
   const username = req.user.name;
 
-  dal.importBatch({
+  importerDal.importBatch({
     batchId: batchId,
     indices: indices,
     username: username,
@@ -129,7 +129,7 @@ exports.importBatch = function (req, res, next) {
       return next(err);
     }
 
-    dal.mergeEntries({
+    importerDal.mergeEntries({
       locations: batchResult.skipped,
       username: username,
     }, (errm, mergeResult) => {
@@ -144,7 +144,7 @@ exports.importBatch = function (req, res, next) {
         modified: mergeResult.locationsModified,
       };
 
-      dal.writeBatchOutcome(outcomeData, (errw) => {
+      importerDal.writeBatchOutcome(outcomeData, (errw) => {
         if (errw) {
           return next(errw);
         }
