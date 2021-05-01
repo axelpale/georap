@@ -200,7 +200,7 @@ const substeps = [
   function removeVisitStatistics(nextStep) {
     console.log('8. Remove visit statistics from users...');
 
-    const coll = db.collection('useres');
+    const coll = db.collection('users');
 
     iter.updateEach(coll, (origUser, iterNext) => {
       const user = clone(origUser);
