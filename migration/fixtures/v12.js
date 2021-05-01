@@ -44,6 +44,7 @@ module.exports = {
 
     entries: [{
       _id: db.id('581f166110a1482dd0b7ea01'),
+      activeAt: '2009-09-04T23:44:21.000Z', // NOTE
       attachments: [], // NOTE
       comments: [], // NOTE
       deleted: false,
@@ -56,6 +57,7 @@ module.exports = {
       // NOTE type prop is dropped
     }, {
       _id: c.locatorEntryId,
+      activeAt: '2021-02-10T20:30:01.000Z', // NOTE
       attachments: ['ewdsf3kk'], // NOTE
       comments: [
         {

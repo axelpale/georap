@@ -10,6 +10,7 @@
 // 6. refactor locations by adding createdAt prop
 // 7. select thumbnails for each location and add thumbnail prop
 // 8. remove visits-related user properties
+// 9. add activeAt property to entries
 //
 // Also, new indices were made and thus 'npm run migrate' is needed.
 
@@ -21,6 +22,7 @@ const iter = require('../../lib/iter');
 const removeOrphanEvents = require('./removeOrphanEvents');
 const migrateEntry = require('./migrateEntry');
 const getThumbnail = require('./getThumbnail');
+const addActiveAt = require('./addActiveAt');
 
 const FROM_VERSION = 11;
 const TO_VERSION = FROM_VERSION + 1;
@@ -220,6 +222,9 @@ const substeps = [
       return nextStep();
     });
   },
+
+  // Add activeAt property to entries
+  addActiveAt,
 
 ];
 
