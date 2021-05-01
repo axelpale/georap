@@ -48,10 +48,6 @@ exports.getMarkdown = function (entry) {
   return entry.markdown
 }
 
-exports.isVisit = function (entry) {
-  return entry.flags.indexOf('visit') > -1
-}
-
 exports.hasFile = function (entry) {
   return (entry.attachments.length > 0)
 }
