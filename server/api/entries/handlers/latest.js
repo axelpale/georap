@@ -1,7 +1,8 @@
 const getLatestComplete = require('../dal/getLatestComplete');
 
 module.exports = (req, res, next) => {
-  // Latest entries in any location.
+  // Latest active entries, regardless the location.
+  // Activity includes entry creation and comment creation.
 
   // NOTE skip and limit already validated by middleware
   getLatestComplete({
