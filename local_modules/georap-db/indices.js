@@ -16,6 +16,11 @@ module.exports = [
     options: {}
   },
   {
+    collection: 'entries',
+    spec: { activeAt: 1 },
+    options: {}
+  },
+  {
     collection: 'events',
     spec: { time: 1 },
     options: {}
