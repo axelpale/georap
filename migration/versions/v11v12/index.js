@@ -23,6 +23,7 @@ const removeOrphanEvents = require('./removeOrphanEvents');
 const migrateEntry = require('./migrateEntry');
 const getThumbnail = require('./getThumbnail');
 const addActiveAt = require('./addActiveAt');
+const removeVisitStatistics = require('./removeVisitStatistics');
 
 const FROM_VERSION = 11;
 const TO_VERSION = FROM_VERSION + 1;
@@ -199,29 +200,8 @@ const substeps = [
     });
   },
 
-  function removeVisitStatistics(nextStep) {
-    console.log('8. Remove visit statistics from users...');
-
-    const coll = db.collection('users');
-
-    iter.updateEach(coll, (origUser, iterNext) => {
-      const user = clone(origUser);
-      delete user.locationsVisited;
-      if (!user.flagsCreated) {
-        user.flagsCreated = []; // init
-      }
-      return iterNext(null, user);
-    }, (err, iterResults) => {
-      if (err) {
-        return nextStep(err);
-      }
-
-      console.log('  ' + iterResults.numDocuments + ' users processed ' +
-        'successfully.');
-
-      return nextStep();
-    });
-  },
+  // Remove outdated statistics from users
+  removeVisitStatistics,
 
   // Add activeAt property to entries
   addActiveAt,
