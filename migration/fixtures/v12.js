@@ -222,6 +222,7 @@ module.exports = {
       points: 0,
       // points7days: created by worker
       // points30days: created by worker
+      // points365days: created by worker
       status: 'active',
       createdAt: '2009-07-29T12:34:56.000Z',
       loginAt: '2009-10-05T12:34:56.000Z',
@@ -246,7 +247,6 @@ module.exports = {
       status: 'abandoned',
       type: 'default',
       thumbnail: 'ewdsf3kk', // NOTE new. Set null if no thumbnail
-      visits: [],
       text1: '',
       text2: '',
     }],
