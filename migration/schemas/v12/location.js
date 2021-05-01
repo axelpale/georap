@@ -37,7 +37,14 @@ module.exports = {
       type: 'string',
     },
     thumbnail: {
-      type: 'string',
+      anyOf: [
+        {
+          type: 'string',
+        },
+        {
+          type: 'null',
+        },
+      ],
     },
     type: {
       type: 'string',
