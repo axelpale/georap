@@ -106,6 +106,10 @@ a.list-group-item, button.list-group-item {
   color: #ddd; /* orig #555 */
 }
 
+.text-warning {
+  color: #f7ba50;
+}
+
 .well {
   background-color: #121212;
   border-color: #999999;
