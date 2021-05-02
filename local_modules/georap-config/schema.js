@@ -212,6 +212,18 @@ module.exports = {
     markerTemplates: {
       type: 'object',
     },
+    entries: {
+      type: 'object',
+      properties: {
+        pageSize: {
+          type: 'integer',
+        },
+      },
+      required: [
+        'pageSize',
+      ],
+      additionalProperties: false,
+    },
     comments: {
       type: 'object',
       properties: {
@@ -332,6 +344,7 @@ module.exports = {
     'rewards',
     'entryFlags',
     'markerTemplates',
+    'entries',
     'comments',
     'coordinateSystems',
     'exportServices',

@@ -373,6 +373,12 @@ module.exports = {
     },
   },
 
+  // Entry listing
+  entries: {
+    // Items to load initially and when Load More -button is pressed.
+    pageSize: 10,
+  },
+
   // Commenting
   comments: {
     secondsEditable: 360,
