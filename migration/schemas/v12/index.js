@@ -1,7 +1,7 @@
 const collections = require('./collections');
 const indices = require('./indices');
 
-module.exports = {
+exports.fixture = {
   type: 'object',
   properties: {
     collections: collections,

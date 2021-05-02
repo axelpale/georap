@@ -38,26 +38,24 @@ const loadFixtureByTag = function (versionTag, callback) {
 describe('fixtures', () => {
   describe('example', () => {
     it('should follow schema', (done) => {
-      const schema = schemas.v12;
+      const schema = schemas.v12.fixture;
       const fixture = fixtures.example;
       const isValid = ajv.validate(schema, fixture);
       if (!isValid) {
-        console.log(ajv.errors);
+        assert.fail(ajv.errors);
       }
-      assert.ok(isValid);
       return done();
     });
   });
 
   describe('v12', () => {
     it('should follow schema', (done) => {
-      const schema = schemas.v12;
+      const schema = schemas.v12.fixture;
       const fixture = fixtures.v12;
       const isValid = ajv.validate(schema, fixture);
       if (!isValid) {
-        console.log(ajv.errors);
+        assert.fail(ajv.errors);
       }
-      assert.ok(isValid);
       return done();
     });
   });
