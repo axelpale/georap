@@ -57,9 +57,9 @@ module.exports = function (opts) {
         $form.trigger('submit');
       });
 
-    $form.on('submit', function (e) {
+    $form.on('submit', function (ev) {
       // Prevent default form submit
-      e.preventDefault();
+      ev.preventDefault();
 
       // Mix selected files and dropped files.
       var ajaxData = new window.FormData();
