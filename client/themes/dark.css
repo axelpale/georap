@@ -160,9 +160,6 @@ a.list-group-item, button.list-group-item {
   filter: invert(1);
 }
 /* Georap location */
-#location-thumbnails-container img {
-  border: 1px solid #333;
-}
 #tresdb-location-return {
   color: #666;
   border-bottom: 1px solid #333;
