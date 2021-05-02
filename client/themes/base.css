@@ -504,6 +504,13 @@ li.form-attachment-container:first-child img {
   margin: -10px -15px -10px 10px;
   float: right;
 }
+.comment-submit-buttons {
+  line-height: 4rem;
+  text-align: right;
+}
+.comment-tools-buttons {
+  line-height: 4rem;
+}
 /* END Comments */
 
 /* Markdown Component */
