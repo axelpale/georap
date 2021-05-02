@@ -203,9 +203,6 @@ img.location-type-symbol {
 .comment-form-container {
   border-top: 1px solid #444;
 }
-.comment-edit-container {
-  border-top: 1px dashed #444;
-}
 /* Users */
 .points-equality-line {
   border-bottom: 3px double white;
