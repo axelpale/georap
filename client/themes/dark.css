@@ -59,6 +59,11 @@ hr {
   border-color: #444;
 }
 
+.close,
+.close:focus, .close:hover {
+  color: white; /* opacity does hover effect */
+}
+
 .nav-tabs {
   border-bottom: 1px solid #444;
 }
