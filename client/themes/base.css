@@ -309,7 +309,7 @@ time {
 }
 .location-form-thumbnail.thumbnail-selected {
   margin: 0;
-  border: 4px solid black;
+  border: 3px dashed black;
   opacity: 1;
 }
 .location-form-thumbnail:hover {
