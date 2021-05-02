@@ -185,7 +185,7 @@ button.tresdb-geolocation .tresdb-geolocation-icon {
 .form-attachment img {
   border-color: #333;
 }
-/* Thumbnails */
+/* List item thumbnails */
 img.location-type-symbol {
   filter: invert(1); /* Make type symbols white */
 }
