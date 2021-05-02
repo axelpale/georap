@@ -368,6 +368,10 @@ time {
   height: 11rem;
   opacity: 1;
 }
+/* Entry Form */
+.entry-form .entry-tools-buttons {
+  line-height: 4rem;
+}
 /* END Entries */
 
 /* Thumbnail */
