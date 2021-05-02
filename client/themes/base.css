@@ -577,7 +577,7 @@ li.form-attachment-container:first-child img {
 .latest-locations .list-group-item {
   min-height: 11.1rem;
 }
-.latest-locations h4 {
+.latest-locations .location-title {
   margin-bottom: 2px;
 }
 .latest-locations .location-status,
@@ -585,9 +585,7 @@ li.form-attachment-container:first-child img {
   text-transform: capitalize;
 }
 .location-item-thumbnail {
-  position: absolute;
-  top: 0;
-  right: 0;
+  margin: -10px -15px -10px 10px;
 }
 .location-item-thumbnail img {
   object-fit: cover;
@@ -596,6 +594,30 @@ li.form-attachment-container:first-child img {
 }
 .location-item-thumbnail img.location-type-symbol {
   object-fit: none;
+}
+@media (max-width: 520px) {
+  .latest-locations .list-group-item {
+    min-height: 8.7rem;
+  }
+  .latest-locations .location-title {
+    margin-top: 3px;
+  }
+  .location-item-thumbnail img {
+    width: 8.7rem;
+    height: 8.7rem;
+  }
+}
+@media (max-width: 380px) {
+  .latest-locations .list-group-item {
+    min-height: 6.9rem;
+  }
+  .location-item-thumbnail {
+    margin: -10px -15px 0 5px;
+  }
+  .location-item-thumbnail img {
+    width: 6.9rem;
+    height: 6.9rem;
+  }
 }
 /* Latest entries */
 .latest-entries .tresdb-entry {
