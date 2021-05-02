@@ -9,7 +9,6 @@ html, body {
 }
 
 /* Effects et General */
-
 .tresdb-flash {
   background-color: #76E68C !important;
 }
@@ -31,7 +30,6 @@ time {
 /* END Effect et General */
 
 /* Card */
-
 #card-layer {
   position: absolute;
   top: 0%;
@@ -44,7 +42,6 @@ time {
   overflow: visible;
   background: white;
 }
-
 #card-layer.tresdb-card-full {
   top: 0%;
   left: 0%;
@@ -52,10 +49,8 @@ time {
   width: 100%;
   max-width: 100%;
 }
-
 #card-layer.tresdb-card-page {
 }
-
 #card-close-icon {
   position: absolute;
   bottom: 0;
@@ -68,7 +63,6 @@ time {
   padding-left: 0.53em;
   cursor: pointer;
 }
-
 #card-layer-content {
   position: absolute;
   width: 100%;
@@ -76,11 +70,9 @@ time {
   padding-bottom: 18rem;
   overflow-y: scroll;
 }
-
-/* Card END */
+/* END Card */
 
 /* Login */
-
 .tresdb-login-container {
   width: 100%;
   height: 100%;
@@ -89,41 +81,33 @@ time {
   background: url('/assets/images/login.jpg') no-repeat center center fixed;
   background-size: cover;
 }
-
 .tresdb-login-container h1,
 .tresdb-login-container label,
 .tresdb-login-container p,
 .tresdb-login-container a {
   color: #EEE !important;
 }
-
 #tresdb-login-form {
   margin-bottom: 1.68em;
 }
-
-/* Login END */
+/* END Login */
 
 /* Menu */
-
 .dropdown-menu {
   background-color: rgba(255,255,255,0.95);
 }
-
 .tresdb-map-menu {
   padding: 0.9em;
   max-width: 60%; /* Firefox needs width to be specified */
 }
-
 #tresdb-toolbar-main {
   margin-bottom: 0.9em;
 }
-
 #tresdb-toolbar-main .dropdown,
 #tresdb-mainmenu-filter {
   margin-right: 0.3em;
   margin-bottom: 0.5em;
 }
-
 #tresdb-toolbar-main .btn-lg {
   /* Match size with gmaps buttons */
   padding: 8px 13px;
@@ -134,7 +118,6 @@ time {
   padding: 8px 13px;
   font-size: 16px;
 }
-
 #tresdb-mainmenu-filter .glyphicon {
   top: 2px;
 }
@@ -147,7 +130,7 @@ time {
   height: 1.4em;
   border-radius: 0.7em;
 }
-
+/* Menu search form */
 #tresdb-mainmenu-search-form  {
   width: 20rem;
 }
@@ -183,17 +166,14 @@ time {
     width: 13rem;
   }
 }
-
-/* Menu END */
-
+/* END Menu */
 
 /* Location page */
-
 #tresdb-location-loading {
   /* Make space between the loading bar and the top edge. Match with H1 */
   margin-top: 20px;
 }
-
+/* Location return to latest */
 #tresdb-location-return {
   color: #666;
   border-bottom: 1px solid gray;
@@ -208,7 +188,7 @@ time {
   margin: 0;
   color: #333;
 }
-
+/* Location name */
 #tresdb-location-name {
   margin-bottom: 1rem;
   overflow-wrap: break-word;
@@ -218,27 +198,24 @@ time {
   margin-bottom: 0;
   margin-top: 1.5rem;
 }
-
+/* Location geom */
 #tresdb-location-geom {
   margin-bottom: 1rem;
 }
 #tresdb-location-geom > .form-group {
   margin-bottom: 0;
 }
-
 #tresdb-location-geom .location-coords-container {
   margin-top: 0.6rem;
 }
-
+/* Location component containers */
 #tresdb-location-statustype-container {
   margin-bottom: 1.6rem;
 }
-
 #location-thumbnail-container {
   margin-bottom: 1.6rem;
   line-height: 1;
 }
-
 #tresdb-location-forms {
   margin-bottom: 1rem;
 }
@@ -248,12 +225,11 @@ time {
 #tresdb-location-forms-menu button {
   margin-bottom: 0.6rem;
 }
-
 #tresdb-location-entries,
 #tresdb-location-events {
   margin-bottom: 2.68em;
 }
-/* Location page END */
+/* END Location page */
 
 /* Location Status & Type */
 .location-statustype {
@@ -287,7 +263,7 @@ time {
   pointer-events: none;
   vertical-align: top;
 }
-/* Location Status & Type END */
+/* END Location Status & Type */
 
 /* Location Thumbnail */
 .location-thumbnail {
@@ -316,47 +292,39 @@ time {
   opacity: 0.7;
   cursor: pointer;
 }
-/* Location Thumbnail END */
+/* END Location Thumbnail */
 
 /* Entries */
-
 .tresdb-entry .panel-body,
 .tresdb-entry .comment-message {
   overflow-wrap: break-word;
   word-wrap: break-word;
 }
-
 .tresdb-entry .panel-body > p:last-child {
   margin-bottom: 0px;
 }
-
 .tresdb-entry .pull-right button.entry-form-open,
 .tresdb-entry .pull-right button.comment-form-open {
   margin: -5px -9px 0 0;
 }
-
 .form-markdown-group {
   margin-bottom: 1.6rem;
 }
-
 .entry-image-body {
   position: relative;
   padding: 0px;
   text-align: center;
 }
-
 .entry-image-body img {
   max-width: 100%;
   /*margin: 0px auto 0px auto;*/
 }
-
 .entry-image-body a {
   position: relative;
   display: block;
   height: 100%;
   width: 100%;
 }
-
 .entry-image-zoom-icon {
   position: absolute;
   display: block;
@@ -372,7 +340,6 @@ time {
   border-bottom: 1px solid rgba(190, 190, 190, 0.9);
   border-radius: 14px;
 }
-
 .entry-images-browser-container {
   margin-top: 0.6rem;
   margin-bottom: 0.7rem;
@@ -385,7 +352,6 @@ time {
   margin-top: 0;
   margin-bottom: 0;
 }
-
 .entry-images-browser img {
   display: inline-block;
   object-fit: cover;
@@ -399,11 +365,9 @@ time {
   height: 11rem;
   opacity: 1;
 }
-
-/* Entries END */
+/* END Entries */
 
 /* Thumbnail */
-
 .attachment-thumbnail {
   display: inline-block;
 }
@@ -437,11 +401,9 @@ time {
   position: relative;
   top: 0.7rem;
 }
-
-/* Thumbnail END */
+/* END Thumbnail */
 
 /* Attachments Form and Uploader */
-
 .form-attachment-thumbnail {
   display: inline-block;
   vertical-align: top;
@@ -458,14 +420,13 @@ li.form-attachment-container:first-child img {
 .form-attachment .form-attachment-filename {
   margin-bottom: 1rem;
 }
-
 .uploader-container {
   background-color: #f5f5f5;
 }
 .uploader-container.list-group-item {
   padding: 10px 11px; /* defaults 10px 15px */
 }
-
+/* Uploader box */
 .uploader-box {
   color: #444;
   font-size: 1.28rem;
@@ -473,7 +434,6 @@ li.form-attachment-container:first-child img {
   padding: 4.24rem 1.28rem;
   outline: 2px dashed #ddd;
 }
-
 .uploader-box-input input {
   width: 0.1px;
   height: 0.1px;
@@ -482,44 +442,35 @@ li.form-attachment-container:first-child img {
   position: absolute;
   z-index: -1;
 }
-
 .uploader-box-input label {
   font-size: 1.27em;
   font-weight: 700;
   display: inline-block;
   cursor: pointer;
 }
-
 .uploader-box-input label .glyphicon {
   font-size: 4.2rem;
 }
-
 .uploader-box-file:focus + label,
 .uploader-box-file + label:hover {
   color: #337ab7;
 }
-
 .uploader-box-file:focus + label {
   outline: 1px dotted #000;
   outline: -webkit-focus-ring-color auto 5px;
 }
-
 /* Prevent touch-reactive content inside label */
 .uploader-box-input label * {
   pointer-events: none;
 }
-
 /* Drag'n'drop styling */
-
 .uploader-box.is-dragover {
   background-color: grey;
 }
-
 .uploader-box-button {
   display: none;
 }
-
-/* Attachments Form and Uploader END */
+/* END Attachments Form and Uploader */
 
 /* Comments */
 .panel > .list-group.entry-comments-container {
@@ -544,7 +495,7 @@ li.form-attachment-container:first-child img {
   margin: -10px -15px -10px 10px;
   float: right;
 }
-/* Comments END */
+/* END Comments */
 
 /* Markdown Component */
 .markdown-hint {
@@ -554,7 +505,7 @@ li.form-attachment-container:first-child img {
   margin-top: -9px;
   margin-right: -2px;
 }
-/* Markdown Component END */
+/* END Markdown Component */
 
 /* Flags Component */
 .form-flags.form-group {
@@ -567,8 +518,9 @@ li.form-attachment-container:first-child img {
 .form-flags .flag-checkbox:first-child {
   margin-top: 1px;
 }
-/* Flags Component END */
+/* END Flags Component */
 
+/* Latest */
 /* Latest events page */
 .latest-tabs li {
   text-transform: capitalize;
@@ -579,7 +531,6 @@ li.form-attachment-container:first-child img {
 .latest-tabs-spacer {
   padding: 10px 15px;
 }
-
 .latest-events .list-group-item {
   min-height: 5.4rem; /* match xs thumbnail */
 }
@@ -632,7 +583,6 @@ li.form-attachment-container:first-child img {
   border-radius: 0.7rem;
   background-color: #D9534F;
 }
-
 .location-status-list button.location-filter-any,
 .location-type-list button.location-filter-any {
   width: 6rem;
@@ -673,6 +623,7 @@ button.tresdb-geolocation .tresdb-geolocation-icon {
 .georap-credits {
   text-align: right;
 }
+/* END Statistics */
 
 /* Users */
 .points-equality-line {
