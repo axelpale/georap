@@ -553,6 +553,16 @@ li.form-attachment-container:first-child img {
 .latest-tabs-spacer {
   padding: 10px 15px;
 }
+@media (max-width: 380px) {
+  .latest-tabs > li > a {
+    padding: 10px 13px; /* orig 10px 15px */
+  }
+}
+@media (max-width: 330px) {
+  .latest-tabs > li > a {
+    padding: 10px 11px;
+  }
+}
 .latest-events .list-group-item {
   min-height: 5.4rem; /* match xs thumbnail */
 }
