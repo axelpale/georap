@@ -423,6 +423,9 @@ li.form-attachment-container:first-child img {
 .form-attachment .form-attachment-filename {
   margin-bottom: 1rem;
 }
+.form-attachment .form-attachment-buttons {
+  line-height: 3.4rem;
+}
 .uploader-container {
   background-color: #f5f5f5;
 }
