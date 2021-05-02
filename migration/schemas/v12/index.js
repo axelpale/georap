@@ -10,3 +10,5 @@ exports.fixture = {
   required: [],
   additionalProperties: false,
 };
+
+exports.location = require('./location');
