@@ -101,13 +101,13 @@ const substeps = [
   },
 
   function migrateLocations(nextStep) {
-    console.log('5. Add published prop and ensure visits prop in locations...');
+    console.log('5. Add published prop and remove visits prop in locations...');
 
     const coll = db.collection('locations');
 
     iter.updateEach(coll, (origLoc, iterNext) => {
       const loc = clone(origLoc);
-      loc.visits = [];
+      delete loc.visits;
       loc.published = false;
       return iterNext(null, loc);
     }, (err, iterResults) => {
