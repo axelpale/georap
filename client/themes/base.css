@@ -300,6 +300,7 @@ time {
 .tresdb-entry .panel-body,
 .tresdb-entry .comment-message {
   overflow-wrap: break-word;
+  word-break: break-all;
 }
 .tresdb-entry .panel-body > p:last-child {
   margin-bottom: 0;
