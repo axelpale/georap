@@ -377,12 +377,13 @@ describe('migrates.migrate', () => {
             assertFixtureEqual('events', 'v12', (err4) => {
               assert.ifError(err4);
               // Ensure location have createdAt and thumbnail
+              // Ensure location does not have visits
               assertEvery('locations', (loc, then) => {
-                return then(
-                  null,
-                  typeof loc.createdAt === 'string' &&
-                  typeof loc.thumbnail === 'object' // null is an object
-                );
+                const isValid = ajv.validate(schemas.v12.location, loc);
+                if (!isValid) {
+                  return then(ajv.errors);
+                }
+                return then(null, true);
               }, (err5) => {
                 assert.ifError(err5);
                 done();
