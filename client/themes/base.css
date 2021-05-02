@@ -14,6 +14,7 @@ html, body {
 }
 .flip-x {
   -moz-transform: scale(-1, 1);
+  -ms-transform: scale(-1, 1);
   -o-transform: scale(-1, 1);
   -webkit-transform: scale(-1, 1);
   transform: scale(-1, 1);
@@ -32,19 +33,19 @@ time {
 /* Card */
 #card-layer {
   position: absolute;
-  top: 0%;
-  right: 0%;
+  top: 0;
+  right: 0;
   width: 80%;
   height: 100%;
   max-width: 600px;
-  box-shadow: 0px 0px 2.62em black;
+  box-shadow: 0 0 2.62em black;
   z-index: 3;
   overflow: visible;
   background: white;
 }
 #card-layer.tresdb-card-full {
-  top: 0%;
-  left: 0%;
+  top: 0;
+  left: 0;
   height: 100%;
   width: 100%;
   max-width: 100%;
@@ -76,8 +77,8 @@ time {
 .tresdb-login-container {
   width: 100%;
   height: 100%;
-  margin: 0px;
-  padding: 0px;
+  margin: 0;
+  padding: 0;
   background: url('/assets/images/login.jpg') no-repeat center center fixed;
   background-size: cover;
 }
@@ -94,6 +95,7 @@ time {
 
 /* Menu */
 .dropdown-menu {
+  background-color: white;
   background-color: rgba(255,255,255,0.95);
 }
 .tresdb-map-menu {
@@ -192,7 +194,7 @@ time {
 #tresdb-location-name {
   margin-bottom: 1rem;
   overflow-wrap: break-word;
-  word-break: break-word;
+  word-break: break-all;
 }
 #tresdb-location-name h1 {
   margin-bottom: 0;
@@ -298,13 +300,13 @@ time {
 .tresdb-entry .panel-body,
 .tresdb-entry .comment-message {
   overflow-wrap: break-word;
-  word-wrap: break-word;
+  word-wrap: break-all;
 }
 .tresdb-entry .panel-body > p:last-child {
-  margin-bottom: 0px;
+  margin-bottom: 0;
 }
-.tresdb-entry .pull-right button.entry-form-open,
-.tresdb-entry .pull-right button.comment-form-open {
+.tresdb-entry .pull-right .entry-form-open,
+.tresdb-entry .pull-right .comment-form-open {
   margin: -5px -9px 0 0;
 }
 .form-markdown-group {
@@ -312,12 +314,12 @@ time {
 }
 .entry-image-body {
   position: relative;
-  padding: 0px;
+  padding: 0;
   text-align: center;
 }
 .entry-image-body img {
   max-width: 100%;
-  /*margin: 0px auto 0px auto;*/
+  /*margin: 0 auto 0 auto;*/
 }
 .entry-image-body a {
   position: relative;
@@ -334,6 +336,7 @@ time {
   width: 32px;
   height: 32px;
   padding-top: 6px;
+  background-color: white;
   background-color: rgba(255, 255, 255, 0.8);
   color: black;
   border-right: 1px solid rgba(190, 190, 190, 0.9);
@@ -460,7 +463,8 @@ li.form-attachment-container:first-child img {
   outline: -webkit-focus-ring-color auto 5px;
 }
 /* Prevent touch-reactive content inside label */
-.uploader-box-input label * {
+.uploader-box-input label span,
+.uploader-box-input label br {
   pointer-events: none;
 }
 /* Drag'n'drop styling */

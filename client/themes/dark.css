@@ -24,6 +24,7 @@ hr {
 }
 
 .dropdown-menu {
+  background-color: #111;
   background-color: rgba(17,17,17,0.95);
 }
 .dropdown-menu > li > a {
@@ -144,7 +145,7 @@ a.list-group-item, button.list-group-item {
 }
 /* Georap tags */
 .tresdb-tag {
-  border: 0px solid gray;
+  border: 0 solid gray;
 }
 .tresdb-tag-active {
   border: 1px solid #e5e5e5;
