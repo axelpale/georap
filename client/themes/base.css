@@ -448,14 +448,12 @@ time {
 }
 .form-attachment-thumbnail img {
   border-right: 1px solid #ddd;
-  margin: -10px 0 -10px -15px;
 }
 li.form-attachment-container:first-child img {
   border-top-left-radius: 4px;
 }
 .form-attachment .form-attachment-controls {
   display: inline-block;
-  margin-left: 1rem;
 }
 .form-attachment .form-attachment-filename {
   margin-bottom: 1rem;
