@@ -374,6 +374,12 @@ time {
 }
 /* END Entries */
 
+/* Removal Form */
+.form-remove-confirmation {
+  text-align: right;
+}
+/* END Removal Form */
+
 /* Thumbnail */
 .attachment-thumbnail {
   display: inline-block;
