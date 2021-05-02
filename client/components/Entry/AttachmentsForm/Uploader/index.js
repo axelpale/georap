@@ -41,9 +41,9 @@ module.exports = function (opts) {
     $form
       .on(
         'drag dragstart dragend dragover dragenter dragleave drop',
-        function (e) {
-          e.preventDefault();
-          e.stopPropagation();
+        function (ev) {
+          ev.preventDefault();
+          ev.stopPropagation();
         }
       )
       .on('dragover dragenter', function () {
@@ -52,8 +52,8 @@ module.exports = function (opts) {
       .on('dragleave dragend drop', function () {
         $form.removeClass('is-dragover');
       })
-      .on('drop', function (e) {
-        droppedFiles = e.originalEvent.dataTransfer.files;
+      .on('drop', function (dropEv) {
+        droppedFiles = dropEv.originalEvent.dataTransfer.files;
         $form.trigger('submit');
       });
 
