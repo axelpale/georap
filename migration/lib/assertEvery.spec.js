@@ -5,7 +5,7 @@ const db = require('georap-db');
 const loadFixture = require('./loadFixture');
 const dropCollections = require('./dropCollections');
 
-// Ensure we are in test mode before loading fixture
+// Ensure we are in test mode before loading a fixture
 if (config.env !== 'test') {
   throw new Error('Tests not allowed in NODE_ENV ' + config.env);
 }
@@ -61,11 +61,8 @@ test('assertEvery happy', (t) => {
     t.error(berr);
     assertEvery('docs', (doc, next) => {
       next(null, doc.key);
-    }, (err, result) => {
+    }, (err) => {
       t.error(err, 'no errors');
-      t.equal(result.ok, true, 'result.ok');
-      t.equal(result.numValid, 3, 'numValid');
-      t.equal(result.numDocuments, 3, 'numDocuments');
       t.end();
     });
   });
@@ -86,11 +83,10 @@ test('assertEvery short', (t) => {
     t.error(berr);
     assertEvery('docs', (doc, next) => {
       next(null, doc.key);
-    }, (err, result) => {
-      t.error(err, 'no errors');
-      t.equal(result.ok, false, 'result.ok');
-      t.equal(result.numValid, 1, 'numValid');
-      t.equal(result.numDocuments, 3, 'numDocuments');
+    }, (err) => {
+      t.equal(err.name, 'AssertionError', 'error name');
+      t.equal(err.numValid, 1, 'numValid');
+      t.equal(err.numDocuments, 3, 'numDocuments');
       t.end();
     });
   });

@@ -57,40 +57,44 @@ module.exports = function (collectionName, iteratee, callback) {
 
     const numDocs = allDocuments.length;
     let numValid = 0;
+    let failedDoc = null;
 
     asyn.everySeries(allDocuments, (doc, next) => {
-      try {
-        iteratee(doc, (iterateeError, isValid) => {
-          if (iterateeError) {
-            return next(iterateeError);
-          }
+      iteratee(doc, (iterateeError, isValid) => {
+        if (iterateeError) {
+          return next(iterateeError);
+        }
 
-          if (typeof isValid !== 'boolean') {
-            return next(new Error(
-              'assertEvery iteratee was called ' +
-              'with non-boolean value: ' + isValid
-            ));
-          }
+        if (typeof isValid !== 'boolean') {
+          return next(new Error(
+            'assertEvery iteratee was called ' +
+            'with non-boolean value: ' + isValid
+          ));
+        }
 
-          if (isValid) {
-            numValid += 1;
-          }
+        if (isValid) {
+          numValid += 1;
+        } else {
+          failedDoc = doc;
+        }
 
-          return next(null, isValid);
-        });
-      } catch (e) {
-        return next(e);
-      }
-    }, (err3, everyResult) => {
+        return next(null, isValid);
+      });
+    }, (err3, everyResultOk) => {
       if (err3) {
         return callback(err3);
       }
 
-      return callback(null, {
-        ok: everyResult,
-        numDocuments: numDocs,
-        numValid: numValid,
-      });
+      if (!everyResultOk) {
+        return callback({
+          name: 'AssertionError',
+          numDocuments: numDocs,
+          numValid: numValid,
+          failedDoc: failedDoc,
+        });
+      }
+
+      return callback();
     });
   });
 };
