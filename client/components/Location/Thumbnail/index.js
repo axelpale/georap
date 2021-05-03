@@ -15,7 +15,7 @@ module.exports = function (location, entries) {
 
   var $mount = null;
   var $elems = {};
-  var children = {};  // id -> thumbnailView
+  var children = {};
   var bus = models.location.bus(location, rootBus);
   var self = this;
 
@@ -89,9 +89,8 @@ module.exports = function (location, entries) {
   };
 
   self.update = function () {
-    // Update according to current number of available image attachments.
+    // Update according to thumbnail availability.
     if ($mount) {
-      // var images = models.entries.getImages(entries);
 
       // Hide if no thumbnails to show
       if (location.thumbnail) {
@@ -107,7 +106,7 @@ module.exports = function (location, entries) {
         }
       } else {
         ui.hide($mount);
-        if (location.thumbnail) {
+        if (children.thumbnail) {
           children.thumbnail.unbind();
           delete children.thumbnail;
         }
