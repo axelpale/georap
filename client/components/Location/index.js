@@ -57,7 +57,7 @@ var LocationView = function (id, query) {
     var $loading = $('#tresdb-location-loading');
 
     // Fetch location before rendering.
-    locations.get(id, function (err, rawLoc) {
+    locations.getOne(id, function (err, rawLoc) {
       ui.hide($loading);
 
       if (err) {

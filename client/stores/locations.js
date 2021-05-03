@@ -138,7 +138,7 @@ exports.createWithName = function (params, callback) {
   });
 };
 
-exports.get = function (id, callback) {
+exports.getOne = function (id, callback) {
   // Fetch a location from server and return a location object.
   // Will call back with error if not found.
   //
@@ -148,19 +148,9 @@ exports.get = function (id, callback) {
   //   callback
   //     function (err, location)
   //
-
-  $.ajax({
+  return getJSON({
     url: '/api/locations/' + id,
-    method: 'GET',
-    dataType: 'json',
-    headers: { 'Authorization': 'Bearer ' + account.getToken() },
-    success: function (rawLoc) {
-      return callback(null, rawLoc);
-    },
-    error: function (jqxhr, status, statusMessage) {
-      return callback(new Error(statusMessage));
-    },
-  });
+  }, callback);
 };
 
 exports.getAttachments = function (params, callback) {
