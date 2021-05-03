@@ -33,6 +33,7 @@ const indexHtml = (function precompile() {
       rewards: config.rewards,
       entryFlags: config.entryFlags,
       markerTemplates: config.markerTemplates,
+      entries: config.entries,
       comments: config.comments,
       coordinateSystems: config.coordinateSystems,
       exportServices: config.exportServices,
