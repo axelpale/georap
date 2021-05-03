@@ -61,6 +61,12 @@ module.exports = function (entry, opts) {
       ui.hide($elems.markdown);
     }
 
+    // Command all external links in markdown to open a new tab.
+    // See http://stackoverflow.com/a/4425214/638546
+    $elems.markdown.find('a').filter(function (i, elem) {
+      return elem.hostname !== window.location.hostname;
+    }).attr('target', '_blank');
+
     // Attachment viewer
     $elems.attachments = $mount.find('.entry-attachments-container');
     children.attachments = new AttachmentsView(entry, entry.attachments);

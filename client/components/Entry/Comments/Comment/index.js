@@ -37,6 +37,12 @@ module.exports = function (entry, comment) {
     $elems.message = $mount.find('.comment-message');
     $elems.message.html(ui.markdownToHtml(comment.markdown));
 
+    // Command all external links in markdown to open a new tab.
+    // See http://stackoverflow.com/a/4425214/638546
+    $elems.message.find('a').filter(function (i, elem) {
+      return elem.hostname !== window.location.hostname;
+    }).attr('target', '_blank');
+
     // Attachment
     $elems.thumb = $mount.find('.comment-attachment-thumbnail');
     if (comment.attachments.length > 0) {
