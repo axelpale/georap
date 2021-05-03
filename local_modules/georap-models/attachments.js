@@ -1,15 +1,10 @@
 /* eslint-disable no-var */
+var attachmentModel = require('./attachment')
 
 exports.getImages = function (attachments) {
-  var HEAD = 6
-  return attachments.filter(function (at) {
-    return at.mimetype.substr(0, HEAD) === 'image/'
-  })
+  return attachments.filter(attachmentModel.isImage)
 }
 
 exports.getNonImages = function (attachments) {
-  var HEAD = 6
-  return attachments.filter(function (at) {
-    return at.mimetype.substr(0, HEAD) !== 'image/'
-  })
+  return attachments.filter(attachmentModel.notImage)
 }
