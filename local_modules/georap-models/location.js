@@ -21,12 +21,13 @@ exports.forward = forward({
   location_entry_changed: function (location, ev) {
     // If the changed entry loses the selected thumbnail
     // then remove the thumbnail.
+    var imgs
 
     entriesModel.forward(location.entries, ev)
 
     // Check if the thumbnail was lost.
     if (location.thumbnail) {
-      var imgs = entriesModel.getImages(location.entries)
+      imgs = entriesModel.getImages(location.entries)
       var thumbnailExists = imgs.find(function (att) {
         return att.key === location.thumbnail.key
       })
@@ -41,7 +42,7 @@ exports.forward = forward({
     } else {
       // No thumbnail set yet.
       // Check if a thumbnail was gained.
-      var imgs = entriesModel.getImages(location.entries)
+      imgs = entriesModel.getImages(location.entries)
       if (imgs.length > 0) {
         location.thumbnail = imgs[0]
       }
@@ -74,7 +75,7 @@ exports.forward = forward({
   },
 
   location_thumbnail_changed: function (location, ev) {
-    Object.assign(location, ev.data.delta);
+    Object.assign(location, ev.data.delta)
   }
 })
 

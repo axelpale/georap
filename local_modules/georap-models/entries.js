@@ -43,7 +43,7 @@ exports.getImages = function (entries) {
   // Return all image attachments as array
   //
   var atts = exports.getAttachments(entries)
-  return attachmentsModel.getImages(atts);
+  return attachmentsModel.getImages(atts)
 }
 
 exports.getImageEntries = function (entries) {

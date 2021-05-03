@@ -1,3 +1,5 @@
+/* eslint-disable no-var */
+
 exports.latLngToPoint = function (latLng) {
   // LatLngLiteral to GeoJSON point
   return {
@@ -27,7 +29,7 @@ exports.boundsToZoom = function (bounds) {
   //
 
   // Adjusting parameters
-  var zoomAdj = 1;
+  var zoomAdj = 1
 
   // Deal with international date line
   // var dlng = ((bounds.east + 360) % 360) - ((bounds.west + 360) % 360)
