@@ -1,7 +1,6 @@
 /* eslint-disable no-var */
 var bus = require('./lib/bus')
 var forward = require('./lib/forward')
-var entriesModel = require('./entries')
 var attachmentsModel = require('./attachments')
 
 exports.forward = forward({
@@ -13,65 +12,32 @@ exports.forward = forward({
         location.thumbnail = imgs[0]
       }
     }
-
-    // Add entry
-    entriesModel.forward(location.entries, ev)
   },
 
   location_entry_changed: function (location, ev) {
-    // If the changed entry loses the selected thumbnail
-    // then remove the thumbnail.
-    var imgs
+    // If the attachment selected as the thumbnail was removed
+    // we should change the location thumbnail.
+    // However, as we are not aware of other entries of the location
+    // we cannot know how the thumbnail has changed or nullied.
+    // Therefore it is best for now to leave the thumbnail intact client-side.
+    // TODO maybe location_thumbnail_changed should be emitted by server?
 
-    entriesModel.forward(location.entries, ev)
-
-    // Check if the thumbnail was lost.
-    if (location.thumbnail) {
-      imgs = entriesModel.getImages(location.entries)
-      var thumbnailExists = imgs.find(function (att) {
-        return att.key === location.thumbnail.key
-      })
-      if (!thumbnailExists) {
-        // Thumbnail went missing. Reset thumbnail.
+    // Check if the thumbnail was gained.
+    if (!location.thumbnail) {
+      // No thumbnail set yet.
+      if (ev.data.delta.attachments) {
+        var imgs = attachmentsModel.getImages(ev.data.delta.attachments)
         if (imgs.length > 0) {
           location.thumbnail = imgs[0]
-        } else {
-          location.thumbnail = null
         }
-      }
-    } else {
-      // No thumbnail set yet.
-      // Check if a thumbnail was gained.
-      imgs = entriesModel.getImages(location.entries)
-      if (imgs.length > 0) {
-        location.thumbnail = imgs[0]
       }
     }
   },
 
   location_entry_removed: function (location, ev) {
-    // If the removed entry containes the last image attachment,
-    // then remove the thumbnail.
-
-    // Remove entry
-    entriesModel.forward(location.entries, ev)
-
-    // Reset thumbnail if needed
-    if (location.thumbnail) {
-      var removedThumbnail = ev.data.entry.attachments.find(function (att) {
-        return att.key === location.thumbnail.key
-      })
-      if (removedThumbnail) {
-        // Select new thumbnail if images available
-        var candidates = entriesModel.getImages(location.entries)
-        if (candidates.length > 0) {
-          location.thumbnail = candidates[0]
-        } else {
-          // No thumbnails available anymore
-          location.thumbnail = null
-        }
-      }
-    }
+    // No-op. We cannot know if entry removal has changed the thumbnail.
+    // TODO allow default thumbnail in UI so that it is possible
+    // for users to reselect a thumbnail.
   },
 
   location_thumbnail_changed: function (location, ev) {

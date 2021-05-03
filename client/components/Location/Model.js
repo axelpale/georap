@@ -31,12 +31,6 @@ module.exports = function (rawLoc) {
     // For events model
     self.emit('location_event_created', ev);
 
-    // For entries model
-    if (ev.type.startsWith('location_entry_')) {
-      models.entries.forward(rawLoc.entries, ev);
-      // self.emit('location_entry_event', ev);
-    }
-
     if (ev.type === 'location_name_changed') {
       rawLoc.name = ev.data.newName;
       self.emit(ev.type);
@@ -102,11 +96,6 @@ module.exports = function (rawLoc) {
 
   self.getLatitude = function () {
     return rawLoc.geom.coordinates[1];
-  };
-
-  self.getEntries = function () {
-    // Return EntriesModel.
-    return rawLoc.entries;
   };
 
   self.getEvents = function () {
