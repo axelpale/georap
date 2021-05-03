@@ -34,19 +34,5 @@ describe('server.api.locations.location.dal', () => {
       });
     });
 
-    it('should fetch attachments', (done) => {
-      unit.getOneComplete(common.irbeneId, (err, loc) => {
-        assert.ifError(err);
-        assert.equal(loc.entries.length, 2);
-        assert.equal(loc.entries[0].attachments.length, 1, 'ensure length');
-        assert.equal(
-          loc.entries[0].attachments[0].key,
-          'ewdsf3s',
-          'ensure $lookup'
-        );
-        done();
-      });
-    });
-
   });
 });
