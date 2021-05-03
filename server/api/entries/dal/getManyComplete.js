@@ -51,6 +51,8 @@ module.exports = (query, options, callback) => {
     }, {
       $skip: options.skip,
     });
+  } else {
+    throw new Error('Non-numeric skip or limit detected');
   }
 
   // Join locations if wanted. Strip most fields to keep the response small.
