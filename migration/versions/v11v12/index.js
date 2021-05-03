@@ -64,6 +64,10 @@ const substeps = [
 
     db.get().dropCollection('attachments', (err, wasDropped) => {
       if (err) {
+        if (err.codeName === 'NamespaceNotFound') {
+          console.log('  No attachments collection yet.');
+          return nextStep();
+        }
         return nextStep(err);
       }
       if (wasDropped) {
