@@ -4,5 +4,6 @@ exports.changeStatus = require('./changeStatus');
 exports.changeTags = require('./changeTags');
 exports.changeThumbnail = require('./changeThumbnail');
 exports.changeType = require('./changeType');
+exports.getEntries = require('./getEntries');
 exports.getOne = require('./getOne');
 exports.removeOne = require('./removeOne');
