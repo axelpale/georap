@@ -1,50 +1,111 @@
-var EntryView = require('../../Entry');
+// Component to list filtered lists of events.
+//
+var emitter = require('component-emitter');
 var ui = require('georap-ui');
+var template = require('./template.ejs');
+var EntryView = require('../../Entry');
 var rootBus = require('georap-bus');
+var locationsApi = tresdb.stores.locations;
 
-module.exports = function (location, entries) {
-  // Parameters:
-  //   location
-  //     location object
-  //   entries
-  //     an array of entries
-  //
+var PAGE_SIZE = tresdb.config.entries.pageSize;
 
+module.exports = function (locationId) {
+  // Init
   var $mount = null;
-  var children = {};  // id -> entryView
+  var children = {};
+  var $elems = {};
   var bus = rootBus.sub();
   var self = this;
+  emitter(self);
+
+  var skip = 0;
+  var limit = PAGE_SIZE;
+
+  var appendEntries = function (entries, prepend) {
+    // Parameters
+    //   entries
+    //     array
+    //   prepend
+    //     Set true to add to beginning, false to add to bottom.
+    //     Default false.
+    //
+    if ($mount) {
+      entries.forEach(function (entry) {
+        var view = new EntryView(entry);
+        var $container = $('<div id="entry-' + entry._id + '"></div>');
+        if (prepend) {
+          $elems.entries.prepend($container);
+        } else {
+          $elems.entries.append($container);
+        }
+        view.bind($container);
+        children[entry._id] = view;
+      });
+    }
+  };
+
+  var fetchAndAppend = function (callback) {
+    if ($mount) {
+      ui.show($elems.progress);
+      ui.hide($elems.loadMoreBtn);
+      locationsApi.getEntries({
+        locationId: locationId,
+        skip: skip,
+        limit: limit,
+      }, function (err, result) {
+        ui.hide($elems.progress);
+        if (err) {
+          $elems.error.html(err.message);
+          ui.show($elems.error);
+          // NOTE loadMoreBtn might stay hidden. User needs to refresh.
+          return;
+        }
+
+        var entries = result.entries;
+        appendEntries(entries);
+
+        if (result.more) {
+          ui.show($elems.loadMoreBtn);
+        }
+
+        if (callback) {
+          return callback();
+        }
+      });
+    }
+  };
+
+  // Public methods
 
   self.bind = function ($mountEl) {
     $mount = $mountEl;
+    $mount.html(template());
 
-    var appendEntry = function (entry, prepend) {
-      // Parameters
-      //   entry
-      //     entry object
-      //   prepend
-      //     set true to add to beginning, false to add to bottom
-      //
-      var id = entry._id;
-      children[id] = new EntryView(entry);
-      // New container for entry
-      var tmpl = '<div id="entry-' + id + '"></div>';
-      if (prepend) {
-        $mount.prepend(tmpl);
-      } else {
-        $mount.append(tmpl);
-      }
-      children[id].bind($('#entry-' + id));
-    };
+    $elems.entries = $mount.find('.location-entries');
+    $elems.progress = $mount.find('.location-entries-progress');
+    $elems.loadMoreBtn = $mount.find('.load-more');
+    $elems.error = $mount.find('.location-entries-error');
 
-    entries.forEach(function (entry) {
-      appendEntry(entry, false);
+    // Click to load more
+    $elems.loadMoreBtn.click(function () {
+      skip += limit;
+      fetchAndAppend();
+    });
+
+    // Initial event fetch and list render
+    fetchAndAppend(function () {
+      // Signal that the list is rendered.
+      // It seems that setTimeout is required to allow the fetched events
+      // to fill the scrollable container.
+      setTimeout(function () {
+        self.emit('idle');
+      }, 0);
     });
 
     bus.on('location_entry_created', function (ev) {
       var id = ev.data.entryId;
       if (!(id in children)) {
-        appendEntry(ev.data.entry, true);
+        appendEntries([ev.data.entry], true);
       }
     });
 
@@ -76,9 +137,15 @@ module.exports = function (location, entries) {
 
   self.unbind = function () {
     if ($mount) {
+      // Stop listening events
       bus.off();
+      // Unbind events view
       ui.unbindAll(children);
       children = {};
+      ui.offAll($elems);
+      $elems = {};
+      // Clear
+      $mount.empty();
       $mount = null;
     }
   };

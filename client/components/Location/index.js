@@ -82,7 +82,7 @@ var LocationView = function (id, query) {
       formsView = new FormsView(rawLoc);
 
       thumbnailView = new ThumbnailView(rawLoc, rawLoc.entries.slice());
-      entriesView = new EntriesView(rawLoc, rawLoc.entries.slice());
+      entriesView = new EntriesView(rawLoc._id);
 
       eventsView = new EventsView(_location.getEvents());
       removeView = new RemoveView(_location);
@@ -106,20 +106,22 @@ var LocationView = function (id, query) {
         self.emit('removed');
       });
 
-      // Scroll down to possibly referred entry or comment
-      if (window.location.hash.substring(0, 9) === '#comment-') {
-        var scrollerEl = document.getElementById('card-layer-content');
-        var commentEl = document.querySelector(window.location.hash);
-        // Test if such comment exists
-        if (commentEl) {
-          // Scroll at comment and leave a small gap.
-          var MARGIN = 32;
-          scrollerEl.scrollTop = commentEl.offsetTop - MARGIN;
-          // Flash the comment in green
-          var $listItem = $(commentEl).find('.list-group-item');
-          ui.flash($listItem);
+      // Scroll down to possibly referred entry or comment after
+      // entries are loaded.
+      entriesView.once('idle', function () {
+        if (window.location.hash.substring(0, 9) === '#comment-') {
+          var scrollerEl = document.getElementById('card-layer-content');
+          var commentEl = document.querySelector(window.location.hash);
+          // Test if such comment exists
+          if (commentEl) {
+            // Scroll at comment and leave a small gap.
+            var MARGIN = 32;
+            scrollerEl.scrollTop = commentEl.offsetTop - MARGIN;
+            // Flash the comment in green
+            ui.flash($(commentEl));
+          }
         }
-      }
+      });
 
       // Enable tooltips. See http://getbootstrap.com/javascript/#tooltips
       $('[data-toggle="tooltip"]').tooltip();

@@ -163,6 +163,38 @@ exports.get = function (id, callback) {
   });
 };
 
+exports.getEntries = function (params, callback) {
+  // Fetch a set of entries of the location, most recent first.
+  //
+  // Parameters:
+  //   params
+  //     locationId
+  //     skip
+  //       integer
+  //     limit
+  //       integer
+  //   callback
+  //     function (err, { entries, more }) where
+  //       entries
+  //         array of entry objects
+  //       more
+  //         boolean. True if there are still more entries after skip+limit.
+  //
+  return getJSON({
+    url: '/api/locations/' + params.locationId + '/entries',
+    data: {
+      skip: params.skip,
+      limit: params.limit,
+    },
+  }, function (err, result) {
+    if (err) {
+      return callback(err);
+    }
+
+    return callback(null, result);
+  });
+};
+
 exports.getLatest = function (range, callback) {
   // Fetch recent locations from server and return an array of locations objs.
   // Will call back with error if not found.
