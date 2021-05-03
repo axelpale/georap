@@ -1,6 +1,7 @@
 const status = require('http-status-codes');
 const entriesDal = require('../dal');
 const flagMap = require('./compiledEntryFlags');
+const resetThumbnail = require('../../locations/location/dal/resetThumbnail');
 
 module.exports = (req, res, next) => {
   // Create entry.
@@ -69,8 +70,23 @@ module.exports = (req, res, next) => {
     if (err) {
       return next(err);
     }
-    return res.json({
-      entry: entry,
+
+    if (req.location.thumbnail) {
+      // Location thumbnail already set.
+      return res.json({
+        entry: entry,
+      });
+    }
+
+    // Update the thumbnail
+    resetThumbnail(locationId, (errt) => {
+      if (errt) {
+        return next(errt);
+      }
+
+      return res.json({
+        entry: entry,
+      });
     });
   });
 };

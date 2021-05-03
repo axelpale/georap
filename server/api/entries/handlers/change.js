@@ -1,6 +1,7 @@
 const status = require('http-status-codes');
 const entriesDal = require('../dal');
 const flagMap = require('./compiledEntryFlags');
+const resetThumbnail = require('../../locations/location/dal/resetThumbnail');
 
 // eslint-disable-next-line max-statements
 module.exports = (req, res, next) => {
@@ -86,8 +87,23 @@ module.exports = (req, res, next) => {
     if (err) {
       return next(err);
     }
-    return res.json({
-      entry: changedEntry,
+
+    if (req.location.thumbnail) {
+      // Location thumbnail already set.
+      return res.json({
+        entry: changedEntry,
+      });
+    }
+
+    // Update the thumbnail
+    resetThumbnail(req.location._id, (errt) => {
+      if (errt) {
+        return next(errt);
+      }
+
+      return res.json({
+        entry: changedEntry,
+      });
     });
   });
 };
