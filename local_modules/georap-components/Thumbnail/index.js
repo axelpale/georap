@@ -33,7 +33,7 @@ module.exports = function (attachment, opts) {
   opts = Object.assign({
     size: 'md',
     makeLink: false,
-    url: attachment.url,
+    url: null,
   }, opts);
 
   // Setup
@@ -47,7 +47,7 @@ module.exports = function (attachment, opts) {
       attachment: attachment,
       sizeClass: sizeToClass[opts.size],
       makeLink: opts.makeLink,
-      url: opts.url,
+      url: opts.url ? opts.url : attachment.url,
     }));
   };
 
@@ -59,7 +59,7 @@ module.exports = function (attachment, opts) {
         attachment: attachment,
         sizeClass: sizeToClass[opts.size],
         makeLink: opts.makeLink,
-        url: opts.url,
+        url: opts.url ? opts.url : attachment.url,
       }));
     }
   };
