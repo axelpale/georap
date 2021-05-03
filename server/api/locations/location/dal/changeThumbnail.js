@@ -13,9 +13,14 @@ module.exports = (params, callback) => {
   //       string, attachment key
   //     newThumbnail
   //       string, attachment key
+  //     silent
+  //       optional boolean. Default false. Does not create or emit event.
   //   callback
   //     function (err)
   //
+  params = Object.assign({
+    silent: false,
+  }, params);
 
   const q = { _id: params.locationId };
   const u = {
@@ -29,18 +34,16 @@ module.exports = (params, callback) => {
       return callback(err);
     }
 
+    if (params.silent) {
+      return callback();
+    }
+
     eventsDal.createLocationThumbnailChanged({
       locationId: params.locationId,
       locationName: params.locationName,
       username: params.username,
       newThumbnail: params.newThumbnail,
       oldThumbnail: params.oldThumbnail,
-    }, (err2) => {
-      if (err2) {
-        return callback(err2);
-      }
-
-      return callback();
-    });
+    }, callback);
   });
 };
