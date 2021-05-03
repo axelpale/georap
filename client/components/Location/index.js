@@ -79,11 +79,9 @@ var LocationView = function (id, query) {
       placesView = new PlacesView(_location);
       geomView = new GeomView(_location);
       statusTypeView = new StatusTypeView(_location);
-      formsView = new FormsView(rawLoc);
-
       thumbnailView = new ThumbnailView(rawLoc);
+      formsView = new FormsView(rawLoc);
       entriesView = new EntriesView(rawLoc._id);
-
       eventsView = new EventsView(_location.getEvents());
       removeView = new RemoveView(_location);
 
