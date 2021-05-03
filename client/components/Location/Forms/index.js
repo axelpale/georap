@@ -1,7 +1,7 @@
 
 var ExportComponent = require('./Export');
 var ViewOnComponent = require('./ViewOn');
-var EntryCreationComponent = require('../Entries/Creation');
+var EntryCreationComponent = require('./EntryCreation');
 var template = require('./template.ejs');
 var emitter = require('component-emitter');
 var ui = require('georap-ui');
