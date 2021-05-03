@@ -1,0 +1,21 @@
+
+<% if (markers.length === 0) { %>
+
+  <ul class="list-group">
+    <li class="list-group-item tresdb-disabled" style="text-align: center">No results</li>
+  </ul>
+
+<% } else { %>
+
+  <ul class="list-group" style="margin-bottom: 0">
+  <% markers.forEach(function (m) { %>
+    <li class="list-group-item">
+      <a href="/locations/<%= m._id %>?zoom=11"><%= m.name %></a>
+      <span style="color: gray; font-style: italic; margin-left: 0.38em">
+        <%= placestamp(m.places) %>
+      </span>
+    </li>
+  <% }); %>
+  </ul>
+  <div class="text-muted" style="margin-top: 0.38rem; margin-bottom: 1rem;">Showing results <%= skip %>–<%= skip + limit %></div>
+<% } %>

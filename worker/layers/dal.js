@@ -1,9 +1,9 @@
-var db = require('tresdb-db');
+const db = require('georap-db');
 
-var TOP_LAYER = 1;
-var BOTTOM_LAYER = 15;
+const TOP_LAYER = 1;
+const BOTTOM_LAYER = 15;
 
-var EARTH_CIRCUMFERENCE = 40000000;  // metres
+const EARTH_CIRCUMFERENCE = 40000000;  // metres
 
 exports.getClusterRadius = function (layer) {
   // This function defines the neighborhood size as a function of zoom level.
@@ -12,16 +12,16 @@ exports.getClusterRadius = function (layer) {
   // Return meters.
 
   // Earth radius in meters.
-  var R = 6371000;
+  const R = 6371000;
 
   // Desired distance between markers in pixels, somewhat.
-  var D = 100;
+  const D = 100;
 
   // Assumed width of average view of the user in pixels.
-  var W = 1000;
+  const W = 1000;
 
   // Ratio between levels
-  var r = 0.5;
+  const r = 0.5;
 
   // A method to obtain reasonable neighborhood:
   // On level 0, the width of the map is the length of the equator.
@@ -52,7 +52,7 @@ exports.findLayerWithClusterRadiusSmallerThan = function (distance) {
   // Begin from the highest layer. For each layer, compute the required
   // cluster radius. Stop when the radius is decreased below the distance
   // to the nearest.
-  var layer, r;
+  let layer, r;
 
   for (layer = TOP_LAYER; layer < BOTTOM_LAYER; layer += 1) {
     r = exports.getClusterRadius(layer);
@@ -69,15 +69,15 @@ exports.markAllAsUnlayered = function (callback) {
   // This is usually necessary when starting to refresh the layer numbers.
   // TODO what about deleted locations?
 
-  var coll = db.collection('locations');
-  var u = {
+  const coll = db.collection('locations');
+  const u = {
     $set: {
       isLayered: false,
       childLayer: 0,
     },
   };
 
-  coll.updateMany({}, u, function (err) {
+  coll.updateMany({}, u, (err) => {
     if (err) {
       return callback(err);
     }
@@ -94,10 +94,10 @@ exports.markOneAsUnlayered = function (locationId, callback) {
   //   callback
   //     function (err)
 
-  var coll = db.collection('locations');
-  var q = { _id: locationId };
+  const coll = db.collection('locations');
+  const q = { _id: locationId };
 
-  coll.updateOne(q, { $set: { isLayered: false } }, function (err) {
+  coll.updateOne(q, { $set: { isLayered: false } }, (err) => {
     if (err) {
       return callback(err);
     }
@@ -120,7 +120,7 @@ exports.findDistToNearestLayered = function (geom, callback) {
   //       nearest
   //         nearest location. Null if nearest does not exist.
   //
-  var coll = db.collection('locations');
+  const coll = db.collection('locations');
 
   coll.aggregate([
     {
@@ -135,7 +135,7 @@ exports.findDistToNearestLayered = function (geom, callback) {
         },
       },
     },
-  ]).toArray(function (err, result) {
+  ]).toArray((err, result) => {
 
     if (err) {
       return callback(err);
@@ -169,7 +169,7 @@ exports.findLayerForPoint = function (geom, callback) {
   //         nearest
   //           nearest location, null if nearest does not exist
   //
-  exports.findDistToNearestLayered(geom, function (err, dist, nearest) {
+  exports.findDistToNearestLayered(geom, (err, dist, nearest) => {
     if (err) {
       return callback(err);
     }
@@ -179,7 +179,7 @@ exports.findLayerForPoint = function (geom, callback) {
       return callback(null, TOP_LAYER, EARTH_CIRCUMFERENCE, null);
     }
 
-    var layer = exports.findLayerWithClusterRadiusSmallerThan(dist);
+    const layer = exports.findLayerWithClusterRadiusSmallerThan(dist);
 
     return callback(null, layer, dist, nearest);
   });
@@ -193,24 +193,24 @@ exports.findLayerAndStore = function (loc, callback) {
   //   callback
   //     function (err)
 
-  var coll = db.collection('locations');
+  const coll = db.collection('locations');
 
-  exports.findLayerForPoint(loc.geom, function (err, layer, dist, nearest) {
+  exports.findLayerForPoint(loc.geom, (err, layer, dist, nearest) => {
     if (err) {
       return callback(err);
     }
 
     // Update layer of the location.
 
-    var q = { _id: loc._id };
-    var u = {
+    const q = { _id: loc._id };
+    const u = {
       $set: {
         layer: layer,
         isLayered: true,
       },
     };
 
-    coll.updateOne(q, u, function (err2) {
+    coll.updateOne(q, u, (err2) => {
       if (err2) {
         return callback(err2);
       }
@@ -220,8 +220,8 @@ exports.findLayerAndStore = function (loc, callback) {
 
       if (nearest) {
         if (layer > nearest.childLayer) {
-          var qNeighbor = { _id: nearest._id };
-          var uNeighbor = {
+          const qNeighbor = { _id: nearest._id };
+          const uNeighbor = {
             $set: {
               childLayer: layer,
             },
@@ -244,7 +244,7 @@ exports.findAll = function (callback) {
   //   callback
   //     function (err, locs)
 
-  var coll = db.collection('locations');
+  const coll = db.collection('locations');
 
   coll.find({ deleted: false }).sort({ points: -1 }).toArray(callback);
 };

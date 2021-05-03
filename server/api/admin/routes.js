@@ -1,12 +1,12 @@
 /* eslint-disable new-cap */
 
-var router = require('express').Router();
-var status = require('http-status-codes');
-var usersRouter = require('./users/routes');
-var testsRouter = require('./tests/routes');
+const router = require('express').Router();
+const status = require('http-status-codes');
+const usersRouter = require('./users/routes');
+const testsRouter = require('./tests/routes');
 
 // Allow requests only by admin users.
-router.use(function (req, res, next) {
+router.use((req, res, next) => {
   if (req.user.admin) {
     return next();
   }

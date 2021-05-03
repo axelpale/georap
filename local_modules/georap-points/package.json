@@ -1,0 +1,21 @@
+{
+  "name": "georap-points",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Rewards from user activity",
+  "keywords": [],
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/axelpale/georap.git"
+  },
+  "scripts": {
+    "test": "node test.js"
+  },
+  "author": "Akseli Palén <akseli.palen@gmail.com>",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {
+    "tape": "^5.2.0"
+  }
+}

@@ -5,10 +5,8 @@ module.exports = {
   'env': {
     // Node.js global variables and Node.js scoping
     'node': true,
-  },
-  'globals': {
-    // place settings for globals here
-    '$': true,
+    // Const, let, arrow functions...
+    'es6': true,
   },
 
   // For available rules, see http://eslint.org/docs/rules/
@@ -68,7 +66,7 @@ module.exports = {
     // disallow function declarations and expressions inside loop statements
     'no-loop-func': 'error',
     // disallow magic numbers
-    'no-magic-numbers': ['error', { ignore: [-1, 0, 1, 2] }],
+    'no-magic-numbers': 'off',
     // disallow multiple spaces
     'no-multi-spaces': ['error', { ignoreEOLComments: true }],
     // disallow multiline strings
@@ -107,6 +105,12 @@ module.exports = {
     'no-void': 'error',
     // disallow with statements
     'no-with': 'error',
+    // require using arrow functions for callbacks
+    'prefer-arrow-callback': ['error', {
+      'allowUnboundThis': false
+    }],
+    // suggest using const
+    'prefer-const': 'error',
     // enforce the consistent use of the radix argument when using parseInt()
     'radix': 'error',
     // require var declarations be placed at the top of their containing scope
@@ -127,6 +131,8 @@ module.exports = {
     'no-undefined': 'error',
     // disallow the use of variables before they are defined
     'no-use-before-define': 'error',
+    // require let or const instead of var
+    'no-var': 'error',
 
     //// Node.js and Common.js
 
@@ -206,7 +212,7 @@ module.exports = {
     // enforce a maximum number of statements allowed per line
     'max-statements-per-line': 'error',
     // enforce a maximum number of statements allowed in function blocks
-    'max-statements': ['error', 20 ],
+    'max-statements': ['error', 25 ],
     // require constructor names to begin with a capital letter
     'new-cap': ['error', { capIsNewExceptions: ['Emitter' ] } ],
     // require parentheses when invoking a constructor with no arguments

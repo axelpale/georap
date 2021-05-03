@@ -1,20 +1,20 @@
 
-var pjson = require('../../package.json');
-var config = require('tresdb-config');
-var ejs = require('ejs');
-var _ = require('lodash');
-var fs = require('fs');
-var path = require('path');
+const pjson = require('../../package.json');
+const config = require('georap-config');
+const ejs = require('ejs');
+const _ = require('lodash');
+const fs = require('fs');
+const path = require('path');
 
 // Precompile template and prerender index.html.
 // Include config and other variables for the client.
-var indexHtml = (function precompile() {
+const indexHtml = (function precompile() {
 
-  var p = path.resolve(__dirname, './template.ejs');
-  var f = fs.readFileSync(p, 'utf8');  // eslint-disable-line no-sync
-  var template = ejs.compile(f);
+  const p = path.resolve(__dirname, './template.ejs');
+  const f = fs.readFileSync(p, 'utf8');  // eslint-disable-line no-sync
+  const template = ejs.compile(f);
 
-  var tresdb = {
+  const tresdb = {
     version: pjson.version,
     config: {
       title: config.title,
@@ -30,7 +30,10 @@ var indexHtml = (function precompile() {
       tempUploadSizeLimit: config.tempUploadSizeLimit,
       locationStatuses: config.locationStatuses,
       locationTypes: config.locationTypes,
+      rewards: config.rewards,
+      entryFlags: config.entryFlags,
       markerTemplates: config.markerTemplates,
+      entries: config.entries,
       comments: config.comments,
       coordinateSystems: config.coordinateSystems,
       exportServices: config.exportServices,
@@ -38,12 +41,12 @@ var indexHtml = (function precompile() {
   };
 
   // Precompile client-side templates and append their source into HTML.
-  var precompiledTemplates = [];
+  const precompiledTemplates = [];
 
-  config.coordinateSystems.forEach(function (sys) {
-    var sysName = sys[0];
-    var sysTemplate = sys[2];
-    var sysSource = _.template(sysTemplate).source;
+  config.coordinateSystems.forEach((sys) => {
+    const sysName = sys[0];
+    const sysTemplate = sys[2];
+    const sysSource = _.template(sysTemplate).source;
 
     precompiledTemplates.push({
       name: sysName,
@@ -51,10 +54,10 @@ var indexHtml = (function precompile() {
     });
   });
 
-  config.exportServices.forEach(function (serv) {
-    var servName = serv[0];
-    var servTemplate = serv[1];
-    var servSource = _.template(servTemplate).source;
+  config.exportServices.forEach((serv) => {
+    const servName = serv[0];
+    const servTemplate = serv[1];
+    const servSource = _.template(servTemplate).source;
 
     precompiledTemplates.push({
       name: servName,

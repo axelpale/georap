@@ -6,7 +6,7 @@
 // the connection is transported via polling or websockets,
 // the host stays the same.
 
-var host = null;
+let host = null;
 
 exports.init = function (hostname) {
   if (host === null) {

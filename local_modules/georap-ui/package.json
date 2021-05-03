@@ -1,0 +1,20 @@
+{
+  "name": "georap-ui",
+  "private": true,
+  "version": "1.0.0",
+  "description": "UI helpers",
+  "keywords": [],
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/axelpale/georap.git"
+  },
+  "scripts": {},
+  "author": "Akseli Palén <akseli.palen@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "marked": "^2.0.3",
+    "timestamp": "file:../timestamp"
+  },
+  "devDependencies": {}
+}

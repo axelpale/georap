@@ -14,7 +14,7 @@ module.exports = function (en) {
   // For v6 events, see
   // - server/api/events/dal.js
 
-  var t = en.type;
+  const t = en.type;
 
   if (t === 'attachment') {
     return {

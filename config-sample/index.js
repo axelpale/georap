@@ -1,12 +1,10 @@
-/* eslint-disable no-magic-numbers */
-
 var path = require('path');
 
 module.exports = {
 
   // Title and description of the site. Used in many places,
   // including html and emails.
-  title: 'My TresDB App',
+  title: 'My Georap App',
   description: 'A secret geographical portal',
 
   // Initial viewport location. Initial sample locations are here.
@@ -67,7 +65,7 @@ module.exports = {
   logDir: path.resolve(__dirname, '../.data/logs'),
 
   // HTTPS
-  // TresDB itself uses only HTTP. However if TresDB is running behind
+  // Georap itself uses only HTTP. However if Georap is running behind
   // a TLS-endpoint reverse-proxy like Nginx, the protocol appears to be
   // HTTPS for the users. Hyperlinks in emails such as invites and password
   // resets should then use HTTPS instead HTTP.
@@ -87,7 +85,9 @@ module.exports = {
 
   // Mongo database settings
   mongo: {
-    url: 'mongodb://mongouser:mongouserpwd@localhost:27017/tresdb',
+    // Main database for persistent data.
+    url: 'mongodb://mongouser:mongouserpwd@localhost:27017/georap',
+    // Database for testing and development. You may leave it null.
     testUrl: 'mongodb://testuser:testuserpwd@localhost:27017/test',
   },
 
@@ -123,14 +123,17 @@ module.exports = {
   ],
 
   // Location classification: type
-  // They need to have matching png symbols available
-  // under config/images/markers/symbols
-  // The list order defines the button order on the location page.
+  // Comment out types you do not need or add your own.
+  // Each type needs a matching png symbol available under
+  // directory: config/images/markers/symbols
+  // The order of the list defines the button order in symbol pickers.
   locationTypes: [
     'default',
     'castle',
     'military',
     'residental',
+    'mansion',
+    'building',
     'town',
     'agricultural',
     'farm',
@@ -147,22 +150,28 @@ module.exports = {
     'nuclear',
     'museum',
     'shop',
+    'restaurant',
+    'movietheatre',
     'leisure',
     'sports',
     'school',
     'hospital',
     'sawmill',
     'mining',
+    'workshop',
     'factory',
     'railway',
     'marine',
     'vehicle',
+    'roadhouse',
     'aviation',
     'helicopter',
+    'firestation',
     'infrastructure',
     'electricity',
     'communications',
     'watermanagement',
+    'watchtower',
     'lighthouse',
     'bridge',
     'tunnel',
@@ -170,11 +179,89 @@ module.exports = {
     'freak',
   ],
 
+  // Rewards.
+  // Users earn stars for successful activity.
+  // This feature brings a playful game-like element to the service.
+  // The rewards are defined here.
+  // NOTE flag-based rewards are defined under entryFlags.
+  rewards: {
+    eventBased: {
+      'location_created': 10,
+      'location_removed': -10,
+      'location_entry_created': 2,
+      'location_name_changed': 0,
+      'location_geom_changed': 1,
+      'location_status_changed': 1,
+      'location_type_changed': 1,
+      // Legacy events from early installations.
+      // They cannot be created anymore yet could not be fully converted.
+      // Fresh installations can safely remove these.
+      'location_tags_changed': 2, // legacy
+      'location_unproved_visit_created': 2, // legacy
+    },
+    attachmentBased: {
+      perAttachment: 3,
+      maxAttachmentsToReward: 2,
+    },
+  },
+
+  // Flags for Entries.
+  // Flags are used to classify entries (aka posts) or give them perks.
+  // An example of a flag is 'visit' that can denote that the entry is
+  // about a visitation on the location instead of just general info.
+  // Flags also accumulate to the location of the flagged entry, so
+  // that a user can filter locations based on flags in their own entries.
+  // For example the 'visit' flag allows a user to browse all locations
+  // she has visited.
+  entryFlags: {
+    visit: {
+      name: 'visit',
+      plural: 'visits',
+      description: 'A photo is required for proof.',
+      glyphicon: 'flag',
+      reward: 15,
+      // Precondition allows a flag to be used only if the entry content
+      // fulfills a condition. Entry content consists of
+      // entry properties { markdown, attachments, flags }.
+      // The condition is represented as JSON schema.
+      precondition: {
+        type: 'object',
+        properties: {
+          attachments: {
+            type: 'array',
+            minItems: 1,
+          },
+        },
+        required: ['attachments'],
+      },
+    },
+  },
+
   // Marker templates.
-  // A mapping: status -> marking -> size -> template name without ext
-  // You can add or edit the templates at config/images/markers/templates
-  // NOTE template name must contain only lowercase letters and/or underscores
-  // NOTE for the server to parse it correctly.
+  // Marker template is a background image for the marker without a symbol.
+  // It determines the shape and color for the combined marker icons.
+  // The configuration here is a mapping:
+  //   status -> flag -> size -> template_name.
+  // where:
+  //   status
+  //     Location status.
+  //   flag
+  //     Entry flag. The locations where the user has posted
+  //     an entry with a flag will show as markers
+  //     built with these templates. For example, locations with entries
+  //     flagged as 'visit' can be configured to show in special color
+  //     for the user who posted the visits.
+  //     Locations where the user has not posted any flagged entries
+  //     will use templates configured as 'default' for the given status.
+  //   size
+  //     There are three sizes: 'sm', 'md', and 'lg'. Emphasized locations
+  //     will show up with large markers.
+  //   template_name:
+  //     A template file name without file extension. You can add or edit
+  //     template images at config/images/markers/templates
+  //     NOTE template name must contain only lowercase letters and/or
+  //     underscores for the server to parse it correctly.
+  //
   markerTemplates: {
     'unknown': {
       'default': {
@@ -182,7 +269,7 @@ module.exports = {
         'md': 'red_default_md',
         'lg': 'red_default_lg',
       },
-      'visited': {
+      'visit': {
         'sm': 'yellow_default_sm',
         'md': 'yellow_default_md',
         'lg': 'yellow_default_lg',
@@ -194,7 +281,7 @@ module.exports = {
         'md': 'red_light_md',
         'lg': 'red_light_lg',
       },
-      'visited': {
+      'visit': {
         'sm': 'yellow_light_sm',
         'md': 'yellow_light_md',
         'lg': 'yellow_light_lg',
@@ -206,7 +293,7 @@ module.exports = {
         'md': 'red_light_md',
         'lg': 'red_light_lg',
       },
-      'visited': {
+      'visit': {
         'sm': 'yellow_light_sm',
         'md': 'yellow_light_md',
         'lg': 'yellow_light_lg',
@@ -218,7 +305,7 @@ module.exports = {
         'md': 'red_light_md',
         'lg': 'red_light_lg',
       },
-      'visited': {
+      'visit': {
         'sm': 'yellow_light_sm',
         'md': 'yellow_light_md',
         'lg': 'yellow_light_lg',
@@ -230,7 +317,7 @@ module.exports = {
         'md': 'red_default_md',
         'lg': 'red_default_lg',
       },
-      'visited': {
+      'visit': {
         'sm': 'yellow_default_sm',
         'md': 'yellow_default_md',
         'lg': 'yellow_default_lg',
@@ -242,7 +329,7 @@ module.exports = {
         'md': 'red_dark_md',
         'lg': 'red_dark_lg',
       },
-      'visited': {
+      'visit': {
         'sm': 'yellow_dark_sm',
         'md': 'yellow_dark_md',
         'lg': 'yellow_dark_lg',
@@ -254,7 +341,7 @@ module.exports = {
         'md': 'red_darker_md',
         'lg': 'red_darker_lg',
       },
-      'visited': {
+      'visit': {
         'sm': 'yellow_darker_sm',
         'md': 'yellow_darker_md',
         'lg': 'yellow_darker_lg',
@@ -266,7 +353,7 @@ module.exports = {
         'md': 'red_darker_md',
         'lg': 'red_darker_lg',
       },
-      'visited': {
+      'visit': {
         'sm': 'yellow_darker_sm',
         'md': 'yellow_darker_md',
         'lg': 'yellow_darker_lg',
@@ -278,7 +365,7 @@ module.exports = {
         'md': 'red_default_md',
         'lg': 'red_default_lg',
       },
-      'visited': {
+      'visit': {
         'sm': 'yellow_default_sm',
         'md': 'yellow_default_md',
         'lg': 'yellow_default_lg',
@@ -286,8 +373,15 @@ module.exports = {
     },
   },
 
+  // Entry listing
+  entries: {
+    // Items to load initially and when Load More -button is pressed.
+    pageSize: 10,
+  },
+
   // Commenting
   comments: {
+    secondsEditable: 360,
     minMessageLength: 2,
     maxMessageLength: 600,
   },
@@ -339,31 +433,31 @@ module.exports = {
     [
       'WGS84',
       '+proj=longlat +ellps=WGS84 +datum=WGS84 +units=degrees',
-      '<%= getD(absLat) %> <%= getLatDir(lat) %>, ' +
-      '<%= getD(absLng) %> <%= getLngDir(lng) %>',
+      '<%= getD(absLat) %>&nbsp;<%= getLatDir(lat) %>, ' +
+      '<%= getD(absLng) %>&nbsp;<%= getLngDir(lng) %>',
     ],
     [
       'WGS84-DM',
       '+proj=longlat +ellps=WGS84 +datum=WGS84 +units=degrees',
-      '<%= getDM(absLat) %> <%= getLatDir(lat) %>, ' +
-      '<%= getDM(absLng) %> <%= getLngDir(lng) %>',
+      '<%= getDM(absLat) %>&nbsp;<%= getLatDir(lat) %>, ' +
+      '<%= getDM(absLng) %>&nbsp;<%= getLngDir(lng) %>',
     ],
     [
       'WGS84-DMS',
       '+proj=longlat +ellps=WGS84 +datum=WGS84 +units=degrees',
-      '<%= getDMS(absLat) %> <%= getLatDir(lat) %>, ' +
-      '<%= getDMS(absLng) %> <%= getLngDir(lng) %>',
+      '<%= getDMS(absLat) %>&nbsp;<%= getLatDir(lat) %>, ' +
+      '<%= getDMS(absLng) %>&nbsp;<%= getLngDir(lng) %>',
     ],
     // For example, the official coordinate system in Finland:
     [
       'ETRS-TM35FIN',
       '+proj=utm +zone=35 +ellps=GRS80 +units=m +no_defs',
-      'N <%= lat %>, E <%= lng %>',
+      'N&nbsp;<%= Math.round(lat) %>, E&nbsp;<%= Math.round(lng) %>',
     ],
     [
       'SWEREF99-TM',
       '+proj=utm +zone=33 +ellps=GRS80 +units=m +no_defs',
-      'N <%= Math.round(lat) %>, E <%= Math.round(lng) %>',
+      'N&nbsp;<%= Math.round(lat) %>, E&nbsp;<%= Math.round(lng) %>',
     ],
   ],
 
@@ -395,7 +489,7 @@ module.exports = {
       'https://tools.wmflabs.org/geohack/geohack.php' +
       '?language=en&params=<%= latitude %>;<%= longitude %>_type:landmark',
       'WGS84',
-      [{
+      [{ // Global
         east: 180,
         north: 90,
         south: -90,
@@ -406,14 +500,50 @@ module.exports = {
       'Paikkatietoikkuna',
       'http://www.paikkatietoikkuna.fi/web/fi/kartta' +
       '?ver=1.17&zoomLevel=8&coord=<%= longitude %>_<%= latitude %>&' +
-      'mapLayers=base_35+100+default&showMarker=true',
+      'mapLayers=base_35+100+default&showMarker=true&showIntro=false',
       'ETRS-TM35FIN',
-      [{
+      [{ // Finland
         east: 32.14,
         north: 70.166,
         south: 59.56,
         west: 18.86,
       }],
+    ],
+    [
+      'Karttapaikka',
+      'https://asiointi.maanmittauslaitos.fi/karttapaikka/' +
+      '?lang=fi&share=customMarker&' +
+      'n=<%= latitude %>&e=<%= longitude %>&' +
+      'zoom=8',
+      'ETRS-TM35FIN',
+      [{ // Finland
+        east: 32.14,
+        north: 70.166,
+        south: 59.56,
+        west: 18.86,
+      }],
+    ],
+    [
+      'Oskari',
+      'https://kartat.tampere.fi/oskari/' +
+      '?zoomLevel=8&' +
+      'coord=<%= longitude %>_<%= latitude %>&' +
+      'showMarker=true&showIntro=false',
+      'ETRS-TM35FIN',
+      [
+        { // Northern Pirkanmaa, Finland
+          east: 24.178,
+          north: 61.869,
+          south: 61.556,
+          west: 23.691,
+        },
+        { // Southern Pirkanmaa, Finland
+          east: 24.079,
+          north: 61.596,
+          south: 61.377,
+          west: 23.493,
+        },
+      ],
     ],
     [
       'Lantmäteriet',

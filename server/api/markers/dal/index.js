@@ -1,4 +1,4 @@
-var db = require('tresdb-db');
+const db = require('georap-db');
 
 
 exports.getAll = function (callback) {
@@ -8,10 +8,10 @@ exports.getAll = function (callback) {
   //   callback
   //     function (err, docs)
 
-  var coll = db.get().collection('locations');
+  const coll = db.get().collection('locations');
 
   // Exclude deleted
-  var q = { deleted: false };
+  const q = { deleted: false };
 
   coll.find(q).toArray(callback);
 };
@@ -72,11 +72,11 @@ exports.getFiltered = function (params, callback) {
   //
 
   // Build query piece by piece.
-  var q = {};
-  var projOpts = {};
-  var sortOpts = {};
-  var skipValue = 0;  // default
-  var limitValue = 100;  // default
+  const q = {};
+  const projOpts = {};
+  const sortOpts = {};
+  let skipValue = 0;  // default
+  let limitValue = 100;  // default
 
   if (typeof params.text === 'string' && params.text.length > 0) {
     q.$text = {
@@ -179,9 +179,9 @@ exports.getWithin = function (params, callback) {
   //     function (err, markers)
   //
 
-  var center = [params.lng, params.lat];
-  var radius = params.radius;
-  var query = params.query;
+  const center = [params.lng, params.lat];
+  const radius = params.radius;
+  const query = params.query;
 
   // Layer number less than equal: only the "higher" markers are included.
   query.layer = { $lte: params.layer };
@@ -189,7 +189,7 @@ exports.getWithin = function (params, callback) {
 
   // See docs:
   // https://docs.mongodb.com/manual/reference/operator/aggregation/geoNear/
-  var pipeline = [
+  const pipeline = [
     {
       $geoNear: {
         near: {
@@ -221,7 +221,7 @@ exports.getWithin = function (params, callback) {
     },
   ];
 
-  var opts = {
+  const opts = {
     cursor: {},
   };
 

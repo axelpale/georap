@@ -1,7 +1,7 @@
 
-var config = require('tresdb-config');
-var db = require('tresdb-db');
-var bcrypt = require('bcryptjs');
+const config = require('georap-config');
+const db = require('georap-db');
+const bcrypt = require('bcryptjs');
 
 exports.createUser = function (username, email, password, callback) {
   // Create non-admin active user. Does not check if user exists.
@@ -16,11 +16,11 @@ exports.createUser = function (username, email, password, callback) {
   //   callback
   //     function (err)
 
-  var users = db.collection('users');
+  const users = db.collection('users');
 
-  var r = config.bcrypt.rounds;
+  const r = config.bcrypt.rounds;
 
-  bcrypt.hash(password, r, function (berr, pwdHash) {
+  bcrypt.hash(password, r, (berr, pwdHash) => {
     if (berr) {
       return callback(berr);
     }
@@ -33,7 +33,7 @@ exports.createUser = function (username, email, password, callback) {
       status: 'active',  // options. 'active' | 'deactivated',
       createdAt: (new Date()).toISOString(),
       loginAt: (new Date()).toISOString(),
-    }, function (qerr) {
+    }, (qerr) => {
       if (qerr) {
         return callback(qerr);
       }
@@ -53,16 +53,16 @@ exports.markLogin = function (username, callback) {
   //   callback
   //     function (err)
   //
-  var users = db.collection('users');
+  const users = db.collection('users');
 
-  var q = { name: username };
-  var u = {
+  const q = { name: username };
+  const u = {
     $set: {
       loginAt: (new Date()).toISOString(),
     },
   };
 
-  users.updateOne(q, u, function (err, result) {
+  users.updateOne(q, u, (err, result) => {
     if (err) {
       return callback(err);
     }

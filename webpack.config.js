@@ -1,4 +1,4 @@
-var config = require('tresdb-config');
+const config = require('georap-config');
 
 // compile js assets into a single bundle file
 module.exports = {
@@ -13,6 +13,8 @@ module.exports = {
     publicPath: config.staticUrl + '/',
     // The name of the bundle and its source maps.
     filename: 'app.bundle.js',
+    // The name of the chunks
+    chunkFilename: '[id]-[name].js',
   },
 
   module: {

@@ -1,6 +1,6 @@
-var db = require('tresdb-db');
-var DistFilter = require('distfilter');
-var boundsToPolygon = require('./boundsToPolygon');
+const db = require('georap-db');
+const DistFilter = require('distfilter');
+const boundsToPolygon = require('./boundsToPolygon');
 
 module.exports = function (params, callback) {
   // Get grid-filtered markers within bounds.
@@ -53,10 +53,10 @@ module.exports = function (params, callback) {
   //   ]
   //
 
-  var coll = db.collection('locations');
+  const coll = db.collection('locations');
 
   // Only these props are needed for markers.
-  var projOpts = {
+  const projOpts = {
     name: true,
     geom: true,
     status: true,
@@ -66,13 +66,13 @@ module.exports = function (params, callback) {
   };
 
   // Sort by points to enforce deterministic grid insertion order.
-  var sortOpts = {
+  const sortOpts = {
     points: -1,
     name: 1, // Often points identical.
   };
 
   // Build query for matching set of locations.
-  var q = {
+  const q = {
     geom: {
       $geoWithin: {
         $geometry: boundsToPolygon(params.bounds),
@@ -93,19 +93,19 @@ module.exports = function (params, callback) {
   coll.find(q)
     .sort(sortOpts)
     .project(projOpts)
-    .toArray(function (err, markers) {
+    .toArray((err, markers) => {
       if (err) {
         return callback(err);
       }
 
       // Add matched to the dist filter.
-      var df = new DistFilter(params.groupRadius);
-      markers.forEach(function (m) {
+      const df = new DistFilter(params.groupRadius);
+      markers.forEach((m) => {
         df.add(m);
       });
 
       // Return with filtered contents.
-      var filteredMarkers = df.getMarkers();
+      const filteredMarkers = df.getMarkers();
       return callback(null, filteredMarkers);
     });
 };

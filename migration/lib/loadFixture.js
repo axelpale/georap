@@ -1,8 +1,8 @@
 
-var db = require('tresdb-db');
-var asyn = require('async');
+const db = require('georap-db');
+const asyn = require('async');
 
-var COLL_NOT_EXISTS_ERROR = 26;
+const COLL_NOT_EXISTS_ERROR = 26;
 
 module.exports = function (fixture, callback) {
   // Load fixture into the database. Existing collections in the DB
@@ -28,24 +28,24 @@ module.exports = function (fixture, callback) {
   //   callback
   //     function (err)
   //
-  var colls, indices;
+  let indices;
 
-  if (!fixture.hasOwnProperty('collections')) {
+  if (!('collections' in fixture)) {
     return callback(new Error('no fixture collections specified'));
   }
-  colls = fixture.collections;
+  const colls = fixture.collections;
 
   // Indices are optional
-  if (fixture.hasOwnProperty('indices')) {
+  if ('indices' in fixture) {
     indices = fixture.indices;
   } else {
     indices = [];
   }
 
-  asyn.eachOfSeries(colls, function (items, collName, next) {
+  asyn.eachOfSeries(colls, (items, collName, next) => {
 
     // Drop possibly existing collection before population.
-    db.get().dropCollection(collName, function (err) {
+    db.get().dropCollection(collName, (err) => {
       // Populate
       if (err) {
         // Continue if collection does not exist.
@@ -56,11 +56,11 @@ module.exports = function (fixture, callback) {
         }
       }
 
-      var coll = db.collection(collName);
+      const coll = db.collection(collName);
 
       if (items.length > 0) {
         // Bulk insert of zero items throws an error.
-        coll.insertMany(items, function (err2) {
+        coll.insertMany(items, (err2) => {
           if (err2) {
             return next(err2);
           }
@@ -72,22 +72,22 @@ module.exports = function (fixture, callback) {
       }
     });
 
-  }, function afterEachOfSeries(err3) {
+  }, (err3) => {
 
     if (err3) {
       return callback(err3);
     }
 
     // Create indices
-    asyn.eachSeries(indices, function (index, next) {
+    asyn.eachSeries(indices, (index, next) => {
 
-      var coll = db.collection(index.collection);
+      const coll = db.collection(index.collection);
 
-      coll.createIndex(index.spec, index.options, function (err4) {
+      coll.createIndex(index.spec, index.options, (err4) => {
         return next(err4);
       });
 
-    }, function afterEachSeries(err5) {
+    }, (err5) => {
       if (err5) {
         return callback(err5);
       }

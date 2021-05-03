@@ -1,6 +1,6 @@
 
-var dal = require('./dal');
-var status = require('http-status-codes');
+const dal = require('./dal');
+const status = require('http-status-codes');
 
 
 exports.getOne = function (req, res, next) {
@@ -15,9 +15,9 @@ exports.getOne = function (req, res, next) {
   //     status: <'active' | 'deactivated'>
   //   }
 
-  var username = req.username;
+  const username = req.username;
 
-  dal.getUserForAdmin(username, function (err, user) {
+  dal.getUserForAdmin(username, (err, user) => {
     if (err) {
       return next(err);
     }
@@ -33,19 +33,19 @@ exports.getOne = function (req, res, next) {
 
 exports.setStatus = function (req, res, next) {
 
-  var isActive = req.body.isActive;
+  const isActive = req.body.isActive;
 
-  var targetName = req.username;
-  var authorName = req.user.name;
+  const targetName = req.username;
+  const authorName = req.user.name;
 
   // Prevent author blocking him/herself out.
   if (authorName === targetName) {
     return res.sendStatus(status.BAD_REQUEST);
   }
 
-  var newStatus = isActive ? 'active' : 'deactivated';
+  const newStatus = isActive ? 'active' : 'deactivated';
 
-  dal.setStatus(targetName, newStatus, function (err) {
+  dal.setStatus(targetName, newStatus, (err) => {
     if (err) {
       return next(err);
     }
@@ -57,17 +57,17 @@ exports.setStatus = function (req, res, next) {
 
 exports.setRole = function (req, res, next) {
 
-  var isAdmin = req.body.isAdmin;
+  const isAdmin = req.body.isAdmin;
 
-  var targetName = req.username;
-  var authorName = req.user.name;
+  const targetName = req.username;
+  const authorName = req.user.name;
 
   // Prevent author changing his/her own role
   if (authorName === targetName) {
     return res.sendStatus(status.BAD_REQUEST);
   }
 
-  dal.setRole(targetName, isAdmin, function (err) {
+  dal.setRole(targetName, isAdmin, (err) => {
     if (err) {
       return next(err);
     }

@@ -1,12 +1,12 @@
-var sanitizeDescription = require('./sanitizeDescription');
-var parseCoordinate = require('./parseCoordinate');
-var _ = require('lodash');
+const sanitizeDescription = require('./sanitizeDescription');
+const parseCoordinate = require('./parseCoordinate');
+const _ = require('lodash');
 
 // Coordinate comparison precision in number of characters
-var PREC = 8;
+const PREC = 8;
 
 module.exports = function (loc, avgLonLat) {
-  var combined = [];
+  let combined = [];
 
   // Combine descriptions
   if ('descriptions' in loc) {
@@ -17,26 +17,26 @@ module.exports = function (loc, avgLonLat) {
   }
 
   // Convert extended data to description
-  combined.push(loc.extendedData.reduce(function (acc, extItem) {
+  combined.push(loc.extendedData.reduce((acc, extItem) => {
     return acc + '<strong>' + extItem.name + ':</strong>' +
       ' ' + extItem.value + '<br>';
   }, ''));
 
   // Remove empty descriptions
-  var nonempty = combined.filter(function (desc) {
+  const nonempty = combined.filter((desc) => {
     return desc.length > 0;
   });
 
   // Convert descriptions to markdown. Remove all remaining HTML.
-  var sanitized = nonempty.map(sanitizeDescription);
+  const sanitized = nonempty.map(sanitizeDescription);
 
   // Remove duplicate descriptions
-  var unique = _.uniq(sanitized);
+  const unique = _.uniq(sanitized);
 
   // Remove descriptions that only repeat the location coordinates
-  var valuable = unique.filter(function (desc) {
-    var a, b, c, d;
-    var coord = parseCoordinate(desc);
+  const valuable = unique.filter((desc) => {
+    let a, b, c, d;
+    const coord = parseCoordinate(desc);
     if (coord) {
       // Do not care about the lat, lng order
       a = coord[0].toFixed(PREC);

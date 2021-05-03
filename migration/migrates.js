@@ -1,13 +1,13 @@
 
-var versions = require('./versions');
-var schema = require('./lib/schema');
-var loadFixture = require('./lib/loadFixture');
-var initialStateFixture = require('./fixtures/initial');
-var ensureIndices = require('./ensureIndices');
+const versions = require('./versions');
+const schema = require('./lib/schema');
+const loadFixture = require('./lib/loadFixture');
+const initialStateFixture = require('./fixtures/initial');
+const ensureIndices = require('./ensureIndices');
 
-var initEmptyDatabase = function (callback) {
+const initEmptyDatabase = function (callback) {
   console.log('Resetting database...');
-  loadFixture(initialStateFixture, function (err) {
+  loadFixture(initialStateFixture, (err) => {
     if (err) {
       console.error('Loading initial data failed.');
       return callback(err);
@@ -18,12 +18,12 @@ var initEmptyDatabase = function (callback) {
   });
 };
 
-var migrationSuccess = function (callback) {
+const migrationSuccess = function (callback) {
   // Ensure indices
   console.log();
   console.log('##### Building indices #####');
 
-  ensureIndices(function (err) {
+  ensureIndices((err) => {
     if (err) {
       console.log('Index creation FAILED.');
       return callback(err);
@@ -64,7 +64,7 @@ exports.migrate = function (targetVersion, callback) {
 
   // Get current version.
   console.log('Checking schema version...');
-  schema.getVersion(function (err, currentVersion) {
+  schema.getVersion((err, currentVersion) => {
     if (err) {
       return callback(err);
     } // else
@@ -72,7 +72,7 @@ exports.migrate = function (targetVersion, callback) {
     if (currentVersion === -1) {
       // Database empty. Init the database.
       console.log('  No schema found. Database is empty.');
-      return initEmptyDatabase(function (errin) {
+      return initEmptyDatabase((errin) => {
         if (errin) {
           console.log('#### Migration FAILED ####');
           return callback(errin);
@@ -90,7 +90,7 @@ exports.migrate = function (targetVersion, callback) {
       console.log('#### Migrating from', currentVersion, 'to',
                   targetVersion, '####');
 
-      versions.run(currentVersion, targetVersion, function (err2) {
+      versions.run(currentVersion, targetVersion, (err2) => {
         if (err2) {
           console.log();
           console.log('##### Migration FAILED #####');

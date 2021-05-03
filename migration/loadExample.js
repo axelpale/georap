@@ -8,35 +8,36 @@
 //  OR
 //   node migration/loadExample.js
 
-var config = require('tresdb-config');
-var fixture = require('./fixtures/example');
-var loadFixture = require('./lib/loadFixture');
+const config = require('georap-config');
+const fixture = require('./fixtures/example');
+const loadFixture = require('./lib/loadFixture');
 
-var db = require('tresdb-db');
-var fse = require('fs-extra');
-var path = require('path');
+const db = require('georap-db');
+const fse = require('fs-extra');
+const path = require('path');
 
 // Files.
 // Clear uploadDir before new files.
 fse.emptyDirSync(config.uploadDir);
 // Copy in uploaded-like files.
-var from = path.join(__dirname, 'fixtures', 'uploads', 'radar.jpg');
-var to = path.join(config.uploadDir, '2009', 'RxRvKSlbl', 'radar.jpg');
+const from = path.join(__dirname, 'fixtures', 'uploads', 'radar.jpg');
+const to = path.join(config.uploadDir, '2009', 'RxRvKSlbl', 'radar.jpg');
 // eslint-disable-next-line no-sync
 fse.copySync(from, to);
 // Thumbnail
-var from2 = path.join(__dirname, 'fixtures', 'uploads', 'radar_medium.jpg');
-var to2 = path.join(config.uploadDir, '2009', 'RxRvKSlbl', 'radar_medium.jpg');
+const from2 = path.join(__dirname, 'fixtures', 'uploads', 'radar_medium.jpg');
+const to2 =
+  path.join(config.uploadDir, '2009', 'RxRvKSlbl', 'radar_medium.jpg');
 // eslint-disable-next-line no-sync
 fse.copySync(from2, to2);
 
 // Database.
-db.init(function (dbErr) {
+db.init((dbErr) => {
   if (dbErr) {
     return console.error('Failed to connect to MongoDB.');
   }
 
-  loadFixture(fixture, function (err) {
+  loadFixture(fixture, (err) => {
     if (err) {
       console.error('Loading sample data failed.');
       console.error(err);

@@ -2,10 +2,10 @@
 // A tool to test if a collection is equal to a fixture.
 // Currently this can test only collections with single document.
 
-var db = require('tresdb-db');
-var fixtures = require('../fixtures');
-var _ = require('lodash');
-var clone = require('clone');
+const db = require('georap-db');
+const fixtures = require('../fixtures');
+const _ = require('lodash');
+const clone = require('clone');
 
 module.exports = function (collectionName, versionTag, callback) {
   // Compares current collection in database
@@ -23,25 +23,25 @@ module.exports = function (collectionName, versionTag, callback) {
   //         if real collection an fixture collection are not deep equal.
 
   // short alias
-  var v = versionTag;
-  var c = collectionName;
+  const v = versionTag;
+  const c = collectionName;
 
-  var fixColl = fixtures[v].collections[c];
+  const fixColl = fixtures[v].collections[c];
 
-  db.collection(c).find().toArray(function (err, docs) {
+  db.collection(c).find().toArray((err, docs) => {
     if (err) {
       return callback(err);
     }
 
     // Possible assertion error here
-    var assertionError = null;
+    let assertionError = null;
 
     // Compare all docs.
-    for (var i = 0; i < fixColl.length; i += 1) {
+    for (let i = 0; i < fixColl.length; i += 1) {
       // Clone because otherwise edits affect some cache and
       // may yield errors elsewhere
-      var fixDoc = clone(fixColl[i]);
-      var realDoc = clone(docs[i]);
+      const fixDoc = clone(fixColl[i]);
+      const realDoc = clone(docs[i]);
 
       // _id are generated and thus always differ
       delete realDoc._id;
@@ -52,14 +52,46 @@ module.exports = function (collectionName, versionTag, callback) {
       if (fixDoc.data) {
         delete fixDoc.data.entryId;
       }
+      // Attachment keys are generated in v11v12 and thus differ.
+      // Therefore test only for length.
+      if (realDoc.attachments) {
+        realDoc.attachments = realDoc.attachments.map(() => 'attakey');
+      }
+      if (fixDoc.attachments) {
+        fixDoc.attachments = fixDoc.attachments.map(() => 'attakey');
+      }
+      if (realDoc.data) {
+        if (realDoc.data.entry && realDoc.data.entry.attachments) {
+          const a = realDoc.data.entry.attachments;
+          realDoc.data.entry.attachments = a.map(() => 'attakey');
+        }
+        if (realDoc.data.original && realDoc.data.original.attachments) {
+          const a = realDoc.data.original.attachments;
+          realDoc.data.original.attachments = a.map(() => 'attakey');
+          const b = realDoc.data.delta.attachments;
+          realDoc.data.delta.attachments = b.map(() => 'attakey');
+        }
+      }
+      if (fixDoc.data) {
+        if (fixDoc.data.entry && fixDoc.data.entry.attachments) {
+          const a = fixDoc.data.entry.attachments;
+          fixDoc.data.entry.attachments = a.map(() => 'attakey');
+        }
+        if (fixDoc.data.original && fixDoc.data.original.attachments) {
+          const a = fixDoc.data.original.attachments;
+          fixDoc.data.original.attachments = a.map(() => 'attakey');
+          const b = fixDoc.data.delta.attachments;
+          fixDoc.data.delta.attachments = b.map(() => 'attakey');
+        }
+      }
 
       // Deep compare & find differences both ways.
       // See http://stackoverflow.com/a/31686152/638546
-      var diffs1 = _.reduce(realDoc, function (result, value, key) {
+      const diffs1 = _.reduce(realDoc, (result, value, key) => {
         return _.isEqual(value, fixDoc[key]) ? result : result.concat(key);
       }, []);
 
-      var diffs2 = _.reduce(fixDoc, function (result, value, key) {
+      const diffs2 = _.reduce(fixDoc, (result, value, key) => {
         return _.isEqual(value, realDoc[key]) ? result : result.concat(key);
       }, []);
 

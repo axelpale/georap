@@ -1,14 +1,19 @@
 /* Bootstrap specific */
+
 body {
   color: #e5e5e5;
   background-color: #111;
 }
 
 a {
-  color: #2D97F0;
+  color: #3399FF;
 }
 a.focus, a:hover {
   color: #5BACEF;
+}
+
+hr {
+  border-color: #666;
 }
 
 .table > thead > tr > th {
@@ -20,6 +25,7 @@ a.focus, a:hover {
 
 .dropdown-menu {
   background-color: #111;
+  background-color: rgba(17,17,17,0.95);
 }
 .dropdown-menu > li > a {
   color: #e5e5e5;
@@ -53,6 +59,29 @@ a.focus, a:hover {
   border-color: #444;
 }
 
+.close,
+.close:focus, .close:hover {
+  color: white; /* opacity does hover effect */
+}
+
+.nav-tabs {
+  border-bottom: 1px solid #444;
+}
+.nav-tabs>li.active>a,
+.nav-tabs>li.active>a:focus,
+.nav-tabs>li.active>a:hover {
+  color: #AAA; /* Orig #555 */
+  border: 1px solid #444; /* Orig 1px solid #ddd */
+  border-bottom: 1px solid #111;
+  background-color: #111; /* Orig #fff */
+}
+.nav-tabs>li>a:hover {
+  border-color: #111 #111 #444; /* Orig #eee #eee #ddd */
+}
+.nav>li>a:focus, .nav>li>a:hover {
+  background-color: #111; /* Orig #eee */
+}
+
 .panel {
   background-color: #111;
 }
@@ -70,8 +99,20 @@ a.focus, a:hover {
 }
 
 .list-group-item {
-  background-color: #111;
+  background-color: #0C0C0C;
   border: 1px solid #333;
+}
+a.list-group-item, button.list-group-item {
+  color: #ddd; /* orig #555 */
+}
+
+.text-warning {
+  color: #f7ba50;
+}
+
+.well {
+  background-color: #121212;
+  border-color: #999999;
 }
 
 /* Google Maps specific */
@@ -98,38 +139,37 @@ a.focus, a:hover {
   filter: invert(1);
 }
 
-/* TresDB specific */
+/* Georap specific, most generic first */
 
+/* Georap generic */
+.tresdb-disabled {
+  color: #777;
+}
 .tresdb-flash {
   background-color: #10C48A !important;
 }
-
+/* Georap card */
 #card-layer {
-  background-color: #111;
+  background-color: #111; /* Bad rgba(17, 17, 17, 0.95); */
 }
-
+/* Georap tags */
 .tresdb-tag {
-  border: 0px solid gray;
+  border: 0 solid gray;
 }
 .tresdb-tag-active {
   border: 1px solid #e5e5e5;
 }
-.tresdb-tag.tresdb-filter-any {
+.tresdb-tag.location-filter-any {
   border: 1px solid #666;
 }
-.tresdb-tag-active.tresdb-filter-any {
+.tresdb-tag-active.location-filter-any {
   border: 1px solid #e5e5e5;
 }
-
-#tresdb-location-statustype-viewer img,
+.location-statustype-viewer img,
 .tresdb-tag img {
   filter: invert(1);
 }
-
-#tresdb-location-thumbnails img {
-  border: 1px solid #333;
-}
-
+/* Georap location */
 #tresdb-location-return {
   color: #666;
   border-bottom: 1px solid #333;
@@ -137,10 +177,37 @@ a.focus, a:hover {
 #tresdb-location-return:hover h1 {
   color: #999;
 }
-
+/* Geolocation */
 button.tresdb-geolocation {
   background-color: #111;
 }
 button.tresdb-geolocation .tresdb-geolocation-icon {
   filter: invert(1);
+}
+/* Thumbnail selector */
+.location-form-thumbnail.thumbnail-selected {
+  border: 3px dashed white;
+}
+/* Attachments */
+.uploader-container {
+  background-color: #2d2d2d;
+}
+.uploader-box {
+  color: #ddd;
+  outline: 2px dashed #444;
+}
+.form-attachment img {
+  border-color: #333;
+}
+/* List item thumbnails */
+img.location-type-symbol {
+  filter: invert(1); /* Make type symbols white */
+}
+/* Comments */
+.comment-form-container {
+  border-top: 1px solid #444;
+}
+/* Users */
+.points-equality-line {
+  border-bottom: 3px double white;
 }

@@ -1,30 +1,37 @@
-/* eslint-disable no-magic-numbers, no-sync, max-lines */
+/* eslint-disable no-sync, max-lines */
 
+// Latest v12 schema. Tedious to migrate, but is the most complete
+// representation of the available data structures yet easy to modify
+// without burden of migration consistency. Also here user credentials
+// are loaded from config/index instead of test-specific literals.
+// Also no need for change notes here.
+//
 // This fixture is aimed to be used as a demo and for experimenting
 // in development.
 
-var config = require('tresdb-config');
-var db = require('tresdb-db');
-var bcrypt = require('bcryptjs');
+const config = require('georap-config');
+const db = require('georap-db');
+const bcrypt = require('bcryptjs');
+const common = require('./common');
 
-var NOW = (new Date()).toISOString();
+const NOW = (new Date()).toISOString();
 
-var admin = config.admin.username;
+const admin = config.admin.username;
 
-var luznaId = db.id('581f266110a1482dd0b7cd14');
-var rummuId = db.id('581f166130a1482dd0b7cd15');
-var irbeneId = db.id('581f166110a1482dd0b7cd13');
+const luznaId = db.id('581f266110a1482dd0b7cd14');
+const rummuId = db.id('581f166130a1482dd0b7cd15');
+const irbeneId = common.irbeneId;
 
 // Temporary names of locations before they are titled
-var luznaBaby = 'rkVdAtjYg';
-var rummuBaby = 'ByX6eQoYe';
-var irbeneBaby = 'SkdplmsFx';
+const luznaBaby = 'rkVdAtjYg';
+const rummuBaby = 'ByX6eQoYe';
+const irbeneBaby = 'SkdplmsFx';
 // Location titles
-var luznaName = 'Luzna';
-var rummuName = 'Rummu';
-var irbeneName = 'Irbene';
+const luznaName = 'Luzna';
+const rummuName = 'Rummu';
+const irbeneName = 'Irbene';
 // Duplicated content
-var irbeneInfo = 'It is a soviet union ghost town.';
+const irbeneInfo = 'It is a soviet union ghost town.';
 
 module.exports = {
   collections: {
@@ -32,43 +39,63 @@ module.exports = {
       {
         _id: db.id('58092312bbba430a35fb4139'),
         key: 'schemaVersion',
-        value: 9,
+        value: 12,
+      },
+    ],
+    attachments: [
+      {
+        key: 'ewdsf3s',
+        user: 'admin',
+        time: '2009-09-04T23:44:21.000Z',
+        filename: 'radar.jpg',
+        filepath: '2009/RxRvKSlbl/radar.jpg', // the uploads/ contains this...
+        mimetype: 'image/jpeg',
+        thumbfilepath: '2009/RxRvKSlbl/radar_medium.jpg', // ...and this.
+        thumbmimetype: 'image/jpeg',
+        deleted: false,
+        data: {},
+      },
+      {
+        key: 'adebd2r',
+        user: 'admin',
+        time: '2009-09-04T23:44:21.000Z',
+        filename: 'tunnel-ground.jpg',
+        filepath: '2021/EdvjkeEdf/tunnel-ground.jpg', // see uploads/
+        mimetype: 'image/jpeg', /// small pic = same image
+        thumbfilepath: '2021/EdvjkeEdf/tunnel-ground.jpg',
+        thumbmimetype: 'image/jpeg',
+        deleted: false,
+        data: {},
       },
     ],
     entries: [
       {
         // A brief description about location
         _id: db.id('58092312bbba420a35fb4201'),
+        activeAt: '2009-09-04T23:44:21.000Z',
+        attachments: [],
+        comments: [],
         deleted: false,
+        flags: [],
         locationId: irbeneId,
-        type: 'location_entry',
+        markdown: irbeneInfo,
+        published: false,
         time: '2009-09-04T23:44:21.000Z',
         user: admin,
-        data: {
-          isVisit: false,
-          markdown: irbeneInfo,
-          filepath: null,
-          mimetype: null,
-          thumbfilepath: null,
-          thumbmimetype: null,
-        },
       },
       {
         // A visit with attachment
         _id: db.id('58092312bebc430a35fb4102'),
+        activeAt: '2009-10-05T12:23:34.000Z',
+        attachments: ['ewdsf3s'],
+        comments: [],
         deleted: false,
+        flags: ['visit'],
         locationId: irbeneId,
-        type: 'location_entry',
+        markdown: '',
+        published: false,
         time: '2009-10-05T12:23:34.000Z',
         user: admin,
-        data: {
-          isVisit: true,
-          markdown: null,
-          filepath: '2009/RxRvKSlbl/radar.jpg',
-          mimetype: 'image/jpeg',
-          thumbfilepath: '2009/RxRvKSlbl/radar_medium.jpg',
-          thumbmimetype: 'image/jpeg',
-        },
       },
     ],
     events: [
@@ -100,7 +127,7 @@ module.exports = {
         },
       },
       {
-        // A description entry
+        // A description entry creation
         _id: db.id('58092312bbba430a35fb4101'),
         locationId: irbeneId,
         locationName: irbeneName,
@@ -109,16 +136,23 @@ module.exports = {
         time: '2009-09-04T23:44:21.000Z',
         data: {
           entryId: db.id('58092312bbba420a35fb4201'),
-          isVisit: false,
-          markdown: irbeneInfo,
-          filepath: null,
-          mimetype: null,
-          thumbfilepath: null,
-          thumbmimetype: null,
+          entry: {
+            _id: db.id('58092312bbba420a35fb4201'),
+            activeAt: '2009-09-04T23:44:21.000Z',
+            attachments: [],
+            comments: [],
+            deleted: false,
+            flags: [],
+            locationId: irbeneId,
+            markdown: irbeneInfo,
+            published: false,
+            time: '2009-09-04T23:44:21.000Z',
+            user: admin,
+          },
         },
       },
       {
-        // A visit entry
+        // A visit entry creation
         _id: db.id('58092312bbba430a35fb4102'),
         locationId: irbeneId,
         locationName: irbeneName,
@@ -127,12 +161,19 @@ module.exports = {
         time: '2009-10-05T12:23:34.000Z',
         data: {
           entryId: db.id('58092312bebc430a35fb4102'),
-          isVisit: true,
-          markdown: null,
-          filepath: '2009/RxRvKSlbl/radar.jpg',
-          mimetype: 'image/jpeg',
-          thumbfilepath: '2009/RxRvKSlbl/radar_medium.jpg',
-          thumbmimetype: 'image/jpeg',
+          entry: {
+            _id: db.id('58092312bebc430a35fb4102'),
+            locationId: irbeneId,
+            activeAt: '2009-10-05T12:23:34.000Z',
+            time: '2009-10-05T12:23:34.000Z',
+            user: admin,
+            deleted: false,
+            published: false,
+            markdown: '',
+            attachments: ['ewdsf3s'],
+            comments: [],
+            flags: ['visit'],
+          },
         },
       },
       {
@@ -202,67 +243,73 @@ module.exports = {
       {
         // A location in Latvia
         _id: irbeneId,
+        createdAt: '2009-07-30T10:44:58.000Z',
         creator: admin,
-        name: irbeneName,
+        deleted: false,
         geom: {
           type: 'Point',
           coordinates: [21.857705, 57.55341],
         },
-        deleted: false,
+        name: irbeneName,
+        places: ['Irbene', 'Ances pagasts', 'Ventspils Municipality', 'Latvia'],
+        published: false,
         status: 'abandoned',
-        type: 'town',
         text1: '',
         text2: '',
-        places: ['Irbene', 'Ances pagasts', 'Ventspils Municipality', 'Latvia'],
+        thumbnail: 'ewdsf3s',
+        type: 'town',
         // Latent properties, updated by worker:
         points: 18,
         layer: 1,
         childLayer: 9,
         isLayered: true,
-        visits: [],
       },
       {
         // A location close to the first one.
         _id: luznaId,
+        createdAt: '2017-02-22T22:18:00.000Z',
         creator: admin,
-        name: luznaName,
+        deleted: false,
         geom: {
           type: 'Point',
           coordinates: [21.89747, 57.59686],
         },
-        deleted: false,
+        name: luznaName,
+        places: ['Tārgale parish', 'Ventspils Municipality', 'Latvia'],
+        published: false,
         status: 'unknown',
-        type: 'military',
         text1: '',
         text2: '',
-        places: ['Tārgale parish', 'Ventspils Municipality', 'Latvia'],
+        thumbnail: null,
+        type: 'military',
         // Latent properties, updated by worker:
         points: 11,
         layer: 9,
         childLayer: 0,
         isLayered: true,
-        visits: [],
       },
       {
         // A deleted location
         _id: rummuId,
+        createdAt: '2017-02-06T12:23:34.000Z',
         creator: admin,
-        name: rummuName,
+        deleted: true,
         geom: {
           type: 'Point',
           coordinates: [24.19462, 59.22667],
         },
-        deleted: true,
+        name: rummuName,
+        places: ['Rummu', 'Vasalemma Parish', 'Harju County', 'Estonia'],
+        published: false,
         status: 'unknown',
-        type: 'default',
         text1: '',
         text2: '',
-        places: ['Rummu', 'Vasalemma Parish', 'Harju County', 'Estonia'],
+        thumbnail: null,
+        type: 'default',
         // Latent properties, updated by worker:
         layer: 2,
         childLayer: 0,
         isLayered: false,
-        visits: [],
       },
     ],
     users: [

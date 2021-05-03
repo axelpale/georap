@@ -1,0 +1,44 @@
+<div class="container-fluid tresdb-location">
+  <% if (ref === 'latest') { %>
+  <a id="tresdb-location-return" class="row" href="/latest">
+    <div class="col-md-12">
+      <h1>Latest</h1>
+    </div>
+  </a>
+  <% } %>
+  <div class="row">
+    <div class="col-md-12">
+
+      <div id="tresdb-location-loading">
+        <div class="progress">
+          <div class="progress-bar progress-bar-striped active" role="progressbar" style="width: 100%">
+            <span class="sr-only">Waiting for server</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="location-missing-error hidden">
+        <h2>Location is missing. Check URL address.</h2>
+      </div>
+
+      <div id="tresdb-location-name"></div>
+
+      <div id="tresdb-location-places"></div>
+
+      <div id="tresdb-location-geom"></div>
+
+      <div id="tresdb-location-statustype-container"></div>
+
+      <div id="location-thumbnail-container"></div>
+
+      <div id="tresdb-location-forms"></div>
+
+      <div id="tresdb-location-entries"></div>
+
+      <div id="tresdb-location-events"></div>
+
+      <div id="tresdb-location-remove"></div>
+
+    </div>
+  </div>
+</div>

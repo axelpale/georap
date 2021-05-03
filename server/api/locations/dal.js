@@ -1,14 +1,14 @@
 /* eslint-disable max-lines */
 
-var db = require('tresdb-db');
-var layersDal = require('../../../worker/layers/dal');
-var eventsDal = require('../events/dal');
-var config = require('tresdb-config');
+const db = require('georap-db');
+const layersDal = require('../../../worker/layers/dal');
+const eventsDal = require('../events/dal');
+const config = require('georap-config');
 
-var shortid = require('shortid');
+const shortid = require('shortid');
 
 // Do not allow locations to be closer to each other.
-var MIN_DISTANCE_METERS = 10;
+const MIN_DISTANCE_METERS = 10;
 
 exports.count = function (callback) {
   // Count non-deleted locations
@@ -16,12 +16,12 @@ exports.count = function (callback) {
   // Parameters:
   //   callback
   //     function (err, number)
+  //
+  const coll = db.get().collection('locations');
 
-  var coll = db.get().collection('locations');
-
-  coll.countDocuments({ deleted: false }).then(function (number) {
+  coll.countDocuments({ deleted: false }).then((number) => {
     return callback(null, number);
-  }).catch(function (err) {
+  }).catch((err) => {
     return callback(err);
   });
 };
@@ -37,12 +37,12 @@ exports.createLocation = function (args, callback) {
   //     function (err, rawLocation)
   //
 
-  var geom = {
+  const geom = {
     type: 'Point',
     coordinates: [args.longitude, args.latitude],
   };
 
-  layersDal.findLayerForPoint(geom, function (errl, layer, distance, nearest) {
+  layersDal.findLayerForPoint(geom, (errl, layer, distance, nearest) => {
     // Gives distance to the closest point in addition to layer number.
     if (errl) {
       console.error(errl);
@@ -50,14 +50,15 @@ exports.createLocation = function (args, callback) {
     }
 
     if (distance < MIN_DISTANCE_METERS) {
-      var errclose = new Error('TOO_CLOSE');
+      const errclose = new Error('TOO_CLOSE');
       errclose.data = nearest;
       return callback(errclose);
     }
 
-    var newLoc = {
+    const newLoc = {
       creator: args.username,
       deleted: false,
+      published: false,
       geom: geom,
       isLayered: true,
       layer: layer,
@@ -65,11 +66,13 @@ exports.createLocation = function (args, callback) {
       places: [],
       status: config.locationStatuses[0],
       type: config.locationTypes[0],
+      thumbnail: null,
+      visits: [],
     };
 
-    var coll = db.collection('locations');
+    const coll = db.collection('locations');
 
-    coll.insertOne(newLoc, function (err, result) {
+    coll.insertOne(newLoc, (err, result) => {
       if (err) {
         return callback(err);
       }
@@ -82,7 +85,7 @@ exports.createLocation = function (args, callback) {
         lat: args.latitude,
         lng: args.longitude,
         username: newLoc.creator,
-      }, function (err2) {
+      }, (err2) => {
         if (err2) {
           return callback(err2);
         }
@@ -101,14 +104,76 @@ exports.create = function (lat, lng, username, callback) {
   //   username
   //   callback
   //     function (err, rawLocation)
-
+  //
 
   exports.createLocation({
     name: 'Unnamed ' + shortid.generate(),
     latitude: lat,
     longitude: lng,
     username: username,
-    status: config.locationStatuses[0],
-    type: config.locationTypes[0],
   }, callback);
+};
+
+exports.latestComplete = (range, callback) => {
+  // Find n latest, non-deleted locations
+  //
+  // Parameters:
+  //   range
+  //     skip
+  //       integer
+  //     limit
+  //       integer
+  //   callback
+  //     function (err, array of locations)
+  //
+  db.collection('locations').aggregate([
+    {
+      $match: {
+        deleted: false,
+      },
+    },
+    {
+      $sort: {
+        createdAt: -1,
+      },
+    },
+    {
+      $skip: range.skip,
+    },
+    {
+      $limit: range.limit,
+    },
+    {
+      $lookup: {
+        from: 'attachments',
+        localField: 'thumbnail',
+        foreignField: 'key',
+        as: 'thumbnail',
+      },
+    },
+    {
+      $unwind: {
+        path: '$thumbnail',
+        preserveNullAndEmptyArrays: true, // include locs without thumbnail
+      },
+    },
+  ]).toArray(callback);
+};
+
+exports.search = (params, callback) => {
+  // Find locations. If more detailed queries are needed, see
+  // /api/markers/dal.getFiltered
+
+  const q = {
+    $text: {
+      $search: params.phrase,
+    },
+    deleted: false,
+  };
+
+  db.collection('locations')
+    .find(q)
+    .skip(params.skip)
+    .limit(params.limit)
+    .toArray(callback);
 };

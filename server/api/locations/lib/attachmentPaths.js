@@ -1,7 +1,7 @@
 
-var config = require('tresdb-config');
-var path = require('path');
-var urljoin = require('url-join');
+const config = require('georap-config');
+const path = require('path');
+const urljoin = require('url-join');
 
 exports.getRelativeFilePath = function (fileEntry) {
   return fileEntry.data.filepath;
@@ -13,13 +13,13 @@ exports.getRelativeUrl = function (fileEntry) {
 };
 
 exports.getAbsoluteFilePath = function (fileEntry) {
-  var relPath = exports.getRelativeFilePath(fileEntry);
+  const relPath = exports.getRelativeFilePath(fileEntry);
 
   return path.resolve(config.uploadDir, relPath);
 };
 
 exports.getAbsoluteUrl = function (fileEntry) {
-  var relUrl = exports.getRelativeUrl(fileEntry);
+  const relUrl = exports.getRelativeUrl(fileEntry);
 
   return urljoin(config.uploadUrl, relUrl);
 };

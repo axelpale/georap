@@ -1,5 +1,5 @@
 
-var dal = require('./dal');
+const dal = require('./dal');
 
 exports.create = function (req, res) {
   res.json({});
@@ -12,7 +12,7 @@ exports.createCorrection = function (req, res) {
 exports.getAll = function (req, res, next) {
   // Response with all payments.
 
-  dal.getAll(function (err, payments) {
+  dal.getAll((err, payments) => {
     if (err) {
       return next(err);
     }
@@ -23,7 +23,7 @@ exports.getAll = function (req, res, next) {
 
 exports.getBalances = function (req, res, next) {
 
-  dal.getBalances(function (err, users) {
+  dal.getBalances((err, users) => {
     if (err) {
       return next(err);
     }
@@ -34,9 +34,9 @@ exports.getBalances = function (req, res, next) {
 
 exports.getBalanceOfUser = function (req, res, next) {
 
-  var u = req.username;
+  const u = req.username;
 
-  dal.getBalanceOfUser(u, function (err, balance) {
+  dal.getBalanceOfUser(u, (err, balance) => {
     if (err) {
       return next(err);
     }
@@ -46,9 +46,9 @@ exports.getBalanceOfUser = function (req, res, next) {
 };
 
 exports.getAllOfUser = function (req, res, next) {
-  var u = req.username;
+  const u = req.username;
 
-  dal.getAllOfUser(u, function (err, payments) {
+  dal.getAllOfUser(u, (err, payments) => {
     if (err) {
       return next(err);
     }

@@ -6,25 +6,25 @@
 //
 // Also, new indices were made and thus 'npm run migrate' is needed.
 
-var db = require('tresdb-db');
-var schema = require('../../lib/schema');
-var iter = require('../../iter');
-var asyn = require('async');
-var clone = require('clone');
-var findFirstAndLastEvent = require('./findFirstAndLastEvent');
+const db = require('georap-db');
+const schema = require('../../lib/schema');
+const iter = require('../../lib/iter');
+const asyn = require('async');
+const clone = require('clone');
+const findFirstAndLastEvent = require('./findFirstAndLastEvent');
 
-var FROM_VERSION = 10;
-var TO_VERSION = FROM_VERSION + 1;
+const FROM_VERSION = 10;
+const TO_VERSION = FROM_VERSION + 1;
 
 // Steps to be executed with asyn.eachSeries in the given order.
 // The parameter 'next' is function (err) that must be called in the end of
 // each step.
-var substeps = [
+const substeps = [
 
   function updateSchema(next) {
     console.log('1. Updating schema version tag...');
 
-    schema.setVersion(TO_VERSION, function (err) {
+    schema.setVersion(TO_VERSION, (err) => {
       if (err) {
         return next(err);
       }
@@ -37,22 +37,22 @@ var substeps = [
   function addTimeProps(next) {
     console.log('2. Adding createdAt and loginAt properties for each user...');
 
-    var coll = db.collection('users');
+    const coll = db.collection('users');
     // Without further knowledge, act like users are created and logged
     // in just now.
-    var now = (new Date()).toISOString();
+    const now = (new Date()).toISOString();
 
-    iter.updateEach(coll, function (origUser, iterNext) {
+    iter.updateEach(coll, (origUser, iterNext) => {
 
       // Use the earliest event as the creation time.
       // Use the latest event as the login time.
       // If no events, use now.
-      findFirstAndLastEvent(origUser.name, function (erre, firstLastEv) {
+      findFirstAndLastEvent(origUser.name, (erre, firstLastEv) => {
         if (erre) {
           return iterNext(erre);
         }
 
-        var u = clone(origUser);
+        const u = clone(origUser);
 
         if (firstLastEv.first === null) {
           u.createdAt = now;
@@ -81,7 +81,7 @@ exports.run = function (callback) {
   console.log();
   console.log('### Step v' + FROM_VERSION + ' to v' + TO_VERSION + ' ###');
 
-  asyn.series(substeps, function (err) {
+  asyn.series(substeps, (err) => {
     if (err) {
       console.error(err);
       return callback(err);

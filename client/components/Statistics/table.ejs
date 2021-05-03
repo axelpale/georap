@@ -1,0 +1,24 @@
+<table class="table">
+  <tbody>
+<%
+  var order = [
+    { key: 'usersCount', label: 'Users' },
+    { key: 'locationCount', label: 'Locations' },
+    { key: 'entriesCount', label: 'Posts' },
+    { key: 'attachmentsCount', label: 'Attachments' },
+    { key: 'commentsCount', label: 'Comments' },
+    { key: 'eventsCount', label: 'Actions' },
+    { key: 'clientVersion', label: 'Client version' },
+    { key: 'serverVersion', label: 'Server version' },
+  ];
+  order.forEach(function (item) {
+%>
+    <tr>
+      <td title="<%= item.key %>"><%= item.label %></td>
+      <td><%= stats[item.key] %></td>
+    </tr>
+<%
+  });
+%>
+  </tbody>
+</table>

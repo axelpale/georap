@@ -1,0 +1,27 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-12">
+
+      <h1><span class="glyphicon glyphicon-filter" aria-hidden="true"></span><span id="tresdb-filter-title-dot" class="<%= isFilterActive ? '' : 'hidden' %>">&nbsp;</span> Filter Locations</h1>
+
+      <p>
+      <button id="tresdb-filter-off" class="btn <%= isFilterActive ? 'btn-danger' : 'btn-default disabled' %>">Turn Off</button>
+      <p>
+
+      <h3>Filter by Status</h3>
+
+      <div id="tresdb-filter-status-list" class="location-status-list">
+        <button data-status="any" class="location-filter-any tresdb-tag <%= currentStatus === 'any' ? 'tresdb-tag-active' : '' %>">Any</button>
+        <%= statusListHtml %>
+      </div>
+
+      <h3>Filter by Type</h3>
+
+      <div id="tresdb-filter-type-list" class="location-type-list">
+        <button data-type="any" class="location-filter-any tresdb-tag <%= currentType === 'any' ? 'tresdb-tag-active' : '' %>">Any</button>
+        <%= typeListHtml %>
+      </div>
+
+    </div>
+  </div>
+</div>

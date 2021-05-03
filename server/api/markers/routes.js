@@ -1,9 +1,9 @@
 /* eslint-disable new-cap */
 
-var handlers = require('./handlers');
-var kmlRouter = require('./kml/routes');
-var express = require('express');
-var router = express.Router();
+const handlers = require('./handlers');
+const kmlRouter = require('./kml/routes');
+const express = require('express');
+const router = express.Router();
 
 router.get('/', handlers.getWithin);
 router.get('/search', handlers.getFiltered);

@@ -1,0 +1,9 @@
+<div class="entry-images-browser">
+  <% attachments.forEach(function (attachment, i) { %>
+  <img
+    class="<%= i === selectedIndex ? 'active' : '' %>"
+    src="<%= attachment.thumbUrl %>"
+    title="<%= attachment.filename %>"
+    data-attachment-key="<%= attachment.key %>">
+  <% }); %>
+</div>

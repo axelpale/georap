@@ -1,12 +1,12 @@
-var config = require('tresdb-config');
-var tempdirs = require('../../server/services/tempdirs');
+const config = require('georap-config');
+const tempdirs = require('../../server/services/tempdirs');
 
 exports.run = function (callback) {
 
-  var tempRoot = config.tempUploadDir;
-  var ttlSeconds = config.tempUploadTimeToLive;
+  const tempRoot = config.tempUploadDir;
+  const ttlSeconds = config.tempUploadTimeToLive;
 
-  tempdirs.removeOlderThan(tempRoot, ttlSeconds, function (err, names) {
+  tempdirs.removeOlderThan(tempRoot, ttlSeconds, (err, names) => {
     if (err) {
       if (err.code === 'ENOENT') {
         // Temporary dir does not exist.
@@ -17,9 +17,9 @@ exports.run = function (callback) {
       }
     }
 
-    var n = names.length;
+    const n = names.length;
     console.log('cleartemp: removed ' + n + ' temporary directories.');
-    names.forEach(function (name, index) {
+    names.forEach((name, index) => {
       console.log('  (' + index + ') ' + name);
     });
 

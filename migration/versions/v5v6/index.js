@@ -18,28 +18,28 @@
 // 8. remove deprecated entries
 // 9. normalize entries: combine entry types to single location_entry
 
-var db = require('tresdb-db');
-var uploads = require('../../../server/services/uploads');
+const db = require('georap-db');
+const uploads = require('../../../server/services/uploads');
 //var googlemaps = require('../../../server/services/googlemaps');
-var schema = require('../../lib/schema');
-var iter = require('../../iter');
-var entryToEvent = require('./entryToEvent');
-var getShortId = require('./getShortId');
-var asyn = require('async');
-var clone = require('clone');
+const schema = require('../../lib/schema');
+const iter = require('../../lib/iter');
+const entryToEvent = require('./entryToEvent');
+const getShortId = require('./getShortId');
+const asyn = require('async');
+const clone = require('clone');
 
-var FROM_VERSION = 5;
-var TO_VERSION = FROM_VERSION + 1;
+const FROM_VERSION = 5;
+const TO_VERSION = FROM_VERSION + 1;
 
 // Steps to be executed with asyn.eachSeries in the given order.
 // The parameter 'next' is function (err) that must be called in the end of
 // each step.
-var substeps = [
+const substeps = [
 
   function updateSchema(next) {
     console.log('1. Updating schema version tag...');
 
-    schema.setVersion(TO_VERSION, function (err) {
+    schema.setVersion(TO_VERSION, (err) => {
       if (err) {
         return next(err);
       }
@@ -52,18 +52,18 @@ var substeps = [
   function addPoints(next) {
     console.log('2. Adding property \'points\' to each user and location...');
 
-    var coll = db.collection('users');
-    var locColl = db.collection('locations');
+    const coll = db.collection('users');
+    const locColl = db.collection('locations');
 
-    iter.updateEach(coll, function (user, iterNext) {
+    iter.updateEach(coll, (user, iterNext) => {
       user.points = 0;
       return iterNext(null, user);
-    }, function (err) {
+    }, (err) => {
       if (err) {
         return next(err);
       }
 
-      iter.updateEach(locColl, function (loc, iterNext) {
+      iter.updateEach(locColl, (loc, iterNext) => {
         loc.points = 0;
         return iterNext(null, loc);
       }, next);
@@ -73,9 +73,9 @@ var substeps = [
   function addIsLayered(next) {
     console.log('3. Adding property \'isLayered\' to each location...');
 
-    var coll = db.collection('locations');
+    const coll = db.collection('locations');
 
-    iter.updateEach(coll, function (loc, iterNext) {
+    iter.updateEach(coll, (loc, iterNext) => {
       loc.isLayered = true;
       return iterNext(null, loc);
     }, next);
@@ -84,11 +84,11 @@ var substeps = [
   function addCreator(next) {
     console.log('4. Adding property \'creator\' to each location...');
 
-    var coll = db.collection('locations');
+    const coll = db.collection('locations');
 
-    var getCreatedEntry = function (loc) {
+    const getCreatedEntry = function (loc) {
       // Returns an entry of 'created' type. Return null if no such entry.
-      var i, entry;
+      let i, entry;
       for (i = 0; i < loc.content.length; i += 1) {
         if (loc.content[i].type === 'created') {
           entry = loc.content[i];
@@ -102,9 +102,9 @@ var substeps = [
       return null;
     };
 
-    iter.updateEach(coll, function (loc, iterNext) {
+    iter.updateEach(coll, (loc, iterNext) => {
       // Find creator
-      var en = getCreatedEntry(loc);
+      const en = getCreatedEntry(loc);
 
       if (en === null) {
         return iterNext(new Error('location does not have a creator:' +
@@ -120,10 +120,10 @@ var substeps = [
   function addTempPlaces(next) {
     console.log('5. Adding \'places\' to each location...');
 
-    var coll = db.collection('locations');
+    const coll = db.collection('locations');
 
-    iter.updateEach(coll, function (origLoc, iterNext) {
-      var loc = clone(origLoc);
+    iter.updateEach(coll, (origLoc, iterNext) => {
+      const loc = clone(origLoc);
       loc.places = [];
       return iterNext(null, loc);
     }, next);
@@ -133,14 +133,14 @@ var substeps = [
     console.log('6. Move content entries to separate entries collection ' +
                 'and remove content prop from locations...');
 
-    var coll = db.collection('locations');
-    var entriesColl = db.collection('entries');
+    const coll = db.collection('locations');
+    const entriesColl = db.collection('entries');
 
-    iter.updateEach(coll, function (origLoc, iterNext) {
-      var loc = clone(origLoc);  // Clone to avoid affecting cache
+    iter.updateEach(coll, (origLoc, iterNext) => {
+      const loc = clone(origLoc);  // Clone to avoid affecting cache
 
-      var entries = loc.content.map(function (origEntry) {
-        var entry = clone(origEntry);  // Clone to avoid affecting cache
+      let entries = loc.content.map((origEntry) => {
+        const entry = clone(origEntry);  // Clone to avoid affecting cache
         entry.shortId = entry._id;
         delete entry._id;
 
@@ -170,7 +170,7 @@ var substeps = [
       });
 
       // Remove stories with empty content.
-      entries = entries.filter(function (en) {
+      entries = entries.filter((en) => {
         if (en.type === 'story') {
           if (en.data.markdown.trim() === '') {
             return false;
@@ -182,7 +182,7 @@ var substeps = [
       // Remove entries in the location.
       delete loc.content;
 
-      entriesColl.insertMany(entries, function (err) {
+      entriesColl.insertMany(entries, (err) => {
         if (err) {
           return iterNext(err);
         }
@@ -196,15 +196,15 @@ var substeps = [
   function createThumbnails(next) {
     console.log('7. Create thumbnail for each attachment...');
 
-    var coll = db.collection('entries');
+    const coll = db.collection('entries');
 
-    iter.updateEach(coll, function (origEntry, iterNext) {
+    iter.updateEach(coll, (origEntry, iterNext) => {
       if (origEntry.type !== 'attachment') {
         return iterNext(null, origEntry);
       }
 
-      var newEntry = clone(origEntry);
-      var file = {
+      const newEntry = clone(origEntry);
+      const file = {
         path: uploads.getAbsolutePath(newEntry.data.filepath),
         mimetype: newEntry.data.mimetype,
       };
@@ -212,7 +212,7 @@ var substeps = [
       // Original attachment entry contains:
       //   data.filepath
       //   data.mimetype
-      uploads.createThumbnail(file, function (err, thumb) {
+      uploads.createThumbnail(file, (err, thumb) => {
         if (err) {
           return iterNext(err);
         }
@@ -229,17 +229,17 @@ var substeps = [
   function createEvents(next) {
     console.log('8. Create events from entries...');
 
-    var enColl = db.collection('entries');
-    var evColl = db.collection('events');
+    const enColl = db.collection('entries');
+    const evColl = db.collection('events');
 
-    enColl.find().toArray(function (err, entries) {
+    enColl.find().toArray((err, entries) => {
       if (err) {
         return next(err);
       }
 
-      var events = entries.map(entryToEvent);
+      const events = entries.map(entryToEvent);
 
-      evColl.insertMany(events, function (insertErr) {
+      evColl.insertMany(events, (insertErr) => {
         if (insertErr) {
           return next(insertErr);
         }
@@ -252,18 +252,18 @@ var substeps = [
     console.log('9. Advance location_created events to correct the order.');
     // Created event should be the earliest.
 
-    var evColl = db.collection('events');
+    const evColl = db.collection('events');
 
-    var advanceBySecond = function (isostring) {
+    const advanceBySecond = function (isostring) {
       // Return time as ISO string
       // '2017-03-03T23:39:44.000Z'
-      var second = 1000;
-      var ms = Date.parse(isostring) - second;
+      const second = 1000;
+      const ms = Date.parse(isostring) - second;
       return (new Date(ms)).toISOString();
     };
 
-    iter.updateEach(evColl, function (ev, iterNext) {
-      var copyEv;
+    iter.updateEach(evColl, (ev, iterNext) => {
+      let copyEv;
       if (ev.type === 'location_created') {
         copyEv = clone(ev);
         copyEv.time = advanceBySecond(copyEv.time);
@@ -285,13 +285,13 @@ var substeps = [
     // - tagadd
     // - tagdel
 
-    var q = {
+    const q = {
       type: {
         $in: ['visit', 'created', 'move', 'rename', 'tagadd', 'tagdel'],
       },
     };
 
-    db.collection('entries').deleteMany(q, function (err) {
+    db.collection('entries').deleteMany(q, (err) => {
       if (err) {
         return next(err);
       }
@@ -311,12 +311,12 @@ var substeps = [
     // - remove shortId
     // - remove locationName
 
-    var enColl = db.collection('entries');
+    const enColl = db.collection('entries');
 
-    iter.updateEach(enColl, function (origEntry, iterNext) {
-      var orig = origEntry; // alias
+    iter.updateEach(enColl, (origEntry, iterNext) => {
+      const orig = origEntry; // alias
 
-      var en = {
+      const en = {
         _id: orig._id,
         type: 'location_entry',
         user: orig.user,
@@ -361,7 +361,7 @@ exports.run = function (callback) {
   console.log();
   console.log('### Step v' + FROM_VERSION + ' to v' + TO_VERSION + ' ###');
 
-  asyn.series(substeps, function (err) {
+  asyn.series(substeps, (err) => {
     if (err) {
       console.error(err);
       return callback(err);

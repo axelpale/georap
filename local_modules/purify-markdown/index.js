@@ -1,3 +1,5 @@
+// Intended for server-side to sanitize any markdown content from client.
+
 const marked = require('marked')
 const createDOMPurify = require('dompurify')
 const { JSDOM } = require('jsdom')

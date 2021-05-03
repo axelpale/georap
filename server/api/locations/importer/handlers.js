@@ -1,22 +1,21 @@
-var config = require('tresdb-config');
-var uploads = require('../../../services/uploads');
-var dal = require('./dal');
+const config = require('georap-config');
+const uploads = require('../../../services/uploads');
+const importerDal = require('./dal');
 
-var status = require('http-status-codes');
-var urljoin = require('url-join');
-var path = require('path');
+const status = require('http-status-codes');
+const urljoin = require('url-join');
+const path = require('path');
 
-var uploadHandler = uploads.tempUploader.single('importfile');
+const uploadHandler = uploads.tempUploader.single('importfile');
 
-
-var buildUrls = function (locs) {
-  // Modifies given locations.
-  // Convert absolute file paths to URLs.
+const buildUrls = (batchLocs) => {
+  // Modifies given batch locations and batch entries.
+  // Convert absolute file paths in batch entries to URLs.
   // This is most correct to do in handler because it is a REST thing.
   // Absolute filepaths are needed internally more often.
-  locs.forEach(function (loc) {
-    loc.entries.forEach(function (entry) {
-      var rel, url;
+  batchLocs.forEach((loc) => {
+    loc.entries.forEach((entry) => {
+      let rel, url;
       if (entry.filepath !== null) {
         if (entry.filepath.startsWith('/')) {
           rel = path.relative(config.tempUploadDir, entry.filepath);
@@ -28,12 +27,15 @@ var buildUrls = function (locs) {
   });
 };
 
-
-exports.import = function (req, res, next) {
+exports.import = (req, res, next) => {
   // Import locations from KML, KMZ, or GPX file.
-  // importfile is required.
-
-  uploadHandler(req, res, function (err) {
+  // A file to import is required.
+  //
+  // The import parses the file and creates a batch
+  // which is a temporary JSON file. No locations are yet
+  // added to collections.
+  //
+  uploadHandler(req, res, (err) => {
     if (err) {
       if (err.code === 'LIMIT_FILE_SIZE') {
         return res.sendStatus(status.REQUEST_TOO_LONG);
@@ -47,49 +49,46 @@ exports.import = function (req, res, next) {
       return res.send('no file given');
     }
 
-    var ext = path.extname(req.file.originalname);
+    // Extension
+    const ext = path.extname(req.file.originalname);
 
-    var ext2methodName = {
+    const ext2methodName = {
       '.xml': 'readKML',
       '.kml': 'readKML',
       '.kmz': 'readKMZ',
     };
-    var methodName = null;
 
-    if (ext2methodName[ext]) {
-      methodName = ext2methodName[ext];
-      return dal[methodName](req.file.path, function (errr, result) {
-        if (errr) {
-          if (errr.message === 'INVALID_KMZ') {
-            res.status(status.BAD_REQUEST);
-            return res.send('unknown filetype');
-          }
-          return next(errr);
-        }
-
-        if (typeof result.batchId !== 'string') {
-          throw new Error('invalid batchId');
-        }
-
-        var batchId = result.batchId;
-
-        return res.json({
-          batchId: batchId,
-        });
-      });
+    if (!ext2methodName[ext]) {
+      return res.status(status.BAD_REQUEST).send('unknown filetype');
     }
 
-    res.status(status.BAD_REQUEST);
-    return res.send('unknown filetype');
+    const methodName = ext2methodName[ext];
+    return importerDal[methodName](req.file.path, (errr, result) => {
+      if (errr) {
+        if (errr.message === 'INVALID_KMZ') {
+          return res.status(status.BAD_REQUEST).send('unknown filetype');
+        }
+        return next(errr);
+      }
+
+      if (typeof result.batchId !== 'string') {
+        throw new Error('invalid batchId');
+      }
+
+      return res.json({
+        batchId: result.batchId,
+      });
+    });
   });
 };
 
+exports.getBatch = (req, res, next) => {
+  // Import creates a batch for preview.
+  // The get batch handler provides means to fetch the batch for preview.
+  //
+  const batchId = req.params.batchId;
 
-exports.getBatch = function (req, res, next) {
-
-  var batchId = req.params.batchId;
-
-  dal.getBatch(batchId, function (err, locs) {
+  importerDal.getBatch(batchId, (err, locs) => {
     if (err) {
       if (err.code === 'ENOENT') {
         return res.sendStatus(status.NOT_FOUND);
@@ -103,48 +102,41 @@ exports.getBatch = function (req, res, next) {
   });
 };
 
-exports.getOutcome = function (req, res, next) {
-  var batchId = req.params.batchId;
-  dal.getOutcome(batchId, function (err, outcome) {
-    if (err) {
-      return next(err);
-    }
+exports.runBatch = (req, res, next) => {
+  // After a file is imported and parsed and a batch is created
+  // the user can first preview and then run the batch.
+  // This handler creates the locations and other data captured in the batch.
+  //
+  const batchId = req.params.batchId;
+  const indices = req.body.indices;
+  const username = req.user.name;
 
-    return res.json(outcome);
-  });
-};
-
-
-exports.importBatch = function (req, res, next) {
-  var batchId = req.params.batchId;
-  var indices = req.body.indices;
-  var username = req.user.name;
-
-  dal.importBatch({
+  importerDal.runBatch({
     batchId: batchId,
     indices: indices,
     username: username,
-  }, function (err, batchResult) {
+  }, (err, batchResult) => {
     if (err) {
       return next(err);
     }
 
-    dal.mergeEntries({
+    importerDal.mergeEntries({
       locations: batchResult.skipped,
       username: username,
-    }, function (errm, mergeResult) {
+    }, (errm, mergeResult) => {
       if (errm) {
         return next(errm);
       }
 
-      var outcomeData = {
+      // Report
+      const outcomeData = {
         batchId: batchId,
         created: batchResult.created,
         skipped: mergeResult.locationsSkipped,
         modified: mergeResult.locationsModified,
       };
 
-      dal.writeBatchOutcome(outcomeData, function (errw) {
+      importerDal.writeBatchOutcome(outcomeData, (errw) => {
         if (errw) {
           return next(errw);
         }
@@ -152,5 +144,18 @@ exports.importBatch = function (req, res, next) {
         return res.json(outcomeData);
       });
     });
+  });
+};
+
+exports.getOutcome = (req, res, next) => {
+  // After successful batch run, a temporary outcome JSON is created.
+  // This outcome contains a report data how the batch ran.
+  const batchId = req.params.batchId;
+  importerDal.getOutcome(batchId, (err, outcome) => {
+    if (err) {
+      return next(err);
+    }
+
+    return res.json(outcome);
   });
 };

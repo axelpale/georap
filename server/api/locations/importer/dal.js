@@ -1,61 +1,63 @@
 /* eslint-disable max-lines */
 
-var config = require('tresdb-config');
-var entriesDal = require('../../entries/dal');
-var parsekml = require('./parsekml');
-var dallib = require('./dallib');
-var extract = require('extract-zip');
-var asyn = require('async');
-var glob = require('glob');
-var path = require('path');
-var fs = require('fs-extra');
+const config = require('georap-config');
+const entriesDal = require('../../entries/dal');
+const parsekml = require('./parsekml');
+const dallib = require('./dallib');
+const extract = require('extract-zip');
+const asyn = require('async');
+const glob = require('glob');
+const path = require('path');
+const fs = require('fs-extra');
 
+// Helper functions
 
-var batchIdFromPath = function (p) {
+const batchIdFromPath = (p) => {
   // Handlers provide the absolute path but we need the directory name.
   return path.basename(path.dirname(p));
 };
 
-var cachePathFromBatchId = function (batchId) {
+const cachePathFromBatchId = (batchId) => {
   // For example
   //   '2017-10-13-weivd32'
   //   => '/home/...../tempUploads/2017-10-13-weivd32/2017-10-13-weivd32.json
   return path.resolve(config.tempUploadDir, batchId, batchId + '.json');
 };
 
-var outcomePathFromBatchId = function (batchId) {
+const outcomePathFromBatchId = (batchId) => {
   return path.resolve(config.tempUploadDir, batchId, batchId + '_outcome.json');
 };
 
+// Public functions
 
-exports.getBatch = function (batchId, callback) {
+exports.getBatch = (batchId, callback) => {
   // Return batch as array of locations.
-  var cachePath = cachePathFromBatchId(batchId);
+  const cachePath = cachePathFromBatchId(batchId);
   fs.readJSON(cachePath, callback);
 };
 
-exports.getOutcome = function (batchId, callback) {
-  var p = outcomePathFromBatchId(batchId);
+exports.getOutcome = (batchId, callback) => {
+  const p = outcomePathFromBatchId(batchId);
   fs.readJSON(p, callback);
 };
 
 
-exports.readKML = function (kmlpath, callback) {
+exports.readKML = (kmlpath, callback) => {
 
-  fs.readFile(kmlpath, function (err, content) {
+  fs.readFile(kmlpath, (err, content) => {
     if (err) {
       return callback(err);
     }
 
-    return parsekml(content, function (errp, locs) {
+    return parsekml(content, (errp, locs) => {
       if (errp) {
         return callback(errp);
       }
 
-      var batchId = batchIdFromPath(kmlpath);
-      var importCache = cachePathFromBatchId(batchId);
+      const batchId = batchIdFromPath(kmlpath);
+      const importCache = cachePathFromBatchId(batchId);
 
-      fs.writeJSON(importCache, locs, function (errw) {
+      fs.writeJSON(importCache, locs, (errw) => {
         if (errw) {
           return callback(errw);
         }
@@ -70,29 +72,29 @@ exports.readKML = function (kmlpath, callback) {
   });
 };
 
-exports.readKMZ = function (kmzpath, callback) {
+exports.readKMZ = (kmzpath, callback) => {
   // KMZ is a zipped collection of resources and KML files.
   // The collection contains images and therefore we must temporarily
   // store them.
 
-  var targetPath = path.dirname(kmzpath);
+  const targetPath = path.dirname(kmzpath);
 
   // Fight against the pyramid of doom
-  var andThenRead = function (mainKmlPath) {
-    exports.readKML(mainKmlPath, function (errk, result) {
+  const andThenRead = (mainKmlPath) => {
+    exports.readKML(mainKmlPath, (errk, result) => {
       if (errk) {
         return callback(errk);
       }
 
-      var batchId = result.batchId;
-      var locs = result.locations;
+      const batchId = result.batchId;
+      const batchLocs = result.locations;
 
       // Turn relative file paths to absolute paths.
       // Detect URLs from http prefix.
       // We will download the URLs later.
-      locs.forEach(function (loc) {
-        loc.entries.forEach(function (entry) {
-          var fp = entry.filepath;
+      batchLocs.forEach((batchLoc) => {
+        batchLoc.entries.forEach((entry) => {
+          const fp = entry.filepath;
 
           // Filepath is null when entry does not have an image
           if (fp !== null) {
@@ -104,7 +106,7 @@ exports.readKMZ = function (kmzpath, callback) {
         });
       });
 
-      // Structure of loc at this point
+      // Structure of a batchLoc at this point
       // {
       //   name: <string>
       //   latitude: <number>
@@ -112,18 +114,19 @@ exports.readKMZ = function (kmzpath, callback) {
       //   entries: [{
       //     markdown: <string>
       //     filepath: <string>
+      //     overlay: <optional object>
       //   }]
 
-      var cachePath = cachePathFromBatchId(batchId);
+      const cachePath = cachePathFromBatchId(batchId);
 
-      fs.writeJSON(cachePath, locs, function (errw) {
+      fs.writeJSON(cachePath, batchLocs, (errw) => {
         if (errw) {
           return callback(errw);
         }
 
         return callback(null, {
           batchId: batchId,
-          locations: locs,
+          locations: batchLocs,
         });
       });
     });
@@ -132,16 +135,16 @@ exports.readKMZ = function (kmzpath, callback) {
   // TODO what if zip contains files with illegal characters in names
   extract(kmzpath, {
     dir: targetPath,
-  }, function (erre) {
+  }, (erre) => {
     if (erre) {
       return callback(erre);
     }
 
     // KMZ archive must contain doc.kml as the main kml file.
     // See https://developers.google.com/kml/documentation/kmzarchives
-    var docPath = path.resolve(targetPath, 'doc.kml');
+    const docPath = path.resolve(targetPath, 'doc.kml');
 
-    fs.pathExists(docPath, function (errx, exist) {
+    fs.pathExists(docPath, (errx, exist) => {
       if (errx) {
         return callback(errx);
       }
@@ -154,7 +157,7 @@ exports.readKMZ = function (kmzpath, callback) {
       glob('/*.kml', {
         root: targetPath,
         nodir: true,
-      }, function (errg, foundFilePaths) {
+      }, (errg, foundFilePaths) => {
         if (errg) {
           return callback(errg);
         }
@@ -173,7 +176,7 @@ exports.readKMZ = function (kmzpath, callback) {
 };
 
 
-exports.importBatch = function (args, callback) {
+exports.runBatch = (args, callback) => {
   // After a user has first uploaded a KML or other importable file,
   // then the user selects which locations to import. The uploaded and
   // parsed locations are stored as an array in a JSON file on server-side.
@@ -185,7 +188,7 @@ exports.importBatch = function (args, callback) {
   //     batchId
   //       string
   //     indices
-  //       array of integers
+  //       array of integers. Array indices of selected batch locations.
   //     username
   //       string, who is importing
   //   callback
@@ -196,12 +199,13 @@ exports.importBatch = function (args, callback) {
   //         locationsCreated
   //           array of raw db locations
   //         locationsSkipped
-  //           array of import locations
+  //           array of batch locations
+  //
 
-  var indices = args.indices;
-  var username = args.username;
+  const indices = args.indices;
+  const username = args.username;
 
-  exports.getBatch(args.batchId, function (err, locs) {
+  exports.getBatch(args.batchId, (err, batchLocs) => {
     if (err) {
       return callback(err);
     }
@@ -209,23 +213,23 @@ exports.importBatch = function (args, callback) {
     // Create locations. Location creation includes calls to database,
     // so it is async operation.
 
-    var locsCreated = [];
-    var locsSkipped = [];
+    const locsCreated = [];
+    const locsSkipped = [];
 
-    asyn.mapSeries(indices, function iteratee(index, next) {
+    asyn.mapSeries(indices, (index, next) => {
 
-      var loc = locs[index];
+      const batchLoc = batchLocs[index];
 
-      if (typeof loc === 'undefined') {
+      if (typeof batchLoc === 'undefined') {
         console.log('Index not found');
         return next();
       }
 
-      dallib.createLocation(loc, username, function (errc, newRawLoc) {
+      dallib.createLocation(batchLoc, username, (errc, newRawLoc) => {
         if (errc) {
           if (errc.message === 'TOO_CLOSE') {
-            loc.existing = errc.data;
-            locsSkipped.push(loc);
+            batchLoc.existing = errc.data;
+            locsSkipped.push(batchLoc);
             return next();
           }
           return next(errc);
@@ -235,7 +239,7 @@ exports.importBatch = function (args, callback) {
 
         return next();
       });
-    }, function then(erra) {
+    }, (erra) => {
       if (erra) {
         console.error(erra);
         return callback(erra);
@@ -259,9 +263,9 @@ exports.importBatch = function (args, callback) {
 };
 
 
-exports.mergeEntries = function (args, callback) {
+exports.mergeEntries = (args, callback) => {
   // Description by algorithm:
-  // 1. For each given location with entries,
+  // 1. For each given batch location with entries,
   //    find a nearest existing location.
   //   1.1. Get all existing entries of the existing location.
   //   1.2. For each new entry, compare it to the existing entries.
@@ -270,7 +274,7 @@ exports.mergeEntries = function (args, callback) {
   // Parameters
   //   args
   //     locations
-  //       array of import locations:
+  //       array of batch locations:
   //         entries
   //         existing
   //           _id
@@ -287,19 +291,19 @@ exports.mergeEntries = function (args, callback) {
   //         numEntriesCreated
   //
 
-  var numEntryCandidates = 0;
-  var numEntriesCreated = 0;
-  var locationsModified = [];
-  var locationsSkipped = [];
+  let numEntryCandidates = 0;
+  let numEntriesCreated = 0;
+  const locationsModified = [];
+  const locationsSkipped = [];
 
-  asyn.eachSeries(args.locations, function (loc, next) {
+  asyn.eachSeries(args.locations, (batchLoc, next) => {
 
     // Finding of unique entries requires following properties
     //   username
     //   markdown
     //   filepath
     // Therefore we map import entries into this format
-    var entryCandidates = loc.entries.map(function (entry) {
+    const entryCandidates = batchLoc.entries.map((entry) => {
       return {
         username: args.username,
         markdown: entry.markdown,
@@ -311,33 +315,33 @@ exports.mergeEntries = function (args, callback) {
     numEntryCandidates += entryCandidates.length;
 
     // We like to merge the entries into target location.
-    var targetId = loc.existing._id;
+    const targetId = batchLoc.existing._id;
 
     // We first get the unique entries...
     entriesDal.filterUniqueLocationEntries({
       locationId: targetId,
       entryCandidates: entryCandidates,
-    }, function (errf, uniqueEntries) {
+    }, (errf, uniqueEntries) => {
       if (errf) {
         return next(errf);
       }
 
       if (uniqueEntries.length > 0) {
         numEntriesCreated += uniqueEntries.length;
-        locationsModified.push(loc.existing);
+        locationsModified.push(batchLoc.existing);
       } else {
-        locationsSkipped.push(loc.existing);
+        locationsSkipped.push(batchLoc.existing);
       }
 
       // ...and then create them.
       dallib.createEntries({
-        locationId: loc.existing._id,
-        locationName: loc.existing.name,
+        locationId: batchLoc.existing._id,
+        locationName: batchLoc.existing.name,
         username: args.username,
         entries: uniqueEntries,
       }, next);
     });
-  }, function (errs) {
+  }, (errs) => {
     if (errs) {
       return callback(errs);
     }
@@ -352,8 +356,8 @@ exports.mergeEntries = function (args, callback) {
 };
 
 
-exports.writeBatchOutcome = function (outcome, cb) {
-  // Write a JSON file about the outcome of an import.
+exports.writeBatchOutcome = (outcome, cb) => {
+  // Write a JSON file about the outcome of an batch run.
   //
   // Parameters
   //   outcome
@@ -363,7 +367,7 @@ exports.writeBatchOutcome = function (outcome, cb) {
   //   cb
   //     function (err)
   //
-  var outcomePath = outcomePathFromBatchId(outcome.batchId);
+  const outcomePath = outcomePathFromBatchId(outcome.batchId);
 
   fs.writeJSON(outcomePath, outcome, cb);
 };

@@ -6,11 +6,11 @@
 //   https://googlemaps.github.io/google-maps-services-js
 //   /docs/GoogleMapsClient.html
 
-var config = require('tresdb-config');
-var api = require('@googlemaps/google-maps-services-js');
-var _ = require('lodash');
+const config = require('georap-config');
+const api = require('@googlemaps/google-maps-services-js');
+const _ = require('lodash');
 
-var googleMapsClient = new api.Client({});
+const googleMapsClient = new api.Client({});
 
 exports.LIMIT_PER_SECOND = 50;
 exports.LIMIT_PER_DAY = 2500;
@@ -30,24 +30,28 @@ exports.reverseGeocode = function (latlng, callback) {
         key: config.googleMapsKey,
         latlng: latlng,
         language: 'en', // 'fi',
-        'result_type': 'political',
+        'result_type': 'political|natural_feature',
       },
       timeout: 1000, // ms
     })
-    .then(function (mapsResponse) {
-      var result, places;
+    .then((mapsResponse) => {
+      let result, places;
 
       if (mapsResponse.data.results.length === 0) {
-        places = [];
+        // NOTE Here was a bug prior to 2021-04-20 such that we
+        // set unknown places back to []. This caused worker to
+        // query Google API endlessly because worker tries to find
+        // places for locations with places prop equal to []
+        places = ['Remote territory'];
       } else {
         // First of the multiple results seems to be the most accurate.
         result = mapsResponse.data.results[0];
 
         // Response contains an array of placenames.
         // Skip the ones with type postal_code.
-        places = result.address_components.filter(function (c) {
+        places = result.address_components.filter((c) => {
           return c.types[0] !== 'postal_code';
-        }).map(function (c) {
+        }).map((c) => {
           return c.long_name;
         });
 
@@ -62,7 +66,7 @@ exports.reverseGeocode = function (latlng, callback) {
 
       return callback(null, places);
     })
-    .catch(function (err) {
+    .catch((err) => {
       console.error(err);
       return callback(err);
     });

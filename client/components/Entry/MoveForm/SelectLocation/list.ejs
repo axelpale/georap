@@ -1,0 +1,8 @@
+<div class="list-group">
+<% locations.forEach(function (loc) { %>
+  <button type="button" class="list-group-item" data-location-id="<%= loc._id %>" data-location-name="<%= loc.name %>"><%= loc.name %></button>
+<% }) %>
+<% if (locations.length === 0) { %>
+  <button type="button" class="list-group-item">No locations found for '<%= phrase %>'</button>
+<% } %>
+</div>

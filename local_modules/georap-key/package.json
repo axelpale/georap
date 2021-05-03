@@ -1,0 +1,25 @@
+{
+  "name": "georap-key",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Random key generation",
+  "keywords": [],
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/axelpale/georap.git"
+  },
+  "scripts": {
+    "lint": "standard",
+    "test": "standard"
+  },
+  "author": "Akseli Palén <akseli.palen@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "nanoid": "^3.1.20",
+    "nanoid-dictionary": "^4.2.0"
+  },
+  "devDependencies": {
+    "standard": "*"
+  }
+}

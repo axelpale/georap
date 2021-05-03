@@ -4,8 +4,8 @@ module.exports = function (str) {
   // Return
   //   null if not valid
   //   [lat, lng] otherwise
-  var lat, lng;
-  var parts = str.trim().split(/\s*[,;:\s]\s*/);
+  let lat, lng;
+  const parts = str.trim().split(/\s*[,;:\s]\s*/);
   if (parts.length === 2) {
     lat = parseFloat(parts[0]);
     lng = parseFloat(parts[1]);

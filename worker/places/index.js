@@ -1,38 +1,38 @@
 
-var db = require('tresdb-db');
-var googlemaps = require('../../server/services/googlemaps');
-var async = require('async');
+const db = require('georap-db');
+const googlemaps = require('../../server/services/googlemaps');
+const asyn = require('async');
 
 // For Google Maps API usage limits, see:
 // https://developers.google.com/maps/documentation/geocoding/usage-limits
-var SECOND = 1000;
-var PLACES_PER_SECOND = googlemaps.LIMIT_PER_SECOND;  // lag provides margin
-var PLACES_PER_JOB = 30;
-var INTERVAL = Math.round(SECOND / PLACES_PER_SECOND);
+const SECOND = 1000;
+const PLACES_PER_SECOND = googlemaps.LIMIT_PER_SECOND;  // lag provides margin
+const PLACES_PER_JOB = 30;
+const INTERVAL = Math.round(SECOND / PLACES_PER_SECOND);
 
 exports.run = function (callback) {
 
-  var coll = db.collection('locations');
+  const coll = db.collection('locations');
 
-  var cursor = coll.find({ places: [] }).limit(PLACES_PER_JOB);
+  const cursor = coll.find({ places: [] }).limit(PLACES_PER_JOB);
 
-  var reverseAndStore = function (loc, cb) {
+  const reverseAndStore = function (loc, cb) {
     // Parameters:
     //   loc
     //     raw location
     //   cb
     //     function (err)
 
-    var latlng = [loc.geom.coordinates[1], loc.geom.coordinates[0]];
+    const latlng = [loc.geom.coordinates[1], loc.geom.coordinates[0]];
 
-    googlemaps.reverseGeocode(latlng, function (err, places) {
+    googlemaps.reverseGeocode(latlng, (err, places) => {
       if (err) {
         return cb(err);
       }
 
-      var q = { _id: loc._id };
-      var u = { $set: { places: places } };
-      coll.updateOne(q, u, function (err2) {
+      const q = { _id: loc._id };
+      const u = { $set: { places: places } };
+      coll.updateOne(q, u, (err2) => {
         if (err2) {
           return cb(err2);
         }
@@ -41,22 +41,22 @@ exports.run = function (callback) {
     });
   };
 
-  cursor.toArray(function (err, locs) {
+  cursor.toArray((err, locs) => {
     if (err) {
       return callback(err);
     }
 
-    async.eachSeries(locs, function iteratee(loc, cb) {
-      setTimeout(function () {
+    asyn.eachSeries(locs, (loc, cb) => {
+      setTimeout(() => {
         reverseAndStore(loc, cb);
       }, INTERVAL);
-    }, function (err2) {
+    }, (err2) => {
       if (err2) {
         return callback(err2);
       }
 
-      var msg = 'places: reverse geocodes for ' + locs.length + ' locations ' +
-                'computed and stored.';
+      const msg = 'places: reverse geocodes for ' + locs.length +
+                  ' locations computed and stored.';
       console.log(msg);
       return callback();
     });

@@ -1,5 +1,5 @@
 
-var db = require('tresdb-db');
+const db = require('georap-db');
 
 exports.getUserForAdmin = function (username, callback) {
   // Fetch an array of users with admin-only information such as email.
@@ -17,12 +17,12 @@ exports.getUserForAdmin = function (username, callback) {
     throw new Error('invalid parameters');
   }
 
-  var coll = db.collection('users');
-  var q = { name: username };
-  var proj = { hash: false };
+  const coll = db.collection('users');
+  const q = { name: username };
+  const proj = { hash: false };
 
-  coll.find(q).project(proj).toArray(function (err, users) {
-    var u;
+  coll.find(q).project(proj).toArray((err, users) => {
+    let u;
 
     if (err) {
       return callback(err);
@@ -53,11 +53,11 @@ exports.setRole = function (username, isAdmin, callback) {
     throw new Error('invalid parameters');
   }
 
-  var coll = db.collection('users');
-  var q = { name: username };
-  var up = { $set: { 'admin': isAdmin } };
+  const coll = db.collection('users');
+  const q = { name: username };
+  const up = { $set: { 'admin': isAdmin } };
 
-  coll.updateOne(q, up, function (err) {
+  coll.updateOne(q, up, (err) => {
     if (err) {
       return callback(err);
     }
@@ -80,11 +80,11 @@ exports.setStatus = function (username, newStatus, callback) {
     throw new Error('invalid parameters');
   }
 
-  var coll = db.collection('users');
-  var q = { name: username };
-  var up = { $set: { 'status': newStatus } };
+  const coll = db.collection('users');
+  const q = { name: username };
+  const up = { $set: { 'status': newStatus } };
 
-  coll.updateOne(q, up, function (err) {
+  coll.updateOne(q, up, (err) => {
     if (err) {
       return callback(err);
     }

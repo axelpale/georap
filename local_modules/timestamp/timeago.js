@@ -1,4 +1,3 @@
-/* eslint-disable no-magic-numbers, */
 /* eslint-disable no-useless-escape,no-bitwise */
 
 // Forked from

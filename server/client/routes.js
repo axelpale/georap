@@ -1,8 +1,8 @@
 /* eslint-disable new-cap */
 
-var handlers = require('./handlers');
-var express = require('express');
-var router = express.Router();
+const handlers = require('./handlers');
+const express = require('express');
+const router = express.Router();
 
 // Support for Add Home Screen.
 router.get('/manifest.webmanifest', handlers.getManifest);

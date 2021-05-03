@@ -1,14 +1,14 @@
-var db = require('tresdb-db');
-var loadFixture = require('./lib/loadFixture');
+const db = require('georap-db');
+const loadFixture = require('./lib/loadFixture');
 
 module.exports = function (callback) {
   // Build a loadable fixture without any collections.
-  var fixture = {
+  const fixture = {
     collections: {},
     indices: db.INDICES,
   };
 
-  loadFixture(fixture, function (err) {
+  loadFixture(fixture, (err) => {
     if (err) {
       console.error('Loading indices failed.');
       return callback(err);

@@ -1,0 +1,24 @@
+<% if (results.length === 0) { %>
+
+  <ul class="list-group">
+    <li class="list-group-item tresdb-disabled" style="text-align: center">No results</li>
+  </ul>
+
+<% } else { %>
+
+  <ul class="list-group">
+  <% results.forEach(function (result) { %>
+    <% var comps = result.address_components %>
+    <% var geom = result.geometry %>
+    <% var latlng = geom.location %>
+    <% var zoom = boundsToZoom(geom.viewport) %>
+    <li class="list-group-item">
+      <a href="/?lat=<%= latlng.lat() %>&lng=<%= latlng.lng() %>&zoom=<%= zoom %>"><%= comps.map(function (comp) {
+        var title = comp.types.join(', ');
+        var value = comp.long_name;
+        return '<span title="' + title + '">' + value + '</span>';
+      }).join(', ') %></a>
+    </li>
+  <% }); %>
+  </ul>
+<% } %>

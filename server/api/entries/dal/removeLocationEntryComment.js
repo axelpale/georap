@@ -1,0 +1,69 @@
+const db = require('georap-db');
+const entryModel = require('georap-models').entry;
+const eventsDal = require('../../events/dal');
+
+module.exports = (params, callback) => {
+  // Parameters:
+  //   params
+  //     username
+  //     locationId
+  //     locationName
+  //     entry
+  //       entry object. Needed to determine next entry.activeAt.
+  //     commentId
+  //       determines the comment to remove
+  //   callback
+  //     function (err)
+
+  const coll = db.collection('entries');
+  const filter = { _id: params.entryId };
+
+  // Comment to remove
+  const commentId = params.commentId;
+  // Entry before removal
+  const entryBefore = params.entry;
+
+  // Collect removed comment to pass to event creation.
+  const removedComment = entryBefore.comments.find((comm) => {
+    return comm.id === commentId;
+  });
+
+  // If comment already removed, exit early and successfully
+  if (!removedComment) {
+    return callback();
+  }
+
+  // Determine next activeAt.
+  const entryAfter = Object.assign({}, entryBefore, {
+    comments: entryBefore.comments.filter((comm) => {
+      return comm.id !== commentId;
+    }),
+  });
+
+  const update = {
+    $set: {
+      activeAt: entryModel.activeAt(entryAfter),
+    },
+    $pull: {
+      comments: {
+        id: commentId,
+      },
+    },
+  };
+
+  coll.updateOne(filter, update, (err) => {
+    if (err) {
+      return callback(err);
+    }
+
+    const eventParams = {
+      username: params.username,
+      locationId: params.locationId,
+      locationName: params.locationName,
+      entryId: params.entry._id,
+      commentId: params.commentId,
+      comment: removedComment,
+    };
+    eventsDal.createLocationEntryCommentRemoved(eventParams, callback);
+  });
+};

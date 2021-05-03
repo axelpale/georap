@@ -1,14 +1,14 @@
-var normalizeDescriptions = require('./normalizeDescriptions');
-var combineCoordinates = require('./combineCoordinates');
-var normalizeOverlays = require('./normalizeOverlays');
-var normalizeName = require('./normalizeName');
-var makeEntries = require('./makeEntries');
-var TEMPLATE = require('./template');
-var camaro = require('camaro');
+const normalizeDescriptions = require('./normalizeDescriptions');
+const combineCoordinates = require('./combineCoordinates');
+const normalizeOverlays = require('./normalizeOverlays');
+const normalizeName = require('./normalizeName');
+const makeEntries = require('./makeEntries');
+const TEMPLATE = require('./template');
+const camaro = require('camaro');
 
 // Interface
 
-module.exports = function (kmlBuffer, callback) {
+module.exports = (kmlBuffer, callback) => {
   // Find an array of locations from a KML file.
   //
   // Parameters
@@ -41,13 +41,13 @@ module.exports = function (kmlBuffer, callback) {
     throw new Error('parsekml requires a Buffer or string');
   }
 
-  camaro.transform(kmlBuffer, TEMPLATE).then(function (result) {
+  camaro.transform(kmlBuffer, TEMPLATE).then((result) => {
     // Combine locations from each folder
-    var combinedLocations = result.rootLocations;
-    result.folders.forEach(function (folder) {
+    let combinedLocations = result.rootLocations;
+    result.folders.forEach((folder) => {
 
       if (folder.locations.length > 0) {
-        var first = folder.locations[0];
+        const first = folder.locations[0];
 
         first.descriptions = [folder.description];
         first.overlays = folder.overlays;
@@ -57,16 +57,16 @@ module.exports = function (kmlBuffer, callback) {
     });
 
     // Format locations: remove empty properties etc
-    var formattedLocations = combinedLocations.map(function (loc) {
+    const formattedLocations = combinedLocations.map((loc) => {
       // Replace empty names with something.
       loc.name = normalizeName(loc);
       // Combine coordinates from Point, LineString, and Polygon.
-      var avgLonLat = combineCoordinates(loc);
+      const avgLonLat = combineCoordinates(loc);
       // Combine and filter descriptions and overlays
-      var finalDescriptions = normalizeDescriptions(loc, avgLonLat);
-      var finalOverlays = normalizeOverlays(loc);
+      const finalDescriptions = normalizeDescriptions(loc, avgLonLat);
+      const finalOverlays = normalizeOverlays(loc);
       // Transform descriptions and overlays to entries
-      var finalEntries = makeEntries(finalOverlays, finalDescriptions);
+      const finalEntries = makeEntries(finalOverlays, finalDescriptions);
       // A temporary format for locations to import.
       return {
         name: loc.name,
@@ -77,7 +77,7 @@ module.exports = function (kmlBuffer, callback) {
     });
 
     // Filter out locations with no valid coordinates:
-    var validatedLocations = formattedLocations.filter(function (loc) {
+    const validatedLocations = formattedLocations.filter((loc) => {
       if (typeof loc.name === 'string') {
         if (typeof loc.longitude === 'number' && !isNaN(loc.longitude)) {
           if (typeof loc.latitude === 'number' && !isNaN(loc.latitude)) {
@@ -89,7 +89,7 @@ module.exports = function (kmlBuffer, callback) {
     });
 
     return callback(null, validatedLocations);
-  }).catch(function (err) {
+  }).catch((err) => {
     return callback(err);
   });
 };

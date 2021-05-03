@@ -1,5 +1,6 @@
-var eventFilters = require('pretty-events');
-var getPoints = require('tresdb-points');
+const eventFilters = require('pretty-events');
+const getPoints = require('georap-points');
+const config = require('georap-config');
 
 exports.sumPoints = function (evs) {
   // Return sum of points of given events.
@@ -8,39 +9,76 @@ exports.sumPoints = function (evs) {
   // from accumulating points.
   // TODO aggregate actions per location and give points based on the aggregate
   // instead of independent events.
-  var filteredEvs = eventFilters.mergeSimilar(evs);
+  const filteredEvs = eventFilters.mergeSimilar(evs);
 
-  return filteredEvs.reduce(function (acc, ev) {
-    return acc + getPoints(ev);
+  return filteredEvs.reduce((acc, ev) => {
+    return acc + getPoints(config, ev);
   }, 0);
 };
 
-exports.sumVisits = function (evs) {
-  return evs.reduce(function (acc, ev) {
+exports.sumFlags = function (evs) {
+  // Flag statistics
+  //
+  // Parameters
+  //   evs
+  //     array of events
+  //
+  // Return
+  //   array of flagCount objects
+  //     name
+  //       flag name
+  //     count
+  //       integer
+  //
+  const flagNames = Object.keys(config.entryFlags);
+  const initFlagCounts = flagNames.reduce((acc, flagName) => {
+    acc[flagName] = 0;
+    return acc;
+  }, {});
+
+  const flagCounts = evs.reduce((acc, ev) => {
     if (ev.type === 'location_entry_changed') {
-      if (ev.data.oldIsVisit === true && ev.data.newIsVisit === false) {
-        return acc - 1;
+      if (ev.data.original.flags) {
+        ev.data.original.flags.forEach((flagName) => {
+          acc[flagName] -= 1;
+        });
       }
-      if (ev.data.oldIsVisit === false && ev.data.newIsVisit === true) {
-        return acc + 1;
+      if (ev.data.delta.flags) {
+        ev.data.delta.flags.forEach((flagName) => {
+          acc[flagName] += 1;
+        });
       }
       return acc;
     }
     if (ev.type === 'location_entry_created') {
-      if (ev.data.isVisit === true) {
-        return acc + 1;
-      }
+      ev.data.entry.flags.forEach((flagName) => {
+        acc[flagName] += 1;
+      });
+      return acc;
     }
     if (ev.type === 'location_entry_removed') {
-      // No good way to determine if visit or not. Punish the remover.
-      return acc - 1;
+      ev.data.entry.flags.forEach((flagName) => {
+        acc[flagName] -= 1;
+      });
+      return acc;
     }
     return acc;
-  }, 0);
+  }, initFlagCounts);
+
+  // Convert to ordered array
+  return flagNames.map((flagName) => {
+    const flagConf = config.entryFlags[flagName];
+    return {
+      name: flagName,
+      plural: flagConf.plural,
+      glyphicon: flagConf.glyphicon,
+      count: flagCounts[flagName],
+    };
+  });
 };
 
 exports.sumCreations = function (evs) {
-  return evs.reduce(function (acc, ev) {
+  return evs.reduce((acc, ev) => {
     if (ev.type === 'location_created') {
       return acc + 1;
     }
@@ -52,7 +90,7 @@ exports.sumCreations = function (evs) {
 };
 
 exports.sumPosts = function (evs) {
-  return evs.reduce(function (acc, ev) {
+  return evs.reduce((acc, ev) => {
     if (ev.type === 'location_entry_created') {
       return acc + 1;
     }
@@ -64,7 +102,7 @@ exports.sumPosts = function (evs) {
 };
 
 exports.sumComments = function (evs) {
-  return evs.reduce(function (acc, ev) {
+  return evs.reduce((acc, ev) => {
     if (ev.type === 'location_entry_comment_created') {
       return acc + 1;
     }
@@ -76,7 +114,7 @@ exports.sumComments = function (evs) {
 };
 
 exports.sumClassifications = function (evs) {
-  return evs.reduce(function (acc, ev) {
+  return evs.reduce((acc, ev) => {
     if (ev.type === 'location_tags_changed') { // legacy
       return acc + ev.data.newTags.length - ev.data.oldTags.length;
     }

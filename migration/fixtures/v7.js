@@ -1,8 +1,7 @@
-/* eslint-disable no-magic-numbers */
 // NOTE This file is an important documentation of the data structure of v7.
 
-var c = require('./common');
-var db = require('tresdb-db');
+const c = require('./common');
+const db = require('georap-db');
 
 module.exports = {
   collections: {

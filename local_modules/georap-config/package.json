@@ -1,0 +1,23 @@
+{
+  "name": "georap-config",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Provide tresdb configuration as a package",
+  "keywords": [],
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/axelpale/georap.git"
+  },
+  "scripts": {
+    "lint": "eslint --config ../../.eslintrc.js *.js && echo OK"
+  },
+  "author": "Akseli Palén <akseli.palen@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "ajv": "^6.12.6"
+  },
+  "devDependencies": {
+    "eslint": "^7.11.0"
+  }
+}

@@ -1,13 +1,13 @@
-# tresdb
+# Georap
 
 ![Example](doc/tresdb_menu.jpg)
 
-Everyone has their own secret places. TresDB, a geographical content managing system, was created to allow you to browse, manage, and describe geolocations in a fun, easy and social manner. It is for persons, groups, or organisations who want to share, document, and discuss locations. It for them who want to keep all data in their own hands. Whether your topic is nature, constructions, urban exploration, traveling, berry picking, or treasure hunting, we bet you will find TresDB useful.
+Everyone has their own secret places. Georap, a geographical content managing system and formerly known as TresDB, was created to allow you to browse, manage, and describe geolocations in a fun, easy and social manner. It is for persons, groups, or organisations who want to share, document, and discuss locations. It for them who want to keep all data in their own hands. Whether your topic is nature, constructions, urban exploration, traveling, berry picking, or treasure hunting, we bet you will find Georap useful.
 
 ## Features
 
 ![](doc/10-full-map-view.jpg)<br>
-1/9. TresDB can handle practically unlimited number of locations. Hierarchical grouping of map markers keeps things smooth and fast.
+1/9. Georap can handle practically unlimited number of locations. Hierarchical grouping of map markers keeps things smooth and fast.
 
 ![](doc/20-location-and-images.jpg)<br>
 2/9. Users create and import new locations for the community to discuss and remember. Each location receives own page.
@@ -55,28 +55,28 @@ Read on for technical details and installation instructions.
 
 ## Install
 
-TresDB is a web application and thus requires installation to a web server. The web server is required to have Node.js and MongoDB available.
+Georap is a web application and thus requires installation to a web server. The web server is required to have Node.js and MongoDB available.
 
 We assume you have Node.js v10 or later and MongoDB v4 or later already installed. See [mongodb.org/downloads](https://www.mongodb.org/downloads) for instructions. For example on macOS:
 
     $ brew install mongodb
 
-To install TresDB, first clone the repository:
+To install Georap, first clone the repository:
 
-    $ git clone https://github.com/axelpale/tresdb.git
+    $ git clone https://github.com/axelpale/georap.git
 
 Second, install dependencies:
 
-    $ cd tresdb
+    $ cd georap
     $ npm install
 
-Fourth, create a MongoDB database named `tresdb` and create necessary database users. For a demo setup or development purposes, just install the default users:
+Fourth, create a MongoDB database named `georap` and create necessary database users. For a demo setup or development purposes, just install the default users:
 
     $ npm run mongod:init
 
 Do not use the defaults in production. For production, see detailed [MongoDB user setup](#mongodb-user-setup).
 
-Fifth, copy `config-sample/` as `config/`. The directory contains the main configuration for your TresDB app, including the title of the app, Google Maps API key, marker icons, and multiple other settings. Modify it to match your needs. The config will be validated whenever the server app is started.
+Fifth, copy `config-sample/` as `config/`. The directory contains the main configuration for your Georap app, including the title of the app, Google Maps API key, marker icons, and multiple other settings. Modify it to match your needs. The config will be validated whenever the server app is started.
 
     $ cp -R config-sample config
     $ nano config/index.js
@@ -85,7 +85,7 @@ After successful configuration, the final installation step is to populate the d
 
     $ npm run migrate
 
-Now your TresDB instance is successfully installed and ready to be started.
+Now your Georap instance is successfully installed and ready to be started.
 
 ## Start up
 
@@ -95,7 +95,7 @@ First, after installation, start MongoDB in auth mode by running:
 
 If it ever refuses to stop, try `killall mongod`. Happens sometimes.
 
-Second, build the TresDB client app code. A bundle will be placed in the static file directory specified in the configuration.
+Second, build the Georap client app code. A bundle will be placed in the static file directory specified in the configuration.
 
     $ npm run build
 
@@ -103,7 +103,7 @@ Third, run a worker to compute search keywords and other cached data. Single run
 
     $ npm run worker
 
-Finally, start the TresDB Node.js server on port `3000`. If you need another port, see the configuration file.
+Finally, start the Georap Node.js server on port `3000`. If you need another port, see the configuration file.
 
     $ npm start
 
@@ -113,7 +113,7 @@ Congratulations, all set up! Browse to [localhost:3000](http://localhost:3000) a
 
 ## Environments
 
-TresDB's Node server can be started in 3 environments: `development`, `production`, and `test`. Specify the environment to use by setting the `NODE_ENV` environment variable. The effects of each env is listed below:
+Georap's Node server can be started in 3 environments: `development`, `production`, and `test`. Specify the environment to use by setting the `NODE_ENV` environment variable. The effects of each env is listed below:
 
 - `production`: Default.
 - `development`: Client app bundles are not minified.
@@ -135,7 +135,7 @@ These helpful scripts are defined in `package.json`. See it for details.
 
 Alias for [npm run server:production](#npm-run-server-production)
 
-### npm run watchstart
+### npm run start:watch
 
 For development. Lint and re-run the server each time server code is modified.
 
@@ -143,7 +143,9 @@ For development. Lint and re-run the server each time server code is modified.
 
 Builds the client with webpack.
 
-### npm run watchbuild
+Webpack chunks the bundle. Usually a chunk contains a View. The chunk names are defined in client/routes.
+
+### npm run build:watch
 
 For development. Lint and rebuild the client code bundle each time client code is modified.
 
@@ -179,7 +181,7 @@ Runs ESLint over the whole codebase. See `.eslintrc.js` and `client/.eslintrc.js
 
 Requirements: MongoDB is running
 
-Starts mongo client on tresdb database.
+Starts mongo client on georap database.
 
 ### npm run mongo:test
 
@@ -261,9 +263,9 @@ Server logs are stored under `.data/logs/` by default. To change the dir, edit `
 
 Warning: always back up before attempting to migrate. See [Database backups](#database-backups).
 
-During development, the database schema can and will evolve. For each schema evolution step, the major package version is increased (e.g. from 1.2.3 to 2.0.0). To update old TresDB instances and their databases, we provide programmatic migration steps for each version increment and a script to execute them.
+During development, the database schema can and will evolve. For each schema evolution step, the major package version is increased (e.g. from 1.2.3 to 2.0.0). To update old Georap or TresDB instances and their databases, we provide programmatic migration steps for each version increment and a script to execute them.
 
-First, pull the desired TresDB version from git:
+First, pull the desired Georap version from git:
 
     $ git pull
 
@@ -291,24 +293,24 @@ To update the client and server, rebuild and restart:
 
 To take a snapshot of the database with [mongodump](https://docs.mongodb.com/v3.6/reference/program/mongodump/):
 
-    $ mongodump --username <user> --password <userpwd> --db tresdb
+    $ mongodump --username <user> --password <userpwd> --db georap
 
 If you want to take the snapshot as the admin user, add `--authenticationDatabase admin` to the command.
 
-To restore the snapshot with [mongorestore](https://docs.mongodb.com/v3.6/reference/program/mongorestore/):
+To restore the snapshot with [mongorestore](https://docs.mongodb.com/v3.6/reference/program/mongorestore/). Use `--drop` to drop existing collections before restore:
 
-    $ mongorestore --username <user> --password <userpwd> --db tresdb dump/tresdb
+    $ mongorestore --username <user> --password <userpwd> --drop --db georap dump/georap
 
 After restoring it might be necessary to run migrate and worker:
 
     $ npm run migrate
     $ npm run worker
 
-
+In rare cases, restore can leave indices in odd state. If this happens, execute `db.<collection>.reIndex()` for each collection. However, `reIndex` requires the user to have role `dbAdmin` on the database. For development purposes `db.grantRolesToUser('mongoadmin',[{ db: 'georap', role: 'dbAdmin' }])` will do the trick.
 
 ## MongoDB user setup
 
-We recommend running MongoDB in auth mode to prevent free access to the database. For that, we create three database users: one to add new database users, one to access the main database from TresDB app, and one to access the test database. The last is required only to run the test suite.
+We recommend running MongoDB in auth mode to prevent free access to the database. For that, we create three database users: one to add new database users, one to access the main database from Georap app, and one to access the test database. The last is required only to run the test suite.
 
 To create users, start mongod without authentication:
 
@@ -320,22 +322,22 @@ Create an administrator that can add other users. Create the admin user into `ad
     $ mongo
     > use admin
     > db.createUser({
-      user: 'foodmin',
-      pwd: 'barword',
+      user: 'mongoadmin',
+      pwd: 'mongoadminpwd',
       roles: ['userAdminAnyDatabase', 'backup']
     })
 
-Next, create a user with permission to access only `tresdb`. Note that this user needs to be created into `tresdb` database instead of `admin`. Thus, authenticate first on `admin`, and then switch to `tresdb` to create.
+Next, create a user with permission to access only `georap`. Note that this user needs to be created into `georap` database instead of `admin`. Thus, authenticate first on `admin`, and then switch to `georap` to create.
 
     > use admin
-    > db.auth('foodmin', 'barword')
-    > use tresdb
-    > db.createUser({ user: 'foo', pwd: 'bar', roles: ['readWrite'] })
+    > db.auth('mongoadmin', 'mongoadminpwd')
+    > use georap
+    > db.createUser({ user: 'mongouser', pwd: 'mongouserpwd', roles: ['readWrite'] })
 
 Then in similar manner, create the test user that can access only 'test':
 
     > use test
-    > db.createUser({ user: 'foo', pwd: 'bar', roles: ['readWrite'] })
+    > db.createUser({ user: 'mongouser', pwd: 'mongouserpwd', roles: ['readWrite'] })
 
 Press `ctrl + d` to quit `mongo` client.
 
@@ -343,8 +345,8 @@ Modify `mongo.url` and `mongo.testUrl` properties in `config/index.js` to includ
 
     ...
     mongo: {
-      url: 'mongodb://foo:bar@localhost:27017/tresdb',
-      testUrl: 'mongodb://foo:bar@localhost:27017/test'
+      url: 'mongodb://mongouser:mongouserpwd@localhost:27017/georap',
+      testUrl: 'mongodb://mongouser:mongouserpwd@localhost:27017/test'
     }
     ...
 
@@ -358,7 +360,7 @@ or alternatively just `$ npm run mongod`.
 
 ## Production
 
-Here are some notes and tips for putting your TresDB app into production.
+Here are some notes and tips for putting your Georap app into production.
 
 
 ### Check dependencies for vulnerabilities
@@ -439,7 +441,7 @@ Second, we need to connect to the production database. Often the remote database
 
 Third, we [mongoexport](https://docs.mongodb.com/manual/reference/program/mongoexport/) a remote collection and save it as a local JSON file:
 
-    $ mongoexport --host localhost:27018 --username remoteuser --password remoteword --db tresdb --collection locations --out tmp/locations.json
+    $ mongoexport --host localhost:27018 --username remoteuser --password remoteword --db georap --collection locations --out tmp/locations.json
 
 Repeat this for each collection you need. If you need all then repeat the above for `locations`, `users`, `events`, `entries`, and `config`.
 
@@ -449,7 +451,7 @@ Fourth, log out of production server or close the tunnel. If you exported the fi
 
 Fifth, ensure your development database is running. Then [mongoimport](https://docs.mongodb.com/manual/reference/program/mongoimport/) the files to the database:
 
-    $ mongoimport --username localfoouser --password localbarword --db tresdb --collection locations --file .tmp/locations.json
+    $ mongoimport --username localfoouser --password localbarword --db georap --collection locations --file .tmp/locations.json
 
 Use `--drop` flag if you need to clear each collection before importing.
 
@@ -482,7 +484,7 @@ Small updates to documentation are allowed to be done directly to `master`.
 
 ## Versioning
 
-On the master branch, we use the [semantic versioning](http://semver.org/) scheme. The semantic version increments are bound to the operations you need to do when upgrading your TresDB instance:
+On the master branch, we use the [semantic versioning](http://semver.org/) scheme. The semantic version increments are bound to the operations you need to do when upgrading your Georap instance:
 
 - MAJOR (+1.0.0) denotes a new incompatible feature. A database migration might be required after upgrade. Hyperlinks of earlier versions might not work.
 - MINOR (+0.1.0) denotes a new backwards-compatible feature. Upgrading directly from the Git should not break anything.
@@ -491,7 +493,7 @@ On the master branch, we use the [semantic versioning](http://semver.org/) schem
 
 ## Issues
 
-Report bugs and features to [GitHub issues](https://github.com/axelpale/tresdb/issues).
+Report bugs and features to [GitHub issues](https://github.com/axelpale/georap/issues).
 
 The issue labels follow [Drupal's issue priority levels](https://www.drupal.org/core/issue-priority): critical, major, normal, and minor.
 

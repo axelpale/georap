@@ -1,7 +1,7 @@
 // Markdown parsing.
-var TurndownService = require('turndown');
-var turndownService = new TurndownService();
-var striptags = require('striptags');
+const TurndownService = require('turndown');
+const turndownService = new TurndownService();
+const striptags = require('striptags');
 
 module.exports = function (desc) {
   // Convert to markdown. Remove all remaining html tags.
@@ -10,8 +10,8 @@ module.exports = function (desc) {
   if (typeof desc !== 'string') {
     return '';
   }
-  var spaced = desc.replace('/a><a', '/a>, <a');
-  var mark = turndownService.turndown(spaced.trim());
+  const spaced = desc.replace('/a><a', '/a>, <a');
+  const mark = turndownService.turndown(spaced.trim());
 
   return striptags(mark);
 };
