@@ -17,15 +17,12 @@ var template = require('./template.ejs');
 var Palette = require('./Palette');
 var locationApi = tresdb.stores.locations;
 
-module.exports = function (locationId, selectedImage, images) {
+module.exports = function (locationId, selectedImage) {
   // Parameters:
   //   locationId
   //     Id of the location in question
   //   selectedImage
   //     attachment object. The current location thumbnail attachment
-  //   images
-  //     array of attachment objects. Image attachments only.
-  //     These will be presented for the user to pick from.
   //
 
   // Setup
@@ -40,6 +37,14 @@ module.exports = function (locationId, selectedImage, images) {
 
     $mount.html(template({}));
 
+    // Display progress until palette loaded
+    $elems.progress = $mount.find('.progress-container');
+    children.progress = new uic.Progress();
+    children.progress.bind($elems.progress);
+
+    // Setup error view
+    $elems.error = $mount.find('.error-container');
+
     // Cancel button
     $elems.cancel = $mount.find('.form-cancel');
     $elems.cancel.click(function () {
@@ -47,45 +52,62 @@ module.exports = function (locationId, selectedImage, images) {
       self.emit('cancel');
     });
 
-    // Palette of thumbnails
-    $elems.palette = $mount.find('.palette-container');
-    children.palette = new Palette(selectedImage, images);
-    children.palette.bind($elems.palette);
+    // Get image attachment objects.
+    // These will be presented for the user to pick from.
+    locationApi.getAttachments({
+      locationId: locationId,
+      imagesOnly: true,
+    }, function (err, result) {
+      children.progress.unbind();
 
-    // Palette pick
-    children.palette.on('pick', function (att) {
-      self.emit('pick', att);
-    });
+      if (err) {
+        children.error = new uic.Error(err.message);
+        children.error.bind($elems.error);
+        return;
+      }
 
-    // Form submit
-    $elems.form = $mount.find('.location-thumbnails-form');
-    $elems.form.submit(function (ev) {
-      ev.preventDefault();
+      var images = result.attachments;
 
-      // Read selected attachment key
-      var key = children.palette.getSelectedKey();
+      // Palette of thumbnails
+      $elems.palette = $mount.find('.palette-container');
+      children.palette = new Palette(selectedImage, images);
+      children.palette.bind($elems.palette);
 
-      // If ok, hide form and reveal progress bar
-      ui.hide($elems.form);
+      // Palette pick
+      children.palette.on('pick', function (att) {
+        self.emit('pick', att);
+      });
 
-      children.progress = new uic.Progress();
-      children.progress.bind($mount.find('.progress-container'));
+      // Form submit
+      $elems.form = $mount.find('.location-thumbnails-form');
+      $elems.form.submit(function (ev) {
+        ev.preventDefault();
 
-      // Request thumbnail change
-      locationApi.setThumbnail(locationId, key, function (err) {
-        children.progress.unbind();
+        // Read selected attachment key
+        var key = children.palette.getSelectedKey();
 
-        if (err) {
-          // Show form
-          ui.show($elems.form);
-          // Show error
-          children.error = new uic.Error(err.message);
-          children.error.bind($mount.find('.error-container'));
+        // If ok, hide form and reveal progress bar
+        ui.hide($elems.form);
 
-          return;
-        }
+        children.progress = new uic.Progress();
+        children.progress.bind($elems.progress);
 
-        self.emit('success');
+        // Request thumbnail change
+        locationApi.setThumbnail(locationId, key, function (errs) {
+          children.progress.unbind();
+
+          if (errs) {
+            // Show form
+            ui.show($elems.form);
+            // Show error
+            children.error = new uic.Error(errs.message);
+            children.error.bind($mount.find('.error-container'));
+
+            return;
+          }
+
+          self.emit('success');
+        });
       });
     });
   };

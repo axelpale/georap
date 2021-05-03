@@ -7,10 +7,11 @@ var models = require('georap-models');
 var rootBus = require('georap-bus');
 var ui = require('georap-ui');
 
-module.exports = function (location, entries) {
+module.exports = function (location) {
   // Parameters:
-  //   location: plain location object
-  //   entries: an array of entry objects
+  //   location
+  //     A location object with thumbnail completed.
+  //     The attachments are loaded when the form is opened.
   //
 
   var $mount = null;
@@ -27,19 +28,16 @@ module.exports = function (location, entries) {
     $elems.open = $mount.find('.location-thumbnail-open');
 
     bus.on('location_entry_created', function (ev) {
-      models.entries.forward(entries, ev);
       models.location.forward(location, ev);
       self.update();
     });
 
     bus.on('location_entry_changed', function (ev) {
-      models.entries.forward(entries, ev);
       models.location.forward(location, ev);
       self.update();
     });
 
     bus.on('location_entry_removed', function (ev) {
-      models.entries.forward(entries, ev);
       models.location.forward(location, ev);
       self.update();
     });
@@ -57,10 +55,7 @@ module.exports = function (location, entries) {
         children.form.off('success');
         delete children.form;
       } else {
-        var atts = models.entries.getAttachments(entries);
-        var imgs = models.attachments.getImages(atts);
-        var locId = location._id;
-        children.form = new ThumbnailForm(locId, location.thumbnail, imgs);
+        children.form = new ThumbnailForm(location._id, location.thumbnail);
         children.form.bind($mount.find('.location-thumbnail-form-container'));
         children.form.once('cancel', function () {
           children.form.unbind();
