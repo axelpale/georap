@@ -41,9 +41,7 @@ module.exports = function (entry) {
   self.bind = function ($mountEl) {
     $mount = $mountEl;
 
-    $mount.html(template({
-      entryId: entry._id,
-    }));
+    $mount.html(template());
 
     // Render comments
     $elems.comments = $mount.find('.entry-comments');
