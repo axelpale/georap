@@ -217,36 +217,31 @@ exports.getEntries = function (params, callback) {
   });
 };
 
-exports.getLatest = function (range, callback) {
+exports.getLatest = function (params, callback) {
   // Fetch recent locations from server and return an array of locations objs.
   // Will call back with error if not found.
   //
   // Parameters:
-  //   range
+  //   params
   //     skip: skip first locations
   //     limit: number of locations to fetch
   //   callback
   //     function (err, locations)
   //
 
-  $.ajax({
+  return getJSON({
     url: '/api/locations/',
-    method: 'GET',
     data: { // url params
-      skip: range.skip,
-      limit: range.limit,
+      skip: params.skip,
+      limit: params.limit,
     },
-    dataType: 'json', // response data type
-    headers: { 'Authorization': 'Bearer ' + account.getToken() },
-    success: function (response) {
-      return callback(null, {
-        locations: response.locations,
-        locationCount: response.locationCount,
-      });
-    },
-    error: function (jqxhr, status, statusMessage) {
-      return callback(new Error(statusMessage));
-    },
+  }, function (err, result) {
+    if (err) {
+      return callback(err);
+    }
+
+    // Result is { locations, locationCount }
+    return callback(null, result);
   });
 };
 
