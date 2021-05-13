@@ -22,6 +22,7 @@ const iter = require('../../lib/iter');
 const removeOrphanEvents = require('./removeOrphanEvents');
 const migrateEntry = require('./migrateEntry');
 const getThumbnail = require('./getThumbnail');
+const addCreatedAt = require('./addCreatedAt');
 const addActiveAt = require('./addActiveAt');
 const removeVisitStatistics = require('./removeVisitStatistics');
 
@@ -129,43 +130,8 @@ const substeps = [
     });
   },
 
-  function addCreatedAt(nextStep) {
-    console.log('6. Add createdAt prop to each location...');
-
-    const coll = db.collection('locations');
-
-    iter.updateEach(coll, (origLoc, iterNext) => {
-      db.collection('events').findOne({
-        locationId: origLoc._id,
-        type: 'location_created',
-      }, (err, locEv) => {
-        if (err) {
-          return iterNext(err);
-        }
-
-        if (!locEv) {
-          const msg = 'Missing location_created event for ' + origLoc._id;
-          return iterNext(new Error(msg));
-        }
-
-        const loc = clone(origLoc);
-        loc.createdAt = locEv.time;
-        return iterNext(null, loc);
-      });
-    }, (err, iterResults) => {
-      if (err) {
-        return nextStep(err);
-      }
-
-      console.log('  ' + iterResults.numDocuments + ' locations processed ' +
-        'successfully.');
-      console.log('  ' + iterResults.numUpdated + ' locations updated, ' +
-        (iterResults.numDocuments - iterResults.numUpdated) + ' did not ' +
-        'need an update');
-
-      return nextStep();
-    });
-  },
+  // Add createdAt property to locations
+  addCreatedAt,
 
   function addThumbnail(nextStep) {
     console.log('7. Add thumbnail to each location...');
