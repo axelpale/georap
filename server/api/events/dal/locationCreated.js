@@ -1,4 +1,3 @@
-const db = require('georap-db');
 const lib = require('./lib');
 
 module.exports = (params, callback) => {
@@ -12,13 +11,15 @@ module.exports = (params, callback) => {
   //       float
   //     username
   //       string
+  //     time
+  //       timestamp used to create the location
   //   callback
   //     function (err);
   //
   const newEvent = {
     type: 'location_created',
     user: params.username,
-    time: db.timestamp(),
+    time: params.time,
     locationId: params.locationId,
     locationName: params.locationName,
     data: {

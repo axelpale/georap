@@ -56,18 +56,23 @@ exports.createLocation = function (args, callback) {
     }
 
     const newLoc = {
+      createdAt: db.timestamp(),
       creator: args.username,
       deleted: false,
-      published: false,
       geom: geom,
-      isLayered: true,
-      layer: layer,
       name: args.name,
       places: [],
+      published: false,
       status: config.locationStatuses[0],
       type: config.locationTypes[0],
       thumbnail: null,
-      visits: [],
+      // To be modified by worker
+      childLayer: 0,
+      isLayered: true,
+      layer: layer,
+      points: 0,
+      text1: '',
+      text2: '',
     };
 
     const coll = db.collection('locations');
@@ -85,6 +90,7 @@ exports.createLocation = function (args, callback) {
         lat: args.latitude,
         lng: args.longitude,
         username: newLoc.creator,
+        time: newLoc.createdAt,
       }, (err2) => {
         if (err2) {
           return callback(err2);
