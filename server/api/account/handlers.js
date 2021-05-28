@@ -51,7 +51,8 @@ exports.login = function (req, res, next) {
     }
 
     if (user === null) {
-      return res.sendStatus(status.UNAUTHORIZED);
+      const msg = 'Invalid username or password';
+      return res.status(status.UNAUTHORIZED).send(msg);
     }
 
     bcrypt.compare(password, user.hash, (err2, match) => {
@@ -62,7 +63,8 @@ exports.login = function (req, res, next) {
 
       if (!match) {
         // no password match => Authentication failure
-        return res.sendStatus(status.UNAUTHORIZED);
+        const msg = 'Invalid username or password';
+        return res.status(status.UNAUTHORIZED).send(msg);
       }
 
       // Else, success. Passwords match.

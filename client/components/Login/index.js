@@ -5,6 +5,9 @@ var ui = require('georap-ui');
 var emitter = require('component-emitter');
 var validator = require('email-validator');
 
+var UNAUTHORIZED = 401;
+var FORBIDDEN = 403;
+
 module.exports = function (onSuccess) {
   // Parameters:
   //   onSuccess
@@ -32,7 +35,7 @@ module.exports = function (onSuccess) {
       return onSuccess();
     }
 
-    if (err.name === 'Unauthorized') {
+    if (err.code === UNAUTHORIZED) {
       // Show error
       ui.show($incorrect);
       // Show forms
@@ -42,7 +45,7 @@ module.exports = function (onSuccess) {
       return;
     } // else
 
-    if (err.name === 'Forbidden') {
+    if (err.code === FORBIDDEN) {
       // Show error for deactivated account. Keep login form hidden.
       var $msg = $deactivated.find('#tresdb-login-deactivated-message');
       $msg.html(err.message);
