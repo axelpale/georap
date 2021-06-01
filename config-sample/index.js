@@ -546,6 +546,29 @@ module.exports = {
       ],
     ],
     [
+      'Museovirasto',
+      'https://kartta.museoverkko.fi/' +
+      '?zoomLevel=<%= zoom - 6 %>&' +
+      'coord=<%= longitude %>_<%= latitude %>&' +
+      'mapLayers=' +
+      '17+100+default,' +
+      '133+100+Ei%20tunnuksia,' + // Kiinteät muinaisjäännökset, pisteet
+      '142+100+Ei%20tunnuksia,' + // Mahdolliset muinaisjäännökset, pisteet
+      '136+100+Ei%20tunnuksia,' + // Luonnonmuodostumat, pisteet
+      '145+100+Ei%20tunnuksia,' + // Muut kohteet, pisteet
+      '139+100+Ei%20tunnuksia,' + // Löytöpaikat, pisteet
+      '161+100+Ei%20tunnuksia&' + // Muut kulttuuriperintökohteet, pisteet
+      'markers=2|3|ff3334|<%= longitude %>_<%= latitude %>|' +
+      '<%= name %>',
+      'ETRS-TM35FIN',
+      [{ // Finland
+        east: 32.14,
+        north: 70.166,
+        south: 59.56,
+        west: 18.86,
+      }],
+    ],
+    [
       'Lantmäteriet',
       'https://minkarta.lantmateriet.se/' +
       '?e=<%= longitude %>&n=<%= latitude %>&' +
