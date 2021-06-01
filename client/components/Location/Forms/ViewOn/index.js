@@ -2,6 +2,7 @@
 var template = require('./template.ejs');
 var emitter = require('component-emitter');
 var ui = require('georap-ui');
+var mapStateStore = tresdb.stores.mapstate;
 
 var NAME = 0;
 var COORD_SYS = 2;
@@ -61,10 +62,12 @@ module.exports = function (location) {
     });
 
     // Compute service templates into URLs
+    var mapstate = mapStateStore.get();
     var exportServiceUrls = availableServices.map(function (es) {
       var altCoords = location.altGeom[es.system];
       var url = es.template({
         name: location.name,
+        zoom: mapstate.zoom,
         longitude: altCoords[0],
         latitude: altCoords[1],
       });
