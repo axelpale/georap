@@ -64,6 +64,7 @@ module.exports = function (location) {
     var exportServiceUrls = availableServices.map(function (es) {
       var altCoords = location.altGeom[es.system];
       var url = es.template({
+        name: location.name,
         longitude: altCoords[0],
         latitude: altCoords[1],
       });
