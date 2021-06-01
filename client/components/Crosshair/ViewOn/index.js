@@ -1,6 +1,7 @@
 var template = require('./template.ejs');
 var emitter = require('component-emitter');
 var exportsModel = require('georap-models').exports;
+var mapStateStore = tresdb.stores.mapstate;
 
 // Services that can be referenced by a link.
 // Collect the templates here for simpler code.
@@ -31,10 +32,15 @@ module.exports = function () {
         geoms
       );
 
+      // Get zoom
+      var zoom = mapStateStore.get().zoom;
+
       // Compute services into URLs
       var exportServiceUrls = exportsModel.getServiceUrls(
         availableServices,
-        geoms
+        geoms,
+        zoom,
+        '', // title for marker
       );
 
       var servHtml = exportsModel.getServiceButtons(exportServiceUrls);

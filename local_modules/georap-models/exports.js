@@ -68,7 +68,7 @@ exports.getAvailableServices = function (simplifiedExportServices, geoms) {
   })
 }
 
-exports.getServiceUrls = function (simplifiedServices, geoms) {
+exports.getServiceUrls = function (simplifiedServices, geoms, zoom, locName) {
   // Compute service templates into URLs
   //
   // Parameters:
@@ -84,6 +84,8 @@ exports.getServiceUrls = function (simplifiedServices, geoms) {
     var altCoords = geoms[es.system]
 
     var url = es.template({
+      name: locName,
+      zoom: zoom,
       longitude: altCoords[0],
       latitude: altCoords[1]
     })
