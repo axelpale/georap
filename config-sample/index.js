@@ -602,8 +602,9 @@ module.exports = {
     [
       'Finn.no',
       'https://kart.finn.no/' +
-      '?lng=<%= longitude %>&lat=<%= latitude %>' +
-      '&zoom=12&mapType=normaphd',
+      '?lng=<%= longitude %>&lat=<%= latitude %>&' +
+      'zoom=<%= Math.max(Math.min(zoom, 21), 4) %>&' +
+      'mapType=normaphd',
       'WGS84',
       [
         { // Northern Norway
