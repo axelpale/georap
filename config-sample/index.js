@@ -1,4 +1,4 @@
-var path = require('path');
+const path = require('path');
 
 module.exports = {
 
@@ -487,7 +487,14 @@ module.exports = {
     [
       'GeoHack',
       'https://tools.wmflabs.org/geohack/geohack.php' +
-      '?language=en&params=<%= latitude %>;<%= longitude %>_type:landmark',
+      '?language=en&params=<%= latitude %>;<%= longitude %>_type:' +
+      '<%= (zoom <= 5) ? "country" : ' +
+      '    (zoom <= 8) ? "state" : ' +
+      '    (zoom <= 10) ? "adm1st" : ' +
+      '    (zoom <= 11) ? "adm2nd" : ' +
+      '    (zoom <= 12) ? "adm3rd" : ' +
+      '    (zoom <= 13) ? "event" : ' +
+      '    (zoom <= 14) ? "airport" : "landmark" %>',
       'WGS84',
       [{ // Global
         east: 180,
@@ -499,7 +506,9 @@ module.exports = {
     [
       'Paikkatietoikkuna',
       'http://www.paikkatietoikkuna.fi/web/fi/kartta' +
-      '?ver=1.17&zoomLevel=8&coord=<%= longitude %>_<%= latitude %>&' +
+      '?ver=1.17&' +
+      'zoomLevel=<%= zoom - 6 %>&' +
+      'coord=<%= longitude %>_<%= latitude %>&' +
       'mapLayers=base_35+100+default&showMarker=true&showIntro=false',
       'ETRS-TM35FIN',
       [{ // Finland
@@ -514,7 +523,7 @@ module.exports = {
       'https://asiointi.maanmittauslaitos.fi/karttapaikka/' +
       '?lang=fi&share=customMarker&' +
       'n=<%= latitude %>&e=<%= longitude %>&' +
-      'zoom=8',
+      'zoom=<%= zoom - 6 %>',
       'ETRS-TM35FIN',
       [{ // Finland
         east: 32.14,
@@ -668,7 +677,7 @@ module.exports = {
   // See https://github.com/eslint/eslint/issues/657
   env: (function () {
     // eslint-disable-next-line no-process-env
-    var env = process.env.NODE_ENV;
+    const env = process.env.NODE_ENV;
 
     if (env === 'production' || env === 'development' || env === 'test') {
       return env;
