@@ -507,7 +507,7 @@ module.exports = {
       'Paikkatietoikkuna',
       'http://www.paikkatietoikkuna.fi/web/fi/kartta' +
       '?ver=1.17&' +
-      'zoomLevel=<%= zoom - 6 %>&' +
+      'zoomLevel=<%= Math.max(Math.min(zoom - 6, 13), 0) %>&' +
       'coord=<%= longitude %>_<%= latitude %>&' +
       'mapLayers=base_35+100+default&showMarker=true&showIntro=false',
       'ETRS-TM35FIN',
@@ -523,7 +523,7 @@ module.exports = {
       'https://asiointi.maanmittauslaitos.fi/karttapaikka/' +
       '?lang=fi&share=customMarker&' +
       'n=<%= latitude %>&e=<%= longitude %>&' +
-      'zoom=<%= zoom - 6 %>',
+      'zoom=<%= Math.max(Math.min(zoom - 6, 13), 0) %>',
       'ETRS-TM35FIN',
       [{ // Finland
         east: 32.14,
