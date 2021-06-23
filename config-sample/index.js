@@ -557,7 +557,7 @@ module.exports = {
     [
       'Museovirasto',
       'https://kartta.museoverkko.fi/' +
-      '?zoomLevel=<%= zoom - 6 %>&' +
+      '?zoomLevel=<%= Math.max(Math.min(zoom - 6, 12), 0) %>&' +
       'coord=<%= longitude %>_<%= latitude %>&' +
       'mapLayers=' +
       '17+100+default,' +
