@@ -533,7 +533,7 @@ module.exports = {
       }],
     ],
     [
-      'Oskari',
+      'Tampereen karttapalvelu',
       'https://kartat.tampere.fi/oskari/' +
       '?zoomLevel=<%= Math.max(Math.min(zoom - 6, 15), 5) %>&' +
       'coord=<%= longitude %>_<%= latitude %>&' +
