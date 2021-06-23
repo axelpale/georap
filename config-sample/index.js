@@ -535,7 +535,7 @@ module.exports = {
     [
       'Oskari',
       'https://kartat.tampere.fi/oskari/' +
-      '?zoomLevel=8&' +
+      '?zoomLevel=<%= Math.max(Math.min(zoom - 6, 15), 5) %>&' +
       'coord=<%= longitude %>_<%= latitude %>&' +
       'showMarker=true&showIntro=false',
       'ETRS-TM35FIN',
