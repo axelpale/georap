@@ -581,7 +581,8 @@ module.exports = {
       'Lantmäteriet',
       'https://minkarta.lantmateriet.se/' +
       '?e=<%= longitude %>&n=<%= latitude %>&' +
-      'z=12&background=1&boundaries=true',
+      'z=<%= Math.max(Math.min(zoom - 4, 15), 0) %>&' +
+      'background=1&boundaries=true',
       'SWEREF99-TM',
       [
         { // Northern Sweden
