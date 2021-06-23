@@ -637,7 +637,8 @@ module.exports = {
       'Gule Sider',
       'https://kart.gulesider.no/' +
       '?c=<%= latitude %>,<%= longitude %>&' +
-      'z=14&l=aerial',
+      'z=<%= Math.max(Math.min(zoom, 20), 3) %>&' +
+      'l=aerial',
       'WGS84',
       [
         { // Northern Norway
