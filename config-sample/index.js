@@ -7,15 +7,13 @@ module.exports = {
   title: 'My Georap App',
   description: 'A secret geographical portal',
 
-  // Initial viewport location. Initial sample locations are here.
-  // Default map state. At Irbene, the default samples' loc.
-  // @57.5727427,21.8783527,13z
+  // Initial map location for new users.
+  // Example locations are at @57.5727427,21.8783527,13z
   defaultMapState: {
     lat: 57.5727427,
     lng: 21.8783527,
     zoom: 13,
-    // 'hybrid' is darker and more practical than 'roadmap'
-    mapTypeId: 'hybrid',
+    mapTypeId: 'hybrid', // 'roadmap', 'satellite', 'hybrid', or 'terrain'
   },
 
   supportButtonTitle: 'Support us',
