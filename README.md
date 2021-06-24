@@ -61,22 +61,22 @@ We assume you have Node.js v10 or later and MongoDB v4 or later already installe
 
     $ brew install mongodb
 
-To install Georap, first clone the repository:
+To install Georap, first clone the repository. You only need the latest, thus `--depth 1`
 
-    $ git clone https://github.com/axelpale/georap.git
+    $ git clone --depth 1 https://github.com/axelpale/georap.git
 
 Second, install dependencies:
 
     $ cd georap
     $ npm install
 
-Fourth, create a MongoDB database named `georap` and create necessary database users. For a demo setup or development purposes, just install the default users:
+Fourth, create a MongoDB database named `georap` (or anything) and create necessary database users. For a demo setup or development purposes, just install the default users:
 
     $ npm run mongod:init
 
-Do not use the defaults in production. For production, see detailed [MongoDB user setup](#mongodb-user-setup).
+Do not use the default users in production. For production, see detailed [MongoDB user setup](#mongodb-user-setup).
 
-Fifth, copy `config-sample/` as `config/`. The directory contains the main configuration for your Georap app, including the title of the app, Google Maps API key, marker icons, and multiple other settings. Modify it to match your needs. The config will be validated whenever the server app is started.
+Fifth, copy `config-sample/` as `config/`. The directory contains the main configuration for your Georap app, including the title of the app, Google Maps API key, marker icons, and multiple other settings. Modify it to match your needs. The config will be validated whenever the server app is started and will notify you if something is wrong.
 
     $ cp -R config-sample config
     $ nano config/index.js
