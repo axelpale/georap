@@ -1,4 +1,7 @@
-exports.bind = function ($mount, view) {
+var $mount = null;
+
+exports.bind = function ($mountEl, view) {
+  $mount = $mountEl;
   // Max compatibility: call render method if available.
   if ('render' in view) {
     $mount.html(view.render());
@@ -7,6 +10,9 @@ exports.bind = function ($mount, view) {
   }
 };
 
-exports.unbind = function ($mount) {
-  $mount.empty();
+exports.unbind = function () {
+  if ($mount) {
+    $mount.empty();
+    $mount = null;
+  }
 };
