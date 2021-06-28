@@ -108,7 +108,8 @@ var LocationView = function (id, query) {
       // entries are loaded.
       entriesView.once('idle', function () {
         if (window.location.hash.substring(0, 9) === '#comment-') {
-          var scrollerEl = document.getElementById('card-layer-content');
+          var layerEl = document.getElementById('card-layer');
+          var scrollerEl = layerEl.querySelector('.card-layer-content');
           var commentEl = document.querySelector(window.location.hash);
           // Test if such comment exists
           if (commentEl) {

@@ -36,10 +36,6 @@ module.exports = function () {
   var _activeView = null;
   var _$mount = null;
 
-  // Elements known to exist;
-  var $content = $('#card-layer-content');
-
-
   // Public methods
 
   self.bind = function ($mount) {
@@ -95,7 +91,8 @@ module.exports = function () {
     }
     _activeView = view;
 
-    // Activate view.
+    // Render view into card.
+    var $content = _$mount.find('.card-layer-content');
     contentView.bind($content, view);
 
     // removes previous tresdb-card-* classes
@@ -142,7 +139,7 @@ module.exports = function () {
     }
 
     ui.hide(_$mount);
-    contentView.unbind($content);
+    contentView.unbind();
 
     if (!silent) {
       self.emit('closed');
