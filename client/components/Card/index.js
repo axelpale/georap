@@ -95,11 +95,11 @@ module.exports = function () {
     var $content = _$mount.find('.card-layer-content');
     contentView.bind($content, view);
 
-    // removes previous tresdb-card-* classes
-    _$mount.removeClass('tresdb-card-full');
-    _$mount.removeClass('tresdb-card-page');
+    // removes previous card-* classes
+    _$mount.removeClass('card-full');
+    _$mount.removeClass('card-page');
 
-    _$mount.addClass('tresdb-card-' + cardType);
+    _$mount.addClass('card-' + cardType);
     _activeView.bind($content);
 
     // Reveal if hidden

@@ -43,14 +43,14 @@ time {
   overflow: visible;
   background: white;
 }
-#card-layer.tresdb-card-full {
+#card-layer.card-full {
   top: 0;
   left: 0;
   height: 100%;
   width: 100%;
   max-width: 100%;
 }
-#card-layer.tresdb-card-page {
+#card-layer.card-page {
 }
 .card-close-icon {
   position: absolute;
@@ -70,7 +70,7 @@ time {
   height: 100%;
   overflow-y: scroll;
 }
-.tresdb-card-page .card-layer-content {
+.card-page .card-layer-content {
   padding-bottom: 18rem;
 }
 /* END Card */
