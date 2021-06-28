@@ -52,7 +52,7 @@ time {
 }
 #card-layer.tresdb-card-page {
 }
-#card-close-icon {
+.card-close-icon {
   position: absolute;
   bottom: 0;
   left: -2.3em;
