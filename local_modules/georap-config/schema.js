@@ -1,5 +1,26 @@
 // JSON schema for Georap config.
 
+// Define reuseable types first
+
+const iconObject = {
+  type: 'object',
+  properties: {
+    src: {
+      type: 'string',
+    },
+    sizes: {
+      type: 'string',
+    },
+    type: {
+      type: 'string',
+    },
+  },
+  required: ['src', 'sizes', 'type'],
+  additionalProperties: false,
+};
+
+// Then the full config
+
 module.exports = {
   type: 'object',
   properties: {
@@ -9,6 +30,14 @@ module.exports = {
     },
     description: {
       type: 'string',
+    },
+    icons: {
+      type: 'array',
+      items: iconObject,
+    },
+    appleTouchIcons: {
+      type: 'array',
+      items: iconObject,
     },
     loginBackground: {
       type: 'string',
@@ -322,6 +351,7 @@ module.exports = {
     'title',
     'description',
     // 'icon', TODO require in v13
+    // 'appleTouchIcon', TODO require in v13
     'loginBackground',
     'defaultMapState',
     'supportButtonTitle',

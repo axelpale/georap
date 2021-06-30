@@ -75,6 +75,7 @@ const themesSource = path.resolve(__dirname, '..', 'client', 'themes');
 const modulesSource = path.resolve(__dirname, '..', 'node_modules');
 const bootstrapSource = path.resolve(modulesSource, 'bootstrap', 'dist');
 const configSource = path.resolve(__dirname, '..', 'config');
+const iconsSource = path.join(configSource, 'images', 'icons');
 const markersSource = path.join(configSource, 'images', 'markers');
 // Target paths
 const imagesTarget = path.join(config.staticDir, 'images');
@@ -89,6 +90,7 @@ const bootstrapTarget = path.join(config.staticDir, 'bootstrap');
   [bootstrapSource, bootstrapTarget],
   [themesSource, path.join(config.staticDir, 'themes')],
   [config.loginBackground, path.join(imagesTarget, 'login.jpg')],
+  [iconsSource, path.join(imagesTarget, 'icons')],
   [markersSource, path.join(imagesTarget, 'markers')],
 ]));
 console.log('Copying custom static files to', config.staticDir);

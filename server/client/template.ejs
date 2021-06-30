@@ -16,8 +16,21 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta id="theme-color" name="theme-color" content="white">
 
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" href="/assets/images/logo/16.png">
+    <!-- Icons -->
+    <% if (tresdb.config.icons) { %>
+    <% tresdb.config.icons.forEach((icon) => { %>
+    <link rel="icon" type="<%= icon.type %>" sizes="<%= icon.sizes %>"
+          href="/assets/<%= icon.src %>">
+    <% }) %>
+    <% } else { %>
+      <link rel="icon" type="image/png" href="/assets/images/logo/16.png">
+    <% } %>
+    <% if (tresdb.config.appleTouchIcons) { %>
+    <% tresdb.config.appleTouchIcons.forEach((icon) => { %>
+    <link rel="apple-touch-icon-precomposed" type="<%= icon.type %>" sizes="<%= icon.sizes %>"
+          href="/assets/<%= icon.src %>">
+    <% }) %>
+    <% } %>
 
     <!-- Stylesheets are included in the webpack bundle. -->
     <!-- See config/webpack.js for details. -->

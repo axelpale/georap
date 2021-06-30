@@ -17,8 +17,11 @@ const indexHtml = (function precompile() {
   const tresdb = {
     version: pjson.version,
     config: {
+      // Include only configs the client needs
       title: config.title,
       description: config.description,
+      icons: config.icons,
+      appleTouchIcons: config.appleTouchIcons,
       defaultMapState: config.defaultMapState,
       supportButtonTitle: config.supportButtonTitle,
       supportPageContent: config.supportPageContent,
@@ -77,27 +80,16 @@ exports.get = function (req, res) {
 };
 
 exports.getManifest = function (req, res) {
+  // Construct a web app manifest.
   return res.json({
     'background_color': 'black',
     'description': config.description,
     'display': 'standalone',
-    'icons': [
-      {
-        'src': 'assets/images/logo/64.png',
-        'sizes': '64x64',
-        'type': 'image/png',
-      },
-      {
-        'src': 'assets/images/logo/128.png',
-        'sizes': '128x128',
-        'type': 'image/png',
-      },
-      {
-        'src': 'assets/images/logo/256.png',
-        'sizes': '256x256',
-        'type': 'image/png',
-      },
-    ],
+    'icons': config.icons.map(icon => {
+      return Object.assign({}, icon, {
+        src: '/assets/' + icon.src,
+      });
+    }),
     'name': config.title,
     'start_url': '.',
   });
