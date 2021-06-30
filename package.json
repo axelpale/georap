@@ -2,11 +2,15 @@
   "name": "georap",
   "private": true,
   "version": "12.0.4",
-  "description": "Geographical CMS built on Express.js",
+  "description": "Geographical messaging board built on Express.js",
   "keywords": [
     "GIS",
     "CMS",
-    "maps"
+    "maps",
+    "geographical",
+    "community",
+    "social",
+    "collaboration"
   ],
   "main": "server/index.js",
   "repository": {
