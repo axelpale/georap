@@ -1,3 +1,5 @@
+// JSON schema for Georap config.
+
 module.exports = {
   type: 'object',
   properties: {
@@ -25,6 +27,7 @@ module.exports = {
           enum: ['roadmap', 'satellite', 'hybrid', 'terrain'],
         },
       },
+      required: ['lat', 'lng', 'zoom', 'mapTypeId'],
       additionalProperties: false,
     },
     supportButtonTitle: {
@@ -97,6 +100,7 @@ module.exports = {
           type: 'string',
         },
       },
+      required: ['username', 'email', 'password'],
       additionalProperties: false,
     },
     mongo: {
@@ -109,6 +113,7 @@ module.exports = {
           type: 'string',
         },
       },
+      required: ['url'],
       additionalProperties: false,
     },
     smtp: {
@@ -316,6 +321,7 @@ module.exports = {
   required: [
     'title',
     'description',
+    // 'icon', TODO require in v13
     'defaultMapState',
     'supportButtonTitle',
     'supportPageContent',
