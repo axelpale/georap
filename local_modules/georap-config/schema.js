@@ -10,6 +10,9 @@ module.exports = {
     description: {
       type: 'string',
     },
+    loginBackground: {
+      type: 'string',
+    },
     defaultMapState: {
       type: 'object',
       properties: {
@@ -34,9 +37,6 @@ module.exports = {
       type: 'string',
     },
     supportPageContent: {
-      type: 'string',
-    },
-    loginBackground: {
       type: 'string',
     },
     secret: {
@@ -322,10 +322,10 @@ module.exports = {
     'title',
     'description',
     // 'icon', TODO require in v13
+    'loginBackground',
     'defaultMapState',
     'supportButtonTitle',
     'supportPageContent',
-    'loginBackground',
     'secret',
     'googleMapsKey',
     'staticDir',

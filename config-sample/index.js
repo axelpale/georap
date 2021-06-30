@@ -7,6 +7,11 @@ module.exports = {
   title: 'My Georap App',
   description: 'A secret geographical portal',
 
+  // Login screen background image. The first thing the user experiences.
+  // The image will be copied to a public location on start up.
+  // Use only an absolute path.
+  loginBackground: path.join(__dirname, 'images/login-background.jpg'),
+
   // Initial map location for new users.
   // Example locations are at @57.5727427,21.8783527,13z
   defaultMapState: {
@@ -18,11 +23,6 @@ module.exports = {
 
   supportButtonTitle: 'Support us',
   supportPageContent: 'Support us by <insert support method here>',
-
-  // Login screen background image. The first thing the user experiences.
-  // The image will be copied to a public location on start up.
-  // Use only an absolute path.
-  loginBackground: path.join(__dirname, 'images/login-background.jpg'),
 
   // Site secret. CHANGE! DO NOT EXPOSE TO CLIENT!
   // Used to encrypt and decrypt passwords and tokens.
