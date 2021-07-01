@@ -42,6 +42,10 @@ module.exports = {
     loginBackground: {
       type: 'string',
     },
+    loginColor: {
+      type: 'string',
+      enum: ['muted', 'primary', 'success', 'info', 'warning', 'danger'],
+    },
     defaultMapState: {
       type: 'object',
       properties: {
@@ -356,8 +360,9 @@ module.exports = {
     // 'icon', TODO require in v13
     // 'appleTouchIcon', TODO require in v13
     'loginBackground',
+    // 'loginColor', TODO require in v13
     'defaultMapState',
-    'enableSupportPage',
+    // 'enableSupportPage', TODO require in v13
     'supportButtonTitle',
     'supportPageContent',
     'secret',

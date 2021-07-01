@@ -28,7 +28,7 @@
 
       <div id="tresdb-login-in-progress" class="hidden">
         <div class="progress">
-          <div class="progress-bar progress-bar-striped progress-bar-danger active" role="progressbar" style="width: 100%">
+          <div class="progress-bar progress-bar-striped progress-bar-<%= loginColor %> active" role="progressbar" style="width: 100%">
             <span class="sr-only">Waiting for server</span>
           </div>
         </div>
@@ -46,12 +46,11 @@
         <div class="pull-right">
           <a id="tresdb-password-reset-button" href="#">I forgot my password...</a>
         </div>
-        <button type="submit" class="btn btn-danger">Log in</button>
+        <button type="submit" class="btn btn-<%= loginColor %>">Log in</button>
       </form>
 
       <!-- Password reset -->
       <div id="tresdb-password-reset">
-
 
         <div id="tresdb-password-reset-invalid-email" class="hidden">
           <div class="alert alert-danger" role="alert">Ensure the given email address is correct and has a format similar to <em>john.doe@example.com</em> or <em>myname@example.com</em>.</div>

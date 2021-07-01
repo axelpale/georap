@@ -1,5 +1,6 @@
 
 var account = tresdb.stores.account;
+var config = tresdb.config;
 var loginTemplate = require('./template.ejs');
 var ui = require('georap-ui');
 var emitter = require('component-emitter');
@@ -169,7 +170,10 @@ module.exports = function (onSuccess) {
 
   this.render = function () {
     return loginTemplate({
-      title: tresdb.config.title,
+      title: config.title,
+      // TODO in v12 loginColor is optional, in v13 it becomes required
+      // and thus does not need the default value handler anymore.
+      loginColor: config.loginColor ? config.loginColor : 'primary',
     });
   };
 

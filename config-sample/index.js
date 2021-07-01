@@ -62,6 +62,10 @@ module.exports = {
   // The image will be copied to a public location on start up.
   // Use only an absolute path.
   loginBackground: path.join(__dirname, 'images/login-background.jpg'),
+  // A color scheme for buttons and progress bars on the login page.
+  // The possible values are the contextual color from Bootstrap 3:
+  // 'muted', 'primary', 'success', 'info', 'warning', 'danger'
+  loginColor: 'primary',
 
   // Initial map location for new users.
   // Example locations are at @57.5727427,21.8783527,13z
