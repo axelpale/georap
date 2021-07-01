@@ -72,6 +72,9 @@ module.exports = {
     mapTypeId: 'hybrid', // 'roadmap', 'satellite', 'hybrid', or 'terrain'
   },
 
+  // A custom page aimed for community rules and
+  // ways to support the community or maintenance.
+  enableSupportPage: true,
   supportButtonTitle: 'Support us',
   supportPageContent: 'Support us by <insert support method here>',
 

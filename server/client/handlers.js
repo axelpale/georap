@@ -23,6 +23,7 @@ const indexHtml = (function precompile() {
       icons: config.icons,
       appleTouchIcons: config.appleTouchIcons,
       defaultMapState: config.defaultMapState,
+      enableSupportPage: config.enableSupportPage,
       supportButtonTitle: config.supportButtonTitle,
       supportPageContent: config.supportPageContent,
       features: config.features,

@@ -47,11 +47,12 @@
           <li role="separator" class="divider"></li>
         <% } %>
 
-        <li>
-          <a href="/fund"><%= glyphicon({ name: 'star' }) %> <%= supportButtonTitle %></a>
-        </li>
-
-        <li role="separator" class="divider"></li>
+        <% if (config.enableSupportPage) { %>
+          <li>
+            <a href="/fund"><%= glyphicon({ name: 'star' }) %> <%= config.supportButtonTitle %></a>
+          </li>
+          <li role="separator" class="divider"></li>
+        <% } %>
 
         <li class="dropdown-header"><%= user.name %></li>
         <li>

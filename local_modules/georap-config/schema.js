@@ -62,6 +62,9 @@ module.exports = {
       required: ['lat', 'lng', 'zoom', 'mapTypeId'],
       additionalProperties: false,
     },
+    enableSupportPage: {
+      type: 'boolean',
+    },
     supportButtonTitle: {
       type: 'string',
     },
@@ -354,6 +357,7 @@ module.exports = {
     // 'appleTouchIcon', TODO require in v13
     'loginBackground',
     'defaultMapState',
+    'enableSupportPage',
     'supportButtonTitle',
     'supportPageContent',
     'secret',
