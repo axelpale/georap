@@ -5,7 +5,7 @@ module.exports = {
   // Title and description of the site. Used in many places,
   // including html and emails.
   title: 'My Georap App',
-  description: 'A secret geographical portal',
+  description: 'A geographical community',
 
   // Site logo in various sizes for different devices and use cases.
   // The logo will be visible as a favicon in browser tabs, a menu icon,
