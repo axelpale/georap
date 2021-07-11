@@ -76,10 +76,12 @@ module.exports = {
     mapTypeId: 'hybrid', // 'roadmap', 'satellite', 'hybrid', or 'terrain'
   },
 
-  // A custom page aimed for community rules and
+  // A custom html page aimed for community rules and
   // ways to support the community or maintenance.
+  // The page can be opened from a main menu button next to the log out.
   enableSupportPage: true,
   supportButtonTitle: 'Support us',
+  // supportPageContent can have any static html content
   supportPageContent: 'Support us by <insert support method here>',
 
   // Site secret. CHANGE! DO NOT EXPOSE TO CLIENT!
