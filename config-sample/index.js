@@ -1,11 +1,134 @@
+//
+// This is the main configuration file of your Georap instance.
+//
+// The configuration is split in three sections:
+// - CRITICAL CONFIG
+// - FILES AND PATHS
+// - THEME AND BRAND
+// - FOR DEVS ONLY
+//
+// As the name suggests, you need to go through CRITICAL CONFIG to get
+// the site up and running.
+//
+// For custom installation paths and directory structure,
+// read and update FILES AND PATHS.
+//
+// To tailor the app for your team or community, see THEME AND BRAND.
+// Theming config includes settings such as available marker icons,
+// location classification, list lengths, coordinate systems, and
+// third party map services.
+//
+// Leave the FOR DEVS ONLY as is unless you know what you are doing.
+//
+
+// We will join paths relative to the current directory.
 const path = require('path');
 
 module.exports = {
+  // ##### CRITICAL CONFIG #####
 
   // Title and description of the site. Used in many places,
   // including html and emails.
   title: 'My Georap App',
   description: 'A geographical community',
+
+  // Default admin user to be initially created.
+  admin: {
+    username: 'admin',
+    email: 'admin@example.com',
+    password: '1234',
+  },
+
+  // Site secret. CHANGE! DO NOT EXPOSE TO CLIENT!
+  // Used to encrypt and decrypt passwords and tokens.
+  secret: '123456789',
+
+  // Google Maps API key. CHANGE! Required for e.g. reverse geocoding.
+  googleMapsKey: '123456789012345678901234567890123456789',
+
+  // HTTPS
+  // Georap itself uses only HTTP. However if Georap is running behind
+  // a TLS-endpoint reverse-proxy like Nginx, the protocol appears to be
+  // HTTPS for the users. Hyperlinks in emails such as invites and password
+  // resets should then use HTTPS instead HTTP.
+  // By setting publicProtocol property to 'https' instead 'http', HTTPS
+  // is used in the links instead HTTP.
+  publicProtocol: 'https',
+
+  // Port for server to listen
+  port: 3000,
+
+  // Mongo database settings
+  mongo: {
+    // Main database for persistent data.
+    url: 'mongodb://mongouser:mongouserpwd@localhost:27017/georap',
+    // Database for testing and development. You may leave it null.
+    testUrl: 'mongodb://testuser:testuserpwd@localhost:27017/test',
+  },
+
+  // Email server connection
+  // For details, see https://nodemailer.com/2-0-0-beta/setup-smtp/.
+  smtp: {
+    host: 'smtp.example.com',
+    port: 465,
+    secure: true,
+    auth: {
+      user: 'mailboxuser',
+      pass: 'mailboxpassword',
+    },
+  },
+  // Email messages
+  mail: {
+    sender: 'admin@example.com',
+  },
+
+
+  // ##### FILES AND PATHS #####
+  // Can be left as default if you do the installation as described in README.
+
+  // Static files
+  // Express/Webpack will copy the static files to be served to this directory:
+  staticDir: path.resolve(__dirname, '../.tmp/public'),
+  // URLs of the static files are prefixed with this static URL root path.
+  // Ensure to remove any trailing slash.
+  staticUrl: '/assets',
+
+  // Uploaded files
+  // Express will serve uploaded files (location attachments) from this dir.
+  uploadDir: path.resolve(__dirname, '../.data/uploads'),
+  // URLs of the uploaded files are prefixed with this URL root path.
+  uploadUrl: '/uploads',
+  // Thumbnail max width & height in pixels
+  uploadThumbSize: 568,
+  // Upload file size limit in bytes.
+  uploadSizeLimit: 20 * 1024 * 1024, // 20 MiB
+
+  // Temporary uploaded files.
+  // Files under these directories are removed in regular basis.
+  tempUploadDir: path.resolve(__dirname, '../.data/tempUploads'),
+  // URLs of the temporary files are prefixed with this URL root path.
+  tempUploadUrl: '/temporary',
+  // Seconds from last change, after the file or dir can be safely removed.
+  tempUploadTimeToLive: 2 * 24 * 60 * 60, // two days
+  // Upload file size limit in bytes.
+  tempUploadSizeLimit: 200 * 1024 * 1024, // 200 MiB
+
+  // Log files
+  // Logs about requests are stored under this directory:
+  logDir: path.resolve(__dirname, '../.data/logs'),
+
+
+  // ##### THEME AND BRAND #####
+  // Settings from here to the end of the file can be left default.
+
+  // Initial map location for new users.
+  // Example locations are at @57.5727427,21.8783527,13z
+  defaultMapState: {
+    lat: 57.5727427,
+    lng: 21.8783527,
+    zoom: 13,
+    mapTypeId: 'hybrid', // 'roadmap', 'satellite', 'hybrid', or 'terrain'
+  },
 
   // Site logo in various sizes for different devices and use cases.
   // The logo will be visible as a favicon in browser tabs, a menu icon,
@@ -66,104 +189,6 @@ module.exports = {
   // The possible values are the contextual color from Bootstrap 3:
   // 'muted', 'primary', 'success', 'info', 'warning', 'danger'
   loginColor: 'primary',
-
-  // Initial map location for new users.
-  // Example locations are at @57.5727427,21.8783527,13z
-  defaultMapState: {
-    lat: 57.5727427,
-    lng: 21.8783527,
-    zoom: 13,
-    mapTypeId: 'hybrid', // 'roadmap', 'satellite', 'hybrid', or 'terrain'
-  },
-
-  // A custom html page aimed for community rules and
-  // ways to support the community or maintenance.
-  // The page can be opened from a main menu button next to the log out.
-  enableSupportPage: true,
-  supportButtonTitle: 'Support us',
-  // supportPageContent can have any static html content
-  supportPageContent: 'Support us by <insert support method here>',
-
-  // Site secret. CHANGE! DO NOT EXPOSE TO CLIENT!
-  // Used to encrypt and decrypt passwords and tokens.
-  secret: '123456789',
-
-  // Google Maps API key. CHANGE! Required for e.g. reverse geocoding.
-  googleMapsKey: '123456789012345678901234567890123456789',
-
-  // Static files
-  // Express/Webpack will copy the static files to be served to this directory:
-  staticDir: path.resolve(__dirname, '../.tmp/public'),
-  // URLs of the static files are prefixed with this static URL root path.
-  // Ensure to remove any trailing slash.
-  staticUrl: '/assets',
-
-  // Uploaded files
-  // Express will serve uploaded files (location attachments) from this dir.
-  uploadDir: path.resolve(__dirname, '../.data/uploads'),
-  // URLs of the uploaded files are prefixed with this URL root path.
-  uploadUrl: '/uploads',
-  // Thumbnail max width & height in pixels
-  uploadThumbSize: 568,
-  // Upload file size limit in bytes.
-  uploadSizeLimit: 20 * 1024 * 1024, // 20 MiB
-
-  // Temporary uploaded files.
-  // Files under these directories are removed in regular basis.
-  tempUploadDir: path.resolve(__dirname, '../.data/tempUploads'),
-  // URLs of the temporary files are prefixed with this URL root path.
-  tempUploadUrl: '/temporary',
-  // Seconds from last change, after the file or dir can be safely removed.
-  tempUploadTimeToLive: 2 * 24 * 60 * 60, // two days
-  // Upload file size limit in bytes.
-  tempUploadSizeLimit: 200 * 1024 * 1024, // 200 MiB
-
-  // Log files
-  // Logs about requests are stored under this directory:
-  logDir: path.resolve(__dirname, '../.data/logs'),
-
-  // HTTPS
-  // Georap itself uses only HTTP. However if Georap is running behind
-  // a TLS-endpoint reverse-proxy like Nginx, the protocol appears to be
-  // HTTPS for the users. Hyperlinks in emails such as invites and password
-  // resets should then use HTTPS instead HTTP.
-  // By setting publicProtocol property to 'https' instead 'http', HTTPS
-  // is used in the links instead HTTP.
-  publicProtocol: 'https',
-
-  // Port for server to listen
-  port: 3000,
-
-  // Default admin user
-  admin: {
-    username: 'admin',
-    email: 'admin@example.com',
-    password: '1234',
-  },
-
-  // Mongo database settings
-  mongo: {
-    // Main database for persistent data.
-    url: 'mongodb://mongouser:mongouserpwd@localhost:27017/georap',
-    // Database for testing and development. You may leave it null.
-    testUrl: 'mongodb://testuser:testuserpwd@localhost:27017/test',
-  },
-
-  // Email server connection
-  // For details, see https://nodemailer.com/2-0-0-beta/setup-smtp/.
-  smtp: {
-    host: 'smtp.example.com',
-    port: 465,
-    secure: true,
-    auth: {
-      user: 'mailboxuser',
-      pass: 'mailboxpassword',
-    },
-  },
-  // Email messages
-  mail: {
-    sender: 'admin@example.com',
-  },
 
   // Location classification: status.
   // The first in the list is used as the default.
@@ -451,6 +476,15 @@ module.exports = {
     maxMessageLength: 600,
   },
 
+  // Support page
+  // A custom html page aimed for community rules and
+  // ways to support the community or maintenance.
+  // The page can be opened from a main menu button next to the log out.
+  enableSupportPage: true,
+  supportButtonTitle: 'Support us',
+  // supportPageContent can have any static html content
+  supportPageContent: 'Support us by <insert support method here>',
+
   // Register coordinate systems to be used.
   // These coordinate systems will be displayed on the location page.
   // These systems are also available for exportServices.
@@ -733,6 +767,11 @@ module.exports = {
       ],
     ],
   ],
+
+
+  // ##### FOR DEVS ONLY #####
+  // Hashing security and environment variables.
+  // Leave these as they are unless you know what you are doing.
 
   // Bcrypt hashing strength
   bcrypt: {
