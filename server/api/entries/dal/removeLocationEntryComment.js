@@ -16,14 +16,15 @@ module.exports = (params, callback) => {
   //     function (err)
 
   const coll = db.collection('entries');
-  const filter = { _id: params.entryId };
 
+  // Entry to modify
+  const entryId = params.entry._id;
   // Comment to remove
   const commentId = params.commentId;
   // Entry before removal
   const entryBefore = params.entry;
 
-  // Collect removed comment to pass to event creation.
+  // Collect removed comment to pass it to the event creation.
   const removedComment = entryBefore.comments.find((comm) => {
     return comm.id === commentId;
   });
@@ -33,13 +34,14 @@ module.exports = (params, callback) => {
     return callback();
   }
 
-  // Determine next activeAt.
+  // Determine next activeAt (most recent comment).
   const entryAfter = Object.assign({}, entryBefore, {
     comments: entryBefore.comments.filter((comm) => {
       return comm.id !== commentId;
     }),
   });
 
+  const filter = { _id: entryId };
   const update = {
     $set: {
       activeAt: entryModel.activeAt(entryAfter),
