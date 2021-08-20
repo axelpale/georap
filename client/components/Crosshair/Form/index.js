@@ -1,7 +1,8 @@
 var template = require('./template.ejs');
 var ui = require('georap-ui');
 var bus = require('georap-bus');
-var defaultSystemName = tresdb.config.coordinateSystems[0][0];
+var coordinateSystems = tresdb.config.coordinateSystems;
+var defaultSystemName = coordinateSystems[0][0];
 
 // Coordinate decimals
 var PRECISION = 6; //
