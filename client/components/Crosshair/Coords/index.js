@@ -1,4 +1,4 @@
-// Component to filter map markers.
+// Component to display coordinates in all available coordinate systems.
 //
 var geostamp = require('geostamp');
 var template = require('./template.ejs');
