@@ -490,14 +490,16 @@ module.exports = {
   // These systems are also available for exportServices.
   //
   // Each entry has the form:
-  //   [<cordinate system name>, <proj4 projection definition>, <template fn>]
+  //   [<cordinate system name>,
+  //    <proj4 projection definition>,
+  //    <output template>]
   // Where:
   //   coordinate system name
   //     String. Visible to user.
   //   proj4 projection definition
   //     See https://epsg.io/ and for proj4js projection definitions
   //     and http://proj4js.org/ for syntax details.
-  //   template
+  //   output template
   //     String. The pretty print of coodinates in EJS templating language.
   //     See available template variables and functions below.
   //
