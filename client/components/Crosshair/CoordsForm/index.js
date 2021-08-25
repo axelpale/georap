@@ -28,10 +28,22 @@ module.exports = function () {
     }));
 
     $elems.form = $mount.find('.coordsform');
+    $elems.systemSelector = $mount.find('select.form-control');
+    $elems.systemForm = $mount.find('.coordsform-system-form');
     $elems.$lng = $mount.find('#coordsform-longitude');
     $elems.$lat = $mount.find('#coordsform-latitude');
     $elems.$goBtn = $mount.find('button');
     var $error = $mount.find('.coordsform-error');
+
+    // Render system specific form when system selection changes.
+    var handleSystemChange = function () {
+      var selectedSystem = $elems.systemSelector.val();
+      console.log('selectedSystem', selectedSystem);
+      $elems.systemForm.html(systemToForm({
+        system: selectedSystem,
+      }));
+    };
+    $elems.systemSelector.on('change', handleSystemChange);
 
     // Make go button stand out during custom coordinates.
     // Return it default during geometry update.
