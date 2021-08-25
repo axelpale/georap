@@ -21,11 +21,11 @@ module.exports = function () {
     $mount = $mountArg;
     $mount.html(template({}));
 
-    $elems.form = $mount.find('.crosshair-form');
-    $elems.$lng = $mount.find('#crosshair-form-longitude');
-    $elems.$lat = $mount.find('#crosshair-form-latitude');
+    $elems.form = $mount.find('.coordsform');
+    $elems.$lng = $mount.find('#coordsform-longitude');
+    $elems.$lat = $mount.find('#coordsform-latitude');
     $elems.$goBtn = $mount.find('button');
-    var $error = $mount.find('.crosshair-form-error');
+    var $error = $mount.find('.coordsform-error');
 
     // Make go button stand out during custom coordinates.
     // Return it default during geometry update.
