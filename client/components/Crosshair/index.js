@@ -6,7 +6,7 @@ var template = require('./template.ejs');
 var TitleView = require('./Title');
 var ZoomView = require('./Zoom');
 var CoordsView = require('./Coords');
-var FormView = require('./Form');
+var CoordsFormView = require('./CoordsForm');
 var ViewOnView = require('./ViewOn');
 var CreateView = require('./Create');
 var geometryApi = tresdb.stores.geometry;
@@ -38,8 +38,8 @@ module.exports = function () {
     children.coords = new CoordsView();
     children.coords.bind($mount.find('.crosshair-coords-container'));
 
-    children.form = new FormView();
-    children.form.bind($mount.find('.crosshair-form-container'));
+    children.coordsform = new CoordsFormView();
+    children.coordsform.bind($mount.find('.crosshair-coordsform-container'));
 
     children.viewon = new ViewOnView();
     children.viewon.bind($mount.find('.crosshair-viewon-container'));
@@ -64,7 +64,7 @@ module.exports = function () {
             children.create.updateGeometry(geoms);
             if (!movedOnce) {
               movedOnce = true;
-              children.form.updateGeometry(geoms);
+              children.coordsform.updateGeometry(geoms);
               // Set the coordinate form fields only once because in
               // mobile context the user might need to flip the device
               // to browse between input fields. That would cause an

@@ -1,3 +1,5 @@
+// Enable user to write coordinates to navigate on the map.
+//
 var template = require('./template.ejs');
 var ui = require('georap-ui');
 var bus = require('georap-bus');
