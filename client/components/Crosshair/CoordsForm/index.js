@@ -19,7 +19,9 @@ module.exports = function () {
 
   this.bind = function ($mountArg) {
     $mount = $mountArg;
-    $mount.html(template({}));
+    $mount.html(template({
+      systems: coordinateSystems,
+    }));
 
     $elems.form = $mount.find('.coordsform');
     $elems.$lng = $mount.find('#coordsform-longitude');

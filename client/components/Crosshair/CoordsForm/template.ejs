@@ -5,6 +5,14 @@
   </div>
   <div class="panel-body">
     <div class="form-group">
+      <label for="coordsform-system">Coordinate System</label>
+      <select class="form-control" id="coordsform-system">
+        <% systems.forEach(function (system) { %>
+        <option value="system[0]"><%= system[0] %></option>
+        <% }) %>
+      </select>
+    </div>
+    <div class="form-group">
       <label for="coordsform-latitude">Latitude</label>
       <input type="text" class="form-control" id="coordsform-latitude">
       <small class="form-text text-muted">WGS 84, decimal degrees (DD.DDDD)</small>
