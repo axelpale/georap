@@ -5,22 +5,15 @@
   </div>
   <div class="panel-body">
     <div class="form-group">
-      <label for="coordsform-system">Coordinate System</label>
-      <select class="form-control" id="coordsform-system">
+      <label for="coordsform-system-selector">Coordinate System</label>
+      <select class="form-control" id="coordsform-system-selector">
         <% systems.forEach(function (system) { %>
         <option value="system[0]"><%= system[0] %></option>
         <% }) %>
       </select>
     </div>
-    <div class="form-group">
-      <label for="coordsform-latitude">Latitude</label>
-      <input type="text" class="form-control" id="coordsform-latitude">
-      <small class="form-text text-muted">WGS 84, decimal degrees (DD.DDDD)</small>
-    </div>
-    <div class="form-group">
-      <label for="coordsform-longitude">Longitude</label>
-      <input type="text" class="form-control" id="coordsform-longitude">
-      <small class="form-text text-muted">WGS 84, decimal degrees (DD.DDDD)</small>
+    <div class="coordsform-system-form">
+      <%= defaultSystemForm %>
     </div>
     <div class="pull-right">
       <button type="submit" class="btn btn-default">Go</button>

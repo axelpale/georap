@@ -1,6 +1,7 @@
 // Enable user to write coordinates to navigate on the map.
 //
 var template = require('./template.ejs');
+var systemToForm = require('./systemToForm.ejs');
 var ui = require('georap-ui');
 var bus = require('georap-bus');
 var coordinateSystems = tresdb.config.coordinateSystems;
@@ -21,6 +22,9 @@ module.exports = function () {
     $mount = $mountArg;
     $mount.html(template({
       systems: coordinateSystems,
+      defaultSystemForm: systemToForm({
+        system: 'WGS84',
+      }),
     }));
 
     $elems.form = $mount.find('.coordsform');
