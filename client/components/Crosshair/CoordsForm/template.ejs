@@ -13,11 +13,13 @@
       </select>
       <small class="form-text text-muted">The default is WGS84.</small>
     </div>
-    <div class="coordsform-system-form">
-      <%= defaultSystemForm %>
+    <div class="form-group">
+      <label for="coordsform-input">Coordinates as text</label>
+      <input type="text" id="coordsform-input" class="coordsform-input">
     </div>
+    <button type="button" class="btn btn-default coordsform-reset">Reset</button>
     <div class="pull-right">
-      <button type="submit" class="btn btn-default">Go</button>
+      <button type="submit" class="btn btn-default coordsform-go">Go</button>
     </div>
   </div>
 </form>
