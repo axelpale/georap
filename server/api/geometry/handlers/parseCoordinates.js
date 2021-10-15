@@ -1,4 +1,4 @@
-const proj = require('../../services/proj');
+const proj = require('../../../services/proj');
 const status = require('http-status-codes');
 
 module.exports = function (req, res) {

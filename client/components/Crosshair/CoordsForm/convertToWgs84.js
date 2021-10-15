@@ -8,5 +8,8 @@ module.exports = function (params, callback) {
   //       latlng
   //         { lat, lng } in WGS84
   //
-  return callback(null, { lat: 0, lng: 0 });
+  return callback(null, {
+    lat: 0,
+    lng: 0,
+  });
 };
