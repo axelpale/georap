@@ -87,9 +87,11 @@ exports.projectFrom = function (name, position) {
   // Parameters:
   //   name
   //   position
-  //     [lng, lat]
+  //     { x: lng, y: lat }
   //
-
+  // Return
+  //   { x: lng, y: lat }
+  //
   return proj4(name).inverse(position);
 };
 
@@ -99,8 +101,10 @@ exports.projectTo = function (name, position) {
   // Parameters:
   //   name
   //   position
-  //     [lng, lat]
+  //     { x: lng, y: lat }
   //
-
+  // Return
+  //   { x: lng, y: lat }
+  //
   return proj4(name, position);
 };
