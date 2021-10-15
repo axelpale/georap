@@ -1,5 +1,7 @@
 const proj = require('../../../services/proj');
 const status = require('http-status-codes');
+const utmParser = require('utm-coordinate-parser');
+const CoordinateParser = require('coordinate-parser');
 
 module.exports = function (req, res) {
   // Parse and detect coordinates from the given string in the given system.
@@ -7,29 +9,48 @@ module.exports = function (req, res) {
   const systemName = req.body.coordinateSystem;
   const text = req.body.coordinatesText;
 
-  if (!systemName) {
-    // TODO check if system exists
-    return res.status(status.BAD_REQUEST).send('Invalid coordinate system');
+  if (!systemName || !proj.hasCoordinateSystem(systemName)) {
+    const msg = 'Invalid coordinate system: ' + systemName;
+    return res.status(status.BAD_REQUEST).send(msg);
   }
 
   if (!text || typeof text !== 'string') {
     return res.status(status.BAD_REQUEST).send('Missing coordinate string');
   }
 
-  // TODO parse
-  // TODO convert to WGS84 if not in WGS84
+  const projDef = proj.getProjectionDefinition(systemName);
+  const projection = proj.parseProjectionDefinition(projDef);
+
+  // Parse the coordinate text according to projection type.
+  let xy;
+  if (projection.projName === 'longlat') {
+    // Use 3rd party parser
+    const position = new CoordinateParser(text);
+    xy = {
+      x: position.getLongitude(),
+      y: position.getLatitude(),
+    };
+  } else if (projection.projName === 'utm') {
+    // Use utm parser
+    const ne = utmParser(text);
+    xy = {
+      x: ne.x,
+      y: ne.y,
+    };
+  }
+
+  // Convert to WGS84 if not in WGS84
+  const wgs84xy = proj.projectFrom(projection, xy);
 
   return res.json({
     coordinates: [
       {
         system: systemName,
-        xy: [12, 34],
-        pretty: 'foobar',
+        xy: xy,
       },
       {
         system: 'WGS84',
-        xy: [56, 78],
-        pretty: 'foobar',
+        xy: wgs84xy,
       },
     ],
   });
