@@ -50,7 +50,11 @@ module.exports = function (req, res) {
       },
       {
         system: 'WGS84',
-        xy: wgs84xy,
+        xy: {
+          x: wgs84xy.x,
+          y: wgs84xy.y,
+          // there is also wgs84xy.z but we leave it out as unnecessary
+        },
       },
     ],
   });
