@@ -13,17 +13,25 @@ exports.getInEverySystem = function (geom, callback) {
 };
 
 exports.parseCoordinates = function (params, callback) {
+  // Parse textual coordinates in various systems and convert to WGS84.
+  //
   // Parameters
   //   params, object with props
-  //     coordinateSystem
-  //     coordinatesText
+  //     system
+  //     text
   //   callback
-  //     fn (err, latlng), where
-  //       latlng
-  //         { lat, lng } in WGS84
+  //     fn (err, coords), where
+  //       coords is an array of objects with props:
+  //         system
+  //           string, system name e.g. 'WGS84'
+  //         xy
+  //           object { x, y }
   //
-  return callback(null, {
-    lat: 0,
-    lng: 0,
-  });
+  return request.getJSON({
+    url: '/api/geometry/parse',
+    data: {
+      system: params.system,
+      text: params.text,
+    },
+  }, callback);
 };
