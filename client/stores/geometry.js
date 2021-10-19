@@ -1,26 +1,26 @@
-var account = require('./account');
+var request = require('./lib/request');
 
 exports.getInEverySystem = function (geom, callback) {
-
-  var params = {
-    geometry: geom,
-  };
-
-  $.ajax({
+  return request.postJSON({
     url: '/api/geometry',
-    method: 'POST', // get cannot have JSON body
-    data: JSON.stringify(params), // request data
-    contentType: 'application/json', // request data type
-    processData: false, // already string
-    dataType: 'json', // response data type
-    headers: { 'Authorization': 'Bearer ' + account.getToken() },
-    success: function (coordinates) {
-      return callback(null, coordinates);
+    data: {
+      geometry: geom,
     },
-    error: function (jqxhr) {
-      var err = new Error(jqxhr.statusText);
-      err.code = jqxhr.status;
-      return callback(err);
-    },
+  }, callback);
+};
+
+exports.parseCoordinates = function (params, callback) {
+  // Parameters
+  //   params, object with props
+  //     coordinateSystem
+  //     coordinatesText
+  //   callback
+  //     fn (err, latlng), where
+  //       latlng
+  //         { lat, lng } in WGS84
+  //
+  return callback(null, {
+    lat: 0,
+    lng: 0,
   });
 };
