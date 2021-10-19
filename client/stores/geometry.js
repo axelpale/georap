@@ -1,6 +1,9 @@
 var request = require('./lib/request');
 
 exports.getInEverySystem = function (geom, callback) {
+  // Get geom in all configured coordinate systems.
+  // Use POST request to send GeoJSON as is.
+  //
   return request.postJSON({
     url: '/api/geometry',
     data: {
