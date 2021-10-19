@@ -36,8 +36,11 @@ exports.getJSON = function (params, callback) {
   //     url
   //       request url
   //     data
-  //       optional object, request url parameters
+  //       optional object, request url parameters.
+  //       On server side, will be available as req.query.* by default.
   //   callback
+  //     fn (err, result)
+  //       where result is parsed object
   //
   if (!params.data || typeof params.data !== 'object') {
     params.data = {};
