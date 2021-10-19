@@ -1,14 +1,11 @@
 // Enable user to write coordinates to navigate on the map.
 //
 var template = require('./template.ejs');
-var systemToForm = require('./systemToForm.ejs');
 var ui = require('georap-ui');
-var bus = require('georap-bus');
+// var bus = require('georap-bus');
+var geometryStore = tresdb.stores.geometry;
 var coordinateSystems = tresdb.config.coordinateSystems;
 var defaultSystemName = coordinateSystems[0][0];
-
-// Coordinate decimals
-var PRECISION = 6; //
 
 module.exports = function () {
 
@@ -22,78 +19,56 @@ module.exports = function () {
     $mount = $mountArg;
     $mount.html(template({
       systems: coordinateSystems,
-      defaultSystemForm: systemToForm({
-        system: 'WGS84',
-      }),
+      defaultSystemName: defaultSystemName,
     }));
 
     $elems.form = $mount.find('.coordsform');
     $elems.systemSelector = $mount.find('select.form-control');
-    $elems.systemForm = $mount.find('.coordsform-system-form');
-    $elems.$lng = $mount.find('#coordsform-longitude');
-    $elems.$lat = $mount.find('#coordsform-latitude');
-    $elems.$goBtn = $mount.find('button');
-    var $error = $mount.find('.coordsform-error');
+    $elems.coordInput = $mount.find('input.coordsform-input');
+    $elems.resetBtn = $mount.find('button.coordform-reset');
+    $elems.goBtn = $mount.find('button.coordsform-go');
+    $elems.error = $mount.find('.coordsform-error');
 
     // Render system specific form when system selection changes.
     var handleSystemChange = function () {
       var selectedSystem = $elems.systemSelector.val();
       console.log('selectedSystem', selectedSystem);
-      $elems.systemForm.html(systemToForm({
-        system: selectedSystem,
-      }));
     };
     $elems.systemSelector.on('change', handleSystemChange);
 
     // Make go button stand out during custom coordinates.
     // Return it default during geometry update.
     var handleChange = function () {
-      if ($elems.$goBtn.hasClass('btn-default')) {
-        $elems.$goBtn.addClass('btn-primary').removeClass('btn-default');
+      if ($elems.goBtn.hasClass('btn-default')) {
+        $elems.goBtn.addClass('btn-primary').removeClass('btn-default');
       }
     };
-    $elems.$lng.on('input', handleChange);
-    $elems.$lat.on('input', handleChange);
+    $elems.coordInput.on('input', handleChange);
 
     // Form submit
-
     $elems.form.submit(function (ev) {
       ev.preventDefault();
 
-      var lngRaw = $elems.$lng.val();
-      var latRaw = $elems.$lat.val();
+      var selectedSystem = $elems.systemSelector.val();
+      var coordRaw = $elems.coordInput.val().trim();
 
-      var lng = parseFloat(lngRaw);
-      var lat = parseFloat(latRaw);
+      // Call backend
+      geometryStore.parseCoordinates({
+        system: selectedSystem,
+        text: coordRaw,
+      }, function (err, coords) {
+        if (err) {
+          $elems.error.html(err.message);
+          ui.show($elems.error);
+        }
 
-      if (isNaN(lng) || isNaN(lat)) {
-        ui.show($error);
-        return;
-      }
+        console.log(coords);
 
-      bus.emit('crosshair_form_submit', {
-        latLng: {
-          lat: lat,
-          lng: lng,
-        },
+        // bus.emit('crosshair_form_submit', {
+        //   latLng: latLng,
+        // });
       });
     });
-  };
-
-  this.updateGeometry = function (geoms) {
-    if ($mount) {
-      var defaultCoords = geoms[defaultSystemName];
-      var lat = defaultCoords[1];
-      var lng = defaultCoords[0];
-
-      $elems.$lng.val(lng.toFixed(PRECISION));
-      $elems.$lat.val(lat.toFixed(PRECISION));
-
-      // Make go button default style if not already.
-      if ($elems.$goBtn.hasClass('btn-primary')) {
-        $elems.$goBtn.addClass('btn-default').removeClass('btn-primary');
-      }
-    }
   };
 
   this.unbind = function () {
