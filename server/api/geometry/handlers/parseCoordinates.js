@@ -6,8 +6,8 @@ const CoordinateParser = require('coordinate-parser');
 module.exports = function (req, res) {
   // Parse and detect coordinates from the given string in the given system.
   //
-  const systemName = req.body.coordinateSystem;
-  const text = req.body.coordinatesText;
+  const systemName = req.query.system;
+  const text = req.query.text;
 
   if (!systemName || !proj.hasCoordinateSystem(systemName)) {
     const msg = 'Invalid coordinate system: ' + systemName;
