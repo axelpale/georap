@@ -7,9 +7,18 @@
     <div class="form-group">
       <label for="coordsform-system-selector">Coordinate System</label>
       <select class="form-control" id="coordsform-system-selector">
-        <% systems.forEach(function (system) { %>
-        <option value="<%= system[0] %>"><%= system[0] %></option>
-        <% }) %>
+        <%
+          systems.forEach(function (system, index) {
+            var systemName = system[0];
+            var isDefault = systemName === defaultSystemName;
+        %>
+        <option value="<%= systemName %>"
+          <%= isDefault ? ' selected="selected"' : '' %>>
+          <%= systemName %>
+        </option>
+        <%
+          });
+        %>
       </select>
       <small class="form-text text-muted">The default is WGS84.</small>
     </div>
