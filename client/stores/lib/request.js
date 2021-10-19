@@ -58,6 +58,32 @@ exports.getJSON = function (params, callback) {
   });
 };
 
+exports.postJSON = function (params, callback) {
+  // General JSON POST AJAX request.
+  //
+  // Parameters:
+  //   params
+  //     url
+  //     data
+  //   callback
+  //     function (err)
+  $.ajax({
+    url: params.url,
+    type: 'POST',
+    contentType: 'application/json',
+    data: JSON.stringify(params.data),
+    processData: false, // already a string
+    dataType: 'json', // response data type
+    headers: { 'Authorization': 'Bearer ' + account.getToken() },
+    success: function (responseData) {
+      return callback(null, responseData);
+    },
+    error: function (jqxhr) {
+      return callback(createError(jqxhr));
+    },
+  });
+};
+
 exports.deleteJSON = function (params, callback) {
   // General JSON DELETE AJAX request.
   //
@@ -114,31 +140,6 @@ exports.postFile = function (params, callback) {
     processData: false,
     success: function (jsonResp) {
       return callback(null, jsonResp);
-    },
-    error: function (jqxhr) {
-      return callback(createError(jqxhr));
-    },
-  });
-};
-
-
-exports.postJSON = function (params, callback) {
-  // General JSON POST AJAX request.
-  //
-  // Parameters:
-  //   params
-  //     url
-  //     data
-  //   callback
-  //     function (err)
-  $.ajax({
-    url: params.url,
-    type: 'POST',
-    contentType: 'application/json',
-    data: JSON.stringify(params.data),
-    headers: { 'Authorization': 'Bearer ' + account.getToken() },
-    success: function (responseData) {
-      return callback(null, responseData);
     },
     error: function (jqxhr) {
       return callback(createError(jqxhr));
