@@ -60,6 +60,7 @@ exports.getJSON = function (params, callback) {
 
 exports.postJSON = function (params, callback) {
   // General JSON POST AJAX request.
+  // Assumes the success response be JSON.
   //
   // Parameters:
   //   params
@@ -67,13 +68,14 @@ exports.postJSON = function (params, callback) {
   //     data
   //   callback
   //     function (err)
+  //
   $.ajax({
     url: params.url,
     type: 'POST',
     contentType: 'application/json',
     data: JSON.stringify(params.data),
     processData: false, // already a string
-    dataType: 'json', // response data type
+    // dataType: 'json', // expected response type TODO
     headers: { 'Authorization': 'Bearer ' + account.getToken() },
     success: function (responseData) {
       return callback(null, responseData);
