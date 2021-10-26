@@ -31,7 +31,7 @@ module.exports = function () {
     $elems.form = $mount.find('.coordsform');
     $elems.systemSelector = $mount.find('select.form-control');
     $elems.coordInput = $mount.find('input.coordsform-input');
-    $elems.resetBtn = $mount.find('button.coordform-reset');
+    $elems.resetBtn = $mount.find('button.coordsform-reset');
     $elems.goBtn = $mount.find('button.coordsform-go');
     $elems.example = $mount.find('.coordsform-example');
     $elems.error = $mount.find('.coordsform-error');
@@ -43,6 +43,20 @@ module.exports = function () {
       self.updateExample();
     };
     $elems.systemSelector.on('change', handleSystemChange);
+
+    $elems.resetBtn.on('click', function (ev) {
+      console.log('reset');
+      ev.preventDefault();
+      // Fill input with the render of current coordinate.
+      var systemName = $elems.systemSelector.val();
+      var coordsHtml = self.geomsToHtml(systemName);
+      // Convert html entities to text
+      var span = document.createElement('span');
+      span.innerHTML = coordsHtml;
+      var coordsText = span.innerText;
+      // Reset the input field value
+      $elems.coordInput.val(coordsText);
+    });
 
     // Make go button stand out during custom coordinates.
     // Return it default during geometry update.
@@ -89,20 +103,33 @@ module.exports = function () {
         });
       });
     });
+  }; // /bind
+
+  this.geomsToHtml = function (systemName) {
+    // Parameters
+    //   systemName
+    //     string, the selected system to output current geom
+    //
+    // Return
+    //   string, formatted coordinate
+    //
+    if (geoms && geoms[systemName]) {
+      var systemCoords = geoms[systemName];
+      var x = systemCoords[0];
+      var y = systemCoords[1];
+      // Pick template
+      var systemTemplate = coordinateTemplates[systemName];
+      var coordsHtml = geostamp.html(systemTemplate, y, x);
+      return coordsHtml;
+    }
+    return '-';
   };
 
   this.updateExample = function () {
     if ($mount && $elems.example) {
       var systemName = $elems.systemSelector.val();
-      if (geoms && geoms[systemName]) {
-        var systemCoords = geoms[systemName];
-        var x = systemCoords[0];
-        var y = systemCoords[1];
-        // Pick template
-        var systemTemplate = coordinateTemplates[systemName];
-        var coordsHtml = geostamp.html(systemTemplate, y, x);
-        $elems.example.html('Example: ' + coordsHtml);
-      }
+      var coordsHtml = self.geomsToHtml(systemName);
+      $elems.example.html('Example: ' + coordsHtml);
     }
   };
 
