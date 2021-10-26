@@ -23,20 +23,25 @@ module.exports = function (req, res) {
 
   // Parse the coordinate text according to projection type.
   let xy;
-  if (projection.projName === 'longlat') {
-    // Use 3rd party parser
-    const position = new CoordinateParser(text);
-    xy = {
-      x: position.getLongitude(),
-      y: position.getLatitude(),
-    };
-  } else if (projection.projName === 'utm') {
-    // Use utm parser
-    const ne = utmParser.parse(text);
-    xy = {
-      x: ne.x,
-      y: ne.y,
-    };
+  // Parsers will throw if unknown format.
+  try {
+    if (projection.projName === 'longlat') {
+      // Use 3rd party parser
+      const position = new CoordinateParser(text);
+      xy = {
+        x: position.getLongitude(),
+        y: position.getLatitude(),
+      };
+    } else if (projection.projName === 'utm') {
+      // Use utm parser
+      const ne = utmParser.parse(text);
+      xy = {
+        x: ne.x,
+        y: ne.y,
+      };
+    }
+  } catch (err) {
+    return res.status(status.BAD_REQUEST).send('Unknown coordinate format');
   }
 
   // Convert to WGS84 if not in WGS84

@@ -66,7 +66,9 @@ module.exports = function () {
         text: coordRaw,
       }, function (err, coords) {
         if (err) {
-          $elems.error.html(err.message);
+          var msg = 'No coordinates could be found from the given text. ' +
+            'Ensure the text makes sense and see the example above.';
+          $elems.error.find('.alert').html(msg);
           ui.show($elems.error);
           return;
         }

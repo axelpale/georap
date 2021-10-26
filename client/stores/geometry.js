@@ -41,5 +41,10 @@ exports.parseCoordinates = function (params, callback) {
       system: params.system,
       text: params.text,
     },
-  }, callback);
+  }, function (err, response) {
+    if (err) {
+      return callback(err);
+    }
+    return callback(null, response.coordinates);
+  });
 };
