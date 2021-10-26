@@ -64,7 +64,7 @@ module.exports = function () {
             children.create.updateGeometry(geoms);
             if (!movedOnce) {
               movedOnce = true;
-              children.coordsform.updateGeometry(geoms);
+              // children.coordsform.updateGeometry(geoms);
               // Set the coordinate form fields only once because in
               // mobile context the user might need to flip the device
               // to browse between input fields. That would cause an
