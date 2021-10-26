@@ -60,6 +60,7 @@ module.exports = function () {
         if (err) {
           $elems.error.html(err.message);
           ui.show($elems.error);
+          return;
         }
 
         console.log(coords);
