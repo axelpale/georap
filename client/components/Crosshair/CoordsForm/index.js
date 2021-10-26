@@ -38,8 +38,8 @@ module.exports = function () {
 
     // Render system specific example when system selection changes.
     var handleSystemChange = function () {
-      var selectedSystem = $elems.systemSelector.val();
-      console.log('selectedSystem', selectedSystem);
+      // DEBUG var selectedSystem = $elems.systemSelector.val();
+      // console.log('selectedSystem', selectedSystem);
       self.updateExample();
     };
     $elems.systemSelector.on('change', handleSystemChange);
