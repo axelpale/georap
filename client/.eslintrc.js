@@ -28,6 +28,7 @@ module.exports = {
   },
 
   globals: {
+    georap: true,
     tresdb: true,
   },
 };
