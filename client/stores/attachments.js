@@ -4,10 +4,6 @@ var request = require('./lib/request');
 // Init
 emitter(exports);
 
-var postJSON = request.postJSON;
-var postFile = request.postFile;
-var deleteJSON = request.deleteJSON;
-
 exports.createAttachments = function (form, callback) {
   // Create one or more attachments with single upload
   //
@@ -17,7 +13,7 @@ exports.createAttachments = function (form, callback) {
   //   callback
   //     function (err, attachments)
   //
-  return postFile({
+  return request.postFile({
     url: '/api/attachments',
     form: form,
   }, callback);
@@ -32,7 +28,7 @@ exports.rotateImage = function (key, deg, callback) {
   //   callback
   //     function (err, updatedAttachment)
   //
-  return postJSON({
+  return request.postJSON({
     url: '/api/attachments/' + key,
     data: {
       degrees: deg,
@@ -46,7 +42,7 @@ exports.rotateImage = function (key, deg, callback) {
 };
 
 exports.removeAttachment = function (key, callback) {
-  return deleteJSON({
+  return request.deleteJSON({
     url: '/api/attachments/' + key,
     data: {},
   }, callback);

@@ -1,7 +1,7 @@
 {
   "name": "georap",
   "private": true,
-  "version": "12.1.1",
+  "version": "12.2.0",
   "description": "Geographical messaging board built on Express.js",
   "keywords": [
     "GIS",
@@ -59,6 +59,7 @@
     "camaro": "^6.0.4",
     "commander": "^2.9.0",
     "component-emitter": "^1.2.1",
+    "coordinate-parser": "^1.0.7",
     "distfilter": "file:local_modules/distfilter",
     "download": "^7.1.0",
     "ejs": "^2.5.2",
@@ -110,6 +111,7 @@
     "striptags": "^3.1.0",
     "turndown": "^7.0.0",
     "url-join": "^4.0.1",
+    "utm-coordinate-parser": "^1.0.1",
     "zpad": "^0.5.0"
   },
   "devDependencies": {

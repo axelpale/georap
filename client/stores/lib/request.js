@@ -36,8 +36,11 @@ exports.getJSON = function (params, callback) {
   //     url
   //       request url
   //     data
-  //       optional object, request url parameters
+  //       optional object, request url parameters.
+  //       On server side, will be available as req.query.* by default.
   //   callback
+  //     fn (err, result)
+  //       where result is parsed object
   //
   if (!params.data || typeof params.data !== 'object') {
     params.data = {};
@@ -51,6 +54,34 @@ exports.getJSON = function (params, callback) {
     headers: { 'Authorization': 'Bearer ' + account.getToken() },
     success: function (result) {
       return callback(null, result);
+    },
+    error: function (jqxhr) {
+      return callback(createError(jqxhr));
+    },
+  });
+};
+
+exports.postJSON = function (params, callback) {
+  // General JSON POST AJAX request.
+  // Assumes the success response be JSON.
+  //
+  // Parameters:
+  //   params
+  //     url
+  //     data
+  //   callback
+  //     function (err)
+  //
+  $.ajax({
+    url: params.url,
+    type: 'POST',
+    contentType: 'application/json',
+    data: JSON.stringify(params.data),
+    processData: false, // already a string
+    // dataType: 'json', // expected response type TODO
+    headers: { 'Authorization': 'Bearer ' + account.getToken() },
+    success: function (responseData) {
+      return callback(null, responseData);
     },
     error: function (jqxhr) {
       return callback(createError(jqxhr));
@@ -114,31 +145,6 @@ exports.postFile = function (params, callback) {
     processData: false,
     success: function (jsonResp) {
       return callback(null, jsonResp);
-    },
-    error: function (jqxhr) {
-      return callback(createError(jqxhr));
-    },
-  });
-};
-
-
-exports.postJSON = function (params, callback) {
-  // General JSON POST AJAX request.
-  //
-  // Parameters:
-  //   params
-  //     url
-  //     data
-  //   callback
-  //     function (err)
-  $.ajax({
-    url: params.url,
-    type: 'POST',
-    contentType: 'application/json',
-    data: JSON.stringify(params.data),
-    headers: { 'Authorization': 'Bearer ' + account.getToken() },
-    success: function (responseData) {
-      return callback(null, responseData);
     },
     error: function (jqxhr) {
       return callback(createError(jqxhr));

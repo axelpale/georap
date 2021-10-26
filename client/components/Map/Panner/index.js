@@ -19,6 +19,8 @@ module.exports = function (map) {
     // Parameters:
     //   latLng
     //     LatLngLiteral
+    //       { lat, lng }
+    //
 
     // Wait until map has projection.
     // See convert.point2LatLng for details.

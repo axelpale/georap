@@ -8,5 +8,6 @@ const handlers = require('./handlers');
 // Geometry tools
 
 router.post('/', jsonParser, handlers.getInEverySystem);
+router.get('/parse', handlers.parseCoordinates);
 
 module.exports = router;

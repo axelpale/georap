@@ -48,11 +48,14 @@ module.exports = function () {
     children.create.bind($mount.find('.crosshair-create-container'));
 
     var THROTTLE_DURATION = 2000; // ms
-    var movedOnce = false;
     routes.crosshair = bus.on('crosshair_marker_moved', throttle(
       function (latLng, callback) {
         var geom = geometryModel.latLngToPoint(latLng);
         geometryApi.getInEverySystem(geom, function (err, geoms) {
+          // Params:
+          //   err
+          //   geoms is { <systemName>: [x, y], ... }
+          //
           if (err) {
             return console.error(err); // TODO
           }
@@ -62,15 +65,7 @@ module.exports = function () {
             children.coords.updateGeometry(geoms);
             children.viewon.updateGeometry(geoms);
             children.create.updateGeometry(geoms);
-            if (!movedOnce) {
-              movedOnce = true;
-              children.coordsform.updateGeometry(geoms);
-              // Set the coordinate form fields only once because in
-              // mobile context the user might need to flip the device
-              // to browse between input fields. That would cause an
-              // unexpected loss of the field values painstakingly typed
-              // this far.
-            }
+            children.coordsform.updateGeometry(geoms);
           }
           return callback();
         });

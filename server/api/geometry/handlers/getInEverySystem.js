@@ -1,8 +1,12 @@
-const proj = require('../../services/proj');
+const proj = require('../../../services/proj');
 const status = require('http-status-codes');
 
-exports.getInEverySystem = function (req, res) {
+module.exports = function (req, res) {
   // Return given GeoJSON geometry in all configured coordinate systems.
+  //
+  // Response structure:
+  //   A map from system names to [x, y] coordinates.
+  //   { <systemName>: [x, y] }
   //
   const geom = req.body.geometry;
 

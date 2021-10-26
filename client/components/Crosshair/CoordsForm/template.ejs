@@ -5,21 +5,34 @@
   </div>
   <div class="panel-body">
     <div class="form-group">
-      <label for="coordsform-latitude">Latitude</label>
-      <input type="text" class="form-control" id="coordsform-latitude">
-      <small class="form-text text-muted">WGS 84, decimal degrees (DD.DDDD)</small>
+      <label for="coordsform-system-selector">Coordinate System</label>
+      <select class="form-control" id="coordsform-system-selector">
+        <%
+          systems.forEach(function (system, index) {
+            var systemName = system[0];
+            var isDefault = systemName === defaultSystemName;
+        %>
+        <option value="<%= systemName %>"
+          <%= isDefault ? ' selected="selected"' : '' %>>
+          <%= systemName %>
+        </option>
+        <%
+          });
+        %>
+      </select>
+      <small class="form-text text-muted">The default is WGS84.</small>
     </div>
     <div class="form-group">
-      <label for="coordsform-longitude">Longitude</label>
-      <input type="text" class="form-control" id="coordsform-longitude">
-      <small class="form-text text-muted">WGS 84, decimal degrees (DD.DDDD)</small>
+      <label for="coordsform-input">Coordinates as text</label>
+      <input type="text" id="coordsform-input" class="coordsform-input form-control">
+      <small class="form-text text-muted coordsform-example"></small>
     </div>
+    <div class="hidden coordsform-error">
+      <div class="alert alert-warning" role="alert"></div>
+    </div>
+    <button type="button" class="btn btn-default coordsform-reset">Reset</button>
     <div class="pull-right">
-      <button type="submit" class="btn btn-default">Go</button>
+      <button type="submit" class="btn btn-default coordsform-go">Go</button>
     </div>
   </div>
 </form>
-
-<div class="hidden coordsform-error">
-  <div class="alert alert-danger" role="alert">Updating the coordinates failed. Ensure both coordinates to be in the decimal degree format similar to 12.345678.</div>
-</div>

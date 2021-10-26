@@ -69,6 +69,9 @@
       <%# Use bracket notation to allow template names with spaces and - %>
       window.tresdb.templates['<%= template.name %>'] = <%- template.source %>;
       <% }); %>
+
+      // alias: georap namespace
+      window.georap = window.tresdb;
     </script>
 
     <!-- Webpack bundle -->

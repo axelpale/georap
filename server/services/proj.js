@@ -11,14 +11,65 @@ config.coordinateSystems.forEach((cordsys) => {
   proj4.defs(name, projection);
 });
 
+exports.hasCoordinateSystem = (name) => {
+  const system = config.coordinateSystems.find((sys) => {
+    return sys[0] === name;
+  });
+
+  if (system) {
+    return true;
+  }
+  return false;
+};
+
+exports.getProjectionDefinition = (name) => {
+  // Get the projection definition string for the coordinate system.
+  //
+  // Parameters
+  //   name
+  //     string
+  //
+  // Return a projection definition string.
+  // Return null if unknown system.
+  //
+  const system = config.coordinateSystems.find((sys) => {
+    return sys[0] === name;
+  });
+
+  if (!system) {
+    return null;
+  }
+
+  return system[1];
+};
+
+exports.parseProjectionDefinition = (def) => {
+  // Parse projection definition string and return a Proj instance.
+  // The instance has the parsed definitions in its properties:
+  //
+  // Example
+  //   > const def = '+proj=utm +zone=35 +ellps=GRS80 +units=m +no_defs'
+  //   > parseProjectionDefinition(def)
+  //   {
+  //     projName: 'utm',
+  //     zone: 35,
+  //     ellps: 'GRS80',
+  //     units: 'm',
+  //     ...
+  //   }
+  //
+  return new proj4.Proj(def);
+};
+
 exports.getAltPositions = function (position) {
   //
   // Parameters:
   //   position
-  //     [lng, lat]
+  //     [lng, lat] i.e. [x, y]
   //
   // Return
   //   map from coordinate system names to projected coordinates.
+  //     { <systemName>: [x, y] }
   //
   const result = {};
 
@@ -37,9 +88,11 @@ exports.projectFrom = function (name, position) {
   // Parameters:
   //   name
   //   position
-  //     [lng, lat]
+  //     { x: lng, y: lat }
   //
-
+  // Return
+  //   { x: lng, y: lat }
+  //
   return proj4(name).inverse(position);
 };
 
@@ -49,8 +102,10 @@ exports.projectTo = function (name, position) {
   // Parameters:
   //   name
   //   position
-  //     [lng, lat]
+  //     { x: lng, y: lat }
   //
-
+  // Return
+  //   { x: lng, y: lat }
+  //
   return proj4(name, position);
 };

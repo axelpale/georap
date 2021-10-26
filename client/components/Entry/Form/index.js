@@ -53,7 +53,7 @@ module.exports = function (locationId, entry) {
     // Markdown form
     children.markdown = new MarkdownView(entry.markdown, {
       label: 'Tell something about the location:',
-      rows: 3,
+      rows: 5,
     });
     children.markdown.bind($mount.find('.form-markdown-container'));
     // Focus to textarea and move cursor to message end

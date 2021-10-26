@@ -2,15 +2,16 @@
 var bus = require('georap-bus');
 var socket = require('./connection/socket');
 
-// Collect data access API's under tresdb global.
+// Collect data access API's under georap global.
 // This prevents cumbersome ../../../ requires.
-// The tresdb global is defined in index.html
+// The georap global is defined in index.html
+// Lecacy name: tresdb
 var stores = require('./stores');
 
-// The html contains tresdb object,
+// The html contains georap object,
 // preset with some config.
 // Let us append the stores to the global namespace.
-tresdb.stores = stores;
+georap.stores = stores;
 
 // Use following stores here
 var account = stores.account;
@@ -32,9 +33,9 @@ var MapComp = require('./components/Map');
 var MainMenuComp = require('./components/MainMenu');
 
 
-// Collect helpers under tresdb global.
-tresdb.go = routes.show;  // go to path. very general, thus exposed globally
-tresdb.getCurrentPath = routes.getCurrentPath;  // query current page
+// Collect helpers under georap global.
+georap.go = routes.show;  // go to path. very general, thus exposed globally
+georap.getCurrentPath = routes.getCurrentPath;  // query current page
 
 // Define routes
 
@@ -42,13 +43,15 @@ routes.route();
 
 // Emit socket events to bus.
 
-socket.on('tresdb_event', function (ev) {
+var handleEvent = function (ev) {
   // Emit all location events. Allow hooking to all location events or
   // specific event type e.g. location_created, needed by main menu to
   // determine when creation is successful.
   bus.emit(ev.type, ev);
   bus.emit('socket_event', ev);
-});
+};
+socket.on('tresdb_event', handleEvent); // legacy
+socket.on('georap_event', handleEvent);
 
 
 // Map init

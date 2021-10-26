@@ -17,7 +17,7 @@ router.use((req, res, next) => {
   return next();
 });
 
-router.get('/', jsonParser, handlers.getAll);
+router.get('/', jsonParser, handlers.getAll); // TODO Bug? JSON parser w/ GET?
 router.post('/', jsonParser, handlers.create);
 router.get('/count', handlers.count);
 router.use('/:attachmentKey', attachmentLoader, attachmentRouter);

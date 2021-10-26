@@ -9,7 +9,9 @@ var coordinateTemplates = tresdb.templates;
 var prerenderGeoms = function (geoms) {
   // Parameters:
   //   geoms
-  //     system name -> [lng, lat]
+  //     system name -> [x, y]
+  //       where x is longitude or easting
+  //             y is latitude or northing
   //
   // Return
   //   array of { name, html } objects
@@ -19,10 +21,10 @@ var prerenderGeoms = function (geoms) {
   return coordinateSystems.map(function (coordSystem) {
     var systemName = coordSystem[0];
     var systemCoords = geoms[systemName];
-    var lat = systemCoords[1];
-    var lng = systemCoords[0];
+    var y = systemCoords[1];
+    var x = systemCoords[0];
     var systemTemplate = coordinateTemplates[systemName];
-    var coordsHtml = geostamp.html(systemTemplate, lat, lng);
+    var coordsHtml = geostamp.html(systemTemplate, y, x);
     return {
       name: systemName,
       html: coordsHtml,
