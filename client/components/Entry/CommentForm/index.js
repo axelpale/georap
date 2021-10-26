@@ -79,7 +79,7 @@ module.exports = function (entry, comment) {
       label: isNew ? 'Add Comment:' : 'Edit Comment:',
       glyphicon: isNew ? 'glyphicon-comment' : 'glyphicon-pencil flip-x',
       placeholder: 'message...',
-      rows: 2,
+      rows: 3,
       minLength: MIN_LEN,
       maxLength: MAX_LEN,
     });
