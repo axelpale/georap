@@ -27,6 +27,7 @@ module.exports = function () {
     $elems.coordInput = $mount.find('input.coordsform-input');
     $elems.resetBtn = $mount.find('button.coordform-reset');
     $elems.goBtn = $mount.find('button.coordsform-go');
+    $elems.example = $mount.find('.coordsform-example');
     $elems.error = $mount.find('.coordsform-error');
 
     // Render system specific form when system selection changes.
