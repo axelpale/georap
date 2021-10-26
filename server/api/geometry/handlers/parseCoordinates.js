@@ -32,7 +32,7 @@ module.exports = function (req, res) {
     };
   } else if (projection.projName === 'utm') {
     // Use utm parser
-    const ne = utmParser(text);
+    const ne = utmParser.parse(text);
     xy = {
       x: ne.x,
       y: ne.y,
