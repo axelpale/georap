@@ -42,13 +42,15 @@ routes.route();
 
 // Emit socket events to bus.
 
-socket.on('tresdb_event', function (ev) {
+var handleEvent = function (ev) {
   // Emit all location events. Allow hooking to all location events or
   // specific event type e.g. location_created, needed by main menu to
   // determine when creation is successful.
   bus.emit(ev.type, ev);
   bus.emit('socket_event', ev);
-});
+};
+socket.on('tresdb_event', handleEvent); // legacy
+socket.on('georap_event', handleEvent);
 
 
 // Map init
