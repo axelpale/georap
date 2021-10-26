@@ -1,17 +1,23 @@
 // Enable user to write coordinates to navigate on the map.
 //
 var template = require('./template.ejs');
+var geostamp = require('geostamp');
 var ui = require('georap-ui');
-// var bus = require('georap-bus');
+var bus = require('georap-bus');
 var geometryStore = tresdb.stores.geometry;
 var coordinateSystems = tresdb.config.coordinateSystems;
+var coordinateTemplates = tresdb.templates;
 var defaultSystemName = coordinateSystems[0][0];
 
 module.exports = function () {
 
   // For unbinding to prevent memory leaks.
+  var self = this;
   var $elems = {};
   var $mount = null;
+
+  // Keep track of crosshair position
+  var geoms = null;
 
   // Public methods
 
@@ -30,10 +36,11 @@ module.exports = function () {
     $elems.example = $mount.find('.coordsform-example');
     $elems.error = $mount.find('.coordsform-error');
 
-    // Render system specific form when system selection changes.
+    // Render system specific example when system selection changes.
     var handleSystemChange = function () {
       var selectedSystem = $elems.systemSelector.val();
       console.log('selectedSystem', selectedSystem);
+      self.updateExample();
     };
     $elems.systemSelector.on('change', handleSystemChange);
 
@@ -64,13 +71,52 @@ module.exports = function () {
           return;
         }
 
-        console.log(coords);
+        // Pick WGS84
+        const coordsInWgs84 = coords.find(function (c) {
+          return c.system === 'WGS84';
+        });
+        if (!coordsInWgs84) {
+          throw new Error('No WGS84 coordinate system found.');
+        }
 
-        // bus.emit('crosshair_form_submit', {
-        //   latLng: latLng,
-        // });
+        bus.emit('crosshair_form_submit', {
+          latLng: {
+            lat: coordsInWgs84.xy.y,
+            lng: coordsInWgs84.xy.x,
+          },
+        });
       });
     });
+  };
+
+  this.updateExample = function () {
+    if ($mount && $elems.example) {
+      var systemName = $elems.systemSelector.val();
+      if (geoms && geoms[systemName]) {
+        var systemCoords = geoms[systemName];
+        var x = systemCoords[0];
+        var y = systemCoords[1];
+        // Pick template
+        var systemTemplate = coordinateTemplates[systemName];
+        var coordsHtml = geostamp.html(systemTemplate, y, x);
+        $elems.example.html('Example: ' + coordsHtml);
+      }
+    }
+  };
+
+  this.updateGeometry = function (newGeoms) {
+    // Update form-specific location.
+    //
+    // Parameters:
+    //   geoms
+    //     a map { <systemName>: [x, y], ... }
+    //
+    geoms = newGeoms;
+    // Update example coordinates. Do not update input form because
+    // the coordinate input process can be slow and difficult and thus
+    // a reset would wipe that hard work away. This is emphasized in
+    // mobile context where even a screen rotation can update geometry.
+    this.updateExample();
   };
 
   this.unbind = function () {
