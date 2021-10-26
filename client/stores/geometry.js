@@ -4,6 +4,14 @@ exports.getInEverySystem = function (geom, callback) {
   // Get geom in all configured coordinate systems.
   // Use POST request to send GeoJSON as is.
   //
+  // Parameters:
+  //   geom
+  //     GeoJSON
+  //   callback
+  //     fn (err, geoms), where
+  //       geoms
+  //         { <systemName>: [x, y], ... }
+  //
   return request.postJSON({
     url: '/api/geometry',
     data: {

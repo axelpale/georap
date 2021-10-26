@@ -53,6 +53,10 @@ module.exports = function () {
       function (latLng, callback) {
         var geom = geometryModel.latLngToPoint(latLng);
         geometryApi.getInEverySystem(geom, function (err, geoms) {
+          // Params:
+          //   err
+          //   geoms is { <systemName>: [x, y], ... }
+          //
           if (err) {
             return console.error(err); // TODO
           }

@@ -4,6 +4,10 @@ const status = require('http-status-codes');
 module.exports = function (req, res) {
   // Return given GeoJSON geometry in all configured coordinate systems.
   //
+  // Response structure:
+  //   A map from system names to [x, y] coordinates.
+  //   { <systemName>: [x, y] }
+  //
   const geom = req.body.geometry;
 
   if (!geom) {

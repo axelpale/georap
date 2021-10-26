@@ -65,10 +65,11 @@ exports.getAltPositions = function (position) {
   //
   // Parameters:
   //   position
-  //     [lng, lat]
+  //     [lng, lat] i.e. [x, y]
   //
   // Return
   //   map from coordinate system names to projected coordinates.
+  //     { <systemName>: [x, y] }
   //
   const result = {};
 
