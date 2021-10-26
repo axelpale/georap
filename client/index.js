@@ -32,7 +32,7 @@ var MapComp = require('./components/Map');
 var MainMenuComp = require('./components/MainMenu');
 
 
-// Collect helpers under tresdb global.
+// Collect helpers under georap and tresdb global.
 tresdb.go = routes.show;  // go to path. very general, thus exposed globally
 tresdb.getCurrentPath = routes.getCurrentPath;  // query current page
 
