@@ -1,8 +1,14 @@
 var template = require('./template.ejs');
+var ui = require('georap-ui');
 
 module.exports = function (fileupload) {
 
-  this.bind = function ($mount) {
+  var $mount = null;
+  var $elems = {};
+
+  this.bind = function ($mountEl) {
+    $mount = $mountEl;
+
     $mount.html(template({
       filename: fileupload.file.name,
       filesize: Math.round(fileupload.file.size / 1024),
@@ -10,10 +16,10 @@ module.exports = function (fileupload) {
       validatorError: fileupload.validatorError,
     }));
 
-    var $bar = $mount.find('.progress-bar');
+    $elems.bar = $mount.find('.progress-bar');
 
     fileupload.on('progress', function (percentage) {
-      $bar.css('width', percentage + '%');
+      $elems.bar.css('width', percentage + '%');
     });
 
     fileupload.on('error', function (err) {
@@ -31,6 +37,11 @@ module.exports = function (fileupload) {
   };
 
   this.unbind = function () {
-    fileupload.off();
+    if ($mount) {
+      $mount = null;
+      fileupload.off();
+      ui.offAll($elems);
+      $elems = {};
+    }
   };
 };
