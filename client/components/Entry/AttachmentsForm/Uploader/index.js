@@ -162,10 +162,14 @@ module.exports = function (opts) {
               textStatus: textStatus,
             });
           });
+        })
+        .always(function () {
+          // Deferred always.
+          // Unbind fileuploads to ensure memory management.
+          fileuploads.forEach(function (fileupload) {
+            fileupload.off();
+          });
         });
-      // .always(function () {
-      //   console.log('deferred always');
-      // });
     });
 
     bound.form = $form;
