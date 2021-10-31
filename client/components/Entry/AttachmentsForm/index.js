@@ -91,6 +91,18 @@ module.exports = function (attachments, opts) {
         delete children[fileupload.id];
         $attContainer.remove();
       });
+      fileupload.on('cancel', function () {
+        // The UploadView will stop animation and hide the cancel button.
+        // Let the change sit a moment and then remove the element.
+        setTimeout(function () {
+          // Remove with hide animation
+          children[fileupload.id].unbind();
+          delete children[fileupload.id];
+          $attContainer.hide(400, function () {
+            $attContainer.remove();
+          });
+        }, 1000);
+      });
     };
 
     attachments.forEach(appendAttachment);

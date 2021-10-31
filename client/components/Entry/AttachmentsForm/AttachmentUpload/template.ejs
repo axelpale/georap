@@ -2,10 +2,13 @@
   <%= filename %> – <%= filesize %> kB
 
   <% if (isValid) { %>
-  <div class="progress">
+  <div class="progress" style="margin-bottom: 0.38em">
     <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
       <span class="sr-only">0% Complete</span>
     </div>
+  </div>
+  <div class="upload-controls">
+    <button class="btn btn-default btn-sm btn-cancel"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Cancel Upload</button>
   </div>
   <% } else { %>
     <div><%= validatorError %></div>

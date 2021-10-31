@@ -135,6 +135,23 @@ module.exports = function (opts) {
               });
             }
           }, false);
+          // Provide means to cancel the upload. Cancel only once.
+          var cancelled = false;
+          var cancelAll = function () {
+            if (!cancelled) {
+              cancelled = true;
+              // Cancel others also. Note that this will trigger new cancel
+              // events. The 'cancelled' flag prevents recalling abort().
+              // The FileUpload.cancel() method must prevent double calls.
+              for (var i = 0; i < fileuploads.length; i += 1) {
+                fileuploads[i].cancel();
+              }
+              xhr.abort();
+            }
+          };
+          fileuploads.forEach(function (fileupload) {
+            fileupload.on('cancel', cancelAll);
+          });
           // Use the modified XMLHttpRequest
           return xhr;
         },

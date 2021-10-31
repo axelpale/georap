@@ -16,22 +16,39 @@ module.exports = function (fileupload) {
     }));
 
     $elems.bar = $mount.find('.progress-bar');
+    $elems.cancel = $mount.find('.upload-controls .btn-cancel');
 
     fileupload.on('progress', function (percentage) {
       $elems.bar.css('width', percentage + '%');
     });
 
     fileupload.on('error', function (err) {
-      // Turn red
-      // Show error
-      // Allow close
-      console.error(err);
+      if (!fileupload.cancelled) {
+        // Turn red
+        // Show error
+        // Allow close
+        console.error(err);
+      }
+      // cancelled, no real error.
     });
 
     fileupload.on('success', function () {
       // Flash green success.
       // Converted to an attachment in the parent.
       // Hide.
+    });
+
+    fileupload.on('cancel', function () {
+      // React to self or sibling cancel.
+      // Stop the animation
+      $elems.bar.removeClass(['progress-bar-striped', 'active']);
+      // Hide the cancel button to show that the command took hold
+      ui.hide($elems.cancel);
+    });
+
+    $elems.cancel.click(function () {
+      // Cancel the upload
+      fileupload.cancel();
     });
   };
 
