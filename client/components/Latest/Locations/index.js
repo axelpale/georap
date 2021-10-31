@@ -47,22 +47,25 @@ module.exports = function () {
         skip: skip,
         limit: limit,
       }, function (errmore, latestResult) {
-        ui.hide($elems.progress);
-        if (errmore) {
-          $elems.error.html(errmore.message);
-          ui.show($elems.error);
-          return;
-        }
+        // Possibly unbound during the request
+        if ($mount) {
+          ui.hide($elems.progress);
+          if (errmore) {
+            $elems.error.html(errmore.message);
+            ui.show($elems.error);
+            return;
+          }
 
-        var morelocs = latestResult.locations;
-        var total = latestResult.locationCount;
+          var morelocs = latestResult.locations;
+          var total = latestResult.locationCount;
 
-        appendLocations(morelocs, total);
+          appendLocations(morelocs, total);
 
-        ui.show($elems.loadMoreBtn);
+          ui.show($elems.loadMoreBtn);
 
-        if (callback) {
-          return callback();
+          if (callback) {
+            return callback();
+          }
         }
       });
     }

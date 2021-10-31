@@ -43,22 +43,25 @@ module.exports = function () {
         skip: skip,
         limit: limit,
       }, function (err, result) {
-        ui.hide($elems.progress);
-        if (err) {
-          $elems.error.html(err.message);
-          ui.show($elems.error);
-          return;
-        }
+        // Often not mounted anymore when quickly navigating tabs
+        if ($mount) {
+          ui.hide($elems.progress);
+          if (err) {
+            $elems.error.html(err.message);
+            ui.show($elems.error);
+            return;
+          }
 
-        var entries = result.entries;
-        // var total = latestResult.entriesCount;
+          var entries = result.entries;
+          // var total = latestResult.entriesCount;
 
-        appendEntries(entries);
+          appendEntries(entries);
 
-        ui.show($elems.loadMoreBtn);
+          ui.show($elems.loadMoreBtn);
 
-        if (callback) {
-          return callback();
+          if (callback) {
+            return callback();
+          }
         }
       });
     }

@@ -53,6 +53,11 @@ module.exports = function () {
         skip: skip,
         limit: limit,
       }, function (err, result) {
+        if (!$mount) {
+          // Happens when quickly navigating tabs
+          return;
+        }
+
         ui.hide($elems.progress);
         if (err) {
           $elems.error.html(err.message);
