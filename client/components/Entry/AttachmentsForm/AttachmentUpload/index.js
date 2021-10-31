@@ -2,7 +2,6 @@ var template = require('./template.ejs');
 var ui = require('georap-ui');
 
 module.exports = function (fileupload) {
-
   var $mount = null;
   var $elems = {};
 
@@ -31,7 +30,7 @@ module.exports = function (fileupload) {
 
     fileupload.on('success', function () {
       // Flash green success.
-      // Convert to Attachment somehow.
+      // Converted to an attachment in the parent.
       // Hide.
     });
   };

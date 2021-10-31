@@ -125,7 +125,7 @@ module.exports = function (opts) {
         contentType: false,
         processData: false,
         xhr: function () {
-          // For upload progress bar
+          // For upload progress bar, update on progress
           var xhr = new window.XMLHttpRequest();
           xhr.upload.addEventListener('progress', function (evt) {
             if (evt.lengthComputable) {
@@ -135,6 +135,7 @@ module.exports = function (opts) {
               });
             }
           }, false);
+          // Use the modified XMLHttpRequest
           return xhr;
         },
       })
@@ -154,7 +155,7 @@ module.exports = function (opts) {
           }
         })
         .fail(function (jqxhr, textStatus, err) {
-          console.error(err);
+          // Delegate error to the individual uploads.
           fileuploads.forEach(function (fileupload) {
             fileupload.emit('error', {
               data: err,
