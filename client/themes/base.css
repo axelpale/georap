@@ -438,7 +438,12 @@ li.form-attachment-container:first-child img {
 .form-attachment .form-attachment-buttons {
   line-height: 3.4rem;
 }
+.form-attachment-upload-container {
+  /* Ongoing uploads */
+  padding-bottom: 15px;
+}
 .uploader-container {
+  /* Drag and drop upload form */
   background-color: #f5f5f5;
 }
 .uploader-container.list-group-item {
