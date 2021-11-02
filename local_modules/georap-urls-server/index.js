@@ -8,8 +8,9 @@ exports.completeAttachment = (attachment) => {
   const thumburl = urljoin(uploadUrl, attachment.thumbfilepath)
   return Object.assign({}, attachment, {
     url: urljoin(uploadUrl, attachment.filepath),
-    thumbUrl: thumburl, // note camelCase
-    thumburl: thumburl
+    thumbUrl: thumburl, // note camelCase DEPRECATED
+    thumburl: thumburl,
+    viewerurl: '/attachments/' + attachment.key,
   })
 }
 
