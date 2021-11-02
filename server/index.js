@@ -65,9 +65,10 @@ if (config.env === 'production') {
 // ---------------
 // Request logging END
 
+// Static assets
+// -------------
 app.use(config.staticUrl, express.static(config.staticDir));
 console.log('Serving static files from', config.staticUrl);
-
 // Instance-specific static files are best copied without webpack
 // because webpack does not support dynamic paths well.
 const imagesSource = path.resolve(__dirname, '..', 'client', 'images');
