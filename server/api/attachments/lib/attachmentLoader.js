@@ -2,7 +2,7 @@
 
 const dal = require('../attachment/dal');
 const status = require('http-status-codes');
-const keyPattern = require('./keyPattern');
+const georapkey = require('georap-key');
 
 module.exports = function (req, res, next) {
   // Converts string object id to ObjectId and fetches the location.
@@ -10,7 +10,7 @@ module.exports = function (req, res, next) {
   const key = req.params.attachmentKey;
 
   // Validate key
-  if (!keyPattern.test(key)) {
+  if (!georapkey.validate(key)) {
     return res.status(status.BAD_REQUEST).send('Invalid attachment key');
   }
 
