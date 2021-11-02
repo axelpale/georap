@@ -1,9 +1,9 @@
 const asyn = require('async');
 const status = require('http-status-codes');
 const urls = require('georap-urls-server');
+const georapkey = require('georap-key');
 const dal = require('./dal');
 const attachmentDal = require('./attachment/dal');
-const keyPattern = require('./lib/keyPattern');
 const uploads = require('../../services/uploads');
 
 // Setup
@@ -107,7 +107,7 @@ exports.getMany = (req, res, next) => {
 
   // Validate keys
   try {
-    if (!keys.every(k => keyPattern.test(k))) {
+    if (!keys.every(georapkey.validate)) {
       return res.status(status.BAD_REQUEST).send('Invalid attribute: keys');
     }
   } catch (err) {
