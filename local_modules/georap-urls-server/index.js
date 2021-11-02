@@ -4,9 +4,12 @@ const staticUrl = config.staticUrl
 const uploadUrl = config.uploadUrl
 
 exports.completeAttachment = (attachment) => {
+  // Add url properties.
+  const thumburl = urljoin(uploadUrl, attachment.thumbfilepath)
   return Object.assign({}, attachment, {
     url: urljoin(uploadUrl, attachment.filepath),
-    thumbUrl: urljoin(uploadUrl, attachment.thumbfilepath)
+    thumbUrl: thumburl, // note camelCase
+    thumburl: thumburl
   })
 }
 
