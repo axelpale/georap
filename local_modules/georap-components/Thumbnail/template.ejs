@@ -7,7 +7,7 @@ if (makeLink) {
 }
 
 if (attachment.mimetype.startsWith('image/')) {
-  %><img src="<%= attachment.thumbUrl %>" title="<%= attachment.filename %>"><%
+  %><img src="<%= attachment.thumburl %>" title="<%= attachment.filename %>"><%
 } else if (attachment.mimetype === 'application/pdf') {
   %><img src="/assets/images/thumbnails/pdf.png" title="<%= attachment.filename %>"><%
 } else if (attachment.mimetype === 'application/vnd.ms-excel') {
