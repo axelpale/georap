@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+
+    <title><%= attachment.filename %></title>
+
+    <!-- Viewport mobile tag for sensible mobile support -->
+    <!--meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"-->
+
+    <!-- Icons -->
+    <% if (icons) { %>
+    <% icons.forEach((icon) => { %>
+    <link rel="icon" type="<%= icon.type %>" sizes="<%= icon.sizes %>"
+          href="/assets/<%= icon.src %>">
+    <% }) %>
+    <% } %>
+
+    <style>
+      img {
+        max-width: 100%;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div>
+      <img src="<%= attachment.url %>" title="<%= attachment.filename %>">
+    </div>
+    <div style="display: <%= isProduction ? 'none' : 'block' %>">
+      <pre><code><%- jsonsnippet %></code></pre>
+    </div>
+  </body>
+</html>
