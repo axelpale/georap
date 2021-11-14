@@ -62,7 +62,7 @@
     "coordinate-parser": "^1.0.7",
     "distfilter": "file:local_modules/distfilter",
     "download": "^7.1.0",
-    "ejs": "^2.5.2",
+    "ejs": "^3.1.6",
     "email-validator": "^1.0.7",
     "express": "^4.17.1",
     "express-jwt": "^6.1.0",
