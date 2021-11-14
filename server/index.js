@@ -24,7 +24,7 @@ const loggers = require('./services/logs/loggers');
 const router = require('./routes');
 
 // Log environment
-console.log('Starting TresDB in environment:', config.env);
+console.log('Starting Georap in environment:', config.env);
 
 
 // Database connection first
