@@ -20,7 +20,7 @@
   "scripts": {
     "start": "npm run server:production",
     "start:watch": "nodemon --watch local_modules --watch server --ext js,ejs,json --exec 'npm run lint:server && npm run server:development'",
-    "build": "webpack client",
+    "build": "webpack ./client",
     "build:watch": "nodemon --watch client --watch local_modules --ext js,ejs,css,json --exec 'npm run lint:client && npm run build:css && npm run build'",
     "build:css": "cp client/themes/*.css .tmp/public/themes/",
     "server:development": "NODE_ENV=development node server/index.js",
@@ -125,7 +125,7 @@
     "should": "^13.2.3",
     "style-loader": "^1.1.3",
     "tape": "^5.3.1",
-    "webpack": "^4.42.0",
-    "webpack-cli": "^3.3.11"
+    "webpack": "^5.64.0",
+    "webpack-cli": "^4.9.1"
   }
 }
