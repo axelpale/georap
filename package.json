@@ -66,7 +66,7 @@
     "ejs-loader": "^0.3.0",
     "email-validator": "^1.0.7",
     "express": "^4.17.1",
-    "express-jwt": "^6.0.0",
+    "express-jwt": "^6.1.0",
     "extract-zip": "^1.6.5",
     "fs-extra": "^4.0.2",
     "georap-bus": "file:local_modules/georap-bus",
