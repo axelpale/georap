@@ -83,7 +83,7 @@
     "georap-urls-client": "file:local_modules/georap-urls-client",
     "georap-urls-server": "file:local_modules/georap-urls-server",
     "geostamp": "file:local_modules/geostamp",
-    "glob": "^7.1.2",
+    "glob": "^7.2.0",
     "http-status-codes": "^1.1.6",
     "jsonwebtoken": "^8.0.1",
     "jwt-decode": "^2.1.0",
