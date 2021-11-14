@@ -111,7 +111,7 @@
     "striptags": "^3.1.0",
     "turndown": "^7.0.0",
     "url-join": "^4.0.1",
-    "utm-coordinate-parser": "^1.0.1",
+    "utm-coordinate-parser": "^1.1.0",
     "zpad": "^0.5.0"
   },
   "devDependencies": {
