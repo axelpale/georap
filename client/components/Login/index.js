@@ -4,7 +4,7 @@ var config = tresdb.config;
 var loginTemplate = require('./template.ejs');
 var ui = require('georap-ui');
 var emitter = require('component-emitter');
-var validator = require('email-validator');
+var emailValidator = require('email-validator');
 
 var UNAUTHORIZED = 401;
 var FORBIDDEN = 403;
@@ -149,7 +149,7 @@ module.exports = function (onSuccess) {
     ui.hide($('#tresdb-password-reset-success'));
 
     // Validate input
-    if (!validator.validate(resetEmail)) {
+    if (!emailValidator.validate(resetEmail)) {
       // Display error message
       ui.show($('#tresdb-password-reset-invalid-email'));
 
