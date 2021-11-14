@@ -1,10 +1,11 @@
-var minibus = require('minibus');
+/* eslint-disable no-var */
+var minibus = require('minibus')
 
 minibus.extension.sub = function () {
   // Return a local bus object that remembers the bound handlers
   // and thus provides an easy way to off them.
   //
-  var self = this;
+  var self = this
   var routes = []
   return {
 

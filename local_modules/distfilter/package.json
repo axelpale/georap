@@ -15,9 +15,8 @@
   },
   "author": "Akseli Palén <akseli.palen@gmail.com>",
   "license": "MIT",
-  "dependencies": {},
   "devDependencies": {
-    "tape": "^4.13.3",
-    "standard": "*"
+    "standard": "^16.0.4",
+    "tape": "^4.13.3"
   }
 }

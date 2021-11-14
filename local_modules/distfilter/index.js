@@ -1,3 +1,5 @@
+/* eslint-disable no-var */
+
 var geomDist2 = function (g1, g2) {
   // Parameters:
   //   g1, g2

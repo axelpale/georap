@@ -1,3 +1,4 @@
+/* eslint-disable no-var */
 // Max hiding time frame. E.g. if two similar entries are created within
 // this duration, the first might be hidden.
 var MAX_DIFF_MSEC = 300000 // 5 * 60 * 1000

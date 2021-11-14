@@ -19,6 +19,6 @@
     "minibus": "^3.1.0"
   },
   "devDependencies": {
-    "standard": "*"
+    "standard": "^16.0.4"
   }
 }
