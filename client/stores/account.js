@@ -17,7 +17,7 @@
 var storage = require('../connection/storage');
 var users = require('./users');
 var emitter = require('component-emitter');
-var jwtDecode = require('jwt-decode');
+var jwtDecode = require('jwt-decode').default;
 
 emitter(exports);
 

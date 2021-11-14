@@ -3,7 +3,7 @@
 var account = tresdb.stores.account;
 var template = require('./template.ejs');
 var emitter = require('component-emitter');
-var jwtDecode = require('jwt-decode');
+var jwtDecode = require('jwt-decode').default;
 var ui = require('georap-ui');
 
 module.exports = function (token, goLogin) {
