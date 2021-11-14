@@ -237,7 +237,7 @@ exports.sendResetPasswordEmail = function (req, res, next) {
 
     const mailOptions = {
       from: config.mail.sender,
-      to: user.email,
+      to: [user.email],
       subject: config.title + ' password reset requested for your account',
       text: templates.resetMailTemplate({
         resetUrl: url,
@@ -368,7 +368,7 @@ exports.sendInviteEmail = function (req, res, next) {
 
     const mailOptions = {
       from: config.mail.sender,
-      to: email,
+      to: [email],
       subject: 'Invite to ' + config.title,
       text: templates.inviteMailTemplate({
         url: url,
