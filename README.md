@@ -57,7 +57,7 @@ Read on for technical details and installation instructions.
 
 Georap is a web application and thus requires installation to a web server. The web server is required to have Node.js and MongoDB available.
 
-We assume you have Node.js v10 or later and MongoDB v4 or later already installed. See [mongodb.org/downloads](https://www.mongodb.org/downloads) for instructions. For example on macOS:
+We assume you have Node.js v12 or later and MongoDB v4 or later already installed. See [mongodb.org/downloads](https://www.mongodb.org/downloads) for instructions. For example on macOS:
 
     $ brew install mongodb
 
