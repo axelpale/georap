@@ -25,7 +25,10 @@ module.exports = {
       },
       {
         test: /\.ejs$/,
-        use: 'ejs-loader',
+        loader: 'ejs-loader',
+        options: {
+          esModule: false, // enable CommonJS modules. Maybe set true in future.
+        },
       },
     ],
   },
