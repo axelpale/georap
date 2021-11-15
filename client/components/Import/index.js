@@ -18,7 +18,7 @@ module.exports = function () {
 
   this.bind = function ($mount) {
     $mount.html(template({
-      limit: Math.round(tresdb.config.tempUploadSizeLimit / (K * K)),
+      limit: Math.round(georap.config.tempUploadSizeLimit / (K * K)),
     }));
 
     var $uploadForm = $('#tresdb-import-upload-form');
@@ -41,7 +41,7 @@ module.exports = function () {
       // Begin progress
       ui.show($progress);
 
-      tresdb.stores.locations.importFile($uploadForm, function (err, result) {
+      georap.stores.locations.importFile($uploadForm, function (err, result) {
         ui.hide($progress);
 
         if (err) {
@@ -57,7 +57,7 @@ module.exports = function () {
 
         // Import successful. Switch to batch page.
         var batchId = result.batchId;
-        tresdb.go('/import/' + batchId);
+        georap.go('/import/' + batchId);
       });
     });
 

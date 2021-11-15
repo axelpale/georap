@@ -3,7 +3,7 @@
 // Map marker icon definitions. The icons can be used only after google maps
 // api has been loaded. Therefore, call the methods after initMap.
 
-var staticUrl = tresdb.config.staticUrl;
+var staticUrl = georap.config.staticUrl;
 var geolocationUrl = staticUrl + '/images/mapicons/geolocation.png';
 var crosshairUrl = staticUrl + '/images/mapicons/crosshair.png';
 var additionMarkerUrl = staticUrl + '/images/mapicons/additionMarker.png';

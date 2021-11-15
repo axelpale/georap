@@ -1,7 +1,7 @@
 var template = require('./template.ejs');
 var ui = require('georap-ui');
 var geometryModel = require('georap-models').geometry;
-var locationsStore = tresdb.stores.locations;
+var locationsStore = georap.stores.locations;
 
 module.exports = function () {
 

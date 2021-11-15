@@ -2,7 +2,7 @@ var template = require('./template.ejs');
 var listTemplate = require('./list.ejs');
 var emitter = require('component-emitter');
 var ui = require('georap-ui');
-var markers = tresdb.stores.markers;
+var markersStore = georap.stores.markers;
 
 var CONNECTION_ERROR = 0;
 var BAD_REQUEST = 400;
@@ -51,7 +51,7 @@ module.exports = function (query) {
     });
 
     // Fetch location search results.
-    markers.getFiltered(extendedQuery, function (err, results) {
+    markersStore.getFiltered(extendedQuery, function (err, results) {
       // Hide progress if visible
       ui.hide($elems.progress);
 

@@ -17,7 +17,7 @@ var MoveForm = require('../MoveForm');
 var drafting = require('./drafting');
 var ui = require('georap-ui');
 var emitter = require('component-emitter');
-var entries = tresdb.stores.entries;
+var entries = georap.stores.entries;
 
 module.exports = function (locationId, entry) {
   // Entry form View.

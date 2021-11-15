@@ -4,7 +4,7 @@ var template = require('./template.ejs');
 var listTemplate = require('./list.ejs');
 var selectedTemplate = require('./selected.ejs');
 var throttle = require('georap-throttle');
-var locationsApi = tresdb.stores.locations;
+var locationsApi = georap.stores.locations;
 
 module.exports = function () {
 

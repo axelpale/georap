@@ -6,9 +6,9 @@ var emitter = require('component-emitter');
 var statusListTemplate = require('../Location/StatusType/statusFormList.ejs');
 var typeListTemplate = require('../Location/StatusType/typeFormList.ejs');
 var template = require('./template.ejs');
-var locationTypes = tresdb.config.locationTypes;
-var locationStatuses = tresdb.config.locationStatuses;
-var filterStore = tresdb.stores.filter;
+var locationTypes = georap.config.locationTypes;
+var locationStatuses = georap.config.locationStatuses;
+var filterStore = georap.stores.filter;
 
 module.exports = function () {
   // Parameters

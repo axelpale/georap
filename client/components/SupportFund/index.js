@@ -2,9 +2,8 @@
 // View for location
 
 var emitter = require('component-emitter');
-
-// Templates
 var template = require('./template.ejs');
+var content = georap.config.supportPageContent;
 
 module.exports = function () {
   // Parameters
@@ -27,11 +26,12 @@ module.exports = function () {
   self.bind = function ($mount) {
     // Loading
     $mount.html(template({
-      tresdb: tresdb, // for page content
+      content: content,
     }));
-  };  // end bind
+  };
 
   self.unbind = function () {
+    // noop
   };
 
 };

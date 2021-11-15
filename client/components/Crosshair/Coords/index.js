@@ -3,8 +3,8 @@
 var geostamp = require('geostamp');
 var template = require('./template.ejs');
 
-var coordinateSystems = tresdb.config.coordinateSystems;
-var coordinateTemplates = tresdb.templates;
+var coordinateSystems = georap.config.coordinateSystems;
+var coordinateTemplates = georap.templates;
 
 var prerenderGeoms = function (geoms) {
   // Parameters:

@@ -3,7 +3,7 @@
 var emitter = require('component-emitter');
 var models = require('georap-models');
 var EventsModel = require('./Events/Model');
-var locations = tresdb.stores.locations;
+var locations = georap.stores.locations;
 
 module.exports = function (rawLoc) {
   // Usage:

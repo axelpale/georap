@@ -6,7 +6,7 @@ var emitter = require('component-emitter');
 var RemoveView = require('../Remove');
 var ErrorView = require('../Error');
 var template = require('./template.ejs');
-var entryApi = tresdb.stores.entries;
+var entryApi = georap.stores.entries;
 
 module.exports = function (entry, comment) {
   // Parameters

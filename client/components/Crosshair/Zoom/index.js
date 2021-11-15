@@ -2,7 +2,7 @@
 //
 var template = require('./template.ejs');
 var ui = require('georap-ui');
-var mapStateStore = tresdb.stores.mapstate;
+var mapStateStore = georap.stores.mapstate;
 
 module.exports = function () {
   // Init

@@ -1,5 +1,5 @@
 var emitter = require('component-emitter');
-var uploadSizeLimit = tresdb.config.uploadSizeLimit;
+var uploadSizeLimit = georap.config.uploadSizeLimit;
 var idCounter = 0;
 var MB = 1024 * 1024;
 

@@ -16,8 +16,8 @@ var queryString = require('qs');
 var emitter = require('component-emitter');
 
 // Stores
-var account = tresdb.stores.account;
-var mapStateStore = tresdb.stores.mapstate;
+var account = georap.stores.account;
+var mapStateStore = georap.stores.mapstate;
 
 // Emit 'map_activated' so that map knows when to pan back to original state.
 emitter(exports);

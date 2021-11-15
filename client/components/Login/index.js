@@ -1,6 +1,6 @@
 
-var account = tresdb.stores.account;
-var config = tresdb.config;
+var account = georap.stores.account;
+var config = georap.config;
 var loginTemplate = require('./template.ejs');
 var ui = require('georap-ui');
 var emitter = require('component-emitter');

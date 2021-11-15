@@ -4,8 +4,8 @@ var validateCoords = require('./lib/validateCoords');
 var request = require('./lib/request');
 var account = require('./account');
 var emitter = require('component-emitter');
-var locationStatuses = tresdb.config.locationStatuses;
-var locationTypes = tresdb.config.locationTypes;
+var locationStatuses = georap.config.locationStatuses;
+var locationTypes = georap.config.locationTypes;
 
 // Init
 emitter(exports);

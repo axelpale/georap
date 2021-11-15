@@ -7,7 +7,7 @@ var template = require('./template.ejs');
 var EventsView = require('../../Events');
 var LocationSelector = require('../LocationSelector');
 var rootBus = require('georap-bus');
-var eventsStore = tresdb.stores.events;
+var eventsStore = georap.stores.events;
 
 var LIST_SIZE = 100;
 

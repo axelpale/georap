@@ -2,7 +2,7 @@
 var template = require('./template.ejs');
 var emitter = require('component-emitter');
 var ui = require('georap-ui');
-var account = tresdb.stores.account;
+var account = georap.stores.account;
 
 module.exports = function () {
 

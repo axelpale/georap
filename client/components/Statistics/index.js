@@ -3,7 +3,7 @@ var template = require('./template.ejs');
 var tableTemplate = require('./table.ejs');
 var emitter = require('component-emitter');
 var ui = require('georap-ui');
-var statistics = tresdb.stores.statistics;
+var statisticsApi = georap.stores.statistics;
 
 module.exports = function () {
 
@@ -22,7 +22,7 @@ module.exports = function () {
     var $progress = $('#tresdb-statistics-progress');
     var $table = $('#tresdb-statistics-table');
 
-    statistics.getAll(function (err, stats) {
+    statisticsApi.getAll(function (err, stats) {
       ui.hide($progress);
 
       if (err) {
@@ -32,7 +32,7 @@ module.exports = function () {
 
       // Add current client version.
       // A dev can compare this to serverVersion.
-      stats.clientVersion = tresdb.version;
+      stats.clientVersion = georap.version;
 
       $table.html(tableTemplate({
         stats: stats,

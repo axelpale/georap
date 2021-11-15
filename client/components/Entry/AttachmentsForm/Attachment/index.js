@@ -2,7 +2,7 @@ var template = require('./template.ejs');
 var Thumbnail = require('georap-components').Thumbnail;
 var ui = require('georap-ui');
 var emitter = require('component-emitter');
-var attachmentsApi = tresdb.stores.attachments;
+var attachmentsApi = georap.stores.attachments;
 
 module.exports = function (attachment, opts) {
   // Parameters:

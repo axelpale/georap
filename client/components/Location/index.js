@@ -16,7 +16,7 @@ var EventsView = require('./Events');
 
 // Templates
 var locationTemplate = require('./template.ejs');
-var locations = tresdb.stores.locations;
+var locations = georap.stores.locations;
 
 var LocationView = function (id, query) {
   // Parameters

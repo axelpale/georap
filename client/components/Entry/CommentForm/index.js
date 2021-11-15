@@ -9,10 +9,10 @@ var RemoveView = require('../Remove');
 var ErrorView = require('../Error');
 var template = require('./template.ejs');
 var drafting = require('./drafting');
-var entryApi = tresdb.stores.entries;
+var entryApi = georap.stores.entries;
 
-var MIN_LEN = tresdb.config.comments.minMessageLength;
-var MAX_LEN = tresdb.config.comments.maxMessageLength;
+var MIN_LEN = georap.config.comments.minMessageLength;
+var MAX_LEN = georap.config.comments.maxMessageLength;
 
 module.exports = function (entry, comment) {
   // Parameters

@@ -2,7 +2,7 @@
 var template = require('./template.ejs');
 var emitter = require('component-emitter');
 var ui = require('georap-ui');
-var mapStateStore = tresdb.stores.mapstate;
+var mapStateStore = georap.stores.mapstate;
 
 var NAME = 0;
 var COORD_SYS = 2;
@@ -12,7 +12,7 @@ var BOUNDS = 3;
 // Collect the templates here for simpler code.
 // Some services require non-WGS84 coordinates.
 // Location provides those via getAltGeom method.
-var exportServices = tresdb.config.exportServices.map(function (serv) {
+var exportServices = georap.config.exportServices.map(function (serv) {
   var servName = serv[NAME];
   var servCoordSys = serv[COORD_SYS];
   var servLatLngBounds = serv[BOUNDS];
@@ -20,7 +20,7 @@ var exportServices = tresdb.config.exportServices.map(function (serv) {
   return {
     name: servName,
     system: servCoordSys,
-    template: tresdb.templates[servName],
+    template: georap.templates[servName],
     bounds: servLatLngBounds,
   };
 });

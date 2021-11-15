@@ -52,14 +52,14 @@ module.exports = function (query) {
     // Handle form submit
     children.form.on('submit', function (queryObj) {
       // Reload view with new url.
-      tresdb.go('/search?' + queryString.stringify(queryObj));
+      georap.go('/search?' + queryString.stringify(queryObj));
       // HACK update the search bar content in menu
       $('#tresdb-mainmenu-search-text').val(queryObj.text);
     });
     // Handle next/prev navigation
     children.locations.on('submit', function (queryObj) {
       // Reload view with new url.
-      tresdb.go('/search?' + queryString.stringify(queryObj));
+      georap.go('/search?' + queryString.stringify(queryObj));
     });
   };
 

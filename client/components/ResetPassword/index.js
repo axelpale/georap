@@ -1,6 +1,6 @@
 // This is the form the user arrives via the link in a password reset email.
 
-var account = tresdb.stores.account;
+var account = georap.stores.account;
 var template = require('./template.ejs');
 var emitter = require('component-emitter');
 var jwtDecode = require('jwt-decode').default;

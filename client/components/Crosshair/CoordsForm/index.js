@@ -4,9 +4,9 @@ var template = require('./template.ejs');
 var geostamp = require('geostamp');
 var ui = require('georap-ui');
 var bus = require('georap-bus');
-var geometryStore = tresdb.stores.geometry;
-var coordinateSystems = tresdb.config.coordinateSystems;
-var coordinateTemplates = tresdb.templates;
+var geometryStore = georap.stores.geometry;
+var coordinateSystems = georap.config.coordinateSystems;
+var coordinateTemplates = georap.templates;
 var defaultSystemName = coordinateSystems[0][0];
 
 module.exports = function () {

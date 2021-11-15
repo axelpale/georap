@@ -1,6 +1,6 @@
 // User Management UI
 
-var admin = tresdb.stores.admin;
+var admin = georap.stores.admin;
 var template = require('./template.ejs');
 var InfoComponent = require('./Info');
 var StatusComponent = require('./Status');

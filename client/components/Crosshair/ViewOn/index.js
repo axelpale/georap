@@ -1,15 +1,15 @@
 var template = require('./template.ejs');
 var emitter = require('component-emitter');
 var exportsModel = require('georap-models').exports;
-var mapStateStore = tresdb.stores.mapstate;
+var mapStateStore = georap.stores.mapstate;
 
 // Services that can be referenced by a link.
 // Collect the templates here for simpler code.
 // Some services require non-WGS84 coordinates.
 // Location provides those via getAltGeom method.
 var simplifiedExportServices = exportsModel.getSimplified(
-  tresdb.config.exportServices,
-  tresdb.templates
+  georap.config.exportServices,
+  georap.templates
 );
 
 module.exports = function () {

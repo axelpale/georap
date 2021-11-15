@@ -1,5 +1,5 @@
-var statuses = tresdb.config.locationStatuses;
-var types = tresdb.config.locationTypes;
+var statuses = georap.config.locationStatuses;
+var types = georap.config.locationTypes;
 
 module.exports = function (ev) {
   if (ev.type !== 'location_created') {

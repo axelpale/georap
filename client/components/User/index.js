@@ -1,5 +1,5 @@
 
-var users = tresdb.stores.users;
+var usersApi = georap.stores.users;
 var EventsView = require('../Events');
 var template = require('./template.ejs');
 var pointsTemplate = require('./points.ejs');
@@ -27,7 +27,7 @@ module.exports = function (username) {
     }));
 
     // Fetch user before further rendering.
-    users.getOneWithEvents(username, function (err, user) {
+    usersApi.getOneWithEvents(username, function (err, user) {
       // Hide loading bar
       ui.hide($('#tresdb-user-loading'));
 

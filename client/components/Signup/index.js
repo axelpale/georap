@@ -1,10 +1,11 @@
 // A form for an invited user to sign up.
 
-var account = tresdb.stores.account;
+var accountStore = georap.stores.account;
 var template = require('./template.ejs');
 var emitter = require('component-emitter');
 var jwtDecode = require('jwt-decode').default;
 var ui = require('georap-ui');
+var siteTitle = georap.config.title;
 
 module.exports = function (token, goLogin) {
   // Parameters:
@@ -29,7 +30,7 @@ module.exports = function (token, goLogin) {
 
   this.bind = function ($mount) {
     $mount.html(template({
-      siteTitle: tresdb.config.title,
+      siteTitle: siteTitle,
       email: parsedToken.email,
     }));
 
@@ -87,7 +88,7 @@ module.exports = function (token, goLogin) {
     // Hide form
     ui.hide($('#tresdb-signup-form'));
 
-    account.signup(token, username, password, responseHandler);
+    accountStore.signup(token, username, password, responseHandler);
   };
 
   responseHandler = function (err) {

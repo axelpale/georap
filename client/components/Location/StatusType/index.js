@@ -7,8 +7,8 @@ var statusTypeTemplate = require('./statusType.ejs');
 var statusFormListTemplate = require('./statusFormList.ejs');
 var typeFormListTemplate = require('./typeFormList.ejs');
 // Config
-var locationStatuses = tresdb.config.locationStatuses;
-var locationTypes = tresdb.config.locationTypes;
+var locationStatuses = georap.config.locationStatuses;
+var locationTypes = georap.config.locationTypes;
 
 module.exports = function (location) {
 

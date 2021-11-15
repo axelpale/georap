@@ -1,5 +1,5 @@
 var models = require('georap-models');
-var locations = tresdb.stores.locations;
+var locations = georap.stores.locations;
 
 module.exports = function () {
   // Init

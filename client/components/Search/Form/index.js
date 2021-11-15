@@ -1,6 +1,8 @@
 var template = require('./template.ejs');
 var emitter = require('component-emitter');
 var ui = require('georap-ui');
+var accountStore = georap.stores.account;
+var usersStore = georap.stores.users;
 
 // Phrase input field focus
 var FOCUS_DELAY = 200;
@@ -32,7 +34,7 @@ module.exports = function (query) {
   self.bind = function ($mountEl) {
     $mount = $mountEl;
 
-    var myName = tresdb.stores.account.getName();
+    var myName = accountStore.getName();
 
     $mount.html(template({
       username: myName,
@@ -56,7 +58,7 @@ module.exports = function (query) {
     }
 
     // Load additional users into the created-by dropdown
-    tresdb.stores.users.getAll(function (err, users) {
+    usersStore.getAll(function (err, users) {
       if (err) {
         // Fail quietly, not so important
         return;

@@ -1,6 +1,6 @@
 var template = require('./template.ejs');
 var emitter = require('component-emitter');
-var themeStore = tresdb.stores.theme;
+var themeStore = georap.stores.theme;
 
 var colorSchemes = ['light', 'dark'];
 var themeColors = ['white', '#111111'];

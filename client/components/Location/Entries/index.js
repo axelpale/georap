@@ -5,9 +5,9 @@ var ui = require('georap-ui');
 var template = require('./template.ejs');
 var EntryView = require('../../Entry');
 var rootBus = require('georap-bus');
-var locationsApi = tresdb.stores.locations;
+var locationsApi = georap.stores.locations;
 
-var PAGE_SIZE = tresdb.config.entries.pageSize;
+var PAGE_SIZE = georap.config.entries.pageSize;
 
 module.exports = function (locationId) {
   // Init

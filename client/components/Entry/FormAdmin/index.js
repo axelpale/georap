@@ -6,7 +6,7 @@ var emitter = require('component-emitter');
 var template = require('./template.ejs');
 var RemoveForm = require('../Remove');
 var MoveForm = require('../MoveForm');
-var entries = tresdb.stores.entries;
+var entries = georap.stores.entries;
 
 module.exports = function (locationId, entry) {
   // Entry deletion form View.

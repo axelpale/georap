@@ -6,8 +6,8 @@ var template = require('./template.ejs');
 module.exports = function () {
   // Init
 
-  var defaultSystemName = tresdb.config.coordinateSystems[0][0];
-  var coordsTemplate = tresdb.templates[defaultSystemName];
+  var defaultSystemName = georap.config.coordinateSystems[0][0];
+  var coordsTemplate = georap.templates[defaultSystemName];
 
   var _$mount = null;
 

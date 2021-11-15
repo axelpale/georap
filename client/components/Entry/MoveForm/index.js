@@ -5,7 +5,7 @@ var template = require('./template.ejs');
 var SelectLocation = require('./SelectLocation');
 var Progress = uic.Progress;
 var ErrorView = uic.Error;
-var entryApi = tresdb.stores.entries;
+var entryApi = georap.stores.entries;
 
 module.exports = function (entry) {
   // Parameters

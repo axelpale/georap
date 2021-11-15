@@ -4,7 +4,7 @@ var geostamp = require('geostamp');
 var template = require('./template.ejs');
 var AdditionMarker = require('../../Map/AdditionMarker');
 var ui = require('georap-ui');
-var mapStateStore = tresdb.stores.mapstate;
+var mapStateStore = georap.stores.mapstate;
 
 // Reuse the map instance after first use to avoid memory leaks.
 // Google Maps does not handle garbage collecting well.
@@ -19,7 +19,7 @@ var getAllCoords = function (loc) {
   // coordinates in each registered coordinate system.
 
   // Coordinate systems and their templates
-  var systemNames = tresdb.config.coordinateSystems.map(function (sys) {
+  var systemNames = georap.config.coordinateSystems.map(function (sys) {
     return sys[0];
   });
 
@@ -38,7 +38,7 @@ var getAllCoords = function (loc) {
       getDMS: geostamp.getDMS,
     };
 
-    var systemHtml = tresdb.templates[sysName](tmplParams);
+    var systemHtml = georap.templates[sysName](tmplParams);
 
     return {
       name: sysName,

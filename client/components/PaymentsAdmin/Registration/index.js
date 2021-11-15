@@ -3,7 +3,7 @@
 var emitter = require('component-emitter');
 var template = require('./template.ejs');
 var ui = require('georap-ui');
-var payments = tresdb.stores.payments;
+var payments = georap.stores.payments;
 
 module.exports = function () {
 

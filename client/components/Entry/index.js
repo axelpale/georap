@@ -8,7 +8,7 @@ var CommentButton = require('./CommentButton');
 var FormView = require('./Form');
 var FormAdminView = require('./FormAdmin');
 var ui = require('georap-ui');
-var account = tresdb.stores.account;
+var account = georap.stores.account;
 
 module.exports = function (entry, opts) {
   // Parameters:

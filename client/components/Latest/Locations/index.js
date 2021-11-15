@@ -6,7 +6,7 @@ var template = require('./template.ejs');
 var listTemplate = require('./list.ejs');
 var LocationSelector = require('../LocationSelector');
 var rootBus = require('georap-bus');
-var locationsStore = tresdb.stores.locations;
+var locationsStore = georap.stores.locations;
 
 var LIST_SIZE = 50;
 

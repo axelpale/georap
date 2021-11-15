@@ -4,7 +4,7 @@ var inviteTemplate = require('./template.ejs');
 var ui = require('georap-ui');
 var emitter = require('component-emitter');
 var validator = require('email-validator');
-var account = tresdb.stores.account;
+var account = georap.stores.account;
 
 module.exports = function () {
   // Init

@@ -3,9 +3,9 @@ var template = require('./template.ejs');
 var glyphiconTemplate = require('./glyphicon.ejs');
 var emitter = require('component-emitter');
 var ui = require('georap-ui');
-var account = tresdb.stores.account;
-var locations = tresdb.stores.locations;
-var filterStore = tresdb.stores.filter;
+var account = georap.stores.account;
+var locations = georap.stores.locations;
+var filterStore = georap.stores.filter;
 
 // var isGeomAlmostEqual = function (geom1, geom2) {
 //   var prec = 5;
@@ -49,7 +49,7 @@ module.exports = function (mapComp) {
 
     $mount.html(template({
       glyphicon: glyphiconTemplate,
-      config: tresdb.config,
+      config: georap.config,
       user: account.getUser(),  // might be undefined
       isFilterActive: !filterStore.isDefault(),
     }));
@@ -60,7 +60,7 @@ module.exports = function (mapComp) {
 
     $mount.on('click', '#tresdb-mainmenu', function () {
       // Close the sidebar whenever user opens the menu.
-      return tresdb.go('/');
+      return georap.go('/');
     });
 
     // Location manipulation
@@ -168,12 +168,12 @@ module.exports = function (mapComp) {
     $mount.on('click', '#tresdb-mainmenu-filter', function (ev) {
       ev.preventDefault();
 
-      var isFilterOpen = tresdb.getCurrentPath() === '/filter';
+      var isFilterOpen = georap.getCurrentPath() === '/filter';
 
       if (isFilterOpen) {
         if (filterTimer) {
           filterTimer = false;
-          tresdb.go('/');
+          georap.go('/');
         }
       } else {
         // Delay to prevent immediate double click open close.
@@ -181,7 +181,7 @@ module.exports = function (mapComp) {
         setTimeout(function () {
           filterTimer = true;
         }, SEC);
-        tresdb.go('/filter');
+        georap.go('/filter');
       }
     });
 
@@ -202,9 +202,9 @@ module.exports = function (mapComp) {
 
       var searchText = $('#tresdb-mainmenu-search-text').val().trim();
       if (searchText.length > 0) {
-        return tresdb.go('/search?text=' + searchText);
+        return georap.go('/search?text=' + searchText);
       }
-      return tresdb.go('/search');
+      return georap.go('/search');
     });
 
   };

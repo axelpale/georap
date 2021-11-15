@@ -1,7 +1,7 @@
 var emitter = require('component-emitter');
 var ui = require('georap-ui');
 var template = require('./template.ejs');
-var entryFlags = tresdb.config.entryFlags;
+var entryFlags = georap.config.entryFlags;
 
 module.exports = function (selectedFlags) {
 

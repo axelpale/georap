@@ -3,10 +3,10 @@
 
 // LocationMarkers is a marker manager.
 
-var markerStore = tresdb.stores.markers;
-var locationsStore = tresdb.stores.locations;
-var account = tresdb.stores.account;
-var filterStore = tresdb.stores.filter;
+var markerStore = georap.stores.markers;
+var locationsStore = georap.stores.locations;
+var account = georap.stores.account;
+var filterStore = georap.stores.filter;
 var emitter = require('component-emitter');
 var rawEventToMarkerLocation = require('./lib/rawEventToMarkerLocation');
 var getBoundsDiagonal = require('./lib/getBoundsDiagonal');

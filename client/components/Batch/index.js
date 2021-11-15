@@ -52,10 +52,10 @@ module.exports = function (batchId) {
     $cancel.click(function (ev) {
       ev.preventDefault();
       // Close
-      tresdb.go('/');
+      georap.go('/');
     });
 
-    tresdb.stores.locations.getBatch(batchId, function (err, locs) {
+    georap.stores.locations.getBatch(batchId, function (err, locs) {
       ui.hide($progress);
 
       if (err) {
@@ -84,7 +84,7 @@ module.exports = function (batchId) {
         ui.show($progress);
         ui.hide($submitAllForm);
 
-        tresdb.stores.locations.importBatch({
+        georap.stores.locations.importBatch({
           batchId: batchId,
           indices: indices,
         }, function (errs) {
@@ -98,7 +98,7 @@ module.exports = function (batchId) {
           }
 
           // Import success, go to results
-          tresdb.go('/import/' + batchId + '/outcome');
+          georap.go('/import/' + batchId + '/outcome');
         });
       };
 
