@@ -233,7 +233,7 @@ module.exports = {
     'secret',
     'googleMapsKey',
     'publicProtocol',
-    'hostname',
+    'hostname', // new in v13
     'port',
     'mongo',
     'smtp',
@@ -252,10 +252,10 @@ module.exports = {
     'logDir',
     // THEME AND BRAND
     'defaultMapState',
-    // 'icon', TODO require in v13
-    // 'appleTouchIcon', TODO require in v13
+    'icons', // new in v12, require in v13
+    'appleTouchIcons', // new in v12, require in v13
     'loginBackground',
-    // 'loginColor', TODO require in v13
+    'loginColor', // new in v12, require in v13
     'locationStatuses',
     'locationTypes',
     'rewards',
@@ -263,7 +263,7 @@ module.exports = {
     'markerTemplates',
     'entries',
     'comments',
-    // 'enableSupportPage', TODO require in v13
+    'enableSupportPage', // new in v12, require in v13
     'supportButtonTitle',
     'supportPageContent',
     'coordinateSystems',
