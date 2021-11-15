@@ -4,7 +4,6 @@ const status = require('http-status-codes');
 const config = require('georap-config');
 const db = require('georap-db');
 
-const hostname = require('../../services/hostname');
 const mailer = require('../../services/mailer');
 const loggers = require('../../services/logs/loggers');
 
@@ -232,7 +231,7 @@ exports.sendResetPasswordEmail = function (req, res, next) {
     const token = jwt.sign(tokenPayload, config.secret, {
       expiresIn: '30m',
     });
-    const host = hostname.get();
+    const host = config.hostname;
     const url = config.publicProtocol + '://' + host + '/reset/' + token;
 
     const mailOptions = {
@@ -358,7 +357,7 @@ exports.sendInviteEmail = function (req, res, next) {
     const token = jwt.sign(tokenPayload, config.secret, {
       expiresIn: '7d',
     });
-    const host = hostname.get();
+    const host = config.hostname;
     const url = config.publicProtocol + '://' + host + '/signup/' + token;
 
     // Make first letter lowercase, so that nice after comma.

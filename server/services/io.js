@@ -1,7 +1,6 @@
 // Singleton wrapper around socket.io
 
 const socketio = require('socket.io');
-const hostname = require('./hostname');
 
 let io = null;
 
@@ -12,18 +11,6 @@ exports.init = function (server) {
   if (io === null) {
     io = socketio(server, {
       pingTimeout: 60000,
-    });
-
-    // Middleware to find hostname.
-    // Domain name is required by some handlers, for example
-    // when a link is sent via email. It does not matter if
-    // the connection is transported via polling or websockets,
-    // the host stays the same.
-    io.use((socket, next) => {
-      if (socket.request.headers.host) {
-        hostname.init(socket.request.headers.host);
-      }
-      return next();
     });
   }
 };
