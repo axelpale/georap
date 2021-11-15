@@ -29,6 +29,6 @@ module.exports = {
 
   globals: {
     georap: true,
-    tresdb: true,
+    tresdb: true, // legacy
   },
 };
