@@ -25,9 +25,9 @@ module.exports = function (batchId) {
       batchId: batchId,
     }));
 
-    var $progress = $('#tresdb-outcome-progress');
-    var $list = $('#tresdb-outcome-list');
-    var $msg = $('#tresdb-outcome-message');
+    var $progress = $('#georap-outcome-progress');
+    var $list = $('#georap-outcome-list');
+    var $msg = $('#georap-outcome-message');
 
     georap.stores.locations.getOutcome(batchId, function (err, result) {
       // Progress bar is visible by default

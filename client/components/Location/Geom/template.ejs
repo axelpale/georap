@@ -1,51 +1,51 @@
 <div class="form-group">
-  <div class="tresdb-coords">
+  <div class="georap-coords">
     <span class="glyphicon glyphicon-screenshot" aria-hidden="true"></span>
 
-    <span id="tresdb-location-coords-geostamp"><%= allCoords[0].html %></span>
+    <span id="georap-location-coords-geostamp"><%= allCoords[0].html %></span>
 
-    <button id="tresdb-location-coords-more-open" type="button" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-chevron-down"></span> More</button>
-    <button id="tresdb-location-coords-more-close" type="button" class="btn btn-default btn-sm hidden"><span class="glyphicon glyphicon-chevron-up"></span> Less</button>
-    <button id="tresdb-location-coords-edit" type="button" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-pencil"></span></button>
+    <button id="georap-location-coords-more-open" type="button" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-chevron-down"></span> More</button>
+    <button id="georap-location-coords-more-close" type="button" class="btn btn-default btn-sm hidden"><span class="glyphicon glyphicon-chevron-up"></span> Less</button>
+    <button id="georap-location-coords-edit" type="button" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-pencil"></span></button>
   </div>
 
-  <div id="tresdb-location-coords-more" class="form-group hidden">
+  <div id="georap-location-coords-more" class="form-group hidden">
     <% allCoords.forEach(function (c) { %>
       <div><span><%= c.html %> (<%= c.name %>)</span></div>
     <% }) %>
   </div>
 </div>
 
-<div id="tresdb-location-coords-container" class="hidden location-coords-container">
-  <form id="tresdb-location-coords-form" class="panel panel-primary">
+<div id="georap-location-coords-container" class="hidden location-coords-container">
+  <form id="georap-location-coords-form" class="panel panel-primary">
     <div class="panel-body">
       <div class="form-group">
-        <label for="tresdb-location-coords-latitude">Latitude</label>
-        <input type="text" class="form-control" id="tresdb-location-coords-latitude">
+        <label for="georap-location-coords-latitude">Latitude</label>
+        <input type="text" class="form-control" id="georap-location-coords-latitude">
         <small class="form-text text-muted">WGS 84, decimal degrees (DD.DDDD)</small>
       </div>
       <div class="form-group">
-        <label for="tresdb-location-coords-longitude">Longitude</label>
-        <input type="text" class="form-control" id="tresdb-location-coords-longitude">
+        <label for="georap-location-coords-longitude">Longitude</label>
+        <input type="text" class="form-control" id="georap-location-coords-longitude">
         <small class="form-text text-muted">WGS 84, decimal degrees (DD.DDDD)</small>
       </div>
-      <div id="tresdb-location-coords-map-container" class="form-group">
-        <div id="tresdb-location-coords-map" style="width: 100%; height: 18em;"></div>
+      <div id="georap-location-coords-map-container" class="form-group">
+        <div id="georap-location-coords-map" style="width: 100%; height: 18em;"></div>
       </div>
       <div class="pull-right">
-        <button id="tresdb-location-coords-cancel" type="button" class="btn btn-default">Cancel</button>
+        <button id="georap-location-coords-cancel" type="button" class="btn btn-default">Cancel</button>
         <button type="submit" class="btn btn-primary">Save</button>
       </div>
     </div>
   </form>
 
-  <div id="tresdb-location-coords-progress" class="progress hidden">
+  <div id="georap-location-coords-progress" class="progress hidden">
     <div class="progress-bar progress-bar-striped active" role="progressbar" style="width: 100%">
       <span class="sr-only">Waiting for server</span>
     </div>
   </div>
 
-  <div id="tresdb-location-coords-error" class="hidden">
+  <div id="georap-location-coords-error" class="hidden">
     <div class="alert alert-danger" role="alert">Updating the coordinates failed. Ensure both coordinates to be in the decimal degree format similar to 12.345678.</div>
   </div>
 </div>

@@ -21,13 +21,13 @@ module.exports = function () {
       limit: Math.round(georap.config.tempUploadSizeLimit / (K * K)),
     }));
 
-    var $uploadForm = $('#tresdb-import-upload-form');
-    var $progress = $('#tresdb-import-progress');
+    var $uploadForm = $('#georap-import-upload-form');
+    var $progress = $('#georap-import-progress');
 
-    var $missingError = $('#tresdb-import-missingerror');
-    var $otherError = $('#tresdb-import-othererror');
-    var $sizeError = $('#tresdb-import-sizeerror');
-    var $typeError = $('#tresdb-import-typeerror');
+    var $missingError = $('#georap-import-missingerror');
+    var $otherError = $('#georap-import-othererror');
+    var $sizeError = $('#georap-import-sizeerror');
+    var $typeError = $('#georap-import-typeerror');
 
     $uploadForm.submit(function (ev) {
       ev.preventDefault();
@@ -64,7 +64,7 @@ module.exports = function () {
   };
 
   this.unbind = function () {
-    $('#tresdb-import-upload-form').off();
+    $('#georap-import-upload-form').off();
   };
 
 };

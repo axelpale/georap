@@ -19,13 +19,13 @@ module.exports = function () {
     // Template with loading bar
     $mount.html(template());
 
-    var $open = $('#tresdb-registration-open');
-    var $cancel = $('#tresdb-registration-cancel');
-    var $form = $('#tresdb-registration-form');
-    var $progress = $('#tresdb-registration-progress');
-    var $success = $('#tresdb-registration-success');
-    var $successClose = $('#tresdb-registration-success button');
-    var $error = $('#tresdb-registration-error');
+    var $open = $('#georap-registration-open');
+    var $cancel = $('#georap-registration-cancel');
+    var $form = $('#georap-registration-form');
+    var $progress = $('#georap-registration-progress');
+    var $success = $('#georap-registration-success');
+    var $successClose = $('#georap-registration-success button');
+    var $error = $('#georap-registration-error');
 
     $open.click(function (ev) {
       ev.preventDefault();

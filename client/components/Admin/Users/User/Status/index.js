@@ -14,12 +14,12 @@ module.exports = function (user) {
     }));
 
     var $box = $('#status-checkbox');
-    var $cancel = $('#tresdb-admin-user-status-cancel');
-    var $edit = $('#tresdb-admin-user-status-edit');
-    var $error = $('#tresdb-admin-user-status-error');
-    var $form = $('#tresdb-admin-user-status-form');
-    var $success = $('#tresdb-admin-user-status-success');
-    var $noauto = $('#tresdb-admin-user-status-noauto');
+    var $cancel = $('#georap-admin-user-status-cancel');
+    var $edit = $('#georap-admin-user-status-edit');
+    var $error = $('#georap-admin-user-status-error');
+    var $form = $('#georap-admin-user-status-form');
+    var $success = $('#georap-admin-user-status-success');
+    var $noauto = $('#georap-admin-user-status-noauto');
 
     $cancel.click(function (ev) {
       ev.preventDefault();
@@ -70,8 +70,8 @@ module.exports = function (user) {
   };
 
   this.unbind = function () {
-    $('tresdb-admin-user-status-cancel').off();
-    $('tresdb-admin-user-status-edit').off();
-    $('tresdb-admin-user-status-form').off();
+    $('georap-admin-user-status-cancel').off();
+    $('georap-admin-user-status-edit').off();
+    $('georap-admin-user-status-form').off();
   };
 };

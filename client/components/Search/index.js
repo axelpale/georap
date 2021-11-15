@@ -54,7 +54,7 @@ module.exports = function (query) {
       // Reload view with new url.
       georap.go('/search?' + queryString.stringify(queryObj));
       // HACK update the search bar content in menu
-      $('#tresdb-mainmenu-search-text').val(queryObj.text);
+      $('#georap-mainmenu-search-text').val(queryObj.text);
     });
     // Handle next/prev navigation
     children.locations.on('submit', function (queryObj) {

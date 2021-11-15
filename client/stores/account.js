@@ -22,7 +22,7 @@ var jwtDecode = require('jwt-decode').default;
 emitter(exports);
 
 // Key of token in storage.
-var TOKEN_KEY = 'tresdb-session-token';
+var TOKEN_KEY = 'georap-session-token';
 
 exports.login = function (email, password, callback) {
   // Parameters:

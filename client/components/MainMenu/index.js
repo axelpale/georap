@@ -58,23 +58,23 @@ module.exports = function (mapComp) {
 
     // Menu opening
 
-    $mount.on('click', '#tresdb-mainmenu', function () {
+    $mount.on('click', '#georap-mainmenu', function () {
       // Close the sidebar whenever user opens the menu.
       return georap.go('/');
     });
 
     // Location manipulation
 
-    $mount.on('click', '#tresdb-mainmenu-add', function (ev) {
+    $mount.on('click', '#georap-mainmenu-add', function (ev) {
       ev.preventDefault();
 
       // Hide other menus
-      ui.hide($('#tresdb-toolbar-main'));
+      ui.hide($('#georap-toolbar-main'));
       // Show addition menu
-      ui.show($('#tresdb-toolbar-addition'));
+      ui.show($('#georap-toolbar-addition'));
 
       // Hide possible error message from previous addition
-      ui.hide($('#tresdb-toolbar-error'));
+      ui.hide($('#georap-toolbar-error'));
 
       // On addition start
       mapComp.addAdditionMarker();
@@ -82,13 +82,13 @@ module.exports = function (mapComp) {
       return;
     });
 
-    $mount.on('click', '#tresdb-addition-cancel', function (ev) {
+    $mount.on('click', '#georap-addition-cancel', function (ev) {
       ev.preventDefault();
 
       // Show other menus
-      ui.show($('#tresdb-toolbar-main'));
+      ui.show($('#georap-toolbar-main'));
       // Hide addition menu
-      ui.hide($('#tresdb-toolbar-addition'));
+      ui.hide($('#georap-toolbar-addition'));
 
       // On addition cancel
       mapComp.removeAdditionMarker();
@@ -96,10 +96,10 @@ module.exports = function (mapComp) {
       return;
     });
 
-    $mount.on('click', '#tresdb-addition-create', function (ev) {
+    $mount.on('click', '#georap-addition-create', function (ev) {
       ev.preventDefault();
 
-      var $tooCloseError = $('#tresdb-toolbar-error-too-close');
+      var $tooCloseError = $('#georap-toolbar-error-too-close');
       $tooCloseError.find('button').click(function (cev) {
         // Will bind multiple times but we do not care
         cev.preventDefault();
@@ -107,9 +107,9 @@ module.exports = function (mapComp) {
       });
 
       // Show progress bar
-      ui.show($('#tresdb-toolbar-progress'));
+      ui.show($('#georap-toolbar-progress'));
       // Hide addition menu
-      ui.hide($('#tresdb-toolbar-addition'));
+      ui.hide($('#georap-toolbar-addition'));
       // Hide possible error
       ui.hide($tooCloseError);
 
@@ -128,10 +128,10 @@ module.exports = function (mapComp) {
         }
 
         // Hide progress bar
-        ui.hide($('#tresdb-toolbar-progress'));
+        ui.hide($('#georap-toolbar-progress'));
 
         // Show main menu
-        ui.show($('#tresdb-toolbar-main'));
+        ui.show($('#georap-toolbar-main'));
 
         locations.off('location_created', thisFn);
       });
@@ -147,14 +147,14 @@ module.exports = function (mapComp) {
           } else {
             console.error(err);
             // Show error message
-            ui.show($('#tresdb-toolbar-error'));
+            ui.show($('#georap-toolbar-error'));
           }
 
           // Hide progress bar
-          ui.hide($('#tresdb-toolbar-progress'));
+          ui.hide($('#georap-toolbar-progress'));
 
           // Show main menu
-          ui.show($('#tresdb-toolbar-main'));
+          ui.show($('#georap-toolbar-main'));
 
           return;
         }
@@ -165,7 +165,7 @@ module.exports = function (mapComp) {
     // Filter
 
     var filterTimer = true; // start without burn-in period
-    $mount.on('click', '#tresdb-mainmenu-filter', function (ev) {
+    $mount.on('click', '#georap-mainmenu-filter', function (ev) {
       ev.preventDefault();
 
       var isFilterOpen = georap.getCurrentPath() === '/filter';
@@ -188,19 +188,19 @@ module.exports = function (mapComp) {
     filterStore.on('updated', function () {
       // Show a red dot when the filter is active.
       if (filterStore.isDefault()) {
-        ui.hide($('#tresdb-mainmenu-filter .label'));
+        ui.hide($('#georap-mainmenu-filter .label'));
       } else {
-        ui.show($('#tresdb-mainmenu-filter .label'));
+        ui.show($('#georap-mainmenu-filter .label'));
       }
     });
 
 
     // Search bar
 
-    $mount.on('submit', '#tresdb-mainmenu-search-form', function (ev) {
+    $mount.on('submit', '#georap-mainmenu-search-form', function (ev) {
       ev.preventDefault();
 
-      var searchText = $('#tresdb-mainmenu-search-text').val().trim();
+      var searchText = $('#georap-mainmenu-search-text').val().trim();
       if (searchText.length > 0) {
         return georap.go('/search?text=' + searchText);
       }

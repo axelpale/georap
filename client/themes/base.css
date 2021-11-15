@@ -9,7 +9,7 @@ html, body {
 }
 
 /* Effects et General */
-.tresdb-flash {
+.georap-flash {
   background-color: #76E68C !important;
 }
 .flip-x {
@@ -22,10 +22,10 @@ html, body {
 time {
   text-decoration: underline;
 }
-.tresdb-disabled {
+.georap-disabled {
   color: #999999;
 }
-.tresdb-coords {
+.georap-coords {
   font-size: 1.38em;
 }
 /* END Effect et General */
@@ -76,7 +76,7 @@ time {
 /* END Card */
 
 /* Login */
-.tresdb-login-container {
+.georap-login-container {
   width: 100%;
   height: 100%;
   margin: 0;
@@ -84,13 +84,13 @@ time {
   background: url('/assets/images/login.jpg') no-repeat center center fixed;
   background-size: cover;
 }
-.tresdb-login-container h1,
-.tresdb-login-container label,
-.tresdb-login-container p,
-.tresdb-login-container a {
+.georap-login-container h1,
+.georap-login-container label,
+.georap-login-container p,
+.georap-login-container a {
   color: #EEE !important;
 }
-#tresdb-login-form {
+#georap-login-form {
   margin-bottom: 1.68em;
 }
 /* END Login */
@@ -100,32 +100,32 @@ time {
   background-color: white;
   background-color: rgba(255,255,255,0.95);
 }
-.tresdb-map-menu {
+.georap-map-menu {
   padding: 0.9em;
   max-width: 60%; /* Firefox needs width to be specified */
 }
-#tresdb-toolbar-main {
+#georap-toolbar-main {
   margin-bottom: 0.9em;
 }
-#tresdb-toolbar-main .dropdown,
-#tresdb-mainmenu-filter {
+#georap-toolbar-main .dropdown,
+#georap-mainmenu-filter {
   margin-right: 0.3em;
   margin-bottom: 0.5em;
 }
-#tresdb-toolbar-main .btn-lg {
+#georap-toolbar-main .btn-lg {
   /* Match size with gmaps buttons */
   padding: 8px 13px;
   font-size: 16px;
 }
-#tresdb-toolbar-main .input-lg {
+#georap-toolbar-main .input-lg {
   height: 39px;
   padding: 8px 13px;
   font-size: 16px;
 }
-#tresdb-mainmenu-filter .glyphicon {
+#georap-mainmenu-filter .glyphicon {
   top: 2px;
 }
-#tresdb-mainmenu-filter .label-danger {
+#georap-mainmenu-filter .label-danger {
   position: absolute;
   display: block;
   top: 2.1em;
@@ -135,50 +135,50 @@ time {
   border-radius: 0.7em;
 }
 /* Menu search form */
-#tresdb-mainmenu-search-form  {
+#georap-mainmenu-search-form  {
   width: 20rem;
 }
 @media (max-width: 600px) {
-  #tresdb-mainmenu-search-form {
+  #georap-mainmenu-search-form {
     width: 16rem;
   }
 }
 @media (max-width: 520px) {
-  #tresdb-mainmenu-search-form {
+  #georap-mainmenu-search-form {
     width: 13rem;
   }
 }
 @media (max-width: 480px) {
-  #tresdb-mainmenu-search-form {
+  #georap-mainmenu-search-form {
     width: 5rem;
   }
-  #tresdb-mainmenu-search-form input {
+  #georap-mainmenu-search-form input {
     display: none;
   }
-  #tresdb-mainmenu-search-form button {
+  #georap-mainmenu-search-form button {
     border-top-left-radius: 6px;
     border-bottom-left-radius: 6px;
   }
 }
 @media (max-width: 380px) {
-  .tresdb-map-menu {
+  .georap-map-menu {
     width: 14rem;
   }
 }
 @media (max-width: 330px) {
-  .tresdb-map-menu {
+  .georap-map-menu {
     width: 13rem;
   }
 }
 /* END Menu */
 
 /* Location page */
-#tresdb-location-loading {
+#georap-location-loading {
   /* Make space between the loading bar and the top edge. Match with H1 */
   margin-top: 20px;
 }
 /* Location return to latest */
-#tresdb-location-return {
+#georap-location-return {
   color: #666;
   border-bottom: 1px solid gray;
   display: block;
@@ -188,49 +188,49 @@ time {
   height: 3.3rem;
   overflow: hidden;
 }
-#tresdb-location-return h1 {
+#georap-location-return h1 {
   margin: 0;
   color: #333;
 }
 /* Location name */
-#tresdb-location-name {
+#georap-location-name {
   margin-bottom: 1rem;
   overflow-wrap: break-word;
   word-break: break-all;
 }
-#tresdb-location-name h1 {
+#georap-location-name h1 {
   margin-bottom: 0;
   margin-top: 1.5rem;
 }
 /* Location geom */
-#tresdb-location-geom {
+#georap-location-geom {
   margin-bottom: 1rem;
 }
-#tresdb-location-geom > .form-group {
+#georap-location-geom > .form-group {
   margin-bottom: 0;
 }
-#tresdb-location-geom .location-coords-container {
+#georap-location-geom .location-coords-container {
   margin-top: 0.6rem;
 }
 /* Location component containers */
-#tresdb-location-statustype-container {
+#georap-location-statustype-container {
   margin-bottom: 1.6rem;
 }
 #location-thumbnail-container {
   margin-bottom: 1.6rem;
   line-height: 1;
 }
-#tresdb-location-forms {
+#georap-location-forms {
   margin-bottom: 1rem;
 }
-#tresdb-location-forms > .form-group {
+#georap-location-forms > .form-group {
   margin-bottom: 0;
 }
-#tresdb-location-forms-menu button {
+#georap-location-forms-menu button {
   margin-bottom: 0.6rem;
 }
-#tresdb-location-entries,
-#tresdb-location-events {
+#georap-location-entries,
+#georap-location-events {
   margin-bottom: 2.68em;
 }
 /* END Location page */
@@ -299,16 +299,16 @@ time {
 /* END Location Thumbnail */
 
 /* Entries */
-.tresdb-entry .panel-body,
-.tresdb-entry .comment-message {
+.georap-entry .panel-body,
+.georap-entry .comment-message {
   overflow-wrap: break-word;
   word-break: normal;
 }
-.tresdb-entry .panel-body > p:last-child {
+.georap-entry .panel-body > p:last-child {
   margin-bottom: 0;
 }
-.tresdb-entry .pull-right .entry-form-open,
-.tresdb-entry .pull-right .comment-form-open {
+.georap-entry .pull-right .entry-form-open,
+.georap-entry .pull-right .comment-form-open {
   margin: -5px -9px 0 0;
 }
 .form-markdown-group {
@@ -627,13 +627,13 @@ li.form-attachment-container:first-child img {
   }
 }
 /* Latest entries */
-.latest-entries .tresdb-entry {
+.latest-entries .georap-entry {
   margin-bottom: 6.8rem;
 }
 /* END Latest */
 
 /* Filter */
-#tresdb-filter-title-dot {
+#georap-filter-title-dot {
   position: relative;
   display: inline-block;
   top: 0.7em;
@@ -651,7 +651,7 @@ li.form-attachment-container:first-child img {
 /* END Filter */
 
 /* Geolocation */
-button.tresdb-geolocation {
+button.georap-geolocation {
   background-color: #fff;
   border: none;
   outline: none;
@@ -663,7 +663,7 @@ button.tresdb-geolocation {
   margin-right: 10px;
   padding: 0;
 }
-button.tresdb-geolocation .tresdb-geolocation-icon {
+button.georap-geolocation .georap-geolocation-icon {
   margin: 5px;
   width: 30px;
   height: 30px;
@@ -675,7 +675,7 @@ button.tresdb-geolocation .tresdb-geolocation-icon {
 /* END Geolocation */
 
 /* Pinpointer */
-.tresdb-crosshair .crosshair-zoom {
+.georap-crosshair .crosshair-zoom {
   margin-bottom: 0.62rem;
 }
 /* END Pinpointer */

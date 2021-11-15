@@ -20,7 +20,7 @@ var BatchList = function () {
   // Public methods
 
   this.getSelectedIndices = function () {
-    var $boxes = $('#tresdb-batch-table tbody input[name="row-check"]:checked');
+    var $boxes = $('#georap-batch-table tbody input[name="row-check"]:checked');
     var $vals = $boxes.map(function (i, elem) {
       return parseInt(elem.value, 10);
     });
@@ -28,7 +28,7 @@ var BatchList = function () {
   };
 
   this.countSelected = function () {
-    var $boxes = $('#tresdb-batch-table tbody input[name="row-check"]:checked');
+    var $boxes = $('#georap-batch-table tbody input[name="row-check"]:checked');
     return $boxes.length;
   };
 
@@ -57,16 +57,16 @@ var BatchList = function () {
 
     $mount.html(template(self.state));
 
-    var $checkAllBox = $('#tresdb-batch-select-all');
-    var $list = $('#tresdb-batch-table');
+    var $checkAllBox = $('#georap-batch-select-all');
+    var $list = $('#georap-batch-table');
 
     $checkAllBox.change(function () {
-      var $rows = $('#tresdb-batch-table .tresdb-batch-row-check');
+      var $rows = $('#georap-batch-table .georap-batch-row-check');
       var checked = $checkAllBox.prop('checked');
       $rows.prop('checked', checked);
     });
 
-    $list.on('click', '.tresdb-batch-view-details', function (ev) {
+    $list.on('click', '.georap-batch-view-details', function (ev) {
       ev.preventDefault();
       // plain stopPropagation fires the event twice
       ev.stopImmediatePropagation();
@@ -88,7 +88,7 @@ var BatchList = function () {
       }
     });
 
-    $list.on('change', '.tresdb-batch-row-check', function (ev) {
+    $list.on('change', '.georap-batch-row-check', function (ev) {
       ev.preventDefault();
       ev.stopImmediatePropagation();
 
@@ -97,8 +97,8 @@ var BatchList = function () {
   };
 
   this.unbind = function () {
-    $('#tresdb-batch-select-all').off();
-    $('#tresdb-batch-table').off();
+    $('#georap-batch-select-all').off();
+    $('#georap-batch-table').off();
   };
 
 };

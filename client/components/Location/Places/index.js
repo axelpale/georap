@@ -15,7 +15,7 @@ module.exports = function (location) {
 
     // Preparation
 
-    var $display = $('#tresdb-location-places-display');
+    var $display = $('#georap-location-places-display');
 
     location.on('location_geom_changed', function () {
       $display.html(displayTemplate({

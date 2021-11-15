@@ -1,11 +1,11 @@
 <h3>
   Role: <%= isAdmin ? 'admin' : 'basic' %>
-  <button id="tresdb-admin-user-role-edit" type="button" class="btn btn-default btn-xs">
+  <button id="georap-admin-user-role-edit" type="button" class="btn btn-default btn-xs">
     <span class="glyphicon glyphicon-pencil"></span> Edit
   </button>
 </h3>
 
-<form id="tresdb-admin-user-role-form" class="hidden panel panel-primary">
+<form id="georap-admin-user-role-form" class="hidden panel panel-primary">
   <div class="panel-heading">
     Change member role
   </div>
@@ -27,20 +27,20 @@
 
     <p class="help-block">Only members with administrator role can change roles of others.</p>
     <div class="pull-right">
-      <button id="tresdb-admin-user-role-cancel" type="button" class="btn btn-default">Cancel</button>
+      <button id="georap-admin-user-role-cancel" type="button" class="btn btn-default">Cancel</button>
       <button type="submit" class="btn btn-primary">Save</button>
     </div>
   </div>
 </form>
 
-<div id="tresdb-admin-user-role-noauto" class="hidden">
+<div id="georap-admin-user-role-noauto" class="hidden">
   <div class="alert alert-warning" role="alert">You cannot downgrade your own account.</div>
 </div>
 
-<div id="tresdb-admin-user-role-error" class="hidden">
+<div id="georap-admin-user-role-error" class="hidden">
   <div class="alert alert-danger" role="alert">Updating the role failed.</div>
 </div>
 
-<div id="tresdb-admin-user-role-success" class="hidden">
+<div id="georap-admin-user-role-success" class="hidden">
   <div class="alert alert-success" role="alert">Successfully changed the role of <%= username %>.</div>
 </div>

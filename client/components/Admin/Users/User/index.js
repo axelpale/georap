@@ -27,11 +27,11 @@ module.exports = function (username) {
       username: username,
     }));
 
-    var $infoRoot = $('#tresdb-admin-user-info-root');
-    var $statusRoot = $('#tresdb-admin-user-status-root');
-    var $eventsRoot = $('#tresdb-admin-user-events-root');
-    var $loading = $('#tresdb-admin-user-loading');
-    var $roleRoot = $('#tresdb-admin-user-role-root');
+    var $infoRoot = $('#georap-admin-user-info-root');
+    var $statusRoot = $('#georap-admin-user-status-root');
+    var $eventsRoot = $('#georap-admin-user-events-root');
+    var $loading = $('#georap-admin-user-loading');
+    var $roleRoot = $('#georap-admin-user-role-root');
 
     // Fetch users and include to page.
     ui.show($loading);

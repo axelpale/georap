@@ -29,7 +29,7 @@ module.exports = function (username) {
     // Fetch user before further rendering.
     usersApi.getOneWithEvents(username, function (err, user) {
       // Hide loading bar
-      ui.hide($('#tresdb-user-loading'));
+      ui.hide($('#georap-user-loading'));
 
       if (err) {
         console.error(err);
@@ -37,7 +37,7 @@ module.exports = function (username) {
       }
 
       // User statistics
-      $('#tresdb-user-points').html(pointsTemplate({
+      $('#georap-user-points').html(pointsTemplate({
         flags: user.flagsCreated,
         adds: user.locationsCreated,
         posts: user.postsCreated,
@@ -47,7 +47,7 @@ module.exports = function (username) {
       }));
 
       children.events = new EventsView(user.events);
-      children.events.bind($('#tresdb-user-events'));
+      children.events.bind($('#georap-user-events'));
     });
   };
 

@@ -1,7 +1,7 @@
-<table id="tresdb-batch-table" class="table table-hover">
+<table id="georap-batch-table" class="table table-hover">
   <thead>
     <tr>
-      <th><input id="tresdb-batch-select-all" type="checkbox" name="all-check" title="Select all"></th>
+      <th><input id="georap-batch-select-all" type="checkbox" name="all-check" title="Select all"></th>
       <th>Name</th>
       <th>Attachments</th>
       <th></th>
@@ -10,8 +10,8 @@
   <tbody>
   <% locs.forEach(function (loc, index) { %>
     <tr data-index="<%= index %>">
-      <td class="tresdb-batch-box"><label><input id="tresdb-batch-<%= index %>" type="checkbox" name="row-check" value="<%= index %>" class="tresdb-batch-row-check"> #<%= index %></label></td>
-      <td class="tresdb-batch-name"><label for="tresdb-batch-<%= index %>"><%= loc.name %></label></td>
+      <td class="georap-batch-box"><label><input id="georap-batch-<%= index %>" type="checkbox" name="row-check" value="<%= index %>" class="georap-batch-row-check"> #<%= index %></label></td>
+      <td class="georap-batch-name"><label for="georap-batch-<%= index %>"><%= loc.name %></label></td>
       <td><%
         var l = loc.entries.length;
         if (l === 0) {
@@ -21,7 +21,7 @@
         }
       %></td>
       <td>
-        <a href="#" class="tresdb-batch-view-details" data-index="<%= index %>">Details</a>
+        <a href="#" class="georap-batch-view-details" data-index="<%= index %>">Details</a>
       </td>
     </tr>
   <% }); %>

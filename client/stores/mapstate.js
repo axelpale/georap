@@ -26,4 +26,4 @@ var storage = require('../connection/storage');
 
 var DEFAULT_STATE = georap.config.defaultMapState;
 
-module.exports = createStore(storage, 'tresdb-geo-location', DEFAULT_STATE);
+module.exports = createStore(storage, 'georap-geo-location', DEFAULT_STATE);

@@ -11,12 +11,12 @@ module.exports = function (location) {
       location: location,
     }));
 
-    var $display = $('#tresdb-location-name-display');
-    var $show = $('#tresdb-location-rename-show');
-    var $form = $('#tresdb-location-rename-form');
-    var $error = $('#tresdb-location-rename-error');
-    var $input = $('#tresdb-location-rename-input');
-    var $cancel = $('#tresdb-location-rename-cancel');
+    var $display = $('#georap-location-name-display');
+    var $show = $('#georap-location-rename-show');
+    var $form = $('#georap-location-rename-form');
+    var $error = $('#georap-location-rename-error');
+    var $input = $('#georap-location-rename-input');
+    var $cancel = $('#georap-location-rename-cancel');
 
     // Listen for events
 
@@ -82,8 +82,8 @@ module.exports = function (location) {
 
   this.unbind = function () {
     location.off('location_name_changed', handleNameChange);
-    $('#tresdb-location-rename-show').off();
-    $('#tresdb-location-rename-cancel').off();
-    $('#tresdb-location-rename-form').off();
+    $('#georap-location-rename-show').off();
+    $('#georap-location-rename-cancel').off();
+    $('#georap-location-rename-form').off();
   };
 };

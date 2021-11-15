@@ -34,17 +34,17 @@ module.exports = function (token, goLogin) {
       email: parsedToken.email,
     }));
 
-    $('#tresdb-signup-to-login-button').click(function (ev) {
+    $('#georap-signup-to-login-button').click(function (ev) {
       ev.preventDefault();
       // Open login form
       goLogin();
     });
-    $('#tresdb-signup-form').submit(submitHandler);
+    $('#georap-signup-form').submit(submitHandler);
   };
 
   this.unbind = function () {
-    $('#tresdb-signup-to-login-button').off();
-    $('#tresdb-signup-form').off();
+    $('#georap-signup-to-login-button').off();
+    $('#georap-signup-form').off();
   };
 
 
@@ -55,20 +55,20 @@ module.exports = function (token, goLogin) {
 
     // Hide previous errors
     (function hidePreviousErrors() {
-      ui.hide($('#tresdb-signup-invalid-username'));
-      ui.hide($('#tresdb-signup-password-no-match'));
-      ui.hide($('#tresdb-signup-email-username-taken'));
+      ui.hide($('#georap-signup-invalid-username'));
+      ui.hide($('#georap-signup-password-no-match'));
+      ui.hide($('#georap-signup-email-username-taken'));
     }());
 
     // Collect values to send
-    var username = $('#tresdb-signup-username').val().trim();
-    var password = $('#tresdb-signup-password').val();
-    var password2 = $('#tresdb-signup-password2').val();
+    var username = $('#georap-signup-username').val().trim();
+    var password = $('#georap-signup-password').val();
+    var password2 = $('#georap-signup-password2').val();
 
     // Validate username
     if (username === '') {
       // Invalid username, show error
-      ui.show($('#tresdb-signup-invalid-username'));
+      ui.show($('#georap-signup-invalid-username'));
 
       return;
     }  // else
@@ -76,7 +76,7 @@ module.exports = function (token, goLogin) {
     // Validate password
     if (password !== password2 || password === '') {
       // Invalid password, display error message
-      ui.show($('#tresdb-signup-password-no-match'));
+      ui.show($('#georap-signup-password-no-match'));
 
       return;
     }  // else
@@ -84,45 +84,45 @@ module.exports = function (token, goLogin) {
     // Okay, all good.
 
     // Display loading animation
-    ui.show($('#tresdb-signup-in-progress'));
+    ui.show($('#georap-signup-in-progress'));
     // Hide form
-    ui.hide($('#tresdb-signup-form'));
+    ui.hide($('#georap-signup-form'));
 
     accountStore.signup(token, username, password, responseHandler);
   };
 
   responseHandler = function (err) {
     // Hide loading animation
-    ui.hide($('#tresdb-signup-in-progress'));
+    ui.hide($('#georap-signup-in-progress'));
 
     if (!err) {
       // Show success message
-      ui.show($('#tresdb-signup-success'));
+      ui.show($('#georap-signup-success'));
       // Show button to continue to log in.
-      ui.show($('#tresdb-signup-to-login'));
+      ui.show($('#georap-signup-to-login'));
 
       return;
     }  // else
 
     if (err.message === 'Conflict') {
       // Duplicate username, show error.
-      ui.show($('#tresdb-signup-email-username-taken'));
+      ui.show($('#georap-signup-email-username-taken'));
       // Show form
-      ui.show($('#tresdb-signup-form'));
+      ui.show($('#georap-signup-form'));
 
       return;
     }  // else
 
     if (err.message === 'Unauthorized') {
       // Expired token
-      ui.show($('#tresdb-signup-token-error'));
+      ui.show($('#georap-signup-token-error'));
       // Do not show the form because filling it again would still fail.
 
       return;
     }  // else
 
     // Other server error, show error message
-    ui.show($('#tresdb-signup-server-error'));
+    ui.show($('#georap-signup-server-error'));
   };
 
 };
