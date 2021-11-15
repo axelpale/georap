@@ -327,7 +327,7 @@ module.exports = {
       {
         _id: db.id('5867bdf00b5a9e18d7755e33'),
         admin: false,
-        email: 'john.doe@tresdb.fi',
+        email: 'john.doe@georap.fi',
         hash: bcrypt.hashSync('foobar', config.bcrypt.rounds),
         name: 'johndoe',
         points: 0,
