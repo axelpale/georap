@@ -55,7 +55,10 @@ module.exports = {
   // is used in the links instead HTTP.
   publicProtocol: 'https',
 
-  // Port for server to listen
+  // Port for the server to listen.
+  // Note that if your app is behind a reverse proxy
+  // this is not the public port but the local port
+  // visible for the rev proxy.
   port: 3000,
 
   // Mongo database settings
