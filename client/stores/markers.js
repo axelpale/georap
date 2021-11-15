@@ -8,7 +8,7 @@ emitter(exports);
 
 // Bind
 
-socket.on('tresdb_event', function (ev) {
+socket.on('georap_event', function (ev) {
   // Emit marker events so that map knows how to respond.
   if (ev.type === 'location_created' ||
       ev.type === 'location_removed' ||

@@ -9,7 +9,7 @@ exports.emitOne = (ev) => {
     throw new Error('Event must have a _id before emitting');
   }
 
-  io.get().emit('tresdb_event', ev);
+  io.get().emit('georap_event', ev);
 };
 
 exports.insertOne = (ev, callback) => {

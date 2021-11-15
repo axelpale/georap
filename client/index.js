@@ -50,7 +50,6 @@ var handleEvent = function (ev) {
   bus.emit(ev.type, ev);
   bus.emit('socket_event', ev);
 };
-socket.on('tresdb_event', handleEvent); // legacy
 socket.on('georap_event', handleEvent);
 
 

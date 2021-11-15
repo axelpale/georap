@@ -10,7 +10,7 @@ var locationTypes = tresdb.config.locationTypes;
 // Init
 emitter(exports);
 
-socket.on('tresdb_event', function (ev) {
+socket.on('georap_event', function (ev) {
   // Emit all location events. Allow hooking to all location events or
   // specific event type e.g. location_created, needed by main menu to
   // determine when creation is successful.
