@@ -1,23 +1,11 @@
 // JSON schema for Georap config.
 
 // Define reuseable types first
-
-const iconObject = {
-  type: 'object',
-  properties: {
-    src: {
-      type: 'string',
-    },
-    sizes: {
-      type: 'string',
-    },
-    type: {
-      type: 'string',
-    },
-  },
-  required: ['src', 'sizes', 'type'],
-  additionalProperties: false,
-};
+const defaultMapStateSchema = require('./defaultMapStateSchema');
+const iconSchema = require('./iconSchema');
+const exportServicesSchema = require('./exportServicesSchema');
+const smtpSchema = require('./smtpSchema');
+const entryFlagsSchema = require('./entryFlagsSchema');
 
 // Then the full config
 
@@ -31,49 +19,22 @@ module.exports = {
     description: {
       type: 'string',
     },
-    icons: {
-      type: 'array',
-      items: iconObject,
-    },
-    appleTouchIcons: {
-      type: 'array',
-      items: iconObject,
-    },
-    loginBackground: {
-      type: 'string',
-    },
-    loginColor: {
-      type: 'string',
-      enum: ['muted', 'primary', 'success', 'info', 'warning', 'danger'],
-    },
-    defaultMapState: {
+    admin: {
       type: 'object',
       properties: {
-        lat: {
-          type: 'number',
-        },
-        lng: {
-          type: 'number',
-        },
-        zoom: {
-          type: 'integer',
-        },
-        mapTypeId: {
+        username: {
           type: 'string',
-          enum: ['roadmap', 'satellite', 'hybrid', 'terrain'],
+        },
+        email: {
+          type: 'string',
+          format: 'email',
+        },
+        password: {
+          type: 'string',
         },
       },
-      required: ['lat', 'lng', 'zoom', 'mapTypeId'],
+      required: ['username', 'email', 'password'],
       additionalProperties: false,
-    },
-    enableSupportPage: {
-      type: 'boolean',
-    },
-    supportButtonTitle: {
-      type: 'string',
-    },
-    supportPageContent: {
-      type: 'string',
     },
     secret: {
       type: 'string',
@@ -82,6 +43,42 @@ module.exports = {
     googleMapsKey: {
       type: 'string',
     },
+    publicProtocol: {
+      type: 'string',
+      enum: ['http', 'https'],
+    },
+    hostname: {
+      type: 'string',
+      format: 'hostname',
+    },
+    port: {
+      type: 'integer',
+    },
+    mongo: {
+      type: 'object',
+      properties: {
+        url: {
+          type: 'string',
+        },
+        testUrl: {
+          type: 'string',
+        },
+      },
+      required: ['url'],
+      additionalProperties: false,
+    },
+    smtp: smtpSchema,
+    mail: {
+      type: 'object',
+      properties: {
+        sender: {
+          type: 'string',
+          format: 'email',
+        },
+      },
+      additionalProperties: false,
+    },
+    // FILES AND PATHS
     staticDir: {
       type: 'string',
     },
@@ -115,82 +112,22 @@ module.exports = {
     logDir: {
       type: 'string',
     },
-    publicProtocol: {
+    // THEME AND BRAND
+    defaultMapState: defaultMapStateSchema,
+    icons: {
+      type: 'array',
+      items: iconSchema,
+    },
+    appleTouchIcons: {
+      type: 'array',
+      items: iconSchema,
+    },
+    loginBackground: {
       type: 'string',
-      enum: ['http', 'https'],
     },
-    hostname: {
+    loginColor: {
       type: 'string',
-      format: 'hostname',
-    },
-    port: {
-      type: 'integer',
-    },
-    admin: {
-      type: 'object',
-      properties: {
-        username: {
-          type: 'string',
-        },
-        email: {
-          type: 'string',
-          format: 'email',
-        },
-        password: {
-          type: 'string',
-        },
-      },
-      required: ['username', 'email', 'password'],
-      additionalProperties: false,
-    },
-    mongo: {
-      type: 'object',
-      properties: {
-        url: {
-          type: 'string',
-        },
-        testUrl: {
-          type: 'string',
-        },
-      },
-      required: ['url'],
-      additionalProperties: false,
-    },
-    smtp: {
-      type: 'object',
-      properties: {
-        host: {
-          type: 'string',
-          format: 'hostname',
-        },
-        port: {
-          type: 'integer',
-        },
-        secure: {
-          type: 'boolean',
-        },
-        auth: {
-          type: 'object',
-          properties: {
-            user: {
-              type: 'string',
-            },
-            pass: {
-              type: 'string',
-            },
-          },
-        },
-      },
-    },
-    mail: {
-      type: 'object',
-      properties: {
-        sender: {
-          type: 'string',
-          format: 'email',
-        },
-      },
-      additionalProperties: false,
+      enum: ['muted', 'primary', 'success', 'info', 'warning', 'danger'],
     },
     locationStatuses: {
       type: 'array',
@@ -212,48 +149,7 @@ module.exports = {
       type: 'object',
       required: ['eventBased', 'attachmentBased'],
     },
-    entryFlags: {
-      type: 'object',
-      // To ensure the value of each property follows the same schema
-      // a sort of HACK is required. The patternProperties keyword,
-      // all-including regexp and additionalProperties:false together
-      // work as 'items' keyword with arrays.
-      patternProperties: {
-        '^.*$': {
-          type: 'object',
-          properties: {
-            name: {
-              type: 'string',
-            },
-            plural: {
-              type: 'string',
-            },
-            description: {
-              type: 'string',
-            },
-            glyphicon: {
-              type: 'string',
-            },
-            reward: {
-              type: 'integer',
-            },
-            precondition: {
-              type: 'object',
-            },
-          },
-          required: [
-            'name',
-            'plural',
-            'description',
-            'glyphicon',
-            'reward',
-            'precondition',
-          ],
-          additionalProperties: false,
-        },
-      },
-      additionalProperties: false,
-    },
+    entryFlags: entryFlagsSchema,
     markerTemplates: {
       type: 'object',
     },
@@ -289,6 +185,16 @@ module.exports = {
       ],
       additionalProperties: false,
     },
+    // Support page
+    enableSupportPage: {
+      type: 'boolean',
+    },
+    supportButtonTitle: {
+      type: 'string',
+    },
+    supportPageContent: {
+      type: 'string',
+    },
     coordinateSystems: {
       type: 'array',
       items: {
@@ -301,45 +207,7 @@ module.exports = {
       },
       minItems: 1,
     },
-    exportServices: {
-      type: 'array',
-      items: {
-        type: 'array',
-        items: [
-          {
-            type: 'string',
-          },
-          {
-            type: 'string',
-          },
-          {
-            type: 'string',
-          },
-          {
-            type: 'array',
-            items: {
-              type: 'object',
-              properties: {
-                east: {
-                  type: 'number',
-                },
-                north: {
-                  type: 'number',
-                },
-                south: {
-                  type: 'number',
-                },
-                west: {
-                  type: 'number',
-                },
-              },
-              additionalProperties: false,
-            },
-          },
-        ],
-        additionalItems: false,
-      },
-    },
+    exportServices: exportServicesSchema,
     bcrypt: {
       type: 'object',
       properties: {
@@ -361,16 +229,16 @@ module.exports = {
   required: [
     'title',
     'description',
-    // 'icon', TODO require in v13
-    // 'appleTouchIcon', TODO require in v13
-    'loginBackground',
-    // 'loginColor', TODO require in v13
-    'defaultMapState',
-    // 'enableSupportPage', TODO require in v13
-    'supportButtonTitle',
-    'supportPageContent',
+    'admin',
     'secret',
     'googleMapsKey',
+    'publicProtocol',
+    'hostname',
+    'port',
+    'mongo',
+    'smtp',
+    'mail',
+    // FILES AND PATHS
     'staticDir',
     'staticUrl',
     'uploadDir',
@@ -382,13 +250,12 @@ module.exports = {
     'tempUploadTimeToLive',
     'tempUploadSizeLimit',
     'logDir',
-    'publicProtocol',
-    'hostname',
-    'port',
-    'admin',
-    'mongo',
-    'smtp',
-    'mail',
+    // THEME AND BRAND
+    'defaultMapState',
+    // 'icon', TODO require in v13
+    // 'appleTouchIcon', TODO require in v13
+    'loginBackground',
+    // 'loginColor', TODO require in v13
     'locationStatuses',
     'locationTypes',
     'rewards',
@@ -396,6 +263,9 @@ module.exports = {
     'markerTemplates',
     'entries',
     'comments',
+    // 'enableSupportPage', TODO require in v13
+    'supportButtonTitle',
+    'supportPageContent',
     'coordinateSystems',
     'exportServices',
     'bcrypt',
