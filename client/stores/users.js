@@ -1,5 +1,5 @@
 // Usage:
-//   var users = tresdb.stores.users;
+//   var users = georap.stores.users;
 //
 
 var request = require('./lib/request');

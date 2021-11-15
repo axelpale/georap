@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8">
 
-    <title><%= tresdb.config.title %></title>
-    <meta name="description" content="<%= tresdb.config.description %>">
+    <title><%= georap.config.title %></title>
+    <meta name="description" content="<%= georap.config.description %>">
 
     <!-- Viewport mobile tag for sensible mobile support -->
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -17,16 +17,16 @@
     <meta id="theme-color" name="theme-color" content="white">
 
     <!-- Icons -->
-    <% if (tresdb.config.icons) { %>
-    <% tresdb.config.icons.forEach((icon) => { %>
+    <% if (georap.config.icons) { %>
+    <% georap.config.icons.forEach((icon) => { %>
     <link rel="icon" type="<%= icon.type %>" sizes="<%= icon.sizes %>"
           href="/assets/<%= icon.src %>">
     <% }) %>
     <% } else { %>
       <link rel="icon" type="image/png" href="/assets/images/logo/16.png">
     <% } %>
-    <% if (tresdb.config.appleTouchIcons) { %>
-    <% tresdb.config.appleTouchIcons.forEach((icon) => { %>
+    <% if (georap.config.appleTouchIcons) { %>
+    <% georap.config.appleTouchIcons.forEach((icon) => { %>
     <link rel="apple-touch-icon-precomposed" type="<%= icon.type %>" sizes="<%= icon.sizes %>"
           href="/assets/<%= icon.src %>">
     <% }) %>
@@ -63,15 +63,15 @@
     <!-- Site config variables -->
     <!-- See client/handlers.js for details -->
     <script>
-      window.tresdb = <%- JSON.stringify(tresdb) %>
-      window.tresdb.templates = {};
+      window.georap = <%- JSON.stringify(georap) %>
+      window.georap.templates = {};
       <% templates.forEach(function (template) { %>
       <%# Use bracket notation to allow template names with spaces and - %>
-      window.tresdb.templates['<%= template.name %>'] = <%- template.source %>;
+      window.georap.templates['<%= template.name %>'] = <%- template.source %>;
       <% }); %>
 
-      // alias: georap namespace
-      window.georap = window.tresdb;
+      // legacy namespace alias
+      window.tresdb = window.georap;
     </script>
 
     <!-- Webpack bundle -->
@@ -80,7 +80,7 @@
 
     <!-- Google Maps JS API -->
     <!-- geometry lib is needed to compute distance of LatLngBounds diagonal -->
-    <script src="https://maps.googleapis.com/maps/api/js?key=<%- tresdb.config.googleMapsKey %>&libraries=geometry&callback=initMap" async defer></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=<%- georap.config.googleMapsKey %>&libraries=geometry&callback=initMap" async defer></script>
 
   </body>
 </html>

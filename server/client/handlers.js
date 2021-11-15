@@ -14,7 +14,7 @@ const indexHtml = (function precompile() {
   const f = fs.readFileSync(p, 'utf8');  // eslint-disable-line no-sync
   const template = ejs.compile(f);
 
-  const tresdb = {
+  const georap = {
     version: pjson.version,
     config: {
       // Include only configs the client needs
@@ -71,7 +71,7 @@ const indexHtml = (function precompile() {
   });
 
   return template({
-    tresdb: tresdb,
+    georap: georap,
     templates: precompiledTemplates,
   });
 }());
