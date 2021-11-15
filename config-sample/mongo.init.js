@@ -1,5 +1,5 @@
 // WARNING This script creates MongoDB users and their permissions
-// as required by TresDB development. Do not use this script in production
+// as required by Georap development. Do not use this script in production
 // without careful modification of all the credentials below.
 // NOTE This script needs a MongoDB instance without --auth flag
 // to be running and listening the default port.
@@ -10,8 +10,8 @@ admin.createUser({
   pwd: 'mongoadminpwd',
   roles: ['userAdminAnyDatabase', 'backup']
 });
-tresdb = admin.getSiblingDB('tresdb');
-tresdb.createUser({
+georapdb = admin.getSiblingDB('georap');
+georapdb.createUser({
   user: 'mongouser',
   pwd: 'mongouserpwd',
   roles: ['readWrite']

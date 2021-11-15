@@ -39,7 +39,7 @@
     "lint:server": "eslint \"server/**/*.js\" \"worker/**/*.js\" && echo 'OK'",
     "lint:migration": "eslint \"migration/**/*.js\" && echo 'OK'",
     "lint:others": "eslint \"cli/**/*.js\" && echo 'OK'",
-    "mongo": "mongo tresdb",
+    "mongo": "mongo georap",
     "mongo:test": "mongo test",
     "mongod:init": "mkdir -p .data/db && mongod --dbpath=.data/db",
     "mongod:init:users": "mongo config/mongo.init.js",
