@@ -67,7 +67,7 @@
     "express": "^4.17.1",
     "express-jwt": "^6.1.0",
     "extract-zip": "^1.6.5",
-    "fs-extra": "^4.0.2",
+    "fs-extra": "^10.0.0",
     "georap-bus": "file:local_modules/georap-bus",
     "georap-components": "file:local_modules/georap-components",
     "georap-config": "file:local_modules/georap-config",
