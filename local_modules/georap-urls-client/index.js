@@ -1,4 +1,4 @@
-if (!tresdb.config) {
+if (!georap.config) {
   throw new Error(
     'No client-side configuration detected. ' +
     'Ensure the urls module is called from client-side code ' +
@@ -6,7 +6,7 @@ if (!tresdb.config) {
   )
 }
 
-var staticUrl = tresdb.config.staticUrl
+var staticUrl = georap.config.staticUrl
 
 exports.locationTypeToSymbolUrl = function (type) {
   var baseUrl = staticUrl + '/images/markers/symbols/'
