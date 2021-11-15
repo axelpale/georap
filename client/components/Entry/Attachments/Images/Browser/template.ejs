@@ -2,7 +2,7 @@
   <% attachments.forEach(function (attachment, i) { %>
   <img
     class="<%= i === selectedIndex ? 'active' : '' %>"
-    src="<%= attachment.thumbUrl %>"
+    src="<%= attachment.thumburl %>"
     title="<%= attachment.filename %>"
     data-attachment-key="<%= attachment.key %>">
   <% }); %>
