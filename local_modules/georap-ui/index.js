@@ -41,9 +41,9 @@ exports.flash = function ($el) {
   var DELAY = 2;
   var SECOND = 1000;
   $el.css('transition', 'background-color ' + DURATION + 's');
-  $el.addClass('tresdb-flash');
+  $el.addClass('georap-flash');
   window.setTimeout(function () {
-    $el.removeClass('tresdb-flash');
+    $el.removeClass('georap-flash');
   }, DELAY * SECOND);
   window.setTimeout(function () {
     $el.css('transition', 'unset');
