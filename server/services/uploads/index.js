@@ -67,7 +67,7 @@ exports.uploader = multer({
     filename: sanitizedOriginal,
   }),
   limits: {
-    fileSize: config.uploadSizeLimit,  // bytes
+    fileSize: config.uploadSizeLimit, // bytes
   },
 });
 
@@ -77,7 +77,7 @@ exports.tempUploader = multer({
     filename: sanitizedOriginal,
   }),
   limits: {
-    fileSize: config.tempUploadSizeLimit,  // bytes
+    fileSize: config.tempUploadSizeLimit, // bytes
   },
 });
 
