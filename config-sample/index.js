@@ -55,6 +55,15 @@ module.exports = {
   // is used in the links instead HTTP.
   publicProtocol: 'https',
 
+  // Public hostname.
+  // The domain that serves your georap app.
+  // Do not include protocol prefix or any trailing slashes.
+  // This is needed when rendering email messages that
+  // contain URLs back to the application.
+  // An invitation is an example of such message.
+  // Introduced in v13.
+  hostname: 'mysite.example.com',
+
   // Port for the server to listen.
   // Note that if your app is behind a reverse proxy
   // this is not the public port but the local port

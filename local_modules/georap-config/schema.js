@@ -119,6 +119,10 @@ module.exports = {
       type: 'string',
       enum: ['http', 'https'],
     },
+    hostname: {
+      type: 'string',
+      format: 'hostname',
+    },
     port: {
       type: 'integer',
     },
@@ -379,6 +383,7 @@ module.exports = {
     'tempUploadSizeLimit',
     'logDir',
     'publicProtocol',
+    'hostname',
     'port',
     'admin',
     'mongo',
