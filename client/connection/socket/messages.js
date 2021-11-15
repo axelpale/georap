@@ -8,9 +8,6 @@ module.exports = function (socket) {
   socket.on('connect_timeout', function () {
     console.log('Socket: connect_timeout');
   });
-  socket.on('error', function () {
-    console.log('Socket: error');
-  });
   socket.on('disconnect', function () {
     console.log('Socket: disconnect');
   });
