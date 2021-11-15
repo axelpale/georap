@@ -1,9 +1,9 @@
 // For server-side use only.
 // Configuration is passed to client via a GET handler.
 
-var config = require('../../config');
-var schema = require('./schema');
-var Ajv = require('ajv');
+const config = require('../../config');
+const schema = require('./schema');
+const Ajv = require('ajv');
 
 // Ensure that config/index.js is not accidentally included in client code
 // by checking the global var window.
@@ -13,8 +13,8 @@ if (typeof window !== 'undefined') {
 }
 
 // Validate against JSON schema
-var ajv = new Ajv();
-var valid = ajv.validate(schema, config);
+const ajv = new Ajv();
+const valid = ajv.validate(schema, config);
 
 if (valid) {
   console.log('Valid configuration loaded from config/index.js.');
