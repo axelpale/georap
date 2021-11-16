@@ -2,6 +2,7 @@
 //
 var template = require('./template.ejs');
 var emitter = require('component-emitter');
+var ui = require('georap-ui');
 
 // Remember which tab was open
 var defaultTabHash = 'activity';
@@ -46,7 +47,7 @@ module.exports = function () {
     // Click tab to change tab
     var tabSwitcher = function (tabHash) {
       return function (ev) { // receives click ev
-        // No link navigation needed.
+        // No # link navigation needed.
         ev.preventDefault();
         // Display active tab
         $mount.find('li').removeClass('active');
@@ -58,7 +59,11 @@ module.exports = function () {
       };
     };
     Object.keys(tabs).forEach(function (tabHash) {
-      $mount.find('.latest-tab-' + tabs[tabHash]).click(tabSwitcher(tabHash));
+      var fullTabClass = '.latest-tab-' + tabs[tabHash];
+      var switchTab = tabSwitcher(tabHash);
+      var throttledSwitch = ui.throttle(1000, switchTab);
+      // Prevent double click double load
+      $mount.find(fullTabClass).click(throttledSwitch);
     });
   };
 

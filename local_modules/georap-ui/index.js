@@ -177,6 +177,11 @@ exports.throttle = function (duration, iteratee) {
 
   return function (a, b, c, d) {
     if (timeout) {
+      // Stop clicks if a click handler was throttled.
+      if (a.preventDefault) {
+        a.preventDefault();
+        a.stopPropagation();
+      }
       return;
     }
 
