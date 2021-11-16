@@ -29,7 +29,7 @@ module.exports = {
       },
       { // NOTE new attachment
         key: 'adebd2rq',
-        user: 'admin',
+        user: 'foobar', // NOTE for v12v13 migration that repairs att users
         time: '2009-09-04T23:44:21.000Z',
         filename: 'tunnel-ground.jpg',
         filepath: '2021/EdvjkeEdf/tunnel-ground.jpg', // see uploads/

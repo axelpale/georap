@@ -395,4 +395,27 @@ describe('migrates.migrate', () => {
     });
   });
 
+  describe('v12 to v13', () => {
+    beforeEach((done) => {
+      loadFixtureByTag('v12', done);
+    });
+
+    it('should be able to migrate from v12 to v13', (done) => {
+      const targetV = 13;
+      migrates.migrate(targetV, (err) => {
+        assert.ifError(err);
+        assertFixtureEqual('config', 'v13', (err2) => {
+          assert.ifError(err2);
+          assertFixtureEqual('entries', 'v13', (err3) => {
+            assert.ifError(err3);
+            assertFixtureEqual('attachments', 'v13', (err4) => {
+              assert.ifError(err4);
+              done();
+            });
+          });
+        });
+      });
+    });
+  });
+
 });
