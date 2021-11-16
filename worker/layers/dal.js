@@ -67,7 +67,7 @@ exports.findLayerWithClusterRadiusSmallerThan = function (distance) {
 exports.markAllAsUnlayered = function (callback) {
   // Mark each location with isLayered=false and childLayer=0.
   // This is usually necessary when starting to refresh the layer numbers.
-  // TODO what about deleted locations?
+  // Note that this unlayers also deleted locations.
 
   const coll = db.collection('locations');
   const u = {
