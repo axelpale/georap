@@ -7,17 +7,7 @@ const handlers = require('./handlers');
 const attachmentLoader = require('./lib/attachmentLoader');
 const attachmentRouter = require('./attachment/routes');
 
-// TEMP Scaffold
-router.use((req, res, next) => {
-  req.user = {
-    name: 'foobar',
-    email: 'foobar@example.com',
-    admin: true,
-  };
-  return next();
-});
-
-router.get('/', jsonParser, handlers.getAll); // TODO Bug? JSON parser w/ GET?
+router.get('/', handlers.getAll);
 router.post('/', jsonParser, handlers.create);
 router.get('/count', handlers.count);
 router.use('/:attachmentKey', attachmentLoader, attachmentRouter);
