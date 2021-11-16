@@ -108,7 +108,7 @@ module.exports = function (query) {
       }
 
       if ('creator' in q) {
-        // TODO Check that creator exists in list. User can typo
+        // TODO Check that creator exists in list. User can typo in url.
         $elems.creator.val(q.creator);
       }
 
