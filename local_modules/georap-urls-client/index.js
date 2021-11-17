@@ -8,6 +8,11 @@ if (!georap.config) {
 
 var staticUrl = georap.config.staticUrl
 
+exports.locationUrl = function (locId) {
+  // Local absolute URL path to location.
+  return '/locations/' + locId
+}
+
 exports.locationTypeToSymbolUrl = function (type) {
   var baseUrl = staticUrl + '/images/markers/symbols/'
   return baseUrl + type + '.png'

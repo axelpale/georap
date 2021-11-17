@@ -1,6 +1,7 @@
 // Root bus
 var bus = require('georap-bus');
 var socket = require('./connection/socket');
+var urls = require('georap-urls-client');
 
 // Collect data access API's under georap global.
 // This prevents cumbersome ../../../ requires.
@@ -75,7 +76,7 @@ window.initMap = function () {
     // If the marker is the current location, close the current location.
     // To prevent double-clicks from opening and closing the location,
     // close only after cardCooldown period.
-    var locPath = '/locations/' + mloc._id;
+    var locPath = urls.locationUrl(mloc._id);
 
     if (!cardCooldown) {
       if (locPath === routes.getCurrentPath()) {
