@@ -1,5 +1,6 @@
 var template = require('./template.ejs');
 var ui = require('georap-ui');
+var urls = require('georap-urls-client');
 var geometryModel = require('georap-models').geometry;
 var locationsStore = georap.stores.locations;
 
@@ -62,14 +63,17 @@ module.exports = function () {
           lng: lng,
         }),
         name: name,
-      }, function (err) {
+      }, function (err, newloc) {
         if (err) {
           console.error(err);
+          // TODO loc too close
           return;
         }
 
-        // TODO go to created location?
-        // Or just add to map and a list below.
+        // Go to created location
+        // IDEA: Just add the marker to map and list below.
+        // Could be nice when creating lots of locations at the site start up.
+        georap.go(urls.locationUrl(newloc._id));
       });
     });
   };
