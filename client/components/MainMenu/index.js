@@ -3,6 +3,7 @@ var template = require('./template.ejs');
 var glyphiconTemplate = require('./glyphicon.ejs');
 var emitter = require('component-emitter');
 var ui = require('georap-ui');
+var urls = require('georap-urls-client');
 var account = georap.stores.account;
 var locations = georap.stores.locations;
 var filterStore = georap.stores.filter;
@@ -130,10 +131,13 @@ module.exports = function (mapComp) {
         // Hide progress bar
         ui.hide($('#georap-toolbar-progress'));
 
-        // Show main menu
+        // Show main menu bar
         ui.show($('#georap-toolbar-main'));
 
         locations.off('location_created', thisFn);
+
+        // Navigate to the new location
+        georap.go(urls.locationUrl(lev.locationId));
       });
 
       locations.create(geom, function (err) {
