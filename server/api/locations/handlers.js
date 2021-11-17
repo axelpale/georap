@@ -46,13 +46,14 @@ exports.create = (req, res, next) => {
       latitude: lat,
       longitude: lng,
       username: username,
-    }, (err) => {
+    }, (err, rawLoc) => {
       if (err) {
         if (err.message === 'TOO_CLOSE') {
           return res.json('TOO_CLOSE');
         }
         return next(err);
       }
+      return res.json(rawLoc);
     });
 
     return;
