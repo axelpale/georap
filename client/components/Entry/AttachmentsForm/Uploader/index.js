@@ -2,6 +2,7 @@ var template = require('./template.ejs');
 var FileUpload = require('./FileUpload');
 var emitter = require('component-emitter');
 var ui = require('georap-ui');
+var account = georap.stores.account;
 
 var any = function () {
   return true;
@@ -124,6 +125,7 @@ module.exports = function (opts) {
         cache: false,
         contentType: false,
         processData: false,
+        headers: { 'Authorization': 'Bearer ' + account.getToken() },
         xhr: function () {
           // For upload progress bar, update on progress
           var xhr = new window.XMLHttpRequest();
