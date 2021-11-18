@@ -19,7 +19,7 @@ module.exports = function () {
     // Fetch users and include to page.
     usersApi.getAll(function (err, rawUsers) {
       // Hide loading bar
-      ui.hide($('#tresdb-users-loading'));
+      ui.hide($('#georap-users-loading'));
 
       if (err) {
         console.error(err);
@@ -64,11 +64,11 @@ module.exports = function () {
       };
 
       // Reveal list
-      $('#tresdb-users-alltime').html(listTemplate({
+      $('#georap-users-alltime').html(listTemplate({
         users: bestUsersAllTime,
       }));
 
-      $('#tresdb-users-365days').html(listTemplate({
+      $('#georap-users-365days').html(listTemplate({
         users: bestUsersOf365days.map(function (u) {
           // Template uses u.points
           return Object.assign({}, u, { points: u.points365days });
@@ -76,7 +76,7 @@ module.exports = function () {
         prefix: '+',
       }));
 
-      $('#tresdb-users-30days').html(listTemplate({
+      $('#georap-users-30days').html(listTemplate({
         users: bestUsersOf30days.map(function (u) {
           // Template uses u.points
           return Object.assign({}, u, { points: u.points30days });
@@ -84,7 +84,7 @@ module.exports = function () {
         prefix: '+',
       }));
 
-      $('#tresdb-users-7days').html(listTemplate({
+      $('#georap-users-7days').html(listTemplate({
         users: bestUsersOf7days.map(function (u) {
           // Template uses u.points
           return Object.assign({}, u, { points: u.points7days });
@@ -92,7 +92,7 @@ module.exports = function () {
         prefix: '+',
       }));
 
-      $('#tresdb-deactivated-users').html(listTemplate({
+      $('#georap-deactivated-users').html(listTemplate({
         users: passiveUsers,
       }));
 

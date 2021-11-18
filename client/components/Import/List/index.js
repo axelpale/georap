@@ -37,15 +37,15 @@ var ImportList = function () {
 
     $mount.html(template(self.state));
 
-    var $checkAllBox = $('#tresdb-import-all');
-    var $list = $('#tresdb-import-list');
+    var $checkAllBox = $('#georap-import-all');
+    var $list = $('#georap-import-list');
 
     $checkAllBox.change(function () {
-      var $rows = $('#tresdb-import-list .tresdb-import-row-check');
+      var $rows = $('#georap-import-list .georap-import-row-check');
       $rows.prop('checked', $checkAllBox.prop('checked'));
     });
 
-    $list.on('click', '.tresdb-import-view-details', function (ev) {
+    $list.on('click', '.georap-import-view-details', function (ev) {
       ev.preventDefault();
       // plain stopPropagation fires the event twice
       ev.stopImmediatePropagation();

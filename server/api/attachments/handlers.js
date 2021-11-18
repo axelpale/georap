@@ -25,6 +25,8 @@ exports.create = (req, res, next) => {
   //
   // At least one file is required.
   //
+  // Request with req.user and req.files
+  //
   // Response with JSON
   //   {
   //     attachments: [<attachment with urls>]

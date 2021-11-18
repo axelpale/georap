@@ -58,8 +58,6 @@ module.exports = function () {
   this.switchTab = function (tabHash) {
     // DEBUG console.log('tab_switch', tabHash);
     if ($mount) {
-      // TODO avoid reloading same tab
-
       // Destroy the previous list view if any.
       if (children.list) {
         children.list.unbind();

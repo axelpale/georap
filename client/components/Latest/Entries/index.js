@@ -53,7 +53,6 @@ module.exports = function () {
           }
 
           var entries = result.entries;
-          // var total = latestResult.entriesCount;
 
           appendEntries(entries);
 

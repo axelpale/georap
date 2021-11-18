@@ -49,7 +49,7 @@ module.exports = function (map) {
 
     var firstChild = (function defineFirstChild() {
       var el = document.createElement('button');
-      el.className = 'tresdb-geolocation';
+      el.className = 'georap-geolocation';
       el.title = 'Your Location';
       return el;
     }());
@@ -57,7 +57,7 @@ module.exports = function (map) {
 
     var secondChild = (function defineSecondChild() {
       var el = document.createElement('div');
-      el.className = 'tresdb-geolocation-icon';
+      el.className = 'georap-geolocation-icon';
       return el;
     }());
     firstChild.appendChild(secondChild);

@@ -1,12 +1,12 @@
-.tresdb-tag {
+.georap-tag {
   border: 0px solid gray;
 }
-.tresdb-tag-active {
+.georap-tag-active {
   border: 1px solid #111;
 }
-.tresdb-tag.location-filter-any {
+.georap-tag.location-filter-any {
   border: 1px solid #bbb;
 }
-.tresdb-tag-active.location-filter-any {
+.georap-tag-active.location-filter-any {
   border: 1px solid #111;
 }

@@ -19,34 +19,34 @@ module.exports = function () {
   emitter(self); // Every card must be emitter to be able to detect close
 
   var updateTemplate = function () {
-    var offbtn = $('button#tresdb-filter-off');
-    var dot = $('#tresdb-filter-title-dot');
+    var offbtn = $('button#georap-filter-off');
+    var dot = $('#georap-filter-title-dot');
 
     // Unstyle the previously active
-    $('#tresdb-filter-status-list .tresdb-tag-active')
-      .removeClass('tresdb-tag-active');
-    $('#tresdb-filter-type-list .tresdb-tag-active')
-      .removeClass('tresdb-tag-active');
+    $('#georap-filter-status-list .georap-tag-active')
+      .removeClass('georap-tag-active');
+    $('#georap-filter-type-list .georap-tag-active')
+      .removeClass('georap-tag-active');
 
     if (filterStore.isDefault()) {
       // Hide red stuff
       ui.hide(dot);
       offbtn.attr('class', 'btn btn-default disabled');
       // Activate any
-      $('#tresdb-filter-status-list .location-filter-any')
-        .addClass('tresdb-tag-active');
-      $('#tresdb-filter-type-list .location-filter-any')
-        .addClass('tresdb-tag-active');
+      $('#georap-filter-status-list .location-filter-any')
+        .addClass('georap-tag-active');
+      $('#georap-filter-type-list .location-filter-any')
+        .addClass('georap-tag-active');
     } else {
       // Show red stuff
       ui.show(dot);
       offbtn.attr('class', 'btn btn-danger');
       // Activate the current status and type buttons
       var filterState = filterStore.get();
-      $('#tresdb-filter-status-list .tresdb-status-' + filterState.status)
-        .addClass('tresdb-tag-active');
-      $('#tresdb-filter-type-list .tresdb-type-' + filterState.type)
-        .addClass('tresdb-tag-active');
+      $('#georap-filter-status-list .georap-status-' + filterState.status)
+        .addClass('georap-tag-active');
+      $('#georap-filter-type-list .georap-type-' + filterState.type)
+        .addClass('georap-tag-active');
     }
   };
 
@@ -75,7 +75,7 @@ module.exports = function () {
     }));
 
     // Click on a status button
-    var $statusList = $('#tresdb-filter-status-list');
+    var $statusList = $('#georap-filter-status-list');
     $statusList.click(function (ev) {
       var btnValue = ev.target.dataset.status;
       if (typeof btnValue === 'string' && btnValue.length > 0) {
@@ -87,7 +87,7 @@ module.exports = function () {
     });
 
     // Click on a type button
-    var $typeList = $('#tresdb-filter-type-list');
+    var $typeList = $('#georap-filter-type-list');
     $typeList.click(function (ev) {
       var btnValue = ev.target.dataset.type;
       if (typeof btnValue === 'string' && btnValue.length > 0) {
@@ -99,7 +99,7 @@ module.exports = function () {
     });
 
     // Click on off button
-    $('button#tresdb-filter-off').click(function () {
+    $('button#georap-filter-off').click(function () {
       filterStore.reset();
     });
 
@@ -108,8 +108,8 @@ module.exports = function () {
   };
 
   this.unbind = function () {
-    $('#tresdb-filter-status-list').off();
-    $('#tresdb-filter-type-list').off();
+    $('#georap-filter-status-list').off();
+    $('#georap-filter-type-list').off();
     filterStore.off('updated', updateTemplate);
   };
 };

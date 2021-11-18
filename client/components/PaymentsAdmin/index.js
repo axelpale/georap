@@ -25,13 +25,13 @@ module.exports = function () {
 
 
     balancesComp = new Balances();
-    balancesComp.bind($('#tresdb-balances-root'));
+    balancesComp.bind($('#georap-balances-root'));
 
     paymentsHistoryComp = new PaymentsHistory();
-    paymentsHistoryComp.bind($('#tresdb-history-root'));
+    paymentsHistoryComp.bind($('#georap-history-root'));
 
     registrationComp = new Registration();
-    registrationComp.bind($('#tresdb-registration-root'));
+    registrationComp.bind($('#georap-registration-root'));
   };
 
   this.unbind = function () {

@@ -2,7 +2,7 @@
 
 ![Example](doc/georap_menu.jpg)
 
-Everyone has their own secret places. Georap, a geographical content managing system and formerly known as TresDB, was created to allow you to browse, manage, and describe geolocations in a fun, easy and social manner. It is for persons, groups, or organisations who want to share, document, and discuss locations. It for them who want to keep all data in their own hands. Whether your topic is nature, constructions, urban exploration, traveling, berry picking, or treasure hunting, we bet you will find Georap useful.
+Create a community on map. Georap, a social geographical content managing system was created to allow you to browse, manage, and describe geolocations. Your users can share local events and notes in a fun, easy, and social manner. It is for groups and organisations who want to share, document, and discuss locations. It for them who want to keep their data in their hands. Whether the community topic is nature, constructions, urban exploration, traveling, birds, berry picking, or treasure hunting, we bet you find Georap useful.
 
 ## Features
 

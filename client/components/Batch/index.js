@@ -25,16 +25,16 @@ module.exports = function (batchId) {
       batchId: batchId,
     }));
 
-    var $progress = $('#tresdb-batch-progress');
-    var $list = $('#tresdb-batch-list');
-    var $error = $('#tresdb-batch-error');
-    var $error404 = $('#tresdb-batch-error404');
-    var $message = $('#tresdb-batch-message');
+    var $progress = $('#georap-batch-progress');
+    var $list = $('#georap-batch-list');
+    var $error = $('#georap-batch-error');
+    var $error404 = $('#georap-batch-error404');
+    var $message = $('#georap-batch-message');
 
-    var $cancel = $('#tresdb-batch-cancel');
-    var $submitSelected = $('#tresdb-batch-import-selected');
-    var $submitAllButton = $('#tresdb-batch-import-all');
-    var $submitAllForm = $('#tresdb-batch-form');
+    var $cancel = $('#georap-batch-cancel');
+    var $submitSelected = $('#georap-batch-import-selected');
+    var $submitAllButton = $('#georap-batch-import-all');
+    var $submitAllForm = $('#georap-batch-form');
 
     listComp.bind($list);
 
@@ -132,8 +132,8 @@ module.exports = function (batchId) {
 
   this.unbind = function () {
     listComp.unbind();
-    $('#tresdb-batch-form').off();
-    $('#tresdb-batch-import-selected').off();
+    $('#georap-batch-form').off();
+    $('#georap-batch-import-selected').off();
   };
 
 };

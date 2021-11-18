@@ -28,7 +28,7 @@ module.exports = {
     },
     status: {
       type: 'string',
-      // TODO enum
+      // values depend on configuration
     },
     text1: {
       type: 'string',

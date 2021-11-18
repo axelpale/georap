@@ -54,7 +54,7 @@ var LocationView = function (id, query) {
       ref: query.ref === 'latest' ? 'latest' : 'map',
     }));
 
-    var $loading = $('#tresdb-location-loading');
+    var $loading = $('#georap-location-loading');
 
     // Fetch location before rendering.
     locations.getOne(id, function (err, rawLoc) {
@@ -85,15 +85,15 @@ var LocationView = function (id, query) {
       eventsView = new EventsView(_location.getEvents());
       removeView = new RemoveView(_location);
 
-      nameView.bind($('#tresdb-location-name'));
-      placesView.bind($('#tresdb-location-places'));
-      geomView.bind($('#tresdb-location-geom'));
-      statusTypeView.bind($('#tresdb-location-statustype-container'));
+      nameView.bind($('#georap-location-name'));
+      placesView.bind($('#georap-location-places'));
+      geomView.bind($('#georap-location-geom'));
+      statusTypeView.bind($('#georap-location-statustype-container'));
       thumbnailView.bind($('#location-thumbnail-container'));
-      formsView.bind($('#tresdb-location-forms'));
-      entriesView.bind($('#tresdb-location-entries'));
-      eventsView.bind($('#tresdb-location-events'));
-      removeView.bind($('#tresdb-location-remove'));
+      formsView.bind($('#georap-location-forms'));
+      entriesView.bind($('#georap-location-entries'));
+      eventsView.bind($('#georap-location-events'));
+      removeView.bind($('#georap-location-remove'));
 
 
       // Listen possible changes in the location.

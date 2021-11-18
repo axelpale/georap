@@ -18,9 +18,9 @@ module.exports = function () {
 
     $mount.html(template());
 
-    var $error = $('#tresdb-statistics-error');
-    var $progress = $('#tresdb-statistics-progress');
-    var $table = $('#tresdb-statistics-table');
+    var $error = $('#georap-statistics-error');
+    var $progress = $('#georap-statistics-progress');
+    var $table = $('#georap-statistics-table');
 
     statisticsApi.getAll(function (err, stats) {
       ui.hide($progress);

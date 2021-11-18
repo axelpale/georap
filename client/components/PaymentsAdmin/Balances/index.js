@@ -20,9 +20,9 @@ module.exports = function () {
     // Template with loading bar
     $mount.html(template());
 
-    var $progress = $('#tresdb-balances-progress');
-    var $tablecont = $('#tresdb-balances-container');
-    var $error = $('#tresdb-balances-error');
+    var $progress = $('#georap-balances-progress');
+    var $tablecont = $('#georap-balances-container');
+    var $error = $('#georap-balances-error');
 
     payments.getBalances(function (err, users) {
       ui.hide($progress);

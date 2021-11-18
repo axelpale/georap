@@ -14,13 +14,12 @@ exports.count = (req, res, next) => {
 };
 
 exports.create = (req, res, next) => {
+  // Create a location with an optional name.
 
   // Validate required arguments
-
   const valid = (typeof req.body === 'object' &&
                  typeof req.body.lat === 'number' &&
                  typeof req.body.lng === 'number');
-
   if (!valid) {
     return res.status(status.BAD_REQUEST).send('Invalid loc name');
   }
@@ -30,8 +29,7 @@ exports.create = (req, res, next) => {
 
   const username = req.user.name;
 
-  // Validate optional arguments
-
+  // Create with name
   if (typeof req.body.name === 'string') {
     const name = req.body.name.trim();
 
@@ -46,28 +44,27 @@ exports.create = (req, res, next) => {
       latitude: lat,
       longitude: lng,
       username: username,
-    }, (err) => {
+    }, (err, rawLoc) => {
       if (err) {
         if (err.message === 'TOO_CLOSE') {
           return res.json('TOO_CLOSE');
         }
         return next(err);
       }
+      return res.json(rawLoc);
     });
-
-    return;
-  }
-
-  dal.create(lat, lng, username, (err, rawLoc) => {
-    if (err) {
-      if (err.message === 'TOO_CLOSE') {
-        return res.json('TOO_CLOSE');
+  } else {
+    // Create without name
+    dal.create(lat, lng, username, (err, rawLoc) => {
+      if (err) {
+        if (err.message === 'TOO_CLOSE') {
+          return res.json('TOO_CLOSE');
+        }
+        return next(err);
       }
-      return next(err);
-    }
-
-    return res.json(rawLoc);
-  });
+      return res.json(rawLoc);
+    });
+  }
 };
 
 exports.latest = (req, res, next) => {

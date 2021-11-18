@@ -24,10 +24,6 @@ const router = require('express').Router();
 // Icon routes do not require authentication. Thus before jwt middleware.
 router.use('/icons', iconsRouter);
 
-// Scaffold routes do not require authentication but must be removed
-// or closed after development.
-router.use('/attachments', attachmentsRouter);
-
 // Account routes only partially require JWT authentication. Thus
 // the router is used before the jwt middleware.
 router.use('/account', accountRouter);
@@ -80,6 +76,7 @@ router.use((req, res, next) => {
 });
 
 router.use('/admin', adminRouter);
+router.use('/attachments', attachmentsRouter);
 router.use('/entries', entriesRouter);
 router.use('/events', eventsRouter);
 router.use('/geometry', geometryRouter);

@@ -22,7 +22,7 @@ var jwtDecode = require('jwt-decode').default;
 emitter(exports);
 
 // Key of token in storage.
-var TOKEN_KEY = 'tresdb-session-token';
+var TOKEN_KEY = 'georap-session-token';
 
 exports.login = function (email, password, callback) {
   // Parameters:
@@ -84,7 +84,8 @@ exports.logout = function (callback) {
   //   logout
   //     On successful logout
 
-  // TODO ask server to invalidate the token.
+  // NOTE The token is removed but the server will still accept it
+  // until the token has expired. This is a feature/weakness of JWT token.
 
   storage.removeItem(TOKEN_KEY);
   exports.emit('logout');

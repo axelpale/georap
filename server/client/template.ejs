@@ -70,8 +70,7 @@
       window.georap.templates['<%= template.name %>'] = <%- template.source %>;
       <% }); %>
 
-      // legacy namespace alias
-      window.tresdb = window.georap;
+      window.tresdb = window.georap;// legacy namespace alias
     </script>
 
     <!-- Webpack bundle -->

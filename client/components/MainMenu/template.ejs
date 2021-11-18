@@ -1,14 +1,14 @@
-<div id="tresdb-toolbar-main">
+<div id="georap-toolbar-main">
 
   <div class="btn-toolbar" role="toolbar">
     <div class="dropdown btn-group">
-      <button id="tresdb-mainmenu" type="button" data-toggle="dropdown" class="dropdown-toggle btn btn-default btn-lg" aria-haspopup="true" aria-expanded="false">
+      <button id="georap-mainmenu" type="button" data-toggle="dropdown" class="dropdown-toggle btn btn-default btn-lg" aria-haspopup="true" aria-expanded="false">
         <%= glyphicon({ name: 'th-list' }) %>
         <span class="caret"></span>
       </button>
-      <ul class="dropdown-menu" aria-labelledby="tresdb-mainmenu">
+      <ul class="dropdown-menu" aria-labelledby="georap-mainmenu">
         <li>
-          <a id="tresdb-mainmenu-add" href="#"><%= glyphicon({ name: 'map-marker' }) %> Add Location...</a>
+          <a id="georap-mainmenu-add" href="#"><%= glyphicon({ name: 'map-marker' }) %> Add Location...</a>
         </li>
         <li>
           <a href="/crosshair"><%= glyphicon({ name: 'screenshot' }) %> Coordinates...</a>
@@ -65,15 +65,15 @@
     </div><!-- .dropdown -->
 
     <div class="btn-group" role="group" aria-label="Filter tools">
-      <button id="tresdb-mainmenu-filter" class="btn btn-default btn-lg" type="button" title="Filter"><%= glyphicon({ name: 'filter' }) %>
+      <button id="georap-mainmenu-filter" class="btn btn-default btn-lg" type="button" title="Filter"><%= glyphicon({ name: 'filter' }) %>
         <span class="label label-danger<%= isFilterActive ? '' : ' hidden' %>">&nbsp;</span>
       </button>
     </div>
 
-    <form id="tresdb-mainmenu-search-form" class="input-group">
-      <input id="tresdb-mainmenu-search-text" type="text" class="form-control input-lg" placeholder="search...">
+    <form id="georap-mainmenu-search-form" class="input-group">
+      <input id="georap-mainmenu-search-text" type="text" class="form-control input-lg" placeholder="search...">
       <span class="input-group-btn">
-        <button id="tresdb-mainmenu-search-submit" class="btn btn-default btn-lg" type="submit"><%= glyphicon({ name: 'search' }) %></button>
+        <button id="georap-mainmenu-search-submit" class="btn btn-default btn-lg" type="submit"><%= glyphicon({ name: 'search' }) %></button>
       </span>
     </form>
   </div><!-- .btn-toolbar -->
@@ -81,17 +81,17 @@
 </div><!-- #main -->
 
 
-<div id="tresdb-toolbar-addition" class="btn-toolbar hidden" role="toolbar">
+<div id="georap-toolbar-addition" class="btn-toolbar hidden" role="toolbar">
   <div class="btn-group" role="group" aria-label="location tools">
-    <button id="tresdb-addition-cancel" type="button" class="btn btn-default">Cancel</button>
+    <button id="georap-addition-cancel" type="button" class="btn btn-default">Cancel</button>
   </div>
 
   <div class="btn-group" role="group" aria-label="location tools">
-    <button id="tresdb-addition-create" type="button" class="btn btn-primary">Create here</button>
+    <button id="georap-addition-create" type="button" class="btn btn-primary">Create here</button>
   </div>
 </div>
 
-<div id="tresdb-toolbar-progress" class="btn-toolbar hidden" role="toolbar">
+<div id="georap-toolbar-progress" class="btn-toolbar hidden" role="toolbar">
   <div class="btn-group" role="group" style="width: 30em">
     <div class="progress">
       <div class="progress-bar progress-bar-striped active" role="progressbar" style="width: 100%">
@@ -101,11 +101,11 @@
   </div>
 </div>
 
-<div id="tresdb-toolbar-error" class="alert alert-danger hidden" role="alert">
+<div id="georap-toolbar-error" class="alert alert-danger hidden" role="alert">
   Failed to create location. Try again later.
 </div>
 
-<div id="tresdb-toolbar-error-too-close" class="alert alert-danger hidden" role="alert" style="font-size: 1.2em">
+<div id="georap-toolbar-error-too-close" class="alert alert-danger hidden" role="alert" style="font-size: 1.2em">
   <button type="button" class="close" aria-label="Close">
     <span aria-hidden="true">&times;</span>
   </button>

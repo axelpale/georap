@@ -39,7 +39,7 @@ module.exports = {
       {
         _id: db.id('58092312bbba430a35fb4139'),
         key: 'schemaVersion',
-        value: 12,
+        value: 13,
       },
     ],
     attachments: [

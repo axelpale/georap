@@ -15,12 +15,13 @@ exports.forward = forward({
   },
 
   location_entry_changed: function (location, ev) {
-    // If the attachment selected as the thumbnail was removed
+    // If the attachment that was selected as the thumbnail is removed
     // we should change the location thumbnail.
     // However, as we are not aware of other entries of the location
     // we cannot know how the thumbnail has changed or nullied.
     // Therefore it is best for now to leave the thumbnail intact client-side.
-    // TODO maybe location_thumbnail_changed should be emitted by server?
+    // The server determines the new thumbnail and broadcasts it via
+    // location_thumbnail_changed event.
 
     // Check if the thumbnail was gained.
     if (!location.thumbnail) {

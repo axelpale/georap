@@ -66,18 +66,18 @@ module.exports = function (location) {
 
     // Preparation for binds
 
-    var $edit = $('#tresdb-location-coords-edit');
-    var $container = $('#tresdb-location-coords-container');
-    var $progress = $('#tresdb-location-coords-progress');
-    var $geostamp = $('#tresdb-location-coords-geostamp');
-    var $form = $('#tresdb-location-coords-form');
-    var $cancel = $('#tresdb-location-coords-cancel');
-    var $error = $('#tresdb-location-coords-error');
-    var $lng = $('#tresdb-location-coords-longitude');
-    var $lat = $('#tresdb-location-coords-latitude');
+    var $edit = $('#georap-location-coords-edit');
+    var $container = $('#georap-location-coords-container');
+    var $progress = $('#georap-location-coords-progress');
+    var $geostamp = $('#georap-location-coords-geostamp');
+    var $form = $('#georap-location-coords-form');
+    var $cancel = $('#georap-location-coords-cancel');
+    var $error = $('#georap-location-coords-error');
+    var $lng = $('#georap-location-coords-longitude');
+    var $lat = $('#georap-location-coords-latitude');
 
     var initMap = function () {
-      var $map = $('#tresdb-location-coords-map');
+      var $map = $('#georap-location-coords-map');
 
       var mapState = mapStateStore.get();
 
@@ -198,9 +198,9 @@ module.exports = function (location) {
     });
 
     (function defineMore() {
-      var $more = $('#tresdb-location-coords-more');
-      var $moreopen = $('#tresdb-location-coords-more-open');
-      var $moreclose = $('#tresdb-location-coords-more-close');
+      var $more = $('#georap-location-coords-more');
+      var $moreopen = $('#georap-location-coords-more-open');
+      var $moreclose = $('#georap-location-coords-more-close');
 
       $moreopen.click(function (ev) {
         ev.preventDefault();
@@ -227,7 +227,7 @@ module.exports = function (location) {
       // WGS84
       $geostamp.html(allCoords[0].html);
       // Other systems
-      var $more = $('#tresdb-location-coords-more');
+      var $more = $('#georap-location-coords-more');
       var moreHtml = allCoords.reduce(function (acc, c) {
         var content = c.html + ' (' + c.name + ')';
         return acc + '<div><span>' + content + '</span></div>';
@@ -242,10 +242,10 @@ module.exports = function (location) {
   };
 
   this.unbind = function () {
-    $('#tresdb-location-coords-edit').off();
-    $('#tresdb-location-coords-form').off();
-    $('#tresdb-location-coords-cancel').off();
-    $('#tresdb-location-coords-more-open').off();
+    $('#georap-location-coords-edit').off();
+    $('#georap-location-coords-form').off();
+    $('#georap-location-coords-cancel').off();
+    $('#georap-location-coords-more-open').off();
 
     Object.keys(locationListeners).forEach(function (k) {
       location.off(k, locationListeners[k]);

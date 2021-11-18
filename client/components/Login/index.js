@@ -21,12 +21,12 @@ module.exports = function (onSuccess) {
 
   var loginResponseHandler = function (err) {
 
-    var $form = $('#tresdb-login-form');
-    var $deactivated = $('#tresdb-login-deactivated');
-    var $progress = $('#tresdb-login-in-progress');
-    var $incorrect = $('#tresdb-login-incorrect');
-    var $reset = $('#tresdb-password-reset');
-    var $error = $('#tresdb-login-server-error');
+    var $form = $('#georap-login-form');
+    var $deactivated = $('#georap-login-deactivated');
+    var $progress = $('#georap-login-in-progress');
+    var $incorrect = $('#georap-login-incorrect');
+    var $reset = $('#georap-password-reset');
+    var $error = $('#georap-login-server-error');
 
     // Hide the progress bar
     ui.hide($progress);
@@ -48,7 +48,7 @@ module.exports = function (onSuccess) {
 
     if (err.code === FORBIDDEN) {
       // Show error for deactivated account. Keep login form hidden.
-      var $msg = $deactivated.find('#tresdb-login-deactivated-message');
+      var $msg = $deactivated.find('#georap-login-deactivated-message');
       $msg.html(err.message);
       ui.show($deactivated);
 
@@ -64,25 +64,25 @@ module.exports = function (onSuccess) {
     ev.preventDefault();
 
     // Get the input values
-    var email = $('#tresdb-login-email').val();
-    var password = $('#tresdb-login-password').val();
+    var email = $('#georap-login-email').val();
+    var password = $('#georap-login-password').val();
 
     // Clear possible earlier error messages
-    ui.hide($('#tresdb-login-invalid-email'));
-    ui.hide($('#tresdb-login-invalid-password'));
-    ui.hide($('#tresdb-login-incorrect'));
-    ui.hide($('#tresdb-login-server-error'));
+    ui.hide($('#georap-login-invalid-email'));
+    ui.hide($('#georap-login-invalid-password'));
+    ui.hide($('#georap-login-incorrect'));
+    ui.hide($('#georap-login-server-error'));
 
     // Validate input
     if (email.length < 1) {
       // Display error message
-      ui.show($('#tresdb-login-invalid-email'));
+      ui.show($('#georap-login-invalid-email'));
 
       return;
     }
     if (password.length < 1) {
       // Display password error message
-      ui.show($('#tresdb-login-invalid-password'));
+      ui.show($('#georap-login-invalid-password'));
 
       return;
     }
@@ -90,11 +90,11 @@ module.exports = function (onSuccess) {
     // Okay, everything good. Start login process with the server.
 
     // Display the progress bar
-    ui.show($('#tresdb-login-in-progress'));
+    ui.show($('#georap-login-in-progress'));
     // Hide the login form
-    ui.hide($('#tresdb-login-form'));
+    ui.hide($('#georap-login-form'));
     // Hide the password reset form
-    ui.hide($('#tresdb-password-reset'));
+    ui.hide($('#georap-password-reset'));
 
     account.login(email, password, loginResponseHandler);
   };
@@ -104,54 +104,54 @@ module.exports = function (onSuccess) {
     // Autofill reset email field if email already given.
     ev.preventDefault();
 
-    ui.toggleHidden($('#tresdb-password-reset-form'));
+    ui.toggleHidden($('#georap-password-reset-form'));
 
-    var loginEmail = $('#tresdb-login-email').val();
+    var loginEmail = $('#georap-login-email').val();
 
     if (loginEmail !== '') {
-      $('#tresdb-password-reset-email').val(loginEmail);
+      $('#georap-password-reset-email').val(loginEmail);
     }
   };
 
   var resetResponseHandler = function (err) {
     // Hide the progress bar
-    ui.hide($('#tresdb-password-reset-in-progress'));
+    ui.hide($('#georap-password-reset-in-progress'));
 
     if (err) {
 
       if (err.message === 'Conflict') {
         // Display error message and show the form.
-        ui.show($('#tresdb-password-reset-unknown-email'));
-        ui.show($('#tresdb-password-reset-form'));
+        ui.show($('#georap-password-reset-unknown-email'));
+        ui.show($('#georap-password-reset-form'));
       } else {
         // Display general error message
-        ui.show($('#tresdb-password-reset-server-error'));
+        ui.show($('#georap-password-reset-server-error'));
       }
 
       return;
     }  // else
 
     // Success. Display success message. Keep the form hidden.
-    ui.show($('#tresdb-password-reset-success'));
+    ui.show($('#georap-password-reset-success'));
   };
 
   var resetFormSubmitHandler = function (ev) {
     ev.preventDefault();
 
     // Get input values
-    var resetEmail = $('#tresdb-password-reset-email').val();
+    var resetEmail = $('#georap-password-reset-email').val();
 
     // Hide possible earlier error messages
-    ui.hide($('#tresdb-password-reset-invalid-email'));
-    ui.hide($('#tresdb-password-reset-unknown-email'));
-    ui.hide($('#tresdb-password-reset-server-error'));
+    ui.hide($('#georap-password-reset-invalid-email'));
+    ui.hide($('#georap-password-reset-unknown-email'));
+    ui.hide($('#georap-password-reset-server-error'));
     // Hide also possible earlier success message
-    ui.hide($('#tresdb-password-reset-success'));
+    ui.hide($('#georap-password-reset-success'));
 
     // Validate input
     if (!emailValidator.validate(resetEmail)) {
       // Display error message
-      ui.show($('#tresdb-password-reset-invalid-email'));
+      ui.show($('#georap-password-reset-invalid-email'));
 
       return;
     }
@@ -159,9 +159,9 @@ module.exports = function (onSuccess) {
     // Okay, input good. Start asking server to send email.
 
     // Display the progress bar
-    ui.show($('#tresdb-password-reset-in-progress'));
+    ui.show($('#georap-password-reset-in-progress'));
     // Hide the form
-    ui.hide($('#tresdb-password-reset-form'));
+    ui.hide($('#georap-password-reset-form'));
 
     account.sendResetPasswordEmail(resetEmail, resetResponseHandler);
   };
@@ -178,15 +178,15 @@ module.exports = function (onSuccess) {
   };
 
   this.bind = function () {
-    $('#tresdb-login-form').submit(loginFormSubmitHandler);
-    $('#tresdb-password-reset-button').click(resetButtonHandler);
-    $('#tresdb-password-reset-form').submit(resetFormSubmitHandler);
+    $('#georap-login-form').submit(loginFormSubmitHandler);
+    $('#georap-password-reset-button').click(resetButtonHandler);
+    $('#georap-password-reset-form').submit(resetFormSubmitHandler);
   };
 
   this.unbind = function () {
-    $('#tresdb-login-form').off();
-    $('#tresdb-password-reset-button').off();
-    $('#tresdb-password-reset-form').off();
+    $('#georap-login-form').off();
+    $('#georap-password-reset-button').off();
+    $('#georap-password-reset-form').off();
   };
 
 };

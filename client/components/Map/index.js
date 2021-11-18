@@ -178,7 +178,7 @@ module.exports = function () {
 
     var el = document.createElement('div');
 
-    el.className = 'tresdb-map-menu';
+    el.className = 'georap-map-menu';
     _map.controls[google.maps.ControlPosition.LEFT_TOP].push(el);
 
     component.bind($(el));

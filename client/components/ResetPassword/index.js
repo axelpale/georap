@@ -36,17 +36,17 @@ module.exports = function (token, showLogin) {
   this.bind = function () {
 
     // Initialize log in button that will be shown after successful reset.
-    $('#tresdb-continue-to-login-button').click(function (ev) {
+    $('#georap-continue-to-login-button').click(function (ev) {
       ev.preventDefault();
       return showLogin();
     });
 
-    $('#tresdb-reset-password-form').submit(submitHandler);
+    $('#georap-reset-password-form').submit(submitHandler);
   };
 
   this.unbind = function () {
-    $('#tresdb-continue-to-login-button').off();
-    $('#tresdb-reset-password-form').off();
+    $('#georap-continue-to-login-button').off();
+    $('#georap-reset-password-form').off();
   };
 
 
@@ -56,23 +56,23 @@ module.exports = function (token, showLogin) {
     // User has typed in two passwords and submitted the form.
     ev.preventDefault();
 
-    var password = $('#tresdb-input-new-password').val();
-    var passwordAgain = $('#tresdb-input-again-password').val();
+    var password = $('#georap-input-new-password').val();
+    var passwordAgain = $('#georap-input-again-password').val();
 
     // Validate
     if (password !== passwordAgain || password === '') {
       // Display error message
-      ui.show($('#tresdb-reset-password-no-match'));
+      ui.show($('#georap-reset-password-no-match'));
 
       return;
     }  // else
 
     // Reveal loading animation.
-    ui.show($('#tresdb-reset-in-progress'));
+    ui.show($('#georap-reset-in-progress'));
     // Hide the password form.
-    ui.hide($('#tresdb-reset-password-form'));
+    ui.hide($('#georap-reset-password-form'));
     // Hide possible earlier no-match error message
-    ui.hide($('#tresdb-reset-password-no-match'));
+    ui.hide($('#georap-reset-password-no-match'));
 
     account.resetPassword(token, password, responseHandler);
   };
@@ -81,11 +81,11 @@ module.exports = function (token, showLogin) {
     if (!err) {
       // Successful reset
       // Reveal success message
-      ui.show($('#tresdb-reset-password-success'));
+      ui.show($('#georap-reset-password-success'));
       // Reveal "Continue to log in" button
-      ui.show($('#tresdb-reset-password-login'));
+      ui.show($('#georap-reset-password-login'));
       // Hide the loading animation
-      ui.hide($('#tresdb-reset-in-progress'));
+      ui.hide($('#georap-reset-in-progress'));
 
       return;
     }  // else
@@ -93,11 +93,11 @@ module.exports = function (token, showLogin) {
     if (err.message === 'Unauthorized') {
       // False token
       // Display token error message.
-      ui.show($('#tresdb-reset-password-token-error'));
+      ui.show($('#georap-reset-password-token-error'));
       // Reveal "Continue to log in" button
-      ui.show($('#tresdb-reset-password-login'));
+      ui.show($('#georap-reset-password-login'));
       // Hide the loading animation
-      ui.hide($('#tresdb-reset-in-progress'));
+      ui.hide($('#georap-reset-in-progress'));
 
       return;
     }  // else
@@ -108,11 +108,11 @@ module.exports = function (token, showLogin) {
     // Database down
     console.error(err);
     // Display error message.
-    ui.show($('#tresdb-reset-password-server-error'));
+    ui.show($('#georap-reset-password-server-error'));
     // Display the original form
-    ui.show($('#tresdb-reset-password-form'));
+    ui.show($('#georap-reset-password-form'));
     // Hide the loading animation
-    ui.hide($('#tresdb-reset-in-progress'));
+    ui.hide($('#georap-reset-in-progress'));
   };
 
 };

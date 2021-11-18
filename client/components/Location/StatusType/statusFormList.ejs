@@ -1,14 +1,14 @@
 <%
   var activityClass = function (status) {
     if (status === currentStatus) {
-      return 'tresdb-tag-active';
+      return 'georap-tag-active';
     }
     return '';
   };
 %>
 
 <% locationStatuses.forEach(function (status) { %>
-  <button data-status="<%= status %>" class="tresdb-status-<%= status %> tresdb-tag <%= activityClass(status) %>">
+  <button data-status="<%= status %>" class="georap-status-<%= status %> georap-tag <%= activityClass(status) %>">
     <%= cap(status) %>
   </button>
 <% }) %>

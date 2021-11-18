@@ -6,14 +6,14 @@
 
       <p>Choose a file from your device, and upload. Importable locations will be listed for you before they are created. Then select wanted locations from the list and finally import.</p>
 
-      <form id="tresdb-import-upload-form" class="panel panel-primary">
+      <form id="georap-import-upload-form" class="panel panel-primary">
         <div class="panel-heading">
           Choose a file to upload
         </div>
         <div class="panel-body">
           <div class="form-group">
-            <label for="tresdb-import-file">Supported formats are KML and KMZ. Max size is <%= limit %> MiB.</label>
-            <input id="tresdb-import-file" type="file" name="importfile">
+            <label for="georap-import-file">Supported formats are KML and KMZ. Max size is <%= limit %> MiB.</label>
+            <input id="georap-import-file" type="file" name="importfile">
           </div>
 
           <div class="pull-right">
@@ -22,29 +22,29 @@
         </div>
       </form>
 
-      <div id="tresdb-import-progress" class="progress hidden">
+      <div id="georap-import-progress" class="progress hidden">
         <div class="progress-bar progress-bar-striped active" role="progressbar" style="width: 100%">
           <span class="sr-only">Waiting for server</span>
         </div>
       </div>
 
-      <div id="tresdb-import-othererror" class="hidden">
+      <div id="georap-import-othererror" class="hidden">
         <div class="alert alert-danger" role="alert">Uploading the file failed.</div>
       </div>
 
-      <div id="tresdb-import-missingerror" class="hidden">
+      <div id="georap-import-missingerror" class="hidden">
         <div class="alert alert-danger" role="alert">A file is required. Please choose a file.</div>
       </div>
 
-      <div id="tresdb-import-typeerror" class="hidden">
+      <div id="georap-import-typeerror" class="hidden">
         <div class="alert alert-danger" role="alert">This file type or structure is not supported.</div>
       </div>
 
-      <div id="tresdb-import-sizeerror" class="hidden">
+      <div id="georap-import-sizeerror" class="hidden">
         <div class="alert alert-danger" role="alert">The file is too large. Please choose a smaller file.</div>
       </div>
 
-      <div id="tresdb-import-list" class="hidden"></div>
+      <div id="georap-import-list" class="hidden"></div>
 
     </div>
   </div>

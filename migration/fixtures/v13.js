@@ -1,4 +1,4 @@
-// NOTE This file is an important documentation of the data structure at v12.
+// NOTE This file is an important documentation of the data structure at v13.
 // NOTE The properties changed from the prev version are marked with NOTE
 
 const c = require('./common');
@@ -9,10 +9,9 @@ module.exports = {
 
     config: [{
       key: 'schemaVersion',
-      value: 12, // NOTE
+      value: 13, // NOTE
     }],
 
-    // NOTE New collection
     attachments: [
       {
         key: 'ewdsf3kk',
@@ -27,9 +26,9 @@ module.exports = {
         deleted: false,
         data: {}, // optional additional data e.g. overlay positions
       },
-      { // NOTE new attachment
+      {
         key: 'adebd2rq',
-        user: 'foobar', // NOTE for v12v13 migration that repairs att users
+        user: 'admin', // NOTE foobar usernames repaired
         time: '2009-09-04T23:44:21.000Z',
         filename: 'tunnel-ground.jpg',
         filepath: '2021/EdvjkeEdf/tunnel-ground.jpg', // see uploads/
@@ -44,46 +43,43 @@ module.exports = {
 
     entries: [{
       _id: db.id('581f166110a1482dd0b7ea01'),
-      activeAt: '2009-09-04T23:44:21.000Z', // NOTE
-      attachments: [], // NOTE
-      comments: [], // NOTE
+      activeAt: '2009-09-04T23:44:21.000Z',
+      attachments: [],
+      comments: [],
       deleted: false,
-      flags: [], // NOTE
+      flags: [],
       locationId: c.irbeneId,
-      markdown: 'A ghost town', // NOTE outside data
-      published: false, // NOTE
+      markdown: 'A ghost town',
+      published: false,
       time: '2009-09-04T23:44:21.000Z',
       user: 'admin',
-      // NOTE type prop is dropped
     }, {
       _id: c.locatorEntryId,
-      activeAt: '2021-02-10T20:30:01.000Z', // NOTE
-      attachments: ['ewdsf3kk'], // NOTE
+      activeAt: '2021-02-10T20:30:01.000Z',
+      attachments: ['ewdsf3kk'],
       comments: [
         {
           id: '200908007777756281648757',
           time: '2009-10-04T19:55:01.000Z',
           user: 'admin',
           markdown: 'Dang radar, dude',
-          attachments: [], // NOTE
+          attachments: [],
         },
         {
           id: '202129864710097690580043',
           time: '2021-02-10T20:30:01.000Z',
           user: 'admin',
           markdown: 'Tunnel ground',
-          attachments: ['adebd2rq'], // NOTE
+          attachments: ['adebd2rq'],
         },
       ],
       deleted: false,
-      flags: ['visit'], // NOTE
+      flags: ['visit'],
       locationId: c.irbeneId,
-      markdown: 'Ventspils RT-32 radio telescope', // NOTE null to '' by deflt
-      published: false, // NOTE
+      markdown: 'Ventspils RT-32 radio telescope',
+      published: false,
       time: '2009-10-02T11:11:01.000Z',
       user: 'admin',
-      // NOTE overlay prop is dropped
-      // NOTE type prop is dropped
     }],
 
     // No event _ids needed, they are created in run time.
@@ -102,16 +98,16 @@ module.exports = {
       {
         data: {
           entryId: db.id('581f166110a1482dd0b7ea01'),
-          entry: { // NOTE full entry
+          entry: {
             _id: db.id('581f166110a1482dd0b7ea01'),
-            activeAt: '2009-09-04T23:44:21.000Z', // NOTE
-            attachments: [], // NOTE
-            comments: [], // NOTE
+            activeAt: '2009-09-04T23:44:21.000Z',
+            attachments: [],
+            comments: [],
             deleted: false,
-            flags: [], // NOTE
+            flags: [],
             locationId: c.irbeneId,
-            markdown: 'A ghost town', // NOTE outside data
-            published: false, // NOTE
+            markdown: 'A ghost town',
+            published: false,
             time: '2009-09-04T23:44:21.000Z',
             user: 'admin',
           },
@@ -134,9 +130,9 @@ module.exports = {
         user: 'admin',
       },
       {
-        data: { // NOTE
+        data: {
           entryId: c.locatorEntryId,
-          entry: { // NOTE full entry state
+          entry: {
             _id: c.locatorEntryId,
             activeAt: '2009-10-02T11:11:01.000Z',
             locationId: c.irbeneId,
@@ -145,9 +141,9 @@ module.exports = {
             deleted: false,
             published: false,
             markdown: '',
-            attachments: ['ewdsf3kk'], // NOTE ref to attachment key
+            attachments: ['ewdsf3kk'],
             comments: [],
-            flags: [], // NOTE isVisit:false converted to flags:[]
+            flags: [],
           },
         },
         locationId: c.irbeneId,
@@ -160,7 +156,7 @@ module.exports = {
         data: {
           entryId: c.locatorEntryId,
           commentId: '200908007777756281648757',
-          comment: { // NOTE
+          comment: {
             id: '200908007777756281648757',
             time: '2009-10-04T19:55:01.000Z',
             user: 'admin',
@@ -178,7 +174,7 @@ module.exports = {
         data: {
           entryId: c.locatorEntryId,
           commentId: '202129864710097690580043',
-          comment: { // NOTE
+          comment: {
             id: '202129864710097690580043',
             time: '2021-02-10T20:30:01.000Z',
             user: 'admin',
@@ -201,17 +197,16 @@ module.exports = {
         locationName: 'Irbene',
         data: {
           entryId: c.locatorEntryId,
-          original: { // NOTE original values of the changed
-            markdown: '', // NOTE in v11 was null but in v12 is ''
+          original: {
+            markdown: '',
             flags: [],
           },
-          delta: { // NOTE new values of the changed
+          delta: {
             markdown: 'Ventspils RT-32 radio telescope',
             flags: ['visit'],
           },
         },
       },
-      // NOTE missing entry create-remove pair.
     ],
 
     users: [{
@@ -230,7 +225,7 @@ module.exports = {
 
     locations: [{
       _id: c.irbeneId,
-      createdAt: '2009-07-30T10:44:57.000Z', // NOTE
+      createdAt: '2009-07-30T10:44:57.000Z',
       creator: 'admin',
       deleted: false,
       published: false,
@@ -246,7 +241,7 @@ module.exports = {
       places: [],
       status: 'abandoned',
       type: 'default',
-      thumbnail: 'ewdsf3kk', // NOTE new. Set null if no thumbnail
+      thumbnail: 'ewdsf3kk',
       text1: '',
       text2: '',
     }],

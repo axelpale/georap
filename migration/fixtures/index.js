@@ -13,6 +13,7 @@ module.exports = {
   'v10': require('./v10'),
   'v11': require('./v11'),
   'v12': require('./v12'),
+  'v13': require('./v13'),
   'initial': require('./initial'),
   'example': require('./example'),
 };

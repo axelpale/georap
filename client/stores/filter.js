@@ -4,7 +4,7 @@
 var storage = require('../connection/storage');
 var createStore = require('./lib/createStore');
 
-module.exports = createStore(storage, 'tresdb-filter', {
+module.exports = createStore(storage, 'georap-filter', {
   // Default pass-all filter
   type: 'any',
   status: 'any',

@@ -23,11 +23,11 @@ module.exports = function () {
       user: account.getUser(),
     }));
 
-    $('#tresdb-change-password-form').submit(submitHandler);
+    $('#georap-change-password-form').submit(submitHandler);
   };
 
   this.unbind = function () {
-    $('#tresdb-change-password-form').off();
+    $('#georap-change-password-form').off();
   };
 
 
@@ -37,24 +37,24 @@ module.exports = function () {
     ev.preventDefault();
 
     // Get input values
-    var curPass = $('#tresdb-input-current-password').val();
-    var newPass = $('#tresdb-input-new-password').val();
-    var agaPass = $('#tresdb-input-again-password').val();
+    var curPass = $('#georap-input-current-password').val();
+    var newPass = $('#georap-input-new-password').val();
+    var agaPass = $('#georap-input-again-password').val();
 
     // Clear possible earlier error messages
-    ui.hide($('#tresdb-change-password-invalid-curpass'));
-    ui.hide($('#tresdb-change-password-invalid-newpass'));
-    ui.hide($('#tresdb-change-password-incorrect-curpass'));
-    ui.hide($('#tresdb-change-password-server-error'));
+    ui.hide($('#georap-change-password-invalid-curpass'));
+    ui.hide($('#georap-change-password-invalid-newpass'));
+    ui.hide($('#georap-change-password-incorrect-curpass'));
+    ui.hide($('#georap-change-password-server-error'));
 
     // Validate input
     if (curPass === '') {
-      ui.show($('#tresdb-change-password-invalid-curpass'));
+      ui.show($('#georap-change-password-invalid-curpass'));
 
       return;
     } // else
     if (newPass === '' || newPass !== agaPass) {
-      ui.show($('#tresdb-change-password-invalid-newpass'));
+      ui.show($('#georap-change-password-invalid-newpass'));
 
       return;
     } // else
@@ -62,9 +62,9 @@ module.exports = function () {
     // Okay, everything good. Request server to change password.
 
     // Display the progress bar
-    ui.show($('#tresdb-change-password-in-progress'));
+    ui.show($('#georap-change-password-in-progress'));
     // Hide the form
-    ui.hide($('#tresdb-change-password-form'));
+    ui.hide($('#georap-change-password-form'));
 
     account.changePassword(curPass, newPass, responseHandler);
   };
@@ -72,24 +72,24 @@ module.exports = function () {
   responseHandler = function (err) {
 
     // Hide the progress bar
-    ui.hide($('#tresdb-change-password-in-progress'));
+    ui.hide($('#georap-change-password-in-progress'));
 
     if (err) {
       if (err.message === 'Unauthorized') {
         // Show form and error message.
-        ui.show($('#tresdb-change-password-form'));
-        ui.show($('#tresdb-change-password-incorrect-curpass'));
+        ui.show($('#georap-change-password-form'));
+        ui.show($('#georap-change-password-incorrect-curpass'));
         return;
       }  // else
 
       // A rare error. Show error:
-      ui.show($('#tresdb-change-password-server-error'));
-      $('#tresdb-change-password-server-error-name').text(err.message);
+      ui.show($('#georap-change-password-server-error'));
+      $('#georap-change-password-server-error-name').text(err.message);
       return;
     }  // else
 
     // Successfully changed. Show success message. No need to show form.
-    ui.show($('#tresdb-change-password-success'));
+    ui.show($('#georap-change-password-success'));
     return;
   };
 

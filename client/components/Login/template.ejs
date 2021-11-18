@@ -1,4 +1,4 @@
-<div class="tresdb-login-container">
+<div class="georap-login-container">
 <div class="container-fluid">
   <div class="row">
     <div class="col-md-12">
@@ -6,27 +6,27 @@
     </div>
     <div class="col-md-4 col-sm-6">
 
-      <div id="tresdb-login-incorrect" class="hidden">
+      <div id="georap-login-incorrect" class="hidden">
         <div class="alert alert-danger" role="alert">Incorrect email or password. Check and try again.</div>
       </div>
 
-      <div id="tresdb-login-invalid-email" class="hidden">
+      <div id="georap-login-invalid-email" class="hidden">
         <div class="alert alert-danger" role="alert">Ensure the given username or email address is correct.</div>
       </div>
 
-      <div id="tresdb-login-invalid-password" class="hidden">
+      <div id="georap-login-invalid-password" class="hidden">
         <div class="alert alert-danger" role="alert">Your password cannot be empty.</div>
       </div>
 
-      <div id="tresdb-login-server-error" class="hidden">
+      <div id="georap-login-server-error" class="hidden">
         <div class="alert alert-danger" role="alert">We failed to log you in due to some mysterious server issues. Please try again later.</div>
       </div>
 
-      <div id="tresdb-login-deactivated" class="hidden">
-        <div class="alert alert-warning" role="alert"><span class="glyphicon glyphicon-lock" aria-hidden="true"></span> <span id="tresdb-login-deactivated-message">Your account is deactivated.</span></div>
+      <div id="georap-login-deactivated" class="hidden">
+        <div class="alert alert-warning" role="alert"><span class="glyphicon glyphicon-lock" aria-hidden="true"></span> <span id="georap-login-deactivated-message">Your account is deactivated.</span></div>
       </div>
 
-      <div id="tresdb-login-in-progress" class="hidden">
+      <div id="georap-login-in-progress" class="hidden">
         <div class="progress">
           <div class="progress-bar progress-bar-striped progress-bar-<%= loginColor %> active" role="progressbar" style="width: 100%">
             <span class="sr-only">Waiting for server</span>
@@ -34,41 +34,41 @@
         </div>
       </div>
 
-      <form id="tresdb-login-form">
+      <form id="georap-login-form">
         <div class="form-group">
-          <label for="tresdb-login-email">Email or Username:</label>
-          <input type="text" class="form-control" id="tresdb-login-email">
+          <label for="georap-login-email">Email or Username:</label>
+          <input type="text" class="form-control" id="georap-login-email">
         </div>
         <div class="form-group">
-          <label for="tresdb-login-password">Password:</label>
-          <input type="password" class="form-control" id="tresdb-login-password">
+          <label for="georap-login-password">Password:</label>
+          <input type="password" class="form-control" id="georap-login-password">
         </div>
         <div class="pull-right">
-          <a id="tresdb-password-reset-button" href="#">I forgot my password...</a>
+          <a id="georap-password-reset-button" href="#">I forgot my password...</a>
         </div>
         <button type="submit" class="btn btn-<%= loginColor %>">Log in</button>
       </form>
 
       <!-- Password reset -->
-      <div id="tresdb-password-reset">
+      <div id="georap-password-reset">
 
-        <div id="tresdb-password-reset-invalid-email" class="hidden">
+        <div id="georap-password-reset-invalid-email" class="hidden">
           <div class="alert alert-danger" role="alert">Ensure the given email address is correct and has a format similar to <em>john.doe@example.com</em> or <em>myname@example.com</em>.</div>
         </div>
 
-        <div id="tresdb-password-reset-unknown-email" class="hidden">
+        <div id="georap-password-reset-unknown-email" class="hidden">
           <div class="alert alert-danger" role="alert">No user with this email exists. Please ensure that the email address is correct.</div>
         </div>
 
-        <div id="tresdb-password-reset-server-error" class="hidden">
+        <div id="georap-password-reset-server-error" class="hidden">
           <div class="alert alert-danger" role="alert">We failed to send the password reset message to your email. Please try again later.</div>
         </div>
 
-        <div id="tresdb-password-reset-success" class="hidden">
+        <div id="georap-password-reset-success" class="hidden">
           <div class="alert alert-success" role="alert">Password reset message was sent successfully. Please check your email.</div>
         </div>
 
-        <div id="tresdb-password-reset-in-progress" class="hidden">
+        <div id="georap-password-reset-in-progress" class="hidden">
           <div class="progress">
             <div class="progress-bar progress-bar-striped active" role="progressbar" style="width: 100%">
               <span class="sr-only">Waiting for server</span>
@@ -77,15 +77,15 @@
         </div>
 
         <!-- Reset form -->
-        <form id="tresdb-password-reset-form" class="hidden">
+        <form id="georap-password-reset-form" class="hidden">
           <p>Insert your account's email address and we send you a link to reset your password.</p>
           <div class="form-group">
-            <label for="tresdb-password-reset-email">Email address:</label>
-            <input type="email" class="form-control" id="tresdb-password-reset-email">
+            <label for="georap-password-reset-email">Email address:</label>
+            <input type="email" class="form-control" id="georap-password-reset-email">
           </div>
           <button type="submit" class="btn btn-primary">Send email</button>
         </form>
-      </div><!-- #tresdb-password-reset -->
+      </div><!-- #georap-password-reset -->
 
     </div>
   </div><!-- .row -->

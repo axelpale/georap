@@ -18,8 +18,8 @@ module.exports = function () {
   self.bind = function ($mount) {
     $mount.html(template());
 
-    var $loading = $('#tresdb-admin-users-loading');
-    var $table = $('#tresdb-admin-users-table');
+    var $loading = $('#admin-users-loading');
+    var $table = $('#admin-users-table');
 
     // Fetch users and include to page.
     ui.show($loading);
