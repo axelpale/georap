@@ -40,7 +40,8 @@ module.exports = {
   },
 
   // Site secret. CHANGE! DO NOT EXPOSE TO CLIENT!
-  // Used to encrypt and decrypt passwords and tokens.
+  // The secret is used to encrypt and decrypt passwords and tokens.
+  // To generate random strings: https://www.random.org/strings/
   secret: '123456789',
 
   // Google Maps API key. CHANGE! Required for e.g. reverse geocoding.
