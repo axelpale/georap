@@ -75,8 +75,8 @@ module.exports = {
   mongo: {
     // Main database for persistent data.
     url: 'mongodb://mongouser:mongouserpwd@localhost:27017/georap',
-    // Database for testing and development. You may leave it null.
-    testUrl: 'mongodb://testuser:testuserpwd@localhost:27017/test',
+    // Optional database for testing and development. Uncomment if needed.
+    // testUrl: 'mongodb://testuser:testuserpwd@localhost:27017/test',
   },
 
   // Email server connection
