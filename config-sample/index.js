@@ -32,7 +32,8 @@ module.exports = {
   title: 'My Georap App',
   description: 'A geographical community',
 
-  // Default admin user to be initially created.
+  // The admin user credentials.
+  // The admin user will be created in the first migration.
   admin: {
     username: 'admin',
     email: 'admin@example.com',
