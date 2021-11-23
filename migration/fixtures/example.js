@@ -1,13 +1,17 @@
 /* eslint-disable no-sync, max-lines */
 
-// Latest v12 schema. Tedious to migrate, but is the most complete
-// representation of the available data structures yet easy to modify
-// without burden of migration consistency. Also here user credentials
-// are loaded from config/index instead of test-specific literals.
-// Also no need for change notes here.
-//
-// This fixture is aimed to be used as a demo and for experimenting
+// A database fixture that follows the latest schema.
+// The fixture is aimed to be used as a demo and for experimenting
 // in development.
+//
+// Dev note: Why to have the example fixture and a separate versioned fixture?
+// Although the example fixture is a bit tedious to migrate, it is still
+// the most complete representation of the available data structures.
+// Also, it is easy to modify without burden of migration consistency.
+// Also, here user credentials are loaded from config/index instead of
+// test-specific literals.
+// Also, the dev does not need to write change notes unlike in the versions.
+//
 
 const config = require('georap-config');
 const db = require('georap-db');
