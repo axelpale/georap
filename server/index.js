@@ -81,6 +81,9 @@ const markersSource = path.join(configSource, 'images', 'markers');
 // Target paths
 const imagesTarget = path.join(config.staticDir, 'images');
 const bootstrapTarget = path.join(config.staticDir, 'bootstrap');
+// Ensure target paths exist
+fse.ensureDirSync(imagesTarget);
+fse.ensureDirSync(bootstrapTarget);
 // Copy
 (function copyCustomStatic(copyPaths) {
   copyPaths.forEach((pp) => {
@@ -94,7 +97,7 @@ const bootstrapTarget = path.join(config.staticDir, 'bootstrap');
   [iconsSource, path.join(imagesTarget, 'icons')],
   [markersSource, path.join(imagesTarget, 'markers')],
 ]));
-console.log('Copying custom static files to', config.staticDir);
+console.log('Copying static files to', config.staticDir);
 // -------------
 // Static assets END
 
