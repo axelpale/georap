@@ -20,6 +20,17 @@ const db = require('georap-db');
 // Logging
 const loggers = require('./services/logs/loggers');
 
+// Internationalization i18n
+// The i18n configuration must be done before routes
+// because the locale-specific client index page precompilation
+// needs it when routes are built.
+const i18n = require('i18n');
+const catalog = require('../locales');
+i18n.configure({
+  defaultLocale: config.defaultLocale, // string e.g: 'en'
+  staticCatalog: catalog,
+});
+
 // Routes
 const router = require('./routes');
 
@@ -64,6 +75,13 @@ if (config.env === 'production') {
 }
 // ---------------
 // Request logging END
+
+// Internationalization i18n
+// -------------------------
+// Internationalization init recongizes accept-language header
+app.use(i18n.init);
+// -------------------------
+// Internationalization i18n END
 
 // Static assets
 // -------------

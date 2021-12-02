@@ -1,6 +1,7 @@
 
 const pjson = require('../../package.json');
 const config = require('georap-config');
+const i18n = require('i18n');
 const ejs = require('ejs');
 const _ = require('lodash');
 const fs = require('fs');
@@ -8,7 +9,7 @@ const path = require('path');
 
 // Precompile template and prerender index.html.
 // Include config and other variables for the client.
-const indexHtml = (function precompile() {
+const precompile = function (locale) {
 
   const p = path.resolve(__dirname, './template.ejs');
   const f = fs.readFileSync(p, 'utf8');  // eslint-disable-line no-sync
@@ -20,6 +21,8 @@ const indexHtml = (function precompile() {
       // Include only configs the client needs
       title: config.title,
       description: config.description,
+      defaultLocale: config.defaultLocale,
+      availableLocales: config.availableLocales,
       icons: config.icons,
       appleTouchIcons: config.appleTouchIcons,
       defaultMapState: config.defaultMapState,
@@ -42,6 +45,10 @@ const indexHtml = (function precompile() {
       comments: config.comments,
       coordinateSystems: config.coordinateSystems,
       exportServices: config.exportServices,
+    },
+    i18n: {
+      locale: locale,
+      catalog: i18n.getCatalog(locale),
     },
   };
 
@@ -74,10 +81,28 @@ const indexHtml = (function precompile() {
     georap: georap,
     templates: precompiledTemplates,
   });
-}());
+};
 
+// Precompile index page in each locale for fast delivery.
+// As a penalty, some memory is used.
+const indexHtmls = config.availableLocales.reduce((acc, locale) => {
+  acc[locale] = precompile(locale); // html
+  return acc;
+}, {});
 
+// Serve the client page in a user favoured language.
 exports.get = function (req, res) {
+  // Find locale and its precompiled page.
+  const userLocale = req.getLocale();
+  const defaultLocale = config.defaultLocale;
+  let indexHtml;
+  if (indexHtmls[userLocale]) {
+    indexHtml = indexHtmls[userLocale];
+  } else {
+    // No such precompiled indexHtml.
+    indexHtml = indexHtmls[defaultLocale];
+  }
+  // Send precompiled index page.
   return res.send(indexHtml);
 };
 
