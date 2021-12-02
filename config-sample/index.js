@@ -135,6 +135,10 @@ module.exports = {
   // ##### THEME AND BRAND #####
   // Settings from here to the end of the file can be left default.
 
+  // Languages and translations
+  defaultLocale: 'en',
+  availableLocales: ['en', 'fi'],
+
   // Initial map location for new users.
   // Example locations are at @57.5727427,21.8783527,13z
   defaultMapState: {

@@ -113,6 +113,15 @@ module.exports = {
       type: 'string',
     },
     // THEME AND BRAND
+    defaultLocale: {
+      type: 'string',
+    },
+    availableLocales: {
+      type: 'array',
+      items: {
+        type: 'string',
+      },
+    },
     defaultMapState: defaultMapStateSchema,
     icons: {
       type: 'array',
@@ -251,6 +260,8 @@ module.exports = {
     'tempUploadSizeLimit',
     'logDir',
     // THEME AND BRAND
+    'availableLocales',
+    'defaultLocale',
     'defaultMapState',
     'icons', // new in v12, require in v13
     'appleTouchIcons', // new in v12, require in v13
