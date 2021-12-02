@@ -1,4 +1,4 @@
-/* eslint-disable max-statements */
+/* eslint-disable max-statements, no-sync */
 
 const config = require('georap-config');
 const http = require('http');
