@@ -71,6 +71,7 @@
     "georap-bus": "file:local_modules/georap-bus",
     "georap-components": "file:local_modules/georap-components",
     "georap-config": "file:local_modules/georap-config",
+    "georap-cookie": "file:local_modules/georap-cookie",
     "georap-db": "file:local_modules/georap-db",
     "georap-key": "file:local_modules/georap-key",
     "georap-middlewares": "file:local_modules/georap-middlewares",
