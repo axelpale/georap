@@ -5,6 +5,7 @@ const http = require('http');
 const path = require('path');
 const fse = require('fs-extra');
 const express = require('express');
+const cookieParser = require('cookie-parser');
 
 const app = express();
 const server = http.createServer(app);
@@ -28,6 +29,9 @@ const i18n = require('i18n');
 const catalog = require('../locales');
 i18n.configure({
   defaultLocale: config.defaultLocale, // string e.g: 'en'
+  // The name of the cookie from to parse locale settings
+  cookie: 'locale',
+  // A set of dictionaries.
   staticCatalog: catalog,
 });
 
@@ -78,7 +82,8 @@ if (config.env === 'production') {
 
 // Internationalization i18n
 // -------------------------
-// Internationalization init recongizes accept-language header
+// Internationalization init recognizes cookie and accept-language header
+app.use(cookieParser());
 app.use(i18n.init);
 // -------------------------
 // Internationalization i18n END
