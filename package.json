@@ -59,6 +59,7 @@
     "camaro": "^6.0.4",
     "commander": "^2.9.0",
     "component-emitter": "^1.2.1",
+    "cookie-parser": "^1.4.6",
     "coordinate-parser": "^1.0.7",
     "distfilter": "file:local_modules/distfilter",
     "download": "^7.1.0",
