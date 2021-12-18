@@ -18,22 +18,21 @@
 //   Emits
 //     'updated' with state
 //
-var createStore = require('./lib/createStore');
-var storage = require('../connection/storage');
+var cookies = require('georap-cookie');
 var request = require('./lib/request');
 
-var DEFAULT_STATE = {
-  locale: georap.config.defaultLocale,
-};
-
-var localeStore = createStore(storage, 'georap-locale', DEFAULT_STATE);
-
 exports.getLocale = function () {
-  return localeStore.get().locale;
+  var locale = cookies.getCookie('locale');
+
+  if (locale) {
+    return locale;
+  }
+  return georap.config.defaultLocale;
 };
 
-exports.setLocale = function (locale, callback) {
+exports.switchLocale = function (locale, callback) {
   // Fetch locale and replace current client-side translations.
+  // TODO update cookie?
   //
   // Parameters:
   //   locale
@@ -48,10 +47,6 @@ exports.setLocale = function (locale, callback) {
     if (err) {
       return callback(err);
     }
-
-    localeStore.update({
-      locale: reply.locale,
-    });
 
     // Replace translation dictionary
     georap.i18n.locale = reply.locale;

@@ -6,6 +6,7 @@ exports.events = require('./events');
 exports.filter = require('./filter');
 exports.geometry = require('./geometry');
 exports.locations = require('./locations');
+exports.locales = require('./locales');
 exports.mapstate = require('./mapstate');
 exports.markers = require('./markers');
 exports.search = require('./search');

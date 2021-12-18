@@ -1,9 +1,8 @@
 var template = require('./template.ejs');
 var emitter = require('component-emitter');
-var components = require('georap-components');
 var ui = require('georap-ui');
 var themeStore = georap.stores.theme;
-var localeStore = georap.stores.locale;
+var localesStore = georap.stores.locales;
 var availableLocales = georap.config.availableLocales;
 
 var colorSchemes = ['light', 'dark'];
@@ -22,11 +21,10 @@ module.exports = function () {
   this.bind = function ($mount) {
     $mount.html(template({
       theme: themeStore.get(),
+      currentLocale: localesStore.getLocale(),
       availableLocales: availableLocales,
+      __: georap.i18n.__,
     }));
-
-    $elems.localeSelector = $mount.find('.locale-selector');
-    $elems.localeErrorContainer = $mount.find('.locale-error-container');
 
     colorSchemes.forEach(function (colorScheme, i) {
       var elemid = 'theme-' + colorScheme;
@@ -36,16 +34,6 @@ module.exports = function () {
           colorScheme: colorScheme,
           themeColor: themeColors[i],
         });
-      });
-    });
-
-    $elems.localeSelector.on('change', function () {
-      var selectedLocale = $elems.localeSelector.val();
-      localeStore.setLocale(selectedLocale, function (err) {
-        if (err) {
-          children.localeError = new components.Error(err.message);
-          children.localeError.bind($elems.localeErrorContainer);
-        }
       });
     });
   };

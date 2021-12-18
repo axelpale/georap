@@ -21,17 +21,16 @@
         </label>
       </div>
 
-      <h3>Language</h3>
+      <h3><%= __('language') %></h3>
 
-      <div>
-        <select class="locale-selector form-control">
-          <% availableLocales.forEach(function (locale) { %>
-          <option value="<%= locale %>"><%= locale %></option>
-          <% }) %>
-        </select>
-        <div class="locale-error-container"></div>
+      <div class="list-group">
+        <% availableLocales.forEach(function (locale) { %>
+          <% var activity = locale === currentLocale ? 'active' : '' %>
+          <a href="?locale=<%= locale %>" class="list-group-item <%= activity %>" target="_self">
+            <%= __('locale-' + locale) %>
+          </a>
+        <% }) %>
       </div>
-
     </div>
   </div><!-- .row -->
 </div><!-- .container-fluid -->
