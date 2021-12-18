@@ -1,10 +1,10 @@
 {
-  "mainmenu-users": "Ihmiset",
+  "language": "Kieli",
   "locale-fi": "Suomi",
   "locale-en": "English",
   "locale-de": "Deutsch",
   "locale-se": "Svenska",
   "log-in": "Kirjaudu",
-  "language": "Kieli",
+  "mainmenu-users": "Ihmiset",
   "search-placeholder": "hae..."
 }

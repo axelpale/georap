@@ -1,10 +1,10 @@
 {
-  "mainmenu-users": "Users",
+  "language": "Language",
   "locale-fi": "Suomi",
   "locale-en": "English",
   "locale-de": "Deutsch",
   "locale-se": "Svenska",
   "log-in": "Log in",
-  "language": "Language",
+  "mainmenu-users": "Users",
   "search-placeholder": "search..."
 }
