@@ -1,9 +1,13 @@
 {
+  "add-location": "Luo paikka...",
+  "coordinates": "Koordinaatit",
   "language": "Kieli",
+  "latest": "Uusimmat",
   "locale-fi": "Suomi",
   "locale-en": "English",
   "locale-de": "Deutsch",
   "locale-se": "Svenska",
+  "locations": "Paikat",
   "log-in": "Kirjaudu",
   "search-placeholder": "hae...",
   "statistics": "Tilastot",

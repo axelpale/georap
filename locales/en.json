@@ -1,9 +1,13 @@
 {
+  "add-location": "Add Location...",
+  "coordinates": "Coordinates",
   "language": "Language",
+  "latest": "Latest",
   "locale-fi": "Suomi",
   "locale-en": "English",
   "locale-de": "Deutsch",
   "locale-se": "Svenska",
+  "locations": "Locations",
   "log-in": "Log in",
   "search-placeholder": "search...",
   "statistics": "Statistics",
