@@ -5,5 +5,6 @@
   "locale-de": "Deutsch",
   "locale-se": "Svenska",
   "log-in": "Kirjaudu",
-  "language": "Kieli"
+  "language": "Kieli",
+  "search-placeholder": "hae..."
 }
