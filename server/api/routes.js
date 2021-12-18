@@ -75,6 +75,7 @@ router.use((req, res, next) => {
   });
 });
 
+// These routes require authentication.
 router.use('/admin', adminRouter);
 router.use('/attachments', attachmentsRouter);
 router.use('/entries', entriesRouter);
