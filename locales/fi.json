@@ -3,7 +3,11 @@
   "add-location": "Luo paikka...",
   "admin-menu": "Ylläpito",
   "coordinates": "Koordinaatit",
+  "email-address": "Sähköpostiosoite",
+  "email-or-username": "Sähköposti tai nimimerkki",
   "export": "Lataa kaikki...",
+  "forgot-password": "Salasana unohtui...",
+  "forgot-password-help": "Anna käyttäjätilisi sähköpostiosoite niin lähetämme sinulle linkin, jolla voit uusia salasanasi.",
   "import": "Tuo paikkoja...",
   "invite": "Kutsu...",
   "language": "Kieli",
@@ -16,7 +20,9 @@
   "log-in": "Kirjaudu",
   "log-out": "Kirjaudu ulos",
   "manage-users": "Käyttäjähallinta",
+  "password": "Salasana",
   "search-placeholder": "hae...",
+  "send-email": "Lähetä",
   "statistics": "Tilastot",
   "users": "Ihmiset"
 }

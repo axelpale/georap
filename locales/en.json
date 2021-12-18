@@ -3,7 +3,11 @@
   "add-location": "Add Location...",
   "admin-menu": "Admin",
   "coordinates": "Coordinates",
+  "email-address": "Email address",
+  "email-or-username": "Email or Username",
   "export": "Export...",
+  "forgot-password": "I forgot my password...",
+  "forgot-password-help": "Insert your account's email address and we send you a link to reset your password.",
   "import": "Import...",
   "invite": "Invite...",
   "language": "Language",
@@ -16,7 +20,9 @@
   "log-in": "Log in",
   "log-out": "Log out",
   "manage-users": "Manage Users",
+  "password": "Password",
   "search-placeholder": "search...",
+  "send-email": "Send email",
   "statistics": "Statistics",
   "users": "Users"
 }
