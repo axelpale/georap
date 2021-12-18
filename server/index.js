@@ -31,6 +31,8 @@ i18n.configure({
   defaultLocale: config.defaultLocale, // string e.g: 'en'
   // The name of the cookie from to parse locale settings
   cookie: 'locale',
+  // The name of the ?locale=en url query parameter
+  queryParameter: 'locale',
   // A set of dictionaries.
   staticCatalog: catalog,
 });
