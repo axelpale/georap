@@ -1,4 +1,4 @@
-
+const status = require('http-status-codes');
 const pjson = require('../../package.json');
 const config = require('georap-config');
 const i18n = require('i18n');
@@ -6,6 +6,7 @@ const ejs = require('ejs');
 const _ = require('lodash');
 const fs = require('fs');
 const path = require('path');
+const MONTH = 30 * 24 * 60 * 60 * 1000 // ms
 
 // Precompile template and prerender index.html.
 // Include config and other variables for the client.
@@ -95,15 +96,16 @@ exports.get = function (req, res) {
   // Find locale and its precompiled page.
   const userLocale = req.getLocale();
   const defaultLocale = config.defaultLocale;
-  let indexHtml;
-  if (indexHtmls[userLocale]) {
-    indexHtml = indexHtmls[userLocale];
-  } else {
-    // No such precompiled indexHtml.
-    indexHtml = indexHtmls[defaultLocale];
-  }
+  // Ensure such precomiled indexHmtl exists
+  const servedLocale = indexHtmls[userLocale] ? userLocale : defaultLocale;
+  const indexHtml = indexHtmls[servedLocale];
   // Send precompiled index page.
-  return res.send(indexHtml);
+  return res
+    .status(status.OK)
+    .cookie('locale', servedLocale, {
+      maxAge: MONTH,
+    }) // init user locale if not set
+    .send(indexHtml);
 };
 
 exports.getManifest = function (req, res) {
