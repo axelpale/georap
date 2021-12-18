@@ -1,6 +1,11 @@
 {
+  "account-settings": "Tilin asetukset",
   "add-location": "Luo paikka...",
+  "admin-menu": "Ylläpito",
   "coordinates": "Koordinaatit",
+  "export": "Lataa kaikki...",
+  "import": "Tuo paikkoja...",
+  "invite": "Kutsu...",
   "language": "Kieli",
   "latest": "Uusimmat",
   "locale-fi": "Suomi",
@@ -9,6 +14,8 @@
   "locale-se": "Svenska",
   "locations": "Paikat",
   "log-in": "Kirjaudu",
+  "log-out": "Kirjaudu ulos",
+  "manage-users": "Käyttäjähallinta",
   "search-placeholder": "hae...",
   "statistics": "Tilastot",
   "users": "Ihmiset"

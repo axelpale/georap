@@ -28,21 +28,21 @@
         </li>
         <li role="separator" class="divider"></li>
         <li>
-          <a href="/import"><%= glyphicon({ name: 'import' }) %> Import...</a>
+          <a href="/import"><%= glyphicon({ name: 'import' }) %> <%= __('import') %></a>
         </li>
         <li>
-          <a href="/export"><%= glyphicon({ name: 'export' }) %> Export...</a>
+          <a href="/export"><%= glyphicon({ name: 'export' }) %> <%= __('export') %></a>
         </li>
 
         <li role="separator" class="divider"></li>
 
         <% if (user.admin) { %>
-          <li class="dropdown-header">Admin Only</li>
+          <li class="dropdown-header"><%= __('admin-section') %></li>
           <li>
-            <a href="/invite"><%= glyphicon({ name: 'envelope' }) %> Invite...</a>
+            <a href="/invite"><%= glyphicon({ name: 'envelope' }) %> <%= __('invite') %></a>
           </li>
           <li>
-            <a href="/admin/users"><%= glyphicon({ name: 'user' }) %> Manage Users...</a>
+            <a href="/admin/users"><%= glyphicon({ name: 'user' }) %> <%= __('manage-users') %></a>
           </li>
           <li role="separator" class="divider"></li>
         <% } %>
@@ -56,10 +56,10 @@
 
         <li class="dropdown-header"><%= user.name %></li>
         <li>
-          <a href="/account"><%= glyphicon({ name: 'user' }) %> Account Settings</a>
+          <a href="/account"><%= glyphicon({ name: 'user' }) %> <%= __('account-settings') %></a>
         </li>
         <li>
-          <a href="/login"><%= glyphicon({ name: 'off' }) %> Log out</a>
+          <a href="/login"><%= glyphicon({ name: 'off' }) %> <%= __('log-out') %></a>
         </li>
       </ul>
     </div><!-- .dropdown -->

@@ -1,6 +1,11 @@
 {
+  "account-settings": "Account Settings",
   "add-location": "Add Location...",
+  "admin-menu": "Admin",
   "coordinates": "Coordinates",
+  "export": "Export...",
+  "import": "Import...",
+  "invite": "Invite...",
   "language": "Language",
   "latest": "Latest",
   "locale-fi": "Suomi",
@@ -9,6 +14,8 @@
   "locale-se": "Svenska",
   "locations": "Locations",
   "log-in": "Log in",
+  "log-out": "Log out",
+  "manage-users": "Manage Users",
   "search-placeholder": "search...",
   "statistics": "Statistics",
   "users": "Users"
