@@ -19,7 +19,7 @@
   },
   "scripts": {
     "start": "npm run server:production",
-    "start:watch": "nodemon --watch local_modules --watch server --ext js,ejs,json --exec 'npm run lint:server && npm run server:development'",
+    "start:watch": "nodemon --watch local_modules --watch server --watch locales --ext js,ejs,json --exec 'npm run lint:server && npm run server:development'",
     "build": "webpack ./client",
     "build:watch": "nodemon --watch client --watch local_modules --ext js,ejs,css,json --exec 'npm run lint:client && npm run build:css && npm run build'",
     "build:css": "cp client/themes/*.css .tmp/public/themes/",
