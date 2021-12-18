@@ -174,6 +174,9 @@ module.exports = function (onSuccess) {
       // TODO in v12 loginColor is optional, in v13 it becomes required
       // and thus does not need the default value handler anymore.
       loginColor: config.loginColor ? config.loginColor : 'primary',
+      // Internationalization
+      availableLocales: config.availableLocales,
+      __: georap.i18n.__,
     });
   };
 

@@ -49,6 +49,15 @@
         <button type="submit" class="btn btn-<%= loginColor %>"><%= __('log-in') %></button>
       </form>
 
+      <p>
+        <% availableLocales.forEach(function (locale, index) { %>
+          <%= index > 0 ? '-' : '' %>
+          <a href="?locale=<%= locale %>" target="_self">
+            <%= __('locale-' + locale) %>
+          </a>
+        <% }) %>
+      </p>
+
       <!-- Password reset -->
       <div id="georap-password-reset">
 
