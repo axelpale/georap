@@ -1,3 +1,8 @@
 {
-  "mainmenu-users": "Users"
+  "mainmenu-users": "Users",
+  "locale-fi": "Suomi",
+  "locale-en": "English",
+  "locale-de": "Deutsch",
+  "locale-se": "Svenska",
+  "log-in": "Log in"
 }

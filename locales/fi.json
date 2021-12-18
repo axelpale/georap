@@ -1,3 +1,8 @@
 {
-  "mainmenu-users": "Ihmiset"
+  "mainmenu-users": "Ihmiset",
+  "locale-fi": "Suomi",
+  "locale-en": "English",
+  "locale-de": "Deutsch",
+  "locale-se": "Svenska",
+  "log-in": "Kirjaudu"
 }
