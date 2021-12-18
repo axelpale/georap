@@ -2,6 +2,7 @@ var template = require('./template.ejs');
 var emitter = require('component-emitter');
 var ui = require('georap-ui');
 var themeStore = georap.stores.theme;
+var availableLocales = georap.config.availableLocales;
 
 var colorSchemes = ['light', 'dark'];
 var themeColors = ['white', '#111111'];
@@ -19,6 +20,7 @@ module.exports = function () {
   this.bind = function ($mount) {
     $mount.html(template({
       theme: themeStore.get(),
+      availableLocales: availableLocales,
     }));
 
     colorSchemes.forEach(function (colorScheme, i) {
