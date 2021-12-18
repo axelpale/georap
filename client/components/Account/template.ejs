@@ -21,6 +21,17 @@
         </label>
       </div>
 
+      <h3>Language</h3>
+
+      <div>
+        <select class="locale-selector form-control">
+          <% availableLocales.forEach(function (locale) { %>
+          <option value="<%= locale %>"><%= locale %></option>
+          <% }) %>
+        </select>
+        <div class="locale-error-container"></div>
+      </div>
+
     </div>
   </div><!-- .row -->
 </div><!-- .container-fluid -->
