@@ -6,7 +6,7 @@ const ejs = require('ejs');
 const _ = require('lodash');
 const fs = require('fs');
 const path = require('path');
-const MONTH = 30 * 24 * 60 * 60 * 1000 // ms
+const MONTH = 30 * 24 * 60 * 60 * 1000; // ms
 
 // Precompile template and prerender index.html.
 // Include config and other variables for the client.
