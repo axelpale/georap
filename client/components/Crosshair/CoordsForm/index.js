@@ -47,7 +47,6 @@ module.exports = function () {
     $elems.systemSelector.on('change', handleSystemChange);
 
     $elems.resetBtn.on('click', function (ev) {
-      console.log('reset');
       ev.preventDefault();
       // Fill input with the render of current coordinate.
       var systemName = $elems.systemSelector.val();
