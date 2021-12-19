@@ -18,6 +18,7 @@ module.exports = function () {
 
     $mount.html(template({
       zoom: zoom,
+      __: georap.i18n.__,
     }));
 
     listeners = {

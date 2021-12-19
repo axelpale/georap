@@ -3,6 +3,7 @@ var ui = require('georap-ui');
 var urls = require('georap-urls-client');
 var geometryModel = require('georap-models').geometry;
 var locationsStore = georap.stores.locations;
+var __ = georap.i18n.__;
 
 module.exports = function () {
 
@@ -15,7 +16,9 @@ module.exports = function () {
   // Public methods
 
   this.bind = function ($mount) {
-    $mount.html(template({}));
+    $mount.html(template({
+      __: __,
+    }));
 
     $elems.form = $mount.find('.crosshair-create');
     $elems.$name = $mount.find('.crosshair-create-name');

@@ -1,16 +1,16 @@
 <form class="panel panel-default crosshair-create">
   <div class="panel-heading">
     <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
-    Create a location here
+    <%= __('create-location-here') %>
   </div>
   <div class="panel-body">
     <div class="form-group">
-      <label for="crosshair-coords-latitude">Location name</label>
+      <label for="crosshair-coords-latitude"><%= __('location-name') %></label>
       <input type="text" class="form-control crosshair-create-name">
-      <small class="form-text text-muted">2–100 characters</small>
+      <small class="form-text text-muted">2–100 <%= __('characters') %></small>
     </div>
     <div class="pull-right">
-      <button type="submit" class="btn btn-default">Create here</button>
+      <button type="submit" class="btn btn-default"><%= __('create-here') %></button>
     </div>
   </div>
 </form>
