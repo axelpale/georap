@@ -20,7 +20,9 @@ module.exports = function (events) {
 
   this.bind = function ($mountEl) {
     $mount = $mountEl;
-    $mount.html(template());
+    $mount.html(template({
+      __: georap.i18n.__,
+    }));
 
     var filteredEvents = eventFilter(events.toRawArray());
     children.events = new EventsView(filteredEvents);

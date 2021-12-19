@@ -1,5 +1,6 @@
 var template = require('./template.ejs');
 var ui = require('georap-ui');
+var __ = georap.i18n.__;
 
 module.exports = function (location) {
 
@@ -9,6 +10,7 @@ module.exports = function (location) {
 
     $mount.html(template({
       location: location,
+      __: __,
     }));
 
     var $display = $('#georap-location-name-display');
@@ -22,7 +24,7 @@ module.exports = function (location) {
 
     handleNameChange = function () {
       var newName = location.getName();
-      var s = (newName === '' ? 'Untitled' : newName);
+      var s = (newName === '' ? __('untitled') : newName);
       $display.text(s);
     };
     location.on('location_name_changed', handleNameChange);

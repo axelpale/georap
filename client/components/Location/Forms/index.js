@@ -57,7 +57,9 @@ module.exports = function (location) {
   };
 
   self.bind = function ($mount) {
-    $mount.html(template({}));
+    $mount.html(template({
+      __: georap.i18n.__,
+    }));
 
     makeOpenable('entry-creation', EntryCreationComponent);
     makeOpenable('location-export', ExportComponent);

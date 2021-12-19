@@ -19,6 +19,7 @@ module.exports = function (location) {
 
     $mount.html(template({
       location: location,
+      __: georap.i18n.__,
     }));
 
     $elems.ensure = $('#georap-location-delete-ensure');

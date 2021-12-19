@@ -1,20 +1,20 @@
 <% var locName = location.getName(); %>
-<% locName = (locName === '' ? 'Untitled' : locName); %>
+<% locName = (locName === '' ? __('untitled') : locName); %>
 <h1><span id="georap-location-name-display"><%= locName %></span> <button id="georap-location-rename-show" type="button" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-pencil"></span></button></h1>
 
 <form id="georap-location-rename-form" class="hidden panel panel-primary">
   <div class="panel-body">
     <div class="form-group">
-      <label for="georap-location-rename-input">New name:</label>
+      <label for="georap-location-rename-input"><%= __('new-name') %>:</label>
       <input type="text" class="form-control" id="georap-location-rename-input">
     </div>
     <div class="pull-right">
-      <button id="georap-location-rename-cancel" type="button" class="btn btn-default">Cancel</button>
-      <button type="submit" class="btn btn-primary">Save</button>
+      <button id="georap-location-rename-cancel" type="button" class="btn btn-default"><%= __('cancel') %></button>
+      <button type="submit" class="btn btn-primary"><%= __('save') %></button>
     </div>
   </div>
 </form>
 
 <div id="georap-location-rename-error" class="hidden">
-  <div class="alert alert-danger" role="alert">Renaming the location failed.</div>
+  <div class="alert alert-danger" role="alert"><%= __('location-rename-error') %></div>
 </div>
