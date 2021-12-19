@@ -1,6 +1,7 @@
 
 var template = require('./template.ejs');
 var displayTemplate = require('./display.ejs');
+var __ = georap.i18n.__;
 
 module.exports = function (location) {
 
@@ -11,6 +12,7 @@ module.exports = function (location) {
     $mount.html(template({
       displayTemplate: displayTemplate,
       places: location.getPlaces(),
+      __: __,
     }));
 
     // Preparation
@@ -20,6 +22,7 @@ module.exports = function (location) {
     location.on('location_geom_changed', function () {
       $display.html(displayTemplate({
         places: location.getPlaces(),
+        __: __,
       }));
     });
 
