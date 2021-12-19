@@ -62,6 +62,7 @@ module.exports = function (location) {
     $mount.html(template({
       location: location,
       allCoords: getAllCoords(location),
+      __: georap.i18n.__,
     }));
 
     // Preparation for binds
