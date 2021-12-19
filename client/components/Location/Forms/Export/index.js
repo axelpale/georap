@@ -20,6 +20,7 @@ module.exports = function (location) {
     $mount.html(template({
       id: location._id,
       token: account.getToken(),
+      __: georap.i18n.__,
     }));
 
     listeners.cancel = $mount.find('.location-export-cancel');

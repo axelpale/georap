@@ -81,6 +81,7 @@ module.exports = function (location) {
     // Render
     $mount.html(template({
       services: exportServiceUrls,
+      __: georap.i18n.__,
     }));
 
     listeners.cancel = $mount.find('.location-viewon-cancel');
