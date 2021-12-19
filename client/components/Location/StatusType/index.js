@@ -41,6 +41,7 @@ module.exports = function (location) {
         currentType: location.getType(),
         toSymbolUrl: urls.locationTypeToSymbolUrl,
       }),
+      __: georap.i18n.__,
     }));
 
     $elems.show = $mount.find('.location-statustype-form-show');
