@@ -1,23 +1,23 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col-md-12">
-      <h1><span class="glyphicon glyphicon-user" aria-hidden="true"></span> Account settings</h1>
+      <h1><span class="glyphicon glyphicon-user" aria-hidden="true"></span> <%= __('account-settings') %></h1>
 
-      <h3>Security</h3>
-      <p><a class="btn btn-default" href="/account/password" role="button"><span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span> Change Password...</a></p>
+      <h3><%= __('security') %></h3>
+      <p><a class="btn btn-default" href="/account/password" role="button"><span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span> <%= __('change-password') %>...</a></p>
 
-      <h3>Theme</h3>
+      <h3><%= __('theme') %></h3>
 
       <div class="radio">
         <label>
           <input type="radio" name="colorScheme" id="theme-light" value="light" <%= theme.colorScheme === 'light' ? 'checked' : '' %>>
-          Light
+          <%= __('theme-light') %>
         </label>
       </div>
       <div class="radio">
         <label>
           <input type="radio" name="colorScheme" id="theme-dark" value="dark" <%= theme.colorScheme === 'dark' ? 'checked' : '' %>>
-          Dark
+          <%= __('theme-dark') %>
         </label>
       </div>
 
