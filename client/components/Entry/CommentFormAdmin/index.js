@@ -53,6 +53,9 @@ module.exports = function (entry, comment) {
       info: 'This will delete the comment and its attachments if any.',
     });
     children.remove.bind($elems.remove);
+    children.remove.on('cancel', function () {
+      ui.hide($elems.remove);
+    });
     children.remove.on('submit', function () {
       entryApi.removeComment({
         entryId: entryId,

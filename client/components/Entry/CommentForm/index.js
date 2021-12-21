@@ -108,6 +108,9 @@ module.exports = function (entry, comment) {
         info: __('comment-removal-info'),
       });
       children.remove.bind($elems.remove);
+      children.remove.on('cancel', function () {
+        ui.hide($elems.remove);
+      });
       children.remove.on('submit', function () {
         entryApi.removeComment({
           entryId: entryId,
