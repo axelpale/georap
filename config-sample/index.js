@@ -321,11 +321,16 @@ module.exports = {
   // that a user can filter locations based on flags in their own entries.
   // For example the 'visit' flag allows a user to browse all locations
   // she has visited.
+  // Translation of flags: to display flags in different languages
+  // the name and description of the flag are in fact translation keys.
+  // Because the flags are customized by you, Georap cannot know translations
+  // for them automatically. For that, you must give translations for the keys
+  // in the custom locales under config/locales.
   entryFlags: {
     visit: {
-      name: 'visit',
-      plural: 'visits',
-      description: 'A photo is required for proof.',
+      name: 'visit', // a translation key
+      plural: 'visits', // a translation key
+      description: 'visit-description', // a translation key
       glyphicon: 'flag',
       reward: 15,
       // Precondition allows a flag to be used only if the entry content

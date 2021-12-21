@@ -1,3 +1,6 @@
 {
-  "users": "Explorers"
+  "users": "Explorers",
+  "visit": "visit",
+  "visit-description": "A photo is required for proof.",
+  "visits": "visits"
 }
