@@ -1,5 +1,5 @@
-// HTML timestamp. Keep this module separate for
-// server-side usage.
+// HTML timestamp. Intended for both client and server side
+// unlike georap-ui that is for client-side only.
 
 var timeago = require('./timeago');
 
