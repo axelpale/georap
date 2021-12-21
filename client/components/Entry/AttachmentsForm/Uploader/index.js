@@ -3,6 +3,7 @@ var FileUpload = require('./FileUpload');
 var emitter = require('component-emitter');
 var ui = require('georap-ui');
 var account = georap.stores.account;
+var __ = georap.i18n.__;
 
 var any = function () {
   return true;
@@ -22,7 +23,9 @@ module.exports = function (opts) {
   var bound = {};
 
   this.bind = function ($mount) {
-    $mount.html(template({}));
+    $mount.html(template({
+      __: __,
+    }));
 
     var $form = $mount.find('form.uploader-box');
     var droppedFiles = false;

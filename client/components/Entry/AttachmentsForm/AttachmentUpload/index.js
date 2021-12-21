@@ -1,5 +1,6 @@
 var template = require('./template.ejs');
 var ui = require('georap-ui');
+var __ = georap.i18n.__;
 
 module.exports = function (fileupload) {
   var $mount = null;
@@ -13,6 +14,7 @@ module.exports = function (fileupload) {
       filesize: Math.round(fileupload.file.size / 1024),
       isValid: fileupload.valid,
       validatorError: fileupload.validatorError,
+      __: __,
     }));
 
     $elems.bar = $mount.find('.progress-bar');

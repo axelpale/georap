@@ -2,6 +2,7 @@ var emitter = require('component-emitter');
 var ui = require('georap-ui');
 var template = require('./template.ejs');
 var entryFlags = georap.config.entryFlags;
+var __ = georap.i18n.__;
 
 module.exports = function (selectedFlags) {
 
@@ -23,6 +24,7 @@ module.exports = function (selectedFlags) {
           checked: selectedFlags.indexOf(flagName) > -1,
         };
       }),
+      __: __,
     }));
   };
 
