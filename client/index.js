@@ -40,7 +40,7 @@ georap.getCurrentPath = routes.getCurrentPath;  // query current page
 
 // Translation helper
 georap.i18n.__ = function (key) {
-  return georap.i18n.catalog[key];
+  return georap.i18n.catalog[key] || key;
 };
 
 // Define routes
