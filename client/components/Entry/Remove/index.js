@@ -32,6 +32,7 @@ module.exports = function (opts) {
 
     $mount.html(template({
       info: opts.info,
+      __: georap.i18n.__,
     }));
 
     $elems.confirmation = $mount.find('.form-remove-confirmation');
