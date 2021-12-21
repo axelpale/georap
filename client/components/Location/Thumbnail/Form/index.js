@@ -35,7 +35,9 @@ module.exports = function (locationId, selectedImage) {
   self.bind = function ($mountEl) {
     $mount = $mountEl;
 
-    $mount.html(template({}));
+    $mount.html(template({
+      __: georap.i18n.__,
+    }));
 
     // Display progress until palette loaded
     $elems.progress = $mount.find('.progress-container');
