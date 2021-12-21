@@ -12,14 +12,14 @@
 
   <div class="form-group">
     <div class="entry-submit-buttons pull-right">
-      <button type="button" class="btn btn-default entry-form-cancel">Cancel</button>
-      <button type="button" class="btn btn-primary entry-form-save">Save</button>
+      <button type="button" class="btn btn-default entry-form-cancel"><%= __('cancel') %></button>
+      <button type="button" class="btn btn-primary entry-form-save"><%= __('save') %></button>
     </div>
     <% if (!isNew) { %>
       <!-- Delete confirmation -->
       <div class="entry-tools-buttons form-group">
-        <button type="button" class="entry-remove-open btn btn-danger">Delete post...</button>
-        <button type="button" class="entry-move-open btn btn-default">Move post...</button>
+        <button type="button" class="entry-remove-open btn btn-danger"><%= __('delete-post') %>...</button>
+        <button type="button" class="entry-move-open btn btn-default"><%= __('move-post') %>...</button>
       </div>
       <div class="entry-remove-container hidden"></div>
       <div class="entry-move-container hidden"></div>
@@ -32,6 +32,6 @@
 
   <% if (!isNew) { %>
   <hr>
-  <h4>Original:</h4>
+  <h4><%= __('original') %>:</h4>
   <% } %>
 </div>

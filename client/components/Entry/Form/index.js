@@ -18,6 +18,7 @@ var drafting = require('./drafting');
 var ui = require('georap-ui');
 var emitter = require('component-emitter');
 var entries = georap.stores.entries;
+var __ = georap.i18n.__;
 
 module.exports = function (locationId, entry) {
   // Entry form View.
@@ -48,6 +49,7 @@ module.exports = function (locationId, entry) {
     $mount.html(template({
       entry: entry,
       isNew: isNew,
+      __: __,
     }));
 
     // Markdown form
