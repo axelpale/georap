@@ -37,14 +37,9 @@ var timer = function (time) {
     return;
   }
 
-  time = time.replace(/\.\d+/, ''); // remove milliseconds
-  time = time.replace(/-/, '/').replace(/-/, '/');
-  time = time.replace(/T/, ' ').replace(/Z/, ' UTC');
-  time = time.replace(/([\+\-]\d\d)\:?(\d\d)/, ' $1$2'); // -04:00 -> -0400
-  time = new Date(time * 1000 || time);
-
-  var now = new Date();
-  var seconds = ((now.getTime() - time) * 0.001) >> 0;
+  var t = Date.parse(time); // ms since epoch
+  var now = Date.now(); // ms
+  var seconds = (now - t) / 1000;
   var minutes = seconds / 60;
   var hours = minutes / 60;
   var days = hours / 24;
