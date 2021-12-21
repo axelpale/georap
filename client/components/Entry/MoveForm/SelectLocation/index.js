@@ -5,6 +5,7 @@ var listTemplate = require('./list.ejs');
 var selectedTemplate = require('./selected.ejs');
 var throttle = require('georap-throttle');
 var locationsApi = georap.stores.locations;
+var __ = georap.i18n.__;
 
 module.exports = function () {
 
@@ -21,7 +22,9 @@ module.exports = function () {
   self.bind = function ($mountEl) {
     $mount = $mountEl;
 
-    $mount.html(template({}));
+    $mount.html(template({
+      __: __,
+    }));
 
     $elems.results = $mount.find('.location-search-results');
     var renderList = function (locs, phrase) {
