@@ -46,8 +46,8 @@ config.availableLocales.forEach((locale) => {
 });
 
 // Merge the custom catalog and the built-in catalog.
-// Detect translations not available in the built-in catalog,
-// because the custom catalog might have translations typoed by the end-user.
+// The custom catalog might contain translations not in the built-in catalog
+// due to custom flags and tags.
 Object.keys(customCatalog).forEach((locale) => {
   // Test if such built-in locale exists. User might typo the custom locale.
   if (!catalog[locale]) {
@@ -55,23 +55,11 @@ Object.keys(customCatalog).forEach((locale) => {
       '. Available locales are: ' + config.availableLocales.join(',');
     throw new Error(msg);
   }
-  // Ensure each translation is available in the built-in locales.
-  const unknownTranslations = [];
+  // Overwrite built-in translation
   const customDict = customCatalog[locale];
   Object.keys(customDict).forEach((key) => {
-    if (!(key in catalog[locale])) {
-      unknownTranslations.push(key);
-    } else {
-      // Overwrite built-in translation
-      catalog[locale][key] = customDict[key];
-    }
+    catalog[locale][key] = customDict[key];
   });
-  if (unknownTranslations.length > 0) {
-    const unknowns = unknownTranslations.join(',');
-    const msg = 'Unknown custom translations: ' + unknowns + '. ' +
-      'See built-in locales for available keys.';
-    throw new Error(msg);
-  }
 });
 
 // Catalog is now merged with custom translations.
