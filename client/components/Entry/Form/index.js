@@ -165,6 +165,9 @@ module.exports = function (locationId, entry) {
         info: __('post-removal-info'),
       });
       children.remove.bind($elems.remove);
+      children.remove.on('cancel', function () {
+        ui.hide($elems.remove);
+      });
       children.remove.on('submit', function () {
         entries.remove(entry.locationId, entry._id, function (err) {
           if (err) {

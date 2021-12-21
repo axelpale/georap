@@ -38,6 +38,11 @@ module.exports = function (opts) {
     $elems.confirmation = $mount.find('.form-remove-confirmation');
     $elems.progress = $mount.find('.form-remove-progress');
 
+    $elems.cancelBtn = $mount.find('button.form-cancel-btn');
+    $elems.cancelBtn.click(function () {
+      self.emit('cancel');
+    });
+
     $elems.removeBtn = $mount.find('button.form-remove-btn');
     $elems.removeBtn.click(function () {
       ui.hide($elems.confirmation);
