@@ -59,9 +59,7 @@ exports.locationstamp = function (location) {
   return '<a href="' + url + '">' + location.name + '</a>';
 };
 
-exports.timestamp = function (time) {
-  return timestamp(time);
-};
+exports.timestamp = timestamp;
 
 exports.flagstamp = function (flags) {
   // Convert an array of flags to string
