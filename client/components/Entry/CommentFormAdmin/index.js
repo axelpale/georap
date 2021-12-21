@@ -7,6 +7,7 @@ var RemoveView = require('../Remove');
 var ErrorView = require('../Error');
 var template = require('./template.ejs');
 var entryApi = georap.stores.entries;
+var __ = georap.i18n.__;
 
 module.exports = function (entry, comment) {
   // Parameters
@@ -29,7 +30,9 @@ module.exports = function (entry, comment) {
   self.bind = function ($mountEl) {
     $mount = $mountEl;
 
-    $mount.html(template());
+    $mount.html(template({
+      __: __,
+    }));
 
     // Cancel button
     $elems.cancel = $mount.find('.comment-form-cancel');
@@ -50,7 +53,7 @@ module.exports = function (entry, comment) {
     });
 
     children.remove = new RemoveView({
-      info: 'This will delete the comment and its attachments if any.',
+      info: __('comment-removal-info'),
     });
     children.remove.bind($elems.remove);
     children.remove.on('cancel', function () {
