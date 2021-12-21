@@ -1,6 +1,7 @@
 var ui = require('georap-ui');
 var emitter = require('component-emitter');
 var template = require('./template.ejs');
+var __ = georap.i18n.__;
 
 module.exports = function () {
 
@@ -14,7 +15,9 @@ module.exports = function () {
   self.bind = function ($mountEl) {
     $mount = $mountEl;
 
-    $mount.html(template());
+    $mount.html(template({
+      __: __,
+    }));
 
     $elems.open = $mount.find('.comment-form-open');
     var waitMs = 500;
