@@ -3,12 +3,14 @@
 
 var timeago = require('./timeago');
 
-module.exports = function (isoTime) {
+module.exports = function (isoTime, locale) {
   // Parameters:
   //   isoTime
   //     string in ISO format. See ISO 8601
-
+  //   locale
+  //     string, locale code e.g. 'en' or 'fi'
+  //
   return '<time datetime="' + isoTime + '" title="' + isoTime +
          '" data-toggle="tooltip" data-placement="bottom">' +
-         timeago(isoTime) + '</time>';
+         timeago(isoTime, locale) + '</time>';
 };
