@@ -1,5 +1,6 @@
 {
   "account-settings": "Tilin asetukset",
+  "activity": "Tapahtumat",
   "add-comment": "Lisää kommentti",
   "add-location": "Luo paikka...",
   "add-post": "Kirjoita",
@@ -84,6 +85,7 @@
   "photo-or-document": "Valokuva tai asiakirja",
   "photos-and-documents": "Valokuvia ja asiakirjoja",
   "post-removal-info": "Tämä poistaa viestin ja kaikki sen liitteet ja kommentit.",
+  "posts": "Viestit",
   "remote-territory": "Nimeämätön alue",
   "rotate": "Käännä",
   "save": "Tallenna",

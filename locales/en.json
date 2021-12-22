@@ -1,5 +1,6 @@
 {
   "account-settings": "Account Settings",
+  "activity": "Activity",
   "add-comment": "Add Comment",
   "add-location": "Add Location...",
   "add-post": "Add Post",
@@ -84,6 +85,7 @@
   "photo-or-document": "Photo or document",
   "photos-and-documents": "Photos and documents",
   "post-removal-info": "This will delete the post and all its attachments and comments if any.",
+  "posts": "Posts",
   "remote-territory": "Remote territory",
   "rotate": "Rotate",
   "save": "Save",
