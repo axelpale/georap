@@ -7,6 +7,7 @@ var getPoints = require('georap-points');
 var ui = require('georap-ui');
 var config = georap.config;
 var locale = georap.i18n.locale;
+var __ = georap.i18n.__;
 
 module.exports = function (events, opts) {
   // Parameters:
@@ -39,6 +40,7 @@ module.exports = function (events, opts) {
       getPoints: getPoints,
       config: config,
       showThumbnail: opts.showThumbnails,
+      __: __,
     });
   };
 
