@@ -82,7 +82,7 @@
     <%= ev.type %>
   <% } %>
 
-  <%= timestamp(ev.time) %>
+  <%= timestamp %>
   <% if (typeof pointstamp !== 'undefined') { %>
     &nbsp;<%= pointstamp(getPoints(config, ev)) %>
   <% } %>

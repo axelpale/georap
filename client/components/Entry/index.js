@@ -9,6 +9,7 @@ var FormView = require('./Form');
 var FormAdminView = require('./FormAdmin');
 var ui = require('georap-ui');
 var account = georap.stores.account;
+var locale = georap.i18n.locale;
 
 module.exports = function (entry, opts) {
   // Parameters:
@@ -48,7 +49,7 @@ module.exports = function (entry, opts) {
     $elems.heading.html(headingTemplate({
       username: entry.user,
       flagstamp: ui.flagstamp(entry.flags),
-      timestamp: ui.timestamp(entry.time),
+      timestamp: ui.timestamp(entry.time, locale),
       locationstamp: opts.displayLocation
         ? ui.locationstamp(entry.location) : null,
     }));
