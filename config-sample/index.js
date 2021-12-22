@@ -329,7 +329,8 @@ module.exports = {
   entryFlags: {
     visit: {
       name: 'visit', // a translation key
-      plural: 'visits', // a translation key
+      genitive: 'visit-genitive', // a translation key
+      plural: 'visit-plural', // a translation key
       description: 'visit-description', // a translation key
       glyphicon: 'flag',
       reward: 15,

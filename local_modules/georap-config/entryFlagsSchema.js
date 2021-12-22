@@ -11,6 +11,9 @@ module.exports = {
         name: {
           type: 'string',
         },
+        genitive: {
+          type: 'string',
+        },
         plural: {
           type: 'string',
         },
@@ -29,6 +32,7 @@ module.exports = {
       },
       required: [
         'name',
+        'genitive',
         'plural',
         'description',
         'glyphicon',

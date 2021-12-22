@@ -1,5 +1,6 @@
 {
   "visit": "käynti",
   "visit-description": "Liitä valokuva todisteeksi.",
-  "visits": "käyntiä"
+  "visit-genitive": "käynnin",
+  "visit-plural": "käyntiä"
 }

@@ -2,5 +2,6 @@
   "users": "Explorers",
   "visit": "visit",
   "visit-description": "A photo is required for proof.",
-  "visits": "visits"
+  "visit-genitive": "a visit",
+  "visit-plural": "visits"
 }
