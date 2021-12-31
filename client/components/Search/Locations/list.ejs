@@ -2,7 +2,7 @@
 <% if (markers.length === 0) { %>
 
   <ul class="list-group">
-    <li class="list-group-item georap-disabled" style="text-align: center">No results</li>
+    <li class="list-group-item georap-disabled" style="text-align: center"><%= __('no-results') %></li>
   </ul>
 
 <% } else { %>
@@ -17,5 +17,5 @@
     </li>
   <% }); %>
   </ul>
-  <div class="text-muted" style="margin-top: 0.38rem; margin-bottom: 1rem;">Showing results <%= skip %>–<%= skip + limit %></div>
+  <div class="text-muted" style="margin-top: 0.38rem; margin-bottom: 1rem;"><%= __('showing-results') %> <%= skip %>–<%= skip + limit %></div>
 <% } %>

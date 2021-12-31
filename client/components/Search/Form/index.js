@@ -3,6 +3,7 @@ var emitter = require('component-emitter');
 var ui = require('georap-ui');
 var accountStore = georap.stores.account;
 var usersStore = georap.stores.users;
+var __ = georap.i18n.__;
 
 // Phrase input field focus
 var FOCUS_DELAY = 200;
@@ -38,6 +39,7 @@ module.exports = function (query) {
 
     $mount.html(template({
       username: myName,
+      __: __,
     }));
 
     $elems.form = $mount.find('.search-form');

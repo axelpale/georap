@@ -7,6 +7,7 @@ var template = require('./template.ejs');
 var emitter = require('component-emitter');
 var queryString = require('query-string');
 var ui = require('georap-ui');
+var __ = georap.i18n.__;
 
 module.exports = function (query) {
   // Parameters
@@ -36,7 +37,9 @@ module.exports = function (query) {
 
   this.bind = function ($mountEl) {
     $mount = $mountEl;
-    $mount.html(template());
+    $mount.html(template({
+      __: __,
+    }));
 
     children.form = new FormView(query);
     children.form.bind($mount.find('.search-form-container'));

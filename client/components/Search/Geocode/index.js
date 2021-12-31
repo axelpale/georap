@@ -3,6 +3,7 @@ var searchApi = georap.stores.search;
 var geometry = require('georap-models').geometry;
 var template = require('./template.ejs');
 var listTemplate = require('./list.ejs');
+var __ = georap.i18n.__;
 
 module.exports = function (phrase) {
   // Parameters
@@ -36,6 +37,7 @@ module.exports = function (phrase) {
         // array of { address_components: [ { long_name, short_name }] }
         results: results,
         boundsToZoom: geometry.boundsToZoom,
+        __: __,
       }));
     });
   };
