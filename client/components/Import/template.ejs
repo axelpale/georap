@@ -2,22 +2,22 @@
   <div class="row">
     <div class="col-md-12">
 
-      <h1><span class="glyphicon glyphicon-import" aria-hidden="true"></span> Import locations</h1>
+      <h1><span class="glyphicon glyphicon-import" aria-hidden="true"></span> <%= __('import-locations') %></h1>
 
-      <p>Choose a file from your device, and upload. Importable locations will be listed for you before they are created. Then select wanted locations from the list and finally import.</p>
+      <p><%= __('import-intro') %></p>
 
       <form id="georap-import-upload-form" class="panel panel-primary">
         <div class="panel-heading">
-          Choose a file to upload
+          <%= __('choose-file-to-upload') %>
         </div>
         <div class="panel-body">
           <div class="form-group">
-            <label for="georap-import-file">Supported formats are KML and KMZ. Max size is <%= limit %> MiB.</label>
+            <label for="georap-import-file"><%= __('import-supported-formats') %> <%= __('max-size-is') %> <%= limit %> MiB.</label>
             <input id="georap-import-file" type="file" name="importfile">
           </div>
 
           <div class="pull-right">
-            <button type="submit" class="btn btn-primary">Upload</button>
+            <button type="submit" class="btn btn-primary"><%= __('upload') %></button>
           </div>
         </div>
       </form>
