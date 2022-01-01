@@ -9,6 +9,7 @@ var template = require('./template.ejs');
 var locationTypes = georap.config.locationTypes;
 var locationStatuses = georap.config.locationStatuses;
 var filterStore = georap.stores.filter;
+var __ = georap.i18n.__;
 
 module.exports = function () {
   // Parameters
@@ -72,6 +73,7 @@ module.exports = function () {
         currentType: filterState.type,
         toSymbolUrl: urls.locationTypeToSymbolUrl,
       }),
+      __: __,
     }));
 
     // Click on a status button
