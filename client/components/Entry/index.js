@@ -7,9 +7,11 @@ var CommentForm = require('./CommentForm');
 var CommentButton = require('./CommentButton');
 var FormView = require('./Form');
 var FormAdminView = require('./FormAdmin');
+var flagstamp = require('./flagstamp');
 var ui = require('georap-ui');
 var account = georap.stores.account;
 var locale = georap.i18n.locale;
+var __ = georap.i18n.__;
 
 module.exports = function (entry, opts) {
   // Parameters:
@@ -48,10 +50,11 @@ module.exports = function (entry, opts) {
     $elems.heading = $mount.find('.entry-heading');
     $elems.heading.html(headingTemplate({
       username: entry.user,
-      flagstamp: ui.flagstamp(entry.flags),
-      timestamp: ui.timestamp(entry.time, locale),
+      flagstamp: flagstamp(entry.flags),
+      timestamp: ui.timestamp(entry.time, locale), // locale for 'ago' trnsltn
       locationstamp: opts.displayLocation
         ? ui.locationstamp(entry.location) : null,
+      __: __,
     }));
 
     // Markdown viewer
@@ -156,10 +159,11 @@ module.exports = function (entry, opts) {
       // Update flags in heading
       $elems.heading.html(headingTemplate({
         username: entry.user,
-        flagstamp: ui.flagstamp(entry.flags),
-        timestamp: ui.timestamp(entry.time),
+        flagstamp: flagstamp(entry.flags),
+        timestamp: ui.timestamp(entry.time, locale),
         locationstamp: opts.displayLocation
           ? ui.locationstamp(entry.location) : null,
+        __: __,
       }));
       // Update markdown
       if (entryModel.hasMarkdown(entry)) {

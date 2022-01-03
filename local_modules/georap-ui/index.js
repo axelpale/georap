@@ -61,15 +61,6 @@ exports.locationstamp = function (location) {
 
 exports.timestamp = timestamp;
 
-exports.flagstamp = function (flags) {
-  // Convert an array of flags to string
-  //
-  if (flags && flags.length > 0) {
-    return 'a <strong>' + flags.join(' ') + '</strong> ';
-  }
-  return '';
-};
-
 exports.pointstamp = function (points) {
   var p = points;
   var h = '<span class="georap-pointstamp">';
