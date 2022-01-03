@@ -70,8 +70,6 @@ exports.sumFlags = function (evs) {
     const flagConf = config.entryFlags[flagName];
     return {
       name: flagName,
-      plural: flagConf.plural,
-      glyphicon: flagConf.glyphicon,
       count: flagCounts[flagName],
     };
   });
