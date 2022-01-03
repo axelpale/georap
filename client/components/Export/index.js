@@ -2,6 +2,7 @@
 var template = require('./template.ejs');
 var emitter = require('component-emitter');
 var account = georap.stores.account;
+var __ = georap.i18n.__;
 
 module.exports = function () {
   // Parameters
@@ -17,6 +18,7 @@ module.exports = function () {
   this.bind = function ($mount) {
     $mount.html(template({
       token: account.getToken(),
+      __: __,
     }));
   };
 
