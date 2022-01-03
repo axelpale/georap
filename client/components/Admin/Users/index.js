@@ -5,6 +5,7 @@ var template = require('./template.ejs');
 var tableTemplate = require('./table.ejs');
 var emitter = require('component-emitter');
 var ui = require('georap-ui');
+var __ = georap.i18n.__;
 
 module.exports = function () {
 
@@ -12,11 +13,12 @@ module.exports = function () {
   var self = this;
   emitter(self);
 
-
   // Public methods
 
   self.bind = function ($mount) {
-    $mount.html(template());
+    $mount.html(template({
+      __: __,
+    }));
 
     var $loading = $('#admin-users-loading');
     var $table = $('#admin-users-table');
@@ -35,6 +37,7 @@ module.exports = function () {
       // Reveal user table
       $table.html(tableTemplate({
         users: rawUsers,
+        __: __,
       }));
     });
   };
