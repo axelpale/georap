@@ -5,6 +5,8 @@ var template = require('./template.ejs');
 var pointsTemplate = require('./points.ejs');
 var emitter = require('component-emitter');
 var ui = require('georap-ui');
+var flagConfig = georap.config.entryFlags;
+var __ = georap.i18n.__;
 
 module.exports = function (username) {
   // Parameters
@@ -24,6 +26,7 @@ module.exports = function (username) {
 
     $mount.html(template({
       username: username,
+      __: __,
     }));
 
     // Fetch user before further rendering.
@@ -38,12 +41,14 @@ module.exports = function (username) {
 
       // User statistics
       $('#georap-user-points').html(pointsTemplate({
+        flagConfig: flagConfig,
         flags: user.flagsCreated,
         adds: user.locationsCreated,
         posts: user.postsCreated,
         classifications: user.locationsClassified,
         comments: user.commentsCreated,
         points: user.points,
+        __: __,
       }));
 
       children.events = new EventsView(user.events);
