@@ -26,7 +26,10 @@
       <div class="list-group">
         <% availableLocales.forEach(function (locale) { %>
           <% var activity = locale === currentLocale ? 'active' : '' %>
-          <a href="?locale=<%= locale %>" class="list-group-item <%= activity %>" target="_self">
+          <a href="?locale=<%= locale %>"
+             class="list-group-item <%= activity %>"
+             lang="<%= locale %>"
+             target="_self">
             <%= __('locale-' + locale) %>
           </a>
         <% }) %>
