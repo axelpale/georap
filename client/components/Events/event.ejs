@@ -45,10 +45,8 @@
     <%= __('user-changed-thumb') %> <a href="<%= locUrl %>"><%= name %></a>
 
   <% } else if (t === 'location_entry_created') { %>
-    <%= __('user-created-post') %> <%=
-      ev.data.entry.flags.length > 0
-        ? __(config.entryFlags[ev.data.entry.flags[0]].genitive) : ''
-    %> <%= __('user-created-post-to') %> <a href="<%= locUrl %>"><%= name %></a>
+    <%= __('user-created-post') %> <%= flagstamp(ev.data.entry.flags) %>
+    <%= __('user-created-post-to') %> <a href="<%= locUrl %>"><%= name %></a>
 
   <% } else if (t === 'location_entry_changed') { %>
     <%= __('user-edited-post') %> <a href="<%= locUrl %>"><%= name %></a>

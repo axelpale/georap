@@ -5,6 +5,7 @@ var eventTemplate = require('./event.ejs');
 var emitter = require('component-emitter');
 var getPoints = require('georap-points');
 var ui = require('georap-ui');
+var flagstamp = require('../Entry/flagstamp');
 var config = georap.config;
 var locale = georap.i18n.locale;
 var __ = georap.i18n.__;
@@ -37,6 +38,7 @@ module.exports = function (events, opts) {
       ev: ev,
       timestamp: ui.timestamp(ev.time, locale),
       pointstamp: ui.pointstamp,
+      flagstamp: flagstamp,
       getPoints: getPoints,
       config: config,
       showThumbnail: opts.showThumbnails,
