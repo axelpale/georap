@@ -100,6 +100,7 @@
   "locale-se": "Svenska",
   "location-name": "Location name",
   "location-rename-error": "Renaming the location failed.",
+  "location-status-type-fail": "Sorry, updating status or type failed. Try again later.",
   "locations": "Locations",
   "locations-created-by": "by",
   "locations-showing": "Showing",

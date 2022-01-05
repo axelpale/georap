@@ -1,6 +1,6 @@
 <span><img src="<%= toSymbolUrl(currentType) %>" title="<%= currentType %>" width="22" height="40"></span>
-<span class="location-status"><%= cap(currentStatus) %></span> <%
+<span class="location-status"><%= __('location-status', currentStatus) %></span> <%
   if (currentType !== defaultType) {
-    %><span class="location-type"><%= cap(currentType) %></span><%
+    %><span class="location-type"><%= __('location-type', currentType) %></span><%
   }
 %>

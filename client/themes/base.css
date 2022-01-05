@@ -243,6 +243,9 @@ time {
 .location-statustype-viewer .location-type {
   font-size: 1.38em;
 }
+.location-statustype-viewer .location-status {
+  text-transform: capitalize;
+}
 .location-statustype-form {
   margin-bottom: 1.6rem;
 }
@@ -256,6 +259,7 @@ time {
   padding: 0.38rem;
   border-radius: 0.5rem;
   background-color: transparent;
+  text-transform: capitalize;
 }
 .location-type-list button {
   width: 3rem;

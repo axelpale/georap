@@ -9,6 +9,7 @@ var typeFormListTemplate = require('./typeFormList.ejs');
 // Config
 var locationStatuses = georap.config.locationStatuses;
 var locationTypes = georap.config.locationTypes;
+var __ = georap.i18n.__;
 
 module.exports = function (location) {
 
@@ -27,13 +28,13 @@ module.exports = function (location) {
         currentType: location.getType(),
         toSymbolUrl: urls.locationTypeToSymbolUrl,
         defaultType: locationTypes[0],
-        cap: ui.cap,
+        __: __,
       }),
       // List of available statuses
       statusFormListHtml: statusFormListTemplate({
         locationStatuses: locationStatuses,
         currentStatus: location.getStatus(),
-        cap: ui.cap,
+        __: __,
       }),
       // List of available types
       typeFormListHtml: typeFormListTemplate({
@@ -41,7 +42,7 @@ module.exports = function (location) {
         currentType: location.getType(),
         toSymbolUrl: urls.locationTypeToSymbolUrl,
       }),
-      __: georap.i18n.__,
+      __: __,
     }));
 
     $elems.show = $mount.find('.location-statustype-form-show');
