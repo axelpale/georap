@@ -65,7 +65,7 @@
     <%= __('user-deleted-post') %> <a href="<%= locUrl %>"><%= name %></a>
 
   <% } else if (t === 'location_unproved_visit_created') { %>
-    maybe visited <a href="<%= locUrl %>"><%= name %></a>
+    <%= __('user-visited-legacy') %> <a href="<%= locUrl %>"><%= name %></a>
 
   <% } else if (t === 'location_entry_comment_created') { %>
     <%= __('user-commented-post') %> <a href="<%= locUrl %>#comment-<%= ev.data.commentId %>"><%= name %></a>
