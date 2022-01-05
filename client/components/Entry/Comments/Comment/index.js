@@ -5,6 +5,7 @@ var Thumbnail = require('georap-components').Thumbnail;
 var commentModel = require('georap-models').comment;
 var ui = require('georap-ui');
 var account = georap.stores.account;
+var locale = georap.i18n.locale;
 
 module.exports = function (entry, comment) {
   // Parameters:
@@ -29,7 +30,7 @@ module.exports = function (entry, comment) {
 
     $mount.html(template({
       author: comment.user,
-      timestamp: ui.timestamp(comment.time),
+      timestamp: ui.timestamp(comment.time, locale),
       isAuthorOrAdmin: isAuthorOrAdmin,
     }));
 
