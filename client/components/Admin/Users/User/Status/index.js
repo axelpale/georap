@@ -2,6 +2,7 @@ var template = require('./template.ejs');
 var ui = require('georap-ui');
 var account = georap.stores.account;
 var admin = georap.stores.admin;
+var __ = georap.i18n.__;
 
 module.exports = function (user) {
   var self = this;
@@ -11,6 +12,7 @@ module.exports = function (user) {
     $mount.html(template({
       username: user.name,
       status: user.status,
+      __: __,
     }));
 
     var $box = $('#status-checkbox');
