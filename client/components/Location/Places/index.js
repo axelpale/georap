@@ -17,7 +17,7 @@ module.exports = function (location) {
 
     // Preparation
 
-    var $display = $('#georap-location-places-display');
+    var $display = $mount.find('.location-places-display');
 
     location.on('location_geom_changed', function () {
       $display.html(displayTemplate({
