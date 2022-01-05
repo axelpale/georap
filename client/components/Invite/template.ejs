@@ -1,30 +1,30 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col-md-12">
-      <h1>Invite a new user</h1>
+      <h1><%= __('invite-user') %></h1>
 
       <div id="georap-invite-email-error" class="hidden">
-        <div class="alert alert-danger" role="alert">Invalid email address. Try again.</div>
+        <div class="alert alert-danger" role="alert"><%= __('invite-invalid-email') %></div>
       </div>
 
       <div id="georap-invite-exist-error" class="hidden">
-        <div class="alert alert-warning" role="alert">An account with this email address already exists. The account owner has already received an invite and created an account.</div>
+        <div class="alert alert-warning" role="alert"><%= __('invite-account-exists') %></div>
       </div>
 
       <div id="georap-invite-server-error" class="hidden">
-        <div class="alert alert-danger" role="alert">Failed to send invitation. Try again later.</div>
+        <div class="alert alert-danger" role="alert"><%= __('invite-send-failed') %></div>
       </div>
 
       <div id="georap-invite-success" class="hidden">
-        <div class="alert alert-success" role="alert">Invite sent successfully.</div>
+        <div class="alert alert-success" role="alert"><%= __('invite-send-success') %></div>
       </div>
 
       <form id="georap-invite-form">
         <div class="form-group">
-          <label for="georap-invite-email">Email address to send the invite to:</label>
+          <label for="georap-invite-email"><%= __('invite-email') %>:</label>
           <input type="email" class="form-control" id="georap-invite-email">
         </div>
-        <button type="submit" class="btn btn-primary">Send invite</button>
+        <button type="submit" class="btn btn-primary"><%= __('invite-send') %></button>
       </form>
 
       <div id="georap-invite-in-progress" class="hidden">
@@ -36,7 +36,7 @@
       </div>
 
       <div id="georap-invite-another" class="hidden">
-        <button id="georap-invite-another-button" type="button" class="btn btn-primary">Invite another...</button>
+        <button id="georap-invite-another-button" type="button" class="btn btn-primary"><%= __('invite-another') %></button>
       </div>
 
     </div>

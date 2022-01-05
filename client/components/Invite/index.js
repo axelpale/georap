@@ -5,6 +5,7 @@ var ui = require('georap-ui');
 var emitter = require('component-emitter');
 var validator = require('email-validator');
 var account = georap.stores.account;
+var __ = georap.i18n.__;
 
 module.exports = function () {
   // Init
@@ -20,7 +21,9 @@ module.exports = function () {
   // Public methods
 
   this.bind = function ($mount) {
-    $mount.html(inviteTemplate());
+    $mount.html(inviteTemplate({
+      __: __,
+    }));
 
     $('#georap-invite-another-button').click(inviteAnotherButtonHandler);
     $('#georap-invite-form').submit(inviteFormSubmitHandler);
