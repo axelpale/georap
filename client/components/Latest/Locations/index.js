@@ -7,6 +7,8 @@ var listTemplate = require('./list.ejs');
 var LocationSelector = require('../LocationSelector');
 var rootBus = require('georap-bus');
 var locationsStore = georap.stores.locations;
+var locale = georap.i18n.locale;
+var __ = georap.i18n.__;
 
 var LIST_SIZE = 50;
 
@@ -34,6 +36,8 @@ module.exports = function () {
         locations: locs,
         timestamp: ui.timestamp,
         placestamp: ui.placestamp,
+        locale: locale,
+        __: __,
       }));
     }
   };
@@ -75,7 +79,9 @@ module.exports = function () {
 
   self.bind = function ($mountEl) {
     $mount = $mountEl;
-    $mount.html(template());
+    $mount.html(template({
+      __: __,
+    }));
 
     // Select associated marker by clicking an event or hovering cursor on it.
     $elems.locations = $mount.find('.latest-locations');
@@ -110,11 +116,6 @@ module.exports = function () {
       }, 0);
     });
   };
-
-  // self.update = function () {
-  //   if ($mount) {
-  //
-  // };
 
   self.unbind = function () {
     if ($mount) {

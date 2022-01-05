@@ -12,7 +12,7 @@
     <li class="list-group-item">
       <a href="/locations/<%= m._id %>?zoom=11"><%= m.name %></a>
       <span style="color: gray; font-style: italic; margin-left: 0.38em">
-        <%= placestamp(m.places) %>
+        <%= m.places.length > 0 ? placestamp(m.places) : __('yet-undefined-place') %>
       </span>
     </li>
   <% }); %>

@@ -84,6 +84,7 @@
   "import-intro": "Choose a file from your device, and upload. Importable locations will be listed for you before they are created. Then select wanted locations from the list and finally import.",
   "import-locations": "Import Locations",
   "import-supported-formats": "Supported formats are KML and KMZ.",
+  "in-place": "in",
   "invite": "Invite...",
   "language": "Language",
   "last-7-days": "Last 7 days",
@@ -92,6 +93,7 @@
   "latest": "Latest",
   "latitude": "Latitude",
   "less": "Less",
+  "load-more": "Load more",
   "locale-fi": "Suomi",
   "locale-en": "English",
   "locale-de": "Deutsch",
@@ -99,6 +101,9 @@
   "location-name": "Location name",
   "location-rename-error": "Renaming the location failed.",
   "locations": "Locations",
+  "locations-created-by": "by",
+  "locations-showing": "Showing",
+  "locations-showing-of": "locations out of",
   "log-in": "Log in",
   "log-out": "Log out",
   "longitude": "Longitude",
@@ -211,5 +216,6 @@
   "username": "Username",
   "users": "Users",
   "view-coordinates-on": "View the same coordinates on",
+  "yet-undefined-place": "yet unnamed area",
   "zoom-level": "Zoom Level"
 }

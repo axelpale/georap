@@ -82,13 +82,18 @@ exports.pointstamp = function (points) {
 
 exports.placestamp = function (places) {
   // String representation for location.places array
+  //
+  // Parameters
+  //   places
+  //     array of strings, places
+  //
   if (places.length > 1) {
     return places[0] + ', ' + places[places.length - 1];
   }
   if (places.length > 0) {
     return places[0];
   }
-  return 'yet undefined area';
+  return '';
 };
 
 exports.sizestamp = function (bytes) {

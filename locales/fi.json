@@ -84,6 +84,7 @@
   "import-intro": "Valitse tuotava tiedosto ja paina lähetä. Pääset esikatselemaan listaa tiedoston sisältämistä paikoista ennen varsinaista lisäystä. Valitse haluamasi paikat listalta ja käynnistä tuonti.",
   "import-locations": "Tuo paikkoja",
   "import-supported-formats": "Tuetut tiedostomuodot ovat KML ja KMZ.",
+  "in-place": "alueella",
   "invite": "Kutsu...",
   "language": "Kieli",
   "last-7-days": "Viikko",
@@ -92,6 +93,7 @@
   "latest": "Uusimmat",
   "latitude": "Latitudi",
   "less": "Vähemmän",
+  "load-more": "Näytä lisää",
   "locale-fi": "Suomi",
   "locale-en": "English",
   "locale-de": "Deutsch",
@@ -99,6 +101,9 @@
   "location-name": "Paikan nimi",
   "location-rename-error": "Paikan nimeäminen uudelleen epäonnistui.",
   "locations": "Paikat",
+  "locations-created-by": "Lisännyt",
+  "locations-showing": "Näkyvissä",
+  "locations-showing-of": "paikkaa, joita yhteensä",
   "log-in": "Kirjaudu",
   "log-out": "Kirjaudu ulos",
   "longitude": "Longitudi",
@@ -211,5 +216,6 @@
   "username": "Nimimerkki",
   "users": "Jäsenet",
   "view-coordinates-on": "Näytä sijainti karttapalvelussa",
+  "yet-undefined-place": "nimeämätön alue",
   "zoom-level": "Karttataso"
 }

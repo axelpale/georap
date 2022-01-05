@@ -1,6 +1,6 @@
 <ul class="list-group">
 <% if (locations.length === 0) { %>
-  <li class="list-group-item text-muted center-block">No results</li>
+  <li class="list-group-item text-muted center-block"><%= __('no-results') %></li>
 <% } else { %>
   <% locations.forEach(function (loc) { %>
     <% var locUrl = '/locations/' + loc._id + '?&ref=latest'; %>
@@ -17,15 +17,15 @@
     <h4 class="location-title"><a href="<%= locUrl %>"><%= loc.name %></a></h4>
     <div class="location-description">
       <span class="location-status"><%= loc.status %></span>
-      <span class="location-type"><%= loc.type %></span> in
-      <%= placestamp(loc.places) %>
+      <span class="location-type"><%= loc.type %></span> <%= __('in-place') %>
+      <%= loc.places.length > 0 ? placestamp(loc.places) : __('yet-undefined-place') %>
     </div>
-    <div>by <a href=""><%= loc.creator %></a> <%= timestamp(loc.createdAt) %></div>
+    <div><%= __('locations-created-by') %> <a href=""><%= loc.creator %></a> <%= timestamp(loc.createdAt, locale) %></div>
   </li>
   <% }); %>
 <% } %>
 </ul>
 <div class="text-muted" style="margin-top: -20px; margin-bottom: 5px;">
   <span class="glyphicon glyphicon-triangle-top" aria-label="Above"></span>
-  Showing <%= skip + limit %> locations out of <%= total %>
+  <%= __('locations-showing') %> <%= skip + limit %> <%= __('locations-showing-of') %> <%= total %>
 </div>
