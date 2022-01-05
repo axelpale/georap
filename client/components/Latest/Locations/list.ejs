@@ -16,8 +16,8 @@
     <% } %>
     <h4 class="location-title"><a href="<%= locUrl %>"><%= loc.name %></a></h4>
     <div class="location-description">
-      <span class="location-status"><%= loc.status %></span>
-      <span class="location-type"><%= loc.type %></span> <%= __('in-place') %>
+      <span class="location-status"><%= __('location-status', loc.status) %></span>
+      <span class="location-type"><%= __('location-type', loc.type) %></span> <%= __('in-place') %>
       <%= loc.places.length > 0 ? placestamp(loc.places) : __('yet-undefined-place') %>
     </div>
     <div><%= __('locations-created-by') %> <a href=""><%= loc.creator %></a> <%= timestamp(loc.createdAt, locale) %></div>
