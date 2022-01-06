@@ -8,6 +8,7 @@ var EventsView = require('../../Events');
 var LocationSelector = require('../LocationSelector');
 var rootBus = require('georap-bus');
 var eventsStore = georap.stores.events;
+var __ = georap.i18n.__;
 
 var LIST_SIZE = 100;
 
@@ -91,7 +92,9 @@ module.exports = function () {
 
   self.bind = function ($mountEl) {
     $mount = $mountEl;
-    $mount.html(template());
+    $mount.html(template({
+      __: __,
+    }));
 
     // Set up elements
     $elems.events = $mount.find('.latest-events');

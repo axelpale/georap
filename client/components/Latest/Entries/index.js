@@ -6,6 +6,7 @@ var template = require('./template.ejs');
 var EntryView = require('../../Entry');
 var rootBus = require('georap-bus');
 var entriesStore = georap.stores.entries;
+var __ = georap.i18n.__;
 
 var LIST_SIZE = 10;
 
@@ -70,7 +71,9 @@ module.exports = function () {
 
   self.bind = function ($mountEl) {
     $mount = $mountEl;
-    $mount.html(template());
+    $mount.html(template({
+      __: __,
+    }));
 
     $elems.entries = $mount.find('.latest-entries');
     $elems.progress = $mount.find('.latest-entries-progress');
