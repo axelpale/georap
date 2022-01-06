@@ -92,7 +92,7 @@
   "invite-invalid-email": "Virheellinen sähköpostiosoite. Tarkista ja kokeile uudelleen.",
   "invite-send": "Lähetä kutsu",
   "invite-send-failed": "Kutsun lähetys epäonnistui. Kokeile myöhemmin uudelleen.",
-  "invite-send-success": "Invite sent successfully.",
+  "invite-send-success": "Kutsun lähetys onnistui.",
   "invite-user": "Kutsu uusi jäsen",
   "language": "Kieli",
   "last-7-days": "Viikko",
