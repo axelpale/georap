@@ -50,26 +50,28 @@ module.exports = {
 
   // HTTPS
   // Georap itself uses only HTTP. However if Georap is running behind
-  // a TLS-endpoint reverse-proxy like Nginx, the protocol appears to be
-  // HTTPS for the users. Hyperlinks in emails such as invites and password
-  // resets should then use HTTPS instead HTTP.
+  // a TLS-endpoint reverse-proxy like Nginx, the protocol is HTTPS
+  // from the user perspective.
+  // Hyperlinks in emails such as invites and password resets
+  // respect the publicProtocol setting.
   // By setting publicProtocol property to 'https' instead 'http', HTTPS
   // is used in the links instead HTTP.
   publicProtocol: 'https',
 
   // Public hostname.
-  // The domain that serves your georap app.
+  // The domain that serves your georap app from the user's perspective.
   // Do not include protocol prefix or any trailing slashes.
-  // This is needed when rendering email messages that
+  // Include port number if the app is served publicly via non-standard port.
+  // The hostname is needed when rendering email messages that
   // contain URLs back to the application.
-  // An invitation is an example of such message.
+  // An invitation with a link is an example of such message.
   // Introduced in v13.
   hostname: 'mysite.example.com',
 
   // Port for the server to listen.
-  // Note that if your app is behind a reverse proxy
-  // this is not the public port but the local port
-  // visible for the rev proxy.
+  // Note that if your app is behind a reverse proxy such as load balancer
+  // this is not the public port but the local port that is visible only
+  // for the reverse proxy.
   port: 3000,
 
   // Mongo database settings
