@@ -318,9 +318,13 @@ exports.sendInviteEmail = function (req, res, next) {
   //     Properties:
   //       email
   //         The email address where to send the invite.
-
+  //       lang
+  //         string, optional locale code e.g. 'en' that determines
+  //         the translation of the invitation.
+  //
   const email = req.body.email;
   const isAdmin = req.user.admin;
+  let lang = req.body.lang;
 
   if (isAdmin !== true) {
     return res.sendStatus(status.UNAUTHORIZED);
@@ -333,6 +337,18 @@ exports.sendInviteEmail = function (req, res, next) {
   if (!validator.validate(email)) {
     return res.sendStatus(status.BAD_REQUEST);
   }
+
+  // If no language or unknown language code is given,
+  // use the default language.
+  if (typeof lang !== 'string') {
+    lang = config.defaultLocale;
+  }
+  if (!config.availableLocales.includes(lang)) {
+    lang = config.defaultLocale;
+  }
+  // The selected language might differ from inviter account preferences.
+  // Therefore we must change locale manually for correct mail translation.
+  res.setLocale(lang);
 
   // Ensure that no account with this email exists already
   const users = db.collection('users');
@@ -368,12 +384,13 @@ exports.sendInviteEmail = function (req, res, next) {
     const mailOptions = {
       from: config.mail.sender,
       to: [email],
-      subject: 'Invite to ' + config.title,
+      subject: res.__('invite-mail-subject') + ' ' + config.title,
       text: templates.inviteMailTemplate({
         url: url,
         email: email,
         siteTitle: config.title,
         siteDesc: desc,
+        __: res.__,
       }),
     };
 

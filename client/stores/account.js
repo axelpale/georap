@@ -172,13 +172,22 @@ exports.resetPassword = function (resetToken, newPassword, callback) {
   });
 };
 
-exports.sendInviteEmail = function (email, callback) {
-
+exports.sendInviteEmail = function (email, lang, callback) {
+  // Parameters
+  //   email
+  //     string, valid email
+  //   lang
+  //     string, a locale string e.g. 'en'. If server does not support
+  //     the selected locale, the invitation is sent in the default lang.
+  //
   $.ajax({
     url: '/api/account/invite',
     type: 'POST',
     contentType: 'application/json',
-    data: JSON.stringify({ email: email }),
+    data: JSON.stringify({
+      email: email,
+      lang: lang,
+    }),
     headers: { 'Authorization': 'Bearer ' + exports.getToken() },
     success: function () {
       return callback();

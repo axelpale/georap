@@ -24,6 +24,17 @@
           <label for="georap-invite-email"><%= __('invite-email') %>:</label>
           <input type="email" class="form-control" id="georap-invite-email">
         </div>
+        <div class="form-group">
+          <label for="georap-invite-lang"><%= __('invite-language') %>:</label>
+          <select class="form-control" id="georap-invite-lang">
+            <% availableLocales.forEach(function (locale) { %>
+              <option
+                value="<%= locale %>"
+                <%= locale === defaultLocale ? 'selected="selected"' : '' %>
+              ><%= __('locale', locale) %></option>
+            <% }) %>
+          </select>
+        </div>
         <button type="submit" class="btn btn-primary"><%= __('invite-send') %></button>
       </form>
 
