@@ -1,48 +1,48 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col-md-4">
-      <h1>Sign up</h1>
-      <p>For <strong><%= email %></strong></p>
-      <p>Welcome to <%= siteTitle %>. Choose your username and password. We use your email address to send you instructions how to reset your password in case you forget it.</p>
+      <h1><%= __('signup-title') %></h1>
+      <p><%= __('signup-for-email') %> <strong><%= email %></strong></p>
+      <p><%= __('signup-welcome') %> <%= siteTitle %>. <%= __('signup-info') %></p>
 
       <div id="georap-signup-invalid-username" class="hidden">
-        <div class="alert alert-danger" role="alert">Invalid username. Check and try again.</div>
+        <div class="alert alert-danger" role="alert"><%= __('signup-invalid-username') %></div>
       </div>
 
       <div id="georap-signup-password-no-match" class="hidden">
-        <div class="alert alert-danger" role="alert">Passwords do not match.</div>
+        <div class="alert alert-danger" role="alert"><%= __('signup-password-mismatch') %></div>
       </div>
 
       <div id="georap-signup-email-username-taken" class="hidden">
-        <div class="alert alert-danger" role="alert">The email or username is already taken. Choose another and try again or log in with the existing account.</div>
+        <div class="alert alert-danger" role="alert"><%= __('signup-username-taken') %></div>
       </div>
 
       <div id="georap-signup-server-error" class="hidden">
-        <div class="alert alert-danger" role="alert">Failed to sign you up. Try again later.</div>
+        <div class="alert alert-danger" role="alert"><%= __('signup-failed') %></div>
       </div>
 
       <div id="georap-signup-token-error" class="hidden">
-        <div class="alert alert-warning" role="alert">Your invitation has expired. You need someone to send you a new invitation.</div>
+        <div class="alert alert-warning" role="alert"><%= __('signup-expired') %></div>
       </div>
 
       <div id="georap-signup-success" class="hidden">
-        <div class="alert alert-success" role="alert">Your account was created successfully. You may now log in.</div>
+        <div class="alert alert-success" role="alert"><%= __('signup-success') %></div>
       </div>
 
       <form id="georap-signup-form">
         <div id="georap-signup-username-group" class="form-group">
-          <label for="georap-signup-username" class="control-label">Username (choose well, you cannot change this later):</label>
+          <label for="georap-signup-username" class="control-label"><%= __('signup-username') %>:</label>
           <input type="text" class="form-control" id="georap-signup-username">
         </div>
         <div id="georap-new-password-group" class="form-group">
-          <label for="georap-signup-password" class="control-label">New password:</label>
+          <label for="georap-signup-password" class="control-label"><%= __('signup-password') %>:</label>
           <input type="password" class="form-control" id="georap-signup-password">
         </div>
         <div id="georap-again-password-group" class="form-group">
-          <label for="georap-signup-password2" class="control-label">New password again:</label>
+          <label for="georap-signup-password2" class="control-label"><%= __('signup-password-repeat') %>:</label>
           <input type="password" class="form-control" id="georap-signup-password2">
         </div>
-        <button type="submit" class="btn btn-primary">Create account</button>
+        <button type="submit" class="btn btn-primary"><%= __('signup-submit') %></button>
       </form>
 
       <div id="georap-signup-in-progress" class="hidden">
@@ -54,7 +54,7 @@
       </div>
 
       <div id="georap-signup-to-login" class="hidden">
-        <button id="georap-signup-to-login-button" type="button" class="btn btn-primary">Continue to log in</button>
+        <button id="georap-signup-to-login-button" type="button" class="btn btn-primary"><%= __('signup-continue') %></button>
       </div>
     </div>
   </div><!-- .row -->
