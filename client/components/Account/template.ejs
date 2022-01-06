@@ -30,7 +30,8 @@
              class="list-group-item <%= activity %>"
              lang="<%= locale %>"
              target="_self">
-            <%= __('locale-' + locale) %>
+            <%# target=_self is necessary to bypass page.js router %>
+            <%= __('locale', locale) %>
           </a>
         <% }) %>
       </div>

@@ -53,7 +53,7 @@
         <% availableLocales.forEach(function (locale, index) { %>
           <%= index > 0 ? '-' : '' %>
           <a href="?locale=<%= locale %>" lang="<%= locale %>" target="_self">
-            <%= __('locale-' + locale) %>
+            <%= __('locale', locale) %>
           </a>
         <% }) %>
       </p>
