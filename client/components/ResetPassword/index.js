@@ -30,7 +30,10 @@ module.exports = function (token, showLogin) {
   // Public methods
 
   this.render = function () {
-    return template({ email: parsedToken.email });
+    return template({
+      email: parsedToken.email,
+      __: georap.i18n.__,
+    });
   };
 
   this.bind = function () {
