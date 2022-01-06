@@ -237,11 +237,12 @@ exports.sendResetPasswordEmail = function (req, res, next) {
     const mailOptions = {
       from: config.mail.sender,
       to: [user.email],
-      subject: config.title + ' password reset requested for your account',
+      subject: res.__('pwd-reset-subject') + ' ' + config.title,
       text: templates.resetMailTemplate({
         resetUrl: url,
         email: user.email,
         siteTitle: config.title,
+        __: res.__,
       }),
     };
 
