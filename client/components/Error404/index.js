@@ -9,7 +9,9 @@ module.exports = function () {
   emitter(self);
 
   self.bind = function ($mount) {
-    $mount.html(template());
+    $mount.html(template({
+      __: georap.i18n.__,
+    }));
   };
 
   self.unbind = function () {
