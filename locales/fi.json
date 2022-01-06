@@ -108,11 +108,17 @@
   "latitude": "Latitudi",
   "less": "Vähemmän",
   "load-more": "Näytä lisää",
-  "locale": {
+  "locale-native": {
     "fi": "Suomi",
     "en": "English",
     "de": "Deutsch",
     "se": "Svenska"
+  },
+  "locale": {
+    "fi": "Suomi",
+    "en": "Englanti",
+    "de": "Saksa",
+    "se": "Ruotsi"
   },
   "location-name": "Paikan nimi",
   "location-rename-error": "Paikan nimeäminen uudelleen epäonnistui.",

@@ -108,11 +108,17 @@
   "latitude": "Latitude",
   "less": "Less",
   "load-more": "Load more",
-  "locale" : {
+  "locale-native": {
     "fi": "Suomi",
     "en": "English",
     "de": "Deutsch",
     "se": "Svenska"
+  },
+  "locale": {
+    "fi": "Finnish",
+    "en": "English",
+    "de": "German",
+    "se": "Swedish"
   },
   "location-name": "Location name",
   "location-rename-error": "Renaming the location failed.",
