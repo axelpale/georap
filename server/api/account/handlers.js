@@ -8,6 +8,7 @@ const mailer = require('../../services/mailer');
 const loggers = require('../../services/logs/loggers');
 
 const dal = require('./dal');
+const rootUrl = require('./rootUrl');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const validator = require('email-validator');
@@ -231,8 +232,7 @@ exports.sendResetPasswordEmail = function (req, res, next) {
     const token = jwt.sign(tokenPayload, config.secret, {
       expiresIn: '30m',
     });
-    const host = config.hostname;
-    const url = config.publicProtocol + '://' + host + '/reset/' + token;
+    const url = rootUrl() + '/reset/' + token;
 
     const mailOptions = {
       from: config.mail.sender,
@@ -373,8 +373,7 @@ exports.sendInviteEmail = function (req, res, next) {
     const token = jwt.sign(tokenPayload, config.secret, {
       expiresIn: '7d',
     });
-    const host = config.hostname;
-    const url = config.publicProtocol + '://' + host + '/signup/' + token;
+    const url = rootUrl() + '/signup/' + token;
 
     // Make first letter lowercase, so that nice after comma.
     // ...welcome to My Site, my description.

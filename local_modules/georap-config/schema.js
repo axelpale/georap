@@ -47,9 +47,12 @@ module.exports = {
       type: 'string',
       enum: ['http', 'https'],
     },
-    hostname: {
+    publicHostname: {
       type: 'string',
       format: 'hostname',
+    },
+    publicPort: {
+      type: 'integer',
     },
     port: {
       type: 'integer',
@@ -242,7 +245,8 @@ module.exports = {
     'secret',
     'googleMapsKey',
     'publicProtocol',
-    'hostname', // new in v13
+    'publicHostname', // changed in v14
+    'publicPort', // new in v14
     'port',
     'mongo',
     'smtp',

@@ -59,14 +59,15 @@ module.exports = {
   publicProtocol: 'https',
 
   // Public hostname.
-  // The domain that serves your georap app from the user's perspective.
+  // The domain that serves your georap app from the clients' perspective.
   // Do not include protocol prefix or any trailing slashes.
-  // Include port number if the app is served publicly via non-standard port.
   // The hostname is needed when rendering email messages that
   // contain URLs back to the application.
   // An invitation with a link is an example of such message.
   // Introduced in v13.
-  hostname: 'mysite.example.com',
+  publicHostname: 'mysite.example.com',
+  // Public port, the port from the clients' perspective.
+  publicPort: 3000, // default public port for http is 80 and for https 443
 
   // Port for the server to listen.
   // Note that if your app is behind a reverse proxy such as load balancer
