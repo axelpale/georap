@@ -18,6 +18,7 @@ var drafting = require('./drafting');
 var ui = require('georap-ui');
 var emitter = require('component-emitter');
 var entries = georap.stores.entries;
+var __ = georap.i18n.__;
 
 module.exports = function (locationId, entry) {
   // Entry form View.
@@ -48,11 +49,12 @@ module.exports = function (locationId, entry) {
     $mount.html(template({
       entry: entry,
       isNew: isNew,
+      __: __,
     }));
 
     // Markdown form
     children.markdown = new MarkdownView(entry.markdown, {
-      label: 'Tell something about the location:',
+      label: __('tell-about-location') + ':',
       rows: 5,
     });
     children.markdown.bind($mount.find('.form-markdown-container'));
@@ -63,7 +65,7 @@ module.exports = function (locationId, entry) {
 
     // Attachments form
     children.attachments = new AttachmentsForm(entry.attachments, {
-      label: 'Photos and documents:',
+      label: __('photos-and-documents') + ':',
     });
     children.attachments.bind($mount.find('.form-attachments-container'));
 
@@ -105,7 +107,7 @@ module.exports = function (locationId, entry) {
 
       // Ensure non-empty content
       if (entryData.markdown.length + entryData.attachments.length === 0) {
-        return onError('Empty posts are not allowed.');
+        return onError(__('empty-post-error'));
       }
 
       // Display progress bar
@@ -160,10 +162,12 @@ module.exports = function (locationId, entry) {
 
       // Remove entry
       children.remove = new RemoveForm({
-        info: 'This will delete the post and ' +
-          'all its attachments and comments if any.',
+        info: __('post-removal-info'),
       });
       children.remove.bind($elems.remove);
+      children.remove.on('cancel', function () {
+        ui.hide($elems.remove);
+      });
       children.remove.on('submit', function () {
         entries.remove(entry.locationId, entry._id, function (err) {
           if (err) {

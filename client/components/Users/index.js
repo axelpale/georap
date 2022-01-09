@@ -4,6 +4,7 @@ var template = require('./template.ejs');
 var listTemplate = require('./list.ejs');
 var emitter = require('component-emitter');
 var ui = require('georap-ui');
+var __ = georap.i18n.__;
 
 module.exports = function () {
 
@@ -14,7 +15,9 @@ module.exports = function () {
 
   this.bind = function ($mount) {
 
-    $mount.html(template());
+    $mount.html(template({
+      __: __,
+    }));
 
     // Fetch users and include to page.
     usersApi.getAll(function (err, rawUsers) {

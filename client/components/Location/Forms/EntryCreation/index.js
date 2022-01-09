@@ -17,7 +17,9 @@ module.exports = function (location) {
   var locationId = location._id;
 
   self.bind = function ($mount) {
-    $mount.html(template({}));
+    $mount.html(template({
+      __: georap.i18n.__,
+    }));
 
     children.form = new FormView(locationId);
     children.form.bind($mount.find('.entry-form-container'));

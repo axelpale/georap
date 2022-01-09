@@ -2,19 +2,19 @@
 
   <div class="panel panel-primary">
     <div class="panel-heading">
-      More maps
+      <%= __('more-maps') %>
     </div>
     <div class="panel-body">
 
+      <h4><%= __('view-coordinates-on') %>:</h4>
       <p>
-        <h4>View the same coordinates on:</h4>
         <% services.forEach(function (serv) { %>
         <a href="<%= serv.url %>" class="btn btn-default" role="button" target="_blank"><%= serv.name %></a>
         <% }); %>
       </p>
 
       <div class="pull-right">
-        <button type="button" class="btn btn-default location-viewon-cancel">Cancel</button>
+        <button type="button" class="btn btn-default location-viewon-cancel"><%= __('cancel') %></button>
       </div>
 
     </div>

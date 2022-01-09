@@ -21,6 +21,7 @@ module.exports = function () {
 
     $mount.html(template({
       user: account.getUser(),
+      __: georap.i18n.__,
     }));
 
     $('#georap-change-password-form').submit(submitHandler);

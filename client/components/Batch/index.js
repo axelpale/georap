@@ -4,6 +4,7 @@ var template = require('./template.ejs');
 var ListComp = require('./List');
 var emitter = require('component-emitter');
 var ui = require('georap-ui');
+var __ = georap.i18n.__;
 
 var DEC = 10;
 
@@ -23,6 +24,7 @@ module.exports = function (batchId) {
   this.bind = function ($mount) {
     $mount.html(template({
       batchId: batchId,
+      __: __,
     }));
 
     var $progress = $('#georap-batch-progress');
@@ -39,10 +41,10 @@ module.exports = function (batchId) {
     listComp.bind($list);
 
     var updateCounts = function () {
-      var a = listComp.countSelected();
-      var b = listComp.countLocations();
-      $submitSelected.html('Import selected (' + a.toString(DEC) + ')');
-      $submitAllButton.html('Import all (' + b.toString(DEC) + ')');
+      var a = listComp.countSelected().toString(DEC);
+      var b = listComp.countLocations().toString(DEC);
+      $submitSelected.html(__('import-selected') + ' (' + a + ')');
+      $submitAllButton.html(__('import-all') + ' (' + b + ')');
     };
 
     listComp.on('changed', function () {
@@ -68,7 +70,10 @@ module.exports = function (batchId) {
         return;
       }
 
-      $message.html(messageTemplate({ locs: locs }));
+      $message.html(messageTemplate({
+        locs: locs,
+        __: __,
+      }));
 
       ui.show($list);
       ui.show($submitAllForm);

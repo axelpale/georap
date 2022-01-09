@@ -5,6 +5,9 @@ var ui = require('georap-ui');
 var emitter = require('component-emitter');
 var validator = require('email-validator');
 var account = georap.stores.account;
+var defaultLocale = georap.config.defaultLocale;
+var availableLocales = georap.config.availableLocales;
+var __ = georap.i18n.__;
 
 module.exports = function () {
   // Init
@@ -20,7 +23,11 @@ module.exports = function () {
   // Public methods
 
   this.bind = function ($mount) {
-    $mount.html(inviteTemplate());
+    $mount.html(inviteTemplate({
+      defaultLocale: defaultLocale,
+      availableLocales: availableLocales,
+      __: __,
+    }));
 
     $('#georap-invite-another-button').click(inviteAnotherButtonHandler);
     $('#georap-invite-form').submit(inviteFormSubmitHandler);
@@ -52,6 +59,7 @@ module.exports = function () {
 
     // Collect values to send
     var email = $('#georap-invite-email').val();
+    var lang = $('#georap-invite-lang').val();
 
     // Validate email.
     if (!validator.validate(email)) {
@@ -66,7 +74,7 @@ module.exports = function () {
     // Display loading animation
     ui.show($('#georap-invite-in-progress'));
 
-    account.sendInviteEmail(email, inviteSubmitResponseHandler);
+    account.sendInviteEmail(email, lang, inviteSubmitResponseHandler);
   };
 
   inviteSubmitResponseHandler = function (err) {

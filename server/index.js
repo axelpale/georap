@@ -5,6 +5,7 @@ const http = require('http');
 const path = require('path');
 const fse = require('fs-extra');
 const express = require('express');
+const cookieParser = require('cookie-parser');
 
 const app = express();
 const server = http.createServer(app);
@@ -19,6 +20,22 @@ const db = require('georap-db');
 
 // Logging
 const loggers = require('./services/logs/loggers');
+
+// Internationalization i18n
+// The i18n configuration must be done before routes
+// because the locale-specific client index page precompilation
+// needs it when routes are built.
+const i18n = require('i18n');
+const catalog = require('../locales');
+i18n.configure({
+  defaultLocale: config.defaultLocale, // string e.g: 'en'
+  // The name of the cookie from to parse locale settings
+  cookie: 'locale',
+  // The name of the ?locale=en url query parameter
+  queryParameter: 'locale',
+  // A set of dictionaries.
+  staticCatalog: catalog,
+});
 
 // Routes
 const router = require('./routes');
@@ -64,6 +81,14 @@ if (config.env === 'production') {
 }
 // ---------------
 // Request logging END
+
+// Internationalization i18n
+// -------------------------
+// Internationalization init recognizes cookie and accept-language header
+app.use(cookieParser());
+app.use(i18n.init);
+// -------------------------
+// Internationalization i18n END
 
 // Static assets
 // -------------

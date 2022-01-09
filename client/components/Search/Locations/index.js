@@ -3,6 +3,7 @@ var listTemplate = require('./list.ejs');
 var emitter = require('component-emitter');
 var ui = require('georap-ui');
 var markersStore = georap.stores.markers;
+var __ = georap.i18n.__;
 
 var CONNECTION_ERROR = 0;
 var BAD_REQUEST = 400;
@@ -17,7 +18,9 @@ module.exports = function (query) {
   self.bind = function ($mountEl) {
     $mount = $mountEl;
 
-    $mount.html(template());
+    $mount.html(template({
+      __: __,
+    }));
 
     $elems.locations = $mount.find('.search-locations');
     $elems.progress = $mount.find('.search-progress');
@@ -103,6 +106,7 @@ module.exports = function (query) {
         placestamp: ui.placestamp,
         skip: query.skip,
         limit: query.limit,
+        __: __,
       }));
     });
   };

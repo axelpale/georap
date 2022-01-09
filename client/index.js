@@ -38,6 +38,29 @@ var MainMenuComp = require('./components/MainMenu');
 georap.go = routes.show;  // go to path. very general, thus exposed globally
 georap.getCurrentPath = routes.getCurrentPath;  // query current page
 
+// Translation helper
+georap.i18n.__ = function (key, key2) {
+  // Parameters
+  //   key
+  //     string, a translation key to be searched from the catalog
+  //   key2
+  //     optional string, a secondary translation key if the first key
+  //     is a namespace for translations.
+  //
+  // Return
+  //   string, the translated string
+  //        or the given key if no translation found.
+  //
+  var tr = georap.i18n.catalog[key];
+  if (tr) {
+    if (key2) {
+      return tr[key2] || key2;
+    }
+    return tr;
+  }
+  return key;
+};
+
 // Define routes
 
 routes.route();

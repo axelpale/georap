@@ -3,6 +3,7 @@
 var template = require('./template.ejs');
 var emitter = require('component-emitter');
 var ui = require('georap-ui');
+var __ = georap.i18n.__;
 
 // Remember which tab was open
 var defaultTabHash = 'activity';
@@ -38,6 +39,7 @@ module.exports = function () {
     $mount = $mountEl;
     $mount.html(template({
       tabs: tabs,
+      __: __,
     }));
 
     // Make current tab active

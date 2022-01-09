@@ -2,10 +2,10 @@
   <div class="row">
     <div class="col-md-12">
       <p>
-        <a href="/account">&larr; Account Settings</a>
+        <a href="/account">&larr; <%= __('account-settings') %></a>
       </p>
 
-      <h1>Change password</h1>
+      <h1><%= __('change-password') %></h1>
     </div>
   </div><!-- .row -->
 
@@ -13,23 +13,23 @@
     <div class="col-md-6">
 
       <div id="georap-change-password-invalid-curpass" class="hidden">
-        <div class="alert alert-danger" role="alert">Your current password cannot be empty.</div>
+        <div class="alert alert-danger" role="alert"><%= __('current-password-empty') %></div>
       </div>
 
       <div id="georap-change-password-invalid-newpass" class="hidden">
-        <div class="alert alert-danger" role="alert">The new passwords do not match. Please check and try again.</div>
+        <div class="alert alert-danger" role="alert"><%= __('pwd-reset-mismatch') %></div>
       </div>
 
       <div id="georap-change-password-incorrect-curpass" class="hidden">
-        <div class="alert alert-danger" role="alert">The given current password was incorrect. Please check and try again.</div>
+        <div class="alert alert-danger" role="alert"><%= __('current-password-incorrect') %></div>
       </div>
 
       <div id="georap-change-password-server-error" class="hidden">
-        <div class="alert alert-danger" role="alert">We failed to change your password. An error occurred: <span id="georap-change-password-server-error-name"></span></div>
+        <div class="alert alert-danger" role="alert"><%= __('current-password-failed') %> <%= __('error-occurred') %>: <span id="georap-change-password-server-error-name"></span></div>
       </div>
 
       <div id="georap-change-password-success" class="hidden">
-        <div class="alert alert-success" role="alert">Password changed successfully.</div>
+        <div class="alert alert-success" role="alert"><%= __('current-password-success') %></div>
       </div>
 
       <div id="georap-change-password-in-progress" class="hidden">
@@ -42,19 +42,19 @@
 
       <form id="georap-change-password-form">
         <div id="georap-current-password-group" class="form-group">
-          <label for="georap-input-current-password" class="control-label">Current password:</label>
+          <label for="georap-input-current-password" class="control-label"><%= __('current-password') %>:</label>
           <input type="password" class="form-control" id="georap-input-current-password">
         </div>
         <div id="georap-new-password-group" class="form-group">
-          <label for="georap-input-new-password" class="control-label">New password:</label>
+          <label for="georap-input-new-password" class="control-label"><%= __('new-password') %>:</label>
           <input type="password" class="form-control" id="georap-input-new-password">
         </div>
         <div id="georap-again-password-group" class="form-group">
-          <label for="georap-input-again-password" class="control-label">New password again:</label>
+          <label for="georap-input-again-password" class="control-label"><%= __('new-password-again') %>:</label>
           <input type="password" class="form-control" id="georap-input-again-password">
         </div>
 
-        <button type="submit" class="btn btn-primary">Change</button>
+        <button type="submit" class="btn btn-primary"><%= __('save') %></button>
       </form>
     </div>
   </div><!-- .row -->

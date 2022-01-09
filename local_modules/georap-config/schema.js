@@ -47,9 +47,12 @@ module.exports = {
       type: 'string',
       enum: ['http', 'https'],
     },
-    hostname: {
+    publicHostname: {
       type: 'string',
       format: 'hostname',
+    },
+    publicPort: {
+      type: 'integer',
     },
     port: {
       type: 'integer',
@@ -113,6 +116,15 @@ module.exports = {
       type: 'string',
     },
     // THEME AND BRAND
+    defaultLocale: {
+      type: 'string',
+    },
+    availableLocales: {
+      type: 'array',
+      items: {
+        type: 'string',
+      },
+    },
     defaultMapState: defaultMapStateSchema,
     icons: {
       type: 'array',
@@ -233,7 +245,8 @@ module.exports = {
     'secret',
     'googleMapsKey',
     'publicProtocol',
-    'hostname', // new in v13
+    'publicHostname', // changed in v14
+    'publicPort', // new in v14
     'port',
     'mongo',
     'smtp',
@@ -251,6 +264,8 @@ module.exports = {
     'tempUploadSizeLimit',
     'logDir',
     // THEME AND BRAND
+    'availableLocales',
+    'defaultLocale',
     'defaultMapState',
     'icons', // new in v12, require in v13
     'appleTouchIcons', // new in v12, require in v13

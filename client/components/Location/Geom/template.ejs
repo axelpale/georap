@@ -4,8 +4,8 @@
 
     <span id="georap-location-coords-geostamp"><%= allCoords[0].html %></span>
 
-    <button id="georap-location-coords-more-open" type="button" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-chevron-down"></span> More</button>
-    <button id="georap-location-coords-more-close" type="button" class="btn btn-default btn-sm hidden"><span class="glyphicon glyphicon-chevron-up"></span> Less</button>
+    <button id="georap-location-coords-more-open" type="button" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-chevron-down"></span> <%= __('more') %></button>
+    <button id="georap-location-coords-more-close" type="button" class="btn btn-default btn-sm hidden"><span class="glyphicon glyphicon-chevron-up"></span> <%= __('less') %></button>
     <button id="georap-location-coords-edit" type="button" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-pencil"></span></button>
   </div>
 
@@ -20,21 +20,21 @@
   <form id="georap-location-coords-form" class="panel panel-primary">
     <div class="panel-body">
       <div class="form-group">
-        <label for="georap-location-coords-latitude">Latitude</label>
+        <label for="georap-location-coords-latitude"><%= __('latitude') %></label>
         <input type="text" class="form-control" id="georap-location-coords-latitude">
-        <small class="form-text text-muted">WGS 84, decimal degrees (DD.DDDD)</small>
+        <small class="form-text text-muted">WGS 84, <%= __('decimal-degrees') %> (DD.DDDD)</small>
       </div>
       <div class="form-group">
-        <label for="georap-location-coords-longitude">Longitude</label>
+        <label for="georap-location-coords-longitude"><%= __('longitude') %></label>
         <input type="text" class="form-control" id="georap-location-coords-longitude">
-        <small class="form-text text-muted">WGS 84, decimal degrees (DD.DDDD)</small>
+        <small class="form-text text-muted">WGS 84, <%= __('decimal-degrees') %> (DD.DDDD)</small>
       </div>
       <div id="georap-location-coords-map-container" class="form-group">
         <div id="georap-location-coords-map" style="width: 100%; height: 18em;"></div>
       </div>
       <div class="pull-right">
-        <button id="georap-location-coords-cancel" type="button" class="btn btn-default">Cancel</button>
-        <button type="submit" class="btn btn-primary">Save</button>
+        <button id="georap-location-coords-cancel" type="button" class="btn btn-default"><%= __('cancel') %></button>
+        <button type="submit" class="btn btn-primary"><%= __('save') %></button>
       </div>
     </div>
   </form>
@@ -46,6 +46,6 @@
   </div>
 
   <div id="georap-location-coords-error" class="hidden">
-    <div class="alert alert-danger" role="alert">Updating the coordinates failed. Ensure both coordinates to be in the decimal degree format similar to 12.345678.</div>
+    <div class="alert alert-danger" role="alert"><%= __('updating-coords-error') %></div>
   </div>
 </div>

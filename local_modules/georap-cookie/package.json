@@ -1,0 +1,19 @@
+{
+  "name": "georap-cookie",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Client-side cookie getset",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/axelpale/georap.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Akseli Palén <akseli.palen@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "standard": "^16.0.4"
+  }
+}

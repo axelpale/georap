@@ -50,26 +50,29 @@ module.exports = {
 
   // HTTPS
   // Georap itself uses only HTTP. However if Georap is running behind
-  // a TLS-endpoint reverse-proxy like Nginx, the protocol appears to be
-  // HTTPS for the users. Hyperlinks in emails such as invites and password
-  // resets should then use HTTPS instead HTTP.
+  // a TLS-endpoint reverse-proxy like Nginx, the protocol is HTTPS
+  // from the user perspective.
+  // Hyperlinks in emails such as invites and password resets
+  // respect the publicProtocol setting.
   // By setting publicProtocol property to 'https' instead 'http', HTTPS
   // is used in the links instead HTTP.
   publicProtocol: 'https',
 
   // Public hostname.
-  // The domain that serves your georap app.
+  // The domain that serves your georap app from the clients' perspective.
   // Do not include protocol prefix or any trailing slashes.
-  // This is needed when rendering email messages that
+  // The hostname is needed when rendering email messages that
   // contain URLs back to the application.
-  // An invitation is an example of such message.
+  // An invitation with a link is an example of such message.
   // Introduced in v13.
-  hostname: 'mysite.example.com',
+  publicHostname: 'mysite.example.com',
+  // Public port, the port from the clients' perspective.
+  publicPort: 3000, // default public port for http is 80 and for https 443
 
   // Port for the server to listen.
-  // Note that if your app is behind a reverse proxy
-  // this is not the public port but the local port
-  // visible for the rev proxy.
+  // Note that if your app is behind a reverse proxy such as load balancer
+  // this is not the public port but the local port that is visible only
+  // for the reverse proxy.
   port: 3000,
 
   // Mongo database settings
@@ -134,6 +137,10 @@ module.exports = {
 
   // ##### THEME AND BRAND #####
   // Settings from here to the end of the file can be left default.
+
+  // Languages and translations
+  defaultLocale: 'en',
+  availableLocales: ['en', 'fi'],
 
   // Initial map location for new users.
   // Example locations are at @57.5727427,21.8783527,13z
@@ -317,11 +324,17 @@ module.exports = {
   // that a user can filter locations based on flags in their own entries.
   // For example the 'visit' flag allows a user to browse all locations
   // she has visited.
+  // Translation of flags: to display flags in different languages
+  // the name and description of the flag are in fact translation keys.
+  // Because the flags are customized by you, Georap cannot know translations
+  // for them automatically. For that, you must give translations for the keys
+  // in the custom locales under config/locales.
   entryFlags: {
     visit: {
-      name: 'visit',
-      plural: 'visits',
-      description: 'A photo is required for proof.',
+      name: 'visit', // a translation key
+      genitive: 'visit-genitive', // a translation key
+      plural: 'visit-plural', // a translation key
+      description: 'visit-description', // a translation key
       glyphicon: 'flag',
       reward: 15,
       // Precondition allows a flag to be used only if the entry content

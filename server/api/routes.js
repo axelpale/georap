@@ -9,6 +9,7 @@ const entriesRouter = require('./entries/routes');
 const eventsRouter = require('./events/routes');
 const geometryRouter = require('./geometry/routes');
 const iconsRouter = require('./icons/routes');
+const localesRouter = require('./locales/routes');
 const locationsRouter = require('./locations/routes');
 const markersRouter = require('./markers/routes');
 const paymentsRouter = require('./payments/routes');
@@ -23,6 +24,9 @@ const router = require('express').Router();
 
 // Icon routes do not require authentication. Thus before jwt middleware.
 router.use('/icons', iconsRouter);
+
+// Locale and translation do not require authentication.
+router.use('/locales', localesRouter);
 
 // Account routes only partially require JWT authentication. Thus
 // the router is used before the jwt middleware.
@@ -75,6 +79,7 @@ router.use((req, res, next) => {
   });
 });
 
+// These routes require authentication.
 router.use('/admin', adminRouter);
 router.use('/attachments', attachmentsRouter);
 router.use('/entries', entriesRouter);

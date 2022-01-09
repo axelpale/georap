@@ -1,36 +1,36 @@
 <h3>
-  Status: <%= status %>
+  <%= __('status') %>: <%= status === 'active' ? __('status-active') : __('status-deactive') %>
   <button id="georap-admin-user-status-edit" type="button" class="btn btn-default btn-xs">
-    <span class="glyphicon glyphicon-pencil"></span> Edit
+    <span class="glyphicon glyphicon-pencil"></span> <%= __('edit') %>
   </button>
 </h3>
 
 <form id="georap-admin-user-status-form" class="hidden panel panel-primary">
   <div class="panel-heading">
-    Activate/deactivate member account
+    <%= __('status-activate-deactivate') %>
   </div>
   <div class="panel-body">
     <div class="checkbox">
       <label>
-        <input id="status-checkbox" type="checkbox" name="isactive" <%= status === 'active' ? '' : 'checked="checked"' %> > Deactivate account <%= username %>
+        <input id="status-checkbox" type="checkbox" name="isactive" <%= status === 'active' ? '' : 'checked="checked"' %> > <%= __('status-deactivate') %> <%= username %>
       </label>
     </div>
-    <p class="help-block">A member with a deactivated status is not allowed to log in and see or edit content. Only members with administrator roles can change statuses of member accounts.</p>
+    <p class="help-block"><%= __('status-deactivate-info') %></p>
     <div class="pull-right">
-      <button id="georap-admin-user-status-cancel" type="button" class="btn btn-default">Cancel</button>
-      <button type="submit" class="btn btn-primary">Save</button>
+      <button id="georap-admin-user-status-cancel" type="button" class="btn btn-default"><%= __('cancel') %></button>
+      <button type="submit" class="btn btn-primary"><%= __('save') %></button>
     </div>
   </div>
 </form>
 
 <div id="georap-admin-user-status-noauto" class="hidden">
-  <div class="alert alert-warning" role="alert">You cannot lock your own account.</div>
+  <div class="alert alert-warning" role="alert"><%= __('status-cannot-lock') %></div>
 </div>
 
 <div id="georap-admin-user-status-error" class="hidden">
-  <div class="alert alert-danger" role="alert">Updating status failed.</div>
+  <div class="alert alert-danger" role="alert"><%= __('status-update-failed') %></div>
 </div>
 
 <div id="georap-admin-user-status-success" class="hidden">
-  <div class="alert alert-success" role="alert">Successfully updated the account <%= username %> status.</div>
+  <div class="alert alert-success" role="alert"><%= __('status-update-success') %></div>
 </div>

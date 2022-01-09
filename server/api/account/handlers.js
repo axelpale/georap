@@ -8,6 +8,7 @@ const mailer = require('../../services/mailer');
 const loggers = require('../../services/logs/loggers');
 
 const dal = require('./dal');
+const rootUrl = require('./rootUrl');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const validator = require('email-validator');
@@ -231,17 +232,17 @@ exports.sendResetPasswordEmail = function (req, res, next) {
     const token = jwt.sign(tokenPayload, config.secret, {
       expiresIn: '30m',
     });
-    const host = config.hostname;
-    const url = config.publicProtocol + '://' + host + '/reset/' + token;
+    const url = rootUrl() + '/reset/' + token;
 
     const mailOptions = {
       from: config.mail.sender,
       to: [user.email],
-      subject: config.title + ' password reset requested for your account',
+      subject: res.__('pwd-reset-subject') + ' ' + config.title,
       text: templates.resetMailTemplate({
         resetUrl: url,
         email: user.email,
         siteTitle: config.title,
+        __: res.__,
       }),
     };
 
@@ -318,9 +319,13 @@ exports.sendInviteEmail = function (req, res, next) {
   //     Properties:
   //       email
   //         The email address where to send the invite.
-
+  //       lang
+  //         string, optional locale code e.g. 'en' that determines
+  //         the translation of the invitation.
+  //
   const email = req.body.email;
   const isAdmin = req.user.admin;
+  let lang = req.body.lang;
 
   if (isAdmin !== true) {
     return res.sendStatus(status.UNAUTHORIZED);
@@ -333,6 +338,18 @@ exports.sendInviteEmail = function (req, res, next) {
   if (!validator.validate(email)) {
     return res.sendStatus(status.BAD_REQUEST);
   }
+
+  // If no language or unknown language code is given,
+  // use the default language.
+  if (typeof lang !== 'string') {
+    lang = config.defaultLocale;
+  }
+  if (!config.availableLocales.includes(lang)) {
+    lang = config.defaultLocale;
+  }
+  // The selected language might differ from inviter account preferences.
+  // Therefore we must change locale manually for correct mail translation.
+  res.setLocale(lang);
 
   // Ensure that no account with this email exists already
   const users = db.collection('users');
@@ -357,8 +374,7 @@ exports.sendInviteEmail = function (req, res, next) {
     const token = jwt.sign(tokenPayload, config.secret, {
       expiresIn: '7d',
     });
-    const host = config.hostname;
-    const url = config.publicProtocol + '://' + host + '/signup/' + token;
+    const url = rootUrl() + '/signup/' + token;
 
     // Make first letter lowercase, so that nice after comma.
     // ...welcome to My Site, my description.
@@ -368,12 +384,13 @@ exports.sendInviteEmail = function (req, res, next) {
     const mailOptions = {
       from: config.mail.sender,
       to: [email],
-      subject: 'Invite to ' + config.title,
+      subject: res.__('invite-mail-subject') + ' ' + config.title,
       text: templates.inviteMailTemplate({
         url: url,
         email: email,
         siteTitle: config.title,
         siteDesc: desc,
+        __: res.__,
       }),
     };
 

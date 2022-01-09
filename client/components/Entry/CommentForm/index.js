@@ -10,6 +10,7 @@ var ErrorView = require('../Error');
 var template = require('./template.ejs');
 var drafting = require('./drafting');
 var entryApi = georap.stores.entries;
+var __ = georap.i18n.__;
 
 var MIN_LEN = georap.config.comments.minMessageLength;
 var MAX_LEN = georap.config.comments.maxMessageLength;
@@ -65,6 +66,7 @@ module.exports = function (entry, comment) {
 
     $mount.html(template({
       isNew: isNew,
+      __: __,
     }));
 
     // Cancel button
@@ -76,9 +78,9 @@ module.exports = function (entry, comment) {
     // Setup message input
     $elems.markdown = $mount.find('.comment-form-markdown-container');
     children.markdown = new MarkdownView(comment.markdown, {
-      label: isNew ? 'Add Comment:' : 'Edit Comment:',
+      label: isNew ? __('add-comment') + ':' : __('edit-comment') + ':',
       glyphicon: isNew ? 'glyphicon-comment' : 'glyphicon-pencil flip-x',
-      placeholder: 'message...',
+      placeholder: __('comment-placeholder'),
       rows: 3,
       minLength: MIN_LEN,
       maxLength: MAX_LEN,
@@ -103,9 +105,12 @@ module.exports = function (entry, comment) {
       });
 
       children.remove = new RemoveView({
-        info: 'This will delete the comment and its attachments if any.',
+        info: __('comment-removal-info'),
       });
       children.remove.bind($elems.remove);
+      children.remove.on('cancel', function () {
+        ui.hide($elems.remove);
+      });
       children.remove.on('submit', function () {
         entryApi.removeComment({
           entryId: entryId,
@@ -130,7 +135,7 @@ module.exports = function (entry, comment) {
       // Hide the form opening button as unnecessary
       ui.hide($elems.attachBtn);
       children.attach = new AttachmentsForm(comment.attachments, {
-        label: 'Photo or document:',
+        label: __('photo-or-document') + ':',
         limit: 1,
       });
       children.attach.bind($elems.attach);
@@ -155,7 +160,7 @@ module.exports = function (entry, comment) {
       var len = commentData.markdown.length;
       if (len < MIN_LEN || len > MAX_LEN) {
         // Do not submit if too short or long
-        children.error.update('Message is too short or long.');
+        children.error.update(__('comment-bad-length'));
         return;
       }
 

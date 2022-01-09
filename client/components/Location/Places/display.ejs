@@ -1,5 +1,9 @@
 <% if (places.length > 0) { %>
-  <%= places.join(', ') %>
+  <% if (places[0] === 'Remote territory') { %>
+    <%= __('remote-place') %>
+  <% } else { %>
+    <%= places.join(', ') %>
+  <% } %>
 <% } else { %>
-  Remote territory
+  <%= __('yet-undefined-place') %>
 <% } %>

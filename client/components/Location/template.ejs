@@ -2,7 +2,7 @@
   <% if (ref === 'latest') { %>
   <a id="georap-location-return" class="row" href="/latest">
     <div class="col-md-12">
-      <h1>Latest</h1>
+      <h1><%= __('latest') %></h1>
     </div>
   </a>
   <% } %>
@@ -18,7 +18,7 @@
       </div>
 
       <div class="location-missing-error hidden">
-        <h2>Location is missing. Check URL address.</h2>
+        <h2><%= __('location-missing') %></h2>
       </div>
 
       <div id="georap-location-name"></div>

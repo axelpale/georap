@@ -8,41 +8,41 @@
       </button>
       <ul class="dropdown-menu" aria-labelledby="georap-mainmenu">
         <li>
-          <a id="georap-mainmenu-add" href="#"><%= glyphicon({ name: 'map-marker' }) %> Add Location...</a>
+          <a id="georap-mainmenu-add" href="#"><%= glyphicon({ name: 'map-marker' }) %> <%= __('add-location') %></a>
         </li>
         <li>
-          <a href="/crosshair"><%= glyphicon({ name: 'screenshot' }) %> Coordinates...</a>
-        </li>
-        <li role="separator" class="divider"></li>
-        <li>
-          <a href="/latest"><%= glyphicon({ name: 'bell' }) %> Latest</a>
-        </li>
-        <li>
-          <a href="/users"><%= glyphicon({ name: 'user' }) %> Explorers</a>
-        </li>
-        <li>
-          <a href="/search"><%= glyphicon({ name: 'th-list' }) %> Locations</a>
-        </li>
-        <li>
-          <a href="/statistics"><%= glyphicon({ name: 'signal' }) %> Statistics</a>
+          <a href="/crosshair"><%= glyphicon({ name: 'screenshot' }) %> <%= __('coordinates') %></a>
         </li>
         <li role="separator" class="divider"></li>
         <li>
-          <a href="/import"><%= glyphicon({ name: 'import' }) %> Import...</a>
+          <a href="/latest"><%= glyphicon({ name: 'bell' }) %> <%= __('latest') %></a>
         </li>
         <li>
-          <a href="/export"><%= glyphicon({ name: 'export' }) %> Export...</a>
+          <a href="/users"><%= glyphicon({ name: 'user' }) %> <%= __('users') %></a>
+        </li>
+        <li>
+          <a href="/search"><%= glyphicon({ name: 'th-list' }) %> <%= __('locations') %></a>
+        </li>
+        <li>
+          <a href="/statistics"><%= glyphicon({ name: 'signal' }) %> <%= __('statistics') %></a>
+        </li>
+        <li role="separator" class="divider"></li>
+        <li>
+          <a href="/import"><%= glyphicon({ name: 'import' }) %> <%= __('import') %></a>
+        </li>
+        <li>
+          <a href="/export"><%= glyphicon({ name: 'export' }) %> <%= __('export') %></a>
         </li>
 
         <li role="separator" class="divider"></li>
 
         <% if (user.admin) { %>
-          <li class="dropdown-header">Admin Only</li>
+          <li class="dropdown-header"><%= __('admin-menu') %></li>
           <li>
-            <a href="/invite"><%= glyphicon({ name: 'envelope' }) %> Invite...</a>
+            <a href="/invite"><%= glyphicon({ name: 'envelope' }) %> <%= __('invite') %></a>
           </li>
           <li>
-            <a href="/admin/users"><%= glyphicon({ name: 'user' }) %> Manage Users...</a>
+            <a href="/admin/users"><%= glyphicon({ name: 'user' }) %> <%= __('manage-users') %></a>
           </li>
           <li role="separator" class="divider"></li>
         <% } %>
@@ -56,10 +56,10 @@
 
         <li class="dropdown-header"><%= user.name %></li>
         <li>
-          <a href="/account"><%= glyphicon({ name: 'user' }) %> Account Settings</a>
+          <a href="/account"><%= glyphicon({ name: 'user' }) %> <%= __('account-settings') %></a>
         </li>
         <li>
-          <a href="/login"><%= glyphicon({ name: 'off' }) %> Log out</a>
+          <a href="/login"><%= glyphicon({ name: 'off' }) %> <%= __('log-out') %></a>
         </li>
       </ul>
     </div><!-- .dropdown -->
@@ -71,7 +71,7 @@
     </div>
 
     <form id="georap-mainmenu-search-form" class="input-group">
-      <input id="georap-mainmenu-search-text" type="text" class="form-control input-lg" placeholder="search...">
+      <input id="georap-mainmenu-search-text" type="text" class="form-control input-lg" placeholder="<%= __('search-placeholder') %>">
       <span class="input-group-btn">
         <button id="georap-mainmenu-search-submit" class="btn btn-default btn-lg" type="submit"><%= glyphicon({ name: 'search' }) %></button>
       </span>
@@ -83,11 +83,11 @@
 
 <div id="georap-toolbar-addition" class="btn-toolbar hidden" role="toolbar">
   <div class="btn-group" role="group" aria-label="location tools">
-    <button id="georap-addition-cancel" type="button" class="btn btn-default">Cancel</button>
+    <button id="georap-addition-cancel" type="button" class="btn btn-default"><%= __('cancel') %></button>
   </div>
 
   <div class="btn-group" role="group" aria-label="location tools">
-    <button id="georap-addition-create" type="button" class="btn btn-primary">Create here</button>
+    <button id="georap-addition-create" type="button" class="btn btn-primary"><%= __('create-here') %></button>
   </div>
 </div>
 

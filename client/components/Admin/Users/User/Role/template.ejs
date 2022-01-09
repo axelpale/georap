@@ -1,46 +1,46 @@
 <h3>
-  Role: <%= isAdmin ? 'admin' : 'basic' %>
+  <%= __('role') %>: <%= isAdmin ? __('role-admin') : __('role-basic') %>
   <button id="georap-admin-user-role-edit" type="button" class="btn btn-default btn-xs">
-    <span class="glyphicon glyphicon-pencil"></span> Edit
+    <span class="glyphicon glyphicon-pencil"></span> <%= __('edit') %>
   </button>
 </h3>
 
 <form id="georap-admin-user-role-form" class="hidden panel panel-primary">
   <div class="panel-heading">
-    Change member role
+    <%= __('role-change') %>
   </div>
   <div class="panel-body">
 
     <div class="radio">
       <label>
         <input id="role-radio-admin" type="radio" name="userRole" value="admin" <%= isAdmin ? 'checked' : '' %> >
-        Administrator
+        <%= __('role-admin') %>
       </label>
     </div>
 
     <div class="radio">
       <label>
         <input id="role-radio-basic" type="radio" name="userRole" value="basic" <%= isAdmin ? '' : 'checked' %> >
-        Basic
+        <%= __('role-basic') %>
       </label>
     </div>
 
-    <p class="help-block">Only members with administrator role can change roles of others.</p>
+    <p class="help-block"><%= __('role-form-help') %></p>
     <div class="pull-right">
-      <button id="georap-admin-user-role-cancel" type="button" class="btn btn-default">Cancel</button>
-      <button type="submit" class="btn btn-primary">Save</button>
+      <button id="georap-admin-user-role-cancel" type="button" class="btn btn-default"><%= __('cancel') %></button>
+      <button type="submit" class="btn btn-primary"><%= __('save') %></button>
     </div>
   </div>
 </form>
 
 <div id="georap-admin-user-role-noauto" class="hidden">
-  <div class="alert alert-warning" role="alert">You cannot downgrade your own account.</div>
+  <div class="alert alert-warning" role="alert"><%= __('role-form-limit') %></div>
 </div>
 
 <div id="georap-admin-user-role-error" class="hidden">
-  <div class="alert alert-danger" role="alert">Updating the role failed.</div>
+  <div class="alert alert-danger" role="alert"><%= __('role-form-fail') %></div>
 </div>
 
 <div id="georap-admin-user-role-success" class="hidden">
-  <div class="alert alert-success" role="alert">Successfully changed the role of <%= username %>.</div>
+  <div class="alert alert-success" role="alert"><%= __('role-form-success') %></div>
 </div>

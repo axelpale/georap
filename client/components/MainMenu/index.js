@@ -53,6 +53,7 @@ module.exports = function (mapComp) {
       config: georap.config,
       user: account.getUser(),  // might be undefined
       isFilterActive: !filterStore.isDefault(),
+      __: georap.i18n.__,
     }));
 
     _$root = $mount;

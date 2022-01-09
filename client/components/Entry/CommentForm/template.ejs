@@ -7,12 +7,12 @@
   <div class="form-group">
     <div class="comment-submit-buttons pull-right">
       <button type="button" class="comment-form-photo-btn btn btn-default" title="Add Photo or Document"><span class="glyphicon glyphicon-plus" aria-label="Add"></span> <span class="glyphicon glyphicon-picture" aria-label="Photo"></span> <span class="glyphicon glyphicon-paperclip" aria-label="Attachment"></span></button>
-      <button class="comment-form-cancel btn btn-default" type="button">Cancel</button>
+      <button class="comment-form-cancel btn btn-default" type="button"><%= __('cancel') %></button>
       <button class="comment-form-submit btn btn-primary" type="button"><%
         if (isNew) {
-          %>Comment<%
+          %><%= __('comment') %><%
         } else {
-          %>Save<%
+          %><%= __('save') %><%
         }
       %></button>
     </div>
@@ -20,7 +20,7 @@
     <% if (!isNew) { %>
       <!-- Delete confirmation -->
       <div class="comment-tools-buttons form-group">
-        <button type="button" class="comment-remove-open btn btn-default"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Delete comment...</button>
+        <button type="button" class="comment-remove-open btn btn-default"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span> <%= __('comment-delete') %>...</button>
       </div>
       <div class="comment-remove-container hidden"></div>
     <% } %>

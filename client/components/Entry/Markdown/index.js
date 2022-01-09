@@ -3,6 +3,7 @@ var template = require('./template.ejs');
 var updateHint = require('./updateHint');
 var markdownSyntax = require('./markdownSyntax');
 var ui = require('georap-ui');
+var __ = georap.i18n.__;
 
 module.exports = function (markdown, opts) {
   // Entry form markdown section.
@@ -52,6 +53,7 @@ module.exports = function (markdown, opts) {
       glyphicon: opts.glyphicon,
       placeholder: opts.placeholder,
       rows: opts.rows,
+      __: __,
     }));
 
     $elems.textarea = $mount.find('textarea');

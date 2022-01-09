@@ -2,8 +2,8 @@
   <thead>
     <tr>
       <th><input id="georap-batch-select-all" type="checkbox" name="all-check" title="Select all"></th>
-      <th>Name</th>
-      <th>Attachments</th>
+      <th><%= __('name') %></th>
+      <th><%= __('attachments') %></th>
       <th></th>
     </tr>
   </thead>
@@ -21,7 +21,7 @@
         }
       %></td>
       <td>
-        <a href="#" class="georap-batch-view-details" data-index="<%= index %>">Details</a>
+        <a href="#" class="georap-batch-view-details" data-index="<%= index %>"><%= __('details') %></a>
       </td>
     </tr>
   <% }); %>

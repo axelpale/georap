@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="<%= georap.i18n.locale %>">
   <head>
     <meta charset="utf-8">
 
@@ -61,7 +61,7 @@
     <script src="/assets/bootstrap/js/bootstrap.min.js"></script>
 
     <!-- Site config variables -->
-    <!-- See client/handlers.js for details -->
+    <%# See client/handlers.js for details %>
     <script>
       window.georap = <%- JSON.stringify(georap) %>
       window.georap.templates = {};
@@ -74,12 +74,13 @@
     </script>
 
     <!-- Webpack bundle -->
-    <!-- See webpack.config.js for details. -->
+    <%# See webpack.config.js for details. %>
     <script src="/assets/app.bundle.js"></script>
 
     <!-- Google Maps JS API -->
-    <!-- geometry lib is needed to compute distance of LatLngBounds diagonal -->
-    <script src="https://maps.googleapis.com/maps/api/js?key=<%- georap.config.googleMapsKey %>&libraries=geometry&callback=initMap" async defer></script>
+    <%# geometry lib is needed to compute distance of LatLngBounds diagonal %>
+    <%# language parameter defines the UI language %>
+    <script src="https://maps.googleapis.com/maps/api/js?key=<%- georap.config.googleMapsKey %>&language=<%- georap.i18n.locale %>&libraries=geometry&callback=initMap" async defer></script>
 
   </body>
 </html>

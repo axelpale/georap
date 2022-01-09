@@ -4,6 +4,7 @@ var tableTemplate = require('./table.ejs');
 var emitter = require('component-emitter');
 var ui = require('georap-ui');
 var statisticsApi = georap.stores.statistics;
+var __ = georap.i18n.__;
 
 module.exports = function () {
 
@@ -16,7 +17,9 @@ module.exports = function () {
 
   self.bind = function ($mount) {
 
-    $mount.html(template());
+    $mount.html(template({
+      __: __,
+    }));
 
     var $error = $('#georap-statistics-error');
     var $progress = $('#georap-statistics-progress');
@@ -36,6 +39,7 @@ module.exports = function () {
 
       $table.html(tableTemplate({
         stats: stats,
+        __: __,
       }));
     });
 

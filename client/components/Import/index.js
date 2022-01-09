@@ -2,6 +2,7 @@
 var template = require('./template.ejs');
 var emitter = require('component-emitter');
 var ui = require('georap-ui');
+var __ = georap.i18n.__;
 
 var K = 1024;
 
@@ -19,6 +20,7 @@ module.exports = function () {
   this.bind = function ($mount) {
     $mount.html(template({
       limit: Math.round(georap.config.tempUploadSizeLimit / (K * K)),
+      __: __,
     }));
 
     var $uploadForm = $('#georap-import-upload-form');

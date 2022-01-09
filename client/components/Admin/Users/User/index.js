@@ -8,6 +8,7 @@ var EventsComponent = require('./Events');
 var RoleComponent = require('./Role');
 var emitter = require('component-emitter');
 var ui = require('georap-ui');
+var __ = georap.i18n.__;
 
 module.exports = function (username) {
 
@@ -25,6 +26,7 @@ module.exports = function (username) {
 
     $mount.html(template({
       username: username,
+      __: __,
     }));
 
     var $infoRoot = $('#georap-admin-user-info-root');

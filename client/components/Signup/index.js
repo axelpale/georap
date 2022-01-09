@@ -6,6 +6,7 @@ var emitter = require('component-emitter');
 var jwtDecode = require('jwt-decode').default;
 var ui = require('georap-ui');
 var siteTitle = georap.config.title;
+var __ = georap.i18n.__;
 
 module.exports = function (token, goLogin) {
   // Parameters:
@@ -32,6 +33,7 @@ module.exports = function (token, goLogin) {
     $mount.html(template({
       siteTitle: siteTitle,
       email: parsedToken.email,
+      __: __,
     }));
 
     $('#georap-signup-to-login-button').click(function (ev) {

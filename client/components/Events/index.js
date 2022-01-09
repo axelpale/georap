@@ -5,7 +5,10 @@ var eventTemplate = require('./event.ejs');
 var emitter = require('component-emitter');
 var getPoints = require('georap-points');
 var ui = require('georap-ui');
+var flagstamp = require('../Entry/flagstamp');
 var config = georap.config;
+var locale = georap.i18n.locale;
+var __ = georap.i18n.__;
 
 module.exports = function (events, opts) {
   // Parameters:
@@ -30,6 +33,19 @@ module.exports = function (events, opts) {
   var self = this;
   emitter(self);
 
+  var renderEvent = function (ev) {
+    return eventTemplate({
+      ev: ev,
+      timestamp: ui.timestamp(ev.time, locale),
+      pointstamp: ui.pointstamp,
+      flagstamp: flagstamp,
+      getPoints: getPoints,
+      config: config,
+      showThumbnail: opts.showThumbnails,
+      __: __,
+    });
+  };
+
   // Public methods
 
   this.bind = function ($mountEl) {
@@ -39,14 +55,7 @@ module.exports = function (events, opts) {
     $elems.events = $mount.find('.events-group');
 
     events.forEach(function (ev) {
-      $elems.events.append(eventTemplate({
-        ev: ev,
-        timestamp: ui.timestamp,
-        pointstamp: ui.pointstamp,
-        getPoints: getPoints,
-        config: config,
-        showThumbnail: opts.showThumbnails,
-      }));
+      $elems.events.append(renderEvent(ev));
     });
   };
 
@@ -56,28 +65,14 @@ module.exports = function (events, opts) {
       $elems.events.empty();
 
       events.forEach(function (ev) {
-        $elems.events.append(eventTemplate({
-          ev: ev,
-          timestamp: ui.timestamp,
-          pointstamp: ui.pointstamp,
-          getPoints: getPoints,
-          config: config,
-          showThumbnail: opts.showThumbnails,
-        }));
+        $elems.events.append(renderEvent(ev));
       });
     }
   };
 
   this.prepend = function (newEvent) {
     if ($mount) {
-      $elems.events.prepend(eventTemplate({
-        ev: newEvent,
-        timestamp: ui.timestamp,
-        pointstamp: ui.pointstamp,
-        getPoints: getPoints,
-        config: config,
-        showThumbnail: opts.showThumbnails,
-      }));
+      $elems.events.prepend(renderEvent(newEvent));
     }
   };
 

@@ -1,6 +1,6 @@
 <a href="/users/<%= username %>"><%= username %></a>
-posted <%= flagstamp %>
+<%= __('user-created-post') %> <%= flagstamp %>
 <% if (locationstamp) { %>
-in <%= locationstamp %>
+<%= __('user-created-post-to') %> <%= locationstamp %>
 <% } %>
 <%= timestamp %>

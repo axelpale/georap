@@ -3,68 +3,60 @@
 // Forked from
 // https://coderwall.com/p/uub3pw/javascript-timeago-func-e-g-8-hours-ago
 
-var templates = {
-  prefix: '',
-  suffix: ' ago',
-  seconds: 'a few seconds',
-  minute: 'a minute',
-  minutes: '%d minutes',
-  hour: 'an hour',
-  hours: '%d hours',
-  day: 'a day',
-  days: '%d days',
-  month: 'a month',
-  months: '%d months',
-  year: 'a year',
-  years: '%d years',
-};
+var locales = require('./locales');
 
-var template = function (t, n) {
+var apply = function (template, n) {
   // Parameters:
-  //   t
-  //     template id
+  //   template
+  //     template string
   //   n
   //     number to template e.g. if n == 6, then 'about 6 hours',
-  return templates[t] && templates[t].replace(/%d/i, Math.abs(Math.round(n)));
+  return template && template.replace(/%d/i, Math.abs(Math.round(n)));
 };
 
-var timer = function (time) {
+var timer = function (time, locale) {
   // Parameters:
   //   time
   //     ISO 8601 time string
+  //   locale
+  //     locale string, for example 'en' or 'fi'
+  //
 
   if (!time) {
     return;
   }
+  if (!locale) {
+    locale = 'en';
+  }
 
-  time = time.replace(/\.\d+/, ''); // remove milliseconds
-  time = time.replace(/-/, '/').replace(/-/, '/');
-  time = time.replace(/T/, ' ').replace(/Z/, ' UTC');
-  time = time.replace(/([\+\-]\d\d)\:?(\d\d)/, ' $1$2'); // -04:00 -> -0400
-  time = new Date(time * 1000 || time);
+  var dict; // Dictionary of time phrases
+  if (locales[locale]) {
+    dict = locales[locale];
+  } else {
+    dict = locales['en'];
+  }
 
-  var now = new Date();
-  var seconds = ((now.getTime() - time) * 0.001) >> 0;
+  var t = Date.parse(time); // ms since epoch
+  var now = Date.now(); // ms
+  var seconds = (now - t) / 1000;
   var minutes = seconds / 60;
   var hours = minutes / 60;
   var days = hours / 24;
   var years = days / 365;
 
-  return templates.prefix + (
-    (seconds < 45 && template('seconds', seconds)) ||
-    (seconds < 90 && template('minute', 1)) ||
-    (minutes < 45 && template('minutes', minutes)) ||
-    (minutes < 90 && template('hour', 1)) ||
-    (hours < 24 && template('hours', hours)) ||
-    (hours < 42 && template('day', 1)) ||
-    (days < 30 && template('days', days)) ||
-    (days < 45 && template('month', 1)) ||
-    (days < 365 && template('months', days / 30)) ||
-    (years < 1.5 && template('year', 1)) ||
-    template('years', years)
-  ) + templates.suffix;
+  return dict.prefix + (
+    (seconds < 45 && apply(dict.seconds, seconds)) ||
+    (seconds < 90 && apply(dict.minute, 1)) ||
+    (minutes < 45 && apply(dict.minutes, minutes)) ||
+    (minutes < 90 && apply(dict.hour, 1)) ||
+    (hours < 24 && apply(dict.hours, hours)) ||
+    (hours < 42 && apply(dict.day, 1)) ||
+    (days < 30 && apply(dict.days, days)) ||
+    (days < 45 && apply(dict.month, 1)) ||
+    (days < 365 && apply(dict.months, days / 30)) ||
+    (years < 1.5 && apply(dict.year, 1)) ||
+    apply(dict.years, years)
+  ) + dict.suffix;
 };
 
-module.exports = function (isoTime) {
-  return timer(isoTime);
-};
+module.exports = timer;

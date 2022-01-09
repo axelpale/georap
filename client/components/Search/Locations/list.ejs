@@ -2,7 +2,7 @@
 <% if (markers.length === 0) { %>
 
   <ul class="list-group">
-    <li class="list-group-item georap-disabled" style="text-align: center">No results</li>
+    <li class="list-group-item georap-disabled" style="text-align: center"><%= __('no-results') %></li>
   </ul>
 
 <% } else { %>
@@ -12,10 +12,10 @@
     <li class="list-group-item">
       <a href="/locations/<%= m._id %>?zoom=11"><%= m.name %></a>
       <span style="color: gray; font-style: italic; margin-left: 0.38em">
-        <%= placestamp(m.places) %>
+        <%= m.places.length > 0 ? placestamp(m.places) : __('yet-undefined-place') %>
       </span>
     </li>
   <% }); %>
   </ul>
-  <div class="text-muted" style="margin-top: 0.38rem; margin-bottom: 1rem;">Showing results <%= skip %>–<%= skip + limit %></div>
+  <div class="text-muted" style="margin-top: 0.38rem; margin-bottom: 1rem;"><%= __('showing-results') %> <%= skip %>–<%= skip + limit %></div>
 <% } %>

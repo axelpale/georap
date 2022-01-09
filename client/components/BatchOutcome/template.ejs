@@ -2,9 +2,9 @@
   <div class="row">
     <div class="col-md-12">
 
-      <h1><span class="glyphicon glyphicon-import" aria-hidden="true"></span> Results</h1>
+      <h1><span class="glyphicon glyphicon-import" aria-hidden="true"></span> <%= __('import-results') %></h1>
 
-      <p><strong>Batch number:</strong> <%= batchId %></p>
+      <p><strong><%= __('import-batch-num') %>:</strong> <%= batchId %></p>
 
       <p id="georap-outcome-message"></p>
 
@@ -17,7 +17,7 @@
       <div id="georap-outcome-list" class="hidden"></div>
 
       <div class="pull-right">
-        <a href="/" class="btn btn-primary" role="button">Finish</a>
+        <a href="/" class="btn btn-primary" role="button"><%= __('import-finish') %></a>
       </div>
     </div>
   </div>

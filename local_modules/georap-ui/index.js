@@ -59,18 +59,7 @@ exports.locationstamp = function (location) {
   return '<a href="' + url + '">' + location.name + '</a>';
 };
 
-exports.timestamp = function (time) {
-  return timestamp(time);
-};
-
-exports.flagstamp = function (flags) {
-  // Convert an array of flags to string
-  //
-  if (flags && flags.length > 0) {
-    return 'a <strong>' + flags.join(' ') + '</strong> ';
-  }
-  return '';
-};
+exports.timestamp = timestamp;
 
 exports.pointstamp = function (points) {
   var p = points;
@@ -93,13 +82,18 @@ exports.pointstamp = function (points) {
 
 exports.placestamp = function (places) {
   // String representation for location.places array
+  //
+  // Parameters
+  //   places
+  //     array of strings, places
+  //
   if (places.length > 1) {
     return places[0] + ', ' + places[places.length - 1];
   }
   if (places.length > 0) {
     return places[0];
   }
-  return 'yet undefined area';
+  return '';
 };
 
 exports.sizestamp = function (bytes) {

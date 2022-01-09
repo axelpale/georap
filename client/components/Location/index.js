@@ -17,6 +17,7 @@ var EventsView = require('./Events');
 // Templates
 var locationTemplate = require('./template.ejs');
 var locations = georap.stores.locations;
+var __ = georap.i18n.__;
 
 var LocationView = function (id, query) {
   // Parameters
@@ -52,6 +53,7 @@ var LocationView = function (id, query) {
     $mount.html(locationTemplate({
       // ref: Where the location was referred
       ref: query.ref === 'latest' ? 'latest' : 'map',
+      __: __,
     }));
 
     var $loading = $('#georap-location-loading');

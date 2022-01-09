@@ -67,11 +67,8 @@ exports.sumFlags = function (evs) {
 
   // Convert to ordered array
   return flagNames.map((flagName) => {
-    const flagConf = config.entryFlags[flagName];
     return {
       name: flagName,
-      plural: flagConf.plural,
-      glyphicon: flagConf.glyphicon,
       count: flagCounts[flagName],
     };
   });

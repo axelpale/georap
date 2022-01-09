@@ -6,6 +6,7 @@ var SelectLocation = require('./SelectLocation');
 var Progress = uic.Progress;
 var ErrorView = uic.Error;
 var entryApi = georap.stores.entries;
+var __ = georap.i18n.__;
 
 module.exports = function (entry) {
   // Parameters
@@ -23,7 +24,9 @@ module.exports = function (entry) {
   self.bind = function ($mountEl) {
     $mount = $mountEl;
 
-    $mount.html(template({}));
+    $mount.html(template({
+      __: __,
+    }));
 
     $elems.form = $mount.find('.entry-move-form');
 

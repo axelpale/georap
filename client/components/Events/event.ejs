@@ -1,7 +1,7 @@
 <% var t = ev.type; %>
 <% var name = ev.locationName; %>
 <% var locUrl = '/locations/' + ev.locationId + '?zoom=11&ref=latest' %>
-<% name = (name === '' ? 'Untitled' : name) %>
+<% name = (name === '' ? __('untitled') : name) %>
 <li class="list-group-item event-item clearfix" data-locationid="<%= ev.locationId %>">
   <%
     if (showThumbnail && ev.location) {
@@ -17,72 +17,70 @@
   %>
   <a href="/users/<%= ev.user %>"><%= ev.user %></a>
   <% if (t === 'location_created') { %>
-    created <a href="<%= locUrl %>"><%= name %></a>
+    <%= __('user-created-loc') %> <a href="<%= locUrl %>"><%= name %></a>
 
   <% } else if (t === 'location_removed') { %>
-    deleted <span title="/locations/<%= ev.locationId %>"><%= name %></span>
+    <%= __('user-deleted-loc') %> <span title="/locations/<%= ev.locationId %>"><%= name %></span>
 
   <% } else if (t === 'location_geom_changed') { %>
-    edited coords of <a href="<%= locUrl %>"><%= name %></a>
+    <%= __('user-edited-coords') %> <a href="<%= locUrl %>"><%= name %></a>
 
   <% } else if (t === 'location_name_changed') { %>
     <% if (ev.data.oldName === '') { %>
-      named <a href="<%= locUrl %>"><%= ev.data.newName %></a>
+      <%= __('user-named-loc') %> <a href="<%= locUrl %>"><%= ev.data.newName %></a>
     <% } else { %>
-      renamed <a href="<%= locUrl %>"><%= ev.data.oldName %></a> to <a href="<%= locUrl %>"><%= ev.data.newName %></a>
+      <%= __('user-renamed-loc') %> <a href="<%= locUrl %>"><%= ev.data.oldName %></a> <%= __('user-renamed-loc-to') %> <a href="<%= locUrl %>"><%= ev.data.newName %></a>
     <% } %>
 
   <% } else if (t === 'location_status_changed') { %>
-    marked <a href="<%= locUrl %>"><%= name %></a> as <%= ev.data.newStatus %>
+    <%= __('user-marked-loc') %> <a href="<%= locUrl %>"><%= name %></a> <%= __('user-marked-status-as') %> <%= ev.data.newStatus %>
 
   <% } else if (t === 'location_type_changed') { %>
-    marked <a href="<%= locUrl %>"><%= name %></a> as <%= ev.data.newType %>
+    <%= __('user-marked-loc') %> <a href="<%= locUrl %>"><%= name %></a> <%= __('user-marked-type-as') %> <%= ev.data.newType %>
 
   <% } else if (t === 'location_tags_changed') { %>
-    tagged <a href="<%= locUrl %>"><%= name %></a> as <%= ev.data.newTags.join(', ') %>
+    <%= __('user-tagged-loc') %> <a href="<%= locUrl %>"><%= name %></a> <%= __('user-tagged-loc-as') %> <%= ev.data.newTags.join(', ') %>
 
   <% } else if (t === 'location_thumbnail_changed') { %>
-    changed thumbnail of <a href="<%= locUrl %>"><%= name %></a>
+    <%= __('user-changed-thumb') %> <a href="<%= locUrl %>"><%= name %></a>
 
   <% } else if (t === 'location_entry_created') { %>
-    posted<%=
-      ev.data.entry.flags.length > 0
-        ? ' a ' + ev.data.entry.flags.join(' ') : ''
-    %> to <a href="<%= locUrl %>"><%= name %></a>
+    <%= __('user-created-post') %> <%= flagstamp(ev.data.entry.flags) %>
+    <%= __('user-created-post-to') %> <a href="<%= locUrl %>"><%= name %></a>
 
   <% } else if (t === 'location_entry_changed') { %>
-    edited a post in <a href="<%= locUrl %>"><%= name %></a>
+    <%= __('user-edited-post') %> <a href="<%= locUrl %>"><%= name %></a>
 
   <% } else if (t === 'location_entry_moved_out') { %>
-    moved a post from
-    <a href="<%= locUrl %>"><%= name %></a> to
+    <%= __('user-moved-post') %> <%= __('user-moved-post-from') %>
+    <a href="<%= locUrl %>"><%= name %></a> <%= __('user-moved-post-to') %>
     <a href="<%= '/locations/' + ev.data.toLocationId + '?ref=latest' %>"><%= ev.data.toLocationName %></a>
 
   <% } else if (t === 'location_entry_moved_in') { %>
-    moved a post to
-    <a href="<%= locUrl %>"><%= name %></a> from
+    <%= __('user-moved-post') %> <%= __('user-moved-post-to') %>
+    <a href="<%= locUrl %>"><%= name %></a> <%= __('user-moved-post-from') %>
     <a href="<%= '/locations/' + ev.data.fromLocationId + '?ref=latest' %>"><%= ev.data.fromLocationName %></a>
 
   <% } else if (t === 'location_entry_removed') { %>
-    deleted a post from <a href="<%= locUrl %>"><%= name %></a>
+    <%= __('user-deleted-post') %> <a href="<%= locUrl %>"><%= name %></a>
 
   <% } else if (t === 'location_unproved_visit_created') { %>
-    maybe visited <a href="<%= locUrl %>"><%= name %></a>
+    <%= __('user-visited-legacy') %> <a href="<%= locUrl %>"><%= name %></a>
 
   <% } else if (t === 'location_entry_comment_created') { %>
-    commented a post in <a href="<%= locUrl %>#comment-<%= ev.data.commentId %>"><%= name %></a>
+    <%= __('user-commented-post') %> <a href="<%= locUrl %>#comment-<%= ev.data.commentId %>"><%= name %></a>
 
   <% } else if (t === 'location_entry_comment_changed') { %>
-    edited a comment in <a href="<%= locUrl %>#comment-<%= ev.data.commentId %>"><%= name %></a>
+    <%= __('user-edited-comment') %> <a href="<%= locUrl %>#comment-<%= ev.data.commentId %>"><%= name %></a>
 
   <% } else if (t === 'location_entry_comment_removed') { %>
-    deleted a comment in <a href="<%= locUrl %>"><%= name %></a>
+    <%= __('user-deleted-comment') %> <a href="<%= locUrl %>"><%= name %></a>
 
   <% } else { %>
     <%= ev.type %>
   <% } %>
 
-  <%= timestamp(ev.time) %>
+  <%= timestamp %>
   <% if (typeof pointstamp !== 'undefined') { %>
     &nbsp;<%= pointstamp(getPoints(config, ev)) %>
   <% } %>

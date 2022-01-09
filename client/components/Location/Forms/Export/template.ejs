@@ -2,25 +2,25 @@
 
   <div class="panel panel-primary">
     <div class="panel-heading">
-      Downloads
+      <%= __('downloads') %>
     </div>
     <div class="panel-body">
 
       <p>
         <a href="/api/locations/<%= id %>?format=kml&amp;token=<%= token %>" class="btn btn-default" role="button" target="_blank">KML</a>
-        for Google Earth
+        <%= __('for-google-earth') %>
       </p>
       <p>
         <a href="/api/locations/<%= id %>?format=gpx&amp;token=<%= token %>" class="btn btn-default" role="button" target="_blank">GPX</a>
-        for GPS devices
+        <%= __('for-gps-devices') %>
       </p>
       <p>
         <a href="/api/locations/<%= id %>?format=geojson&amp;token=<%= token %>" class="btn btn-default" role="button" target="_blank">GeoJSON</a>
-        for web applications
+        <%= __('for-web-apps') %>
       </p>
 
       <div class="pull-right">
-        <button type="button" class="btn btn-default location-export-cancel">Cancel</button>
+        <button type="button" class="btn btn-default location-export-cancel"><%= __('close') %></button>
       </div>
 
     </div>

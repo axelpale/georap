@@ -1,6 +1,6 @@
 <ul class="nav nav-tabs latest-tabs">
   <% Object.keys(tabs).forEach(function (tab) { %>
-  <li role="presentation" class="latest-tab-<%= tab %>"><a href="#"><%= tab %></a></li>
+  <li role="presentation" class="latest-tab-<%= tab %>"><a href="#"><%= __(tab) %></a></li>
   <% }); %>
 </ul>
 <div class="latest-tabs-spacer"></div>

@@ -8,6 +8,7 @@ var geometryStore = georap.stores.geometry;
 var coordinateSystems = georap.config.coordinateSystems;
 var coordinateTemplates = georap.templates;
 var defaultSystemName = coordinateSystems[0][0];
+var __ = georap.i18n.__;
 
 module.exports = function () {
 
@@ -26,6 +27,7 @@ module.exports = function () {
     $mount.html(template({
       systems: coordinateSystems,
       defaultSystemName: defaultSystemName,
+      __: __,
     }));
 
     $elems.form = $mount.find('.coordsform');
@@ -45,7 +47,6 @@ module.exports = function () {
     $elems.systemSelector.on('change', handleSystemChange);
 
     $elems.resetBtn.on('click', function (ev) {
-      console.log('reset');
       ev.preventDefault();
       // Fill input with the render of current coordinate.
       var systemName = $elems.systemSelector.val();
@@ -129,7 +130,7 @@ module.exports = function () {
     if ($mount && $elems.example) {
       var systemName = $elems.systemSelector.val();
       var coordsHtml = self.geomsToHtml(systemName);
-      $elems.example.html('Example: ' + coordsHtml);
+      $elems.example.html(__('example') + ': ' + coordsHtml);
     }
   };
 

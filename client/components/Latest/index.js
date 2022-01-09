@@ -8,6 +8,7 @@ var LocationsView = require('./Locations');
 var EntriesView = require('./Entries');
 var ui = require('georap-ui');
 var ScrollRecorder = require('./ScrollRecorder');
+var __ = georap.i18n.__;
 
 // Record scroll position to help browsing through the list
 // and avoid scrolling in other views to affect the events list.
@@ -40,7 +41,9 @@ module.exports = function () {
     $mount = $mountEl;
 
     // Render initial page with visible loading bar
-    $mount.html(template());
+    $mount.html(template({
+      __: __,
+    }));
 
     // Set up tabs
     children.tabs = new TabsView();

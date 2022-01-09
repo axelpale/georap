@@ -21,7 +21,9 @@ module.exports = function () {
   self.bind = function ($mountEl) {
     $mount = $mountEl;
     // Render
-    $mount.html(template());
+    $mount.html(template({
+      __: georap.i18n.__,
+    }));
   };
 
   self.updateGeometry = function (geoms) {

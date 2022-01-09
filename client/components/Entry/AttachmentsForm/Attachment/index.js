@@ -3,6 +3,7 @@ var Thumbnail = require('georap-components').Thumbnail;
 var ui = require('georap-ui');
 var emitter = require('component-emitter');
 var attachmentsApi = georap.stores.attachments;
+var __ = georap.i18n.__;
 
 module.exports = function (attachment, opts) {
   // Parameters:
@@ -33,6 +34,7 @@ module.exports = function (attachment, opts) {
     $mount.html(template({
       sizestamp: ui.sizestamp(attachment.filesize),
       attachment: attachment,
+      __: __,
     }));
 
     $elems.thumb = $mount.find('.form-attachment-thumbnail');
