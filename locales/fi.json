@@ -61,6 +61,8 @@
   "email-or-username": "Sähköposti tai nimimerkki",
   "emphasize": "kursivoitu",
   "empty-post-error": "Et voi lähettää tyhjää viestiä.",
+  "error-401-desc": "Tälle sivulle pääsevät ainoastaan ylläpitäjät.",
+  "error-401-title": "Pääsy estetty",
   "error-404-desc": "Emme pystyneet löytämään etsimääsi sivua. Tarkista sivun osoite.",
   "error-404-title": "Tätä sivua ei löydy",
   "error-code": "Virhekoodi",
