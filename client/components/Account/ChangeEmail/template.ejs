@@ -1,0 +1,36 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-12">
+      <p>
+        <a href="/account">&larr; <%= __('account-settings') %></a>
+      </p>
+    </div>
+  </div><!-- .row -->
+  <div class="row">
+    <div class="col-md-12">
+      <h1><%= __('change-email') %></h1>
+
+      <form class="change-email-form">
+        <div class="form-group">
+          <label><%= __('change-email-current') %>:</label>
+          <%= email %>
+        </div>
+        <div class="form-group">
+          <label for="change-email-email"><%= __('change-email-new') %>:</label>
+          <input type="email" class="form-control" id="change-email-email">
+        </div>
+        <div class="form-group">
+          <label for="change-email-current-password" class="control-label"><%= __('current-password') %>:</label>
+          <input type="password" class="form-control" id="change-email-current-password">
+        </div>
+
+        <p>To keep your account safe, we must verify that you can access the new email address. Send a verification link to your new address and follow the link to approve the address change.</p>
+
+        <p class="text-right">
+          <button type="submit" class="btn btn-primary"><%= __('change-email-send') %></button>
+        </p>
+      </form>
+
+    </div>
+  </div><!-- .row -->
+</div><!-- .container-fluid -->
