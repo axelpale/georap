@@ -17,6 +17,8 @@ const jwtParser = jwt({
 const router = require('express').Router();
 
 
+// Public routes
+
 // Authentication
 router.post('/', jsonParser, handlers.login);
 
@@ -24,11 +26,24 @@ router.post('/', jsonParser, handlers.login);
 router.post('/reset/email', jsonParser, handlers.resetPasswordSend);
 router.post('/reset', jwtParser, jsonParser, handlers.resetPasswordSave);
 
-// Change password
+// Sign up after invite
+router.post('/signup', jwtParser, jsonParser, handlers.inviteSignup);
+
+
+// User routes - require authentication
+
+// Email change
+router.post('/email', jsonParser, handlers.changeEmailSend);
+router.post('/email/:key', jwtParser, jsonParser, handlers.changeEmailSave);
+
+// Password change
 router.post('/password', jwtParser, jsonParser, handlers.changePassword);
 
-// Invitation & post-invite sign up
+
+// Admin routes - require authentication with admin privilege
+
+// Send invitation
 router.post('/invite', jwtParser, jsonParser, handlers.inviteSend);
-router.post('/signup', jwtParser, jsonParser, handlers.inviteSignup);
+
 
 module.exports = router;

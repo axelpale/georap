@@ -1,3 +1,5 @@
+exports.changeEmailSave = require('./changeEmailSave');
+exports.changeEmailSend = require('./changeEmailSend');
 exports.changePassword = require('./changePassword');
 exports.inviteSend = require('./inviteSend');
 exports.inviteSignup = require('./inviteSignup');
