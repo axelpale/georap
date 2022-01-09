@@ -71,7 +71,9 @@ module.exports = function () {
   self.bind = function ($mountEl) {
     $mount = $mountEl;
 
-    $mount.html(template({}));
+    $mount.html(template({
+      __: georap.i18n.__,
+    }));
 
     $elems.btn = $mount.find('.boilerplate-btn');
     $elems.btn.click(function () {
