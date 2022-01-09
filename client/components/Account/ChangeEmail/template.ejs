@@ -19,15 +19,25 @@
           <label for="change-email-email"><%= __('change-email-new') %>:</label>
           <input type="email" class="form-control" id="change-email-email">
         </div>
+
+        <p>To keep your account safe, we must verify that you can access the new email address. Send a verification message to your new address. Then, copy the verification code in the message to the field below.</p>
+
+        <p class="text-right">
+          <button type="button" class="btn btn-primary"><%= __('change-email-send') %></button>
+        </p>
+
+        <div class="form-group">
+          <label for="change-email-code" class="control-label"><%= __('change-email-code') %>:</label>
+          <input type="number" class="form-control" id="change-email-code">
+          <p class="help-block"><%= __('change-email-check') %></p>
+        </div>
         <div class="form-group">
           <label for="change-email-current-password" class="control-label"><%= __('current-password') %>:</label>
           <input type="password" class="form-control" id="change-email-current-password">
         </div>
 
-        <p>To keep your account safe, we must verify that you can access the new email address. Send a verification link to your new address and follow the link to approve the address change.</p>
-
         <p class="text-right">
-          <button type="submit" class="btn btn-primary"><%= __('change-email-send') %></button>
+          <button type="submit" class="btn btn-default"><%= __('change-email-submit') %></button>
         </p>
       </form>
 
