@@ -21,14 +21,14 @@ const router = require('express').Router();
 router.post('/', jsonParser, handlers.login);
 
 // Password reset
-router.post('/reset/email', jsonParser, handlers.sendResetPasswordEmail);
-router.post('/reset', jwtParser, jsonParser, handlers.resetPassword);
+router.post('/reset/email', jsonParser, handlers.resetPasswordSend);
+router.post('/reset', jwtParser, jsonParser, handlers.resetPasswordSave);
 
 // Change password
 router.post('/password', jwtParser, jsonParser, handlers.changePassword);
 
 // Invitation & post-invite sign up
-router.post('/invite', jwtParser, jsonParser, handlers.sendInviteEmail);
-router.post('/signup', jwtParser, jsonParser, handlers.signup);
+router.post('/invite', jwtParser, jsonParser, handlers.inviteSend);
+router.post('/signup', jwtParser, jsonParser, handlers.inviteSignup);
 
 module.exports = router;
