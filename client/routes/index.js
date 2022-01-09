@@ -218,8 +218,8 @@ exports.route = function () {
 
   page('/account/password', basicViewSetup(function () {
     return import(
-      /* webpackChunkName: "change-password" */
-      '../components/ChangePassword'
+      /* webpackChunkName: "account-password" */
+      '../components/Account/ChangePassword'
     );
   }));
 
