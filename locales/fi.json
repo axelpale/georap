@@ -128,7 +128,7 @@
     "de": "Saksa",
     "se": "Ruotsi"
   },
-  "location-missing": "Paikkaa ei löydy. Tarkista osoite.",
+  "location-missing": "Paikkaa ei löydy. Tarkista verkko-osoite.",
   "location-name": "Paikan nimi",
   "location-rename-error": "Paikan nimeäminen uudelleen epäonnistui.",
   "location-status-type-fail": "Paikan tilan tai tyypin muuttaminen epäonnistui. Kokeile myöhemmin uudelleen.",
