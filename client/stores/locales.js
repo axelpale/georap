@@ -32,7 +32,7 @@ exports.getLocale = function () {
 
 exports.switchLocale = function (locale, callback) {
   // Fetch locale and replace current client-side translations.
-  // TODO update cookie?
+  // TODO update cookie? Cookie is set by the server at page refresh.
   //
   // Parameters:
   //   locale
