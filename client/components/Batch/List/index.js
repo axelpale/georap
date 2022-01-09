@@ -55,7 +55,10 @@ var BatchList = function () {
   this.bind = function ($mount) {
     self.$mount = $mount;
 
-    $mount.html(template(self.state));
+    $mount.html(template({
+      locs: self.state.locs,
+      __: georap.i18n.__,
+    }));
 
     var $checkAllBox = $('#georap-batch-select-all');
     var $list = $('#georap-batch-table');
@@ -83,6 +86,7 @@ var BatchList = function () {
         $tr.after(detailsTemplate({
           location: loc,
           markdownToHtml: markdownToHtml,
+          __: georap.i18n.__,
         }));
         ev.target.dataset.isopen = 1;
       }

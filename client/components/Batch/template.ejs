@@ -2,9 +2,9 @@
   <div class="row">
     <div class="col-md-12">
 
-      <h1><span class="glyphicon glyphicon-import" aria-hidden="true"></span> Upload successful</h1>
+      <h1><span class="glyphicon glyphicon-import" aria-hidden="true"></span> <%= __('import-upload-success') %></h1>
 
-      <p><strong>Batch number:</strong> <%= batchId %></p>
+      <p><strong><%= __('import-batch-num') %>:</strong> <%= batchId %></p>
 
       <p id="georap-batch-message"></p>
 
@@ -17,15 +17,15 @@
       </div>
 
       <div id="georap-batch-error404" class="hidden">
-        <div class="alert alert-danger" role="alert">No batch found. It has probably expired and been removed.</div>
+        <div class="alert alert-danger" role="alert"><%= __('import-not-found') %></div>
       </div>
 
       <div id="georap-batch-error" class="hidden">
-        <div class="alert alert-danger" role="alert">Import failed.</div>
+        <div class="alert alert-danger" role="alert"><%= __('import-failed') %></div>
       </div>
 
       <form id="georap-batch-form" class="hidden" style="margin-bottom: 5em">
-        <button id="georap-batch-cancel" type="button" class="btn btn-default disable">Cancel</button>
+        <button id="georap-batch-cancel" type="button" class="btn btn-default disable"><%= __('cancel') %></button>
         <div class="pull-right">
           <button id="georap-batch-import-selected" type="button" class="btn btn-primary disabled"></button>
           <button id="georap-batch-import-all" type="submit" class="btn btn-primary disabled"></button>
