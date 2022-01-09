@@ -258,12 +258,12 @@ exports.route = function () {
 
   page('/import/:batchId', function (ctx) {
     import(
-      /* webpackChunkName: "batch-view" */
-      '../components/Batch'
+      /* webpackChunkName: "batch-preview" */
+      '../components/BatchPreview'
     )
       .then(function (moduleWrap) {
-        var BatchView = moduleWrap.default;
-        card.open(new BatchView(ctx.params.batchId));
+        var BatchPreview = moduleWrap.default;
+        card.open(new BatchPreview(ctx.params.batchId));
       })
       .catch(importErrorHandler);
   });
