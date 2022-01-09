@@ -19,6 +19,7 @@ var storage = require('../connection/storage');
 var users = require('./users');
 var emitter = require('component-emitter');
 var jwtDecode = require('jwt-decode').default;
+var request = require('./lib/request');
 
 emitter(exports);
 
@@ -94,6 +95,61 @@ exports.logout = function (callback) {
   if (typeof callback !== 'undefined') {
     return callback(null);
   }
+};
+
+exports.changeEmailSendVerify = function (newEmail, callback) {
+  // Parameters:
+  //   newEmail
+  //     string, email address where
+  //       the email verification message
+  //       will be sent.
+  //   callback
+  //     function (err, { message })
+  //
+  return request.postJSON({
+    url: '/api/account/email',
+    data: {
+      newEmail: newEmail,
+    },
+  }, function (err, response) {
+    if (err) {
+      return callback(err);
+    }
+    return callback(null, {
+      key: response.key, // on success, acts like a id for verification event
+      message: response.message,
+    });
+  });
+};
+
+exports.changeEmailSave = function (key, currentPwd, verifyCode, callback) {
+  // Parameters:
+  //   key
+  //     change event key
+  //   currentPwd
+  //     string, current password
+  //   verifyCode
+  //     integer, six-digit
+  //   callback
+  //     function (err, { key, validPassword, validCode })
+  //
+  return request.postJSON({
+    url: '/api/account/email/' + key + '/',
+    data: {
+      currentPassword: currentPwd,
+      verifyCode: verifyCode,
+    },
+  }, function (err, response) {
+    if (err) {
+      return callback(err);
+    }
+
+    return callback(null, {
+      key: response.key,
+      validPassword: response.validPassword,
+      validCode: response.validCode,
+    });
+  });
 };
 
 exports.changePassword = function (currentPassword, newPassword, callback) {
