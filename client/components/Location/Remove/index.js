@@ -24,11 +24,17 @@ module.exports = function (location) {
 
     $elems.ensure = $('#georap-location-delete-ensure');
     $elems.final = $('#georap-location-delete-final');
+    $elems.cancel = $('#georap-location-delete-cancel');
     $elems.del = $('#georap-location-delete');
     $elems.error = $('#georap-location-delete-error');
     $elems.progress = $('#georap-location-delete-progress');
 
     $elems.ensure.click(function (ev) {
+      ev.preventDefault();
+      ui.toggleHidden($elems.final);
+    });
+
+    $elems.cancel.click(function (ev) {
       ev.preventDefault();
       ui.toggleHidden($elems.final);
     });
