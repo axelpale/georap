@@ -23,6 +23,7 @@ module.exports = function (batchId) {
   this.bind = function ($mount) {
     $mount.html(template({
       batchId: batchId,
+      __: georap.i18n.__,
     }));
 
     var $progress = $('#georap-outcome-progress');
@@ -43,12 +44,14 @@ module.exports = function (batchId) {
         createdLocs: result.created,
         modifiedLocs: result.modified,
         skippedLocs: result.skipped,
+        __: georap.i18n.__,
       }));
 
       $list.html(listTemplate({
         createdLocs: result.created,
         modifiedLocs: result.modified,
         skippedLocs: result.skipped,
+        __: georap.i18n.__,
       }));
 
       ui.show($list);

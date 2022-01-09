@@ -1,4 +1,4 @@
-<h3>Created locations (<%= createdLocs.length %>)</h3>
+<h3><%= __('import-created-locs') %> (<%= createdLocs.length %>)</h3>
 
 <%
   function locurl(l) {
@@ -23,7 +23,7 @@
 </table>
 <% } %>
 
-<h3>Modified locations (<%= modifiedLocs.length %>)</h3>
+<h3><%= __('import-modified-locs') %> (<%= modifiedLocs.length %>)</h3>
 
 <% if (modifiedLocs.length > 0) { %>
 <table class="table">
@@ -42,7 +42,7 @@
 </table>
 <% } %>
 
-<h3>Skipped locations (<%= skippedLocs.length %>)</h3>
+<h3><%= __('import-skipped-locs') %> (<%= skippedLocs.length %>)</h3>
 
 <% if (skippedLocs.length > 0) { %>
 <table class="table">
