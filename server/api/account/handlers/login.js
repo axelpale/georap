@@ -1,9 +1,8 @@
 const status = require('http-status-codes');
-const config = require('georap-config');
 const db = require('georap-db');
 const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
 const dal = require('../dal');
+const generateAuthToken = require('../lib/generateAuthToken');
 const loggers = require('../../../services/logs/loggers');
 
 module.exports = function (req, res, next) {
@@ -68,20 +67,7 @@ module.exports = function (req, res, next) {
       }
 
       // else, build jwt token
-
-      const tokenPayload = {
-        name: user.name,
-        email: user.email,
-        admin: user.admin,
-      };
-
-      // The following will add 'exp' property to payload.
-      // For time formatting, see https://github.com/zeit/ms
-      const tokenOptions = {
-        expiresIn: '60d',  // two months,
-      };
-
-      const token = jwt.sign(tokenPayload, config.secret, tokenOptions);
+      const token = generateAuthToken(user.name, user.email, user.admin);
 
       // Register login time.
       dal.markLogin(user.name, (errl) => {
