@@ -33,8 +33,8 @@ router.post('/signup', jwtParser, jsonParser, handlers.inviteSignup);
 // User routes - require authentication
 
 // Email change
-router.post('/email', jsonParser, handlers.changeEmailSend);
-router.post('/email/:key', jwtParser, jsonParser, handlers.changeEmailSave);
+router.post('/email', jwtParser, jsonParser, handlers.changeEmailSend);
+router.post('/email/:code', jwtParser, jsonParser, handlers.changeEmailSave);
 
 // Password change
 router.post('/password', jwtParser, jsonParser, handlers.changePassword);

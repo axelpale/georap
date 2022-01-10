@@ -97,7 +97,7 @@ exports.logout = function (callback) {
   }
 };
 
-exports.changeEmailSendVerify = function (newEmail, callback) {
+exports.changeEmailSendCode = function (newEmail, callback) {
   // Parameters:
   //   newEmail
   //     string, email address where
@@ -116,28 +116,24 @@ exports.changeEmailSendVerify = function (newEmail, callback) {
       return callback(err);
     }
     return callback(null, {
-      key: response.key, // on success, acts like a id for verification event
       message: response.message,
     });
   });
 };
 
-exports.changeEmailSave = function (key, currentPwd, verifyCode, callback) {
+exports.changeEmailSave = function (currentPwd, securityCode, callback) {
   // Parameters:
-  //   key
-  //     change event key
   //   currentPwd
   //     string, current password
-  //   verifyCode
+  //   securityCode
   //     integer, six-digit
   //   callback
   //     function (err, { key, validPassword, validCode })
   //
   return request.postJSON({
-    url: '/api/account/email/' + key + '/',
+    url: '/api/account/email/' + securityCode + '/',
     data: {
-      currentPassword: currentPwd,
-      verifyCode: verifyCode,
+      password: currentPwd,
     },
   }, function (err, response) {
     if (err) {
