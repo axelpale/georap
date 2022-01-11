@@ -31,13 +31,16 @@
 
       <div class="list-group">
         <% availableLocales.forEach(function (locale) { %>
-          <% var activity = locale === currentLocale ? 'active' : '' %>
+          <% var isActive = locale === currentLocale %>
           <a href="?locale=<%= locale %>"
-             class="list-group-item <%= activity %>"
+             class="list-group-item"
              lang="<%= locale %>"
              target="_self">
             <% // target=_self is necessary to bypass page.js router %>
             <%= __('locale-native', locale) %>
+            <% if (isActive) { %>
+              <span class="glyphicon glyphicon-star" aria-label="selected"></span>
+            <% } %>
           </a>
         <% }) %>
       </div>
