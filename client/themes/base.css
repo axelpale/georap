@@ -88,7 +88,17 @@ time {
 .georap-login-container label,
 .georap-login-container p,
 .georap-login-container a {
-  color: #EEE !important;
+  color: #fff !important;
+}
+.login-glass {
+  background-color: rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 10px;
+}
+.login-column {
+  /* text-shadow: -1px 3px 10px rgb(128, 128, 128); */
+  padding-bottom: 1.8rem;
+  margin-top: 1rem;
 }
 #georap-login-form {
   margin-bottom: 1.68em;
