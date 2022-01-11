@@ -33,12 +33,17 @@ module.exports = function () {
     colorSchemes.forEach(function (colorScheme, i) {
       var elemid = 'theme-' + colorScheme;
       $elems[elemid] = $('#' + elemid);
-      $elems[elemid].on('change', function () {
+      $elems[elemid].click(ui.throttle(1000, function (ev) {
+        // No navigation
+        ev.preventDefault();
+        // Switch theme dynamically
         themeStore.update({
           colorScheme: colorScheme,
           themeColor: themeColors[i],
         });
-      });
+        // Hacky but simple way to refresh selection-star
+        $mount.find('.color-schemes .glyphicon-star').appendTo($elems[elemid]);
+      }));
     });
   };
 
