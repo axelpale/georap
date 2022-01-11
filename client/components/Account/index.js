@@ -1,6 +1,7 @@
 var template = require('./template.ejs');
 var emitter = require('component-emitter');
 var ui = require('georap-ui');
+var account = georap.stores.account;
 var themeStore = georap.stores.theme;
 var localesStore = georap.stores.locales;
 var availableLocales = georap.config.availableLocales;
@@ -19,8 +20,11 @@ module.exports = function () {
   // Public methods
 
   this.bind = function ($mount) {
+    var user = account.getUser();
     $mount.html(template({
       theme: themeStore.get(),
+      username: user.name,
+      email: user.email,
       currentLocale: localesStore.getLocale(),
       availableLocales: availableLocales,
       __: georap.i18n.__,
