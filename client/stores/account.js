@@ -62,7 +62,8 @@ exports.login = function (email, password, callback) {
         throw new Error('invalid server response');
       }
 
-      storage.setItem(TOKEN_KEY, tokenResponse);
+      // Set / replace auth token
+      exports.setToken(tokenResponse);
 
       // Publish within client
       exports.emit('login');
@@ -353,4 +354,8 @@ exports.getFlags = function (callback) {
   //       flags is a mapping locationId -> array of flags set by the user
   //
   return users.getFlags(exports.getName(), callback);
+};
+
+exports.setToken = function (token) {
+  storage.setItem(TOKEN_KEY, token);
 };
