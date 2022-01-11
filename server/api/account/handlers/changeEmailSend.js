@@ -21,60 +21,79 @@ module.exports = function (req, res, next) {
     return res.sendStatus(status.BAD_REQUEST);
   }
 
-  // Create a security code
-  const code = generateSecurityCode();
-  // Wrap the code into a jwt token with short expiration time
-  const tokenPayload = {
-    name: user.name,
-    securityCode: code,
-    newEmail: newEmail,
-  };
-  const token = jwt.sign(tokenPayload, config.secret, {
-    expiresIn: '30m',
-  });
+  if (user.email === newEmail) {
+    // Email is the same.
+    return res.sendStatus(status.CONFLICT);
+  }
 
-  // Store the security code with a expiration date to the user.
   const users = db.collection('users');
 
-  const q = { name: user.name };
-  const u = { $set: { securityToken: token } };
-  users.findOneAndUpdate(q, u, (err, foundUser) => {
-    if (err) {
-      return next(err);
+  // Check that the new email is not in use.
+  // We do this because email is used as a unique key.
+  const cq = { email: newEmail };
+  users.findOne(cq, (errc, conflictingUser) => {
+    if (errc) {
+      return next(errc);
     }
 
-    if (!foundUser) {
-      // User not found with that name.
+    if (conflictingUser) {
       return res.sendStatus(status.CONFLICT);
     }
+    // Thus, no user with this email. We can continue.
 
-    // Security code stored to be compared later.
-    // Send the code in an email.
-    const mailOptions = {
-      from: config.mail.sender,
-      to: [newEmail],
-      subject: res.__('change-email-subject') + ' ' + config.title,
-      text: templates.changeEmailMailTemplate({
-        securityCode: code,
-        newEmail: newEmail,
-        siteTitle: config.title,
-        __: res.__,
-      }),
+    // Create a security code
+    const code = generateSecurityCode();
+    // Wrap the code into a jwt token with short expiration time
+    const tokenPayload = {
+      name: user.name,
+      securityCode: code,
+      newEmail: newEmail,
     };
+    const token = jwt.sign(tokenPayload, config.secret, {
+      expiresIn: '30m',
+    });
 
-    // Send the mail
-    mailer.get().sendMail(mailOptions, (err2) => {
-      // Params: err2, info
-      //
-      if (err2) {
-        return next(err2);
-      }  // else
+    // Store the security code with a expiration date to the user.
+    const q = { name: user.name };
+    const u = { $set: { securityToken: token } };
+    users.findOneAndUpdate(q, u, (err, foundUser) => {
+      if (err) {
+        return next(err);
+      }
 
-      // Mail sent successfully
-      loggers.log('Email change requested for ' +
-        user.email + ' to ' + newEmail);
+      if (!foundUser) {
+        // User not found with that name.
+        return res.sendStatus(status.CONFLICT);
+      }
 
-      return res.sendStatus(status.OK);
+      // Security code stored to be compared later.
+      // Send the code in an email.
+      const mailOptions = {
+        from: config.mail.sender,
+        to: [newEmail],
+        subject: res.__('change-email-subject') + ' ' + config.title,
+        text: templates.changeEmailMailTemplate({
+          securityCode: code,
+          newEmail: newEmail,
+          siteTitle: config.title,
+          __: res.__,
+        }),
+      };
+
+      // Send the mail
+      mailer.get().sendMail(mailOptions, (err2) => {
+        // Params: err2, info
+        //
+        if (err2) {
+          return next(err2);
+        }  // else
+
+        // Mail sent successfully
+        loggers.log('Email change requested for ' +
+          user.email + ' to ' + newEmail);
+
+        return res.sendStatus(status.OK);
+      });
     });
   });
 };

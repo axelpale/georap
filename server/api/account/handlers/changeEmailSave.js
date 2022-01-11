@@ -68,6 +68,7 @@ module.exports = function (req, res, next) {
           },
         }, (erru) => {
           if (erru) {
+            // If the email is taken, there will be a key conflict error.
             return next(erru);
           }
 
@@ -79,6 +80,8 @@ module.exports = function (req, res, next) {
 
           return res.json({
             token: token,
+            oldEmail: user.email,
+            newEmail: newEmail,
           });
         });
       });

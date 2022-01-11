@@ -6,7 +6,7 @@
       </p>
     </div>
   </div><!-- .row -->
-  <div class="row">
+  <div class="row change-email-forms">
     <div class="col-md-12">
       <h1><%= __('change-email') %></h1>
 
@@ -26,6 +26,9 @@
 
         <div class="change-email-invalid-address hidden">
           <div class="alert alert-danger" role="alert"><%= __('invite-invalid-email') %></div>
+        </div>
+        <div class="change-email-send-conflict hidden">
+          <div class="alert alert-danger" role="alert"><%= __('change-email-conflict') %></div>
         </div>
 
         <p><%= __('change-email-info') %></p>
@@ -52,16 +55,38 @@
         </div>
 
         <p class="text-right">
-          <button type="submit" class="change-email-submit-btn btn btn-default disabled"><%= __('change-email-submit') %></button>
+          <button type="submit" class="change-email-save-btn btn btn-default disabled"><%= __('change-email-submit') %></button>
         </p>
 
-        <div class="change-email-submit-success hidden">
-          <div class="alert alert-success" role="alert"><%= __('change-email-submit-success') %></div>
+        <div class="change-email-save-progress hidden">
+          <div class="progress">
+            <div class="progress-bar progress-bar-striped active" role="progressbar" style="width: 100%">
+              <span class="sr-only">Waiting for server</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="change-email-save-error hidden">
+          <div class="alert alert-danger" role="alert"><%= __('change-email-save-error') %></div>
+        </div>
+        <div class="change-email-save-unauth hidden">
+          <div class="alert alert-danger" role="alert"><%= __('change-email-save-unauth') %></div>
         </div>
       </form>
-
+    </div>
+  </div><!-- .row -->
+  <div class="row change-email-finish hidden">
+    <div class="col-md-12">
+      <h2><%= __('change-email-success-title') %></h2>
+      <p>
+        <%= __('change-email-old') %>: <span class="change-email-old"></span><br>
+        <%= __('change-email-new') %>: <span class="change-email-new"></span>
+      </p>
+      <p>
+        <%= __('change-email-finish-info') %>
+      </p>
       <p class="text-right">
-        <a href="#" role="button" class="change-email-close-btn btn btn-primary disabled"><%= __('close') %></a>
+        <a href="/" role="button" class="change-email-close-btn btn btn-primary"><%= __('close') %></a>
       </p>
     </div>
   </div><!-- .row -->

@@ -141,10 +141,14 @@ exports.changeEmailSave = function (currentPwd, securityCode, callback) {
       return callback(err);
     }
 
+    // Update auth token because its email changes.
+    if (response.token) {
+      exports.setToken(response.token);
+    }
+
     return callback(null, {
-      key: response.key,
-      validPassword: response.validPassword,
-      validCode: response.validCode,
+      newEmail: response.newEmail,
+      oldEmail: response.oldEmail,
     });
   });
 };

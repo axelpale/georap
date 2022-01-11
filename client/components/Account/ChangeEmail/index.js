@@ -1,9 +1,13 @@
+/* eslint-disable max-statements */
 var emitter = require('component-emitter');
 var ui = require('georap-ui');
 var template = require('./template.ejs');
 var validator = require('email-validator');
 var account = georap.stores.account;
 var siteTitle = georap.config.title;
+// HTTP status codes
+var UNAUTHORIZED = 401;
+var CONFLICT = 409;
 
 module.exports = function () {
 
@@ -24,20 +28,32 @@ module.exports = function () {
       __: __,
     }));
 
-    $elems.newEmail = $mount.find('#change-email-email');
+    $elems.finishRow = $mount.find('.change-email-finish');
+    $elems.formsRow = $mount.find('.change-email-forms');
     $elems.invalidAddress = $mount.find('.change-email-invalid-address');
-    $elems.sendError = $mount.find('.change-email-send-error');
-    $elems.sendSuccess = $mount.find('.change-email-send-success');
-    $elems.form = $mount.find('.change-email-form');
-    $elems.securityCode = $mount.find('#change-email-security-code');
+    $elems.newEmail = $mount.find('#change-email-email');
     $elems.password = $mount.find('#change-email-password');
-    $elems.submit = $mount.find('.change-email-submit-btn');
-    $elems.submitSuccess = $mount.find('.change-email-submit-success');
-
+    $elems.saveBtn = $mount.find('.change-email-save-btn');
+    $elems.saveError = $mount.find('.change-email-save-error');
+    $elems.saveForm = $mount.find('.change-email-save-form');
+    $elems.saveProgress = $mount.find('.change-email-save-progress');
+    $elems.saveUnauth = $mount.find('.change-email-save-unauth');
+    $elems.securityCode = $mount.find('#change-email-security-code');
     $elems.sendBtn = $mount.find('.change-email-send-btn');
-    $elems.sendBtn.click(ui.throttle(2000, function () {
+    $elems.sendConflict = $mount.find('.change-email-send-conflict');
+    $elems.sendError = $mount.find('.change-email-send-error');
+    $elems.sendForm = $mount.find('.change-email-send-form');
+    $elems.sendSuccess = $mount.find('.change-email-send-success');
+    $elems.successOldEmail = $mount.find('.change-email-old');
+    $elems.successNewEmail = $mount.find('.change-email-new');
+
+    $elems.sendForm.submit(ui.throttle(2000, function (ev) {
+      // Prevent default submit behavior (page reload)
+      ev.preventDefault();
+
       // Clear possible previous errors
       ui.hide($elems.invalidAddress);
+      ui.hide($elems.sendConflict);
       ui.hide($elems.sendError);
 
       // Read new email
@@ -50,7 +66,7 @@ module.exports = function () {
         return;
       } // else
 
-      // TODO change button label to "Sending..."
+      // Change button label to "Sending..."
       $elems.sendBtn.html(__('sending'));
 
       // Request to send a security code to the new email
@@ -59,9 +75,15 @@ module.exports = function () {
         if (err) {
           // Restore button label
           $elems.sendBtn.html(__('change-email-send'));
-          // Display error
-          ui.show($elems.sendError);
-          console.error(err);
+          // Determine error
+          if (err.code === CONFLICT) {
+            // Email already exists conflict
+            ui.show($elems.sendConflict);
+          } else {
+            // Unknown error
+            console.error(err);
+            ui.show($elems.sendError);
+          }
           return;
         }
         // Display success message: security code sent successfully
@@ -80,16 +102,20 @@ module.exports = function () {
       var code = $elems.securityCode.val();
       var pwd = $elems.password.val();
       if (code.length === 6 && pwd.length > 2) {
-        $elems.submit.removeClass('disabled');
-        $elems.submit.removeClass('btn-default');
-        $elems.submit.addClass('btn-primary');
+        $elems.saveBtn.removeClass('disabled');
+        $elems.saveBtn.removeClass('btn-default');
+        $elems.saveBtn.addClass('btn-primary');
+      } else {
+        $elems.saveBtn.removeClass('btn-primary');
+        $elems.saveBtn.addClass('disabled');
+        $elems.saveBtn.addClass('btn-default');
       }
     };
     $elems.securityCode.on('input', handleFormInput);
     $elems.password.on('input', handleFormInput);
 
     // Form submission
-    $elems.form.submit(function (ev) {
+    $elems.saveForm.submit(ui.throttle(2000, function (ev) {
       // Prevent default form submission behavior.
       ev.preventDefault();
 
@@ -101,19 +127,33 @@ module.exports = function () {
         return;
       }
 
-      account.changeEmailSave(pwd, code, function (err) {
+      // Show loading bar and hide button
+      ui.hide($elems.saveBtn);
+      ui.show($elems.saveProgress);
+
+      account.changeEmailSave(pwd, code, function (err, response) {
+        // Hide progress bar
+        ui.hide($elems.saveProgress);
         if (err) {
-          // TODO handle errors
+          // Display button again
+          ui.show($elems.saveBtn);
+          if (err.code === UNAUTHORIZED) {
+            ui.show($elems.saveUnauth);
+            return;
+          }
+          ui.show($elems.saveError);
           console.error(err);
           return;
         }
 
-        // TODO hide form
-        // Display success message
-        ui.show($elems.submitSuccess);
-        // TODO display Finish button to close the page
+        // Hide form & display success
+        ui.hide($elems.formsRow);
+        ui.show($elems.finishRow);
+        // Render emails
+        $elems.successOldEmail.text(response.oldEmail);
+        $elems.successNewEmail.text(response.newEmail);
       });
-    });
+    }));
   };
 
   self.unbind = function () {
