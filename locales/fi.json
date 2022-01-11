@@ -85,6 +85,7 @@
   "email": "Sähköposti",
   "email-address": "Sähköpostiosoite",
   "email-or-username": "Sähköposti tai nimimerkki",
+  "email-sign-off": "Terveisin",
   "emphasize": "kursivoitu",
   "empty-post-error": "Et voi lähettää tyhjää viestiä.",
   "error-401-desc": "Tälle sivulle pääsevät ainoastaan ylläpitäjät.",

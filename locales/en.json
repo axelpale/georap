@@ -86,6 +86,7 @@
   "email": "Email",
   "email-address": "Email address",
   "email-or-username": "Email or Username",
+  "email-sign-off": "Regards",
   "emphasize": "emphasize",
   "empty-post-error": "Empty posts are not allowed.",
   "error-401-desc": "It is not possible for you to access this page. An admin user account is required.",
