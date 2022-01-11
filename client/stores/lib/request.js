@@ -70,7 +70,9 @@ exports.postJSON = function (params, callback) {
   //     url
   //     data
   //   callback
-  //     function (err)
+  //     function (err, response)
+  //       where err is { name, message, code }
+  //         where code is status code
   //
   $.ajax({
     url: params.url,
