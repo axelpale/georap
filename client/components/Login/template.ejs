@@ -34,17 +34,19 @@
 
       <form id="georap-login-form">
         <div class="form-group">
-          <label for="georap-login-email"><%= __('email-or-username') %>:</label>
+          <label for="georap-login-email"><%= __('email-or-username') %></label>
           <input type="text" class="form-control" id="georap-login-email">
         </div>
         <div class="form-group">
-          <label for="georap-login-password"><%= __('password') %>:</label>
+          <div class="pull-right">
+            <a id="georap-password-reset-button" href="#"><%= __('forgot-password') %></a>
+          </div>
+          <label for="georap-login-password"><%= __('password') %></label>
           <input type="password" class="form-control" id="georap-login-password">
         </div>
         <div class="pull-right">
-          <a id="georap-password-reset-button" href="#"><%= __('forgot-password') %></a>
+          <button type="submit" class="btn btn-<%= loginColor %>"><%= __('log-in') %></button>
         </div>
-        <button type="submit" class="btn btn-<%= loginColor %>"><%= __('log-in') %></button>
       </form>
 
       <p>
@@ -85,12 +87,16 @@
 
         <!-- Reset form -->
         <form id="georap-password-reset-form" class="hidden">
+          <hr>
+          <h3><%= __('forgot-password-title') %></h3>
           <p><%= __('forgot-password-help') %></p>
           <div class="form-group">
             <label for="georap-password-reset-email"><%= __('email-address') %>:</label>
             <input type="email" class="form-control" id="georap-password-reset-email">
           </div>
-          <button type="submit" class="btn btn-primary"><%= __('send-email') %></button>
+          <div class="pull-right">
+            <button type="submit" class="btn btn-primary"><%= __('send-email') %></button>
+          </div>
         </form>
       </div><!-- #georap-password-reset -->
 
