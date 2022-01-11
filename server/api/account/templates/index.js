@@ -15,3 +15,10 @@ exports.inviteMailTemplate = (function () {
 
   return ejs.compile(f);
 }());
+
+exports.changeEmailMailTemplate = (function () {
+  const p = path.resolve(__dirname, './changeEmail.ejs');
+  const f = fs.readFileSync(p, 'utf8');  // eslint-disable-line no-sync
+
+  return ejs.compile(f);
+}());

@@ -216,6 +216,13 @@ exports.route = function () {
       .catch(importErrorHandler);
   });
 
+  page('/account/email', basicViewSetup(function () {
+    return import(
+      /* webpackChunkName: "account-Email" */
+      '../components/Account/ChangeEmail'
+    );
+  }));
+
   page('/account/password', basicViewSetup(function () {
     return import(
       /* webpackChunkName: "account-password" */

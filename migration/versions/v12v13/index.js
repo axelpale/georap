@@ -1,5 +1,3 @@
-/* eslint-disable max-lines */
-
 // In this version increase:
 // 1. set schema version to 13
 // 2. repair attachment usernames by going through entries and comments

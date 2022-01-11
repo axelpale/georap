@@ -19,6 +19,7 @@ var storage = require('../connection/storage');
 var users = require('./users');
 var emitter = require('component-emitter');
 var jwtDecode = require('jwt-decode').default;
+var request = require('./lib/request');
 
 emitter(exports);
 
@@ -61,7 +62,8 @@ exports.login = function (email, password, callback) {
         throw new Error('invalid server response');
       }
 
-      storage.setItem(TOKEN_KEY, tokenResponse);
+      // Set / replace auth token
+      exports.setToken(tokenResponse);
 
       // Publish within client
       exports.emit('login');
@@ -94,6 +96,61 @@ exports.logout = function (callback) {
   if (typeof callback !== 'undefined') {
     return callback(null);
   }
+};
+
+exports.changeEmailSendCode = function (newEmail, callback) {
+  // Parameters:
+  //   newEmail
+  //     string, email address where
+  //       the email verification message
+  //       will be sent.
+  //   callback
+  //     function (err, { message })
+  //
+  return request.postJSON({
+    url: '/api/account/email',
+    data: {
+      newEmail: newEmail,
+    },
+  }, function (err, response) {
+    if (err) {
+      return callback(err);
+    }
+    return callback(null, {
+      message: response.message,
+    });
+  });
+};
+
+exports.changeEmailSave = function (currentPwd, securityCode, callback) {
+  // Parameters:
+  //   currentPwd
+  //     string, current password
+  //   securityCode
+  //     integer, six-digit
+  //   callback
+  //     function (err, { key, validPassword, validCode })
+  //
+  return request.postJSON({
+    url: '/api/account/email/' + securityCode + '/',
+    data: {
+      password: currentPwd,
+    },
+  }, function (err, response) {
+    if (err) {
+      return callback(err);
+    }
+
+    // Update auth token because its email changes.
+    if (response.token) {
+      exports.setToken(response.token);
+    }
+
+    return callback(null, {
+      newEmail: response.newEmail,
+      oldEmail: response.oldEmail,
+    });
+  });
 };
 
 exports.changePassword = function (currentPassword, newPassword, callback) {
@@ -301,4 +358,8 @@ exports.getFlags = function (callback) {
   //       flags is a mapping locationId -> array of flags set by the user
   //
   return users.getFlags(exports.getName(), callback);
+};
+
+exports.setToken = function (token) {
+  storage.setItem(TOKEN_KEY, token);
 };
