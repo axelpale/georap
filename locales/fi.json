@@ -27,7 +27,7 @@
   "change-email-info": "Varmistuaksemme, että antamasi sähköpostiosoite toimii, tulee sinun lähettää uuteen sähköpostiisi kuusinumeroinen vahvistuskoodi painamalla oheista painiketta. Sen jälkeen tarkista saapuneet sähköpostisi, kopioi saapunut koodi alla näkyvään kenttään ja syötä tilisi salasana.",
   "change-email-msg1": "Tällä vahvistuskoodilla voit vaihtaa",
   "change-email-msg2": "-tilisi sähköpostiosoitteeksi osoitteen",
-  "change-email-msg3": "Kopioi oheinen kuusinumeroinen koodi ja syötä se lomakkeeseen, jolla lähetit koodin. Mikäli et odottanut saavasi vahvistuskoodia, vaihda salasanasi välittömästi, sillä joku on saattanut murtautua tilillesi.",
+  "change-email-msg3": "Kopioi oheinen kuusinumeroinen koodi ja syötä se lomakkeeseen, jolla lähetit koodin. Mikäli et odottanut saavasi vahvistuskoodia, voit jättää tämän viestin huomiotta.",
   "change-email-new": "Uusi sähköpostiosoite",
   "change-email-old": "Vanha sähköpostiosoite",
   "change-email-password-info": "Syötä",
