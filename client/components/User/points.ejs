@@ -1,3 +1,4 @@
+<h3><span class="glyphicon glyphicon-time" aria-hidden="true"></span> <%= __('user-joined') %> <%= createdAt %></h3>
 <% flags.forEach(function (flag) { %>
 <h3><span class="glyphicon glyphicon-<%= flagConfig[flag.name].glyphicon %>" aria-hidden="true"></span> <%= flag.count %> <%= __(flagConfig[flag.name].plural) %></h3>
 <% }) %>

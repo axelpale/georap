@@ -41,6 +41,7 @@ module.exports = function (username) {
 
       // User statistics
       $('#georap-user-points').html(pointsTemplate({
+        createdAt: ui.timestamp(user.createdAt, georap.i18n.locale),
         flagConfig: flagConfig,
         flags: user.flagsCreated,
         adds: user.locationsCreated,
