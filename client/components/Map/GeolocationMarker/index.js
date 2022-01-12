@@ -146,7 +146,7 @@ module.exports = function (map) {
     });
 
     controlDiv.index = 1;
-    map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(controlDiv);
+    map.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(controlDiv);
   };
 
 };

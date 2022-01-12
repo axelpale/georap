@@ -678,7 +678,8 @@ button.georap-geolocation {
   border-radius: 2px;
   box-shadow: 0 1px 4px rgba(0,0,0,0.3);
   cursor: pointer;
-  margin-right: 10px;
+  margin-left: 10px; /* for when button in LEFT_BOTTOM */
+  margin-right: 10px; /* for when button in RIGHT_BOTTOM */
   padding: 0;
 }
 button.georap-geolocation .georap-geolocation-icon {
