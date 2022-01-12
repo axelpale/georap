@@ -48,7 +48,6 @@ module.exports = function (username) {
         posts: user.postsCreated,
         classifications: user.locationsClassified,
         comments: user.commentsCreated,
-        points: user.points,
         __: __,
       }));
 
