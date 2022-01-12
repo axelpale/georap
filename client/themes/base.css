@@ -19,7 +19,7 @@ html, body {
   -webkit-transform: scale(-1, 1);
   transform: scale(-1, 1);
 }
-time {
+time:hover {
   text-decoration: underline;
 }
 .georap-disabled {

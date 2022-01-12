@@ -3,36 +3,52 @@
     <div class="col-md-12">
       <h1><span class="glyphicon glyphicon-user" aria-hidden="true"></span> <%= __('account-settings') %></h1>
 
+      <p>
+        <%= __('username') %>: <%= username %><br>
+        <%= __('email') %>: <%= email %>
+      </p>
+
       <h3><%= __('security') %></h3>
       <p><a class="btn btn-default" href="/account/email" role="button"><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> <%= __('change-email') %>...</a></p>
       <p><a class="btn btn-default" href="/account/password" role="button"><span class="glyphicon glyphicon-asterisk" aria-hidden="true"></span> <%= __('change-password') %>...</a></p>
-
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-5">
       <h3><%= __('theme') %></h3>
 
-      <div class="radio">
-        <label>
-          <input type="radio" name="colorScheme" id="theme-light" value="light" <%= theme.colorScheme === 'light' ? 'checked' : '' %>>
+      <div class="color-schemes list-group">
+        <a href="#" class="list-group-item" id="theme-light">
           <%= __('theme-light') %>
-        </label>
-      </div>
-      <div class="radio">
-        <label>
-          <input type="radio" name="colorScheme" id="theme-dark" value="dark" <%= theme.colorScheme === 'dark' ? 'checked' : '' %>>
+          <% if (theme.colorScheme === 'light') { %>
+            <span class="glyphicon glyphicon-star" aria-label="selected"></span>
+          <% } %>
+        </a>
+        <a href="#" class="list-group-item" id="theme-dark">
           <%= __('theme-dark') %>
-        </label>
+          <% if (theme.colorScheme === 'dark') { %>
+            <span class="glyphicon glyphicon-star" aria-label="selected"></span>
+          <% } %>
+        </a>
       </div>
-
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-5">
       <h3><%= __('language') %></h3>
 
       <div class="list-group">
         <% availableLocales.forEach(function (locale) { %>
-          <% var activity = locale === currentLocale ? 'active' : '' %>
+          <% var isActive = locale === currentLocale %>
           <a href="?locale=<%= locale %>"
-             class="list-group-item <%= activity %>"
+             class="list-group-item"
              lang="<%= locale %>"
              target="_self">
             <% // target=_self is necessary to bypass page.js router %>
             <%= __('locale-native', locale) %>
+            <% if (isActive) { %>
+              <span class="glyphicon glyphicon-star" aria-label="selected"></span>
+            <% } %>
           </a>
         <% }) %>
       </div>
