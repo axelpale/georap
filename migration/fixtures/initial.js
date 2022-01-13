@@ -11,7 +11,7 @@ module.exports = {
     config: [
       {
         key: 'schemaVersion',
-        value: 12,
+        value: 14,
       },
     ],
     attachments: [],
@@ -20,17 +20,17 @@ module.exports = {
     locations: [],
     users: [
       {
-        admin: true,
         email: config.admin.email,
         hash: bcrypt.hashSync(config.admin.password, config.bcrypt.rounds),
         name: admin,
+        role: 'admin',
+        status: 'active',
+        createdAt: db.timestamp(),
+        loginAt: db.timestamp(),
         points: 0, // points are updated by worker
         // points7days: created by worker
         // points30days: created by worker
         // points365days: created by worker
-        status: 'active',
-        createdAt: db.timestamp(),
-        loginAt: db.timestamp(),
       },
     ],
   },

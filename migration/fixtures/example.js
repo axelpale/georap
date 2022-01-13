@@ -43,7 +43,7 @@ module.exports = {
       {
         _id: db.id('58092312bbba430a35fb4139'),
         key: 'schemaVersion',
-        value: 13,
+        value: 14,
       },
     ],
     attachments: [
@@ -319,22 +319,25 @@ module.exports = {
     users: [
       {
         _id: db.id('5867bdf00a5a9e18d7755e4f'),
-        admin: true,
         email: config.admin.email,
         hash: bcrypt.hashSync(config.admin.password, config.bcrypt.rounds),
         name: admin,
         points: 0,  // points are updated by worker
+        // points7days: to be created by worker
+        // points30days: to be created by worker
+        // points365days: to be created by worker
+        role: 'admin',
         status: 'active',
         createdAt: NOW,
         loginAt: NOW,
       },
       {
         _id: db.id('5867bdf00b5a9e18d7755e33'),
-        admin: false,
         email: 'john.doe@georap.fi',
         hash: bcrypt.hashSync('foobar', config.bcrypt.rounds),
         name: 'johndoe',
         points: 0,
+        role: 'basic',
         status: 'deactivated',
         createdAt: NOW,
         loginAt: NOW,

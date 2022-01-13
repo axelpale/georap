@@ -418,4 +418,24 @@ describe('migrates.migrate', () => {
     });
   });
 
+  describe('v13 to v14', () => {
+    beforeEach((done) => {
+      loadFixtureByTag('v13', done);
+    });
+
+    it('should be able to migrate from v13 to v14', (done) => {
+      const targetV = 14;
+      migrates.migrate(targetV, (err) => {
+        assert.ifError(err);
+        assertFixtureEqual('config', 'v14', (err2) => {
+          assert.ifError(err2);
+          assertFixtureEqual('users', 'v14', (err3) => {
+            assert.ifError(err3);
+            done();
+          });
+        });
+      });
+    });
+  });
+
 });
