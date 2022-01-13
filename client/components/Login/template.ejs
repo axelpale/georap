@@ -35,17 +35,17 @@
       <form id="georap-login-form">
         <div class="form-group">
           <label for="georap-login-email"><%= __('email-or-username') %></label>
-          <input type="text" class="form-control" id="georap-login-email">
+          <input type="text" class="form-control" id="georap-login-email" tabindex="1">
         </div>
         <div class="form-group">
           <div class="pull-right">
             <a id="georap-password-reset-button" href="#"><%= __('forgot-password') %></a>
           </div>
           <label for="georap-login-password"><%= __('password') %></label>
-          <input type="password" class="form-control" id="georap-login-password">
+          <input type="password" class="form-control" id="georap-login-password" tabindex="2">
         </div>
         <div class="pull-right">
-          <button type="submit" class="btn btn-<%= loginColor %>"><%= __('log-in') %></button>
+          <button type="submit" class="btn btn-<%= loginColor %>" tabindex="3"><%= __('log-in') %></button>
         </div>
       </form>
 
