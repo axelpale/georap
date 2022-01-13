@@ -1,7 +1,5 @@
 /* eslint-disable new-cap */
 
-const config = require('georap-config');
-
 const accountRouter = require('./account/routes');
 const adminRouter = require('./admin/routes');
 const attachmentsRouter = require('./attachments/routes');
@@ -18,7 +16,7 @@ const usersRouter = require('./users/routes');
 
 const userDal = require('./users/user/dal');
 
-const jwt = require('express-jwt');
+const authMiddleware = require('./auth');
 const status = require('http-status-codes');
 const router = require('express').Router();
 
@@ -32,30 +30,8 @@ router.use('/locales', localesRouter);
 // the router is used before the jwt middleware.
 router.use('/account', accountRouter);
 
-// Token middleware. User can access the routes only with a valid token.
-// Token contents are stored in req.user with properties:
-//
-// req.user = {
-//   name: <string>,
-//   email: <string>,
-//   admin: <bool>,
-// }
-//
-// See https://github.com/auth0/express-jwt
-router.use(jwt({
-  secret: config.secret,
-  algorithms: ['HS256'],
-  getToken: function fromHeaderOrQuerystring(req) {
-    // Copied from https://github.com/auth0/express-jwt#usage
-    const header = req.headers.authorization;
-    if (header && header.split(' ')[0] === 'Bearer') {
-      return header.split(' ')[1];
-    } else if (req.query && req.query.token) {
-      return req.query.token;
-    }
-    return null;
-  },
-}));
+// Authentication JWT Token middleware.
+router.use(authMiddleware);
 
 // Check if user is banned.
 router.use((req, res, next) => {
