@@ -23,7 +23,7 @@ module.exports = function (req, res, next) {
   //         the translation of the invitation.
   //
   const email = req.body.email;
-  const isAdmin = req.user.admin;
+  const isAdmin = req.user.role === 'admin';
   let lang = req.body.lang;
 
   if (isAdmin !== true) {

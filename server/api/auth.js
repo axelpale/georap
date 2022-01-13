@@ -5,7 +5,7 @@
 // req.user = {
 //   name: <string>,
 //   email: <string>,
-//   admin: <bool>,
+//   role: <string>,
 // }
 //
 // See https://github.com/auth0/express-jwt

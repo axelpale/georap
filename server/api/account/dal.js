@@ -29,7 +29,7 @@ exports.createUser = function (username, email, password, callback) {
       name: username,
       email: email,
       hash: pwdHash,
-      admin: false,
+      role: 'basic',
       status: 'active',  // options. 'active' | 'deactivated',
       createdAt: (new Date()).toISOString(),
       loginAt: (new Date()).toISOString(),

@@ -40,22 +40,27 @@ exports.getUserForAdmin = function (username, callback) {
 };
 
 
-exports.setRole = function (username, isAdmin, callback) {
+exports.setRole = function (username, newRole, callback) {
   // Set user role
   //
   // Parameters:
   //   username
-  //   isAdmin
+  //   newRole
   //   callback
   //     function (err)
 
-  if (typeof username !== 'string' || typeof isAdmin !== 'boolean') {
+  if (typeof username !== 'string' || typeof newRole !== 'string') {
+    throw new Error('invalid parameters');
+  }
+
+  if (newRole !== 'basic' && newRole !== 'admin') {
+    // TODO get roles from config
     throw new Error('invalid parameters');
   }
 
   const coll = db.collection('users');
   const q = { name: username };
-  const up = { $set: { 'admin': isAdmin } };
+  const up = { $set: { 'role': newRole } };
 
   coll.updateOne(q, up, (err) => {
     if (err) {

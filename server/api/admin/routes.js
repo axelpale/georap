@@ -7,7 +7,7 @@ const testsRouter = require('./tests/routes');
 
 // Allow requests only by admin users.
 router.use((req, res, next) => {
-  if (req.user.admin) {
+  if (req.user.role === 'admin') {
     return next();
   }
 

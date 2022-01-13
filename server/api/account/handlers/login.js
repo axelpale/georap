@@ -67,7 +67,7 @@ module.exports = function (req, res, next) {
       }
 
       // else, build jwt token
-      const token = generateAuthToken(user.name, user.email, user.admin);
+      const token = generateAuthToken(user.name, user.email, user.role);
 
       // Register login time.
       dal.markLogin(user.name, (errl) => {

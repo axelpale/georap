@@ -8,10 +8,10 @@ exports.getOne = function (req, res, next) {
   //
   // Response:
   //   {
-  //     admin: <bool>,
   //     email: <string>,
   //     name: <string>,
   //     points: <int>,
+  //     role: <string>,
   //     status: <'active' | 'deactivated'>
   //   }
 
@@ -57,7 +57,7 @@ exports.setStatus = function (req, res, next) {
 
 exports.setRole = function (req, res, next) {
 
-  const isAdmin = req.body.isAdmin;
+  const newRole = req.body.isAdmin ? 'admin' : 'basic';
 
   const targetName = req.username;
   const authorName = req.user.name;
@@ -67,7 +67,7 @@ exports.setRole = function (req, res, next) {
     return res.sendStatus(status.BAD_REQUEST);
   }
 
-  dal.setRole(targetName, isAdmin, (err) => {
+  dal.setRole(targetName, newRole, (err) => {
     if (err) {
       return next(err);
     }

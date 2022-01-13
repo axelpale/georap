@@ -82,7 +82,7 @@ module.exports = function (req, res, next) {
           }
 
           // Refresh user token because its email has changed
-          const token = generateAuthToken(username, newEmail, user.admin);
+          const token = generateAuthToken(username, newEmail, user.role);
 
           // Email changed successfully
           loggers.log(req.user.name + ' changed email to ' + decoded.newEmail);

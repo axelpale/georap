@@ -1,14 +1,14 @@
 const config = require('georap-config');
 const jwt = require('jsonwebtoken');
 
-module.exports = (username, email, isAdmin) => {
+module.exports = (username, email, role) => {
   // Create a JWT token that will be stored client-side.
   //
 
   const tokenPayload = {
     name: username,
     email: email,
-    admin: isAdmin,
+    role: role,
   };
 
   // The following will add 'exp' property to payload.

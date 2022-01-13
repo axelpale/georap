@@ -9,7 +9,7 @@ module.exports = function (req, res, next) {
   const commentId = req.commentId;
 
   // Allow only owners and admins to delete
-  const isAdmin = req.user.admin;
+  const isAdmin = req.user.role === 'admin';
   const isOwner = req.user.name === req.comment.user;
 
   if (!isAdmin && !isOwner) {

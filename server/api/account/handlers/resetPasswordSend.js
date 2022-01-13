@@ -47,7 +47,7 @@ module.exports = function (req, res, next) {
     const tokenPayload = {
       name: user.name,
       email: user.email,
-      admin: user.admin,
+      role: user.role,
       passwordReset: true,
     };
     const token = jwt.sign(tokenPayload, config.secret, {

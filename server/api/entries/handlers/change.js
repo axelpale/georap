@@ -12,7 +12,7 @@ module.exports = (req, res, next) => {
 
   // Allow only creator or admin to edit.
   // TODO make a difference between editor and owner
-  if (req.user.name !== oldEntry.user && req.user.admin === false) {
+  if (req.user.name !== oldEntry.user && req.user.role !== 'admin') {
     return res.sendStatus(status.FORBIDDEN);
   }
 

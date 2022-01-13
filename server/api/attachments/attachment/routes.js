@@ -6,7 +6,7 @@ const handlers = require('./handlers');
 const status = require('http-status-codes');
 
 const onlyOwnerOrAdmin = (req, res, next) => {
-  if (req.user.admin === true || req.attachment.user === req.user.name) {
+  if (req.user.role === 'admin' || req.attachment.user === req.user.name) {
     return next();
   }
   return res.status(status.FORBIDDEN).send('Only for owners and admins.');
