@@ -1,7 +1,7 @@
 const len = 6;
 const dec = 10;
 
-module.exports = function () {
+exports.generate = function () {
   // Return a random security code length six.
   //
   let digits = '';
@@ -9,4 +9,8 @@ module.exports = function () {
     digits += Math.floor(10 * Math.random()).toString(dec);
   }
   return digits;
+};
+
+exports.validate = function (code) {
+  return (typeof code === 'string' && code.length > len);
 };

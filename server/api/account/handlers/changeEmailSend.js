@@ -4,7 +4,7 @@ const db = require('georap-db');
 const jwt = require('jsonwebtoken');
 const validator = require('email-validator');
 const templates = require('../templates');
-const generateSecurityCode = require('../lib/generateSecurityCode');
+const securityCode = require('../lib/securityCode');
 const mailer = require('../../../services/mailer');
 const loggers = require('../../../services/logs/loggers');
 
@@ -42,7 +42,7 @@ module.exports = function (req, res, next) {
     // Thus, no user with this email. We can continue.
 
     // Create a security code
-    const code = generateSecurityCode();
+    const code = securityCode.generate();
     // Wrap the code into a jwt token with short expiration time
     const tokenPayload = {
       name: user.name,

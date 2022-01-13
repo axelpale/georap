@@ -4,20 +4,24 @@ const db = require('georap-db');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const generateAuthToken = require('../lib/generateAuthToken');
+const securityCode = require('../lib/securityCode');
 const loggers = require('../../../services/logs/loggers');
 
 module.exports = function (req, res, next) {
   // Parameters:
-  //   req.params.key
+  //   req.params.code
   //   req.body.password
-  //   req.body.securityCode
   //
 
-  const securityCode = req.params.code;
+  const code = req.params.code; // security code
   const password = req.body.password;
   const username = req.user.name;
 
-  if (typeof password !== 'string' || typeof securityCode !== 'string') {
+  if (typeof password !== 'string') {
+    return res.sendStatus(status.BAD_REQUEST);
+  }
+
+  if (!securityCode.validate(code)) {
     return res.sendStatus(status.BAD_REQUEST);
   }
 
@@ -48,12 +52,17 @@ module.exports = function (req, res, next) {
       // Check that given security code matches the stored token.
       jwt.verify(user.securityToken, config.secret, (errj, decoded) => {
         if (errj) {
-          // Probably expired token
+          // Probably expired or invalid token
+          return res.sendStatus(status.UNAUTHORIZED);
+        }
+
+        // Ensure non-empty code. Just to double-check for uncertain future.
+        if (!securityCode.validate(decoded.securityCode)) {
           return res.sendStatus(status.UNAUTHORIZED);
         }
 
         // Do the codes match
-        if (securityCode !== decoded.securityCode) {
+        if (code !== decoded.securityCode) {
           return res.sendStatus(status.UNAUTHORIZED);
         }
 
@@ -64,7 +73,7 @@ module.exports = function (req, res, next) {
         db.collection('users').updateOne(q, {
           $set: {
             email: newEmail,
-            securityToken: null,
+            securityToken: '',
           },
         }, (erru) => {
           if (erru) {

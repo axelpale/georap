@@ -216,7 +216,7 @@ module.exports = {
       name: 'admin',
       points: 0,
       role: 'admin', // NOTE new in v14
-      securityToken: '', // NOTE new in v14
+      securityToken: '', // NOTE new in v14, a JWT token
       status: 'active',
       createdAt: '2009-07-29T12:34:56.000Z',
       loginAt: '2009-10-05T12:34:56.000Z',
