@@ -29,6 +29,7 @@ module.exports = function () {
 
     $elems.loading = $mount.find('.admin-users-loading');
     $elems.table = $mount.find('.admin-users-table');
+    $elems.buttons = $mount.find('.admin-users-buttons');
 
     children.creation = new components.Opener(CreationComponent);
     var $creationContainer = $mount.find('.admin-users-creation');
@@ -45,6 +46,9 @@ module.exports = function () {
         console.error(err);
         return;
       }
+
+      // Reveal buttons after load
+      ui.show($elems.buttons);
 
       // Reveal user table
       $elems.table.html(tableTemplate({

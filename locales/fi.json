@@ -66,6 +66,8 @@
   "create": "Luo",
   "create-here": "Luo tähän",
   "create-user": "Luo käyttäjä",
+  "create-user-email": "Sähköpostiosoite",
+  "create-user-username": "Nimimerkki",
   "create-location-here": "Luo uusi paikka tähän",
   "created-by": "Lisääjä",
   "current-password": "Nykyinen salasana",

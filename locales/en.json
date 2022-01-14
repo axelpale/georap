@@ -68,6 +68,8 @@
   "create-here": "Create here",
   "create-location-here": "Create a location here",
   "create-user": "Create User",
+  "create-user-email": "Email",
+  "create-user-username": "Username",
   "created-by": "Created by",
   "current-password": "Current password",
   "current-password-empty": "Your current password cannot be empty.",

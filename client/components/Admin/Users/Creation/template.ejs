@@ -1,1 +1,37 @@
-<button type="button" class="boilerplate-btn btn btn-default"><span class="glyphicon glyphicon-comment"></span> Press Me</button>
+<div class="panel panel-primary">
+  <div class="panel-heading">
+    <h3 class="panel-title"><%= __('create-user') %></h3>
+  </div>
+  <div class="panel-body">
+
+    <form class="user-creation-form">
+      <div class="user-creation-username-group form-group">
+        <label for="user-creation-username" class="control-label"><%= __('create-user-username') %>:</label>
+        <input type="text" class="form-control" id="user-creation-username">
+      </div>
+      <div class="user-creation-email-group form-group">
+        <label for="user-creation-email"><%= __('create-user-email') %>:</label>
+        <input type="email" class="form-control" id="user-creation-email">
+      </div>
+      <div class="user-creation-password-group form-group">
+        <label for="user-creation-password" class="control-label"><%= __('signup-password') %>:</label>
+        <input type="password" class="form-control" id="user-creation-password">
+      </div>
+      <div class="user-creation-password2-group form-group">
+        <label for="user-creation-password2" class="control-label"><%= __('signup-password-repeat') %>:</label>
+        <input type="password" class="form-control" id="user-creation-password2">
+      </div>
+      <div class="user-creation-inform checkbox">
+        <label>
+          <input type="checkbox"> Send welcome message to email
+        </label>
+        <p class="help-block">Message does not contain the password. Message contains the username.</p>
+      </div>
+      <div class="pull-right">
+        <button type="button" class="btn btn-default"><%= __('cancel') %></button>
+        <button type="submit" class="btn btn-primary"><%= __('create') %></button>
+      </div>
+    </form>
+
+  </div>
+</div>
