@@ -12,34 +12,32 @@ var __ = georap.i18n.__;
 
 module.exports = function (username) {
 
-  // Init
+  // Setup
+  var $mount = null;
+  var children = {};
+  var $elems = {};
   var self = this;
   emitter(self);
 
-  // Components
-  var infoComp, eventsComp, roleComp, statusComp;
-
-
-  // Public methods
-
-  self.bind = function ($mount) {
+  self.bind = function ($mountEl) {
+    $mount = $mountEl;
 
     $mount.html(template({
       username: username,
       __: __,
     }));
 
-    var $infoRoot = $('#admin-user-info-root');
-    var $statusRoot = $('#admin-user-status-root');
-    var $eventsRoot = $('#admin-user-events-root');
-    var $loading = $('#admin-user-loading');
-    var $roleRoot = $('#admin-user-role-root');
+    $elems.infoRoot = $('.admin-user-info-root');
+    $elems.statusRoot = $('.admin-user-status-root');
+    $elems.eventsRoot = $('.admin-user-events-root');
+    $elems.loading = $('.admin-user-loading');
+    $elems.roleRoot = $('.admin-user-role-root');
 
     // Fetch users and include to page.
-    ui.show($loading);
+    ui.show($elems.loading);
     admin.getUser(username, function (err, user) {
       // Hide loading bar
-      ui.hide($loading);
+      ui.hide($elems.loading);
 
       if (err) {
         console.error(err);
@@ -47,24 +45,26 @@ module.exports = function (username) {
       }
 
       // Construct and bind child components
-      infoComp = new InfoComponent(user);
-      statusComp = new StatusComponent(user);
-      eventsComp = new EventsComponent(user);
-      roleComp = new RoleComponent(user);
+      children.infoComp = new InfoComponent(user);
+      children.statusComp = new StatusComponent(user);
+      children.eventsComp = new EventsComponent(user);
+      children.roleComp = new RoleComponent(user);
 
-      infoComp.bind($infoRoot);
-      statusComp.bind($statusRoot);
-      eventsComp.bind($eventsRoot);
-      roleComp.bind($roleRoot);
+      children.infoComp.bind($elems.infoRoot);
+      children.statusComp.bind($elems.statusRoot);
+      children.eventsComp.bind($elems.eventsRoot);
+      children.roleComp.bind($elems.roleRoot);
     });
   };
 
-
   self.unbind = function () {
-    infoComp.unbind();
-    statusComp.unbind();
-    eventsComp.unbind();
-    roleComp.unbind();
+    if ($mount) {
+      ui.unbindAll(children);
+      children = {};
+      ui.offAll($elems);
+      $elems = {};
+      $mount.empty();
+      $mount = null;
+    }
   };
-
 };

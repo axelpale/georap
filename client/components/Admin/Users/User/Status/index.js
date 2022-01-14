@@ -5,9 +5,12 @@ var admin = georap.stores.admin;
 var __ = georap.i18n.__;
 
 module.exports = function (user) {
+  var $mount = null;
   var self = this;
+  var $elems = {};
 
-  this.bind = function ($mount) {
+  this.bind = function ($mountEl) {
+    $mount = $mountEl;
 
     $mount.html(template({
       username: user.name,
@@ -15,39 +18,39 @@ module.exports = function (user) {
       __: __,
     }));
 
-    var $box = $('#status-checkbox');
-    var $cancel = $('#admin-user-status-cancel');
-    var $edit = $('#admin-user-status-edit');
-    var $error = $('#admin-user-status-error');
-    var $form = $('#admin-user-status-form');
-    var $success = $('#admin-user-status-success');
-    var $noauto = $('#admin-user-status-noauto');
+    $elems.box = $('#status-checkbox');
+    $elems.cancel = $('#admin-user-status-cancel');
+    $elems.edit = $('#admin-user-status-edit');
+    $elems.error = $('#admin-user-status-error');
+    $elems.form = $('#admin-user-status-form');
+    $elems.success = $('#admin-user-status-success');
+    $elems.noauto = $('#admin-user-status-noauto');
 
-    $cancel.click(function (ev) {
+    $elems.cancel.click(function (ev) {
       ev.preventDefault();
       // Hide and reset form
-      ui.hide($form);
-      $box.prop('checked', user.status === 'active');
+      ui.hide($elems.form);
+      $elems.box.prop('checked', user.status === 'active');
     });
 
-    $edit.click(function (ev) {
+    $elems.edit.click(function (ev) {
       ev.preventDefault();
 
       // Prevent user trying to deactivate him/herself
       var author = account.getName();
 
       if (author === user.name) {
-        ui.toggleHidden($noauto);
+        ui.toggleHidden($elems.noauto);
       } else {
-        ui.toggleHidden($form);
-        ui.hide($success);
+        ui.toggleHidden($elems.form);
+        ui.hide($elems.success);
       }
     });
 
-    $form.submit(function (ev) {
+    $elems.form.submit(function (ev) {
       ev.preventDefault();
 
-      var isChecked = $box.prop('checked');
+      var isChecked = $elems.box.prop('checked');
 
       if (typeof isChecked !== 'boolean') {
         throw new Error('Invalid bool isChecked: ' + isChecked);
@@ -57,23 +60,26 @@ module.exports = function (user) {
       admin.setStatus(user.name, !isChecked, function (err) {
         if (err) {
           console.error(err);
-          ui.show($error);
+          ui.show($elems.error);
           return;
         }
 
-        ui.hide($form);
-        ui.show($success);
+        ui.hide($elems.form);
+        ui.show($elems.success);
         user.status = isChecked ? 'deactivated' : 'active';
         self.unbind();
-        self.bind($mount);
+        self.bind($mountEl);
       });
     });
 
   };
 
   this.unbind = function () {
-    $('admin-user-status-cancel').off();
-    $('admin-user-status-edit').off();
-    $('admin-user-status-form').off();
+    if ($mount) {
+      ui.offAll($elems);
+      $elems = {};
+      $mount.empty();
+      $mount = null;
+    }
   };
 };

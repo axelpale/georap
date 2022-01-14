@@ -6,9 +6,12 @@ var roles = georap.config.roles;
 var __ = georap.i18n.__;
 
 module.exports = function (user) {
+  var $mount = null;
   var self = this;
+  var $elems = {};
 
-  this.bind = function ($mount) {
+  this.bind = function ($mountEl) {
+    $mount = $mountEl;
 
     $mount.html(template({
       user: user,
@@ -19,12 +22,12 @@ module.exports = function (user) {
     // Prevent user trying to change his/her role
     var author = account.getName();
 
-    var $cancel = $('#admin-user-role-cancel');
-    var $edit = $('#admin-user-role-edit');
-    var $error = $('#admin-user-role-error');
-    var $form = $('#admin-user-role-form');
-    var $success = $('#admin-user-role-success');
-    var $noauto = $('#admin-user-role-noauto');
+    $elems.cancel = $('#admin-user-role-cancel');
+    $elems.edit = $('#admin-user-role-edit');
+    $elems.error = $('#admin-user-role-error');
+    $elems.form = $('#admin-user-role-form');
+    $elems.success = $('#admin-user-role-success');
+    $elems.noauto = $('#admin-user-role-noauto');
 
     var reset = function () {
       $mount.find('.radio input').each(function (el) {
@@ -40,53 +43,52 @@ module.exports = function (user) {
       return $mount.find('.radio input[name=\'userRole\']:checked').val();
     };
 
-    $cancel.click(function (ev) {
+    $elems.cancel.click(function (ev) {
       ev.preventDefault();
       // Hide and reset form
-      ui.hide($form);
+      ui.hide($elems.form);
       reset();
     });
 
-    $edit.click(function (ev) {
+    $elems.edit.click(function (ev) {
       ev.preventDefault();
 
       if (author === user.name) {
-        ui.toggleHidden($noauto);
+        ui.toggleHidden($elems.noauto);
       } else {
-        ui.toggleHidden($form);
-        ui.hide($success);
+        ui.toggleHidden($elems.form);
+        ui.hide($elems.success);
       }
     });
 
-    $form.submit(function (ev) {
+    $elems.form.submit(function (ev) {
       ev.preventDefault();
       var newRole = getSelectedRole();
 
       admin.setRole(user.name, newRole, function (err) {
         if (err) {
           console.error(err);
-          ui.show($error);
+          ui.show($elems.error);
           return;
         }
 
-        ui.hide($form);
-        ui.show($success);
+        ui.hide($elems.form);
+        ui.show($elems.success);
         user.role = newRole;
         // Refresh
         self.unbind();
-        self.bind($mount);
+        self.bind($mountEl);
       });
     });
 
   };
 
   this.unbind = function () {
-    var $cancel = $('#admin-user-role-cancel');
-    var $edit = $('#admin-user-role-edit');
-    var $form = $('#admin-user-role-form');
-
-    $cancel.off();
-    $edit.off();
-    $form.off();
+    if ($mount) {
+      ui.offAll($elems);
+      $elems = {};
+      $mount.empty();
+      $mount = null;
+    }
   };
 };

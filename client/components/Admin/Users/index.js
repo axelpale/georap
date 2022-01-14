@@ -1,5 +1,5 @@
 // User Management UI
-
+//
 var admin = georap.stores.admin;
 var template = require('./template.ejs');
 var tableTemplate = require('./table.ejs');
@@ -10,24 +10,28 @@ var __ = georap.i18n.__;
 module.exports = function () {
 
   // Init
+  var $mount = null;
+  var $elems = {};
   var self = this;
   emitter(self);
 
   // Public methods
 
-  self.bind = function ($mount) {
+  self.bind = function ($mountEl) {
+    $mount = $mountEl;
+
     $mount.html(template({
       __: __,
     }));
 
-    var $loading = $('#admin-users-loading');
-    var $table = $('#admin-users-table');
+    $elems.loading = $mount.find('.admin-users-loading');
+    $elems.table = $mount.find('.admin-users-table');
 
     // Fetch users and include to page.
-    ui.show($loading);
+    ui.show($elems.loading);
     admin.getUsers(function (err, rawUsers) {
       // Hide loading bar
-      ui.hide($loading);
+      ui.hide($elems.loading);
 
       if (err) {
         console.error(err);
@@ -35,7 +39,7 @@ module.exports = function () {
       }
 
       // Reveal user table
-      $table.html(tableTemplate({
+      $elems.table.html(tableTemplate({
         users: rawUsers,
         __: __,
       }));
@@ -43,6 +47,12 @@ module.exports = function () {
   };
 
   this.unbind = function () {
+    if ($mount) {
+      ui.offAll($elems);
+      $elems = {};
+      $mount.empty();
+      $mount = null;
+    }
   };
 
 };
