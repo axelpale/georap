@@ -248,8 +248,6 @@
   "pwd-reset-unknown-email": "Tiliä tällä sähköpostiosoitteella ei ole olemassa. Tarkista, että antamasi sähköpostiosoite on oikein.",
   "remote-place": "syrjäinen alue",
   "role": "Rooli",
-  "role-admin": "Ylläpitäjä",
-  "role-basic": "Perusjäsen",
   "role-change": "Muuta jäsenen roolia",
   "role-form-fail": "Roolin muuttaminen epäonnistui.",
   "role-form-help": "Ainoastaan ylläpitäjät voivat muuttaa muiden jäsenten rooleja. Ylläpitäjät voivat myös poistaa mitä tahansa sisältöä, kutsua uusia jäseniä ja jäädyttää jäsenten tilejä.",
@@ -334,6 +332,11 @@
   "user-named-loc": "nimesi paikan",
   "user-renamed-loc": "vaihtoi paikan",
   "user-renamed-loc-to": "nimeksi",
+  "user-role": {
+    "admin": "Ylläpitäjä",
+    "mod": "Moderaattori",
+    "basic": "Perusjäsen"
+  },
   "user-tagged-loc": "muutti paikan",
   "user-tagged-loc-as": "tageiksi",
   "user-visited-legacy": "väitti vierailleensa paikassa",

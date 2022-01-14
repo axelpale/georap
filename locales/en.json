@@ -249,8 +249,6 @@
   "pwd-reset-unknown-email": "No user with this email exists. Please ensure that the email address is correct.",
   "remote-place": "remote area",
   "role": "Role",
-  "role-admin": "Admin",
-  "role-basic": "Basic",
   "role-change": "Change member role",
   "role-form-fail": "Updating the role failed.",
   "role-form-help": "Only members with administrator role can change roles of others. Administrators can also delete any content, invite new members and lock member accounts.",
@@ -335,6 +333,11 @@
   "user-named-loc": "named",
   "user-renamed-loc": "renamed",
   "user-renamed-loc-to": "to",
+  "user-role": {
+    "admin": "Admin",
+    "mod": "Moderator",
+    "basic": "Basic"
+  },
   "user-tagged-loc": "tagged",
   "user-tagged-loc-as": "as",
   "user-visited-legacy": "maybe visited",
