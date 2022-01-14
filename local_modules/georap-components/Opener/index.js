@@ -64,16 +64,20 @@ module.exports = function (Component, isOpen) {
 
   this.unbind = function () {
     // Unbind the opener binding and internal component bindings.
-    if ($button) {
+    if (component) {
       if ('off' in component) {
         component.off('cancel');
       }
       component.unbind();
       component = null;
-      $container.empty();
-      $container = null;
+    }
+    if ($button) {
       $button.off();
       $button = null;
+    }
+    if ($container) {
+      $container.empty();
+      $container = null;
     }
   };
 };
