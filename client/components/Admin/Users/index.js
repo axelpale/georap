@@ -5,12 +5,15 @@ var template = require('./template.ejs');
 var tableTemplate = require('./table.ejs');
 var emitter = require('component-emitter');
 var ui = require('georap-ui');
+var components = require('georap-components');
+var CreationComponent = require('./Creation');
 var __ = georap.i18n.__;
 
 module.exports = function () {
 
   // Init
   var $mount = null;
+  var children = {};
   var $elems = {};
   var self = this;
   emitter(self);
@@ -26,6 +29,11 @@ module.exports = function () {
 
     $elems.loading = $mount.find('.admin-users-loading');
     $elems.table = $mount.find('.admin-users-table');
+
+    children.creation = new components.Opener(CreationComponent);
+    var $creationContainer = $mount.find('.admin-users-creation');
+    var $creationOpener = $mount.find('.admin-users-creation-opener');
+    children.creation.bind($creationContainer, $creationOpener);
 
     // Fetch users and include to page.
     ui.show($elems.loading);
@@ -48,6 +56,8 @@ module.exports = function () {
 
   this.unbind = function () {
     if ($mount) {
+      ui.unbindAll(children);
+      children = {};
       ui.offAll($elems);
       $elems = {};
       $mount.empty();
