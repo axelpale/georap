@@ -1,11 +1,11 @@
 <h3>
   <%= __('status') %>: <%= status === 'active' ? __('status-active') : __('status-deactive') %>
-  <button id="georap-admin-user-status-edit" type="button" class="btn btn-default btn-xs">
+  <button id="admin-user-status-edit" type="button" class="btn btn-default btn-xs">
     <span class="glyphicon glyphicon-pencil"></span> <%= __('edit') %>
   </button>
 </h3>
 
-<form id="georap-admin-user-status-form" class="hidden panel panel-primary">
+<form id="admin-user-status-form" class="hidden panel panel-primary">
   <div class="panel-heading">
     <%= __('status-activate-deactivate') %>
   </div>
@@ -17,20 +17,20 @@
     </div>
     <p class="help-block"><%= __('status-deactivate-info') %></p>
     <div class="pull-right">
-      <button id="georap-admin-user-status-cancel" type="button" class="btn btn-default"><%= __('cancel') %></button>
+      <button id="admin-user-status-cancel" type="button" class="btn btn-default"><%= __('cancel') %></button>
       <button type="submit" class="btn btn-primary"><%= __('save') %></button>
     </div>
   </div>
 </form>
 
-<div id="georap-admin-user-status-noauto" class="hidden">
+<div id="admin-user-status-noauto" class="hidden">
   <div class="alert alert-warning" role="alert"><%= __('status-cannot-lock') %></div>
 </div>
 
-<div id="georap-admin-user-status-error" class="hidden">
+<div id="admin-user-status-error" class="hidden">
   <div class="alert alert-danger" role="alert"><%= __('status-update-failed') %></div>
 </div>
 
-<div id="georap-admin-user-status-success" class="hidden">
+<div id="admin-user-status-success" class="hidden">
   <div class="alert alert-success" role="alert"><%= __('status-update-success') %></div>
 </div>

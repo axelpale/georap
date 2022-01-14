@@ -19,12 +19,12 @@ module.exports = function (user) {
     // Prevent user trying to change his/her role
     var author = account.getName();
 
-    var $cancel = $('#georap-admin-user-role-cancel');
-    var $edit = $('#georap-admin-user-role-edit');
-    var $error = $('#georap-admin-user-role-error');
-    var $form = $('#georap-admin-user-role-form');
-    var $success = $('#georap-admin-user-role-success');
-    var $noauto = $('#georap-admin-user-role-noauto');
+    var $cancel = $('#admin-user-role-cancel');
+    var $edit = $('#admin-user-role-edit');
+    var $error = $('#admin-user-role-error');
+    var $form = $('#admin-user-role-form');
+    var $success = $('#admin-user-role-success');
+    var $noauto = $('#admin-user-role-noauto');
 
     var reset = function () {
       $mount.find('.radio input').each(function (el) {
@@ -81,9 +81,9 @@ module.exports = function (user) {
   };
 
   this.unbind = function () {
-    var $cancel = $('georap-admin-user-role-cancel');
-    var $edit = $('georap-admin-user-role-edit');
-    var $form = $('georap-admin-user-role-form');
+    var $cancel = $('#admin-user-role-cancel');
+    var $edit = $('#admin-user-role-edit');
+    var $form = $('#admin-user-role-form');
 
     $cancel.off();
     $edit.off();

@@ -29,11 +29,11 @@ module.exports = function (username) {
       __: __,
     }));
 
-    var $infoRoot = $('#georap-admin-user-info-root');
-    var $statusRoot = $('#georap-admin-user-status-root');
-    var $eventsRoot = $('#georap-admin-user-events-root');
-    var $loading = $('#georap-admin-user-loading');
-    var $roleRoot = $('#georap-admin-user-role-root');
+    var $infoRoot = $('#admin-user-info-root');
+    var $statusRoot = $('#admin-user-status-root');
+    var $eventsRoot = $('#admin-user-events-root');
+    var $loading = $('#admin-user-loading');
+    var $roleRoot = $('#admin-user-role-root');
 
     // Fetch users and include to page.
     ui.show($loading);

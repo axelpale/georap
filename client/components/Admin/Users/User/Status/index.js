@@ -16,12 +16,12 @@ module.exports = function (user) {
     }));
 
     var $box = $('#status-checkbox');
-    var $cancel = $('#georap-admin-user-status-cancel');
-    var $edit = $('#georap-admin-user-status-edit');
-    var $error = $('#georap-admin-user-status-error');
-    var $form = $('#georap-admin-user-status-form');
-    var $success = $('#georap-admin-user-status-success');
-    var $noauto = $('#georap-admin-user-status-noauto');
+    var $cancel = $('#admin-user-status-cancel');
+    var $edit = $('#admin-user-status-edit');
+    var $error = $('#admin-user-status-error');
+    var $form = $('#admin-user-status-form');
+    var $success = $('#admin-user-status-success');
+    var $noauto = $('#admin-user-status-noauto');
 
     $cancel.click(function (ev) {
       ev.preventDefault();
@@ -72,8 +72,8 @@ module.exports = function (user) {
   };
 
   this.unbind = function () {
-    $('georap-admin-user-status-cancel').off();
-    $('georap-admin-user-status-edit').off();
-    $('georap-admin-user-status-form').off();
+    $('admin-user-status-cancel').off();
+    $('admin-user-status-edit').off();
+    $('admin-user-status-form').off();
   };
 };
