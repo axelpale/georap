@@ -36,7 +36,7 @@
 
         <li role="separator" class="divider"></li>
 
-        <% if (user.admin) { %>
+        <% if (user.role === 'admin') { %>
           <li class="dropdown-header"><%= __('admin-menu') %></li>
           <li>
             <a href="/invite"><%= glyphicon({ name: 'envelope' }) %> <%= __('invite') %></a>
