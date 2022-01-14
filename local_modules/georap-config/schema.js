@@ -115,6 +115,16 @@ module.exports = {
     logDir: {
       type: 'string',
     },
+    // USER MANAGEMENT
+    roles: {
+      type: 'array',
+      items: {
+        type: 'string',
+      },
+    },
+    capabilities: {
+      type: 'object',
+    },
     // THEME AND BRAND
     defaultLocale: {
       type: 'string',
@@ -263,6 +273,9 @@ module.exports = {
     'tempUploadTimeToLive',
     'tempUploadSizeLimit',
     'logDir',
+    // USER MANAGEMENT
+    'roles', // new in v14
+    'capabilities', // new in v14
     // THEME AND BRAND
     'availableLocales',
     'defaultLocale',

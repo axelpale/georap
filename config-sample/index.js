@@ -135,6 +135,11 @@ module.exports = {
   logDir: path.resolve(__dirname, '../.data/logs'),
 
 
+  //##### USER MANAGEMENT #####
+  roles: ['basic', 'admin'], // New in v14
+  capabilities: {}, // New in v14. Reserved for future.
+
+
   // ##### THEME AND BRAND #####
   // Settings from here to the end of the file can be left default.
 
