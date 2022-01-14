@@ -20,10 +20,10 @@ module.exports = function () {
       __: georap.i18n.__,
     }));
 
-    // $elems.btn = $mount.find('.boilerplate-btn');
-    // $elems.btn.click(function () {
-    //   console.log('Button clicked');
-    // });
+    $elems.cancel = $mount.find('.user-creation-cancel');
+    $elems.cancel.click(function () {
+      self.emit('cancel');
+    });
   };
 
   self.unbind = function () {
