@@ -5,47 +5,47 @@
       <p><%= __('signup-for-email') %> <strong><%= email %></strong></p>
       <p><%= __('signup-welcome') %> <%= siteTitle %>. <%= __('signup-info') %></p>
 
-      <div id="georap-signup-invalid-username" class="hidden">
+      <div id="signup-invalid-username" class="hidden">
         <div class="alert alert-danger" role="alert"><%= __('signup-invalid-username') %></div>
       </div>
 
-      <div id="georap-signup-password-no-match" class="hidden">
+      <div id="signup-password-no-match" class="hidden">
         <div class="alert alert-danger" role="alert"><%= __('signup-password-mismatch') %></div>
       </div>
 
-      <div id="georap-signup-email-username-taken" class="hidden">
+      <div id="signup-email-username-taken" class="hidden">
         <div class="alert alert-danger" role="alert"><%= __('signup-username-taken') %></div>
       </div>
 
-      <div id="georap-signup-server-error" class="hidden">
+      <div id="signup-server-error" class="hidden">
         <div class="alert alert-danger" role="alert"><%= __('signup-failed') %></div>
       </div>
 
-      <div id="georap-signup-token-error" class="hidden">
+      <div id="signup-token-error" class="hidden">
         <div class="alert alert-warning" role="alert"><%= __('signup-expired') %></div>
       </div>
 
-      <div id="georap-signup-success" class="hidden">
+      <div id="signup-success" class="hidden">
         <div class="alert alert-success" role="alert"><%= __('signup-success') %></div>
       </div>
 
-      <form id="georap-signup-form">
-        <div id="georap-signup-username-group" class="form-group">
-          <label for="georap-signup-username" class="control-label"><%= __('signup-username') %>:</label>
-          <input type="text" class="form-control" id="georap-signup-username">
+      <form id="signup-form">
+        <div id="signup-username-group" class="form-group">
+          <label for="signup-username" class="control-label"><%= __('signup-username') %>:</label>
+          <input type="text" class="form-control" id="signup-username">
         </div>
-        <div id="georap-new-password-group" class="form-group">
-          <label for="georap-signup-password" class="control-label"><%= __('signup-password') %>:</label>
-          <input type="password" class="form-control" id="georap-signup-password">
+        <div id="new-password-group" class="form-group">
+          <label for="signup-password" class="control-label"><%= __('signup-password') %>:</label>
+          <input type="password" class="form-control" id="signup-password">
         </div>
-        <div id="georap-again-password-group" class="form-group">
-          <label for="georap-signup-password2" class="control-label"><%= __('signup-password-repeat') %>:</label>
-          <input type="password" class="form-control" id="georap-signup-password2">
+        <div id="again-password-group" class="form-group">
+          <label for="signup-password2" class="control-label"><%= __('signup-password-repeat') %>:</label>
+          <input type="password" class="form-control" id="signup-password2">
         </div>
         <button type="submit" class="btn btn-primary"><%= __('signup-submit') %></button>
       </form>
 
-      <div id="georap-signup-in-progress" class="hidden">
+      <div id="signup-in-progress" class="hidden">
         <div class="progress">
           <div class="progress-bar progress-bar-striped active" role="progressbar" style="width: 100%">
             <span class="sr-only">Waiting</span>
@@ -53,8 +53,8 @@
         </div>
       </div>
 
-      <div id="georap-signup-to-login" class="hidden">
-        <button id="georap-signup-to-login-button" type="button" class="btn btn-primary"><%= __('signup-continue') %></button>
+      <div id="signup-to-login" class="hidden">
+        <button id="signup-to-login-button" type="button" class="btn btn-primary"><%= __('signup-continue') %></button>
       </div>
     </div>
   </div><!-- .row -->
