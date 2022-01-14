@@ -30,11 +30,9 @@ module.exports = function (Component, isOpen) {
       ui.hide($container);
     }
 
-    console.log('bound');
     // Opener click handler with double-click prevention
     $button.click(ui.throttle(1000, function (ev) {
       ev.preventDefault(); // if element is button-like anchor
-      console.log('clicked');
 
       // Close if open. Unbind only component, do not unbind complete opener.
       if (component) {
@@ -49,12 +47,27 @@ module.exports = function (Component, isOpen) {
       component.bind($container);
       // Ensure container is visible
       ui.show($container);
+
+      // Listen for cancel events
+      if ('on' in component) {
+        component.on('cancel', function () {
+          if ($container && component) {
+            ui.hide($container);
+            component.unbind();
+            component = null;
+          }
+        });
+      }
     }));
+
   };
 
   this.unbind = function () {
     // Unbind the opener binding and internal component bindings.
     if ($button) {
+      if ('off' in component) {
+        component.off('cancel');
+      }
       component.unbind();
       component = null;
       $container.empty();
