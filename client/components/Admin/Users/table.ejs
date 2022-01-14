@@ -12,7 +12,7 @@
     <tr>
       <td><a href="/admin/users/<%= p.name %>"><%= p.name %></a></td>
       <td><%= p.email %></td>
-      <td><%= p.admin ? __('role-admin') : __('role-basic') %></td>
+      <td><%= __('user-role', p.role) %></td>
       <td><%= p.status === 'active' ? __('status-active') : __('status-deactive') %></td>
     </tr>
   <% }); %>

@@ -1,5 +1,5 @@
 <h3>
-  <%= __('role') %>: <%= isAdmin ? __('role-admin') : __('role-basic') %>
+  <%= __('role') %>: <%= __('user-role', user.role) %>
   <button id="georap-admin-user-role-edit" type="button" class="btn btn-default btn-xs">
     <span class="glyphicon glyphicon-pencil"></span> <%= __('edit') %>
   </button>
@@ -11,19 +11,15 @@
   </div>
   <div class="panel-body">
 
+    <% roles.forEach(function (role) { %>
     <div class="radio">
       <label>
-        <input id="role-radio-admin" type="radio" name="userRole" value="admin" <%= isAdmin ? 'checked' : '' %> >
-        <%= __('role-admin') %>
+        <% var isActive = user.role === role; %>
+        <input type="radio" name="userRole" value="<%= role %>" <%= isActive ? 'checked' : '' %> >
+        <%= __('user-role', role) %>
       </label>
     </div>
-
-    <div class="radio">
-      <label>
-        <input id="role-radio-basic" type="radio" name="userRole" value="basic" <%= isAdmin ? '' : 'checked' %> >
-        <%= __('role-basic') %>
-      </label>
-    </div>
+    <% }) %>
 
     <p class="help-block"><%= __('role-form-help') %></p>
     <div class="pull-right">

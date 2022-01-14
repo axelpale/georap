@@ -4,6 +4,7 @@
 
 var request = require('./lib/request');
 var emitter = require('component-emitter');
+var roles = georap.config.roles;
 
 // Init
 emitter(exports);
@@ -33,24 +34,28 @@ exports.getUser = function (username, callback) {
 };
 
 
-exports.setRole = function (username, isAdmin, callback) {
+exports.setRole = function (username, newRole, callback) {
   // Parameters:
   //   username
   //     string
-  //   isAdmin
-  //     boolean
+  //   newRole
+  //     string
   //   callback
   //     function (err)
   //
 
-  if (typeof isAdmin !== 'boolean') {
+  if (typeof newRole !== 'string') {
     throw new Error('invalid role');
+  }
+
+  if (roles.indexOf(newRole) === -1) {
+    throw new Error('unknown role');
   }
 
   request.postJSON({
     url: '/api/admin/users/' + username + '/role',
     data: {
-      isAdmin: isAdmin,
+      role: newRole,
     },
   }, callback);
 };
