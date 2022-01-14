@@ -307,7 +307,7 @@ exports.isAdmin = function () {
   //   bool, true if admin, false if not admin or not logged in.
 
   if (exports.isLoggedIn()) {
-    return exports.getUser().admin;
+    return exports.getUser().role === 'admin';
   }
 
   return false;
@@ -327,7 +327,7 @@ exports.getUser = function () {
   // {
   //   name: <string>
   //   email: <string>
-  //   admin: <bool>
+  //   role: <string>
   // }
   //
   // Can be called only if isLoggedIn.
