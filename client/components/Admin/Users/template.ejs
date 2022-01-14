@@ -5,8 +5,14 @@
       <h1><span class="glyphicon glyphicon-user" aria-hidden="true"></span> <%= __('manage-users') %></h1>
 
       <div class="admin-users-buttons hidden" style="margin-bottom: 0.62rem">
-        <a class="btn btn-default" href="/invite" role="button"><%= __('send-invite') %></a>
-        <button type="button" class="admin-users-creation-opener btn btn-default" role="button"><%= __('create-user') %></button>
+        <a class="btn btn-default" href="/invite" role="button">
+          <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>
+          <%= __('send-invite') %>
+        </a>
+        <button type="button" class="admin-users-creation-opener btn btn-default" role="button">
+          <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+          <%= __('create-user') %>
+        </button>
       </div>
 
       <div class="admin-users-creation hidden"></div>
