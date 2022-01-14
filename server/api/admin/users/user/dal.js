@@ -1,4 +1,4 @@
-
+const config = require('georap-config');
 const db = require('georap-db');
 
 exports.getUserForAdmin = function (username, callback) {
@@ -53,8 +53,7 @@ exports.setRole = function (username, newRole, callback) {
     throw new Error('invalid parameters');
   }
 
-  if (newRole !== 'basic' && newRole !== 'admin') {
-    // TODO get roles from config
+  if (!config.roles.includes(newRole)) {
     throw new Error('invalid parameters');
   }
 

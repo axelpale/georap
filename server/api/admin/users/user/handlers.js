@@ -1,6 +1,7 @@
 
 const dal = require('./dal');
 const status = require('http-status-codes');
+const config = require('georap-config');
 
 
 exports.getOne = function (req, res, next) {
@@ -56,15 +57,20 @@ exports.setStatus = function (req, res, next) {
 
 
 exports.setRole = function (req, res, next) {
-
-  const newRole = req.body.isAdmin ? 'admin' : 'basic';
-
+  // Set user role
+  const newRole = req.body.role;
   const targetName = req.username;
   const authorName = req.user.name;
 
-  // Prevent author changing his/her own role
+  // Ensure role is valid
+  if (!config.roles.includes(newRole)) {
+    return res.status(status.BAD_REQUEST).send('Invalid role');
+  }
+
+  // Prevent author changing his/her own role.
+  // This ensures there is always at least one user with admin role.
   if (authorName === targetName) {
-    return res.sendStatus(status.BAD_REQUEST);
+    return res.status(status.BAD_REQUEST).send('Cannot change own role');
   }
 
   dal.setRole(targetName, newRole, (err) => {
