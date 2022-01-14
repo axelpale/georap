@@ -70,7 +70,7 @@ exports.setRole = function (req, res, next) {
   // Prevent author changing his/her own role.
   // This ensures there is always at least one user with admin role.
   if (authorName === targetName) {
-    return res.status(status.BAD_REQUEST).send('Cannot change own role');
+    return res.status(status.FORBIDDEN).send('Cannot change own role');
   }
 
   dal.setRole(targetName, newRole, (err) => {
