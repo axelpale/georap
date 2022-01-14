@@ -66,6 +66,13 @@ module.exports = function (req, res, next) {
         return res.status(status.FORBIDDEN).send(msg);
       }
 
+      // Provide a bit of backward compatibility in v13-v14 transition
+      // Remove in v15.
+      if (!user.role && typeof user.admin === 'boolean') {
+        // Pre-v14 db schema
+        user.role = user.admin ? 'admin' : 'basic';
+      }
+
       // else, build jwt token
       const token = generateAuthToken(user.name, user.email, user.role);
 
