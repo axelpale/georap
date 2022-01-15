@@ -29,9 +29,8 @@ module.exports = function (user) {
     });
 
     children.remover.on('submit', function () {
-      adminApi.removeUser({
-        username: user.name,
-      }, function (err) {
+      var username = user.name;
+      adminApi.removeUser(username, function (err) {
         if (err) {
           children.remove.reset(); // hide progress
           children.error.update(err.message);

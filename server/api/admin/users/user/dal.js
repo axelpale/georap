@@ -95,3 +95,20 @@ exports.setStatus = function (username, newStatus, callback) {
     return callback();
   });
 };
+
+exports.removeOne = function (username, callback) {
+  if (typeof username !== 'string') {
+    throw new Error('invalid parameters');
+  }
+
+  const coll = db.collection('users');
+  const q = { name: username };
+  const up = { $set: { 'deleted': true } };
+
+  coll.updateOne(q, up, (err) => {
+    if (err) {
+      return callback(err);
+    }
+    return callback();
+  });
+};

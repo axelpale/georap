@@ -81,3 +81,23 @@ exports.setRole = function (req, res, next) {
     return res.sendStatus(status.OK);
   });
 };
+
+
+exports.removeOne = function (req, res, next) {
+  const targetName = req.username;
+  const authorName = req.user.name;
+
+  if (authorName === targetName) {
+    return res.status(status.FORBIDDEN).send('Cannot remove self');
+  }
+
+  dal.removeOne(targetName, (err) => {
+    if (err) {
+      return next(err);
+    }
+
+    // TODO store user event
+
+    return res.sendStatus(status.OK);
+  });
+};
