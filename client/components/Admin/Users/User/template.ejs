@@ -2,9 +2,11 @@
   <div class="row">
     <div class="col-md-12">
 
-      <p><a href="/admin/users">&larr; <%= __('manage-users') %></a></p>
+      <p style="margin-top: 1em">
+        <a href="/admin/users"><%= __('manage-users') %></a>
+      </p>
 
-      <h1><span class="glyphicon glyphicon-user" aria-hidden="true"></span> <%= __('manage-user') %> <%= username %></h1>
+      <h1><span class="glyphicon glyphicon-user" aria-hidden="true"></span> <%= username %></h1>
 
       <div class="admin-user-info-root"></div>
       <div class="admin-user-role-root"></div>
