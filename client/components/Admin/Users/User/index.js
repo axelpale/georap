@@ -6,6 +6,7 @@ var InfoComponent = require('./Info');
 var StatusComponent = require('./Status');
 var EventsComponent = require('./Events');
 var RoleComponent = require('./Role');
+var RemovalComponent = require('./Removal');
 var emitter = require('component-emitter');
 var ui = require('georap-ui');
 var __ = georap.i18n.__;
@@ -32,6 +33,7 @@ module.exports = function (username) {
     $elems.eventsRoot = $('.admin-user-events-root');
     $elems.loading = $('.admin-user-loading');
     $elems.roleRoot = $('.admin-user-role-root');
+    $elems.removalRoot = $('.admin-user-removal-root');
 
     // Fetch users and include to page.
     ui.show($elems.loading);
@@ -49,11 +51,13 @@ module.exports = function (username) {
       children.statusComp = new StatusComponent(user);
       children.eventsComp = new EventsComponent(user);
       children.roleComp = new RoleComponent(user);
+      children.removalComp = new RemovalComponent(user);
 
       children.infoComp.bind($elems.infoRoot);
       children.statusComp.bind($elems.statusRoot);
       children.eventsComp.bind($elems.eventsRoot);
       children.roleComp.bind($elems.roleRoot);
+      children.removalComp.bind($elems.removalRoot);
     });
   };
 
