@@ -66,3 +66,24 @@ exports.run = function (currentVersion, targetVersion, callback) {
   });
 
 };
+
+exports.rerun = function (currentVersion, callback) {
+  // Try to rerun the migration for the same version.
+  // Useful in development when the migration is built idempotent.
+  // Special case: override default run if we detect a rerun in development
+
+  const i = currentVersion - 1;
+  // -1 cuz indexing is based on the source version
+
+  if (typeof v[i].run === 'function') {
+    v[i].run((err) => {
+      if (err) {
+        return callback(err);
+      }
+      return callback();
+    });
+  } else {
+    throw new Error('No migration steps available from v' + i +
+                    ' to v' + (i + 1));
+  }
+};
