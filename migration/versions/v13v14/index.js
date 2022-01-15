@@ -3,6 +3,8 @@
 // 2. users have new property: securityToken
 // 3. users have new property: role (deprecates prop: admin)
 //
+// Idempotent: true when NODE_ENV=development
+//
 const db = require('georap-db');
 const asyn = require('async');
 const clone = require('clone');
@@ -38,9 +40,11 @@ const substeps = [
     iter.updateEach(coll, (origUser, iterNext) => {
       const user = clone(origUser);
       // Init role, remove boolean admin
-      const isAdmin = user.admin;
-      delete user.admin;
-      user.role = isAdmin ? 'admin' : 'basic';
+      if (user.admin) {
+        const isAdmin = user.admin;
+        delete user.admin;
+        user.role = isAdmin ? 'admin' : 'basic';
+      }
       // Init empty security token
       user.securityToken = '';
       // Init deleted flag
