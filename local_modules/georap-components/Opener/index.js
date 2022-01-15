@@ -2,11 +2,12 @@
 // a button element and a container element.
 //
 var ui = require('georap-ui');
+var emitter = require('component-emitter');
 
-module.exports = function (Component, isOpen) {
+module.exports = function (component, isOpen) {
   // Parameters
-  //   Component
-  //     a component class
+  //   component
+  //     a constructed but still unbound component instance
   //   isOpen
   //     optional initial openness state
   //
@@ -15,13 +16,21 @@ module.exports = function (Component, isOpen) {
   }
 
   // Setup
+  var self = this;
   var $container = null;
   var $button = null;
-  var component = null;
+  emitter(self);
 
-  this.bind = function ($containerEl, $buttonEl) {
-    $container = $containerEl;
-    $button = $buttonEl;
+  this.bind = function (mounts) {
+    // Parameters
+    //   mounts, object with props
+    //     $container
+    //       jquery object, empty container element
+    //     $button
+    //       jquery object, a button
+    //
+    $container = mounts.$container;
+    $button = mounts.$button;
 
     // Set default open state
     if (isOpen) {
@@ -35,27 +44,28 @@ module.exports = function (Component, isOpen) {
       ev.preventDefault(); // if element is button-like anchor
 
       // Close if open. Unbind only component, do not unbind complete opener.
-      if (component) {
+      if (!ui.isHidden($container)) {
         ui.hide($container);
         component.unbind();
-        component = null;
         return;
       }
 
       // Render component
-      component = new Component();
       component.bind($container);
       // Ensure container is visible
       ui.show($container);
 
-      // Listen for cancel events
-      if ('on' in component) {
+      if (typeof component.on === 'function') {
+        // Listen for cancel events
         component.on('cancel', function () {
-          if ($container && component) {
+          if ($container) { // ensure opener is bound
             ui.hide($container);
             component.unbind();
-            component = null;
           }
+        });
+        // Bubble submit events
+        component.on('submit', function (ev) {
+          self.emit('submit', ev);
         });
       }
     }));
@@ -64,13 +74,11 @@ module.exports = function (Component, isOpen) {
 
   this.unbind = function () {
     // Unbind the opener binding and internal component bindings.
-    if (component) {
-      if ('off' in component) {
-        component.off('cancel');
-      }
-      component.unbind();
-      component = null;
+    if (typeof component.off === 'function') {
+      component.off('cancel');
     }
+    component.unbind();
+
     if ($button) {
       $button.off();
       $button = null;

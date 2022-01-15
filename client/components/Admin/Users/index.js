@@ -31,10 +31,12 @@ module.exports = function () {
     $elems.table = $mount.find('.admin-users-table');
     $elems.buttons = $mount.find('.admin-users-buttons');
 
-    children.creation = new components.Opener(CreationComponent);
-    var $creationContainer = $mount.find('.admin-users-creation');
-    var $creationOpener = $mount.find('.admin-users-creation-opener');
-    children.creation.bind($creationContainer, $creationOpener);
+    var creationComponent = new CreationComponent();
+    children.creation = new components.Opener(creationComponent);
+    children.creation.bind({
+      $container: $mount.find('.admin-users-creation'),
+      $button: $mount.find('.admin-users-creation-opener'),
+    });
 
     // Fetch users and include to page.
     ui.show($elems.loading);
