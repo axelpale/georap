@@ -24,7 +24,9 @@ module.exports = {
         hash: bcrypt.hashSync(config.admin.password, config.bcrypt.rounds),
         name: admin,
         role: 'admin',
+        securityToken: '',
         status: 'active',
+        deleted: false,
         createdAt: db.timestamp(),
         loginAt: db.timestamp(),
         points: 0, // points are updated by worker

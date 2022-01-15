@@ -220,6 +220,7 @@ module.exports = {
       status: 'active',
       createdAt: '2009-07-29T12:34:56.000Z',
       loginAt: '2009-10-05T12:34:56.000Z',
+      deleted: false, // NOTE new in v14
     }],
 
     locations: [{
