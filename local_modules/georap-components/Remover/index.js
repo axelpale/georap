@@ -9,9 +9,6 @@ module.exports = function (params) {
   //
   // Parameters:
   //   params, with required props
-  //     submit
-  //       function (), a submit handler.
-  //         Called when user confirms deletion.
   //     cancelBtnText
   //       string
   //     deleteBtnText
@@ -47,11 +44,12 @@ module.exports = function (params) {
       $button: $button,
     });
 
+    // Forward RemoverPanel submit
     opener.on('submit', function (ev) {
-      ev.preventDefault();
-      if (typeof params.submit === 'function') {
-        params.submit();
+      if (ev) {
+        ev.preventDefault(); // in case of submit button event is passed
       }
+      self.emit('submit', ev);
     });
   };
 
