@@ -339,6 +339,7 @@
   "user-removal-info": "This will delete the user account. The deleted user cannot log in nor restore the account. Any content created by the user will stay intact but will become anonymous.",
   "user-removal-noauto": "You cannot delete your own account.",
   "user-removal-submit-btn": "Yes, delete account",
+  "user-removal-success": "User account deleted successfully",
   "user-removal-you-sure": "Are you sure you want to delete the account?",
   "user-renamed-loc": "renamed",
   "user-renamed-loc-to": "to",

@@ -28,12 +28,13 @@ module.exports = function (username) {
       __: __,
     }));
 
-    $elems.infoRoot = $('.admin-user-info-root');
-    $elems.statusRoot = $('.admin-user-status-root');
-    $elems.eventsRoot = $('.admin-user-events-root');
-    $elems.loading = $('.admin-user-loading');
-    $elems.roleRoot = $('.admin-user-role-root');
-    $elems.removalRoot = $('.admin-user-removal-root');
+    $elems.infoRoot = $mount.find('.admin-user-info-root');
+    $elems.statusRoot = $mount.find('.admin-user-status-root');
+    $elems.eventsRoot = $mount.find('.admin-user-events-root');
+    $elems.loading = $mount.find('.admin-user-loading');
+    $elems.roleRoot = $mount.find('.admin-user-role-root');
+    $elems.removalRoot = $mount.find('.admin-user-removal-root');
+    $elems.removalSuccess = $mount.find('.admin-user-removal-success');
 
     // Fetch users and include to page.
     ui.show($elems.loading);
@@ -58,6 +59,14 @@ module.exports = function (username) {
       children.eventsComp.bind($elems.eventsRoot);
       children.roleComp.bind($elems.roleRoot);
       children.removalComp.bind($elems.removalRoot);
+
+      children.removalComp.on('success', function () {
+        children.infoComp.unbind();
+        children.statusComp.unbind();
+        children.roleComp.unbind();
+        children.removalComp.unbind();
+        ui.show($elems.removalSuccess);
+      });
     });
   };
 

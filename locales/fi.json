@@ -338,6 +338,7 @@
   "user-removal-info": "Tämä toiminto poistaa käyttäjätilin. Poistettu käyttäjä ei voi kirjautua sisään eikä palauttaa tiliään. Mahdollinen käyttäjän luoma sisältö säilyy ennallaan mutta muuttuu anonyymiksi.",
   "user-removal-noauto": "Et voi poistaa omaa tiliäsi.",
   "user-removal-submit-btn": "Kyllä, poista tili",
+  "user-removal-success": "Käyttäjätili on nyt poistettu.",
   "user-removal-you-sure": "Oletko varma, että haluat poistaa käyttäjätilin?",
   "user-renamed-loc": "vaihtoi paikan",
   "user-renamed-loc-to": "nimeksi",

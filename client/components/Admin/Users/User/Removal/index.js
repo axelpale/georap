@@ -1,16 +1,19 @@
 var template = require('./template.ejs');
 var ui = require('georap-ui');
 var components = require('georap-components');
+var emitter = require('component-emitter');
 var adminApi = georap.stores.admin;
 var __ = georap.i18n.__;
 var FORBIDDEN = 403;
 
 module.exports = function (user) {
+  var self = this;
   var $mount = null;
   var children = {};
   var $elems = {};
+  emitter(self);
 
-  this.bind = function ($mountEl) {
+  self.bind = function ($mountEl) {
     $mount = $mountEl;
 
     $mount.html(template({
@@ -44,14 +47,15 @@ module.exports = function (user) {
           }
           return;
         }
-        console.log('user removed');
+
+        self.emit('success');
         // TODO Global user_removed will cause unbind
         // and $mount removal.
       });
     });
   };
 
-  this.unbind = function () {
+  self.unbind = function () {
     if ($mount) {
       ui.unbindAll(children);
       children = {};
