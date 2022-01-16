@@ -6,6 +6,7 @@ var __ = georap.i18n.__;
 module.exports = function (user) {
   this.bind = function ($mount) {
     $mount.html(template({
+      email: user.email,
       createdAt: ui.timestamp(user.createdAt, locale),
       loginAt: ui.timestamp(user.loginAt, locale),
       __: __,
