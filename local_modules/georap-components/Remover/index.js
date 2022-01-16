@@ -53,6 +53,13 @@ module.exports = function (params) {
     });
   };
 
+  self.close = function () {
+    // Close the panel and button states
+    if (opener) {
+      opener.close();
+    }
+  };
+
   self.unbind = function () {
     if (opener) {
       opener.off('submit');

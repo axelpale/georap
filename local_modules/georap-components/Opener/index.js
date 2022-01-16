@@ -69,7 +69,14 @@ module.exports = function (component, isOpen) {
         });
       }
     }));
+  };
 
+  this.close = function () {
+    // Set default open state
+    if ($container) {
+      ui.hide($container);
+      component.unbind();
+    }
   };
 
   this.unbind = function () {
