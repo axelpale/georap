@@ -1,42 +1,8 @@
 <h3>
   <%= __('role') %>: <%= __('user-role', user.role) %>
-  <button id="admin-user-role-edit" type="button" class="btn btn-default btn-xs">
+  <button type="button" class="admin-user-role-edit btn btn-default btn-xs">
     <span class="glyphicon glyphicon-pencil"></span> <%= __('edit') %>
   </button>
 </h3>
 
-<form id="admin-user-role-form" class="hidden panel panel-primary">
-  <div class="panel-heading">
-    <%= __('role-change') %>
-  </div>
-  <div class="panel-body">
-
-    <% roles.forEach(function (role) { %>
-    <div class="radio">
-      <label>
-        <% var isActive = user.role === role; %>
-        <input type="radio" name="userRole" value="<%= role %>" <%= isActive ? 'checked' : '' %> >
-        <%= __('user-role', role) %>
-      </label>
-    </div>
-    <% }) %>
-
-    <p class="help-block"><%= __('role-form-help') %></p>
-    <div class="pull-right">
-      <button id="admin-user-role-cancel" type="button" class="btn btn-default"><%= __('cancel') %></button>
-      <button type="submit" class="btn btn-primary"><%= __('save') %></button>
-    </div>
-  </div>
-</form>
-
-<div id="admin-user-role-noauto" class="hidden">
-  <div class="alert alert-warning" role="alert"><%= __('role-form-limit') %></div>
-</div>
-
-<div id="admin-user-role-error" class="hidden">
-  <div class="alert alert-danger" role="alert"><%= __('role-form-fail') %></div>
-</div>
-
-<div id="admin-user-role-success" class="hidden">
-  <div class="alert alert-success" role="alert"><%= __('role-form-success') %></div>
-</div>
+<div class="admin-user-role-form-container"></div>
