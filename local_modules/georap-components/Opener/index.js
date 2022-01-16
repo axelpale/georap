@@ -45,11 +45,9 @@ module.exports = function (component, isOpen) {
 
       // Close if open. Unbind only component, do not unbind complete opener.
       if (!ui.isHidden($container)) {
-        ui.hide($container);
-        component.unbind();
+        self.close();
         return;
       }
-
       // Render component
       component.bind($container);
       // Ensure container is visible
@@ -58,14 +56,15 @@ module.exports = function (component, isOpen) {
       if (typeof component.on === 'function') {
         // Listen for cancel events
         component.on('cancel', function () {
-          if ($container) { // ensure opener is bound
-            ui.hide($container);
-            component.unbind();
-          }
+          self.close();
         });
         // Bubble submit events
         component.on('submit', function (ev) {
           self.emit('submit', ev);
+        });
+        // Bubble success events
+        component.on('success', function (ev) {
+          self.emit('success', ev);
         });
       }
     }));
@@ -83,6 +82,8 @@ module.exports = function (component, isOpen) {
     // Unbind the opener binding and internal component bindings.
     if (typeof component.off === 'function') {
       component.off('cancel');
+      component.off('submit');
+      component.off('success');
     }
     component.unbind();
 
