@@ -24,6 +24,16 @@ module.exports = function () {
     $elems.cancel.click(function () {
       self.emit('cancel');
     });
+
+    $elems.form = $mount.find('.user-creation-form');
+    $elems.form.submit(function () {
+      // adminApi.createUser({
+      //   name:
+      //   email:
+      //   password:
+      //   role:
+      // })
+    });
   };
 
   self.unbind = function () {
