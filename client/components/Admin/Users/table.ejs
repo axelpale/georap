@@ -2,7 +2,6 @@
   <thead>
     <tr>
       <th><%= __('username') %></th>
-      <th><%= __('email') %></th>
       <th><%= __('role') %></th>
       <th><%= __('status') %></th>
     </tr>
@@ -11,7 +10,6 @@
   <% users.forEach(function (p) { %>
     <tr>
       <td><a href="/admin/users/<%= p.name %>"><%= p.name %></a></td>
-      <td><%= p.email %></td>
       <td><%= __('user-role', p.role) %></td>
       <td><%= p.status === 'active' ? __('status-active') : __('status-deactive') %></td>
     </tr>
