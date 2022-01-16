@@ -87,6 +87,8 @@ exports.removeOne = function (req, res, next) {
   const targetName = req.username;
   const authorName = req.user.name;
 
+  // Only admins can remove. Admin status checked in router.
+
   if (authorName === targetName) {
     return res.status(status.FORBIDDEN).send('Cannot remove self');
   }
