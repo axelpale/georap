@@ -3,6 +3,7 @@ var ui = require('georap-ui');
 var components = require('georap-components');
 var adminApi = georap.stores.admin;
 var __ = georap.i18n.__;
+var FORBIDDEN = 403;
 
 module.exports = function (user) {
   var $mount = null;
@@ -28,12 +29,19 @@ module.exports = function (user) {
       $button: $mount.find('.user-removal-opener'),
     });
 
+    children.error = new components.Error();
+    children.error.bind($mount.find('.user-removal-error'));
+
     children.remover.on('submit', function () {
       var username = user.name;
       adminApi.removeUser(username, function (err) {
         if (err) {
-          children.remove.reset(); // hide progress
-          children.error.update(err.message);
+          children.remover.close();
+          if (err.code === FORBIDDEN) {
+            children.error.update(__('user-removal-noauto'));
+          } else {
+            children.error.update(err.message);
+          }
           return;
         }
         console.log('user removed');
