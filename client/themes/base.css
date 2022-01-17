@@ -126,6 +126,11 @@ time:hover {
   width: 32px;
   height: 32px;
 }
+#georap-mainmenu:hover img,
+#georap-mainmenu:focus img,
+#georap-toolbar-main .dropdown.open button img {
+  opacity: 0.1;
+}
 #georap-toolbar-main {
   margin-bottom: 0.9em;
 }
