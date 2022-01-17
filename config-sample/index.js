@@ -138,7 +138,31 @@ module.exports = {
 
   //##### USER MANAGEMENT #####
   roles: ['basic', 'admin'], // New in v14
-  capabilities: {}, // New in v14. Reserved for future.
+  capabilities: { // New in v14
+    'public': [
+      'coordinates',
+      'location-read',
+      'locations-read',
+    ],
+    'basic': [
+      'coordinates',
+      'location-read',
+      'location-create',
+      'location-edit',
+      'location-delete-own',
+      'locations-read',
+      'search',
+    ],
+    'moderator': [],
+    'admin': [
+      'location-create',
+      'location-edit-own',
+      'location-delete-any',
+      'account-management',
+      'account-invite',
+      'account-delete-any',
+    ],
+  },
 
 
   // ##### THEME AND BRAND #####
