@@ -10,7 +10,7 @@ module.exports = function (user) {
     $mount = $mountEl;
 
     $mount.html(template({
-      email: user.email,
+      user: user,
       createdAt: ui.timestamp(user.createdAt, locale),
       loginAt: ui.timestamp(user.loginAt, locale),
       __: __,

@@ -1,0 +1,14 @@
+<table class="table">
+  <thead>
+    <tr>
+      <th><%= __('username') %></th>
+    </tr>
+  </thead>
+  <tbody>
+  <% users.forEach(function (p) { %>
+    <tr>
+      <td><a href="/admin/users/<%= p.name %>"><%= p.name %></a></td>
+    </tr>
+  <% }); %>
+  </tbody>
+</table>
