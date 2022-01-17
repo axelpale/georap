@@ -100,6 +100,11 @@ time:hover {
   /* text-shadow: -1px 3px 10px rgb(128, 128, 128); */
   padding-bottom: 1.8rem;
 }
+.login-column h1 img {
+  width: 1.27em;
+  height: 1.27em;
+  vertical-align: baseline;
+}
 .login-form {
   margin-bottom: 1.68em;
 }
@@ -113,6 +118,13 @@ time:hover {
 .georap-map-menu {
   padding: 0.9em;
   max-width: 60%; /* Firefox needs width to be specified */
+}
+#georap-mainmenu {
+  padding: 8px;
+}
+#georap-mainmenu img {
+  width: 32px;
+  height: 32px;
 }
 #georap-toolbar-main {
   margin-bottom: 0.9em;
