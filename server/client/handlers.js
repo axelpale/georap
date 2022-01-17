@@ -28,6 +28,7 @@ const precompile = function (locale) {
       appleTouchIcons: config.appleTouchIcons,
       defaultMapState: config.defaultMapState,
       loginColor: config.loginColor,
+      loginPageSize: config.loginPageSize,
       enableSupportPage: config.enableSupportPage,
       supportButtonTitle: config.supportButtonTitle,
       supportPageContent: config.supportPageContent,

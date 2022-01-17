@@ -144,6 +144,10 @@ module.exports = {
       type: 'array',
       items: iconSchema,
     },
+    loginPageSize: {
+      type: 'string',
+      enum: ['half', 'medium', 'full'],
+    },
     loginBackground: {
       type: 'string',
     },

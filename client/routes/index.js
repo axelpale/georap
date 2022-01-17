@@ -16,6 +16,7 @@ var queryString = require('qs');
 var emitter = require('component-emitter');
 
 // Stores
+var config = georap.config;
 var account = georap.stores.account;
 var mapStateStore = georap.stores.mapstate;
 
@@ -75,7 +76,7 @@ exports.route = function () {
       return next();
     }
     var view = new Error401View();
-    card.open(view, 'page');
+    card.open(view, 'medium');
   };
 
 
@@ -102,7 +103,7 @@ exports.route = function () {
       afterLogin.reset();
 
       var view = new LoginView(urlAfterLogin);
-      card.open(view, 'full');
+      card.open(view, config.loginPageSize);
     });
   });
 
@@ -398,7 +399,7 @@ exports.route = function () {
   page('*', function () {
     // Page not found.
     var view = new Error404View();
-    card.open(view, 'page');
+    card.open(view, 'medium');
   });
 
   page.start();

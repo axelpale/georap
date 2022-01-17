@@ -69,7 +69,9 @@ module.exports = function () {
     //     to be rendered inside the card
     //   cardClass
     //     string, optional. Card type. Available types:
-    //       page (default)
+    //       half
+    //         Half of the map is visible
+    //       medium (default)
     //         A fraction of the map is visible.
     //       full
     //         Fills the map area completely.
@@ -78,7 +80,7 @@ module.exports = function () {
     // Handle default parameters
     var cardType;
     if (typeof cardClass === 'undefined') {
-      cardType = 'page';
+      cardType = 'medium';
     } else {
       cardType = cardClass;
     }
@@ -97,7 +99,8 @@ module.exports = function () {
 
     // removes previous card-* classes
     $mount.removeClass('card-full');
-    $mount.removeClass('card-page');
+    $mount.removeClass('card-medium');
+    $mount.removeClass('card-half');
     // set next class
     $mount.addClass('card-' + cardType);
 

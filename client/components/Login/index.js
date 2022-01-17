@@ -6,6 +6,19 @@ var components = require('georap-components');
 var LoginFormComponent = require('./LoginForm');
 var ResetFormComponent = require('./ResetForm');
 
+var getColumnClass = function (pageSize) {
+  switch (pageSize) {
+    case 'full':
+      return 'col-md-4 col-sm-6';
+    case 'medium':
+      return 'col-md-12 col-sm-12';
+    case 'half':
+      return 'col-md-12 col-sm-12';
+    default:
+      return 'col-md-12 col-sm-12';
+  }
+};
+
 module.exports = function (afterLoginUrl) {
   // Parameters:
   //   afterLoginUrl
@@ -24,6 +37,7 @@ module.exports = function (afterLoginUrl) {
 
     $mount.html(template({
       title: config.title,
+      sizeClass: getColumnClass(config.loginPageSize),
     }));
 
     $elems.loginFormContainer = $mount.find('.login-form-container');

@@ -208,6 +208,8 @@ module.exports = {
     },
   ],
 
+  // Login screen mode
+  loginPageSize: 'full', // or 'medium' to show the map.
   // Login screen background image. The first thing the user experiences.
   // The image will be copied to a public location on start up.
   // Use only an absolute path.

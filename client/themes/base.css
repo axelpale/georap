@@ -50,7 +50,15 @@ time:hover {
   width: 100%;
   max-width: 100%;
 }
-#card-layer.card-page {
+#card-layer.card-medium {
+  width: 80%;
+  height: 100%;
+  max-width: 600px;
+}
+#card-layer.card-half {
+  width: 50%;
+  height: 100%;
+  max-width: 400px;
 }
 .card-close-icon {
   position: absolute;
@@ -70,7 +78,7 @@ time:hover {
   height: 100%;
   overflow-y: scroll;
 }
-.card-page .card-layer-content {
+.card-large .card-layer-content {
   padding-bottom: 18rem;
 }
 /* END Card */
@@ -81,17 +89,21 @@ time:hover {
   height: 100%;
   margin: 0;
   padding: 0;
+}
+
+.card-full .login-container {
   background: url('/assets/images/login.jpg') no-repeat center center fixed;
   background-size: cover;
 }
-.login-container h1,
-.login-container h3,
-.login-container label,
-.login-container p,
-.login-container a {
+
+.card-full .login-container h1,
+.card-full .login-container h3,
+.card-full .login-container label,
+.card-full .login-container p,
+.card-full .login-container a {
   color: #fff !important;
 }
-.login-glass {
+.card-full .login-glass {
   background-color: rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(10px);
   border-radius: 10px;
