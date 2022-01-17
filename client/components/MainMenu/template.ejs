@@ -7,6 +7,8 @@
         <span class="caret"></span>
       </button>
       <ul class="dropdown-menu" aria-labelledby="georap-mainmenu">
+
+        <% if (user) { %>
         <li>
           <a id="georap-mainmenu-add" href="#"><%= glyphicon({ name: 'map-marker' }) %> <%= __('add-location') %></a>
         </li>
@@ -14,6 +16,9 @@
           <a href="/crosshair"><%= glyphicon({ name: 'screenshot' }) %> <%= __('coordinates') %></a>
         </li>
         <li role="separator" class="divider"></li>
+        <% } %>
+
+        <% if (user) { %>
         <li>
           <a href="/latest"><%= glyphicon({ name: 'bell' }) %> <%= __('latest') %></a>
         </li>
@@ -33,10 +38,10 @@
         <li>
           <a href="/export"><%= glyphicon({ name: 'export' }) %> <%= __('export') %></a>
         </li>
-
         <li role="separator" class="divider"></li>
+        <% } %>
 
-        <% if (user.role === 'admin') { %>
+        <% if (user && user.role === 'admin') { %>
           <li class="dropdown-header"><%= __('admin-menu') %></li>
           <li>
             <a href="/invite"><%= glyphicon({ name: 'envelope' }) %> <%= __('invite') %></a>
@@ -54,6 +59,7 @@
           <li role="separator" class="divider"></li>
         <% } %>
 
+        <% if (user) { %>
         <li class="dropdown-header"><%= user.name %></li>
         <li>
           <a href="/account"><%= glyphicon({ name: 'user' }) %> <%= __('account-settings') %></a>
@@ -61,6 +67,11 @@
         <li>
           <a href="/login"><%= glyphicon({ name: 'off' }) %> <%= __('log-out') %></a>
         </li>
+        <% } else { %>
+        <li>
+          <a href="/login"><%= glyphicon({ name: 'user' }) %> <%= __('log-in') %></a>
+        </li>
+        <% } %>
       </ul>
     </div><!-- .dropdown -->
 

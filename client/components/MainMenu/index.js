@@ -51,7 +51,7 @@ module.exports = function (mapComp) {
     $mount.html(template({
       glyphicon: glyphiconTemplate,
       config: georap.config,
-      user: account.getUser(),  // might be undefined
+      user: account.getUser(), // is null if not logged in
       isFilterActive: !filterStore.isDefault(),
       __: georap.i18n.__,
     }));

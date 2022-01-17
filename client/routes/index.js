@@ -94,6 +94,14 @@ exports.route = function () {
     return next();
   });
 
+  page('/', function () {
+    // Map is always open on the background.
+    // Infinite loop prevention:
+    //   Do not emit 'closed' event because it causes redirection to '/'
+    var silent = true;
+    card.close(silent);
+  });
+
   page('/login', function () {
     // Logout should be immediate; no reason to show progress bar.
     account.logout(function () {
@@ -194,15 +202,6 @@ exports.route = function () {
     }
 
     return next();
-  });
-
-  page('/', function () {
-    // Map is always open on the background.
-    // Infinite loop prevention:
-    //   Do not emit 'closed' event because it causes redirection to '/'
-    var silent = true;
-    card.close(silent);
-    exports.emit('map_routed');
   });
 
   page('/account', function () {

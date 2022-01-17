@@ -127,12 +127,14 @@ window.initMap = function () {
 
   // Bind menu to auth events.
   account.on('login', function () {
-    // Add main menu
+    // Refresh main menu
+    mapComp.removeControls();
     mapComp.addControl(menuComp);
   });
   account.on('logout', function () {
-    // Remove main menu
+    // Refresh main menu
     mapComp.removeControls();
+    mapComp.addControl(menuComp);
   });
 
   // Bind fetching of locations to auth events.
@@ -148,6 +150,9 @@ window.initMap = function () {
   // because no initial login or logout events would be fired.
   if (account.isLoggedIn()) {
     mapComp.startLoadingMarkers();
+    mapComp.addControl(menuComp);
+  } else {
+    // Anon user, render limited menu anyway
     mapComp.addControl(menuComp);
   }
 

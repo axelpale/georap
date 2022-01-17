@@ -330,12 +330,26 @@ exports.getUser = function () {
   //   role: <string>
   // }
   //
-  // Can be called only if isLoggedIn.
-  if (!exports.isLoggedIn()) {
-    throw new Error('Cannot get payload because missing token.');
+  // If no user set, will return null.
+  //
+  // TODO MAYBE If public user, will return
+  //   {
+  //     name: 'Anon',
+  //     email: 'anonymous@example.com',
+  //     role: 'public',
+  //   }
+  //
+  var token = storage.getItem(TOKEN_KEY);
+
+  if (token) {
+    var decoded = jwtDecode(token);
+    if (decoded.exp > Date.now() / 1000) {
+      // User still valid
+      return decoded;
+    }
   }
 
-  return jwtDecode(storage.getItem(TOKEN_KEY));
+  return null;
 };
 
 exports.getEmail = function () {
