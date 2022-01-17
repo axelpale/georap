@@ -1,0 +1,31 @@
+<form id="admin-user-role-form" class="panel panel-primary">
+  <div class="panel-heading">
+    <%= __('role-change') %>
+  </div>
+  <div class="panel-body">
+
+    <% roles.forEach(function (role) { %>
+    <div class="radio">
+      <label>
+        <% var isActive = user.role === role; %>
+        <input type="radio" name="userRole" value="<%= role %>" <%= isActive ? 'checked' : '' %> >
+        <%= __('user-role', role) %>
+      </label>
+    </div>
+    <% }) %>
+
+    <p class="help-block"><%= __('role-form-help') %></p>
+    <div class="pull-right">
+      <button id="admin-user-role-cancel" type="button" class="btn btn-default"><%= __('cancel') %></button>
+      <button type="submit" class="btn btn-primary"><%= __('save') %></button>
+    </div>
+  </div>
+</form>
+
+<div id="admin-user-role-error" class="hidden">
+  <div class="alert alert-danger" role="alert"><%= __('role-form-fail') %></div>
+</div>
+
+<div id="admin-user-role-success" class="hidden">
+  <div class="alert alert-success" role="alert"><%= __('role-form-success') %></div>
+</div>

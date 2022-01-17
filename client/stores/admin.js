@@ -85,3 +85,25 @@ exports.setStatus = function (username, isActive, callback) {
     },
   }, callback);
 };
+
+exports.removeUser = function (username, callback) {
+  // Request to remove user account.
+  //
+  // Parameters:
+  //   username
+  //     string
+  //   callback
+  //     function (err)
+  //
+
+  // Assert parameters
+  if (typeof username !== 'string' ||
+      typeof callback !== 'function') {
+    throw new Error('invalid parameters');
+  }
+
+  request.deleteJSON({
+    url: '/api/admin/users/' + username,
+    data: {},
+  }, callback);
+};

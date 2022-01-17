@@ -13,7 +13,7 @@ module.exports = function (req, res, next) {
   //       password: <string>
   //
 
-  const email = req.body.email;
+  const email = req.body.email; // treat also as username
   const password = req.body.password;
 
   // If injection attempted or no email or password provided.
@@ -24,7 +24,16 @@ module.exports = function (req, res, next) {
 
   const users = db.collection('users');
 
-  // Also allow login with username.
+  // Allow login with email
+  // Allow login with username, case-sensitive.
+  // NOTE case-insensitive username match would require regexp query to DB.
+  //   The regexp query requires case-insensitive search against
+  //   the given username. The username is a string from anonymous user.
+  //   That is dangerous. Login credentials can be long strings.
+  //   They can be constructed to contain huge regexp programs.
+  //   Therefore we cannot pass user input directly to regexp.
+  //   Due to this difficulty, we must implement case-insensitivity
+  //   in another manner.
   const q = {
     $or: [
       { name: email },

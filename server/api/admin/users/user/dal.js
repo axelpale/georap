@@ -36,7 +36,6 @@ exports.getUserForAdmin = function (username, callback) {
     // not found
     return callback(null, null);
   });
-
 };
 
 
@@ -87,6 +86,23 @@ exports.setStatus = function (username, newStatus, callback) {
   const coll = db.collection('users');
   const q = { name: username };
   const up = { $set: { 'status': newStatus } };
+
+  coll.updateOne(q, up, (err) => {
+    if (err) {
+      return callback(err);
+    }
+    return callback();
+  });
+};
+
+exports.removeOne = function (username, callback) {
+  if (typeof username !== 'string') {
+    throw new Error('invalid parameters');
+  }
+
+  const coll = db.collection('users');
+  const q = { name: username };
+  const up = { $set: { 'deleted': true } };
 
   coll.updateOne(q, up, (err) => {
     if (err) {

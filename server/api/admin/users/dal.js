@@ -9,7 +9,7 @@ exports.getUsersForAdmin = function (callback) {
   //     function (err, arrayOfUsers)
 
   const coll = db.collection('users');
-  const q = {};
+  const q = {}; // NOTE also deleted
   const proj = { hash: false };
 
   coll.find(q).project(proj).toArray((err, users) => {

@@ -7,8 +7,14 @@ exports.count = (callback) => {
   //   callback
   //     function (err, number)
   //
+
+  // Do not count deleted users
+  const q = {
+    deleted: false,
+  };
+
   db.collection('users')
-    .countDocuments({})
+    .countDocuments(q)
     .then((number) => {
       return callback(null, number);
     })
@@ -18,20 +24,23 @@ exports.count = (callback) => {
 };
 
 exports.getAll = (callback) => {
-  // Get all users, ordered by points, descending
+  // Get all non-deleted users, ordered by points, descending
   //
   // Parameters:
   //   callback
   //     function (err, users)
   //
 
+  const q = {
+    deleted: false,
+  };
   const proj = {
     hash: false,
     email: false,
   };
 
   db.collection('users')
-    .find({})
+    .find(q)
     .project(proj)
     .sort({ points: -1 })
     .toArray((err, users) => {

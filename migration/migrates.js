@@ -5,6 +5,11 @@ const loadFixture = require('./lib/loadFixture');
 const initialStateFixture = require('./fixtures/initial');
 const ensureIndices = require('./ensureIndices');
 
+// NODE_ENV: production | development | test
+// eslint-disable-next-line no-process-env
+const NODE_ENV = process.env.NODE_ENV ? process.env.NODE_ENV : 'development';
+const DEVELOPMENT = NODE_ENV.toLowerCase() === 'development';
+
 const initEmptyDatabase = function (callback) {
   console.log('Resetting database...');
   loadFixture(initialStateFixture, (err) => {
@@ -85,7 +90,24 @@ exports.migrate = function (targetVersion, callback) {
     console.log('  Current DB schema version:', currentVersion);
     console.log('  Desired DB schema version:', targetVersion);
 
-    if (currentVersion < targetVersion) {
+    // Prevent double-migration, except when versions equal in development
+    const migrateable = currentVersion < targetVersion;
+    const bleedingEdge = currentVersion === targetVersion && DEVELOPMENT;
+
+    if (bleedingEdge) {
+      console.log();
+      console.log('#### Attempting re-migration to',
+                  currentVersion, '####');
+      versions.rerun(currentVersion, (err2) => {
+        if (err2) {
+          console.log();
+          console.log('##### Re-migration FAILED #####');
+          console.log('Data might be in a corrupted state.');
+          return callback(err2);
+        } // else success
+        return migrationSuccess(callback);
+      });
+    } else if (migrateable) {
       console.log();
       console.log('#### Migrating from', currentVersion, 'to',
                   targetVersion, '####');
@@ -96,7 +118,7 @@ exports.migrate = function (targetVersion, callback) {
           console.log('##### Migration FAILED #####');
           console.log('Data might be in a corrupted state.');
           return callback(err2);
-        } // else
+        } // else success
         return migrationSuccess(callback);
       });
     } else {

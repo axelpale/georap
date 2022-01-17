@@ -4,8 +4,13 @@ var locale = georap.i18n.locale;
 var __ = georap.i18n.__;
 
 module.exports = function (user) {
-  this.bind = function ($mount) {
+  var $mount = null;
+
+  this.bind = function ($mountEl) {
+    $mount = $mountEl;
+
     $mount.html(template({
+      user: user,
       createdAt: ui.timestamp(user.createdAt, locale),
       loginAt: ui.timestamp(user.loginAt, locale),
       __: __,
@@ -13,6 +18,9 @@ module.exports = function (user) {
   };
 
   this.unbind = function () {
-    // no-op
+    if ($mount) {
+      $mount.empty();
+      $mount = null;
+    }
   };
 };

@@ -36,17 +36,17 @@ module.exports = function (token, goLogin) {
       __: __,
     }));
 
-    $('#georap-signup-to-login-button').click(function (ev) {
+    $('#signup-to-login-button').click(function (ev) {
       ev.preventDefault();
       // Open login form
       goLogin();
     });
-    $('#georap-signup-form').submit(submitHandler);
+    $('#signup-form').submit(submitHandler);
   };
 
   this.unbind = function () {
-    $('#georap-signup-to-login-button').off();
-    $('#georap-signup-form').off();
+    $('#signup-to-login-button').off();
+    $('#signup-form').off();
   };
 
 
@@ -57,20 +57,20 @@ module.exports = function (token, goLogin) {
 
     // Hide previous errors
     (function hidePreviousErrors() {
-      ui.hide($('#georap-signup-invalid-username'));
-      ui.hide($('#georap-signup-password-no-match'));
-      ui.hide($('#georap-signup-email-username-taken'));
+      ui.hide($('#signup-invalid-username'));
+      ui.hide($('#signup-password-no-match'));
+      ui.hide($('#signup-email-username-taken'));
     }());
 
     // Collect values to send
-    var username = $('#georap-signup-username').val().trim();
-    var password = $('#georap-signup-password').val();
-    var password2 = $('#georap-signup-password2').val();
+    var username = $('#signup-username').val().trim();
+    var password = $('#signup-password').val();
+    var password2 = $('#signup-password2').val();
 
     // Validate username
     if (username === '') {
       // Invalid username, show error
-      ui.show($('#georap-signup-invalid-username'));
+      ui.show($('#signup-invalid-username'));
 
       return;
     }  // else
@@ -78,7 +78,7 @@ module.exports = function (token, goLogin) {
     // Validate password
     if (password !== password2 || password === '') {
       // Invalid password, display error message
-      ui.show($('#georap-signup-password-no-match'));
+      ui.show($('#signup-password-no-match'));
 
       return;
     }  // else
@@ -86,45 +86,45 @@ module.exports = function (token, goLogin) {
     // Okay, all good.
 
     // Display loading animation
-    ui.show($('#georap-signup-in-progress'));
+    ui.show($('#signup-in-progress'));
     // Hide form
-    ui.hide($('#georap-signup-form'));
+    ui.hide($('#signup-form'));
 
     accountStore.signup(token, username, password, responseHandler);
   };
 
   responseHandler = function (err) {
     // Hide loading animation
-    ui.hide($('#georap-signup-in-progress'));
+    ui.hide($('#signup-in-progress'));
 
     if (!err) {
       // Show success message
-      ui.show($('#georap-signup-success'));
+      ui.show($('#signup-success'));
       // Show button to continue to log in.
-      ui.show($('#georap-signup-to-login'));
+      ui.show($('#signup-to-login'));
 
       return;
     }  // else
 
     if (err.message === 'Conflict') {
       // Duplicate username, show error.
-      ui.show($('#georap-signup-email-username-taken'));
+      ui.show($('#signup-email-username-taken'));
       // Show form
-      ui.show($('#georap-signup-form'));
+      ui.show($('#signup-form'));
 
       return;
     }  // else
 
     if (err.message === 'Unauthorized') {
       // Expired token
-      ui.show($('#georap-signup-token-error'));
+      ui.show($('#signup-token-error'));
       // Do not show the form because filling it again would still fail.
 
       return;
     }  // else
 
     // Other server error, show error message
-    ui.show($('#georap-signup-server-error'));
+    ui.show($('#signup-server-error'));
   };
 
 };

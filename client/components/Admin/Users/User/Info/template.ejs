@@ -1,2 +1,6 @@
+<% if (user.deleted) { %>
+  <div><h4><%= __('user-is-deleted') %></h4></div>
+<% } %>
+<div><%= __('email') %>: <%= user.email %></div>
 <div><%= __('user-joined') %>: <%= createdAt %></div>
 <div><%= __('user-latest-login') %>: <%= loginAt %></div>

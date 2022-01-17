@@ -96,6 +96,22 @@ exports.placestamp = function (places) {
   return '';
 };
 
+exports.resetRadio = function ($parent, toValue) {
+  var checkedOnce = false;
+  $parent.find('.radio input').each(function (el) {
+    if (el.value === toValue) {
+      el.checked = true;
+      checkedOnce = true;
+    } else {
+      el.checked = false;
+    }
+  });
+  // Ensure at least one is selected. If not, check the first.
+  if (!checkedOnce) {
+    $parent.find('.radio input').get(0).checked = true;
+  }
+};
+
 exports.sizestamp = function (bytes) {
   // Return file size in human readable format.
   // E.g.

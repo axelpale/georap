@@ -34,6 +34,7 @@ module.exports = {
 
   // The admin user credentials.
   // The admin user will be created in the first migration.
+  // The admin user cannot be reroled, banned, or deleted.
   admin: {
     username: 'admin',
     email: 'admin@example.com',

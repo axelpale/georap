@@ -328,6 +328,8 @@ module.exports = {
         // points365days: to be created by worker
         role: 'admin',
         status: 'active',
+        securityToken: '',
+        deleted: false,
         createdAt: NOW,
         loginAt: NOW,
       },
@@ -339,6 +341,8 @@ module.exports = {
         points: 0,
         role: 'basic',
         status: 'deactivated',
+        securityToken: '',
+        deleted: false,
         createdAt: NOW,
         loginAt: NOW,
       },

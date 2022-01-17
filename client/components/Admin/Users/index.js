@@ -4,6 +4,8 @@ var admin = georap.stores.admin;
 var template = require('./template.ejs');
 var tableTemplate = require('./table.ejs');
 var emitter = require('component-emitter');
+var components = require('georap-components');
+var DeletedUsers = require('./Deleted');
 var ui = require('georap-ui');
 var __ = georap.i18n.__;
 
@@ -11,6 +13,7 @@ module.exports = function () {
 
   // Init
   var $mount = null;
+  var children = {};
   var $elems = {};
   var self = this;
   emitter(self);
@@ -26,6 +29,7 @@ module.exports = function () {
 
     $elems.loading = $mount.find('.admin-users-loading');
     $elems.table = $mount.find('.admin-users-table');
+    $elems.buttons = $mount.find('.admin-users-buttons');
 
     // Fetch users and include to page.
     ui.show($elems.loading);
@@ -38,16 +42,32 @@ module.exports = function () {
         return;
       }
 
-      // Reveal user table
+      // Reveal buttons after load
+      ui.show($elems.buttons);
+
+      // Reveal user table. Only non-deleted users.
       $elems.table.html(tableTemplate({
-        users: rawUsers,
+        users: rawUsers.filter(function (user) {
+          return !user.deleted;
+        }),
         __: __,
       }));
+
+      // Optionally list also deleted users
+      var comp = new DeletedUsers(rawUsers);
+      children.deletedUsers = new components.Opener(comp, false);
+      children.deletedUsers.bind({
+        $container: $mount.find('.admin-users-deleted'),
+        $button: $mount.find('.admin-users-deleted-opener'),
+      });
     });
+
   };
 
   this.unbind = function () {
     if ($mount) {
+      ui.unbindAll(children);
+      children = {};
       ui.offAll($elems);
       $elems = {};
       $mount.empty();
