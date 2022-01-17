@@ -354,6 +354,8 @@
     "basic": "Basic"
   },
   "user-role-noauto": "You cannot downgrade your own account.",
+  "user-status-noadmin": "You cannot deactivate the root admin account",
+  "user-status-noauto": "You cannot deactivate your own account",
   "user-tagged-loc": "tagged",
   "user-tagged-loc-as": "as",
   "user-visited-legacy": "maybe visited",

@@ -42,12 +42,12 @@ exports.setStatus = function (req, res, next) {
 
   // Prevent author blocking him/herself out.
   if (authorName === targetName) {
-    return res.sendStatus(status.BAD_REQUEST);
+    return res.status(status.FORBIDDEN).send(req.__('user-status-noauto'));
   }
 
   // Prevent config-admin to become blocked
   if (targetName === adminName) {
-    return res.status(status.FORBIDDEN).send('Cannot change root admin status');
+    return res.status(status.FORBIDDEN).send(req.__('user-status-noadmin'));
   }
 
   const newStatus = isActive ? 'active' : 'deactivated';

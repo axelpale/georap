@@ -353,6 +353,8 @@
     "basic": "Perusjäsen"
   },
   "user-role-noauto": "Et voi alentaa oman tilisi roolia.",
+  "user-status-noadmin": "Et voi sulkea ylläpidon oletustiliä.",
+  "user-status-noauto": "Et voi sulkea omaa tiliäsi.",
   "user-tagged-loc": "muutti paikan",
   "user-tagged-loc-as": "tageiksi",
   "user-visited-legacy": "väitti vierailleensa paikassa",

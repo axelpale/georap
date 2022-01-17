@@ -3,6 +3,7 @@ var ui = require('georap-ui');
 var account = georap.stores.account;
 var admin = georap.stores.admin;
 var __ = georap.i18n.__;
+var FORBIDDEN = 403;
 
 module.exports = function (user) {
   var $mount = null;
@@ -59,7 +60,10 @@ module.exports = function (user) {
       // isChecked is false <=> status is active
       admin.setStatus(user.name, !isChecked, function (err) {
         if (err) {
-          console.error(err);
+          if (err.code === FORBIDDEN) {
+            // Rewrite the message
+            $elems.error.find('.alert').html(err.message);
+          }
           ui.show($elems.error);
           return;
         }
