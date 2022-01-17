@@ -256,7 +256,6 @@
   "role-change": "Muuta jäsenen roolia",
   "role-form-fail": "Roolin muuttaminen epäonnistui.",
   "role-form-help": "Ainoastaan ylläpitäjät voivat muuttaa muiden jäsenten rooleja. Ylläpitäjät voivat myös poistaa mitä tahansa sisältöä, kutsua uusia jäseniä ja jäädyttää jäsenten tilejä.",
-  "role-form-limit": "Et voi alentaa oman tilisi roolia.",
   "role-form-success": "Roolin muuttaminen onnistui.",
   "rotate": "Käännä",
   "save": "Tallenna",
@@ -338,6 +337,7 @@
   "user-moved-post-to": "paikkaan",
   "user-named-loc": "nimesi paikan",
   "user-removal-info": "Tämä toiminto poistaa käyttäjätilin. Poistettu käyttäjä ei voi kirjautua sisään eikä palauttaa tiliään. Mahdollinen käyttäjän luoma sisältö säilyy ennallaan mutta muuttuu anonyymiksi.",
+  "user-removal-noadmin": "Cannot delete root admin",
   "user-removal-noauto": "Et voi poistaa omaa tiliäsi.",
   "user-removal-submit-btn": "Kyllä, poista tili",
   "user-removal-success": "Käyttäjätili on nyt poistettu.",
@@ -352,6 +352,7 @@
     "mod": "Moderaattori",
     "basic": "Perusjäsen"
   },
+  "user-role-noauto": "Et voi alentaa oman tilisi roolia.",
   "user-tagged-loc": "muutti paikan",
   "user-tagged-loc-as": "tageiksi",
   "user-visited-legacy": "väitti vierailleensa paikassa",

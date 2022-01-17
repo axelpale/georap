@@ -38,10 +38,16 @@ exports.setStatus = function (req, res, next) {
 
   const targetName = req.username;
   const authorName = req.user.name;
+  const adminName = config.admin.username;
 
   // Prevent author blocking him/herself out.
   if (authorName === targetName) {
     return res.sendStatus(status.BAD_REQUEST);
+  }
+
+  // Prevent config-admin to become blocked
+  if (targetName === adminName) {
+    return res.status(status.FORBIDDEN).send('Cannot change root admin status');
   }
 
   const newStatus = isActive ? 'active' : 'deactivated';
@@ -61,6 +67,7 @@ exports.setRole = function (req, res, next) {
   const newRole = req.body.role;
   const targetName = req.username;
   const authorName = req.user.name;
+  const adminName = config.admin.username;
 
   // Ensure role is valid
   if (!config.roles.includes(newRole)) {
@@ -70,7 +77,12 @@ exports.setRole = function (req, res, next) {
   // Prevent author changing his/her own role.
   // This ensures there is always at least one user with admin role.
   if (authorName === targetName) {
-    return res.status(status.FORBIDDEN).send('Cannot change own role');
+    return res.status(status.FORBIDDEN).send(req.__('user-role-noauto'));
+  }
+
+  // Prevent config-admin to become reroled
+  if (targetName === adminName) {
+    return res.status(status.FORBIDDEN).send('Cannot change root admin role');
   }
 
   dal.setRole(targetName, newRole, (err) => {
@@ -86,11 +98,18 @@ exports.setRole = function (req, res, next) {
 exports.removeOne = function (req, res, next) {
   const targetName = req.username;
   const authorName = req.user.name;
+  const adminName = config.admin.username;
 
-  // Only admins can remove. Admin status checked in router.
+  // Only admin roles can remove. Admin status checked in router.
+  // Root-admin cannot be removed.
 
   if (authorName === targetName) {
-    return res.status(status.FORBIDDEN).send('Cannot remove self');
+    return res.status(status.FORBIDDEN).send(req.__('user-removal-noauto'));
+  }
+
+  // Prevent config-admin to become reroled
+  if (targetName === adminName) {
+    return res.status(status.FORBIDDEN).send(req.__('user-removal-noadmin'));
   }
 
   dal.removeOne(targetName, (err) => {

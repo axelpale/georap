@@ -41,7 +41,7 @@ module.exports = function (user) {
         if (err) {
           children.remover.close();
           if (err.code === FORBIDDEN) {
-            children.error.update(__('user-removal-noauto'));
+            children.error.update(err.message);
           } else {
             children.error.update(err.message);
           }

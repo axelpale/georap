@@ -36,7 +36,6 @@ exports.getUserForAdmin = function (username, callback) {
     // not found
     return callback(null, null);
   });
-
 };
 
 

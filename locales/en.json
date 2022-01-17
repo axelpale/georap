@@ -257,7 +257,6 @@
   "role-change": "Change member role",
   "role-form-fail": "Updating the role failed.",
   "role-form-help": "Only members with administrator role can change roles of others. Administrators can also delete any content, invite new members and lock member accounts.",
-  "role-form-limit": "You cannot downgrade your own account.",
   "role-form-success": "Role changed successfully.",
   "rotate": "Rotate",
   "save": "Save",
@@ -339,6 +338,7 @@
   "user-moved-post-to": "to",
   "user-named-loc": "named",
   "user-removal-info": "This will delete the user account. The deleted user cannot log in nor restore the account. Any content created by the user will stay intact but will become anonymous.",
+  "user-removal-noadmin": "Cannot delete root admin",
   "user-removal-noauto": "You cannot delete your own account.",
   "user-removal-submit-btn": "Yes, delete account",
   "user-removal-success": "User account deleted successfully",
@@ -353,6 +353,7 @@
     "mod": "Moderator",
     "basic": "Basic"
   },
+  "user-role-noauto": "You cannot downgrade your own account.",
   "user-tagged-loc": "tagged",
   "user-tagged-loc-as": "as",
   "user-visited-legacy": "maybe visited",
