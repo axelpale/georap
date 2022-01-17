@@ -107,25 +107,3 @@ exports.removeUser = function (username, callback) {
     data: {},
   }, callback);
 };
-
-exports.restoreUser = function (username, callback) {
-  // Request to restore user account.
-  //
-  // Parameters:
-  //   username
-  //     string
-  //   callback
-  //     function (err)
-  //
-
-  // Assert parameters
-  if (typeof username !== 'string' ||
-      typeof callback !== 'function') {
-    throw new Error('invalid parameters');
-  }
-
-  request.deleteJSON({
-    url: '/api/admin/users/' + username,
-    data: {},
-  }, callback);
-};

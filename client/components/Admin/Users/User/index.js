@@ -6,7 +6,6 @@ var InfoComponent = require('./Info');
 var StatusComponent = require('./Status');
 var EventsComponent = require('./Events');
 var RoleComponent = require('./Role');
-var RestoreComponent = require('./Restore');
 var RemovalComponent = require('./Removal');
 var emitter = require('component-emitter');
 var ui = require('georap-ui');
@@ -50,11 +49,7 @@ module.exports = function (username) {
       children.infoComp = new InfoComponent(user);
       children.infoComp.bind($elems.infoRoot);
 
-      if (user.deleted) {
-        $elems.restoreRoot = $mount.find('.admin-user-restore-root');
-        children.restoreComp = new RestoreComponent(user);
-        children.restoreComp.bind($elems.restoreRoot);
-      } else {
+      if (!user.deleted) {
         children.statusComp = new StatusComponent(user);
         children.statusComp.bind($elems.statusRoot);
 
