@@ -65,7 +65,7 @@
     "distfilter": "file:local_modules/distfilter",
     "download": "^7.1.0",
     "ejs": "^3.1.6",
-    "email-validator": "^1.0.7",
+    "email-validator": "^2.0.4",
     "express": "^4.17.2",
     "express-jwt": "^6.1.0",
     "extract-zip": "^1.6.5",
