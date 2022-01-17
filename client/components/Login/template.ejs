@@ -59,19 +59,8 @@
       </p>
 
       <!-- Password reset -->
-      <div id="georap-password-reset">
-
-        <div id="georap-password-reset-invalid-email" class="hidden">
-          <div class="alert alert-danger" role="alert"><%= __('pwd-reset-invalid-email') %></div>
-        </div>
-
-        <div id="georap-password-reset-unknown-email" class="hidden">
-          <div class="alert alert-danger" role="alert"><%= __('pwd-reset-unknown-email') %></div>
-        </div>
-
-        <div id="georap-password-reset-server-error" class="hidden">
-          <div class="alert alert-danger" role="alert"><%= __('pwd-reset-send-failed') %></div>
-        </div>
+      <div id="georap-password-reset" class="hidden">
+        <hr>
 
         <div id="georap-password-reset-success" class="hidden">
           <div class="alert alert-success" role="alert"><%= __('pwd-reset-send-success') %></div>
@@ -86,8 +75,7 @@
         </div>
 
         <!-- Reset form -->
-        <form id="georap-password-reset-form" class="hidden">
-          <hr>
+        <form id="georap-password-reset-form">
           <h3><%= __('forgot-password-title') %></h3>
           <p><%= __('forgot-password-help') %></p>
           <div class="form-group">
@@ -97,7 +85,22 @@
           <div class="pull-right">
             <button type="submit" class="btn btn-primary"><%= __('send-email') %></button>
           </div>
+          <div class="form-group">
+            <button type="button" class="password-reset-cancel btn btn-default"><%= __('cancel') %></button>
+          </div>
         </form>
+
+        <div id="georap-password-reset-invalid-email" class="hidden">
+          <div class="alert alert-danger" role="alert"><%= __('pwd-reset-invalid-email') %></div>
+        </div>
+
+        <div id="georap-password-reset-unknown-email" class="hidden">
+          <div class="alert alert-danger" role="alert"><%= __('pwd-reset-unknown-email') %></div>
+        </div>
+
+        <div id="georap-password-reset-server-error" class="hidden">
+          <div class="alert alert-danger" role="alert"><%= __('pwd-reset-send-failed') %></div>
+        </div>
       </div><!-- #georap-password-reset -->
 
     </div>

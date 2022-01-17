@@ -104,7 +104,15 @@ module.exports = function (onSuccess) {
     // Autofill reset email field if email already given.
     ev.preventDefault();
 
-    ui.toggleHidden($('#georap-password-reset-form'));
+    ui.toggleHidden($('#georap-password-reset'));
+    ui.show($('#georap-password-reset-form'));
+
+    // Hide possible earlier error messages
+    ui.hide($('#georap-password-reset-invalid-email'));
+    ui.hide($('#georap-password-reset-unknown-email'));
+    ui.hide($('#georap-password-reset-server-error'));
+    // Hide also possible earlier success message
+    ui.hide($('#georap-password-reset-success'));
 
     var loginEmail = $('#georap-login-email').val();
 
@@ -183,6 +191,7 @@ module.exports = function (onSuccess) {
   this.bind = function () {
     $('#georap-login-form').submit(loginFormSubmitHandler);
     $('#georap-password-reset-button').click(resetButtonHandler);
+    $('.password-reset-cancel').click(resetButtonHandler);
     $('#georap-password-reset-form').submit(resetFormSubmitHandler);
   };
 
