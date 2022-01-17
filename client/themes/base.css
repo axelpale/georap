@@ -76,7 +76,7 @@ time:hover {
 /* END Card */
 
 /* Login */
-.georap-login-container {
+.login-container {
   width: 100%;
   height: 100%;
   margin: 0;
@@ -84,11 +84,11 @@ time:hover {
   background: url('/assets/images/login.jpg') no-repeat center center fixed;
   background-size: cover;
 }
-.georap-login-container h1,
-.georap-login-container h3,
-.georap-login-container label,
-.georap-login-container p,
-.georap-login-container a {
+.login-container h1,
+.login-container h3,
+.login-container label,
+.login-container p,
+.login-container a {
   color: #fff !important;
 }
 .login-glass {
@@ -100,7 +100,7 @@ time:hover {
   /* text-shadow: -1px 3px 10px rgb(128, 128, 128); */
   padding-bottom: 1.8rem;
 }
-#georap-login-form {
+.login-form {
   margin-bottom: 1.68em;
 }
 /* END Login */

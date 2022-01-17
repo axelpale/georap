@@ -1,109 +1,11 @@
-<div class="georap-login-container">
-<div class="container-fluid">
-  <div class="row">
-    <div class="login-column login-glass col-md-4 col-sm-6">
-      <h1><%= title %></h1>
-
-      <div id="georap-login-incorrect" class="hidden">
-        <div class="alert alert-danger" role="alert"><%= __('login-incorrect') %></div>
+<div class="login-container">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="login-column login-glass col-md-4 col-sm-6">
+        <h1><%= title %></h1>
+        <div class="login-form-container"></div>
+        <div class="password-reset-container hidden"></div>
       </div>
-
-      <div id="georap-login-invalid-email" class="hidden">
-        <div class="alert alert-danger" role="alert"><%= __('login-invalid-email') %></div>
-      </div>
-
-      <div id="georap-login-invalid-password" class="hidden">
-        <div class="alert alert-danger" role="alert"><%= __('login-empty-password') %></div>
-      </div>
-
-      <div id="georap-login-server-error" class="hidden">
-        <div class="alert alert-danger" role="alert"><%= __('login-failed') %></div>
-      </div>
-
-      <div id="georap-login-deactivated" class="hidden">
-        <div class="alert alert-warning" role="alert"><span class="glyphicon glyphicon-lock" aria-hidden="true"></span> <span id="georap-login-deactivated-message"><%= __('login-deactivated') %></span></div>
-      </div>
-
-      <div id="georap-login-in-progress" class="hidden">
-        <div class="progress">
-          <div class="progress-bar progress-bar-striped progress-bar-<%= loginColor %> active" role="progressbar" style="width: 100%">
-            <span class="sr-only">Waiting for server</span>
-          </div>
-        </div>
-      </div>
-
-      <form id="georap-login-form">
-        <div class="form-group">
-          <label for="georap-login-email"><%= __('email-or-username') %></label>
-          <input type="text" class="form-control" id="georap-login-email" tabindex="1">
-        </div>
-        <div class="form-group">
-          <div class="pull-right">
-            <a id="georap-password-reset-button" href="#"><%= __('forgot-password') %></a>
-          </div>
-          <label for="georap-login-password"><%= __('password') %></label>
-          <input type="password" class="form-control" id="georap-login-password" tabindex="2">
-        </div>
-        <div class="pull-right">
-          <button type="submit" class="btn btn-<%= loginColor %>" tabindex="3"><%= __('log-in') %></button>
-        </div>
-      </form>
-
-      <p>
-        <% availableLocales.forEach(function (locale, index) { %>
-          <%= index > 0 ? '-' : '' %>
-          <a href="?locale=<%= locale %>" lang="<%= locale %>" target="_self">
-            <%= __('locale-native', locale) %>
-          </a>
-        <% }) %>
-      </p>
-
-      <!-- Password reset -->
-      <div id="georap-password-reset" class="hidden">
-        <hr>
-
-        <div id="georap-password-reset-success" class="hidden">
-          <div class="alert alert-success" role="alert"><%= __('pwd-reset-send-success') %></div>
-        </div>
-
-        <div id="georap-password-reset-in-progress" class="hidden">
-          <div class="progress">
-            <div class="progress-bar progress-bar-striped active" role="progressbar" style="width: 100%">
-              <span class="sr-only">Waiting for server</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Reset form -->
-        <form id="georap-password-reset-form">
-          <h3><%= __('forgot-password-title') %></h3>
-          <p><%= __('forgot-password-help') %></p>
-          <div class="form-group">
-            <label for="georap-password-reset-email"><%= __('email-address') %>:</label>
-            <input type="email" class="form-control" id="georap-password-reset-email">
-          </div>
-          <div class="pull-right">
-            <button type="submit" class="btn btn-primary"><%= __('send-email') %></button>
-          </div>
-          <div class="form-group">
-            <button type="button" class="password-reset-cancel btn btn-default"><%= __('cancel') %></button>
-          </div>
-        </form>
-
-        <div id="georap-password-reset-invalid-email" class="hidden">
-          <div class="alert alert-danger" role="alert"><%= __('pwd-reset-invalid-email') %></div>
-        </div>
-
-        <div id="georap-password-reset-unknown-email" class="hidden">
-          <div class="alert alert-danger" role="alert"><%= __('pwd-reset-unknown-email') %></div>
-        </div>
-
-        <div id="georap-password-reset-server-error" class="hidden">
-          <div class="alert alert-danger" role="alert"><%= __('pwd-reset-send-failed') %></div>
-        </div>
-      </div><!-- #georap-password-reset -->
-
-    </div>
-  </div><!-- .row -->
-</div><!-- .container-fluid -->
+    </div><!-- .row -->
+  </div><!-- .container-fluid -->
 </div>

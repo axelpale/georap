@@ -96,12 +96,12 @@ exports.route = function () {
   page('/login', function () {
     // Logout should be immediate; no reason to show progress bar.
     account.logout(function () {
-      var view = new LoginView(function onSuccess() {
-        // After successful login, go to original path.
-        page.show(afterLogin.get());
-        // Reset for another login during the same session.
-        afterLogin.reset();
-      });
+      // After successful login, go to original url.
+      // Reset for another login during the same session.
+      var urlAfterLogin = afterLogin.get();
+      afterLogin.reset();
+
+      var view = new LoginView(urlAfterLogin);
       card.open(view, 'full');
     });
   });

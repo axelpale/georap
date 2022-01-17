@@ -1,0 +1,46 @@
+<div class="login-incorrect hidden">
+  <div class="alert alert-danger" role="alert"><%= __('login-incorrect') %></div>
+</div>
+
+<div class="login-invalid-email hidden">
+  <div class="alert alert-warning" role="alert"><%= __('login-invalid-email') %></div>
+</div>
+
+<div class="login-invalid-password hidden">
+  <div class="alert alert-warning" role="alert"><%= __('login-empty-password') %></div>
+</div>
+
+<div class="login-server-error hidden">
+  <div class="alert alert-danger" role="alert"><%= __('login-failed') %></div>
+</div>
+
+<div class="login-deactivated hidden">
+  <div class="alert alert-warning" role="alert"><span class="glyphicon glyphicon-lock" aria-hidden="true"></span> <span class="alert-message"><%= __('login-deactivated') %></span></div>
+</div>
+
+<div class="login-in-progress hidden">
+  <div class="progress">
+    <div class="progress-bar progress-bar-striped progress-bar-<%= loginColor %> active" role="progressbar" style="width: 100%">
+      <span class="sr-only">Waiting for server</span>
+    </div>
+  </div>
+</div>
+
+<form class="login-form">
+  <div class="form-group">
+    <label for="georap-login-email"><%= __('email-or-username') %></label>
+    <input type="text" class="form-control" id="georap-login-email" tabindex="1">
+  </div>
+  <div class="form-group">
+    <div class="pull-right">
+      <a class="password-reset-button" href="#"><%= __('forgot-password') %></a>
+    </div>
+    <label for="georap-login-password"><%= __('password') %></label>
+    <input type="password" class="form-control" id="georap-login-password" tabindex="2">
+  </div>
+  <div class="pull-right">
+    <button type="submit" class="btn btn-<%= loginColor %>" tabindex="3"><%= __('log-in') %></button>
+  </div>
+</form>
+
+<p class="available-languages"></p>

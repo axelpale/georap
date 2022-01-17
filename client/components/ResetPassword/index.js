@@ -14,6 +14,8 @@ module.exports = function (token, showLogin) {
   //     function ()
 
   // Init
+  var $mount = null;
+  var $elems = {};
   emitter(this);
 
   var parsedToken = jwtDecode(token);
@@ -29,27 +31,40 @@ module.exports = function (token, showLogin) {
 
   // Public methods
 
-  this.render = function () {
-    return template({
+  this.bind = function ($mountEl) {
+    $mount = $mountEl;
+
+    $mount.html(template({
       email: parsedToken.email,
       __: georap.i18n.__,
-    });
-  };
-
-  this.bind = function () {
+    }));
 
     // Initialize log in button that will be shown after successful reset.
-    $('#georap-continue-to-login-button').click(function (ev) {
+    $elems.afterResetLogin = $mount.find('.reset-password-login');
+    $elems.continue = $mount.find('.continue-to-login-button');
+    $elems.continue.click(function (ev) {
       ev.preventDefault();
       return showLogin();
     });
 
-    $('#georap-reset-password-form').submit(submitHandler);
+    $elems.form = $mount.find('.reset-password-form');
+    $elems.form.submit(submitHandler);
+
+    $elems.progress = $mount.find('.reset-in-progress');
+    $elems.password = $mount.find('#georap-input-new-password');
+    $elems.passwordAgain = $mount.find('#georap-input-again-password');
+    $elems.noMatchError = $mount.find('.reset-password-no-match');
+    $elems.serverError = $mount.find('.reset-password-server-error');
+    $elems.tokenError = $mount.find('.reset-password-token-error');
+    $elems.success = $mount.find('.reset-password-success');
   };
 
   this.unbind = function () {
-    $('#georap-continue-to-login-button').off();
-    $('#georap-reset-password-form').off();
+    if ($mount) {
+      ui.offAll($elems);
+      $mount.empty();
+      $mount = null;
+    }
   };
 
 
@@ -59,23 +74,23 @@ module.exports = function (token, showLogin) {
     // User has typed in two passwords and submitted the form.
     ev.preventDefault();
 
-    var password = $('#georap-input-new-password').val();
-    var passwordAgain = $('#georap-input-again-password').val();
+    var password = $elems.password.val();
+    var passwordAgain = $elems.passwordAgain.val();
 
     // Validate
     if (password !== passwordAgain || password === '') {
       // Display error message
-      ui.show($('#georap-reset-password-no-match'));
+      ui.show($elems.noMatchError);
 
       return;
     }  // else
 
     // Reveal loading animation.
-    ui.show($('#georap-reset-in-progress'));
+    ui.show($elems.progress);
     // Hide the password form.
-    ui.hide($('#georap-reset-password-form'));
+    ui.hide($elems.form);
     // Hide possible earlier no-match error message
-    ui.hide($('#georap-reset-password-no-match'));
+    ui.hide($elems.noMatchError);
 
     account.resetPassword(token, password, responseHandler);
   };
@@ -84,11 +99,11 @@ module.exports = function (token, showLogin) {
     if (!err) {
       // Successful reset
       // Reveal success message
-      ui.show($('#georap-reset-password-success'));
+      ui.show($elems.success);
       // Reveal "Continue to log in" button
-      ui.show($('#georap-reset-password-login'));
+      ui.show($elems.afterResetLogin);
       // Hide the loading animation
-      ui.hide($('#georap-reset-in-progress'));
+      ui.hide($elems.progress);
 
       return;
     }  // else
@@ -96,11 +111,11 @@ module.exports = function (token, showLogin) {
     if (err.message === 'Unauthorized') {
       // False token
       // Display token error message.
-      ui.show($('#georap-reset-password-token-error'));
+      ui.show($elems.tokenError);
       // Reveal "Continue to log in" button
-      ui.show($('#georap-reset-password-login'));
+      ui.show($elems.afterResetLogin);
       // Hide the loading animation
-      ui.hide($('#georap-reset-in-progress'));
+      ui.hide($elems.progress);
 
       return;
     }  // else
@@ -111,11 +126,11 @@ module.exports = function (token, showLogin) {
     // Database down
     console.error(err);
     // Display error message.
-    ui.show($('#georap-reset-password-server-error'));
+    ui.show($elems.serverError);
     // Display the original form
-    ui.show($('#georap-reset-password-form'));
+    ui.show($elems.form);
     // Hide the loading animation
-    ui.hide($('#georap-reset-in-progress'));
+    ui.hide($elems.progress);
   };
 
 };

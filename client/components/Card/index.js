@@ -23,7 +23,6 @@
 //
 var emitter = require('component-emitter');
 var closeButton = require('./closeButton');
-var contentView = require('./contentView');
 var ui = require('georap-ui');
 
 module.exports = function () {
@@ -33,37 +32,40 @@ module.exports = function () {
   emitter(self);
 
   // State
-  var _activeView = null;
-  var _$mount = null;
+  var component = null;
+  var $mount = null;
+  var $elems = {};
 
   // Public methods
 
-  self.bind = function ($mount) {
-    // Update state
-    _$mount = $mount;
+  self.bind = function ($mountEl) {
+    $mount = $mountEl;
+    $elems.container = $mount.find('.card-layer-content');
   };
 
   self.unbind = function () {
-    if (_activeView) {
-      _activeView.off();
-      _activeView.unbind();
-      _activeView = null;
+    if ($mount) {
+      // $mount.empty();
+      $mount = null;
     }
-
-    _$mount = null;
+    if (component) {
+      component.off();
+      component.unbind();
+      component = null;
+    }
   };
 
   self.isViewInstanceOf = function (View) {
     // Test if the active view is of the class View.
-    return (_activeView instanceof View);
+    return (component instanceof View);
   };
 
-  self.open = function (view, cardClass) {
+  self.open = function (nextComponent, cardClass) {
     // Open a card over the map and close any other open cards.
     // The bind() must be called before open().
     //
     // Parameters:
-    //   view
+    //   nextComponent
     //     to be rendered inside the card
     //   cardClass
     //     string, optional. Card type. Available types:
@@ -71,47 +73,48 @@ module.exports = function () {
     //         A fraction of the map is visible.
     //       full
     //         Fills the map area completely.
-    var cardType;
-
-    if (_$mount === null) {
-      throw new Error('Fn open() called before bind()');
-    }
+    //
 
     // Handle default parameters
+    var cardType;
     if (typeof cardClass === 'undefined') {
       cardType = 'page';
     } else {
       cardType = cardClass;
     }
 
-    // Remove possible other cards
-    if (_activeView !== null) {
-      _activeView.off();
-      _activeView.unbind();
+    if ($mount === null) {
+      throw new Error('Fn open() called before bind()');
     }
-    _activeView = view;
 
-    // Render view into card.
-    var $content = _$mount.find('.card-layer-content');
-    contentView.bind($content, view);
+    // Remove possible other cards
+    if (component) {
+      component.off();
+      component.unbind();
+    }
+    // Switch active component
+    component = nextComponent;
 
     // removes previous card-* classes
-    _$mount.removeClass('card-full');
-    _$mount.removeClass('card-page');
+    $mount.removeClass('card-full');
+    $mount.removeClass('card-page');
+    // set next class
+    $mount.addClass('card-' + cardType);
 
-    _$mount.addClass('card-' + cardType);
-    _activeView.bind($content);
+    // Render view into card.
+    component.bind($elems.container);
 
     // Reveal if hidden
-    ui.show(_$mount);
+    ui.show($mount);
+    ui.show($elems.container);
 
     // Create close button (not created if not sidebar)
-    closeButton(_$mount, cardType, function () {
+    closeButton($mount, cardType, function () {
       self.close();
     });
 
     // Listen & close if the model of the view becomes removed.
-    _activeView.once('removed', function () {
+    component.once('removed', function () {
       self.close();
     });
 
@@ -123,7 +126,7 @@ module.exports = function () {
     //   silent, optional, default false
     //     prevent emitting of 'closed' event
 
-    if (_$mount === null) {
+    if ($mount === null) {
       throw new Error('Fn close() called on unbound component. ' +
                       'Call bind() first.');
     }
@@ -132,14 +135,14 @@ module.exports = function () {
       silent = false;
     }
 
-    if (_activeView !== null) {
-      _activeView.off();
-      _activeView.unbind();
-      _activeView = null;
+    if (component) {
+      component.off();
+      component.unbind();
+      component = null;
     }
 
-    ui.hide(_$mount);
-    contentView.unbind();
+    ui.hide($mount);
+    $elems.container.empty();
 
     if (!silent) {
       self.emit('closed');

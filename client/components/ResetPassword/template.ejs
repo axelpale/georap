@@ -6,23 +6,23 @@
     </div>
     <div class="col-md-4">
 
-      <div id="georap-reset-password-no-match" class="hidden">
+      <div class="reset-password-no-match hidden">
         <div class="alert alert-danger" role="alert"><%= __('signup-password-mismatch') %></div>
       </div>
 
-      <div id="georap-reset-password-server-error" class="hidden">
+      <div class="reset-password-server-error hidden">
         <div class="alert alert-danger" role="alert"><%= __('pwd-reset-failed') %></div>
       </div>
 
-      <div id="georap-reset-password-token-error" class="hidden">
+      <div class="georap-reset-password-token-error hidden">
         <div class="alert alert-warning" role="alert"><%= __('pwd-reset-expired') %></div>
       </div>
 
-      <div id="georap-reset-password-success" class="hidden">
+      <div class="reset-password-success hidden">
         <div class="alert alert-success" role="alert"><%= __('pwd-reset-success') %></div>
       </div>
 
-      <form id="georap-reset-password-form">
+      <form class="reset-password-form">
         <div id="georap-new-password-group" class="form-group">
           <label for="georap-input-new-password" class="control-label"><%= __('signup-password') %>:</label>
           <input type="password" class="form-control" id="georap-input-new-password">
@@ -31,11 +31,11 @@
           <label for="georap-input-again-password" class="control-label"><%= __('signup-password-repeat') %>:</label>
           <input type="password" class="form-control" id="georap-input-again-password">
         </div>
-        <div id="georap-reset-password-alert"></div>
+        <div class="reset-password-alert"></div>
         <button type="submit" class="btn btn-primary"><%= __('pwd-reset-submit') %></button>
       </form>
 
-      <div id="georap-reset-in-progress" class="hidden">
+      <div class="reset-in-progress hidden">
         <div class="progress">
           <div class="progress-bar progress-bar-striped active" role="progressbar" style="width: 100%">
             <span class="sr-only">Waiting</span>
@@ -43,8 +43,8 @@
         </div>
       </div>
 
-      <div id="georap-reset-password-login" class="hidden">
-        <button id="georap-continue-to-login-button" type="button" class="btn btn-primary"><%= __('signup-continue') %></button>
+      <div class="reset-password-login hidden">
+        <button type="button" class="continue-to-login-button btn btn-primary"><%= __('signup-continue') %></button>
       </div>
     </div>
   </div><!-- .row -->
