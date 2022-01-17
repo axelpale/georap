@@ -17,7 +17,7 @@ const dompurify = createDOMPurify(window)
 // API
 module.exports = function (dirtyMarkdown) {
   // Convert (possibly dirty) markdown to safe markdown.
-  const dirtyHtml = marked(dirtyMarkdown)
+  const dirtyHtml = marked.parse(dirtyMarkdown)
   const safeHtml = dompurify.sanitize(dirtyHtml)
   const safeMarkdown = turndown.turndown(safeHtml)
   return safeMarkdown

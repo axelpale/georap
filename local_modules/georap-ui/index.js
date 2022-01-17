@@ -51,7 +51,7 @@ exports.flash = function ($el) {
 };
 
 exports.markdownToHtml = function (markdown) {
-  return marked(markdown);
+  return marked.parse(markdown);
 };
 
 exports.locationstamp = function (location) {
