@@ -7,7 +7,6 @@ const entriesRouter = require('./entries/routes');
 const eventsRouter = require('./events/routes');
 const geometryRouter = require('./geometry/routes');
 const iconsRouter = require('./icons/routes');
-const localesRouter = require('./locales/routes');
 const locationsRouter = require('./locations/routes');
 const markersRouter = require('./markers/routes');
 const statisticsRouter = require('./statistics/routes');
