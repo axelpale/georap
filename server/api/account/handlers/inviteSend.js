@@ -23,12 +23,7 @@ module.exports = function (req, res, next) {
   //         the translation of the invitation.
   //
   const email = req.body.email;
-  const isAdmin = req.user.role === 'admin';
   let lang = req.body.lang;
-
-  if (isAdmin !== true) {
-    return res.sendStatus(status.UNAUTHORIZED);
-  }
 
   if (typeof email !== 'string') {
     return res.sendStatus(status.BAD_REQUEST);
