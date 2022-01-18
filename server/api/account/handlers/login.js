@@ -2,7 +2,7 @@ const status = require('http-status-codes');
 const db = require('georap-db');
 const bcrypt = require('bcryptjs');
 const dal = require('../dal');
-const generateAuthToken = require('../lib/generateAuthToken');
+const authToken = require('../lib/authToken');
 const loggers = require('../../../services/logs/loggers');
 
 module.exports = function (req, res, next) {
@@ -83,7 +83,7 @@ module.exports = function (req, res, next) {
       }
 
       // else, build jwt token
-      const token = generateAuthToken(user.name, user.email, user.role);
+      const token = authToken.generate(user.name, user.email, user.role);
 
       // Register login time.
       dal.markLogin(user.name, (errl) => {

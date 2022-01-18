@@ -3,7 +3,7 @@ const config = require('georap-config');
 const db = require('georap-db');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const generateAuthToken = require('../lib/generateAuthToken');
+const authToken = require('../lib/authToken');
 const securityCode = require('../lib/securityCode');
 const loggers = require('../../../services/logs/loggers');
 
@@ -82,7 +82,7 @@ module.exports = function (req, res, next) {
           }
 
           // Refresh user token because its email has changed
-          const token = generateAuthToken(username, newEmail, user.role);
+          const token = authToken.generate(username, newEmail, user.role);
 
           // Email changed successfully
           loggers.log(req.user.name + ' changed email to ' + decoded.newEmail);
