@@ -10,7 +10,6 @@ const iconsRouter = require('./icons/routes');
 const localesRouter = require('./locales/routes');
 const locationsRouter = require('./locations/routes');
 const markersRouter = require('./markers/routes');
-const paymentsRouter = require('./payments/routes');
 const statisticsRouter = require('./statistics/routes');
 const usersRouter = require('./users/routes');
 
@@ -63,9 +62,9 @@ router.use('/events', eventsRouter);
 router.use('/geometry', geometryRouter);
 router.use('/locations', locationsRouter);
 router.use('/markers', markersRouter);
-router.use('/payments', paymentsRouter);
 router.use('/statistics', statisticsRouter);
 router.use('/users', usersRouter);
+// router.use('/payments', paymentsRouter); TODO is any use?
 
 // API error handling
 // See http://expressjs.com/en/guide/error-handling.html
