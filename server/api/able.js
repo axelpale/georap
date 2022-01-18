@@ -10,14 +10,21 @@ module.exports = function (capn) {
   const cap = capn.toLowerCase();
 
   return function (req, res, next) {
-    const role = req.user.role;
+    // Determine role of current client
+    let role = 'public';
+    if (req.user && req.user.role) {
+      role = req.user.role;
+    }
+
+    // Capabilities of this role
     const caps = config.capabilities[role];
 
+    // Do the capabilities include the required capability.
     if (caps.includes(cap)) {
       return next();
     }
 
-    const msg = 'User is not capable of accessing this resource';
+    const msg = 'You are not capable of accessing this resource';
     return res.status(status.FORBIDDEN).send(msg);
   };
 };
