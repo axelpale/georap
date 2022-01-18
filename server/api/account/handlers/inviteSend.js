@@ -68,7 +68,7 @@ module.exports = function (req, res, next) {
 
     const tokenPayload = {
       email: email,
-      invite: true,
+      role: 'invited', // this role must be able to 'account-signup'
     };
     const token = jwt.sign(tokenPayload, config.secret, {
       expiresIn: '7d',
