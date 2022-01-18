@@ -14,10 +14,12 @@
 //
 const jwt = require('express-jwt');
 const config = require('georap-config');
+const userDal = require('./api/users/user/dal');
 
 module.exports = jwt({
   secret: config.secret,
   algorithms: ['HS256'],
+  credentialsRequired: false,
   getToken: function fromHeaderOrQuerystring(req) {
     // Copied from https://github.com/auth0/express-jwt#usage
     const header = req.headers.authorization;
@@ -27,5 +29,30 @@ module.exports = jwt({
       return req.query.token;
     }
     return null;
+  },
+  isRevoked: function (req, payload, done) {
+    // Check if user is banned.
+    // Check this by querying the database, because it's SIMPLE.
+    // This effectively nulls the benefits of using jwt tokens :DD
+    // But what the hell...
+    if (payload && payload.name) {
+      userDal.getOne(payload.name, (err, storedUser) => {
+        if (err) {
+          return done(err);
+        }
+
+        if (storedUser) {
+          if (storedUser.status === 'active') {
+            return done(null, false);
+          }
+        }
+
+        // Token revoked
+        // TODO ensure this works
+        return done(null, true);
+      });
+    } else {
+      return done(null, true);
+    }
   },
 });

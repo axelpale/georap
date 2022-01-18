@@ -12,63 +12,28 @@ const markersRouter = require('./markers/routes');
 const statisticsRouter = require('./statistics/routes');
 const usersRouter = require('./users/routes');
 
-const userDal = require('./users/user/dal');
-
-const authMiddleware = require('./auth');
+const able = require('./able');
 const status = require('http-status-codes');
 const router = require('express').Router();
 
-// Icon routes do not require authentication. Thus before jwt middleware.
-router.use('/icons', iconsRouter);
-
-// Locale and translation do not require authentication.
-router.use('/locales', localesRouter);
-
-// Account routes only partially require JWT authentication. Thus
-// the router is used before the jwt middleware.
+router.use('/icons', able('locations'), iconsRouter);
 router.use('/account', accountRouter);
-
-// Authentication JWT Token middleware.
-router.use(authMiddleware);
-
-// Check if user is banned.
-router.use((req, res, next) => {
-
-  // Check this by querying the database, because it's SIMPLE.
-  // This effectively nulls the benefits of using jwt tokens :DD
-  // But what the hell...
-  userDal.getOne(req.user.name, (err, storedUser) => {
-    if (err) {
-      return next(err);
-    }
-
-    if (storedUser) {
-      if (storedUser.status === 'active') {
-        return next();
-      }
-    }
-
-    // User does not exist or is banned
-    return res.sendStatus(status.FORBIDDEN);
-  });
-});
-
-// These routes require authentication.
-router.use('/admin', adminRouter);
-router.use('/attachments', attachmentsRouter);
-router.use('/entries', entriesRouter);
-router.use('/events', eventsRouter);
-router.use('/geometry', geometryRouter);
-router.use('/locations', locationsRouter);
-router.use('/markers', markersRouter);
-router.use('/statistics', statisticsRouter);
-router.use('/users', usersRouter);
+router.use('/admin', able('admin'), adminRouter);
+router.use('/attachments', able('posts'), attachmentsRouter);
+router.use('/entries', able('posts'), entriesRouter);
+router.use('/events', able('locations'), eventsRouter);
+router.use('/geometry', able('geometry'), geometryRouter);
+router.use('/locations', able('locations'), locationsRouter);
+router.use('/markers', able('locations'), markersRouter);
+router.use('/statistics', able('statistics'), statisticsRouter);
+router.use('/users', able('users'), usersRouter);
+// router.use('/locales', localesRouter); TODO is any use?
 // router.use('/payments', paymentsRouter); TODO is any use?
 
 // API error handling
 // See http://expressjs.com/en/guide/error-handling.html
 router.use((err, req, res, next) => {
-  // Token error handling
+  // Token error handling TODO maybe deprecated
   if (err.name === 'UnauthorizedError') {
     return res.sendStatus(status.UNAUTHORIZED);
   }
