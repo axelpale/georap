@@ -137,7 +137,7 @@ console.log('Serving temporary files from', config.tempUploadUrl);
 // Uploaded files END
 
 
-// HTTP routes here
+// Server HTTP routes here after static asset routing.
 app.use('/', router);
 
 // Socket.io routing
