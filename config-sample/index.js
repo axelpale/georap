@@ -23,6 +23,7 @@
 
 // We will join paths relative to the current directory.
 const path = require('path');
+const capabilities = require('./capabilities');
 
 module.exports = {
   // ##### CRITICAL CONFIG #####
@@ -138,62 +139,7 @@ module.exports = {
 
   //##### USER MANAGEMENT #####
   roles: ['basic', 'admin'], // New in v14
-  capabilities: { // New in v14
-    'public': [
-      'coordinates',
-      'location-read',
-    ],
-    'frozen': [
-      'coordinates',
-      'location-read',
-    ],
-    'basic': [
-      'account-read-own',
-      'account-change-email-own',
-      'account-change-password-own',
-      'coordinates',
-      'location-read',
-      'location-create',
-      'location-edit-own',
-      'location-delete-own',
-      'post-read',
-      'post-create',
-      'post-edit-own',
-      'post-delete-own',
-      'comment-read',
-      'comment-create',
-      'comment-edit-own',
-      'comment-delete-own',
-      'user-read',
-      'search',
-      'filter',
-      'statistics',
-    ],
-    'moderator': [],
-    'admin': [
-      'search',
-      'filter',
-      'coordinates',
-      'location-read',
-      'location-create',
-      'location-edit-own',
-      'location-delete-any',
-      'post-read',
-      'post-create',
-      'post-edit-own',
-      'post-delete-any',
-      'comment-read',
-      'comment-create',
-      'comment-edit-own',
-      'comment-delete-any',
-      'user-read',
-      'account-read-any',
-      'account-invite',
-      'account-change-role',
-      'account-delete-any',
-      'statistics',
-    ],
-  },
+  capabilities: capabilities, // New in v14
 
 
   // ##### THEME AND BRAND #####
