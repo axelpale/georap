@@ -3,6 +3,7 @@ const router = express.Router(); // eslint-disable-line new-cap
 const jsonParser = require('body-parser').json();
 const middlewares = require('georap-middlewares');
 
+const able = require('../able');
 const handlers = require('./handlers');
 const entryIdParser = require('./lib/entryIdParser');
 const locationIdParser = require('./lib/locationIdParser');
@@ -17,6 +18,6 @@ router.post('/:entryId', jsonParser, handlers.change);
 router.delete('/:entryId', handlers.remove);
 
 router.post('/:entryId/move', jsonParser, handlers.move);
-router.use('/:entryId/comments', commentsRouter);
+router.use('/:entryId/comments', able('comments'), commentsRouter);
 
 module.exports = router;
