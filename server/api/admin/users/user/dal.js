@@ -53,7 +53,7 @@ exports.setRole = function (username, newRole, callback) {
   }
 
   if (!config.roles.includes(newRole)) {
-    throw new Error('invalid parameters');
+    throw new Error('invalid role: ' + newRole);
   }
 
   const coll = db.collection('users');
