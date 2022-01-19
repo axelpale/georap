@@ -20,6 +20,7 @@ var users = require('./users');
 var emitter = require('component-emitter');
 var jwtDecode = require('jwt-decode').default;
 var request = require('./lib/request');
+var caps = georap.config.capabilities;
 
 emitter(exports);
 
@@ -302,6 +303,50 @@ exports.isLoggedIn = function () {
   return false;
 };
 
+exports.isAble = function (cap) {
+  // Returns bool to tell if the user is capable of the given capability.
+  //
+  // Parameters
+  //   cap
+  //     string, a capability name
+  //
+  // Dev note: this fn does not make things more secure.
+  //   This fn is only for user interface correctness.
+  //   The real security must be enforced on server-side.
+  //
+
+  // Normalise to lower case
+  var capn = cap.toLowerCase();
+
+  // User role
+  var role = exports.getUser().role;
+
+  if (caps[role]) {
+    if (caps[role].indexOf(capn) > -1) {
+      // User is able only if known user's role has the capability.
+      return true;
+    }
+  }
+
+  // User is not able
+  return false;
+};
+
+exports.isRoleAble = function (role, cap) {
+  // Tells if the given role has the given capability.
+  //
+
+  // Normalise to lower case
+  var capn = cap.toLowerCase();
+  // Role is able only if it is configured and has capability.
+  if (caps[role]) {
+    if (caps[role].indexOf(capn) > -1) {
+      return true;
+    }
+  }
+  return false;
+};
+
 exports.isAdmin = function () {
   // Return
   //   bool, true if admin, false if not admin or not logged in.
@@ -359,6 +404,14 @@ exports.getEmail = function () {
 exports.getName = function () {
   // Return username as a string
   return exports.getUser().name;
+};
+
+exports.getRole = function () {
+  var user = exports.getUser();
+  if (user) {
+    return user.role;
+  }
+  return 'public';
 };
 
 exports.getVisitedLocationIds = function (callback) {
