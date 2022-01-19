@@ -5,6 +5,7 @@ var EntryCreationComponent = require('./EntryCreation');
 var template = require('./template.ejs');
 var emitter = require('component-emitter');
 var ui = require('georap-ui');
+var account = georap.stores.account;
 
 module.exports = function (location) {
   // Parameters:
@@ -13,7 +14,6 @@ module.exports = function (location) {
 
   var self = this;
   emitter(self);
-
   var listeners = {};
   var children = {};
 
@@ -57,13 +57,22 @@ module.exports = function (location) {
   };
 
   self.bind = function ($mount) {
+    var canCreate = account.isAble('posts-create');
+    var canExport = account.isAble('locations-export-one');
+
     $mount.html(template({
+      canCreate: canCreate,
+      canExport: canExport,
       __: georap.i18n.__,
     }));
 
-    makeOpenable('entry-creation', EntryCreationComponent);
-    makeOpenable('location-export', ExportComponent);
-    makeOpenable('location-viewon', ViewOnComponent);
+    if (canCreate) {
+      makeOpenable('entry-creation', EntryCreationComponent);
+    }
+    if (canExport) {
+      makeOpenable('location-export', ExportComponent);
+      makeOpenable('location-viewon', ViewOnComponent);
+    }
   };
 
   self.unbind = function () {
