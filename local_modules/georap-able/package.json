@@ -1,0 +1,24 @@
+{
+  "name": "georap-able",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Capability management tools for Georap",
+  "keywords": [],
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/axelpale/georap.git"
+  },
+  "scripts": {
+    "lint": "standard"
+  },
+  "author": "Akseli Palén <akseli.palen@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "georap-config": "file:../georap-config",
+    "http-status-codes": "^2.2.0"
+  },
+  "devDependencies": {
+    "standard": "^16.0.3"
+  }
+}
