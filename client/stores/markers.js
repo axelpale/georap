@@ -1,6 +1,6 @@
 var socket = require('../connection/socket');
-var account = require('./account');
 var emitter = require('component-emitter');
+var request = require('./lib/request');
 
 // Init
 
@@ -55,21 +55,12 @@ exports.getFiltered = function (params, callback) {
   //           200 on success
   //           500 on internal server error
   //           etc
-
-  $.ajax({
+  //
+  request.getJSON({
     url: '/api/markers/search',
-    method: 'GET',
     data: params,
-    dataType: 'json',
-    headers: { 'Authorization': 'Bearer ' + account.getToken() },
-    success: function (rawMarkers) {
-      return callback(null, rawMarkers);
-    },
-    error: function (jqxhr) {
-      var err = new Error(jqxhr.statusText);
-      err.code = jqxhr.status;
-      return callback(err);
-    },
+  }, function (err, rawMarkers) {
+    return callback(err, rawMarkers);
   });
 };
 
@@ -83,48 +74,39 @@ exports.getWithin = function (center, radius, zoomLevel, callback) {
   //     only locations on this layer and above will be fetched.
   //   callback
   //     function (err, markerLocations)
+  //
+  var data = {
+    lat: center.lat(),
+    lng: center.lng(),
+    radius: radius,
+    layer: zoomLevel,
+  };
 
-  $.ajax({
+  request.getJSON({
     url: '/api/markers',
-    method: 'GET',
-    data: {
-      lat: center.lat(),
-      lng: center.lng(),
-      radius: radius,
-      layer: zoomLevel,
-    },
-    dataType: 'json',
-    headers: { 'Authorization': 'Bearer ' + account.getToken() },
-    success: function (rawMarkers) {
-      return callback(null, rawMarkers);
-    },
-    error: function (jqxhr, textStatus, errorThrown) {
-      return callback(new Error(errorThrown));
-    },
+    data: data,
+  }, function (err, rawMarkers) {
+    return callback(err, rawMarkers);
   });
 };
 
 exports.getFilteredWithin = function (opts, callback) {
-  $.ajax({
+  //
+  var data = {
+    east: opts.east,
+    north: opts.north,
+    south: opts.south,
+    west: opts.west,
+    status: opts.status,
+    type: opts.type,
+    layer: opts.layer,
+    groupRadius: opts.groupRadius,
+  };
+
+  request.getJSON({
     url: '/api/markers/filtered',
-    method: 'GET',
-    data: {
-      east: opts.east,
-      north: opts.north,
-      south: opts.south,
-      west: opts.west,
-      status: opts.status,
-      type: opts.type,
-      layer: opts.layer,
-      groupRadius: opts.groupRadius,
-    },
-    dataType: 'json',
-    headers: { 'Authorization': 'Bearer ' + account.getToken() },
-    success: function (rawMarkers) {
-      return callback(null, rawMarkers);
-    },
-    error: function (jqxhr, textStatus, errorThrown) {
-      return callback(new Error(errorThrown));
-    },
+    data: data,
+  }, function (err, rawMarkers) {
+    return callback(err, rawMarkers);
   });
 };
