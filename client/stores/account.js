@@ -26,6 +26,22 @@ emitter(exports);
 
 // Key of token in storage.
 var TOKEN_KEY = 'georap-session-token';
+// In-memory user to prevent hundreds of times JWT decrypts.
+// Must be kept up-to-date.
+// Can be null if user not authenticated.
+// Init from storage.
+var user = (function () {
+  var token = storage.getItem(TOKEN_KEY);
+  if (token) {
+    var decoded = jwtDecode(token);
+    if (decoded.exp > Date.now() / 1000) {
+      // User still valid
+      return decoded;
+    }
+  }
+  return null;
+}());
+
 
 exports.login = function (email, password, callback) {
   // Parameters:
@@ -91,6 +107,7 @@ exports.logout = function (callback) {
   // NOTE The token is removed but the server will still accept it
   // until the token has expired. This is a feature/weakness of JWT token.
 
+  user = null;
   storage.removeItem(TOKEN_KEY);
   exports.emit('logout');
 
@@ -190,7 +207,10 @@ exports.changePassword = function (currentPassword, newPassword, callback) {
 
 exports.isMe = function (username) {
   // Test if current user has this username.
-  return username === this.getName();
+  if (user) {
+    return username === user.name;
+  }
+  return false;
 };
 
 exports.sendResetPasswordEmail = function (email, callback) {
@@ -291,15 +311,9 @@ exports.signup = function (signupToken, username, password, callback) {
 exports.isLoggedIn = function () {
   // True if user is authenticated. Requires the token to be valid.
   //
-  var token = storage.getItem(TOKEN_KEY);
-
-  if (token) {
-    var decoded = jwtDecode(token);
-    if (decoded.exp > Date.now() / 1000) {
-      return true;
-    }
+  if (user && user.role !== 'public') {
+    return true;
   }
-
   return false;
 };
 
@@ -319,7 +333,10 @@ exports.isAble = function (cap) {
   var capn = cap.toLowerCase();
 
   // User role
-  var role = exports.getUser().role;
+  var role = 'public';
+  if (user) {
+    role = user.role;
+  }
 
   if (caps[role]) {
     if (caps[role].indexOf(capn) > -1) {
@@ -350,21 +367,19 @@ exports.isRoleAble = function (role, cap) {
 exports.isAdmin = function () {
   // Return
   //   bool, true if admin, false if not admin or not logged in.
-
-  if (exports.isLoggedIn()) {
-    return exports.getUser().role === 'admin';
+  //
+  if (user && user.role === 'admin') {
+    return true;
   }
-
   return false;
 };
 
 exports.getToken = function () {
   // Can be called only if isLoggedIn.
-  if (!exports.isLoggedIn()) {
-    throw new Error('The token is missing.');
+  if (user) {
+    return storage.getItem(TOKEN_KEY);
   }
-
-  return storage.getItem(TOKEN_KEY);
+  throw new Error('The token is missing.');
 };
 
 exports.getUser = function () {
@@ -384,30 +399,25 @@ exports.getUser = function () {
   //     role: 'public',
   //   }
   //
-  var token = storage.getItem(TOKEN_KEY);
-
-  if (token) {
-    var decoded = jwtDecode(token);
-    if (decoded.exp > Date.now() / 1000) {
-      // User still valid
-      return decoded;
-    }
-  }
-
-  return null;
+  return user;
 };
 
 exports.getEmail = function () {
-  return exports.getUser().email;
+  if (user) {
+    return user.email;
+  }
+  throw new Error('Non-existent user cannot have a name');
 };
 
 exports.getName = function () {
   // Return username as a string
-  return exports.getUser().name;
+  if (user) {
+    return user.name;
+  }
+  throw new Error('Non-existent user cannot have a name');
 };
 
 exports.getRole = function () {
-  var user = exports.getUser();
   if (user) {
     return user.role;
   }
@@ -418,6 +428,7 @@ exports.getVisitedLocationIds = function (callback) {
   // Return array of ids of locations that the user has visited.
   return users.getVisitedLocationIds(exports.getName(), callback);
 };
+
 exports.getFlags = function (callback) {
   // Parameters:
   //   callback
@@ -428,5 +439,26 @@ exports.getFlags = function (callback) {
 };
 
 exports.setToken = function (token) {
-  storage.setItem(TOKEN_KEY, token);
+  // Set token. Ensure token validity.
+  //
+  // Parameters
+  //   token
+  //     string, a JWT token
+  //
+  // Return
+  //   boolean, true if token set successful, false otherwise.
+  if (token) {
+    var decoded = jwtDecode(token);
+    if (decoded.exp > Date.now() / 1000) {
+      // Success
+      user = decoded;
+      storage.setItem(TOKEN_KEY, token);
+      return true;
+    }
+  }
+
+  // Else invalid. It is best to log the user out.
+  user = null;
+  storage.removeItem(TOKEN_KEY);
+  return false;
 };
