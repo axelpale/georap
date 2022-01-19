@@ -62,6 +62,10 @@ module.exports = function (map) {
     }
   };
 
+  var _updateIcons = function () {
+    Object.keys(_markers).forEach(_updateIcon);
+  };
+
   var _ensureLabel = function (locId, forceUpdate) {
     // Ensure that label is visible.
     // Parameters:
@@ -480,8 +484,7 @@ module.exports = function (map) {
       }
 
       _flagsMan.setAll(flagsObj);
-
-      // TODO update markers?
+      _updateIcons();
     });
   };
 
@@ -491,6 +494,7 @@ module.exports = function (map) {
 
   self.removeAllFlags = function () {
     _flagsMan.removeAll();
+    _updateIcons();
   };
 
 };
