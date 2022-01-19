@@ -74,6 +74,12 @@ exports.postJSON = function (params, callback) {
   //       where err is { name, message, code }
   //         where code is status code
   //
+  var headers = {};
+
+  if (account.hasToken()) {
+    headers.Authorization = 'Bearer ' + account.getToken();
+  }
+
   $.ajax({
     url: params.url,
     type: 'POST',
@@ -81,7 +87,7 @@ exports.postJSON = function (params, callback) {
     data: JSON.stringify(params.data),
     processData: false, // already a string
     // dataType: 'json', // expected response type TODO
-    headers: { 'Authorization': 'Bearer ' + account.getToken() },
+    headers: headers,
     success: function (responseData) {
       return callback(null, responseData);
     },

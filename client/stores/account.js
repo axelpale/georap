@@ -95,6 +95,13 @@ exports.getUser = function () {
   return user;
 };
 
+exports.hasToken = function () {
+  if (storage.getItem(TOKEN_KEY)) {
+    return true;
+  }
+  return false;
+};
+
 exports.isAble = function (cap) {
   // Returns bool to tell if the user is capable of the given capability.
   //
