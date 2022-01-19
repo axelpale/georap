@@ -1,4 +1,5 @@
 // Capability middleware.
+// For server-side use only.
 //
 const config = require('georap-config')
 const status = require('http-status-codes')
