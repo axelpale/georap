@@ -3,7 +3,7 @@
 const router = require('express').Router();
 const jsonParser = require('body-parser').json();
 const middlewares = require('georap-middlewares');
-const able = require('../able');
+const able = require('georap-able').middleware;
 
 const handlers = require('./handlers');
 const locationIdParser = require('./lib/locationIdParser');

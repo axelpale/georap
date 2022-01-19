@@ -3,7 +3,7 @@ const router = express.Router(); // eslint-disable-line new-cap
 const jsonParser = require('body-parser').json();
 const middlewares = require('georap-middlewares');
 
-const able = require('../able');
+const able = require('georap-able').middleware;
 const handlers = require('./handlers');
 const entryIdParser = require('./lib/entryIdParser');
 const locationIdParser = require('./lib/locationIdParser');
