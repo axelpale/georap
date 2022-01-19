@@ -9,47 +9,52 @@
       <ul class="dropdown-menu" aria-labelledby="georap-mainmenu">
 
         <% if (isAble('locations-create')) { %>
-        <li>
-          <a id="georap-mainmenu-add" href="#"><%= glyphicon({ name: 'map-marker' }) %> <%= __('add-location') %></a>
-        </li>
+          <li>
+            <a id="georap-mainmenu-add" href="#"><%= glyphicon({ name: 'map-marker' }) %> <%= __('add-location') %></a>
+          </li>
         <% } %>
         <% if (isAble('geometry')) { %>
-        <li>
-          <a href="/crosshair"><%= glyphicon({ name: 'screenshot' }) %> <%= __('coordinates') %></a>
-        </li>
-        <li role="separator" class="divider"></li>
+          <li>
+            <a href="/crosshair"><%= glyphicon({ name: 'screenshot' }) %> <%= __('coordinates') %></a>
+          </li>
+          <% if (isAble('locations-create')) { %>
+            <li role="separator" class="divider"></li>
+          <% } %>
         <% } %>
 
         <% if (isAble('posts')) { %>
-        <li>
-          <a href="/latest"><%= glyphicon({ name: 'bell' }) %> <%= __('latest') %></a>
-        </li>
+          <li>
+            <a href="/latest"><%= glyphicon({ name: 'bell' }) %> <%= __('latest') %></a>
+          </li>
         <% } %>
         <% if (isAble('users')) { %>
-        <li>
-          <a href="/users"><%= glyphicon({ name: 'user' }) %> <%= __('users') %></a>
-        </li>
+          <li>
+            <a href="/users"><%= glyphicon({ name: 'user' }) %> <%= __('users') %></a>
+          </li>
         <% } %>
         <% if (isAble('locations')) { %>
-        <li>
-          <a href="/search"><%= glyphicon({ name: 'th-list' }) %> <%= __('locations') %></a>
-        </li>
+          <li>
+            <a href="/search"><%= glyphicon({ name: 'th-list' }) %> <%= __('locations') %></a>
+          </li>
         <% } %>
         <% if (isAble('statistics')) { %>
-        <li>
-          <a href="/statistics"><%= glyphicon({ name: 'signal' }) %> <%= __('statistics') %></a>
-        </li>
+          <li>
+            <a href="/statistics"><%= glyphicon({ name: 'signal' }) %> <%= __('statistics') %></a>
+          </li>
         <% } %>
-        <li role="separator" class="divider"></li>
+        <% if (isAble('posts')) { %>
+          <li role="separator" class="divider"></li>
+        <% } %>
+
         <% if (isAble('locations-import')) { %>
-        <li>
-          <a href="/import"><%= glyphicon({ name: 'import' }) %> <%= __('import') %></a>
-        </li>
+          <li>
+            <a href="/import"><%= glyphicon({ name: 'import' }) %> <%= __('import') %></a>
+          </li>
         <% } %>
         <% if (isAble('locations-export')) { %>
-        <li>
-          <a href="/export"><%= glyphicon({ name: 'export' }) %> <%= __('export') %></a>
-        </li>
+          <li>
+            <a href="/export"><%= glyphicon({ name: 'export' }) %> <%= __('export') %></a>
+          </li>
         <% } %>
         <li role="separator" class="divider"></li>
 
