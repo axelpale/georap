@@ -69,7 +69,9 @@ exports.setRole = function (req, res, next) {
   const authorName = req.user.name;
   const adminName = config.admin.username;
 
-  // Ensure role is valid
+  // Ensure role is valid for persistence.
+  // Note that config.capabilities has extra role names where
+  // no true long-term user can be.
   if (!config.roles.includes(newRole)) {
     return res.status(status.BAD_REQUEST).send('Invalid role');
   }
