@@ -1,5 +1,5 @@
 // Capability configuration for user roles.
-// These define what features user can see and access.
+// The white list defines what features user can see and access.
 // The role of the user is stored in JWT token the user possess.
 //
 module.exports = { // New in v14
@@ -20,6 +20,8 @@ module.exports = { // New in v14
     'comments',
     'geometry',
     'locations',
+    'locations-create',
+    'locations-import',
     'posts',
     'statistics',
     'users',
@@ -32,6 +34,9 @@ module.exports = { // New in v14
     'comments',
     'geometry',
     'locations',
+    'locations-create',
+    'locations-export',
+    'locations-import',
     'posts',
     'statistics',
     'users',
