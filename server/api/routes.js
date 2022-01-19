@@ -16,8 +16,12 @@ const able = require('./able');
 const status = require('http-status-codes');
 const router = require('express').Router();
 
-router.use('/icons', able('locations'), iconsRouter);
+// Icons are fully public and requires no capabilities
+router.use('/icons', iconsRouter);
+
+// Account checks capabilities deeper.
 router.use('/account', accountRouter);
+
 router.use('/admin', able('admin'), adminRouter);
 router.use('/attachments', able('posts'), attachmentsRouter);
 router.use('/entries', able('posts'), entriesRouter);
