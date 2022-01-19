@@ -238,6 +238,22 @@ module.exports = function () {
     _manager.removeAll();
   };
 
+  self.startLoadingFlags = function () {
+    assertBound();
+    _manager.startLoadingFlags();
+  };
+
+  self.stopLoadingFlags = function () {
+    assertBound();
+    _manager.stopLoadingFlags();
+  };
+
+  self.removeAllFlags = function () {
+    // Clear the map.
+    assertBound();
+    _manager.removeAllFlags();
+  };
+
   self.addAdditionMarker = function () {
     // Creates a draggable marker at the middle of the map.
     assertBound();

@@ -455,7 +455,22 @@ module.exports = function (map) {
 
     // Each time filter changes, fetch.
     filterStore.on('updated', _loadMarkers);
+  };
 
+  self.stopLoading = function () {
+    google.maps.event.removeListener(_loaderListener);
+    filterStore.off('updated', _loadMarkers);
+    _loaderListener = null;
+  };
+
+  self.removeAll = function () {
+    // Clear the map.
+    Object.keys(_markers).forEach(function (k) {
+      _removeMarker(_markers[k]);
+    });
+  };
+
+  self.startLoadingFlags = function () {
     // Fetch the list of location flags as soon as possible
     // to render the markers with correct templates.
     account.getFlags(function (err, flagsObj) {
@@ -470,17 +485,12 @@ module.exports = function (map) {
     });
   };
 
-  self.stopLoading = function () {
-    google.maps.event.removeListener(_loaderListener);
-    filterStore.off('updated', _loadMarkers);
-    _loaderListener = null;
+  self.stopLoadingFlags = function () {
+    // noop
   };
 
-  self.removeAll = function () {
-    // Clear the map.
-    Object.keys(_markers).forEach(function (k) {
-      _removeMarker(_markers[k]);
-    });
+  self.removeAllFlags = function () {
+    _flagsMan.removeAll();
   };
 
 };

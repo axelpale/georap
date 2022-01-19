@@ -140,20 +140,21 @@ window.initMap = function () {
   // Bind fetching of locations to auth events.
   account.on('login', function () {
     mapComp.startLoadingMarkers();
+    mapComp.startLoadingFlags();
   });
   account.on('logout', function () {
-    mapComp.stopLoadingMarkers();
-    mapComp.removeAllMarkers();  // do not expose data after log out
+    if (!account.isAble('locations')) {
+      mapComp.stopLoadingMarkers();
+      mapComp.removeAllMarkers();  // do not expose data after log out
+    }
+    mapComp.stopLoadingFlags();
+    mapComp.removeAllFlags();
   });
 
-  // Init mainmenu and locations if user is already logged in,
-  // because no initial login or logout events would be fired.
-  if (account.isLoggedIn()) {
+  // Already logged in or public user
+  if (account.isAble('locations')) {
     mapComp.startLoadingMarkers();
-    mapComp.addControl(menuComp);
-  } else {
-    // Anon user, render limited menu anyway
-    mapComp.addControl(menuComp);
   }
 
+  mapComp.addControl(menuComp);
 };
