@@ -95,6 +95,7 @@
       </ul>
     </div><!-- .dropdown -->
 
+    <% if (isAble('locations')) { %>
     <div class="btn-group" role="group" aria-label="Filter tools">
       <button id="georap-mainmenu-filter" class="btn btn-default btn-lg" type="button" title="Filter"><%= glyphicon({ name: 'filter' }) %>
         <span class="label label-danger<%= isFilterActive ? '' : ' hidden' %>">&nbsp;</span>
@@ -107,6 +108,7 @@
         <button id="georap-mainmenu-search-submit" class="btn btn-default btn-lg" type="submit"><%= glyphicon({ name: 'search' }) %></button>
       </span>
     </form>
+    <% } %>
   </div><!-- .btn-toolbar -->
 
 </div><!-- #main -->
