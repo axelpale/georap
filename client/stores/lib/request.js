@@ -30,6 +30,14 @@ var createError = function (jqxhr) {
   return err;
 };
 
+var authHeaders = function () {
+  var headers = {};
+  if (account.hasToken()) {
+    headers.Authorization = 'Bearer ' + account.getToken();
+  }
+  return headers;
+};
+
 exports.getJSON = function (params, callback) {
   // Parameters
   //   params
@@ -51,7 +59,7 @@ exports.getJSON = function (params, callback) {
     method: 'GET',
     data: params.data,
     dataType: 'json',
-    headers: { 'Authorization': 'Bearer ' + account.getToken() },
+    headers: authHeaders(),
     success: function (result) {
       return callback(null, result);
     },
@@ -74,12 +82,6 @@ exports.postJSON = function (params, callback) {
   //       where err is { name, message, code }
   //         where code is status code
   //
-  var headers = {};
-
-  if (account.hasToken()) {
-    headers.Authorization = 'Bearer ' + account.getToken();
-  }
-
   $.ajax({
     url: params.url,
     type: 'POST',
@@ -87,7 +89,7 @@ exports.postJSON = function (params, callback) {
     data: JSON.stringify(params.data),
     processData: false, // already a string
     // dataType: 'json', // expected response type TODO
-    headers: headers,
+    headers: authHeaders(),
     success: function (responseData) {
       return callback(null, responseData);
     },
@@ -112,7 +114,7 @@ exports.deleteJSON = function (params, callback) {
     type: 'DELETE',
     contentType: 'application/json',
     data: JSON.stringify(params.data),
-    headers: { 'Authorization': 'Bearer ' + account.getToken() },
+    headers: authHeaders(),
     success: function (responseData) {
       return callback(null, responseData);
     },
@@ -149,7 +151,7 @@ exports.postFile = function (params, callback) {
     dataType: 'json',  // response data type
     contentType: false,
     data: formData,
-    headers: { 'Authorization': 'Bearer ' + account.getToken() },
+    headers: authHeaders(),
     processData: false,
     success: function (jsonResp) {
       return callback(null, jsonResp);
