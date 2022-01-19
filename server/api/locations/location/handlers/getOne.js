@@ -58,7 +58,9 @@ module.exports = (req, res, next) => {
     }  // else
 
     // Log that user has viewed a location.
-    loggers.log(req.user.name + ' viewed location ' + rawLoc.name + '.');
+    if (req.user) {
+      loggers.log(req.user.name + ' viewed location ' + rawLoc.name + '.');
+    }
 
     return res.json(rawLoc);
   });

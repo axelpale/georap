@@ -9,11 +9,23 @@ module.exports = function (location) {
   var $elems = {};
   var self = this;
 
+  var userCanRemove = function () {
+    // Allow only admins and creators to delete.
+    if (account.isAble('locations-delete-any')) {
+      return true;
+    } else if (account.isAble('locations-delete-own')) {
+      if (account.getName() === location.getCreator()) {
+        return true;
+      }
+    }
+    return false;
+  };
+
   self.bind = function ($mountEl) {
     $mount = $mountEl;
 
-    // Allow only admins and creators to delete.
-    if (!account.isAdmin() && location.getCreator() !== account.getName()) {
+
+    if (!userCanRemove()) {
       return;
     }
 
