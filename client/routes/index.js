@@ -237,7 +237,7 @@ exports.route = function () {
     );
   }));
 
-  page('/export', able('locations-export'), basicViewSetup(function () {
+  page('/export', able('locations-export-all'), basicViewSetup(function () {
     return import(
       /* webpackChunkName: "export-view" */
       '../components/Export'
