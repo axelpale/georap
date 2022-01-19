@@ -8,44 +8,58 @@
       </button>
       <ul class="dropdown-menu" aria-labelledby="georap-mainmenu">
 
-        <% if (user) { %>
+        <% if (isAble('locations-create')) { %>
         <li>
           <a id="georap-mainmenu-add" href="#"><%= glyphicon({ name: 'map-marker' }) %> <%= __('add-location') %></a>
         </li>
+        <% } %>
+        <% if (isAble('geometry')) { %>
         <li>
           <a href="/crosshair"><%= glyphicon({ name: 'screenshot' }) %> <%= __('coordinates') %></a>
         </li>
         <li role="separator" class="divider"></li>
         <% } %>
 
-        <% if (user) { %>
+        <% if (isAble('posts')) { %>
         <li>
           <a href="/latest"><%= glyphicon({ name: 'bell' }) %> <%= __('latest') %></a>
         </li>
+        <% } %>
+        <% if (isAble('users')) { %>
         <li>
           <a href="/users"><%= glyphicon({ name: 'user' }) %> <%= __('users') %></a>
         </li>
+        <% } %>
+        <% if (isAble('locations')) { %>
         <li>
           <a href="/search"><%= glyphicon({ name: 'th-list' }) %> <%= __('locations') %></a>
         </li>
+        <% } %>
+        <% if (isAble('statistics')) { %>
         <li>
           <a href="/statistics"><%= glyphicon({ name: 'signal' }) %> <%= __('statistics') %></a>
         </li>
+        <% } %>
         <li role="separator" class="divider"></li>
+        <% if (isAble('locations-import')) { %>
         <li>
           <a href="/import"><%= glyphicon({ name: 'import' }) %> <%= __('import') %></a>
         </li>
+        <% } %>
+        <% if (isAble('locations-export')) { %>
         <li>
           <a href="/export"><%= glyphicon({ name: 'export' }) %> <%= __('export') %></a>
         </li>
-        <li role="separator" class="divider"></li>
         <% } %>
+        <li role="separator" class="divider"></li>
 
-        <% if (user && user.role === 'admin') { %>
-          <li class="dropdown-header"><%= __('admin-menu') %></li>
-          <li>
-            <a href="/invite"><%= glyphicon({ name: 'envelope' }) %> <%= __('invite') %></a>
-          </li>
+        <% if (isAble('account-invite')) { %>
+        <li class="dropdown-header"><%= __('admin-menu') %></li>
+        <li>
+          <a href="/invite"><%= glyphicon({ name: 'envelope' }) %> <%= __('invite') %></a>
+        </li>
+        <% } %>
+        <% if (isAble('admin')) { %>
           <li>
             <a href="/admin/users"><%= glyphicon({ name: 'user' }) %> <%= __('manage-users') %></a>
           </li>
@@ -59,7 +73,7 @@
           <li role="separator" class="divider"></li>
         <% } %>
 
-        <% if (user) { %>
+        <% if (isAble('account-edit')) { %>
         <li class="dropdown-header"><%= user.name %></li>
         <li>
           <a href="/account"><%= glyphicon({ name: 'user' }) %> <%= __('account-settings') %></a>
@@ -67,7 +81,8 @@
         <li>
           <a href="/login"><%= glyphicon({ name: 'off' }) %> <%= __('log-out') %></a>
         </li>
-        <% } else { %>
+        <% } %>
+        <% if (isAble('account-login')) { %>
         <li>
           <a href="/login"><%= glyphicon({ name: 'user' }) %> <%= __('log-in') %></a>
         </li>

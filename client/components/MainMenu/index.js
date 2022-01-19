@@ -52,6 +52,7 @@ module.exports = function (mapComp) {
       glyphicon: glyphiconTemplate,
       config: georap.config,
       user: account.getUser(), // is null if not logged in
+      isAble: account.isAble,
       isFilterActive: !filterStore.isDefault(),
       __: georap.i18n.__,
     }));
