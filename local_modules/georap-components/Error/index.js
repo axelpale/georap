@@ -37,6 +37,7 @@ module.exports = function (message) {
     }
   }
 
+  self.close =
   self.reset = function () {
     if ($mount) {
       $mount.empty()
