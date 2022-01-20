@@ -28,7 +28,8 @@ module.exports = function (message, alertClass) {
 
     if (message) {
       $mount.html(template({
-        message: message
+        message: message,
+        alertClass: alertClass
       }))
     }
   }
@@ -54,7 +55,7 @@ module.exports = function (message, alertClass) {
     if ($mount) {
       $mount.html(template({
         message: message,
-        alertClass: alertClass,
+        alertClass: alertClass
       }))
     }
   }
