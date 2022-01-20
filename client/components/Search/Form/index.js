@@ -1,7 +1,7 @@
 var template = require('./template.ejs');
 var emitter = require('component-emitter');
 var ui = require('georap-ui');
-var accountStore = georap.stores.account;
+var account = georap.stores.account;
 var usersStore = georap.stores.users;
 var __ = georap.i18n.__;
 
@@ -17,10 +17,10 @@ module.exports = function (query) {
   //     an object parsed from querystring
 
   // Setup
-  var self = this;
-  emitter(self);
   var $mount = null;
   var $elems = {};
+  var self = this;
+  emitter(self);
 
   // Add default values to query if missing
   if (!('skip' in query)) {
@@ -35,7 +35,10 @@ module.exports = function (query) {
   self.bind = function ($mountEl) {
     $mount = $mountEl;
 
-    var myName = accountStore.getName();
+    var myName = '';
+    if (account.hasToken()) {
+      myName = account.getName();
+    }
 
     $mount.html(template({
       username: myName,
@@ -75,7 +78,7 @@ module.exports = function (query) {
       users.sort(function (a, b) {
         return a < b ? 1 : -1;
       }).filter(function (u) {
-        return u.name !== myName;
+        return u.name !== myName; // NOTE myName can be ''
       }).forEach(function (u) {
         var short = u.name;
         var LIMIT = 12;
@@ -174,9 +177,9 @@ module.exports = function (query) {
 
   self.unbind = function () {
     if ($mount) {
-      $mount = null;
       ui.offAll($elems);
       $elems = {};
+      $mount = null;
     }
   };
 };

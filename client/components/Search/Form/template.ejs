@@ -10,7 +10,9 @@
     <div class="col-sm-5">
       <select id="search-creator-select" class="search-creator form-control">
         <option value="anyone"><%= __('anyone') %></option>
+        <% if (username) { %>
         <option value="<%= username %>"><%= username %></option>
+        <% } %>
         <!-- all members here -->
       </select>
     </div>
