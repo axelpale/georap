@@ -9,6 +9,7 @@ Requirements:
 - webpack with ejs-loader
 - jQuery
 
+
 ## components.Error
 
 Usage:
@@ -21,6 +22,28 @@ Usage:
     children.error.close()
 
 Where `.error-container` is an empty div.
+
+
+## components.Opener
+
+Usage:
+
+    var myComp = new MyComponent(myArg)
+    var isOpen = false
+    children.opener = new components.Opener(myComp, isOpen)
+
+    children.opener.bind({
+      $container: $mount.find('.mycomp-container'),
+      $button: $mount.find('.mycomp-opener')
+    })
+
+Where `.mycomp-container` is an empty div and `.mycomp-opener` a button.
+
+Listens `cancel` events from the component and closes at the event.
+Listens `finish` events from the component and closes at the event.
+
+Bubbles `submit` and `success` events from the component. Does not close.
+
 
 ## components.Remover
 
