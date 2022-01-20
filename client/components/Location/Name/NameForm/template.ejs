@@ -1,0 +1,24 @@
+<form class="location-rename-form panel panel-primary">
+  <div class="panel-body">
+    <div class="form-group">
+      <label for="location-rename-input"><%= __('new-name') %>:</label>
+      <input type="text" class="form-control" id="location-rename-input" value="<%= name %>">
+    </div>
+    <div class="pull-right">
+      <button type="button" class="location-rename-cancel btn btn-default"><%= __('cancel') %></button>
+      <button type="submit" class="btn btn-primary"><%= __('save') %></button>
+    </div>
+  </div>
+</form>
+
+<div class="location-rename-progress hidden">
+  <div class="progress">
+    <div class="progress-bar progress-bar-striped active" role="progressbar" style="width: 100%">
+      <span class="sr-only">Waiting for server</span>
+    </div>
+  </div>
+</div>
+
+<div class="location-rename-error hidden">
+  <div class="alert alert-danger" role="alert"><%= __('location-rename-error') %></div>
+</div>
