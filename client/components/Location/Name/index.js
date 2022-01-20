@@ -13,7 +13,7 @@ module.exports = function (location) {
       __: __,
     }));
 
-    var $display = $('#georap-location-name-display');
+    var $display = $('#location-name-display');
     var $show = $('#georap-location-rename-show');
     var $form = $('#georap-location-rename-form');
     var $error = $('#georap-location-rename-error');

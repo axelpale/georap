@@ -56,7 +56,7 @@ var LocationView = function (id, query) {
       __: __,
     }));
 
-    var $loading = $('#georap-location-loading');
+    var $loading = $('#location-loading');
 
     // Fetch location before rendering.
     locations.getOne(id, function (err, rawLoc) {
@@ -87,15 +87,15 @@ var LocationView = function (id, query) {
       eventsView = new EventsView(_location.getEvents());
       removeView = new RemoveView(_location);
 
-      nameView.bind($('#georap-location-name'));
-      placesView.bind($('#georap-location-places'));
-      geomView.bind($('#georap-location-geom'));
-      statusTypeView.bind($('#georap-location-statustype-container'));
+      nameView.bind($('#location-name'));
+      placesView.bind($('#location-places'));
+      geomView.bind($('#location-geom'));
+      statusTypeView.bind($('#location-statustype-container'));
       thumbnailView.bind($('#location-thumbnail-container'));
-      formsView.bind($('#georap-location-forms'));
-      entriesView.bind($('#georap-location-entries'));
-      eventsView.bind($('#georap-location-events'));
-      removeView.bind($('#georap-location-remove'));
+      formsView.bind($('#location-forms'));
+      entriesView.bind($('#location-entries'));
+      eventsView.bind($('#location-events'));
+      removeView.bind($('#location-remove'));
 
 
       // Listen possible changes in the location.

@@ -212,12 +212,12 @@ time:hover {
 /* END Menu */
 
 /* Location page */
-#georap-location-loading {
+#location-loading {
   /* Make space between the loading bar and the top edge. Match with H1 */
   margin-top: 20px;
 }
 /* Location return to latest */
-#georap-location-return {
+#location-return {
   color: #666;
   border-bottom: 1px solid gray;
   display: block;
@@ -227,17 +227,17 @@ time:hover {
   height: 3.3rem;
   overflow: hidden;
 }
-#georap-location-return h1 {
+#location-return h1 {
   margin: 0;
   color: #333;
 }
 /* Location name */
-#georap-location-name {
+#location-name {
   margin-bottom: 1rem;
   overflow-wrap: break-word;
   word-break: break-all;
 }
-#georap-location-name h1 {
+#location-name h1 {
   margin-bottom: 0;
   margin-top: 1.5rem;
 }
@@ -246,34 +246,34 @@ time:hover {
   text-transform: capitalize;
 }
 /* Location geom */
-#georap-location-geom {
+#location-geom {
   margin-bottom: 1rem;
 }
-#georap-location-geom > .form-group {
+#location-geom > .form-group {
   margin-bottom: 0;
 }
-#georap-location-geom .location-coords-container {
+#location-geom .location-coords-container {
   margin-top: 0.6rem;
 }
 /* Location component containers */
-#georap-location-statustype-container {
+#location-statustype-container {
   margin-bottom: 1.6rem;
 }
 #location-thumbnail-container {
   margin-bottom: 1.6rem;
   line-height: 1;
 }
-#georap-location-forms {
+#location-forms {
   margin-bottom: 1rem;
 }
-#georap-location-forms > .form-group {
+#location-forms > .form-group {
   margin-bottom: 0;
 }
-#georap-location-forms-menu button {
+#location-forms-menu button {
   margin-bottom: 0.6rem;
 }
-#georap-location-entries,
-#georap-location-events {
+#location-entries,
+#location-events {
   margin-bottom: 2.68em;
 }
 /* END Location page */

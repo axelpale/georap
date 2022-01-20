@@ -170,11 +170,11 @@ a.list-group-item, button.list-group-item {
   filter: invert(1);
 }
 /* Georap location */
-#georap-location-return {
+#location-return {
   color: #666;
   border-bottom: 1px solid #333;
 }
-#georap-location-return:hover h1 {
+#location-return:hover h1 {
   color: #999;
 }
 /* Geolocation */
