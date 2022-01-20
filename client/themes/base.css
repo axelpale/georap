@@ -220,7 +220,7 @@ time:hover {
   margin-top: 20px;
 }
 /* Location return to latest */
-#location-return {
+.location-return {
   color: #666;
   border-bottom: 1px solid gray;
   display: block;
@@ -230,7 +230,7 @@ time:hover {
   height: 3.3rem;
   overflow: hidden;
 }
-#location-return h1 {
+.location-return h1 {
   margin: 0;
   color: #333;
 }
