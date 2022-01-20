@@ -2,7 +2,6 @@
 var socket = require('../connection/socket');
 var validateCoords = require('./lib/validateCoords');
 var request = require('./lib/request');
-var account = require('./account');
 var emitter = require('component-emitter');
 var locationStatuses = georap.config.locationStatuses;
 var locationTypes = georap.config.locationTypes;
@@ -23,7 +22,7 @@ socket.on('georap_event', function (ev) {
 var getJSON = request.getJSON;
 var postJSON = request.postJSON;
 var postFile = request.postFile;
-// var deleteJSON = request.deleteJSON;
+var deleteJSON = request.deleteJSON;
 
 var state = {
   selectedLocationId: null,
@@ -415,15 +414,8 @@ exports.removeOne = function (id, callback) {
   //   callback
   //     function (err)
   //
-  $.ajax({
+  return deleteJSON({
     url: '/api/locations/' + id,
-    method: 'DELETE',
-    headers: { 'Authorization': 'Bearer ' + account.getToken() },
-    success: function () {
-      return callback();
-    },
-    error: function (jqxhr, status, statusMessage) {
-      return callback(new Error(statusMessage));
-    },
-  });
+    data: {},
+  }, callback);
 };
