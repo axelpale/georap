@@ -81,6 +81,9 @@ time:hover {
 .card-large .card-layer-content {
   padding-bottom: 18rem;
 }
+.card-filler {
+  padding-bottom: 18rem;
+}
 /* END Card */
 
 /* Login */
