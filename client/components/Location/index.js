@@ -42,9 +42,6 @@ var LocationView = function (id, query) {
 
   // State
   var _location;
-  var nameView, placesView, geomView, statusTypeView, formsView;
-  var thumbnailView, entriesView, eventsView, removeView;
-
 
   // Public methods
 
@@ -79,26 +76,25 @@ var LocationView = function (id, query) {
       // Set state
       _location = new LocationModel(rawLoc);
 
-      nameView = new NameView(_location);
-      placesView = new PlacesView(_location);
-      geomView = new GeomView(_location);
-      statusTypeView = new StatusTypeView(_location);
-      thumbnailView = new ThumbnailView(rawLoc);
-      formsView = new FormsView(rawLoc);
-      entriesView = new EntriesView(rawLoc._id);
-      eventsView = new EventsView(_location.getEvents());
-      removeView = new RemoveView(_location);
+      children.nameView = new NameView(_location);
+      children.placesView = new PlacesView(_location);
+      children.geomView = new GeomView(_location);
+      children.statusTypeView = new StatusTypeView(_location);
+      children.thumbnailView = new ThumbnailView(rawLoc);
+      children.formsView = new FormsView(rawLoc);
+      children.entriesView = new EntriesView(rawLoc._id);
+      children.eventsView = new EventsView(_location.getEvents());
+      children.removeView = new RemoveView(_location);
 
-      nameView.bind($('#location-name'));
-      placesView.bind($('#location-places'));
-      geomView.bind($('#location-geom'));
-      statusTypeView.bind($('#location-statustype-container'));
-      thumbnailView.bind($('#location-thumbnail-container'));
-      formsView.bind($('#location-forms'));
-      entriesView.bind($('#location-entries'));
-      eventsView.bind($('#location-events'));
-      removeView.bind($('#location-remove'));
-
+      children.nameView.bind($('#location-name'));
+      children.placesView.bind($('#location-places'));
+      children.geomView.bind($('#location-geom'));
+      children.statusTypeView.bind($('#location-statustype-container'));
+      children.thumbnailView.bind($('#location-thumbnail-container'));
+      children.formsView.bind($('#location-forms'));
+      children.entriesView.bind($('#location-entries'));
+      children.eventsView.bind($('#location-events'));
+      children.removeView.bind($('#location-remove'));
 
       // Listen possible changes in the location.
 
@@ -110,7 +106,7 @@ var LocationView = function (id, query) {
 
       // Scroll down to possibly referred entry or comment after
       // entries are loaded.
-      entriesView.once('idle', function () {
+      children.entriesView.once('idle', function () {
         if (window.location.hash.substring(0, 9) === '#comment-') {
           var layerEl = document.getElementById('card-layer');
           var scrollerEl = layerEl.querySelector('.card-layer-content');
@@ -139,22 +135,13 @@ var LocationView = function (id, query) {
 
   self.unbind = function () {
     if ($mount) {
-      if (_location) {
-        nameView.unbind();
-        placesView.unbind();
-        geomView.unbind();
-        statusTypeView.unbind();
-        formsView.unbind();
-        thumbnailView.unbind();
-        entriesView.unbind();
-        eventsView.unbind();
-        removeView.unbind();
-        _location.off();
-        locations.deselectLocation(_location.getId());
-      }
-      _location = null;
       ui.unbindAll(children);
       children = {};
+      if (_location) {
+        _location.off();
+        locations.deselectLocation(_location.getId());
+        _location = null;
+      }
       $mount.empty();
       $mount = null;
     }
