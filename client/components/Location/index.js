@@ -83,7 +83,7 @@ var LocationView = function (id, query) {
       children.thumbnail = new ThumbnailView(rawLoc);
       children.formsView = new FormsView(rawLoc);
       children.entriesView = new EntriesView(rawLoc._id);
-      children.eventsView = new EventsView(_location.getEvents());
+      children.eventsView = new EventsView(rawLoc._id);
       children.removeView = new RemoveView(_location);
 
       children.nameView.bind($mount.find('.location-name'));

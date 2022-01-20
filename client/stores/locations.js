@@ -216,6 +216,45 @@ exports.getEntries = function (params, callback) {
   });
 };
 
+exports.getEvents = function (params, callback) {
+  // Fetch events of single location, most recent first.
+  //
+  // Parameters
+  //   params
+  //     locationId
+  //     skip
+  //       integer
+  //     limit
+  //       integer
+  //   callback
+  //     function (err, events, more) where
+  //       events
+  //         array of event objects
+  //       more
+  //         boolean. True if there are still more events after skip+limit.
+  //
+
+  // Default skip limit
+  params = Object.assign({
+    skip: 0,
+    limit: 50,
+  }, params);
+
+  return getJSON({
+    url: '/api/locations/' + params.locationId + '/events',
+    data: {
+      skip: params.skip,
+      limit: params.limit,
+    },
+  }, function (err, result) {
+    if (err) {
+      return callback(err);
+    }
+
+    return callback(null, result);
+  });
+};
+
 exports.getLatest = function (params, callback) {
   // Fetch recent locations from server and return an array of locations objs.
   // Will call back with error if not found.
