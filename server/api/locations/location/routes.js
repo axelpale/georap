@@ -17,6 +17,9 @@ router.post('/geom', able('locations-update'),
 
 router.get('/entries', middlewares.skipLimitParser, handlers.getEntries);
 
+router.get('/events', able('locations-events'), middlewares.skipLimitParser,
+           handlers.getEvents);
+
 router.post('/name', able('locations-update'),
             jsonParser, handlers.changeName);
 

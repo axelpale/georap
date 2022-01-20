@@ -6,5 +6,6 @@ exports.changeThumbnail = require('./changeThumbnail');
 exports.changeType = require('./changeType');
 exports.getAttachments = require('./getAttachments');
 exports.getEntries = require('./getEntries');
+exports.getEvents = require('./getEvents');
 exports.getOne = require('./getOne');
 exports.removeOne = require('./removeOne');
