@@ -66,15 +66,23 @@ module.exports = function (component, isOpen) {
     }))
 
     if (typeof component.on === 'function') {
-      // Listen for cancel events
+      // Listen for cancel events.
+      // A cancel button was pressed in the open form and thus we auto-close.
       component.on('cancel', function () {
         self.close()
       })
-      // Bubble submit events
+      // Listen for finish events.
+      // A finish button was pressed in the open form and thus we auto-close.
+      component.on('finish', function () {
+        self.close()
+      })
+      // Bubble submit events.
+      // The open form might display progress bar. Do not auto-close.
       component.on('submit', function (ev) {
         self.emit('submit', ev)
       })
-      // Bubble success events
+      // Bubble success events.
+      // The open form might display success message. Do not auto-close.
       component.on('success', function (ev) {
         self.emit('success', ev)
       })
