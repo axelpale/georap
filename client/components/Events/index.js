@@ -70,6 +70,12 @@ module.exports = function (events, opts) {
     }
   };
 
+  this.append = function (newEvent) {
+    if ($mount) {
+      $elems.events.append(renderEvent(newEvent));
+    }
+  };
+
   this.prepend = function (newEvent) {
     if ($mount) {
       $elems.events.prepend(renderEvent(newEvent));
