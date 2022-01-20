@@ -76,26 +76,55 @@ var LocationView = function (id, query) {
       _location = new LocationModel(rawLoc);
 
       children.nameView = new NameView(_location);
-      children.placesView = new PlacesView(_location);
-      children.geomView = new GeomView(_location);
-      children.statusType = new StatusTypeView(_location);
-      children.thumbnail = new ThumbnailView(rawLoc);
-      children.formsView = new FormsView(rawLoc);
-      children.entriesView = new EntriesView(rawLoc._id);
-      children.removeView = new RemoveView(_location);
-
       children.nameView.bind($mount.find('.location-name'));
+
+      children.placesView = new PlacesView(_location);
       children.placesView.bind($mount.find('.location-places'));
-      children.geomView.bind($mount.find('.location-geom'));
+
+      children.statusType = new StatusTypeView(_location);
       children.statusType.bind($mount.find('.location-statustype'));
+
+      children.geomView = new GeomView(_location);
+      children.geomView.bind($mount.find('.location-geom'));
+
+      children.thumbnail = new ThumbnailView(rawLoc);
       children.thumbnail.bind($mount.find('.location-thumbnail'));
-      children.formsView.bind($mount.find('.location-forms'));
-      children.entriesView.bind($mount.find('.location-entries'));
-      children.removeView.bind($mount.find('.location-remove'));
+
+      if (able('posts-create') || able('locations-export-one')) {
+        children.formsView = new FormsView(rawLoc);
+        children.formsView.bind($mount.find('.location-forms'));
+      }
+
+      if (able('locations-posts')) {
+        children.entriesView = new EntriesView(rawLoc._id);
+        children.entriesView.bind($mount.find('.location-entries'));
+        // Scroll down to possibly referred entry or comment after
+        // entries are loaded.
+        children.entriesView.once('idle', function () {
+          if (window.location.hash.substring(0, 9) === '#comment-') {
+            var layerEl = document.getElementById('card-layer');
+            var scrollerEl = layerEl.querySelector('.card-layer-content');
+            var commentEl = document.querySelector(window.location.hash);
+            // Test if such comment exists
+            if (commentEl) {
+              // Scroll at comment and leave a small gap.
+              var MARGIN = 32;
+              scrollerEl.scrollTop = commentEl.offsetTop - MARGIN;
+              // Flash the comment in green
+              ui.flash($(commentEl));
+            }
+          }
+        });
+      }
 
       if (able('locations-events')) {
         children.eventsView = new EventsView(rawLoc._id);
         children.eventsView.bind($mount.find('.location-events'));
+      }
+
+      if (able('locations-delete-own') || able('locations-delete-any')) {
+        children.removeView = new RemoveView(_location);
+        children.removeView.bind($mount.find('.location-remove'));
       }
 
       // Listen possible changes in the location.
@@ -104,24 +133,6 @@ var LocationView = function (id, query) {
       _location.on('location_removed', function () {
         self.unbind();
         self.emit('removed');
-      });
-
-      // Scroll down to possibly referred entry or comment after
-      // entries are loaded.
-      children.entriesView.once('idle', function () {
-        if (window.location.hash.substring(0, 9) === '#comment-') {
-          var layerEl = document.getElementById('card-layer');
-          var scrollerEl = layerEl.querySelector('.card-layer-content');
-          var commentEl = document.querySelector(window.location.hash);
-          // Test if such comment exists
-          if (commentEl) {
-            // Scroll at comment and leave a small gap.
-            var MARGIN = 32;
-            scrollerEl.scrollTop = commentEl.offsetTop - MARGIN;
-            // Flash the comment in green
-            ui.flash($(commentEl));
-          }
-        }
       });
 
       // Enable tooltips. See http://getbootstrap.com/javascript/#tooltips
