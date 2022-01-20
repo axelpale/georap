@@ -1,6 +1,6 @@
 {
   "location-status": {
-    "unknown": "mahdollinen",
+    "unknown": "tuntematon",
     "active": "aktiivinen",
     "guarded": "vartioitu",
     "locked": "lukittu",
