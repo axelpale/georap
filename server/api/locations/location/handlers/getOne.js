@@ -6,7 +6,7 @@ const status = require('http-status-codes');
 const slugify = require('slugify');
 
 module.exports = (req, res, next) => {
-  // Fetch single location with thumbnail and events
+  // Fetch single location with thumbnail
 
   // eslint-disable-next-line max-statements
   locationDal.getOneComplete(req.location._id, (err, rawLoc) => {

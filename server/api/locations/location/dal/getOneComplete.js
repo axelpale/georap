@@ -1,10 +1,9 @@
 const db = require('georap-db');
 const urls = require('georap-urls-server');
 const proj = require('../../../../services/proj');
-const eventsDal = require('../../../events/dal');
 
 module.exports = (id, callback) => {
-  // Get single location with additional coordinate systems, events,
+  // Get single location with additional coordinate systems,
   // and entries and their attachments with full urls.
   //
   // Parameters:
@@ -45,25 +44,17 @@ module.exports = (id, callback) => {
       return callback(null, null);
     }
 
-    eventsDal.getAllOfLocationComplete(id, (err2, evs) => {
-      if (err2) {
-        return callback(err2);
-      }
+    // Compute additional coodinate systems
+    loc.altGeom = proj.getAltPositions(loc.geom.coordinates);
 
-      loc.events = evs;
+    // Complete thumbnail url
+    // NOTE Also, unwind the lookup array.
+    if (loc.thumbnail.length > 0) {
+      loc.thumbnail = urls.completeAttachment(loc.thumbnail[0]);
+    } else {
+      loc.thumbnail = null;
+    }
 
-      // Compute additional coodinate systems
-      loc.altGeom = proj.getAltPositions(loc.geom.coordinates);
-
-      // Complete thumbnail url
-      // NOTE Also, unwind the lookup array.
-      if (loc.thumbnail.length > 0) {
-        loc.thumbnail = urls.completeAttachment(loc.thumbnail[0]);
-      } else {
-        loc.thumbnail = null;
-      }
-
-      return callback(null, loc);
-    });
+    return callback(null, loc);
   });
 };
