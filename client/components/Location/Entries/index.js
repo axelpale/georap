@@ -81,7 +81,7 @@ module.exports = function (locationId) {
     $mount = $mountEl;
     $mount.html(template());
 
-    $elems.entries = $mount.find('.location-entries');
+    $elems.entries = $mount.find('.location-entries-list');
     $elems.progress = $mount.find('.location-entries-progress');
     $elems.loadMoreBtn = $mount.find('.load-more');
     $elems.error = $mount.find('.location-entries-error');

@@ -235,12 +235,12 @@ time:hover {
   color: #333;
 }
 /* Location name */
-#location-name {
+.location-name {
   margin-bottom: 1rem;
   overflow-wrap: break-word;
   word-break: break-all;
 }
-#location-name h1 {
+.location-name h1 {
   margin-bottom: 0;
   margin-top: 1.5rem;
 }
@@ -249,40 +249,40 @@ time:hover {
   text-transform: capitalize;
 }
 /* Location geom */
-#location-geom {
+.location-geom {
   margin-bottom: 1rem;
 }
-#location-geom > .form-group {
+.location-geom > .form-group {
   margin-bottom: 0;
 }
-#location-geom .location-coords-container {
+.location-geom .location-coords-container {
   margin-top: 0.6rem;
 }
 /* Location component containers */
-#location-statustype-container {
+.location-statustype {
   margin-bottom: 1.6rem;
 }
-#location-thumbnail-container {
+.location-thumbnail {
   margin-bottom: 1.6rem;
   line-height: 1;
 }
-#location-forms {
+.location-forms {
   margin-bottom: 1rem;
 }
-#location-forms > .form-group {
+.location-forms > .form-group {
   margin-bottom: 0;
 }
 #location-forms-menu button {
   margin-bottom: 0.6rem;
 }
-#location-entries,
-#location-events {
+.location-entries,
+.location-events {
   margin-bottom: 2.68em;
 }
 /* END Location page */
 
 /* Location Status & Type */
-.location-statustype {
+.location-statustype-toolbar {
   margin-bottom: 0.6rem;
 }
 .location-statustype-viewer .location-status,
@@ -320,7 +320,7 @@ time:hover {
 /* END Location Status & Type */
 
 /* Location Thumbnail */
-.location-thumbnail {
+.location-thumbnail-viewer {
   position: relative;
   display: inline-block;
   margin-right: 0.6rem;

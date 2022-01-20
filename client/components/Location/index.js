@@ -79,22 +79,22 @@ var LocationView = function (id, query) {
       children.nameView = new NameView(_location);
       children.placesView = new PlacesView(_location);
       children.geomView = new GeomView(_location);
-      children.statusTypeView = new StatusTypeView(_location);
-      children.thumbnailView = new ThumbnailView(rawLoc);
+      children.statusType = new StatusTypeView(_location);
+      children.thumbnail = new ThumbnailView(rawLoc);
       children.formsView = new FormsView(rawLoc);
       children.entriesView = new EntriesView(rawLoc._id);
       children.eventsView = new EventsView(_location.getEvents());
       children.removeView = new RemoveView(_location);
 
-      children.nameView.bind($('#location-name'));
-      children.placesView.bind($('#location-places'));
-      children.geomView.bind($('#location-geom'));
-      children.statusTypeView.bind($('#location-statustype-container'));
-      children.thumbnailView.bind($('#location-thumbnail-container'));
-      children.formsView.bind($('#location-forms'));
-      children.entriesView.bind($('#location-entries'));
-      children.eventsView.bind($('#location-events'));
-      children.removeView.bind($('#location-remove'));
+      children.nameView.bind($mount.find('.location-name'));
+      children.placesView.bind($mount.find('.location-places'));
+      children.geomView.bind($mount.find('.location-geom'));
+      children.statusType.bind($mount.find('.location-statustype'));
+      children.thumbnail.bind($mount.find('.location-thumbnail'));
+      children.formsView.bind($mount.find('.location-forms'));
+      children.entriesView.bind($mount.find('.location-entries'));
+      children.eventsView.bind($mount.find('.location-events'));
+      children.removeView.bind($mount.find('.location-remove'));
 
       // Listen possible changes in the location.
 

@@ -24,7 +24,7 @@ module.exports = function (location) {
     $mount = $mountEl;
 
     $mount.html(template());
-    $elems.thumbnail = $mount.find('.location-thumbnail');
+    $elems.thumbnail = $mount.find('.location-thumbnail-viewer');
     $elems.open = $mount.find('.location-thumbnail-open');
 
     bus.on('location_entry_created', function (ev) {

@@ -26,7 +26,7 @@ module.exports = function (events) {
 
     var filteredEvents = eventFilter(events.toRawArray());
     children.events = new EventsView(filteredEvents);
-    children.events.bind($mount.find('.location-events-container'));
+    children.events.bind($mount.find('.location-events-list'));
 
     _handleCreated = function () {
       // Refresh whole list

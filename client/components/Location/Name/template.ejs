@@ -1,6 +1,6 @@
 <% var locName = location.getName(); %>
 <% locName = (locName === '' ? __('untitled') : locName); %>
-<h1><span class="location-name-display"><%= locName %></span> <button class="location-rename-show" type="button" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-pencil"></span></button></h1>
+<h1><span class="location-name-display"><%= locName %></span> <button type="button" class="location-rename-show btn btn-default btn-sm"><span class="glyphicon glyphicon-pencil"></span></button></h1>
 
 <form class="location-rename-form hidden panel panel-primary">
   <div class="panel-body">
@@ -15,6 +15,6 @@
   </div>
 </form>
 
-<div class="location-rename-error" class="hidden">
+<div class="location-rename-error hidden">
   <div class="alert alert-danger" role="alert"><%= __('location-rename-error') %></div>
 </div>
