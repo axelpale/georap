@@ -30,7 +30,9 @@ module.exports = { // New in v14
     'statistics',
     'users',
   ],
-  'moderator': [],
+  'moderator': [
+    'locations-events',
+  ],
   'admin': [
     'admin',
     'account-invite',
@@ -41,6 +43,7 @@ module.exports = { // New in v14
     'locations-create',
     'locations-delete-any',
     'locations-delete-own',
+    'locations-events',
     'locations-export-all',
     'locations-export-one',
     'locations-import',
