@@ -4,77 +4,80 @@ var __ = georap.i18n.__;
 
 module.exports = function (location) {
 
+  var $mount = null;
+  var $elems = {};
   var handleNameChange;
 
-  this.bind = function ($mount) {
+  this.bind = function ($mountEl) {
+    $mount = $mountEl;
 
     $mount.html(template({
       location: location,
       __: __,
     }));
 
-    var $display = $('#location-name-display');
-    var $show = $('#location-rename-show');
-    var $form = $('#location-rename-form');
-    var $error = $('#location-rename-error');
-    var $input = $('#location-rename-input');
-    var $cancel = $('#location-rename-cancel');
+    $elems.display = $mount.find('.location-name-display');
+    $elems.show = $mount.find('.location-rename-show');
+    $elems.form = $mount.find('.location-rename-form');
+    $elems.error = $mount.find('.location-rename-error');
+    $elems.input = $mount.find('#location-rename-input');
+    $elems.cancel = $mount.find('.location-rename-cancel');
 
     // Listen for events
 
     handleNameChange = function () {
       var newName = location.getName();
       var s = (newName === '' ? __('untitled') : newName);
-      $display.text(s);
+      $elems.display.text(s);
     };
     location.on('location_name_changed', handleNameChange);
 
     // Rename form
 
-    $show.click(function (ev) {
+    $elems.show.click(function (ev) {
       ev.preventDefault();
 
-      if (ui.isHidden($form)) {
+      if (ui.isHidden($elems.form)) {
         // Show
-        ui.show($form);
+        ui.show($elems.form);
         // Remove possible error messages
-        ui.hide($error);
+        ui.hide($elems.error);
         // Prefill the form with the current name
-        $input.val(location.getName());
+        $elems.input.val(location.getName());
         // Focus to input field
-        $input.focus();
+        $elems.input.focus();
       } else {
         // Hide
-        ui.hide($form);
+        ui.hide($elems.form);
         // Remove possible error messages
-        ui.hide($error);
+        ui.hide($elems.error);
       }
     });
 
-    $cancel.click(function (ev) {
+    $elems.cancel.click(function (ev) {
       ev.preventDefault();
-      ui.hide($form);
+      ui.hide($elems.form);
     });
 
-    $form.submit(function (ev) {
+    $elems.form.submit(function (ev) {
       ev.preventDefault();
 
-      var newName = $input.val().trim();
+      var newName = $elems.input.val().trim();
       var oldName = location.getName();
 
       if (newName === oldName) {
         // If name not changed, just close the form.
-        ui.hide($form);
-        ui.hide($error);
+        ui.hide($elems.form);
+        ui.hide($elems.error);
         return;
       }
 
       location.setName(newName, function (err) {
-        ui.hide($form);
+        ui.hide($elems.form);
 
         if (err) {
           console.error(err);
-          ui.show($error);
+          ui.show($elems.error);
           return;
         }
       });
@@ -83,9 +86,11 @@ module.exports = function (location) {
   };
 
   this.unbind = function () {
-    location.off('location_name_changed', handleNameChange);
-    $('#location-rename-show').off();
-    $('#location-rename-cancel').off();
-    $('#location-rename-form').off();
+    if ($mount) {
+      location.off('location_name_changed', handleNameChange);
+      ui.offAll($elems);
+      $elems = {};
+      $mount = null;
+    }
   };
 };
