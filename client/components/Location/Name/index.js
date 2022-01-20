@@ -14,11 +14,11 @@ module.exports = function (location) {
     }));
 
     var $display = $('#location-name-display');
-    var $show = $('#georap-location-rename-show');
-    var $form = $('#georap-location-rename-form');
-    var $error = $('#georap-location-rename-error');
-    var $input = $('#georap-location-rename-input');
-    var $cancel = $('#georap-location-rename-cancel');
+    var $show = $('#location-rename-show');
+    var $form = $('#location-rename-form');
+    var $error = $('#location-rename-error');
+    var $input = $('#location-rename-input');
+    var $cancel = $('#location-rename-cancel');
 
     // Listen for events
 
@@ -84,8 +84,8 @@ module.exports = function (location) {
 
   this.unbind = function () {
     location.off('location_name_changed', handleNameChange);
-    $('#georap-location-rename-show').off();
-    $('#georap-location-rename-cancel').off();
-    $('#georap-location-rename-form').off();
+    $('#location-rename-show').off();
+    $('#location-rename-cancel').off();
+    $('#location-rename-form').off();
   };
 };
