@@ -36,6 +36,8 @@ var LocationView = function (id, query) {
   // Init
   var $mount = null;
   var self = this;
+  var $elems = {};
+  var children = {};
   emitter(self);
 
   // State
@@ -56,11 +58,11 @@ var LocationView = function (id, query) {
       __: __,
     }));
 
-    var $loading = $('#location-loading');
+    $elems.loading = $mount.find('.location-loading');
 
     // Fetch location before rendering.
     locations.getOne(id, function (err, rawLoc) {
-      ui.hide($loading);
+      ui.hide($elems.loading);
 
       if (err) {
         if (err.message && err.message.toLowerCase() === 'not found') {
@@ -151,6 +153,8 @@ var LocationView = function (id, query) {
         locations.deselectLocation(_location.getId());
       }
       _location = null;
+      ui.unbindAll(children);
+      children = {};
       $mount.empty();
       $mount = null;
     }
