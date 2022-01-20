@@ -252,6 +252,8 @@
   "pwd-reset-title": "Password reset",
   "pwd-reset-unknown-email": "No user with this email exists. Please ensure that the email address is correct.",
   "remote-place": "remote area",
+  "request-error-large-payload": "Request payload is too large.",
+  "request-error-no-connection": "No internet connection. Check connection or try again later.",
   "restore-user": "Restore user",
   "role": "Role",
   "role-change": "Change member role",

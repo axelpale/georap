@@ -251,6 +251,8 @@
   "pwd-reset-title": "Salasanan vaihto",
   "pwd-reset-unknown-email": "Tiliä tällä sähköpostiosoitteella ei ole olemassa. Tarkista, että antamasi sähköpostiosoite on oikein.",
   "remote-place": "syrjäinen alue",
+  "request-error-large-payload": "Lähetettävä tietomäärä on liian suuri.",
+  "request-error-no-connection": "Ei internet-yhteyttä. Tarkista yhteys tai kokeile myöhemmin uudelleen.",
   "restore-user": "Palauta tili",
   "role": "Rooli",
   "role-change": "Muuta jäsenen roolia",

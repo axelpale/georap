@@ -9,12 +9,13 @@ var createError = function (jqxhr) {
   var message;
   var name;
   var status = jqxhr.status;
+  var __ = georap.i18n.__;
   if (status === 0) {
     name = 'NO_CONNECTION';
-    message = 'No connection';
+    message = __('request-error-no-connection');
   } else if (status === HTTP_PAYLOAD_TOO_LARGE) {
     name = 'REQUEST_TOO_LONG';
-    message = 'Request payload is too large';
+    message = __('request-error-large-payload');
   } else if (status === HTTP_OK) {
     name = jqxhr.statusText;
     message = jqxhr.responseText;
