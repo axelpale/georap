@@ -2,7 +2,7 @@
 <% locName = (locName === '' ? __('untitled') : locName); %>
 <h1>
   <span class="location-name-display"><%= locName %></span>
-  <% if (isAble('locations-update')) { %>
+  <% if (able('locations-update')) { %>
   <button type="button" class="location-rename-show btn btn-default btn-sm">
     <span class="glyphicon glyphicon-pencil"></span>
   </button>

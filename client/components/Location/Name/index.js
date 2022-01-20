@@ -2,7 +2,7 @@ var template = require('./template.ejs');
 var ui = require('georap-ui');
 var components = require('georap-components');
 var NameForm = require('./NameForm');
-var account = georap.stores.account;
+var able = georap.stores.account.able;
 var __ = georap.i18n.__;
 
 module.exports = function (location) {
@@ -17,7 +17,7 @@ module.exports = function (location) {
 
     $mount.html(template({
       location: location,
-      isAble: account.isAble,
+      able: able,
       __: __,
     }));
 
@@ -36,7 +36,7 @@ module.exports = function (location) {
 
     // Rename form
 
-    if (account.isAble('locations-update')) {
+    if (able('locations-update')) {
       var nameForm = new NameForm(location);
       children.formOpener = new components.Opener(nameForm, false);
       children.formOpener.bind({

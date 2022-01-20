@@ -15,7 +15,7 @@ var EntriesView = require('./Entries');
 var EventsView = require('./Events');
 var template = require('./template.ejs');
 var locations = georap.stores.locations;
-var able = georap.stores.account.isAble;
+var able = georap.stores.account.able;
 var __ = georap.i18n.__;
 
 var LocationView = function (id, query) {

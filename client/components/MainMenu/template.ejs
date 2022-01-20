@@ -8,63 +8,63 @@
       </button>
       <ul class="dropdown-menu" aria-labelledby="georap-mainmenu">
 
-        <% if (isAble('locations-create')) { %>
+        <% if (able('locations-create')) { %>
           <li>
             <a id="georap-mainmenu-add" href="#"><%= glyphicon({ name: 'map-marker' }) %> <%= __('add-location') %></a>
           </li>
         <% } %>
-        <% if (isAble('geometry')) { %>
+        <% if (able('geometry')) { %>
           <li>
             <a href="/crosshair"><%= glyphicon({ name: 'screenshot' }) %> <%= __('coordinates') %></a>
           </li>
-          <% if (isAble('locations-create')) { %>
+          <% if (able('locations-create')) { %>
             <li role="separator" class="divider"></li>
           <% } %>
         <% } %>
 
-        <% if (isAble('posts')) { %>
+        <% if (able('posts')) { %>
           <li>
             <a href="/latest"><%= glyphicon({ name: 'bell' }) %> <%= __('latest') %></a>
           </li>
         <% } %>
-        <% if (isAble('users')) { %>
+        <% if (able('users')) { %>
           <li>
             <a href="/users"><%= glyphicon({ name: 'user' }) %> <%= __('users') %></a>
           </li>
         <% } %>
-        <% if (isAble('locations')) { %>
+        <% if (able('locations')) { %>
           <li>
             <a href="/search"><%= glyphicon({ name: 'th-list' }) %> <%= __('locations') %></a>
           </li>
         <% } %>
-        <% if (isAble('statistics')) { %>
+        <% if (able('statistics')) { %>
           <li>
             <a href="/statistics"><%= glyphicon({ name: 'signal' }) %> <%= __('statistics') %></a>
           </li>
         <% } %>
-        <% if (isAble('posts')) { %>
+        <% if (able('posts')) { %>
           <li role="separator" class="divider"></li>
         <% } %>
 
-        <% if (isAble('locations-import')) { %>
+        <% if (able('locations-import')) { %>
           <li>
             <a href="/import"><%= glyphicon({ name: 'import' }) %> <%= __('import') %></a>
           </li>
         <% } %>
-        <% if (isAble('locations-export-all')) { %>
+        <% if (able('locations-export-all')) { %>
           <li>
             <a href="/export"><%= glyphicon({ name: 'export' }) %> <%= __('export') %></a>
           </li>
         <% } %>
         <li role="separator" class="divider"></li>
 
-        <% if (isAble('account-invite')) { %>
+        <% if (able('account-invite')) { %>
         <li class="dropdown-header"><%= __('admin-menu') %></li>
         <li>
           <a href="/invite"><%= glyphicon({ name: 'envelope' }) %> <%= __('invite') %></a>
         </li>
         <% } %>
-        <% if (isAble('admin')) { %>
+        <% if (able('admin')) { %>
           <li>
             <a href="/admin/users"><%= glyphicon({ name: 'user' }) %> <%= __('manage-users') %></a>
           </li>
@@ -78,7 +78,7 @@
           <li role="separator" class="divider"></li>
         <% } %>
 
-        <% if (isAble('account-edit')) { %>
+        <% if (able('account-edit')) { %>
         <li class="dropdown-header"><%= user.name %></li>
         <li>
           <a href="/account"><%= glyphicon({ name: 'user' }) %> <%= __('account-settings') %></a>
@@ -87,7 +87,7 @@
           <a href="/login"><%= glyphicon({ name: 'off' }) %> <%= __('log-out') %></a>
         </li>
         <% } %>
-        <% if (isAble('account-login')) { %>
+        <% if (able('account-login')) { %>
         <li>
           <a href="/login"><%= glyphicon({ name: 'user' }) %> <%= __('log-in') %></a>
         </li>
@@ -95,7 +95,7 @@
       </ul>
     </div><!-- .dropdown -->
 
-    <% if (isAble('locations')) { %>
+    <% if (able('locations')) { %>
     <div class="btn-group" role="group" aria-label="Filter tools">
       <button id="georap-mainmenu-filter" class="btn btn-default btn-lg" type="button" title="Filter"><%= glyphicon({ name: 'filter' }) %>
         <span class="label label-danger<%= isFilterActive ? '' : ' hidden' %>">&nbsp;</span>

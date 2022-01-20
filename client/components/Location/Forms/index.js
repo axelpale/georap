@@ -57,8 +57,8 @@ module.exports = function (location) {
   };
 
   self.bind = function ($mount) {
-    var canCreate = account.isAble('posts-create');
-    var canExport = account.isAble('locations-export-one');
+    var canCreate = account.able('posts-create');
+    var canExport = account.able('locations-export-one');
 
     $mount.html(template({
       canCreate: canCreate,
