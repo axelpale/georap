@@ -5,7 +5,7 @@ var EntryCreationComponent = require('./EntryCreation');
 var template = require('./template.ejs');
 var emitter = require('component-emitter');
 var ui = require('georap-ui');
-var account = georap.stores.account;
+var able = georap.stores.account.able;
 
 module.exports = function (location) {
   // Parameters:
@@ -57,8 +57,8 @@ module.exports = function (location) {
   };
 
   self.bind = function ($mount) {
-    var canCreate = account.able('posts-create');
-    var canExport = account.able('locations-export-one');
+    var canCreate = able('posts-create');
+    var canExport = able('locations-export-one');
 
     $mount.html(template({
       canCreate: canCreate,

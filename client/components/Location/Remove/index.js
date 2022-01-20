@@ -4,6 +4,7 @@ var able = georap.stores.account.able;
 var template = require('./template.ejs');
 var components = require('georap-components');
 var ui = require('georap-ui');
+var __ = georap.i18n.__;
 
 module.exports = function (location) {
 
@@ -25,13 +26,11 @@ module.exports = function (location) {
   };
 
   self.bind = function ($mountEl) {
-    $mount = $mountEl;
-
     if (!userCanRemove()) {
       return;
     }
 
-    var __ = georap.i18n.__;
+    $mount = $mountEl;
 
     $mount.html(template({
       location: location,
