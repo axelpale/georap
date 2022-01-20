@@ -59,6 +59,14 @@ module.exports = function (params) {
       }
       self.emit('submit', ev)
     })
+
+    opener.on('opened', function () {
+      // Hide errors when user tries again
+      if (errorViewer) {
+        errorViewer.unbind()
+        errorViewer = null;
+      }
+    })
   }
 
   self.close = function () {
@@ -109,6 +117,7 @@ module.exports = function (params) {
   self.unbind = function () {
     if (opener) {
       opener.off('submit')
+      opener.off('opened')
       opener.unbind()
       opener = null
       $container = null

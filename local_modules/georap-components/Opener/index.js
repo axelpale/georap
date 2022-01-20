@@ -11,6 +11,14 @@ module.exports = function (component, isOpen) {
   //   isOpen
   //     optional initial openness state
   //
+  // Emits
+  //   opened
+  //     when opener is opened
+  //   submit
+  //     when component emits submit
+  //   success
+  //     when component emits success
+  //
   if (typeof isOpen !== 'boolean') {
     isOpen = false
   }
@@ -48,26 +56,29 @@ module.exports = function (component, isOpen) {
         self.close()
         return
       }
-      // Render component
+
+      // Open. Render component
       component.bind($container)
       // Ensure container is visible
       ui.show($container)
 
-      if (typeof component.on === 'function') {
-        // Listen for cancel events
-        component.on('cancel', function () {
-          self.close()
-        })
-        // Bubble submit events
-        component.on('submit', function (ev) {
-          self.emit('submit', ev)
-        })
-        // Bubble success events
-        component.on('success', function (ev) {
-          self.emit('success', ev)
-        })
-      }
+      self.emit('opened')
     }))
+
+    if (typeof component.on === 'function') {
+      // Listen for cancel events
+      component.on('cancel', function () {
+        self.close()
+      })
+      // Bubble submit events
+      component.on('submit', function (ev) {
+        self.emit('submit', ev)
+      })
+      // Bubble success events
+      component.on('success', function (ev) {
+        self.emit('success', ev)
+      })
+    }
   }
 
   this.close = function () {
