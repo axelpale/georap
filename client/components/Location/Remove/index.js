@@ -1,12 +1,14 @@
 
 var account = georap.stores.account;
 var template = require('./template.ejs');
+var components = require('georap-components');
 var ui = require('georap-ui');
 
 module.exports = function (location) {
 
   var $mount = null;
   var $elems = {};
+  var children = {};
   var self = this;
 
   var userCanRemove = function () {
@@ -24,48 +26,44 @@ module.exports = function (location) {
   self.bind = function ($mountEl) {
     $mount = $mountEl;
 
-
     if (!userCanRemove()) {
       return;
     }
 
+    var __ = georap.i18n.__;
+
     $mount.html(template({
       location: location,
-      __: georap.i18n.__,
+      __: __,
     }));
 
-    $elems.ensure = $('#georap-location-delete-ensure');
-    $elems.final = $('#georap-location-delete-final');
-    $elems.cancel = $('#georap-location-delete-cancel');
-    $elems.del = $('#georap-location-delete');
-    $elems.error = $('#georap-location-delete-error');
-    $elems.progress = $('#georap-location-delete-progress');
-
-    $elems.ensure.click(function (ev) {
-      ev.preventDefault();
-      ui.toggleHidden($elems.final);
+    children.remover = new components.Remover({
+      cancelBtnText: __('cancel'),
+      deleteBtnText: __('delete-ok'),
+      infoText: '',
+      youSureText: __('are-you-sure-cannot-undo'),
     });
 
-    $elems.cancel.click(function (ev) {
-      ev.preventDefault();
-      ui.toggleHidden($elems.final);
+    children.remover.bind({
+      $container: $mount.find('.location-delete-container'),
+      $button: $mount.find('.location-delete-opener'),
     });
 
-    $elems.del.click(function (ev) {
-      ev.preventDefault();
-
-      // Prevent user clicking the deletion again
-      ui.hide($elems.final);
-      // Show progress bar
-      ui.show($elems.progress);
-
+    children.remover.on('submit', function () {
       location.remove(function (err) {
         if (err) {
-          // Remove progress
-          ui.hide($elems.progress);
-          // Show deletion failed error message
-          ui.show($elems.error);
+          var msg = err.message;
+          if (err.message) {
+            msg = err.message;
+          } else {
+            msg = __('connection-error');
+          }
+          // show error
+          children.remover.error(msg);
+          return;
         }
+
+        children.remover.close();
         // ON successful removal the location will emit "location_removed" event
         // and the card will close the Location component.
       });
@@ -74,6 +72,8 @@ module.exports = function (location) {
 
   self.unbind = function () {
     if ($mount) {
+      ui.unbindAll(children);
+      children = {};
       ui.offAll($elems);
       $elems = {};
       $mount = null;
