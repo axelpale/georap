@@ -102,7 +102,8 @@ exports.hasToken = function () {
   return false;
 };
 
-exports.isAble = function (cap) {
+exports.isAble =
+exports.able = function (cap) {
   // Returns bool to tell if the user is capable of the given capability.
   //
   // Parameters
