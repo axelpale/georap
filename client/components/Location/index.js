@@ -13,10 +13,9 @@ var FormsView = require('./Forms');
 var RemoveView = require('./Remove');
 var EntriesView = require('./Entries');
 var EventsView = require('./Events');
-
-// Templates
 var template = require('./template.ejs');
 var locations = georap.stores.locations;
+var able = georap.stores.account.isAble;
 var __ = georap.i18n.__;
 
 var LocationView = function (id, query) {
@@ -83,7 +82,6 @@ var LocationView = function (id, query) {
       children.thumbnail = new ThumbnailView(rawLoc);
       children.formsView = new FormsView(rawLoc);
       children.entriesView = new EntriesView(rawLoc._id);
-      children.eventsView = new EventsView(rawLoc._id);
       children.removeView = new RemoveView(_location);
 
       children.nameView.bind($mount.find('.location-name'));
@@ -93,8 +91,12 @@ var LocationView = function (id, query) {
       children.thumbnail.bind($mount.find('.location-thumbnail'));
       children.formsView.bind($mount.find('.location-forms'));
       children.entriesView.bind($mount.find('.location-entries'));
-      children.eventsView.bind($mount.find('.location-events'));
       children.removeView.bind($mount.find('.location-remove'));
+
+      if (able('locations-events')) {
+        children.eventsView = new EventsView(rawLoc._id);
+        children.eventsView.bind($mount.find('.location-events'));
+      }
 
       // Listen possible changes in the location.
 
