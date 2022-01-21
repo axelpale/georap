@@ -5,15 +5,15 @@ const skipLimitParser = require('georap-middlewares').skipLimitParser;
 
 const able = require('georap-able').middleware;
 const handlers = require('./handlers');
-const entryIdParser = require('./lib/entryIdParser');
-const locationIdParser = require('./lib/locationIdParser');
+const entryPreloader = require('./lib/entryPreloader');
+const locationPreloader = require('./lib/locationPreloader');
 const commentsRouter = require('./comments/routes');
 
 router.get('/', skipLimitParser, handlers.latest);
 router.post('/', able('posts-create'), jsonParser,
-            locationIdParser, handlers.create);
+            locationPreloader, handlers.create);
 
-router.use('/:entryId', entryIdParser);
+router.use('/:entryId', entryPreloader);
 
 router.post('/:entryId', able('posts-update'), jsonParser, handlers.change);
 router.delete('/:entryId', able('posts-delete'), handlers.remove);

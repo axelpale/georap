@@ -1,7 +1,5 @@
 // URL parser middleware
-
 const dal = require('../location/dal');
-
 const status = require('http-status-codes');
 const db = require('georap-db');
 
