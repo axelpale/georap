@@ -24,6 +24,7 @@ module.exports = function (location) {
 
   self.bind = function ($mountEl) {
     $mount = $mountEl;
+    var __ = georap.i18n.__;
 
     // Geom in every available coordinate system
     var geostamps = renderGeoms(location.getAltGeoms());
@@ -34,7 +35,7 @@ module.exports = function (location) {
       location: location,
       geostamp: defaultGeostamp,
       able: able,
-      __: georap.i18n.__,
+      __: __,
     }));
 
     $elems.geostamp = $mount.find('#location-geom-geostamp');
@@ -50,7 +51,12 @@ module.exports = function (location) {
     }
 
     var geomMore = new GeomMore(geostamps);
-    children.moreOpener = new Opener(geomMore, false);
+    var iconDown = '<span class="glyphicon glyphicon-chevron-down"></span>';
+    var iconUp = '<span class="glyphicon glyphicon-chevron-up"></span>';
+    children.moreOpener = new Opener(geomMore, {
+      labelClosed: iconDown + ' ' + __('more'),
+      labelOpen: iconUp + ' ' + __('less'),
+    });
     children.moreOpener.bind({
       $container: $mount.find('#location-geom-more'),
       $button: $mount.find('#location-geom-more-open'),
