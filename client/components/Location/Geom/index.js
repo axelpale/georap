@@ -51,12 +51,16 @@ var getAllCoords = function (loc) {
 
 module.exports = function (location) {
 
+  var $mount = null;
+  var children = {};
+  var $elems = {};
   // For unbinding to prevent memory leaks.
   var locationListeners = {};
 
   // Public methods
 
-  this.bind = function ($mount) {
+  this.bind = function ($mountEl) {
+    $mount = $mountEl;
 
     // Render
     $mount.html(template({
@@ -67,18 +71,18 @@ module.exports = function (location) {
 
     // Preparation for binds
 
-    var $edit = $('#location-geom-edit');
-    var $container = $('#location-geom-container');
-    var $progress = $('#location-geom-progress');
-    var $geostamp = $('#location-geom-geostamp');
-    var $form = $('#location-geom-form');
-    var $cancel = $('#location-geom-cancel');
-    var $error = $('#location-geom-error');
-    var $lng = $('#location-geom-longitude');
-    var $lat = $('#location-geom-latitude');
+    $elems.edit = $mount.find('#location-geom-edit');
+    $elems.container = $mount.find('#location-geom-container');
+    $elems.progress = $mount.find('#location-geom-progress');
+    $elems.geostamp = $mount.find('#location-geom-geostamp');
+    $elems.form = $mount.find('#location-geom-form');
+    $elems.cancel = $mount.find('#location-geom-cancel');
+    $elems.error = $mount.find('#location-geom-error');
+    $elems.lng = $mount.find('#location-geom-longitude');
+    $elems.lat = $mount.find('#location-geom-latitude');
 
     var initMap = function () {
-      var $map = $('#location-geom-map');
+      $elems.map = $mount.find('#location-geom-map');
 
       var mapState = mapStateStore.get();
 
@@ -96,11 +100,11 @@ module.exports = function (location) {
       };
 
       if (gmap.map === null && gmap.elem === null) {
-        gmap.elem = $map[0];
+        gmap.elem = $elems.map[0];
         gmap.map = new google.maps.Map(gmap.elem, options);
       } else {
         // Already initialised
-        $map.replaceWith(gmap.elem);
+        $elems.map.replaceWith(gmap.elem);
         gmap.map.setZoom(options.zoom);
         gmap.map.setCenter(options.center);
         gmap.map.setMapTypeId(options.mapTypeId);
@@ -112,8 +116,8 @@ module.exports = function (location) {
       gmap.marker.show();
       gmap.listener = gmap.map.addListener('center_changed', function () {
         var latlng = gmap.map.getCenter();
-        $lng.val(latlng.lng());
-        $lat.val(latlng.lat());
+        $elems.lng.val(latlng.lng());
+        $elems.lat.val(latlng.lat());
       });
     };
 
@@ -126,23 +130,23 @@ module.exports = function (location) {
     };
 
     var isFormOpen = function () {
-      var isHidden = $container.hasClass('hidden');
+      var isHidden = $elems.container.hasClass('hidden');
       return !isHidden;
     };
 
     var openForm = function () {
-      ui.show($container);
-      ui.show($form);
+      ui.show($elems.container);
+      ui.show($elems.form);
       // Hide all possible error messages
-      ui.hide($error);
+      ui.hide($elems.error);
       // Load map
       initMap();
     };
 
     var closeForm = function () {
-      ui.hide($container);
+      ui.hide($elems.container);
       // Hide all possible error messages
-      ui.hide($error);
+      ui.hide($elems.error);
       // Destroy map (partially)
       closeMap();
     };
@@ -151,13 +155,13 @@ module.exports = function (location) {
       var lng = location.getLongitude();
       var lat = location.getLatitude();
 
-      $lng.val(lng);
-      $lat.val(lat);
+      $elems.lng.val(lng);
+      $elems.lat.val(lat);
     };
 
     // Binds
 
-    $edit.click(function (ev) {
+    $elems.edit.click(function (ev) {
       ev.preventDefault();
 
       if (isFormOpen()) {
@@ -168,30 +172,30 @@ module.exports = function (location) {
       }
     });
 
-    $cancel.click(function (ev) {
+    $elems.cancel.click(function (ev) {
       ev.preventDefault();
       closeForm();
     });
 
-    $form.submit(function (ev) {
+    $elems.form.submit(function (ev) {
       ev.preventDefault();
 
-      var lngRaw = $lng.val();
-      var latRaw = $lat.val();
+      var lngRaw = $elems.lng.val();
+      var latRaw = $elems.lat.val();
 
       var lng = parseFloat(lngRaw);
       var lat = parseFloat(latRaw);
 
       // Hide form and show progress bar
-      ui.hide($form);
-      ui.show($progress);
+      ui.hide($elems.form);
+      ui.show($elems.progress);
 
       location.setGeom(lng, lat, function (err) {
         // Hide progress bar
-        ui.hide($progress);
+        ui.hide($elems.progress);
 
         if (err) {
-          ui.show($error);
+          ui.show($elems.error);
           return;
         }
         closeForm();
@@ -199,22 +203,22 @@ module.exports = function (location) {
     });
 
     (function defineMore() {
-      var $more = $('#location-geom-more');
-      var $moreopen = $('#location-geom-more-open');
-      var $moreclose = $('#location-geom-more-close');
+      $elems.more = $mount.find('#location-geom-more');
+      $elems.moreopen = $mount.find('#location-geom-more-open');
+      $elems.moreclose = $mount.find('#location-geom-more-close');
 
-      $moreopen.click(function (ev) {
+      $elems.moreopen.click(function (ev) {
         ev.preventDefault();
-        ui.hide($moreopen);
-        ui.show($moreclose);
-        ui.show($more);
+        ui.hide($elems.moreopen);
+        ui.show($elems.moreclose);
+        ui.show($elems.more);
       });
 
-      $moreclose.click(function (ev) {
+      $elems.moreclose.click(function (ev) {
         ev.preventDefault();
-        ui.hide($moreclose);
-        ui.show($moreopen);
-        ui.hide($more);
+        ui.hide($elems.moreclose);
+        ui.show($elems.moreopen);
+        ui.hide($elems.more);
       });
 
     }());
@@ -226,14 +230,13 @@ module.exports = function (location) {
       // Get coords in each coord system.
       var allCoords = getAllCoords(location);
       // WGS84
-      $geostamp.html(allCoords[0].html);
+      $elems.geostamp.html(allCoords[0].html);
       // Other systems
-      var $more = $('#location-geom-more');
       var moreHtml = allCoords.reduce(function (acc, c) {
         var content = c.html + ' (' + c.name + ')';
         return acc + '<div><span>' + content + '</span></div>';
       }, '');
-      $more.html(moreHtml);
+      $elems.more.html(moreHtml);
     };
 
     location.on('location_geom_changed', geomChangedHandler);
@@ -243,13 +246,15 @@ module.exports = function (location) {
   };
 
   this.unbind = function () {
-    $('#location-geom-edit').off();
-    $('#location-geom-form').off();
-    $('#location-geom-cancel').off();
-    $('#location-geom-more-open').off();
-
-    Object.keys(locationListeners).forEach(function (k) {
-      location.off(k, locationListeners[k]);
-    });
+    if ($mount) {
+      ui.unbindAll(children);
+      children = {};
+      ui.offAll($elems);
+      $elems = {};
+      Object.keys(locationListeners).forEach(function (k) {
+        location.off(k, locationListeners[k]);
+      });
+      $mount = null;
+    }
   };
 };
