@@ -1,4 +1,5 @@
 const entriesDal = require('../../dal');
+const able = require('georap-able').isAble;
 const status = require('http-status-codes');
 
 module.exports = function (req, res, next) {
@@ -8,13 +9,14 @@ module.exports = function (req, res, next) {
   const username = req.user.name;
   const commentId = req.commentId;
 
-  // Allow only owners and admins to delete
-  const isAdmin = req.user.role === 'admin';
+  // Allow only owners and privileged users to delete
+  const isGod = able(req.user, 'comments-delete-any');
   const isOwner = req.user.name === req.comment.user;
+  const isOwnerAllowed = isOwner && able(req.user, 'comments-delete-own');
+  const isAllowed = isGod || isOwnerAllowed;
 
-  if (!isAdmin && !isOwner) {
-    const info = 'Only admins and comment author can edit the comment.';
-    return res.status(status.FORBIDDEN).send(info);
+  if (!isAllowed) {
+    return res.sendStatus(status.FORBIDDEN);
   }
 
   // Check if such comment exists. Consider it already removed if not.

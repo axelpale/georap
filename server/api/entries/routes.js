@@ -18,6 +18,6 @@ router.post('/:entryId', jsonParser, handlers.change);
 router.delete('/:entryId', handlers.remove);
 
 router.post('/:entryId/move', jsonParser, handlers.move);
-router.use('/:entryId/comments', able('comments'), commentsRouter);
+router.use('/:entryId/comments', able('comments-read'), commentsRouter);
 
 module.exports = router;
