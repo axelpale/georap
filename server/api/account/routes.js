@@ -2,7 +2,7 @@
 
 const handlers = require('./handlers');
 const jsonParser = require('body-parser').json();
-const able = require('georap-able').middleware;
+const able = require('georap-able').able;
 const router = require('express').Router();
 
 // Public routes - no login

@@ -12,7 +12,7 @@ const markersRouter = require('./markers/routes');
 const statisticsRouter = require('./statistics/routes');
 const usersRouter = require('./users/routes');
 
-const able = require('georap-able').middleware;
+const able = require('georap-able').able;
 const status = require('http-status-codes');
 const router = require('express').Router();
 

@@ -4,8 +4,7 @@
 const config = require('georap-config')
 const status = require('http-status-codes')
 
-exports.isAble =
-exports.able = function (user, cap) {
+exports.isAble = function (user, cap) {
   // Return
   //   boolean
   //
@@ -22,7 +21,7 @@ exports.able = function (user, cap) {
   return caps.includes(capn)
 }
 
-exports.middleware = function (cap) {
+exports.able = function (cap) {
   // Returns a middleware function (req, res, next)
   //   that calls next if user has the required capability.
   //
