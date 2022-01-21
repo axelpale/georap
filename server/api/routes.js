@@ -23,12 +23,12 @@ router.use('/icons', iconsRouter);
 router.use('/account', accountRouter);
 
 router.use('/admin', able('admin'), adminRouter);
-router.use('/attachments', able('posts-read'), attachmentsRouter);
+router.use('/attachments', able('attachments-read'), attachmentsRouter);
 router.use('/entries', able('posts-read'), entriesRouter);
-router.use('/events', able('locations'), eventsRouter);
+router.use('/events', able('locations-read'), eventsRouter);
 router.use('/geometry', able('geometry'), geometryRouter);
-router.use('/locations', able('locations'), locationsRouter);
-router.use('/markers', able('locations'), markersRouter);
+router.use('/locations', able('locations-read'), locationsRouter);
+router.use('/markers', able('locations-read'), markersRouter);
 router.use('/statistics', able('statistics'), statisticsRouter);
 router.use('/users', able('users'), usersRouter);
 // router.use('/locales', localesRouter); TODO is any use?
