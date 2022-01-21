@@ -4,7 +4,8 @@
 const config = require('georap-config')
 const status = require('http-status-codes')
 
-exports.isAble = function (user, cap) {
+exports.isAble =
+exports.able = function (user, cap) {
   // Return
   //   boolean
   //
