@@ -8,7 +8,7 @@
 %>
 
 <% locationStatuses.forEach(function (status) { %>
-  <button data-status="<%= status %>" class="georap-status-<%= status %> georap-tag <%= activityClass(status) %>">
+  <button data-status="<%= status %>" class="location-status-<%= status %> georap-tag <%= activityClass(status) %>">
     <%= __('location-status', status) %>
   </button>
 <% }) %>

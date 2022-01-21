@@ -3,8 +3,8 @@
 var ui = require('georap-ui');
 var urls = require('georap-urls-client');
 var emitter = require('component-emitter');
-var statusListTemplate = require('../Location/StatusType/statusFormList.ejs');
-var typeListTemplate = require('../Location/StatusType/typeFormList.ejs');
+var statusListTemplate = require('../Location/StatusType/Form/statusList.ejs');
+var typeListTemplate = require('../Location/StatusType/Form/typeList.ejs');
 var template = require('./template.ejs');
 var locationTypes = georap.config.locationTypes;
 var locationStatuses = georap.config.locationStatuses;
@@ -43,9 +43,9 @@ module.exports = function () {
       offbtn.attr('class', 'btn btn-danger');
       // Activate the current status and type buttons
       var filterState = filterStore.get();
-      $('#georap-filter-status-list .georap-status-' + filterState.status)
+      $('#georap-filter-status-list .location-status-' + filterState.status)
         .addClass('georap-tag-active');
-      $('#georap-filter-type-list .georap-type-' + filterState.type)
+      $('#georap-filter-type-list .location-type-' + filterState.type)
         .addClass('georap-tag-active');
     }
   };
