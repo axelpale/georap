@@ -10,11 +10,11 @@ const jsonParser = require('body-parser').json();
 
 router.post('/', able('comments-create'), jsonParser, handlers.create);
 
-router.post('/:commentId', able('comments-create'), commentIdParser,
-            jsonParser, handlers.change);
+router.use('/:commentId', commentIdParser);
 
+router.post('/:commentId', able('comments-create'),
+            jsonParser, handlers.change);
 // Deletion has internal permission handling
-router.delete('/:commentId', commentIdParser,
-              jsonParser, handlers.remove);
+router.delete('/:commentId', jsonParser, handlers.remove);
 
 module.exports = router;
