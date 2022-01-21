@@ -275,7 +275,7 @@ exports.route = function () {
       .catch(importErrorHandler);
   });
 
-  page('/latest', able('posts'), function () {
+  page('/latest', able('posts-read'), function () {
     // NOTE Code for future
     // // Prevent reopen on hash change
     // if (card.isViewInstanceOf(LatestView)) {

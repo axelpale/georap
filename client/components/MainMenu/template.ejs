@@ -22,7 +22,7 @@
           <% } %>
         <% } %>
 
-        <% if (able('posts')) { %>
+        <% if (able('posts-read')) { %>
           <li>
             <a href="/latest"><%= glyphicon({ name: 'bell' }) %> <%= __('latest') %></a>
           </li>
@@ -42,7 +42,7 @@
             <a href="/statistics"><%= glyphicon({ name: 'signal' }) %> <%= __('statistics') %></a>
           </li>
         <% } %>
-        <% if (able('posts')) { %>
+        <% if (able('posts-read')) { %>
           <li role="separator" class="divider"></li>
         <% } %>
 

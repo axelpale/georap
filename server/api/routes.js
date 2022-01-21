@@ -23,8 +23,8 @@ router.use('/icons', iconsRouter);
 router.use('/account', accountRouter);
 
 router.use('/admin', able('admin'), adminRouter);
-router.use('/attachments', able('posts'), attachmentsRouter);
-router.use('/entries', able('posts'), entriesRouter);
+router.use('/attachments', able('posts-read'), attachmentsRouter);
+router.use('/entries', able('posts-read'), entriesRouter);
 router.use('/events', able('locations'), eventsRouter);
 router.use('/geometry', able('geometry'), geometryRouter);
 router.use('/locations', able('locations'), locationsRouter);

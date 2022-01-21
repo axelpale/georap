@@ -95,7 +95,7 @@ var LocationView = function (id, query) {
         children.formsView.bind($mount.find('.location-forms'));
       }
 
-      if (able('locations-posts')) {
+      if (able('posts-read')) {
         children.entriesView = new EntriesView(rawLoc._id);
         children.entriesView.bind($mount.find('.location-entries'));
         // Scroll down to possibly referred entry or comment after

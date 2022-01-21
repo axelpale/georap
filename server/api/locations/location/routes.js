@@ -15,7 +15,7 @@ router.get('/attachments', handlers.getAttachments);
 router.post('/geom', able('locations-update'),
             jsonParser, handlers.changeGeom);
 
-router.get('/entries', able('locations-posts'),
+router.get('/entries', able('posts-read'),
            middlewares.skipLimitParser, handlers.getEntries);
 
 router.get('/events', able('locations-events'),
