@@ -55,7 +55,7 @@ module.exports = function () {
 
       // Optionally list also deleted users
       var comp = new DeletedUsers(rawUsers);
-      children.deletedUsers = new components.Opener(comp, false);
+      children.deletedUsers = new components.Opener(comp);
       children.deletedUsers.bind({
         $container: $mount.find('.admin-users-deleted'),
         $button: $mount.find('.admin-users-deleted-opener'),

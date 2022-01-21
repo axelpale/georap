@@ -38,7 +38,7 @@ module.exports = function (location) {
 
     if (able('locations-update')) {
       var nameForm = new NameForm(location);
-      children.formOpener = new components.Opener(nameForm, false);
+      children.formOpener = new components.Opener(nameForm);
       children.formOpener.bind({
         $container: $elems.formContainer,
         $button: $elems.show,

@@ -34,7 +34,7 @@ module.exports = function (location) {
 
     if (able('locations-update')) {
       var form = new StatusTypeForm(location);
-      children.opener = new components.Opener(form, false);
+      children.opener = new components.Opener(form);
       children.opener.bind({
         $container: $mount.find('.location-statustype-form-container'),
         $button: $mount.find('.location-statustype-form-show'),

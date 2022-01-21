@@ -42,7 +42,7 @@ module.exports = function (location) {
     var geomForm = null;
     if (able('locations-update')) {
       geomForm = new GeomForm(location.getId(), location.getGeom());
-      children.formOpener = new Opener(geomForm, false);
+      children.formOpener = new Opener(geomForm);
       children.formOpener.bind({
         $container: $mount.find('#location-geom-container'),
         $button: $mount.find('#location-geom-edit'),

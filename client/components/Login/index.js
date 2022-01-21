@@ -45,7 +45,7 @@ module.exports = function (afterLoginUrl) {
     children.loginForm.bind($elems.loginFormContainer);
 
     var resetForm = new ResetFormComponent();
-    children.resetFormOpener = new components.Opener(resetForm, false);
+    children.resetFormOpener = new components.Opener(resetForm);
     children.resetFormOpener.bind({
       $container: $mount.find('.password-reset-container'),
       $button: $mount.find('.password-reset-button'),
