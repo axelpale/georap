@@ -13,12 +13,6 @@ module.exports = function (req, res, next) {
   const markdown = req.body.markdown.trim(); // trim for length check
   let attachments = req.body.attachments;
 
-  // Allow only owners edit.
-  if (req.user.name !== req.comment.user) {
-    const info = 'Only owners can edit their comments.';
-    return res.status(status.FORBIDDEN).send(info);
-  }
-
   // Allow only fresh comments to be edited.
   const ageMs = commentModel.getAgeMs(req.comment);
   // Add two minutes to the configured limit so that a user who
