@@ -65,6 +65,10 @@ module.exports = function (rawLoc) {
     return rawLoc.altGeom[system];
   };
 
+  self.getAltGeoms = function () {
+    return rawLoc.altGeom;
+  };
+
   self.getCreator = function () {
     // Return the username of the creator of the location.
     // Return '' if not known.
