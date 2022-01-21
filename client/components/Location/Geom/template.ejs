@@ -7,7 +7,9 @@
     <button id="location-geom-more-open" type="button" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-chevron-down"></span> <%= __('more') %></button>
     <button id="location-geom-more-close" type="button" class="btn btn-default btn-sm hidden"><span class="glyphicon glyphicon-chevron-up"></span> <%= __('less') %></button>
 
+    <% if (able('locations-update')) { %>
     <button id="location-geom-edit" type="button" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-pencil"></span></button>
+    <% } %>
   </div>
 
   <div id="location-geom-more" class="form-group hidden"></div>

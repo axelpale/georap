@@ -4,6 +4,7 @@ var GeomForm = require('./Form');
 var GeomMore = require('./More');
 var template = require('./template.ejs');
 var renderGeoms = require('./renderGeoms');
+var able = georap.stores.account.able;
 var MAP_SYSTEM = 'WGS84';
 
 module.exports = function (location) {
@@ -32,19 +33,21 @@ module.exports = function (location) {
     $mount.html(template({
       location: location,
       geostamp: defaultGeostamp,
+      able: able,
       __: georap.i18n.__,
     }));
 
     $elems.geostamp = $mount.find('#location-geom-geostamp');
 
-    var locId = location.getId();
-    var geom = location.getGeom();
-    var geomForm = new GeomForm(locId, geom);
-    children.formOpener = new Opener(geomForm, false);
-    children.formOpener.bind({
-      $container: $mount.find('#location-geom-container'),
-      $button: $mount.find('#location-geom-edit'),
-    });
+    var geomForm = null;
+    if (able('locations-update')) {
+      geomForm = new GeomForm(location.getId(), location.getGeom());
+      children.formOpener = new Opener(geomForm, false);
+      children.formOpener.bind({
+        $container: $mount.find('#location-geom-container'),
+        $button: $mount.find('#location-geom-edit'),
+      });
+    }
 
     var geomMore = new GeomMore(geostamps);
     children.moreOpener = new Opener(geomMore, false);
@@ -65,13 +68,16 @@ module.exports = function (location) {
       $elems.geostamp.html(newDefaultGeostamp);
       // Other systems
       geomMore.update(newGeostamps);
+
       // Update form for next bind. This does not rewrite rendered values.
       // TODO alt geoms should be full GeoJSON objects, not only coords
-      var newCoords = geoms[MAP_SYSTEM];
-      geomForm.update({
-        type: 'Point',
-        coordinates: newCoords,
-      });
+      if (geomForm) {
+        var newCoords = geoms[MAP_SYSTEM];
+        geomForm.update({
+          type: 'Point',
+          coordinates: newCoords,
+        });
+      }
     };
     ui.onBy(location, handlers);
   };
