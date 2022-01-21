@@ -2,7 +2,6 @@
 const pjson = require('../../../package.json');
 const locationsDal = require('../locations/dal');
 const entriesDal = require('../entries/dal');
-const commentsDal = require('../comments/dal');
 const eventsDal = require('../events/dal');
 const attachmentsDal = require('../attachments/dal');
 const usersDal = require('../users/dal');
@@ -29,7 +28,7 @@ exports.getAll = function (callback) {
     serverVersion: exports.getServerVersion,
     locationCount: locationsDal.count,
     entriesCount: entriesDal.count,
-    commentsCount: commentsDal.count,
+    commentsCount: entriesDal.countComments,
     eventsCount: eventsDal.count,
     attachmentsCount: attachmentsDal.count,
     usersCount: usersDal.count,

@@ -1,5 +1,6 @@
 // Statistics
 exports.count = require('./count');
+exports.countComments = require('./countComments');
 // Retrieve entries
 exports.filterUniqueLocationEntries = require('./filterUniqueLocationEntries');
 exports.getAllOfLocationComplete = require('./getAllOfLocationComplete');

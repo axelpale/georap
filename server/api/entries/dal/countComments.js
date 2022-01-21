@@ -1,6 +1,6 @@
 const db = require('georap-db');
 
-exports.count = (callback) => {
+module.exports = (callback) => {
   // Count comments in non-deleted entries
   //
   // Parameters:
