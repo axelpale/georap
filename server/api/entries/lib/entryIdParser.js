@@ -51,6 +51,13 @@ module.exports = function (req, res, next) {
     // be stored with the events.
     delete req.entry.location;
 
+    // Mark ownership for capability checking
+    if (req.user && req.user.name === req.entry.user) {
+      req.isOwner = true;
+    } else {
+      req.isOwner = false;
+    }
+
     return next();
   });
 };

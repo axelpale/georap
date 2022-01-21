@@ -21,6 +21,16 @@ module.exports = function (req, res, next) {
     });
     if (comment) {
       req.comment = comment;
+
+      // Mark ownership for capability checking
+      if (req.user && req.user.name === comment.user) {
+        req.isOwner = true;
+      } else {
+        // Entry might be owned but not the comment.
+        // Thus override if already set.
+        req.isOwner = false;
+      }
+
       return next();
     }
   }

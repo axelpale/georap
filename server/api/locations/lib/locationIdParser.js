@@ -27,6 +27,14 @@ module.exports = function (req, res, next) {
     }
 
     req.location = loc;
+
+    // Mark ownership for capability checking
+    if (req.user && req.user.name === loc.creator) {
+      req.isOwner = true;
+    } else {
+      req.isOwner = false;
+    }
+
     return next();
   });
 };

@@ -24,6 +24,14 @@ module.exports = function (req, res, next) {
     }
 
     req.attachment = doc;
+
+    // Mark ownership for capability checking
+    if (req.user && req.user.name === doc.user) {
+      req.isOwner = true;
+    } else {
+      req.isOwner = false;
+    }
+
     return next();
   });
 };
