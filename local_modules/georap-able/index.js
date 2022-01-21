@@ -34,3 +34,29 @@ exports.middleware = function (cap) {
     return res.status(status.FORBIDDEN).send(msg)
   }
 }
+
+exports.ableOwn = function (capr) {
+  // Takes a capability without -any or -own postfix and
+  // returns a middleware that allows access if the user
+  // is able to <capr>-any OR if req.isOwner is set true
+  // and the user is able to <capr>-own.
+  //
+  // Parameters:
+  //   capr
+  //     string, capability root without -any or -own postfixes
+  //
+  // Return
+  //   function (req, res, next)
+  //     a express middleware fn
+  //
+  return function (req, res, next) {
+    if (exports.isAble(req.user, cap + '-any')) {
+      return next()
+    }
+    if (req.isOwner && exports.isAble(req.user, cap + '-own')) {
+      return next()
+    }
+    const msg = 'You are not capable of accessing this resource'
+    return res.status(status.FORBIDDEN).send(msg)
+  }
+}
