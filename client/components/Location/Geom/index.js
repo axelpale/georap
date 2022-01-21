@@ -67,18 +67,18 @@ module.exports = function (location) {
 
     // Preparation for binds
 
-    var $edit = $('#georap-location-coords-edit');
-    var $container = $('#georap-location-coords-container');
-    var $progress = $('#georap-location-coords-progress');
-    var $geostamp = $('#georap-location-coords-geostamp');
-    var $form = $('#georap-location-coords-form');
-    var $cancel = $('#georap-location-coords-cancel');
-    var $error = $('#georap-location-coords-error');
-    var $lng = $('#georap-location-coords-longitude');
-    var $lat = $('#georap-location-coords-latitude');
+    var $edit = $('#location-geom-edit');
+    var $container = $('#location-geom-container');
+    var $progress = $('#location-geom-progress');
+    var $geostamp = $('#location-geom-geostamp');
+    var $form = $('#location-geom-form');
+    var $cancel = $('#location-geom-cancel');
+    var $error = $('#location-geom-error');
+    var $lng = $('#location-geom-longitude');
+    var $lat = $('#location-geom-latitude');
 
     var initMap = function () {
-      var $map = $('#georap-location-coords-map');
+      var $map = $('#location-geom-map');
 
       var mapState = mapStateStore.get();
 
@@ -199,9 +199,9 @@ module.exports = function (location) {
     });
 
     (function defineMore() {
-      var $more = $('#georap-location-coords-more');
-      var $moreopen = $('#georap-location-coords-more-open');
-      var $moreclose = $('#georap-location-coords-more-close');
+      var $more = $('#location-geom-more');
+      var $moreopen = $('#location-geom-more-open');
+      var $moreclose = $('#location-geom-more-close');
 
       $moreopen.click(function (ev) {
         ev.preventDefault();
@@ -228,7 +228,7 @@ module.exports = function (location) {
       // WGS84
       $geostamp.html(allCoords[0].html);
       // Other systems
-      var $more = $('#georap-location-coords-more');
+      var $more = $('#location-geom-more');
       var moreHtml = allCoords.reduce(function (acc, c) {
         var content = c.html + ' (' + c.name + ')';
         return acc + '<div><span>' + content + '</span></div>';
@@ -243,10 +243,10 @@ module.exports = function (location) {
   };
 
   this.unbind = function () {
-    $('#georap-location-coords-edit').off();
-    $('#georap-location-coords-form').off();
-    $('#georap-location-coords-cancel').off();
-    $('#georap-location-coords-more-open').off();
+    $('#location-geom-edit').off();
+    $('#location-geom-form').off();
+    $('#location-geom-cancel').off();
+    $('#location-geom-more-open').off();
 
     Object.keys(locationListeners).forEach(function (k) {
       location.off(k, locationListeners[k]);

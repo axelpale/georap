@@ -255,7 +255,7 @@ time:hover {
 .location-geom > .form-group {
   margin-bottom: 0;
 }
-.location-geom .location-coords-container {
+.location-geom .location-geom-container {
   margin-top: 0.6rem;
 }
 /* Location component containers */
