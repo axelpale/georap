@@ -230,7 +230,7 @@ exports.route = function () {
     );
   }));
 
-  page('/filter', able('locations'), basicViewSetup(function () {
+  page('/filter', able('locations-able'), basicViewSetup(function () {
     return import(
       /* webpackChunkName: "filter-view" */
       '../components/Filter'
@@ -292,7 +292,7 @@ exports.route = function () {
       .catch(importErrorHandler);
   });
 
-  page('/locations/:id', able('locations'), function (ctx) {
+  page('/locations/:id', able('locations-read'), function (ctx) {
     import(
       /* webpackChunkName: "location" */
       '../components/Location'
@@ -318,7 +318,7 @@ exports.route = function () {
     );
   }));
 
-  page('/search', able('locations'), function (ctx) {
+  page('/search', able('locations-read'), function (ctx) {
     import(
       /* webpackChunkName: "search-view" */
       '../components/Search'

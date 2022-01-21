@@ -143,7 +143,7 @@ window.initMap = function () {
     mapComp.startLoadingFlags();
   });
   account.on('logout', function () {
-    if (!account.able('locations')) {
+    if (!account.able('locations-read')) {
       mapComp.stopLoadingMarkers();
       mapComp.removeAllMarkers();  // do not expose data after log out
     }
@@ -152,7 +152,7 @@ window.initMap = function () {
   });
 
   // Already logged in or public user
-  if (account.able('locations')) {
+  if (account.able('locations-read')) {
     mapComp.startLoadingMarkers();
   }
 
