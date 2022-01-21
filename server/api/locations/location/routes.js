@@ -1,37 +1,41 @@
 /* eslint-disable new-cap */
 
-const able = require('georap-able').middleware;
 const handlers = require('./handlers');
 const express = require('express');
 const router = express.Router();
 const jsonParser = require('body-parser').json();
-const middlewares = require('georap-middlewares');
+const skipLimitParser = require('georap-middlewares').skipLimitParser;
+const grable = require('georap-able');
+
+const able = grable.able;
+const ableOwn = grable.ableOwn;
 
 router.get('/', handlers.getOne);
-router.delete('/', handlers.removeOne); // Internal remove rule checking
+
+router.delete('/', ableOwn('locations-delete'), handlers.removeOne);
 
 router.get('/attachments', handlers.getAttachments);
 
-router.post('/geom', able('locations-update'),
-            jsonParser, handlers.changeGeom);
-
 router.get('/entries', able('posts-read'),
-           middlewares.skipLimitParser, handlers.getEntries);
+           skipLimitParser, handlers.getEntries);
 
 router.get('/events', able('locations-events'),
-           middlewares.skipLimitParser, handlers.getEvents);
+           skipLimitParser, handlers.getEvents);
 
-router.post('/name', able('locations-update'),
+router.post('/geom', ableOwn('locations-update'),
+            jsonParser, handlers.changeGeom);
+
+router.post('/name', ableOwn('locations-update'),
             jsonParser, handlers.changeName);
 
-router.post('/tags', able('locations-update'),
+router.post('/tags', ableOwn('locations-update'),
             jsonParser, handlers.changeTags); // TODO remove
-router.post('/status', able('locations-update'),
+router.post('/status', ableOwn('locations-update'),
             jsonParser, handlers.changeStatus);
-router.post('/type', able('locations-update'),
+router.post('/type', ableOwn('locations-update'),
             jsonParser, handlers.changeType);
 
-router.post('/thumbnail', able('locations-update'),
+router.post('/thumbnail', ableOwn('locations-update'),
             jsonParser, handlers.changeThumbnail);
 
 module.exports = router;
