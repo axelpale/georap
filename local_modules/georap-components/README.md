@@ -29,8 +29,11 @@ Where `.error-container` is an empty div.
 Usage:
 
     var myComp = new MyComponent(myArg)
-    var isOpen = false
-    children.opener = new components.Opener(myComp, isOpen)
+    children.opener = new components.Opener(myComp, {
+      isOpen: true, // optional, default false
+      labelOpen: 'Show less', // optional
+      labelClosed: 'Show more' // optional
+    })
 
     children.opener.bind({
       $container: $mount.find('.mycomp-container'),

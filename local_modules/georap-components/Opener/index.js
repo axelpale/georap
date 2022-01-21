@@ -3,13 +3,21 @@
 //
 const ui = require('georap-ui')
 const emitter = require('component-emitter')
+const REST = 800; // ms to wait after another click allowed
 
-module.exports = function (component, isOpen) {
+module.exports = function (component, opts) {
   // Parameters
   //   component
   //     a constructed but still unbound component instance
-  //   isOpen
-  //     optional initial openness state
+  //   opts, optional object with props
+  //     isOpen
+  //       boolean, optional initial openness state. Defaults to false.
+  //     labelOpen
+  //       string, optional button label to be shown when the component open.
+  //         Requirement: you must specify also labelClosed.
+  //     labelClosed
+  //       string, optional button lable to be shown when the component closed.
+  //         Requirement: you must specify also labelOpen.
   //
   // Emits
   //   opened
@@ -19,9 +27,14 @@ module.exports = function (component, isOpen) {
   //   success
   //     when component emits success
   //
-  if (typeof isOpen !== 'boolean') {
-    isOpen = false
+  if (!opts) {
+    opts = {}
   }
+  opts = Object.assign({
+    isOpen: false,
+    labelOpen: null,
+    labelClosed: null,
+  }, opts)
 
   // Setup
   const self = this
@@ -41,14 +54,20 @@ module.exports = function (component, isOpen) {
     $button = mounts.$button
 
     // Set default open state
-    if (isOpen) {
+    if (opts.isOpen) {
       ui.show($container)
+      if (opts.labelOpen) {
+        $button.html(opts.labelOpen)
+      }
     } else {
       ui.hide($container)
+      if (opts.labelClosed) {
+        $button.html(opts.labelClosed)
+      }
     }
 
     // Opener click handler with double-click prevention
-    $button.click(ui.throttle(1000, function (ev) {
+    $button.click(ui.throttle(REST, function (ev) {
       ev.preventDefault() // if element is button-like anchor
 
       // Close if open. Unbind only component, do not unbind complete opener.
@@ -61,6 +80,10 @@ module.exports = function (component, isOpen) {
       component.bind($container)
       // Ensure container is visible
       ui.show($container)
+      // Set button label
+      if (opts.labelOpen) {
+        $button.html(opts.labelOpen)
+      }
 
       self.emit('opened')
     }))
@@ -94,6 +117,10 @@ module.exports = function (component, isOpen) {
     if ($container) {
       ui.hide($container)
       component.unbind()
+      // Update button label
+      if (opts.labelClosed) {
+        $button.html(opts.labelClosed)
+      }
     }
   }
 

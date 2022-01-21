@@ -46,7 +46,7 @@ module.exports = function (params) {
       infoText: params.infoText,
       youSureText: params.youSureText
     })
-    opener = new Opener(panel, false)
+    opener = new Opener(panel)
     opener.bind({
       $container: $container.find('.remover-panel-container'),
       $button: $button
