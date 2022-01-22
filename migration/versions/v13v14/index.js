@@ -2,6 +2,7 @@
 // 1. set schema version to 14
 // 2. users have new property: securityToken
 // 3. users have new property: role (deprecates prop: admin)
+// 4. rename location.creator to location.user
 //
 // Idempotent: true when NODE_ENV=development
 //
@@ -33,7 +34,7 @@ const substeps = [
   },
 
   function refactorEntries(nextStep) {
-    console.log('2. Add securityToken and role properties to users...');
+    console.log('2. 3. Add securityToken and role properties to users...');
 
     const coll = db.collection('users');
 
@@ -45,26 +46,37 @@ const substeps = [
         delete user.admin;
         user.role = isAdmin ? 'admin' : 'basic';
       }
-      // Init empty security token
-      user.securityToken = '';
-      // Init deleted flag
-      user.deleted = false;
-      return iterNext(null, user);
-    }, (err, iterResults) => {
-      if (err) {
-        return nextStep(err);
+      if (!user.securityToken) {
+        // Init empty security token
+        user.securityToken = '';
       }
+      if (!user.deleted) {
+        // deleted is true => no update
+        // deleted is false => unnecessary update
+        // deleted is undefined => update
 
-      console.log('  ' + iterResults.numDocuments + ' users processed ' +
-        'successfully.');
-      console.log('  ' + iterResults.numUpdated + ' users updated, ' +
-        (iterResults.numDocuments - iterResults.numUpdated) + ' did not ' +
-        'need an update');
-
-      return nextStep();
-    });
+        // Init deleted flag
+        user.deleted = false;
+      }
+      return iterNext(null, user);
+    }, iter.updateEachReport(nextStep));
   },
 
+  function migrateLocations(nextStep) {
+    console.log('4. Rename loc.creator to loc.user...');
+
+    const coll = db.collection('locations');
+
+    iter.updateEach(coll, (origLoc, iterNext) => {
+      const loc = clone(origLoc);
+      if (loc.creator) {
+        loc.user = loc.creator;
+        delete loc.creator;
+        return iterNext(null, loc);
+      }
+      return iterNext(null, false); // skip
+    }, iter.updateEachReport(nextStep));
+  },
 ];
 
 exports.run = (callback) => {
