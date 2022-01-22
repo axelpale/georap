@@ -49,10 +49,10 @@ exports.ableOwn = function (capr) {
   //     a express middleware fn
   //
   return function (req, res, next) {
-    if (exports.isAble(req.user, cap + '-any')) {
+    if (exports.isAble(req.user, capr + '-any')) {
       return next()
     }
-    if (req.isOwner && exports.isAble(req.user, cap + '-own')) {
+    if (req.isOwner && exports.isAble(req.user, capr + '-own')) {
       return next()
     }
     const msg = 'You are not capable of accessing this resource'
