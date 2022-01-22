@@ -94,3 +94,22 @@ exports.updateEach = function (collection, iteratee, callback) {
     });
   });
 };
+
+exports.updateEachReport = function (nextStep) {
+  // Returns a callback fn for iter.updateEach that
+  // outputs iterResults
+  //
+  return (err, iterResults) => {
+    if (err) {
+      return nextStep(err);
+    }
+
+    console.log('  ' + iterResults.numDocuments + ' docs processed ' +
+      'successfully.');
+    console.log('  ' + iterResults.numUpdated + ' docs updated, ' +
+      (iterResults.numDocuments - iterResults.numUpdated) + ' did not ' +
+      'need an update');
+
+    return nextStep();
+  };
+};
