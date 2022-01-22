@@ -135,6 +135,31 @@ exports.able = function (cap) {
   return false;
 };
 
+exports.ableOwn = function (obj, capr) {
+  // Takes a partial capability string and tests if user is
+  // able to <capr>-any OR is an owner and is able to <capr>-own.
+  // Simplifies testing -any and -own capabilities.
+  //
+  // Parameters
+  //   obj
+  //     object with prop 'user'
+  //   capr
+  //     a partial capability string without -any or -own postfix
+  //
+  // Return
+  //   boolean
+  //
+  if (user) {
+    if (exports.isAble(capr + '-any')) {
+      return true;
+    }
+    if (user.name === obj.user && exports.isAble(capr + '-own')) {
+      return true;
+    }
+  }
+  return false;
+};
+
 exports.isAdmin = function () {
   // Return
   //   bool, true if admin, false if not admin or not logged in.
