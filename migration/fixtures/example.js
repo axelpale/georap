@@ -248,7 +248,7 @@ module.exports = {
         // A location in Latvia
         _id: irbeneId,
         createdAt: '2009-07-30T10:44:58.000Z',
-        creator: admin,
+        user: admin,
         deleted: false,
         geom: {
           type: 'Point',
@@ -272,7 +272,7 @@ module.exports = {
         // A location close to the first one.
         _id: luznaId,
         createdAt: '2017-02-22T22:18:00.000Z',
-        creator: admin,
+        user: admin,
         deleted: false,
         geom: {
           type: 'Point',
@@ -296,7 +296,7 @@ module.exports = {
         // A deleted location
         _id: rummuId,
         createdAt: '2017-02-06T12:23:34.000Z',
-        creator: admin,
+        user: admin,
         deleted: true,
         geom: {
           type: 'Point',
