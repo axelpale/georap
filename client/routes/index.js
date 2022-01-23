@@ -231,7 +231,7 @@ exports.route = function () {
     );
   }));
 
-  page('/filter', able('locations-able'), basicViewSetup(function () {
+  page('/filter', able('locations-read'), basicViewSetup(function () {
     return import(
       /* webpackChunkName: "filter-view" */
       '../components/Filter'
