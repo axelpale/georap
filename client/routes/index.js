@@ -79,8 +79,9 @@ exports.route = function () {
       if (account.isRoleAble(role, cap)) {
         return next();
       }
+      // Not able.
 
-      // If not logged in
+      // Redirect to login page if the user is not logged in.
       if (role === 'public') {
         // Remember original requested path and redirect to it after login
         afterLogin.set(ctx);
