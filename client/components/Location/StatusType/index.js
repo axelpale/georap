@@ -5,7 +5,7 @@ var StatusTypeForm = require('./Form');
 var template = require('./template.ejs');
 var statusTypeTemplate = require('./statusType.ejs');
 var locationTypes = georap.config.locationTypes;
-var able = georap.stores.account.able;
+var ableOwn = georap.stores.account.ableOwn;
 var __ = georap.i18n.__;
 
 module.exports = function (location) {
@@ -19,6 +19,9 @@ module.exports = function (location) {
   this.bind = function ($mountEl) {
     $mount = $mountEl;
 
+    var loc = location.getRaw();
+    var ableEdit = ableOwn(loc, 'locations-update');
+
     $mount.html(template({
       // The current status and type
       statusTypeHtml: statusTypeTemplate({
@@ -28,11 +31,11 @@ module.exports = function (location) {
         defaultType: locationTypes[0],
         __: __,
       }),
-      able: able,
+      ableEdit: ableEdit,
       __: __,
     }));
 
-    if (able('locations-update')) {
+    if (ableEdit) {
       var form = new StatusTypeForm(location);
       children.opener = new components.Opener(form);
       children.opener.bind({
