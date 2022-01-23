@@ -59,6 +59,10 @@ module.exports = function (rawLoc) {
 
   // Public Getters
 
+  self.getRaw = function () {
+    return rawLoc;
+  };
+
   self.getAltGeom = function (system) {
     // Return coordinates in the given coordinate systems.
     // Only systems in rawLoc.altGeom are available.
