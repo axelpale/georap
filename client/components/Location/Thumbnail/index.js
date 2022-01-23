@@ -6,7 +6,7 @@ var template = require('./template.ejs');
 var models = require('georap-models');
 var rootBus = require('georap-bus');
 var ui = require('georap-ui');
-var able = georap.stores.account.able;
+var ableOwn = georap.stores.account.ableOwn;
 
 module.exports = function (location) {
   // Parameters:
@@ -24,8 +24,10 @@ module.exports = function (location) {
   self.bind = function ($mountEl) {
     $mount = $mountEl;
 
+    var ableUpdate = ableOwn(location, 'locations-update');
+
     $mount.html(template({
-      able: able,
+      ableUpdate: ableUpdate,
     }));
     $elems.thumbnail = $mount.find('.location-thumbnail-viewer');
 
@@ -50,7 +52,7 @@ module.exports = function (location) {
     });
 
     // Setup form
-    if (able('locations-update')) {
+    if (ableUpdate) {
       $elems.open = $mount.find('.location-thumbnail-open');
       $elems.open.click(function () {
         if (children.form) {
