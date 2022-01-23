@@ -63,17 +63,17 @@ time:hover {
 .card-close-icon {
   position: absolute;
   bottom: -9px;
-  left: -1.6em;
-  width: 2.3em;
+  left: -1.7em;
+  width: 1.9em;
   height: 1.92em;
   font-size: 3rem;
-  color: #d1d1d1;
-  background-color: white;
+  color: #666;
+  background-color: black;
   padding-top: 0.22em;
   padding-left: 0.43em;
   cursor: pointer;
   border-radius: 10px;
-  border-left: 1px solid grey;
+  border-left: 1px solid #666;
 }
 .card-layer-content {
   position: absolute;
