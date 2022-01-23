@@ -2,7 +2,8 @@ var template = require('./template.ejs');
 var ui = require('georap-ui');
 var components = require('georap-components');
 var NameForm = require('./NameForm');
-var able = georap.stores.account.able;
+var account = georap.stores.account;
+var ableOwn = account.ableOwn;
 var __ = georap.i18n.__;
 
 module.exports = function (location) {
@@ -15,14 +16,18 @@ module.exports = function (location) {
   this.bind = function ($mountEl) {
     $mount = $mountEl;
 
+    var loc = location.getRaw(); // transition to no-model
+    var locName = (loc.name ? loc.name : __('untitled'));
+    var ableEdit = ableOwn(loc, 'locations-update');
+
     $mount.html(template({
-      location: location,
-      able: able,
+      locName: locName,
+      ableEdit: ableEdit,
       __: __,
     }));
 
     $elems.display = $mount.find('.location-name-display');
-    $elems.show = $mount.find('.location-rename-show'); // button
+    $elems.open = $mount.find('.location-rename-open'); // button
     $elems.formContainer = $mount.find('.location-rename-form-container');
 
     // Listen for events
@@ -36,12 +41,12 @@ module.exports = function (location) {
 
     // Rename form
 
-    if (able('locations-update')) {
+    if (ableEdit) {
       var nameForm = new NameForm(location);
       children.formOpener = new components.Opener(nameForm);
       children.formOpener.bind({
         $container: $elems.formContainer,
-        $button: $elems.show,
+        $button: $elems.open,
       });
     }
   };

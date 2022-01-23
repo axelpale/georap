@@ -1,9 +1,7 @@
-<% var locName = location.getName(); %>
-<% locName = (locName === '' ? __('untitled') : locName); %>
 <h1>
   <span class="location-name-display"><%= locName %></span>
-  <% if (able('locations-update')) { %>
-  <button type="button" class="location-rename-show btn btn-default btn-sm">
+  <% if (ableEdit) { %>
+  <button type="button" class="location-rename-open btn btn-default btn-sm">
     <span class="glyphicon glyphicon-pencil"></span>
   </button>
   <% } %>
