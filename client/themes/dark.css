@@ -152,6 +152,9 @@ a.list-group-item, button.list-group-item {
 #card-layer {
   background-color: #111; /* Bad rgba(17, 17, 17, 0.95); */
 }
+.card-close-icon {
+  color: #444; /* panel border equivalent */
+}
 /* Georap tags */
 .georap-tag {
   border: 0 solid gray;
