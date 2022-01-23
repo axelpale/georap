@@ -4,7 +4,7 @@ var GeomForm = require('./Form');
 var GeomMore = require('./More');
 var template = require('./template.ejs');
 var renderGeoms = require('./renderGeoms');
-var able = georap.stores.account.able;
+var ableOwn = georap.stores.account.ableOwn;
 var MAP_SYSTEM = 'WGS84';
 
 module.exports = function (location) {
@@ -26,22 +26,25 @@ module.exports = function (location) {
     $mount = $mountEl;
     var __ = georap.i18n.__;
 
+    var loc = location.getRaw();
+
     // Geom in every available coordinate system
-    var geostamps = renderGeoms(location.getAltGeoms());
+    var geostamps = renderGeoms(loc.altGeom);
     var defaultGeostamp = geostamps[0].html;
+
+    var ableEdit = ableOwn(loc, 'locations-update');
 
     // Render
     $mount.html(template({
-      location: location,
       geostamp: defaultGeostamp,
-      able: able,
+      ableEdit: ableEdit,
       __: __,
     }));
 
     $elems.geostamp = $mount.find('#location-geom-geostamp');
 
     var geomForm = null;
-    if (able('locations-update')) {
+    if (ableEdit) {
       geomForm = new GeomForm(location.getId(), location.getGeom());
       children.formOpener = new Opener(geomForm);
       children.formOpener.bind({
