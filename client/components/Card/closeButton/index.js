@@ -3,7 +3,8 @@ var template = require('./template.ejs');
 module.exports = function ($mount, cardType, onClick) {
   // Remove possible previous icon
   $mount.find('.card-close-icon').remove();
-  if (cardType === 'page') {
+  // If there is space at the left, create a new close button.
+  if (cardType !== 'full') {
     $mount.prepend(template({}));
     var $close = $mount.find('.card-close-icon');
     $close.off('click');
