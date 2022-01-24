@@ -75,7 +75,7 @@ const substeps = [
         delete loc.creator;
         return iterNext(null, loc);
       }
-      return iterNext(null, false); // skip
+      return iterNext(null, null); // skip
     }, iter.updateEachReport(nextStep));
   },
 

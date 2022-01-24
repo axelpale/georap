@@ -4,8 +4,8 @@ const db = require('georap-db');
 exports.updateEach = function (collection, iteratee, callback) {
   // Replace each document in a MongoDB collection. Iteratee is the update
   // function, takes in a document and must call the next(err, updatedDocument)
-  // callback function. If updatedDocument is null, that document is left
-  // unaltered.
+  // callback function. If updatedDocument is null or false, that document
+  // is left unaltered.
   //
   // Parameters:
   //   collection
@@ -62,7 +62,7 @@ exports.updateEach = function (collection, iteratee, callback) {
           }
 
           // Skip null docs, no need to replace.
-          if (updatedDoc === null) {
+          if (updatedDoc === null || updatedDoc === false) {
             return eachNext(null);
           }
 
