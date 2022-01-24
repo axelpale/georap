@@ -157,6 +157,7 @@ a.list-group-item, button.list-group-item {
 }
 .card-close-icon {
   color: #444; /* panel border equivalent */
+  border-color: #444;
 }
 /* Georap tags */
 .georap-tag {
