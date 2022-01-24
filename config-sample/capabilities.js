@@ -14,7 +14,9 @@ module.exports = { // New in v14
   'resetter': [
     'account-password-reset',
   ],
-  'frozen': [],
+  'frozen': [], // not able to login. Is different from 'banned'?
+  'reader': [], // able to see content after login but not modify
+  'writer': [], // replaces basic?
   'basic': [],
   'moderator': [],
   'admin': [
