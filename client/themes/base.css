@@ -140,15 +140,15 @@ time:hover {
   padding: 0.9em;
   max-width: 60%; /* Firefox needs width to be specified */
 }
-#georap-mainmenu {
+.mainmenu-btn {
   padding: 8px;
 }
-#georap-mainmenu img {
+.mainmenu-btn img {
   width: 32px;
   height: 32px;
 }
-#georap-mainmenu:hover img,
-#georap-mainmenu:focus img,
+.mainmenu-btn:hover img,
+.mainmenu-btn:focus img,
 #georap-toolbar-main .dropdown.open button img {
   opacity: 0.1;
 }

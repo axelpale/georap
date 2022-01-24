@@ -30,23 +30,22 @@ module.exports = function (mapComp) {
   //     components.Map instance
 
   // Init
+  var $mount = null;
   var self = this;
   emitter(self);
 
-  // Root element. Remember for the unbinding.
-  var _$root = null;
-
   // Public methods
 
-  self.bind = function ($mount) {
+  self.bind = function ($mountEl) {
     // Add listeners to the rendered menu.
     //
     // Parameters:
-    //   $mount
+    //   $mountEl
     //     The point where one should listen the events.
     //     The existence of this point in DOM is required even though
     //     it contents can be dynamically modified later, including
     //     the buttons to bind events to.
+    $mount = $mountEl;
 
     $mount.html(template({
       glyphicon: glyphiconTemplate,
@@ -57,11 +56,11 @@ module.exports = function (mapComp) {
       __: georap.i18n.__,
     }));
 
-    _$root = $mount;
+    // Menu opening.
+    // To ensure that opening and closing the menu does not
+    // affect click bindings, add listeners directly to $mount
 
-    // Menu opening
-
-    $mount.on('click', '#georap-mainmenu', function () {
+    $mount.on('click', '#georap-mainmenu-btn', function () {
       // Close the sidebar whenever user opens the menu.
       return georap.go('/');
     });
@@ -216,9 +215,10 @@ module.exports = function (mapComp) {
   };
 
   self.unbind = function () {
-    if (_$root !== null) {
-      _$root.off('click');
+    if ($mount) {
+      $mount.off('click');
+      $mount = null;
+      filterStore.off();
     }
-    filterStore.off();
   };
 };
