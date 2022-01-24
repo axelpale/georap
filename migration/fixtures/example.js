@@ -327,7 +327,6 @@ module.exports = {
         // points30days: to be created by worker
         // points365days: to be created by worker
         role: 'admin',
-        status: 'active',
         securityToken: '',
         deleted: false,
         createdAt: NOW,
@@ -339,8 +338,7 @@ module.exports = {
         hash: bcrypt.hashSync('foobar', config.bcrypt.rounds),
         name: 'johndoe',
         points: 0,
-        role: 'basic',
-        status: 'deactivated',
+        role: 'frozen',
         securityToken: '',
         deleted: false,
         createdAt: NOW,

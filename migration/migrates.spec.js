@@ -443,7 +443,10 @@ describe('migrates.migrate', () => {
           assert.ifError(err2);
           assertFixtureEqual('users', 'v14', (err3) => {
             assert.ifError(err3);
-            done();
+            assertFixtureEqual('locations', 'v14', (err4) => {
+              assert.ifError(err4);
+              done();
+            });
           });
         });
       });

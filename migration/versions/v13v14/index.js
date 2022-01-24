@@ -3,6 +3,7 @@
 // 2. users have new property: securityToken
 // 3. users have new property: role (deprecates prop: admin)
 // 4. rename location.creator to location.user
+// 5. merge user status into role
 //
 // Idempotent: true when NODE_ENV=development
 //
@@ -33,7 +34,7 @@ const substeps = [
     });
   },
 
-  function refactorEntries(nextStep) {
+  function migrateUsers(nextStep) {
     console.log('2. 3. Add securityToken and role properties to users...');
 
     const coll = db.collection('users');
@@ -75,6 +76,23 @@ const substeps = [
         return iterNext(null, loc);
       }
       return iterNext(null, false); // skip
+    }, iter.updateEachReport(nextStep));
+  },
+
+  function migrateUserStatus(nextStep) {
+    console.log('5. Merge user status into user role...');
+
+    const coll = db.collection('users');
+
+    iter.updateEach(coll, (origUser, iterNext) => {
+      const user = clone(origUser);
+      if (user.status) {
+        if (user.status === 'deactivated') {
+          user.role = 'frozen';
+        }
+        delete user.status;
+      }
+      return iterNext(null, user);
     }, iter.updateEachReport(nextStep));
   },
 ];
