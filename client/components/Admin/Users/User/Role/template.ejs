@@ -1,8 +1,9 @@
-<h3>
-  <%= __('role') %>: <%= __('user-role', user.role) %>
+<h4 style="margin-bottom: 0.236em"><%= __('role') %></h4>
+<p class="admin-user-role-title">
+  <span><%= __('user-role', user.role) %></span>
   <button type="button" class="admin-user-role-edit btn btn-default btn-xs">
     <span class="glyphicon glyphicon-pencil"></span> <%= __('edit') %>
   </button>
-</h3>
+</p>
 
 <div class="admin-user-role-form-container"></div>

@@ -1,9 +1,10 @@
-<h3>
-  <%= __('status') %>: <%= status === 'active' ? __('status-active') : __('status-deactive') %>
+<h4 style="margin-bottom: 0.236em"><%= __('status') %></h4>
+<p>
+  <span><%= status === 'active' ? __('status-active') : __('status-deactive') %></span>
   <button id="admin-user-status-edit" type="button" class="btn btn-default btn-xs">
     <span class="glyphicon glyphicon-pencil"></span> <%= __('edit') %>
   </button>
-</h3>
+</p>
 
 <form id="admin-user-status-form" class="hidden panel panel-primary">
   <div class="panel-heading">
