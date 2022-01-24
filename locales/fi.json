@@ -342,8 +342,9 @@
   "user-restore-you-sure": "Oletko varma?",
   "user-role": {
     "admin": "Ylläpitäjä",
-    "mod": "Moderaattori",
-    "basic": "Perusjäsen"
+    "basic": "Perusjäsen",
+    "frozen": "Jäädytetty",
+    "moderator": "Moderaattori"
   },
   "user-role-noauto": "Et voi alentaa oman tilisi roolia.",
   "user-tagged-loc": "muutti paikan",

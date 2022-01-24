@@ -343,8 +343,9 @@
   "user-restore-you-sure": "Are you sure?",
   "user-role": {
     "admin": "Admin",
-    "mod": "Moderator",
-    "basic": "Basic"
+    "basic": "Basic",
+    "frozen": "Frozen",
+    "moderator": "Moderator"
   },
   "user-role-noauto": "You cannot downgrade your own account.",
   "user-tagged-loc": "tagged",
