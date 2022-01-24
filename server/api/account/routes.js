@@ -8,7 +8,7 @@ const router = require('express').Router();
 // Public routes - no login
 
 // Authentication
-router.post('/', able('account-login'),
+router.post('/', able('account-login-form'),
             jsonParser, handlers.login);
 // Password reset request
 router.post('/reset/email', able('account-password-reset-request'),

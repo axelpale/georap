@@ -5,7 +5,7 @@
 module.exports = { // New in v14
   'public': [
     'geometry',
-    'account-login',
+    'account-login-form',
     'account-password-reset-request',
   ],
   'invited': [
