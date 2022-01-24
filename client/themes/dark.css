@@ -33,6 +33,9 @@ hr {
 .dropdown-menu .divider {
   background-color: #222;
 }
+.mainmenu-btn img {
+  filter: invert(1);
+}
 
 .form-control {
   color: #fff;
