@@ -75,6 +75,9 @@ time:hover {
   border-radius: 10px;
   border-left: 1px solid #666;
 }
+.card-close-icon:hover {
+  color: #999;
+}
 .card-layer-content {
   position: absolute;
   width: 100%;
