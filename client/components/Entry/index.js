@@ -10,6 +10,8 @@ var FormAdminView = require('./FormAdmin');
 var flagstamp = require('./flagstamp');
 var ui = require('georap-ui');
 var account = georap.stores.account;
+var ableOwn = account.ableOwn;
+var able = account.able;
 var locale = georap.i18n.locale;
 var __ = georap.i18n.__;
 
@@ -33,15 +35,16 @@ module.exports = function (entry, opts) {
   var $elems = {};
   var children = {};
 
-  var isAuthor = account.isMe(entry.user);
-  var isAdmin = account.isAdmin();
-  var isAuthorOrAdmin = (isAuthor || isAdmin);
+  var ableUpdate = ableOwn(entry, 'posts-update');
+  var ableDelete = ableOwn(entry, 'posts-delete');
 
   this.bind = function ($mountEl) {
     $mount = $mountEl;
 
     $mount.html(template({
-      isAuthorOrAdmin: isAuthorOrAdmin,
+      ableUpdate: ableUpdate,
+      ableDelete: ableDelete,
+      enableFooter: able('comments-create'),
     }));
 
     // Heading text
@@ -77,44 +80,49 @@ module.exports = function (entry, opts) {
     children.attachments.bind($elems.attachments);
 
     // Comment list
-    children.comments = new CommentsView(entry);
-    children.comments.bind($mount.find('.entry-comments-container'));
+    if (able('comments-read')) {
+      children.comments = new CommentsView(entry);
+      children.comments.bind($mount.find('.entry-comments-container'));
+    }
 
     // Comment form
-    $elems.footer = $mount.find('.entry-footer');
-    $elems.commentForm = $mount.find('.comment-form-container');
-    children.commentButton = new CommentButton();
-    children.commentButton.bind($mount.find('.comment-button-container'));
-    children.commentButton.on('open', function () {
-      ui.hide($elems.footer);
-      ui.show($elems.commentForm);
-      children.commentForm = new CommentForm(entry);
-      children.commentForm.bind($elems.commentForm);
+    if (able('comments-create')) {
+      $elems.footer = $mount.find('.entry-footer');
+      $elems.commentForm = $mount.find('.comment-form-container');
+      children.commentButton = new CommentButton();
+      children.commentButton.bind($mount.find('.comment-button-container'));
+      children.commentButton.on('open', function () {
+        ui.hide($elems.footer);
+        ui.show($elems.commentForm);
+        children.commentForm = new CommentForm(entry);
+        children.commentForm.bind($elems.commentForm);
 
-      // React to cancel button
-      children.commentForm.once('exit', function () {
-        ui.show($elems.footer);
-        ui.hide($elems.commentForm);
-        children.commentForm.unbind();
-        delete children.commentForm;
+        // React to cancel button
+        children.commentForm.once('exit', function () {
+          ui.show($elems.footer);
+          ui.hide($elems.commentForm);
+          children.commentForm.unbind();
+          delete children.commentForm;
+        });
+        // React to successful form submission
+        children.commentForm.once('success', function () {
+          ui.show($elems.footer);
+          ui.hide($elems.commentForm);
+          children.commentForm.unbind();
+          delete children.commentForm;
+        });
       });
-      // React to successful form submission
-      children.commentForm.once('success', function () {
-        ui.show($elems.footer);
-        ui.hide($elems.commentForm);
-        children.commentForm.unbind();
-        delete children.commentForm;
-      });
-    });
+    }
 
-    if (isAuthorOrAdmin) {
+    // Post editing form
+    if (ableUpdate || ableDelete) {
       $elems.openBtn = $mount.find('.entry-form-open');
       $elems.openBtn.click(function () {
         var $formContainer = $mount.find('.entry-form-container');
         if (ui.isHidden($formContainer)) {
           ui.show($formContainer);
 
-          if (isAuthor) {
+          if (ableUpdate) {
             children.editform = new FormView(entry.locationId, entry);
             children.editform.bind($formContainer);
           } else {
