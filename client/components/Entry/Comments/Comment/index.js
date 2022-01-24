@@ -3,9 +3,12 @@ var CommentForm = require('../../CommentForm');
 var CommentFormAdmin = require('../../CommentFormAdmin');
 var Thumbnail = require('georap-components').Thumbnail;
 var commentModel = require('georap-models').comment;
+var isExpired = require('./isExpired');
 var ui = require('georap-ui');
 var account = georap.stores.account;
 var locale = georap.i18n.locale;
+var ableOwn = account.ableOwn;
+
 
 module.exports = function (entry, comment) {
   // Parameters:
@@ -24,14 +27,16 @@ module.exports = function (entry, comment) {
   self.bind = function ($mountEl) {
     $mount = $mountEl;
 
-    var isAuthor = account.isMe(comment.user);
-    var isAdmin = account.isAdmin();
-    var isAuthorOrAdmin = (isAuthor || isAdmin);
+    // Do not allow comment to be edited if the comment is old
+    var ableUpdate = ableOwn(comment, 'comments-update');
+    var canUpdate = ableUpdate && !isExpired(comment);
+    var canDelete = ableOwn(comment, 'comments-delete');
 
     $mount.html(template({
       author: comment.user,
       timestamp: ui.timestamp(comment.time, locale),
-      isAuthorOrAdmin: isAuthorOrAdmin,
+      canUpdate: canUpdate,
+      canDelete: canDelete,
     }));
 
     // Message
@@ -55,7 +60,7 @@ module.exports = function (entry, comment) {
       ui.hide($elems.thumb);
     }
 
-    if (isAuthorOrAdmin) {
+    if (canUpdate || canDelete) {
       $elems.form = $mount.find('.comment-edit-container');
       $elems.open = $mount.find('.comment-edit-open');
       $elems.open.click(function () {
@@ -66,11 +71,10 @@ module.exports = function (entry, comment) {
         } else {
           ui.show($elems.form);
 
-          // Do not allow comment to be edited if the comment is old
-          // or the user is not the author of the comment.
-          var ageMs = commentModel.getAgeMs(comment);
-          var maxAgeMs = georap.config.comments.secondsEditable * 1000;
-          if (isAuthor && ageMs < maxAgeMs) {
+          // Refresh canUpdate because comment might expire
+          canUpdate = ableUpdate && !isExpired(comment);
+
+          if (canUpdate) {
             children.form = new CommentForm(entry, comment);
           } else {
             children.form = new CommentFormAdmin(entry, comment);

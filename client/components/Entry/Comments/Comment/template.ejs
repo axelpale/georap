@@ -1,6 +1,6 @@
 <span class="comment-attachment-thumbnail"></span>
 
-<% if (isAuthorOrAdmin) { %>
+<% if (canUpdate || canDelete) { %>
 <div class="pull-right comment-meta">
   <button type="button" class="btn btn-default btn-sm comment-edit-open">&hellip;</button>
 </div>
