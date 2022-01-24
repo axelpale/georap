@@ -205,7 +205,7 @@ exports.route = function () {
     return next();
   });
 
-  page('/account', able('account-edit'), function () {
+  page('/account', able('account-update'), function () {
     import(
       /* webpackChunkName: "account-view" */
       '../components/Account'
@@ -217,14 +217,14 @@ exports.route = function () {
       .catch(importErrorHandler);
   });
 
-  page('/account/email', able('account-edit'), basicViewSetup(function () {
+  page('/account/email', able('account-update'), basicViewSetup(function () {
     return import(
       /* webpackChunkName: "account-Email" */
       '../components/Account/ChangeEmail'
     );
   }));
 
-  page('/account/password', able('account-edit'), basicViewSetup(function () {
+  page('/account/password', able('account-update'), basicViewSetup(function () {
     return import(
       /* webpackChunkName: "account-password" */
       '../components/Account/ChangePassword'

@@ -23,7 +23,7 @@ module.exports = { // New in v14
     'admin',
     'account-auth', // allow login and authentication
     'account-invite',
-    'account-edit',
+    'account-update',
     'attachments-read',
     'attachments-update-any',
     'attachments-update-own',

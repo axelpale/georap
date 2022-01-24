@@ -27,13 +27,13 @@ router.post('/signup', able('account-signup'),
 // User routes - require authentication
 
 // Email change
-router.post('/email', able('account-edit'),
+router.post('/email', able('account-update'),
             jsonParser, handlers.changeEmailSend);
-router.post('/email/:code', able('account-edit'),
+router.post('/email/:code', able('account-update'),
             jsonParser, handlers.changeEmailSave);
 
 // Password change
-router.post('/password', able('account-edit'),
+router.post('/password', able('account-update'),
             jsonParser, handlers.changePassword);
 
 // Admin routes - require authentication with admin privilege

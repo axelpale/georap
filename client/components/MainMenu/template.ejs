@@ -78,7 +78,7 @@
           <li role="separator" class="divider"></li>
         <% } %>
 
-        <% if (able('account-edit')) { %>
+        <% if (able('account-update')) { %>
         <li class="dropdown-header"><%= user.name %></li>
         <li>
           <a href="/account"><%= glyphicon({ name: 'user' }) %> <%= __('account-settings') %></a>
