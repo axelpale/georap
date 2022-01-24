@@ -68,32 +68,6 @@ exports.setRole = function (username, newRole, callback) {
   });
 };
 
-exports.setStatus = function (username, newStatus, callback) {
-  // Set user status
-  //
-  // Parameters:
-  //   username
-  //   newStatus
-  //     Available values are 'active' | 'deactivated'
-  //   callback
-  //     function (err)
-
-  if (typeof username !== 'string' || typeof newStatus !== 'string' ||
-      (newStatus !== 'active' && newStatus !== 'deactivated')) {
-    throw new Error('invalid parameters');
-  }
-
-  const coll = db.collection('users');
-  const q = { name: username };
-  const up = { $set: { 'status': newStatus } };
-
-  coll.updateOne(q, up, (err) => {
-    if (err) {
-      return callback(err);
-    }
-    return callback();
-  });
-};
 
 exports.removeOne = function (username, callback) {
   if (typeof username !== 'string') {

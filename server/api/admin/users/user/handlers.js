@@ -32,36 +32,6 @@ exports.getOne = function (req, res, next) {
 };
 
 
-exports.setStatus = function (req, res, next) {
-
-  const isActive = req.body.isActive;
-
-  const targetName = req.username;
-  const authorName = req.user.name;
-  const adminName = config.admin.username;
-
-  // Prevent author blocking him/herself out.
-  if (authorName === targetName) {
-    return res.status(status.FORBIDDEN).send(req.__('user-status-noauto'));
-  }
-
-  // Prevent config-admin to become blocked
-  if (targetName === adminName) {
-    return res.status(status.FORBIDDEN).send(req.__('user-status-noadmin'));
-  }
-
-  const newStatus = isActive ? 'active' : 'deactivated';
-
-  dal.setStatus(targetName, newStatus, (err) => {
-    if (err) {
-      return next(err);
-    }
-
-    return res.sendStatus(status.OK);
-  });
-};
-
-
 exports.setRole = function (req, res, next) {
   // Set user role
   const newRole = req.body.role;

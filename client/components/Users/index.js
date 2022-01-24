@@ -38,12 +38,8 @@ module.exports = function () {
         });
       });
 
-      var activeUsers = rawUsers.filter(function (u) {
-        return u.status === 'active';
-      });
-      var passiveUsers = rawUsers.filter(function (u) {
-        return u.status === 'deactivated';
-      });
+      // TODO make banned users look gray
+      var activeUsers = rawUsers;
 
       // Order by points
       var bestUsersAllTime = activeUsers.sort(function (ua, ub) {
@@ -94,11 +90,6 @@ module.exports = function () {
         }).filter(hasPoints),
         prefix: '+',
       }));
-
-      $('#georap-deactivated-users').html(listTemplate({
-        users: passiveUsers,
-      }));
-
     });
   };
 

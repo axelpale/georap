@@ -3,7 +3,6 @@
 var admin = georap.stores.admin;
 var template = require('./template.ejs');
 var InfoComponent = require('./Info');
-var StatusComponent = require('./Status');
 var EventsComponent = require('./Events');
 var RoleComponent = require('./Role');
 var RemovalComponent = require('./Removal');
@@ -29,7 +28,6 @@ module.exports = function (username) {
     }));
 
     $elems.infoRoot = $mount.find('.admin-user-info-root');
-    $elems.statusRoot = $mount.find('.admin-user-status-root');
     $elems.eventsRoot = $mount.find('.admin-user-events-root');
     $elems.loading = $mount.find('.admin-user-loading');
     $elems.roleRoot = $mount.find('.admin-user-role-root');
@@ -50,9 +48,6 @@ module.exports = function (username) {
       children.infoComp.bind($elems.infoRoot);
 
       if (!user.deleted) {
-        children.statusComp = new StatusComponent(user);
-        children.statusComp.bind($elems.statusRoot);
-
         children.eventsComp = new EventsComponent(user);
         children.eventsComp.bind($elems.eventsRoot);
 
@@ -65,7 +60,6 @@ module.exports = function (username) {
         children.removalComp.bind($elems.removalRoot);
         children.removalComp.on('success', function () {
           children.infoComp.unbind();
-          children.statusComp.unbind();
           children.roleComp.unbind();
           children.removalComp.unbind();
           ui.show($elems.removalSuccess);

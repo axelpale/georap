@@ -29,8 +29,7 @@ exports.createUser = function (username, email, password, callback) {
       name: username,
       email: email,
       hash: pwdHash,
-      role: 'basic',
-      status: 'active',  // options. 'active' | 'deactivated',
+      role: 'basic', // TODO rename to writer
       createdAt: (new Date()).toISOString(),
       loginAt: (new Date()).toISOString(),
     }, (qerr) => {

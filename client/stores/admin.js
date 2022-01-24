@@ -61,31 +61,6 @@ exports.setRole = function (username, newRole, callback) {
 };
 
 
-exports.setStatus = function (username, isActive, callback) {
-  // Parameters:
-  //   username
-  //     string
-  //   isActive
-  //     boolean
-  //   callback
-  //     function (err)
-  //
-
-  // Assert parameters
-  if (typeof username !== 'string' ||
-      typeof isActive !== 'boolean' ||
-      typeof callback !== 'function') {
-    throw new Error('invalid parameters');
-  }
-
-  request.postJSON({
-    url: '/api/admin/users/' + username + '/status',
-    data: {
-      isActive: isActive,
-    },
-  }, callback);
-};
-
 exports.removeUser = function (username, callback) {
   // Request to remove user account.
   //

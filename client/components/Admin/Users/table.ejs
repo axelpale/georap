@@ -3,7 +3,6 @@
     <tr>
       <th><%= __('username') %></th>
       <th><%= __('role') %></th>
-      <th><%= __('status') %></th>
     </tr>
   </thead>
   <tbody>
@@ -11,7 +10,6 @@
     <tr>
       <td><a href="/admin/users/<%= p.name %>"><%= p.name %></a></td>
       <td><%= __('user-role', p.role) %></td>
-      <td><%= p.status === 'active' ? __('status-active') : __('status-deactive') %></td>
     </tr>
   <% }); %>
   </tbody>
