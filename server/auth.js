@@ -15,6 +15,7 @@
 const jwt = require('express-jwt');
 const config = require('georap-config');
 const userDal = require('./api/users/user/dal');
+const grable = require('georap-able');
 
 module.exports = jwt({
   secret: config.secret,
@@ -42,8 +43,13 @@ module.exports = jwt({
         }
 
         if (storedUser) {
-          if (storedUser.status === 'active') {
-            return done(null, false);
+          // account exists
+          if (!storedUser.deleted) {
+            // account is not soft-deleted
+            if (grable.isAble(storedUser, 'account-auth')) {
+              // account has role that allows authentication
+              return done(null, false);
+            }
           }
         }
 

@@ -21,6 +21,7 @@ module.exports = { // New in v14
   'moderator': [],
   'admin': [
     'admin',
+    'account-auth', // allow login and authentication
     'account-invite',
     'account-edit',
     'attachments-read',

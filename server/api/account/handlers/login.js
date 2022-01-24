@@ -1,4 +1,5 @@
 const status = require('http-status-codes');
+const grable = require('georap-able');
 const db = require('georap-db');
 const bcrypt = require('bcryptjs');
 const dal = require('../dal');
@@ -35,6 +36,7 @@ module.exports = function (req, res, next) {
   //   Due to this difficulty, we must implement case-insensitivity
   //   in another manner.
   const q = {
+    deleted: false,
     $or: [
       { name: email },
       { email: email },
@@ -52,6 +54,15 @@ module.exports = function (req, res, next) {
       return res.status(status.UNAUTHORIZED).send(msg);
     }
 
+    // Check if user has ability to authenticate
+    if (!grable.isAble(user, 'account-auth')) {
+      const msg = 'Your account is frozen. ' +
+        'This can happen after prolonged inactivity, bad behavior, ' +
+        'or other security-related reasons. ' +
+        'Contact site administration for further assistance.';
+      return res.status(status.FORBIDDEN).send(msg);
+    }
+
     bcrypt.compare(password, user.hash, (err2, match) => {
       if (err2) {
         // Hash comparison failed. Password might still be correct, though.
@@ -64,25 +75,7 @@ module.exports = function (req, res, next) {
         return res.status(status.UNAUTHORIZED).send(msg);
       }
 
-      // Else, success. Passwords match.
-
-      // Check if user is deactivated
-      if (user.status !== 'active') {
-        const msg = 'Your account is deactivated. ' +
-          'This can happen for prolonged inactivity or other security-' +
-          'related reasons. Contact site administration for futher ' +
-          'assistance.';
-        return res.status(status.FORBIDDEN).send(msg);
-      }
-
-      // Provide a bit of backward compatibility in v13-v14 transition
-      // Remove in v15.
-      if (!user.role && typeof user.admin === 'boolean') {
-        // Pre-v14 db schema
-        user.role = user.admin ? 'admin' : 'basic';
-      }
-
-      // else, build jwt token
+      // Else, success. Passwords match. Build jwt token
       const token = authToken.generate(user.name, user.email, user.role);
 
       // Register login time.
