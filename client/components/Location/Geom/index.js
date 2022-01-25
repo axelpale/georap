@@ -57,8 +57,8 @@ module.exports = function (location) {
     var iconDown = '<span class="glyphicon glyphicon-chevron-down"></span>';
     var iconUp = '<span class="glyphicon glyphicon-chevron-up"></span>';
     children.moreOpener = new Opener(geomMore, {
-      labelClosed: iconDown + ' ' + __('more'),
-      labelOpen: iconUp + ' ' + __('less'),
+      labelClosed: iconDown, // + ' ' + __('more'),
+      labelOpen: iconUp, // + ' ' + __('less'),
     });
     children.moreOpener.bind({
       $container: $mount.find('#location-geom-more'),
