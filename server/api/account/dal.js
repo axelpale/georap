@@ -19,6 +19,7 @@ exports.createUser = function (username, email, password, callback) {
   const users = db.collection('users');
 
   const r = config.bcrypt.rounds;
+  const defaultRole = config.defaultRole;
 
   bcrypt.hash(password, r, (berr, pwdHash) => {
     if (berr) {
@@ -29,9 +30,9 @@ exports.createUser = function (username, email, password, callback) {
       name: username,
       email: email,
       hash: pwdHash,
-      role: 'basic', // TODO rename to writer
       createdAt: (new Date()).toISOString(),
       loginAt: (new Date()).toISOString(),
+      role: defaultRole,
     }, (qerr) => {
       if (qerr) {
         return callback(qerr);

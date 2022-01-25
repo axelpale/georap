@@ -122,6 +122,9 @@ module.exports = {
         type: 'string',
       },
     },
+    defaultRole: {
+      type: 'string',
+    },
     capabilities: {
       type: 'object',
     },

@@ -139,6 +139,7 @@ module.exports = {
 
   //##### USER MANAGEMENT #####
   roles: ['frozen', 'basic', 'moderator', 'admin'], // New in v14
+  defaultRole: 'reader', // New in v14
   capabilities: capabilities, // New in v14
 
 
