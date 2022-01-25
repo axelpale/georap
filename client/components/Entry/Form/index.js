@@ -8,16 +8,17 @@
 // - temporary store of content for interrupted creation or edit
 //
 var template = require('./template.ejs');
-var AttachmentsForm = require('../AttachmentsForm');
-var MarkdownView = require('../Markdown');
-var FlagsForm = require('../FlagsForm');
+var EditForm = require('./EditForm');
 var ErrorView = require('../Error');
-var RemoveForm = require('../Remove');
 var MoveForm = require('../MoveForm');
-var drafting = require('./drafting');
 var ui = require('georap-ui');
 var emitter = require('component-emitter');
+var components = require('georap-components');
+var Opener = components.Opener;
+var Remover = components.Remover;
 var entries = georap.stores.entries;
+var account = georap.stores.account;
+var ableOwn = account.ableOwn;
 var __ = georap.i18n.__;
 
 module.exports = function (locationId, entry) {
@@ -32,9 +33,6 @@ module.exports = function (locationId, entry) {
   var isNew = false;
   if (!entry) {
     isNew = true;
-    // Init with empty entry or previously saved draft.
-    drafting.start(locationId);
-    entry = drafting.load(locationId);
   }
 
   var $mount = null;
@@ -46,196 +44,136 @@ module.exports = function (locationId, entry) {
   self.bind = function ($mountEl) {
     $mount = $mountEl;
 
+    var ableUpdate = ableOwn(entry, 'posts-update');
+    var ableMove = ableOwn(entry, 'posts-move');
+    var ableDelete = ableOwn(entry, 'posts-delete');
+
     $mount.html(template({
-      entry: entry,
       isNew: isNew,
+      ableUpdate: ableUpdate,
+      ableMove: ableMove,
+      ableDelete: ableDelete,
       __: __,
     }));
 
-    // Markdown form
-    children.markdown = new MarkdownView(entry.markdown, {
-      label: __('tell-about-location') + ':',
-      rows: 5,
-    });
-    children.markdown.bind($mount.find('.form-markdown-container'));
-    // Focus to textarea and move cursor to message end
-    setTimeout(function () {
-      children.markdown.focus();
-    }, 0);
-
-    // Attachments form
-    children.attachments = new AttachmentsForm(entry.attachments, {
-      label: __('photos-and-documents') + ':',
-    });
-    children.attachments.bind($mount.find('.form-attachments-container'));
-
-    // Flags form
-    children.flags = new FlagsForm(entry.flags);
-    children.flags.bind($mount.find('.form-flags-container'));
-
-    // Error
+    // Error viewer
     children.error = new ErrorView();
     children.error.bind($mount.find('.form-error-container'));
     // Progress bar
     $elems.progress = $mount.find('.form-progress');
 
-    // Save button
-    $elems.saveBtn = $mount.find('.entry-form-save');
-    $elems.saveBtn.click(function () {
-      // Create new entry or update the existing
+    // Edit form
+    if (ableUpdate) {
+      children.edit = new EditForm(locationId, entry);
+      children.edit.bind($mount.find('.entry-edit-form'));
 
-      // Prevent double click
-      $elems.saveBtn.attr('disabled', 'disabled');
+      // Save button
+      $elems.saveBtn = $mount.find('.entry-form-save');
+      $elems.saveBtn.click(function () {
+        // Create new entry or update the existing
 
-      var entryData = self.getEntryData();
+        // Prevent double click
+        $elems.saveBtn.attr('disabled', 'disabled');
 
-      var onError = function (msg) {
-        // Hide progress bar
-        ui.hide($elems.progress);
-        // Show alert
-        children.error.update(msg);
-        // Enable save
-        $elems.saveBtn.removeAttr('disabled');
-      };
+        var entryData = children.edit.getEntryData();
 
-      var onSuccess = function () {
-        // Hide progress bar
-        ui.hide($elems.progress);
-        // Inform parents
-        self.emit('success');
-      };
+        var onError = function (msg) {
+          // Hide progress bar
+          ui.hide($elems.progress);
+          // Show alert
+          children.error.update(msg);
+          // Enable save
+          $elems.saveBtn.removeAttr('disabled');
+        };
 
-      // Ensure non-empty content
-      if (entryData.markdown.length + entryData.attachments.length === 0) {
-        return onError(__('empty-post-error'));
-      }
+        var onSuccess = function () {
+          // Hide progress bar
+          ui.hide($elems.progress);
+          // Inform parents
+          self.emit('success');
+        };
 
-      // Display progress bar
-      ui.show($elems.progress);
+        // Ensure non-empty content
+        if (entryData.markdown.length + entryData.attachments.length === 0) {
+          return onError(__('empty-post-error'));
+        }
 
-      if (isNew) {
-        entries.create(locationId, entryData, function (err) {
-          if (err) {
-            if (!err.message) {
-              return onError('Failed to send. Check connection.');
+        // Display progress bar
+        ui.show($elems.progress);
+
+        if (isNew) {
+          entries.create(locationId, entryData, function (err) {
+            if (err) {
+              if (!err.message) {
+                return onError('Failed to send. Check connection.');
+              }
+              return onError(err.message);
             }
-            return onError(err.message);
-          }
-          // End drafting and clear stored draft.
-          // Do it here instead of onSuccess handler to prevent
-          // an entry edit clearing the new draft.
-          drafting.stop(locationId);
-          // Stuff to do after either creation or change
-          onSuccess();
-        });
-      } else {
-        entries.change(locationId, entry._id, entryData, function (err) {
-          if (err) {
-            if (!err.message) {
-              return onError('Failed to save. Check connection.');
+            // End drafting and clear stored draft.
+            // Do it here instead of onSuccess handler to prevent
+            // an entry change clearing the new draft.
+            children.edit.discardDraft();
+            // Stuff to do after either creation or change
+            onSuccess();
+          });
+        } else {
+          entries.change(locationId, entry._id, entryData, function (err) {
+            if (err) {
+              if (!err.message) {
+                return onError('Failed to save. Check connection.');
+              }
+              return onError(err.message);
             }
-            return onError(err.message);
-          }
-          onSuccess();
-        });
-      }
-    });
-
-    $elems.cancelBtn = $mount.find('.entry-form-cancel');
-    $elems.cancelBtn.click(function () {
-      self.emit('exit');
-    });
+            onSuccess();
+          });
+        }
+      });
+    }
 
     if (!isNew) {
-      $elems.removeOpen = $mount.find('.entry-remove-open');
-      $elems.remove = $mount.find('.entry-remove-container');
-      $elems.moveOpen = $mount.find('.entry-move-open');
-      $elems.move = $mount.find('.entry-move-container');
-
-      var pauseMs = 500;
-      $elems.removeOpen.click(ui.throttle(pauseMs, function () {
-        ui.toggleHidden($elems.remove);
-      }));
-      $elems.moveOpen.click(ui.throttle(pauseMs, function () {
-        ui.toggleHidden($elems.move);
-      }));
-
-      // Remove entry
-      children.remove = new RemoveForm({
-        info: __('post-removal-info'),
-      });
-      children.remove.bind($elems.remove);
-      children.remove.on('cancel', function () {
-        ui.hide($elems.remove);
-      });
-      children.remove.on('submit', function () {
-        entries.remove(entry.locationId, entry._id, function (err) {
-          if (err) {
-            children.remove.reset(); // hide progress and confirmation
-            children.error.update(err.message);
-            return;
-          }
-
-          // Success. The server will emit location_entry_removed
-          self.emit('exit');
+      if (ableDelete) {
+        children.remover = new Remover({
+          cancelBtnText: __('cancel'),
+          deleteBtnText: __('delete-ok'),
+          infoText: __('post-removal-info'),
+          youSureText: __('are-you-sure-cannot-undo'),
         });
-      });
-
-      // Move entry
-      children.move = new MoveForm(entry);
-      children.move.bind($elems.move);
-
-      // Hide on cancel
-      children.remove.on('exit', function () {
-        ui.hide($elems.remove);
-      });
-      children.move.on('exit', function () {
-        ui.hide($elems.move);
-      });
-    }
-  };
-
-  self.getEntryData = function (opts) {
-    // Return entryData object collected from the form.
-    //
-    // Parameters
-    //   opts
-    //     complete
-    //       Set true to get complete attachments instead of keys.
-    //       False by default.
-    //
-    if (!opts) {
-      opts = {};
-    }
-    opts = Object.assign({
-      complete: false,
-    }, opts);
-
-    if ($mount) {
-      var attachments;
-      if (opts.complete) {
-        attachments = children.attachments.getAttachments();
-      } else {
-        attachments = children.attachments.getAttachmentKeys();
+        children.remover.bind({
+          $container: $mount.find('.entry-remove-container'),
+          $button: $mount.find('.entry-remove-open'),
+        });
+        children.remover.on('submit', function () {
+          entries.remove(entry.locationId, entry._id, function (err) {
+            if (err) {
+              children.remover.close(); // hide progress and confirmation
+              children.error.update(err.message);
+              return;
+            }
+            // Success. The server will emit location_entry_removed
+            self.emit('finish');
+          });
+        });
       }
 
-      return {
-        markdown: children.markdown.getMarkdown(),
-        attachments: attachments,
-        flags: children.flags.getFlags(),
-      };
+      if (ableMove) {
+        var moveForm = new MoveForm(entry);
+        children.mover = new Opener(moveForm);
+        children.mover.bind({
+          $container: $mount.find('.entry-move-container'),
+          $button: $mount.find('.entry-move-open'),
+        });
+      }
+
+      // Cancel button to close the edit form
+      $elems.cancelBtn = $mount.find('.entry-form-cancel');
+      $elems.cancelBtn.click(function () {
+        self.emit('cancel');
+      });
     }
-    return null;
   };
 
   self.unbind = function () {
     if ($mount) {
-      // Save draft if allowed
-      if (drafting.started(locationId) && isNew) {
-        var draftData = self.getEntryData({ complete: true });
-        drafting.save(locationId, draftData);
-      }
-      // Then unbind
       ui.offAll($elems);
       $elems = {};
       ui.unbindAll(children);

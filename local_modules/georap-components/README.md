@@ -54,7 +54,7 @@ Usage:
 
     children.remover = new components.Remover({
       cancelBtnText: __('cancel'),
-      deleteBtnText: __('yes-delete'),
+      deleteBtnText: __('delete-ok'),
       infoText: __('delete-info'),
       youSureText: __('are-you-sure')
     })

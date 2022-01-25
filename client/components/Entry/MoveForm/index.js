@@ -32,7 +32,7 @@ module.exports = function (entry) {
 
     $elems.cancel = $mount.find('.entry-move-cancel');
     $elems.cancel.click(function () {
-      self.emit('exit');
+      self.emit('cancel');
     });
 
     $elems.select = $mount.find('.select-location-container');

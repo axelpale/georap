@@ -1,3 +1,4 @@
+/* eslint-disable max-statements */
 var template = require('./template.ejs');
 var headingTemplate = require('./heading.ejs');
 var entryModel = require('georap-models').entry;
@@ -6,9 +7,10 @@ var CommentsView = require('./Comments');
 var CommentForm = require('./CommentForm');
 var CommentButton = require('./CommentButton');
 var FormView = require('./Form');
-var FormAdminView = require('./FormAdmin');
 var flagstamp = require('./flagstamp');
 var ui = require('georap-ui');
+var components = require('georap-components');
+var Opener = components.Opener;
 var account = georap.stores.account;
 var ableOwn = account.ableOwn;
 var able = account.able;
@@ -118,45 +120,11 @@ module.exports = function (entry, opts) {
     // Post editing form
     if (ableUpdate || ableMove || ableDelete) {
       $elems.openBtn = $mount.find('.entry-form-open');
-      $elems.openBtn.click(function () {
-        var $formContainer = $mount.find('.entry-form-container');
-        if (ui.isHidden($formContainer)) {
-          ui.show($formContainer);
-
-          if (ableUpdate) {
-            children.editform = new FormView(entry.locationId, entry);
-            children.editform.bind($formContainer);
-          } else {
-            // The user is non-author admin. Show reduced form.
-            children.editform = new FormAdminView(entry.locationId, entry);
-            children.editform.bind($formContainer);
-          }
-
-          children.editform.once('exit', function () {
-            // Close the form if entry not already unbound.
-            // For example entry removal might remove the entry view before
-            // form exits.
-            if ($mount) {
-              ui.hide($formContainer);
-              children.editform.unbind();
-              children.editform.off(); // for once
-              delete children.editform;
-            }
-          });
-          children.editform.once('success', function () {
-            if ($mount) {
-              ui.hide($formContainer);
-              children.editform.unbind();
-              children.editform.off(); // for once
-              delete children.editform;
-            }
-          });
-        } else {
-          ui.hide($formContainer);
-          children.editform.unbind();
-          children.editform.off(); // for once
-          delete children.editform;
-        }
+      var formView = new FormView(entry.locationId, entry);
+      children.editform = new Opener(formView);
+      children.editform.bind({
+        $container: $mount.find('.entry-form-container'),
+        $button: $mount.find('.entry-form-open'),
       });
     }
   };
