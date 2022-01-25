@@ -1,7 +1,7 @@
 // This module bridges batch data to true entries, attachments, and locations.
 const uploads = require('../../../services/uploads');
 const attachmentDal = require('../../attachments/attachment/dal');
-const entriesDal = require('../../entries/dal');
+const entriesDal = require('../../posts/dal');
 const locationsDal = require('../dal');
 const asyn = require('async');
 const mime = require('mime');

@@ -10,7 +10,7 @@ module.exports = (locationId, callback) => {
   //       Where attachment is an image attachment or null if not found.
   //
   db.collection('entries')
-    .aggregate([ // From /server/api/entries/dal/getAllOfLocationComplete
+    .aggregate([ // From /server/api/posts/dal/getAllOfLocationComplete
       {
         $match: {
           locationId: locationId,

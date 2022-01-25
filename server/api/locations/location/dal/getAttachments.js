@@ -1,4 +1,4 @@
-const getManyComplete = require('../../../entries/dal/getManyComplete');
+const getManyComplete = require('../../../posts/dal/getManyComplete');
 const attachmentsModel = require('georap-models').attachments;
 
 module.exports = (params, callback) => {

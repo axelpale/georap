@@ -1,7 +1,7 @@
-//var db = require('georap-db');
+// NOTE var db = require('georap-db');
 const pjson = require('../../../package.json');
 const locationsDal = require('../locations/dal');
-const entriesDal = require('../entries/dal');
+const entriesDal = require('../posts/dal');
 const eventsDal = require('../events/dal');
 const attachmentsDal = require('../attachments/dal');
 const usersDal = require('../users/dal');

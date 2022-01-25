@@ -1,7 +1,7 @@
 exports.account = require('./account');
 exports.admin = require('./admin');
 exports.attachments = require('./attachments');
-exports.entries = require('./entries');
+exports.entries = require('./posts');
 exports.events = require('./events');
 exports.filter = require('./filter');
 exports.geometry = require('./geometry');

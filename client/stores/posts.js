@@ -16,7 +16,7 @@ exports.getLatest = function (range, callback) {
   //       entries
   //
   return request.getJSON({
-    url: '/api/entries',
+    url: '/api/posts',
     data: {
       skip: range.skip,
       limit: range.limit,
@@ -38,7 +38,7 @@ exports.create = function (locId, entryData, callback) {
   //     function (err, newEntry)
   //
   return request.postJSON({
-    url: '/api/entries',
+    url: '/api/posts',
     data: {
       locationId: locId,
       entryData: entryData,
@@ -61,7 +61,7 @@ exports.change = function (locId, entryId, entryData, callback) {
   //     function (err)
   //
   return request.postJSON({
-    url: '/api/entries/' + entryId,
+    url: '/api/posts/' + entryId,
     data: {
       entryData: entryData,
     },
@@ -82,7 +82,7 @@ exports.move = function (params, callback) {
   var toLocationId = params.toLocationId;
 
   return request.postJSON({
-    url: '/api/entries/' + entryId + '/move',
+    url: '/api/posts/' + entryId + '/move',
     data: {
       toLocationId: toLocationId,
     },
@@ -93,7 +93,7 @@ exports.remove = function (locationId, entryId, callback) {
   // Delete an entry
   //
   return request.deleteJSON({
-    url: '/api/entries/' + entryId,
+    url: '/api/posts/' + entryId,
     data: {},
   }, callback);
 };
@@ -122,7 +122,7 @@ exports.createComment = function (params, callback) {
   }
 
   return request.postJSON({
-    url: '/api/entries/' + entryId + '/comments',
+    url: '/api/posts/' + entryId + '/comments',
     data: {
       markdown: markdown,
       attachments: attachments,
@@ -152,7 +152,7 @@ exports.changeComment = function (params, callback) {
   var attachments = params.attachments;
 
   return request.postJSON({
-    url: '/api/entries/' + entryId + '/comments/' + commentId,
+    url: '/api/posts/' + entryId + '/comments/' + commentId,
     data: {
       markdown: markdown,
       attachments: attachments,
@@ -176,7 +176,7 @@ exports.removeComment = function (params, callback) {
   var commentId = params.commentId;
 
   return request.deleteJSON({
-    url: '/api/entries/' + entryId + '/comments/' + commentId,
+    url: '/api/posts/' + entryId + '/comments/' + commentId,
     data: {},
   }, callback);
 };

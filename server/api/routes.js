@@ -3,7 +3,7 @@
 const accountRouter = require('./account/routes');
 const adminRouter = require('./admin/routes');
 const attachmentsRouter = require('./attachments/routes');
-const entriesRouter = require('./entries/routes');
+const postsRouter = require('./posts/routes');
 const eventsRouter = require('./events/routes');
 const geometryRouter = require('./geometry/routes');
 const iconsRouter = require('./icons/routes');
@@ -24,7 +24,7 @@ router.use('/account', accountRouter);
 
 router.use('/admin', able('admin'), adminRouter);
 router.use('/attachments', able('attachments-read'), attachmentsRouter);
-router.use('/entries', able('posts-read'), entriesRouter);
+router.use('/posts', able('posts-read'), postsRouter);
 router.use('/events', able('locations-read'), eventsRouter);
 router.use('/geometry', able('geometry'), geometryRouter);
 router.use('/locations', able('locations-read'), locationsRouter);

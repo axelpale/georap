@@ -1,7 +1,7 @@
 /* eslint-disable max-lines */
 
 const config = require('georap-config');
-const entriesDal = require('../../entries/dal');
+const entriesDal = require('../../posts/dal');
 const parsekml = require('./parsekml');
 const dallib = require('./dallib');
 const extract = require('extract-zip');

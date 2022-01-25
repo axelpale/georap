@@ -202,7 +202,7 @@ exports.getEntries = function (params, callback) {
   //         boolean. True if there are still more entries after skip+limit.
   //
   return getJSON({
-    url: '/api/locations/' + params.locationId + '/entries',
+    url: '/api/locations/' + params.locationId + '/posts',
     data: {
       skip: params.skip,
       limit: params.limit,
