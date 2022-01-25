@@ -91,7 +91,7 @@ module.exports = function (entry, opts) {
     // Comment form
     if (able('comments-create')) {
       $elems.footer = $mount.find('.entry-footer');
-      $elems.commentForm = $mount.find('.comment-form-container');
+      $elems.commentForm = $mount.find('.comment-creation-form');
       children.commentButton = new CommentButton();
       children.commentButton.bind($mount.find('.comment-button-container'));
       children.commentButton.on('open', function () {

@@ -558,13 +558,13 @@ li.form-attachment-container:first-child img {
 .entry-comment {
   overflow: auto; /* contain floated thumbnails */
 }
-.comment-form-container {
+.comment-creation-form {
   border-top: 1px solid #ddd;
 }
 .comment-form-photo-btn {
   margin-right: 1rem;
 }
-.comment-edit-container {
+.comment-form-container {
   padding-top: 0.6rem;
 }
 .comment-attachment-thumbnail {

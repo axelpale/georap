@@ -211,7 +211,7 @@ img.location-type-symbol {
   filter: invert(1); /* Make type symbols white */
 }
 /* Comments */
-.comment-form-container {
+.comment-creation-form {
   border-top: 1px solid #444;
 }
 /* Users */

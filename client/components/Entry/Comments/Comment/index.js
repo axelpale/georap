@@ -1,14 +1,12 @@
 var template = require('./template.ejs');
 var CommentForm = require('../../CommentForm');
-var CommentFormAdmin = require('../../CommentFormAdmin');
 var Thumbnail = require('georap-components').Thumbnail;
 var commentModel = require('georap-models').comment;
 var isExpired = require('./isExpired');
 var ui = require('georap-ui');
 var account = georap.stores.account;
-var locale = georap.i18n.locale;
 var ableOwn = account.ableOwn;
-
+var locale = georap.i18n.locale;
 
 module.exports = function (entry, comment) {
   // Parameters:
@@ -49,7 +47,7 @@ module.exports = function (entry, comment) {
       return elem.hostname !== window.location.hostname;
     }).attr('target', '_blank');
 
-    // Attachment
+    // Show attachment thumbnail
     $elems.thumb = $mount.find('.comment-attachment-thumbnail');
     if (comment.attachments.length > 0) {
       children.thumb = new Thumbnail(comment.attachments[0], {
@@ -61,7 +59,7 @@ module.exports = function (entry, comment) {
     }
 
     if (canUpdate || canDelete) {
-      $elems.form = $mount.find('.comment-edit-container');
+      $elems.form = $mount.find('.comment-form-container');
       $elems.open = $mount.find('.comment-edit-open');
       $elems.open.click(function () {
         if (children.form) {
@@ -71,14 +69,7 @@ module.exports = function (entry, comment) {
         } else {
           ui.show($elems.form);
 
-          // Refresh canUpdate because comment might expire
-          canUpdate = ableUpdate && !isExpired(comment);
-
-          if (canUpdate) {
-            children.form = new CommentForm(entry, comment);
-          } else {
-            children.form = new CommentFormAdmin(entry, comment);
-          }
+          children.form = new CommentForm(entry, comment);
           children.form.bind($elems.form);
 
           children.form.once('cancel', function () {

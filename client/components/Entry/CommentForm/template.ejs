@@ -1,23 +1,26 @@
-<% if (!isNew) { %><hr><% } %>
+<% if (!canCreate) { %><hr><% } %>
 <div class="comment-form-group">
 
-  <div class="comment-form-markdown-container"></div>
-  <div class="comment-form-attachments-container"></div>
+  <div class="comment-edit-form-container"></div>
 
   <div class="form-group">
     <div class="comment-submit-buttons pull-right">
-      <button type="button" class="comment-form-photo-btn btn btn-default" title="Add Photo or Document"><span class="glyphicon glyphicon-plus" aria-label="Add"></span> <span class="glyphicon glyphicon-picture" aria-label="Photo"></span> <span class="glyphicon glyphicon-paperclip" aria-label="Attachment"></span></button>
+      <% if (canCreate || canUpdate) { %>
+        <button type="button" class="comment-form-photo-btn btn btn-default" title="Add Photo or Document"><span class="glyphicon glyphicon-plus" aria-label="Add"></span> <span class="glyphicon glyphicon-picture" aria-label="Photo"></span> <span class="glyphicon glyphicon-paperclip" aria-label="Attachment"></span></button>
+      <% } %>
       <button class="comment-form-cancel btn btn-default" type="button"><%= __('cancel') %></button>
-      <button class="comment-form-submit btn btn-primary" type="button"><%
-        if (isNew) {
-          %><%= __('comment') %><%
-        } else {
-          %><%= __('save') %><%
-        }
-      %></button>
+      <% if (canCreate || canUpdate) { %>
+        <button class="comment-form-submit btn btn-primary" type="button"><%
+          if (canCreate) {
+            %><%= __('comment') %><%
+          } else {
+            %><%= __('save') %><%
+          }
+        %></button>
+      <% } %>
     </div>
 
-    <% if (!isNew) { %>
+    <% if (canDelete) { %>
       <!-- Delete confirmation -->
       <div class="comment-tools-buttons form-group">
         <button type="button" class="comment-remove-open btn btn-default"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span> <%= __('comment-delete') %>...</button>
