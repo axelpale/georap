@@ -56,7 +56,9 @@
             <a href="/export"><%= glyphicon({ name: 'export' }) %> <%= __('export') %></a>
           </li>
         <% } %>
-        <li role="separator" class="divider"></li>
+        <% if (able('locations-import')) { %>
+          <li role="separator" class="divider"></li>
+        <% } %>
 
         <% if (able('account-invite')) { %>
         <li class="dropdown-header"><%= __('admin-menu') %></li>
