@@ -251,12 +251,15 @@ time:hover {
   margin-top: 1.5rem;
 }
 /* Location place */
+.location-places {
+  margin-bottom: 0.3rem;
+}
 .location-places-display {
   text-transform: capitalize;
 }
 /* Location geom */
 .location-geom {
-  margin-bottom: 1rem;
+  margin-bottom: 1.27rem;
 }
 .location-geom > .form-group {
   margin-bottom: 0;
@@ -265,9 +268,7 @@ time:hover {
   margin-top: 0.6rem;
 }
 /* Location component containers */
-.location-statustype {
-  margin-bottom: 1.6rem;
-}
+.location-statustype {}
 .location-thumbnail {
   margin-bottom: 1.6rem;
   line-height: 1;
@@ -288,9 +289,7 @@ time:hover {
 /* END Location page */
 
 /* Location Status & Type */
-.location-statustype-toolbar {
-  margin-bottom: 0.6rem;
-}
+.location-statustype-toolbar {}
 .location-statustype-viewer .location-status,
 .location-statustype-viewer .location-type {
   font-size: 1.38em;
