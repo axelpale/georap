@@ -19,6 +19,7 @@ var Remover = components.Remover;
 var entries = georap.stores.entries;
 var account = georap.stores.account;
 var ableOwn = account.ableOwn;
+var able = account.able;
 var __ = georap.i18n.__;
 
 module.exports = function (locationId, entry) {
@@ -30,11 +31,29 @@ module.exports = function (locationId, entry) {
   //   entry
   //     optional entry object. If not given, a blank entry form is shown.
   //
+
+  // Manage capabilities so that we can use the same Form component
+  // for post creation, editing, moving, and deletion.
   var isNew = false;
-  if (!entry) {
+  var ableCreate = false;
+  var ableUpdate = false;
+  var ableMove = false;
+  var ableDelete = false;
+  if (entry) {
+    isNew = false;
+    ableCreate = false;
+    ableUpdate = ableOwn(entry, 'posts-update');
+    ableMove = ableOwn(entry, 'posts-move');
+    ableDelete = ableOwn(entry, 'posts-delete');
+  } else {
     isNew = true;
+    ableCreate = able('posts-create');
+    ableUpdate = false;
+    ableMove = false;
+    ableDelete = false;
   }
 
+  // Component setup
   var $mount = null;
   var $elems = {};
   var children = {};
@@ -44,12 +63,9 @@ module.exports = function (locationId, entry) {
   self.bind = function ($mountEl) {
     $mount = $mountEl;
 
-    var ableUpdate = ableOwn(entry, 'posts-update');
-    var ableMove = ableOwn(entry, 'posts-move');
-    var ableDelete = ableOwn(entry, 'posts-delete');
-
     $mount.html(template({
       isNew: isNew,
+      ableCreate: ableCreate,
       ableUpdate: ableUpdate,
       ableMove: ableMove,
       ableDelete: ableDelete,
@@ -61,9 +77,15 @@ module.exports = function (locationId, entry) {
     children.error.bind($mount.find('.form-error-container'));
     // Progress bar
     $elems.progress = $mount.find('.form-progress');
+    // Cancel button to close the form
+    $elems.cancelBtn = $mount.find('.entry-form-cancel');
+    $elems.cancelBtn.click(function () {
+      self.emit('cancel');
+      self.emit('exit'); // controlled by Location/Forms .once TODO
+    });
 
     // Edit form
-    if (ableUpdate) {
+    if (ableCreate || ableUpdate) {
       children.edit = new EditForm(locationId, entry);
       children.edit.bind($mount.find('.entry-edit-form'));
 
@@ -164,11 +186,6 @@ module.exports = function (locationId, entry) {
         });
       }
 
-      // Cancel button to close the edit form
-      $elems.cancelBtn = $mount.find('.entry-form-cancel');
-      $elems.cancelBtn.click(function () {
-        self.emit('cancel');
-      });
     }
   };
 

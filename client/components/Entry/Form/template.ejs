@@ -11,7 +11,7 @@
   <div class="form-group">
     <div class="entry-submit-buttons pull-right">
       <button type="button" class="btn btn-default entry-form-cancel"><%= __('cancel') %></button>
-      <% if (ableUpdate) { %>
+      <% if (ableCreate || ableUpdate) { %>
       <button type="button" class="btn btn-primary entry-form-save"><%= __('save') %></button>
       <% } %>
     </div>
