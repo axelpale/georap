@@ -57,4 +57,5 @@ module.exports = { // New in v14
     'statistics',
     'users',
   ],
+  'dev': [], // raw code views and beta features?
 };
