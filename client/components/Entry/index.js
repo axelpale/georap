@@ -101,7 +101,7 @@ module.exports = function (entry, opts) {
         children.commentForm.bind($elems.commentForm);
 
         // React to cancel button
-        children.commentForm.once('exit', function () {
+        children.commentForm.once('cancel', function () {
           ui.show($elems.footer);
           ui.hide($elems.commentForm);
           children.commentForm.unbind();

@@ -81,7 +81,7 @@ module.exports = function (entry, comment) {
           }
           children.form.bind($elems.form);
 
-          children.form.once('exit', function () {
+          children.form.once('cancel', function () {
             children.form.unbind();
             children.form.off(); // onces
             delete children.form;

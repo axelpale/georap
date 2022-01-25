@@ -37,7 +37,7 @@ module.exports = function (entry, comment) {
     // Cancel button
     $elems.cancel = $mount.find('.comment-form-cancel');
     $elems.cancel.click(function () {
-      self.emit('exit');
+      self.emit('cancel');
     });
 
     // Init error view
