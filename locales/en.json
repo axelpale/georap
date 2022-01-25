@@ -345,7 +345,9 @@
     "admin": "Admin",
     "basic": "Basic",
     "frozen": "Frozen",
-    "moderator": "Moderator"
+    "moderator": "Moderator",
+    "reader": "Reader",
+    "writer": "Writer"
   },
   "user-role-noauto": "You cannot downgrade your own account.",
   "user-tagged-loc": "tagged",

@@ -344,7 +344,9 @@
     "admin": "Ylläpitäjä",
     "basic": "Perusjäsen",
     "frozen": "Jäädytetty",
-    "moderator": "Moderaattori"
+    "moderator": "Moderaattori",
+    "reader": "Lukija",
+    "writer": "Kirjoittaja"
   },
   "user-role-noauto": "Et voi alentaa oman tilisi roolia.",
   "user-tagged-loc": "muutti paikan",
