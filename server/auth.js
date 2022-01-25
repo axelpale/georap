@@ -47,7 +47,9 @@ module.exports = jwt({
           if (!storedUser.deleted) {
             // account is not soft-deleted
             if (grable.isAble(storedUser, 'account-auth')) {
-              // account has role that allows authentication
+              // Account has role that allows authentication.
+              // By ensuring that here, we do not accidentally allow access
+              // in the case when we remove 'account-auth' cap form role.
               return done(null, false);
             }
           }
@@ -58,7 +60,10 @@ module.exports = jwt({
         return done(null, true);
       });
     } else {
-      return done(null, true);
+      // Token payload is not an user or is an anon user, e.g. during signup.
+      // Token is not revoked. Token is valid because it is issued and signed
+      // by the server.
+      return done(null, false);
     }
   },
 });
