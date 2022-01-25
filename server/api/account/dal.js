@@ -27,12 +27,15 @@ exports.createUser = function (username, email, password, callback) {
     }
 
     users.insert({
-      name: username,
+      createdAt: (new Date()).toISOString(),
+      deleted: false,
       email: email,
       hash: pwdHash,
-      createdAt: (new Date()).toISOString(),
       loginAt: (new Date()).toISOString(),
+      name: username,
+      points: 0,
       role: defaultRole,
+      securityToken: '',
     }, (qerr) => {
       if (qerr) {
         return callback(qerr);
