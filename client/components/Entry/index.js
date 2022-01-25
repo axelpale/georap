@@ -36,6 +36,7 @@ module.exports = function (entry, opts) {
   var children = {};
 
   var ableUpdate = ableOwn(entry, 'posts-update');
+  var ableMove = ableOwn(entry, 'posts-move');
   var ableDelete = ableOwn(entry, 'posts-delete');
 
   this.bind = function ($mountEl) {
@@ -115,7 +116,7 @@ module.exports = function (entry, opts) {
     }
 
     // Post editing form
-    if (ableUpdate || ableDelete) {
+    if (ableUpdate || ableMove || ableDelete) {
       $elems.openBtn = $mount.find('.entry-form-open');
       $elems.openBtn.click(function () {
         var $formContainer = $mount.find('.entry-form-container');
@@ -161,6 +162,7 @@ module.exports = function (entry, opts) {
   };
 
   this.update = function (ev) {
+    // Refresh entry UI given an event.
     if ($mount) {
       // Update entry object
       entryModel.forward(entry, ev);
