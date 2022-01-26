@@ -4,6 +4,7 @@ var ui = require('georap-ui');
 var emitter = require('component-emitter');
 var template = require('./template.ejs');
 var TitleView = require('./Title');
+var LinkView = require('./Link');
 var ZoomView = require('./Zoom');
 var CoordsView = require('./CoordsView');
 var CoordsFormView = require('./CoordsForm');
@@ -31,6 +32,9 @@ module.exports = function () {
 
     children.title = new TitleView();
     children.title.bind($mount.find('.crosshair-title-container'));
+
+    children.link = new LinkView();
+    children.link.bind($mount.find('.crosshair-link-container'));
 
     children.zoom = new ZoomView();
     children.zoom.bind($mount.find('.crosshair-zoom-container'));
@@ -62,6 +66,7 @@ module.exports = function () {
           // Ensure view is still bound
           if (children.title) {
             children.title.updateGeometry(geoms);
+            children.link.updateGeometry(geoms);
             children.coords.updateGeometry(geoms);
             children.viewon.updateGeometry(geoms);
             children.create.updateGeometry(geoms);
