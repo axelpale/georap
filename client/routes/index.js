@@ -173,8 +173,9 @@ exports.route = function () {
     window.location.href = context.canonicalPath;
   });
 
-  page('*', able('geometry'), function (context, next) {
+  page('*', function (context, next) {
     // Recenter map to possible query parameters.
+    // ?lat=23.45&lng=123.4&zoom=12
     //
     var q = context.query;
     var s, lat, lng, zoom;
