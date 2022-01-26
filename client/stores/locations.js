@@ -184,8 +184,8 @@ exports.getAttachments = function (params, callback) {
   });
 };
 
-exports.getEntries = function (params, callback) {
-  // Fetch a set of entries of the location, most recent first.
+exports.getPosts = function (params, callback) {
+  // Fetch a set of posts of the location, most recent first.
   //
   // Parameters:
   //   params

@@ -17,7 +17,7 @@ router.delete('/', ableOwn('locations-delete'), handlers.removeOne);
 router.get('/attachments', handlers.getAttachments);
 
 router.get('/posts', able('posts-read'),
-           skipLimitParser, handlers.getEntries);
+           skipLimitParser, handlers.getPosts);
 
 router.get('/events', able('locations-events'),
            skipLimitParser, handlers.getEvents);

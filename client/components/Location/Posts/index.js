@@ -48,7 +48,7 @@ module.exports = function (locationId) {
     if ($mount) {
       ui.show($elems.progress);
       ui.hide($elems.loadMoreBtn);
-      locationsApi.getEntries({
+      locationsApi.getPosts({
         locationId: locationId,
         skip: skip,
         limit: limit,

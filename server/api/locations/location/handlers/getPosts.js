@@ -1,7 +1,7 @@
 const getManyComplete = require('../../../posts/dal/getManyComplete');
 
 module.exports = (req, res, next) => {
-  // Get location entries with their attachments and urls completed.
+  // Get location posts with their attachments and urls completed.
   //
 
   getManyComplete({
@@ -11,22 +11,22 @@ module.exports = (req, res, next) => {
     // NOTE skip and limit already validated by middleware
     skip: req.query.skip,
     limit: req.query.limit + 1, // +1 to detect if there is more
-  }, (err, entries) => {
+  }, (err, posts) => {
     if (err) {
       return next(err);
     }
 
     // Hint if the client should show Load More button
     let moreAvailable = false;
-    if (entries.length > req.query.limit) {
+    if (posts.length > req.query.limit) {
       moreAvailable = true;
     }
 
     // Remove the Load More detector
-    const limitedEntries = entries.slice(0, req.query.limit);
+    const limitedPosts = posts.slice(0, req.query.limit);
 
     return res.json({
-      entries: limitedEntries,
+      entries: limitedPosts,
       more: moreAvailable,
     });
   });
