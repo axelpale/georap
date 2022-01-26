@@ -1,4 +1,4 @@
-const entriesDal = require('../../dal');
+const postsDal = require('../../dal');
 const status = require('http-status-codes');
 
 module.exports = function (req, res, next) {
@@ -16,7 +16,7 @@ module.exports = function (req, res, next) {
     return res.sendStatus(status.OK);
   }
 
-  entriesDal.removeLocationEntryComment({
+  postsDal.removeLocationEntryComment({
     locationId: locationId,
     locationName: locationName,
     entry: entry, // NOTE full entry needed to determine activeAt

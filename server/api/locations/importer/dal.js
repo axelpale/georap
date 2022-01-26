@@ -1,7 +1,7 @@
 /* eslint-disable max-lines */
 
 const config = require('georap-config');
-const entriesDal = require('../../posts/dal');
+const postsDal = require('../../posts/dal');
 const parsekml = require('./parsekml');
 const dallib = require('./dallib');
 const extract = require('extract-zip');
@@ -318,7 +318,7 @@ exports.mergeEntries = (args, callback) => {
     const targetId = batchLoc.existing._id;
 
     // We first get the unique entries...
-    entriesDal.filterUniqueLocationEntries({
+    postsDal.filterUniqueLocationEntries({
       locationId: targetId,
       entryCandidates: entryCandidates,
     }, (errf, uniqueEntries) => {

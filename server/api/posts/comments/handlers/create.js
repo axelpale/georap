@@ -1,4 +1,4 @@
-const entriesDal = require('../../dal');
+const postsDal = require('../../dal');
 const purifyMarkdown = require('purify-markdown');
 const status = require('http-status-codes');
 const config = require('georap-config');
@@ -34,7 +34,7 @@ module.exports = (req, res, next) => {
     return res.status(status.BAD_REQUEST).send(msg);
   }
 
-  entriesDal.createLocationEntryComment({
+  postsDal.createLocationEntryComment({
     locationId: locationId,
     locationName: locationName,
     entryId: entryId,

@@ -1,5 +1,5 @@
 const status = require('http-status-codes');
-const entriesDal = require('../dal');
+const postsDal = require('../dal');
 const flagMap = require('./compiledEntryFlags');
 const resetThumbnail = require('../../locations/location/dal/resetThumbnail');
 
@@ -59,7 +59,7 @@ module.exports = (req, res, next) => {
     return res.status(status.BAD_REQUEST).send(msg);
   }
 
-  entriesDal.createLocationEntry({
+  postsDal.createLocationEntry({
     locationId: locationId,
     locationName: locationName,
     username: username,

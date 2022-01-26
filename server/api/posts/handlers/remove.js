@@ -1,5 +1,5 @@
 const status = require('http-status-codes');
-const entriesDal = require('../dal');
+const postsDal = require('../dal');
 
 module.exports = (req, res, next) => {
   // Remove entry by setting deleted:true
@@ -9,7 +9,7 @@ module.exports = (req, res, next) => {
   const username = req.user.name;
   const entry = req.entry;
 
-  entriesDal.removeLocationEntry({
+  postsDal.removeLocationEntry({
     locationId: locationId,
     locationName: locationName,
     entryId: entry._id,

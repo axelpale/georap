@@ -1,5 +1,5 @@
 const status = require('http-status-codes');
-const entriesDal = require('../dal');
+const postsDal = require('../dal');
 const db = require('georap-db');
 
 module.exports = (req, res, next) => {
@@ -19,7 +19,7 @@ module.exports = (req, res, next) => {
     return res.status(status.BAD_REQUEST).send('Invalid target location id');
   }
 
-  entriesDal.moveLocationEntry({
+  postsDal.moveLocationEntry({
     locationId: locationId,
     locationName: locationName,
     toLocationId: toLocationId,

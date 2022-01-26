@@ -1,7 +1,7 @@
 // NOTE var db = require('georap-db');
 const pjson = require('../../../package.json');
 const locationsDal = require('../locations/dal');
-const entriesDal = require('../posts/dal');
+const postsDal = require('../posts/dal');
 const eventsDal = require('../events/dal');
 const attachmentsDal = require('../attachments/dal');
 const usersDal = require('../users/dal');
@@ -27,8 +27,8 @@ exports.getAll = function (callback) {
   const steps = {
     serverVersion: exports.getServerVersion,
     locationCount: locationsDal.count,
-    entriesCount: entriesDal.count,
-    commentsCount: entriesDal.countComments,
+    entriesCount: postsDal.count,
+    commentsCount: postsDal.countComments,
     eventsCount: eventsDal.count,
     attachmentsCount: attachmentsDal.count,
     usersCount: usersDal.count,

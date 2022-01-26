@@ -1,7 +1,7 @@
 // This module bridges batch data to true entries, attachments, and locations.
 const uploads = require('../../../services/uploads');
 const attachmentDal = require('../../attachments/attachment/dal');
-const entriesDal = require('../../posts/dal');
+const postsDal = require('../../posts/dal');
 const locationsDal = require('../dal');
 const asyn = require('async');
 const mime = require('mime');
@@ -112,7 +112,7 @@ exports.createEntries = (args, callback) => {
     const mimetype = mime.getType(batchEntry.filepath);
 
     if (mimetype === null) {
-      entriesDal.createLocationEntry({
+      postsDal.createLocationEntry({
         locationId: args.locationId,
         locationName: args.locationName,
         username: args.username,
@@ -155,7 +155,7 @@ exports.createEntries = (args, callback) => {
 
       // File in place and attachment created.
       // Time to create the post.
-      entriesDal.createLocationEntry({
+      postsDal.createLocationEntry({
         locationId: args.locationId,
         locationName: args.locationName,
         username: args.username,

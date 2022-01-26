@@ -1,4 +1,4 @@
-const entriesDal = require('../../dal');
+const postsDal = require('../../dal');
 const purifyMarkdown = require('purify-markdown');
 const commentModel = require('georap-models').comment;
 const config = require('georap-config');
@@ -89,7 +89,7 @@ module.exports = function (req, res, next) {
     return res.status(status.BAD_REQUEST).send('Missing parameters');
   }
 
-  entriesDal.changeLocationEntryComment({
+  postsDal.changeLocationEntryComment({
     username: req.user.name,
     locationId: locationId,
     locationName: locationName,
