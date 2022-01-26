@@ -36,7 +36,7 @@ module.exports = function () {
   var appendEvents = function (evs) {
     // Append events in the end
     if ($mount) {
-      var $container = $('<div class="location-entries-block"></div>');
+      var $container = $('<div class="location-posts-block"></div>');
       var view = new EventsView(evs, {
         showThumbnails: true,
       });
