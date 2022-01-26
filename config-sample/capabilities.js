@@ -1,4 +1,5 @@
-// Capability configuration for user roles.
+// Role-based UI Customisation and Permission Management
+// made possible by user roles and their capabilities.
 // The white list defines what features user can see and access.
 // The role of the user is stored in JWT token the user possess.
 //
@@ -53,7 +54,10 @@ module.exports = { // New in v14
     'locations-events',
     'locations-export-all',
     'locations-export-one',
+    'locations-geometry',
     'locations-import',
+    'locations-places',
+    'locations-statustype',
     'locations-thumbnail',
     'locations-update-any',
     'locations-update-own',

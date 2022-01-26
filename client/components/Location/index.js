@@ -78,14 +78,20 @@ var LocationView = function (id, query) {
       children.nameView = new NameView(_location);
       children.nameView.bind($mount.find('.location-name'));
 
-      children.placesView = new PlacesView(_location);
-      children.placesView.bind($mount.find('.location-places'));
+      if (able('locations-statustype')) {
+        children.statusType = new StatusTypeView(_location);
+        children.statusType.bind($mount.find('.location-statustype'));
+      }
 
-      children.statusType = new StatusTypeView(_location);
-      children.statusType.bind($mount.find('.location-statustype'));
+      if (able('locations-places')) {
+        children.placesView = new PlacesView(_location);
+        children.placesView.bind($mount.find('.location-places'));
+      }
 
-      children.geomView = new GeomView(_location);
-      children.geomView.bind($mount.find('.location-geom'));
+      if (able('locations-geometry')) {
+        children.geomView = new GeomView(_location);
+        children.geomView.bind($mount.find('.location-geom'));
+      }
 
       if (able('locations-thumbnail')) {
         children.thumbnail = new ThumbnailView(rawLoc);
