@@ -8,6 +8,8 @@ if (!georap.config) {
 
 var staticUrl = georap.config.staticUrl
 
+exports.baseUrl = require('./baseUrl')
+
 exports.locationUrl = function (locId) {
   // Local absolute URL path to location.
   return '/locations/' + locId
