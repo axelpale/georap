@@ -1,4 +1,4 @@
-// Component to list filtered lists of events.
+// Component to list latest posts
 //
 var emitter = require('component-emitter');
 var ui = require('georap-ui');
@@ -22,16 +22,16 @@ module.exports = function () {
   var skip = 0;
   var limit = LIST_SIZE;
 
-  var appendEntries = function (entries) {
+  var appendPosts = function (posts) {
     if ($mount) {
-      entries.forEach(function (entry) {
-        var view = new EntryView(entry, {
+      posts.forEach(function (post) {
+        var view = new EntryView(post, {
           displayLocation: true,
         });
-        var $container = $('<div id="entry-' + entry._id + '"></div>');
-        $elems.entries.append($container);
+        var $container = $('<div id="entry-' + post._id + '"></div>');
+        $elems.posts.append($container);
         view.bind($container);
-        children[entry._id] = view;
+        children[post._id] = view;
       });
     }
   };
@@ -53,9 +53,7 @@ module.exports = function () {
             return;
           }
 
-          var entries = result.entries;
-
-          appendEntries(entries);
+          appendPosts(result.entries);
 
           ui.show($elems.loadMoreBtn);
 
@@ -75,10 +73,10 @@ module.exports = function () {
       __: __,
     }));
 
-    $elems.entries = $mount.find('.latest-entries');
-    $elems.progress = $mount.find('.latest-entries-progress');
+    $elems.posts = $mount.find('.latest-posts');
+    $elems.progress = $mount.find('.latest-posts-progress');
     $elems.loadMoreBtn = $mount.find('.latest-load-more');
-    $elems.error = $mount.find('.latest-entries-error');
+    $elems.error = $mount.find('.latest-posts-error');
 
     // Click to load more
     $elems.loadMoreBtn.click(function () {
@@ -86,10 +84,10 @@ module.exports = function () {
       fetchAndAppend();
     });
 
-    // Initial event fetch and list render
+    // Initial fetch and list render
     fetchAndAppend(function () {
       // Signal that the list is rendered.
-      // It seems that setTimeout is required to allow the fetched events
+      // It seems that setTimeout is required to allow the fetched posts
       // to fill the scrollable container.
       setTimeout(function () {
         self.emit('idle');
@@ -99,9 +97,9 @@ module.exports = function () {
 
   self.unbind = function () {
     if ($mount) {
-      // Stop listening events
+      // Stop listening events to posts
       bus.off();
-      // Unbind events view
+      // Unbind post views
       ui.unbindAll(children);
       children = {};
       ui.offAll($elems);
