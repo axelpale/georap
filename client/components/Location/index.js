@@ -87,8 +87,10 @@ var LocationView = function (id, query) {
       children.geomView = new GeomView(_location);
       children.geomView.bind($mount.find('.location-geom'));
 
-      children.thumbnail = new ThumbnailView(rawLoc);
-      children.thumbnail.bind($mount.find('.location-thumbnail'));
+      if (able('locations-thumbnail')) {
+        children.thumbnail = new ThumbnailView(rawLoc);
+        children.thumbnail.bind($mount.find('.location-thumbnail'));
+      }
 
       if (able('posts-create') || able('locations-export-one')) {
         children.formsView = new FormsView(rawLoc);

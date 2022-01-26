@@ -54,6 +54,7 @@ module.exports = { // New in v14
     'locations-export-all',
     'locations-export-one',
     'locations-import',
+    'locations-thumbnail',
     'locations-update-any',
     'locations-update-own',
     'posts-read',
