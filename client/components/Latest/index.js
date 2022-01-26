@@ -5,7 +5,7 @@ var TabsView = require('./Tabs');
 var template = require('./template.ejs');
 var EventsView = require('./Events');
 var LocationsView = require('./Locations');
-var EntriesView = require('./Entries');
+var PostsView = require('./Posts');
 var ui = require('georap-ui');
 var ScrollRecorder = require('./ScrollRecorder');
 var __ = georap.i18n.__;
@@ -32,7 +32,7 @@ module.exports = function () {
   var tabs = {
     activity: EventsView,
     locations: LocationsView,
-    posts: EntriesView,
+    posts: PostsView,
   };
 
   // Public methods
