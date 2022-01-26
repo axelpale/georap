@@ -98,8 +98,8 @@ var LocationView = function (id, query) {
       if (able('posts-read')) {
         children.postsView = new PostsView(rawLoc._id);
         children.postsView.bind($mount.find('.location-posts'));
-        // Scroll down to possibly referred entry or comment after
-        // entries are loaded.
+        // Scroll down to possibly referred post or comment after
+        // posts are loaded.
         children.postsView.once('idle', function () {
           if (window.location.hash.substring(0, 9) === '#comment-') {
             var layerEl = document.getElementById('card-layer');

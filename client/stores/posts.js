@@ -1,16 +1,16 @@
-// Location entries API adapter
+// Location posts API adapter
 //
 var request = require('./lib/request');
 
 exports.getLatest = function (range, callback) {
-  // Fetch latest non-deleted entries
+  // Fetch latest non-deleted posts
   //
   // Parameters
   //   range
   //     skip
   //       integer, skip this many before results
   //     limit
-  //       integer, max number of entries to fetch
+  //       integer, max number of posts to fetch
   //   callback
   //     function (err, result) where result has properties
   //       entries
@@ -24,13 +24,13 @@ exports.getLatest = function (range, callback) {
   }, callback);
 };
 
-exports.create = function (locId, entryData, callback) {
-  // Create new entry.
+exports.create = function (locId, postData, callback) {
+  // Create a new post.
   //
   // Parameters
   //   locId
   //     location id
-  //   entryData, object with following props
+  //   postData, object with following props
   //     markdown
   //     attachments
   //     flags
@@ -41,19 +41,19 @@ exports.create = function (locId, entryData, callback) {
     url: '/api/posts',
     data: {
       locationId: locId,
-      entryData: entryData,
+      entryData: postData,
     },
   }, callback);
 };
 
-exports.change = function (locId, entryId, entryData, callback) {
+exports.change = function (locId, postId, postData, callback) {
   // Update an entry.
   //
   // Parameters:
   //   locId
   //     location id
-  //   entryId
-  //   entryData, object with following props
+  //   postId
+  //   postData, object with following props
   //     markdown
   //     attachments
   //     flags
@@ -61,9 +61,9 @@ exports.change = function (locId, entryId, entryData, callback) {
   //     function (err)
   //
   return request.postJSON({
-    url: '/api/posts/' + entryId,
+    url: '/api/posts/' + postId,
     data: {
-      entryData: entryData,
+      entryData: postData,
     },
   }, callback);
 };
@@ -78,22 +78,22 @@ exports.move = function (params, callback) {
   //   callback
   //     function (err)
   //
-  var entryId = params.entryId;
+  var postId = params.entryId;
   var toLocationId = params.toLocationId;
 
   return request.postJSON({
-    url: '/api/posts/' + entryId + '/move',
+    url: '/api/posts/' + postId + '/move',
     data: {
       toLocationId: toLocationId,
     },
   }, callback);
 };
 
-exports.remove = function (locationId, entryId, callback) {
+exports.remove = function (locationId, postId, callback) {
   // Delete a post
   //
   return request.deleteJSON({
-    url: '/api/posts/' + entryId,
+    url: '/api/posts/' + postId,
     data: {},
   }, callback);
 };
@@ -146,13 +146,13 @@ exports.changeComment = function (params, callback) {
   //   callback
   //     function (err)
   //
-  var entryId = params.entryId;
+  var postId = params.entryId;
   var commentId = params.commentId;
   var markdown = params.markdown;
   var attachments = params.attachments;
 
   return request.postJSON({
-    url: '/api/posts/' + entryId + '/comments/' + commentId,
+    url: '/api/posts/' + postId + '/comments/' + commentId,
     data: {
       markdown: markdown,
       attachments: attachments,
@@ -172,11 +172,11 @@ exports.removeComment = function (params, callback) {
   //   callback
   //     function (err)
   //
-  var entryId = params.entryId;
+  var postId = params.entryId;
   var commentId = params.commentId;
 
   return request.deleteJSON({
-    url: '/api/posts/' + entryId + '/comments/' + commentId,
+    url: '/api/posts/' + postId + '/comments/' + commentId,
     data: {},
   }, callback);
 };

@@ -1,4 +1,4 @@
-// A list of images from entries.
+// A list of images from posts.
 
 var Thumbnail = require('georap-components').Thumbnail;
 var ThumbnailForm = require('./Form');
