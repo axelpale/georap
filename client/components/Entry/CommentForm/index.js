@@ -8,7 +8,7 @@ var RemoveView = require('../Remove');
 var ErrorView = require('../Error');
 var template = require('./template.ejs');
 var isExpired = require('../Comments/Comment/isExpired');
-var entryApi = georap.stores.entries;
+var postsApi = georap.stores.posts;
 var account = georap.stores.account;
 var able = account.able;
 var ableOwn = account.ableOwn;
@@ -55,13 +55,13 @@ module.exports = function (entry, comment) {
 
   var submit = function (commentData, callback) {
     if (isNew) {
-      entryApi.createComment({
+      postsApi.createComment({
         entryId: entryId,
         markdown: commentData.markdown,
         attachments: commentData.attachments,
       }, callback);
     } else {
-      entryApi.changeComment({
+      postsApi.changeComment({
         entryId: entryId,
         commentId: comment.id,
         markdown: commentData.markdown,
@@ -110,7 +110,7 @@ module.exports = function (entry, comment) {
         ui.hide($elems.remove);
       });
       children.remove.on('submit', function () {
-        entryApi.removeComment({
+        postsApi.removeComment({
           entryId: entryId,
           commentId: comment.id,
         }, function (err) {

@@ -16,7 +16,7 @@ var emitter = require('component-emitter');
 var components = require('georap-components');
 var Opener = components.Opener;
 var Remover = components.Remover;
-var entries = georap.stores.entries;
+var posts = georap.stores.posts;
 var account = georap.stores.account;
 var ableOwn = account.ableOwn;
 var able = account.able;
@@ -124,7 +124,7 @@ module.exports = function (locationId, entry) {
         ui.show($elems.progress);
 
         if (isNew) {
-          entries.create(locationId, entryData, function (err) {
+          posts.create(locationId, entryData, function (err) {
             if (err) {
               if (!err.message) {
                 return onError('Failed to send. Check connection.');
@@ -139,7 +139,7 @@ module.exports = function (locationId, entry) {
             onSuccess();
           });
         } else {
-          entries.change(locationId, entry._id, entryData, function (err) {
+          posts.change(locationId, entry._id, entryData, function (err) {
             if (err) {
               if (!err.message) {
                 return onError('Failed to save. Check connection.');
@@ -165,7 +165,7 @@ module.exports = function (locationId, entry) {
           $button: $mount.find('.entry-remove-open'),
         });
         children.remover.on('submit', function () {
-          entries.remove(entry.locationId, entry._id, function (err) {
+          posts.remove(entry.locationId, entry._id, function (err) {
             if (err) {
               children.remover.close(); // hide progress and confirmation
               children.error.update(err.message);

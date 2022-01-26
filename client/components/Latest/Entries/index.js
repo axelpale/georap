@@ -5,7 +5,7 @@ var ui = require('georap-ui');
 var template = require('./template.ejs');
 var EntryView = require('../../Entry');
 var rootBus = require('georap-bus');
-var entriesStore = georap.stores.entries;
+var postsApi = georap.stores.posts;
 var __ = georap.i18n.__;
 
 var LIST_SIZE = 10;
@@ -40,7 +40,7 @@ module.exports = function () {
     if ($mount) {
       ui.show($elems.progress);
       ui.hide($elems.loadMoreBtn);
-      entriesStore.getLatest({
+      postsApi.getLatest({
         skip: skip,
         limit: limit,
       }, function (err, result) {

@@ -5,7 +5,7 @@ var template = require('./template.ejs');
 var SelectLocation = require('./SelectLocation');
 var Progress = uic.Progress;
 var ErrorView = uic.Error;
-var entryApi = georap.stores.entries;
+var postsApi = georap.stores.posts;
 var __ = georap.i18n.__;
 
 module.exports = function (entry) {
@@ -50,7 +50,7 @@ module.exports = function (entry) {
       children.progress.bind($elems.progress);
       ui.hide($elems.form);
 
-      entryApi.move({
+      postsApi.move({
         entryId: entry._id,
         toLocationId: selectedLocId,
       }, function (err) {
