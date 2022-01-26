@@ -1,4 +1,4 @@
-// Component to filter map markers.
+// Map coordinates as h1 title
 //
 var geostamp = require('geostamp');
 var template = require('./template.ejs');

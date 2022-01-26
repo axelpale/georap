@@ -1,4 +1,4 @@
-// Component to filter map markers.
+// Display maps zoom level
 //
 var template = require('./template.ejs');
 var ui = require('georap-ui');
