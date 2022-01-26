@@ -312,10 +312,10 @@ exports.route = function () {
       .catch(importErrorHandler);
   });
 
-  page('/crosshair', able('geometry'), basicViewSetup(function () {
+  page('/coordinates', able('geometry'), basicViewSetup(function () {
     return import(
-      /* webpackChunkName: "crosshair-view" */
-      '../components/Crosshair'
+      /* webpackChunkName: "coordinates-view" */
+      '../components/Coordinates'
     );
   }));
 
