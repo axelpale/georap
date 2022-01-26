@@ -327,12 +327,12 @@ module.exports = {
     },
   },
 
-  // Flags for Entries.
-  // Flags are used to classify entries (aka posts) or give them perks.
-  // An example of a flag is 'visit' that can denote that the entry is
+  // Flags for Posts.
+  // Flags are used to classify posts (aka entries) or give them perks.
+  // An example of a flag is 'visit' that can denote that the post is
   // about a visitation on the location instead of just general info.
-  // Flags also accumulate to the location of the flagged entry, so
-  // that a user can filter locations based on flags in their own entries.
+  // Flags also accumulate to the location of the flagged post, so
+  // that a user can filter locations based on flags in their own posts.
   // For example the 'visit' flag allows a user to browse all locations
   // she has visited.
   // Translation of flags: to display flags in different languages
@@ -348,9 +348,9 @@ module.exports = {
       description: 'visit-description', // a translation key
       glyphicon: 'flag',
       reward: 15,
-      // Precondition allows a flag to be used only if the entry content
-      // fulfills a condition. Entry content consists of
-      // entry properties { markdown, attachments, flags }.
+      // Precondition allows a flag to be used only if the post content
+      // fulfills a condition. Post content consists of
+      // the post properties { markdown, attachments, flags }.
       // The condition is represented as JSON schema.
       precondition: {
         type: 'object',
@@ -374,12 +374,12 @@ module.exports = {
   //   status
   //     Location status.
   //   flag
-  //     Entry flag. The locations where the user has posted
-  //     an entry with a flag will show as markers
-  //     built with these templates. For example, locations with entries
+  //     Post flag. The locations where the user has created
+  //     a post with a flag will show as markers
+  //     built with these templates. For example, locations with posts
   //     flagged as 'visit' can be configured to show in special color
-  //     for the user who posted the visits.
-  //     Locations where the user has not posted any flagged entries
+  //     for the user who created the visits.
+  //     Locations where the user has not created any flagged posts
   //     will use templates configured as 'default' for the given status.
   //   size
   //     There are three sizes: 'sm', 'md', and 'lg'. Emphasized locations
@@ -501,7 +501,7 @@ module.exports = {
     },
   },
 
-  // Entry listing
+  // Post list view settings
   entries: {
     // Items to load initially and when Load More -button is pressed.
     pageSize: 10,
@@ -527,7 +527,7 @@ module.exports = {
   // These coordinate systems will be displayed on the location page.
   // These systems are also available for exportServices.
   //
-  // Each entry has the form:
+  // Each post has the form:
   //   [<cordinate system name>,
   //    <proj4 projection definition>,
   //    <output template>]
@@ -603,7 +603,7 @@ module.exports = {
   // Register location export services here.
   // With these, user can inspect the location on other online maps.
   //
-  // Each entry has the form:
+  // Each post has the form:
   //   [<service name>, <url pattern>, <coordinate system name>, <bounds>]
   // Where:
   //   service name
