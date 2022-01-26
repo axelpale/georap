@@ -1,7 +1,7 @@
 /* eslint-disable max-statements */
 var template = require('./template.ejs');
 var headingTemplate = require('./heading.ejs');
-var entryModel = require('georap-models').entry;
+var postModel = require('georap-models').entry;
 var AttachmentsView = require('./Attachments');
 var CommentsView = require('./Comments');
 var CommentForm = require('./CommentForm');
@@ -65,7 +65,7 @@ module.exports = function (entry, opts) {
 
     // Markdown viewer
     $elems.markdown = $mount.find('.entry-body');
-    if (entryModel.hasMarkdown(entry)) {
+    if (postModel.hasMarkdown(entry)) {
       $elems.markdown.html(ui.markdownToHtml(entry.markdown));
     } else {
       ui.hide($elems.markdown);
@@ -133,7 +133,7 @@ module.exports = function (entry, opts) {
     // Refresh entry UI given an event.
     if ($mount) {
       // Update entry object
-      entryModel.forward(entry, ev);
+      postModel.forward(entry, ev);
       // Update flags in heading
       $elems.heading.html(headingTemplate({
         username: entry.user,
@@ -144,7 +144,7 @@ module.exports = function (entry, opts) {
         __: __,
       }));
       // Update markdown
-      if (entryModel.hasMarkdown(entry)) {
+      if (postModel.hasMarkdown(entry)) {
         $elems.markdown.html(ui.markdownToHtml(entry.markdown));
       } else {
         $elems.markdown.empty();

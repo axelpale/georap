@@ -6,7 +6,7 @@ var ui = require('georap-ui');
 var __ = georap.i18n.__;
 
 module.exports = function (markdown, opts) {
-  // Entry form markdown section.
+  // Post form markdown section.
   //
   // Parameters:
   //   markdown

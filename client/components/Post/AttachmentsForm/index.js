@@ -1,5 +1,5 @@
 // View for attachment upload and listing.
-// Pluggable into Entry and Comments
+// Pluggable into Post and Comments
 var AttachmentView = require('./Attachment');
 var AttachmentUploadView = require('./AttachmentUpload');
 var UploaderView = require('./Uploader');

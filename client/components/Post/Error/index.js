@@ -4,8 +4,6 @@ var template = require('./template.ejs');
 var emitter = require('component-emitter');
 
 module.exports = function () {
-  // Entry form View.
-  //
   var self = this;
   emitter(self);
 

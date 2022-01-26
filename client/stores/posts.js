@@ -69,7 +69,7 @@ exports.change = function (locId, entryId, entryData, callback) {
 };
 
 exports.move = function (params, callback) {
-  // Move entry and all its content from a location to another.
+  // Move post and all its content from a location to another.
   //
   // Parameters
   //   params
@@ -90,7 +90,7 @@ exports.move = function (params, callback) {
 };
 
 exports.remove = function (locationId, entryId, callback) {
-  // Delete an entry
+  // Delete a post
   //
   return request.deleteJSON({
     url: '/api/posts/' + entryId,
@@ -98,7 +98,7 @@ exports.remove = function (locationId, entryId, callback) {
   }, callback);
 };
 
-// Entry comments
+// Post's comments
 
 exports.createComment = function (params, callback) {
   // Create a comment

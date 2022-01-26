@@ -3,7 +3,7 @@
 var emitter = require('component-emitter');
 var ui = require('georap-ui');
 var template = require('./template.ejs');
-var EntryView = require('../../Entry');
+var PostView = require('../../Post');
 var rootBus = require('georap-bus');
 var postsApi = georap.stores.posts;
 var __ = georap.i18n.__;
@@ -25,7 +25,7 @@ module.exports = function () {
   var appendPosts = function (posts) {
     if ($mount) {
       posts.forEach(function (post) {
-        var view = new EntryView(post, {
+        var view = new PostView(post, {
           displayLocation: true,
         });
         var $container = $('<div id="entry-' + post._id + '"></div>');

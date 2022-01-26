@@ -26,7 +26,7 @@ module.exports = function (req, res, next) {
       if (req.user && req.user.name === comment.user) {
         req.isOwner = true;
       } else {
-        // Entry might be owned but not the comment.
+        // Post might be owned but not the comment.
         // Thus override if already set.
         req.isOwner = false;
       }

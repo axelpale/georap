@@ -3,7 +3,7 @@
 var emitter = require('component-emitter');
 var ui = require('georap-ui');
 var template = require('./template.ejs');
-var PostView = require('../../Entry');
+var PostView = require('../../Post');
 var rootBus = require('georap-bus');
 var locationsApi = georap.stores.locations;
 
