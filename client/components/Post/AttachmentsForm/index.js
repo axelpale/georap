@@ -147,6 +147,8 @@ module.exports = function (attachments, opts) {
   };
 
   self.getAttachments = function () {
+    // Return array of attachment objects
+    //
     var keys = this.getAttachmentKeys();
     return keys.map(function (key) {
       return children[key].getAttachment();
@@ -154,7 +156,7 @@ module.exports = function (attachments, opts) {
   };
 
   self.getAttachmentKeys = function () {
-    // Return list of attachment keys
+    // Return array of attachment keys
     // To ensure correct order, read from dom
     if ($mount) {
       var $keys = $mount.find('.form-attachment').map(function (i, attEl) {

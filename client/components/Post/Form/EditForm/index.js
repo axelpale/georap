@@ -14,6 +14,7 @@ var FlagsForm = require('./FlagsForm');
 var drafting = require('./drafting');
 var ui = require('georap-ui');
 var emitter = require('component-emitter');
+var able = georap.stores.account.able;
 var __ = georap.i18n.__;
 
 module.exports = function (locationId, entry) {
@@ -60,10 +61,12 @@ module.exports = function (locationId, entry) {
     }, 0);
 
     // Attachments form
-    children.attachments = new AttachmentsForm(entry.attachments, {
-      label: __('photos-and-documents') + ':',
-    });
-    children.attachments.bind($mount.find('.form-attachments-container'));
+    if (able('attachments-create')) {
+      children.attachments = new AttachmentsForm(entry.attachments, {
+        label: __('photos-and-documents') + ':',
+      });
+      children.attachments.bind($mount.find('.form-attachments-container'));
+    }
 
     // Flags form
     children.flags = new FlagsForm(entry.flags);
@@ -93,10 +96,14 @@ module.exports = function (locationId, entry) {
 
     if ($mount) {
       var attachments;
-      if (opts.complete) {
-        attachments = children.attachments.getAttachments();
+      if (children.attachments) { // == able('attachments-create')
+        if (opts.complete) {
+          attachments = children.attachments.getAttachments();
+        } else {
+          attachments = children.attachments.getAttachmentKeys();
+        }
       } else {
-        attachments = children.attachments.getAttachmentKeys();
+        attachments = [];
       }
 
       return {

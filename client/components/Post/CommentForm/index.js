@@ -52,6 +52,7 @@ module.exports = function (entry, comment) {
     canUpdate = false;
     canDelete = false;
   }
+  var canAttach = able('attachments-create');
 
   var submit = function (commentData, callback) {
     if (isNew) {
@@ -74,6 +75,7 @@ module.exports = function (entry, comment) {
     $mount = $mountEl;
 
     $mount.html(template({
+      canAttach: canAttach,
       canCreate: canCreate,
       canUpdate: canUpdate,
       canDelete: canDelete,
@@ -132,7 +134,8 @@ module.exports = function (entry, comment) {
 
       // If comment has no attachments, attachment form is not open by default.
       // Therefore provide a button to open the form if needed.
-      if (!comment || comment.attachments.length === 0) {
+      var isEmpty = (!comment || comment.attachments.length === 0);
+      if (canAttach && isEmpty) {
         $elems.attachBtn = $mount.find('.comment-form-photo-btn');
         $elems.attachBtn.click(function (ev) {
           ev.preventDefault();

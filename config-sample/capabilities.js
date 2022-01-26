@@ -36,6 +36,7 @@ module.exports = { // New in v14
     'account-invite',
     'account-update',
     'attachments-read',
+    'attachments-create',
     'attachments-update-any',
     'attachments-update-own',
     'attachments-delete-any',
