@@ -5,7 +5,7 @@ var GeocodeView = require('./Geocode');
 var LocationsView = require('./Locations');
 var template = require('./template.ejs');
 var emitter = require('component-emitter');
-var queryString = require('query-string');
+var queryString = require('qs');
 var ui = require('georap-ui');
 var __ = georap.i18n.__;
 

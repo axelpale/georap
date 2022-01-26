@@ -102,7 +102,6 @@
     "proj4": "^2.7.5",
     "purify-markdown": "file:local_modules/purify-markdown",
     "qs": "^6.10.3",
-    "query-string": "^5.1.1",
     "request": "^2.88.2",
     "sanitize-filename": "^1.6.1",
     "sax": "^1.2.4",
