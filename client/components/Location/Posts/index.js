@@ -1,9 +1,9 @@
-// Component to list filtered lists of events.
+// Component to list posts.
 //
 var emitter = require('component-emitter');
 var ui = require('georap-ui');
 var template = require('./template.ejs');
-var EntryView = require('../../Entry');
+var PostView = require('../../Entry');
 var rootBus = require('georap-bus');
 var locationsApi = georap.stores.locations;
 
@@ -21,25 +21,25 @@ module.exports = function (locationId) {
   var skip = 0;
   var limit = PAGE_SIZE;
 
-  var appendEntries = function (entries, prepend) {
+  var appendPosts = function (posts, prepend) {
     // Parameters
-    //   entries
+    //   posts
     //     array
     //   prepend
     //     Set true to add to beginning, false to add to bottom.
     //     Default false.
     //
     if ($mount) {
-      entries.forEach(function (entry) {
-        var view = new EntryView(entry);
-        var $container = $('<div id="entry-' + entry._id + '"></div>');
+      posts.forEach(function (post) {
+        var view = new PostView(post);
+        var $container = $('<div id="entry-' + post._id + '"></div>');
         if (prepend) {
-          $elems.entries.prepend($container);
+          $elems.posts.prepend($container);
         } else {
-          $elems.entries.append($container);
+          $elems.posts.append($container);
         }
         view.bind($container);
-        children[entry._id] = view;
+        children[post._id] = view;
       });
     }
   };
@@ -61,8 +61,7 @@ module.exports = function (locationId) {
           return;
         }
 
-        var entries = result.entries;
-        appendEntries(entries);
+        appendPosts(result.entries);
 
         if (result.more) {
           ui.show($elems.loadMoreBtn);
@@ -81,10 +80,10 @@ module.exports = function (locationId) {
     $mount = $mountEl;
     $mount.html(template());
 
-    $elems.entries = $mount.find('.location-entries-list');
-    $elems.progress = $mount.find('.location-entries-progress');
+    $elems.posts = $mount.find('.location-posts-list');
+    $elems.progress = $mount.find('.location-posts-progress');
     $elems.loadMoreBtn = $mount.find('.load-more');
-    $elems.error = $mount.find('.location-entries-error');
+    $elems.error = $mount.find('.location-posts-error');
 
     // Click to load more
     $elems.loadMoreBtn.click(function () {
@@ -105,7 +104,7 @@ module.exports = function (locationId) {
     bus.on('location_entry_created', function (ev) {
       var id = ev.data.entryId;
       if (!(id in children)) {
-        appendEntries([ev.data.entry], true);
+        appendPosts([ev.data.entry], true);
       }
     });
 

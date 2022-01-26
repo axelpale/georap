@@ -11,7 +11,7 @@ var GeomView = require('./Geom');
 var StatusTypeView = require('./StatusType');
 var FormsView = require('./Forms');
 var RemoveView = require('./Remove');
-var EntriesView = require('./Entries');
+var PostsView = require('./Posts');
 var EventsView = require('./Events');
 var template = require('./template.ejs');
 var locations = georap.stores.locations;
@@ -96,11 +96,11 @@ var LocationView = function (id, query) {
       }
 
       if (able('posts-read')) {
-        children.entriesView = new EntriesView(rawLoc._id);
-        children.entriesView.bind($mount.find('.location-entries'));
+        children.postsView = new PostsView(rawLoc._id);
+        children.postsView.bind($mount.find('.location-entries'));
         // Scroll down to possibly referred entry or comment after
         // entries are loaded.
-        children.entriesView.once('idle', function () {
+        children.postsView.once('idle', function () {
           if (window.location.hash.substring(0, 9) === '#comment-') {
             var layerEl = document.getElementById('card-layer');
             var scrollerEl = layerEl.querySelector('.card-layer-content');
