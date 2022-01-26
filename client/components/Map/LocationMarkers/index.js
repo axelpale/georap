@@ -333,9 +333,9 @@ module.exports = function (map) {
   });
 
   markerStore.on('location_entry_changed', function (ev) {
-    // Add or remove flags according to how the entry has changed.
+    // Add or remove flags according to how the post has changed.
     // NOTE this is not perfect as it does not consider if there
-    // were multiple entries with similar flags. Yet, it is good enough.
+    // were multiple posts with similar flags. Yet, it is good enough.
     if (account.isMe(ev.user)) {
       if (ev.data.delta.flags) {
         if (ev.data.original.flags) {

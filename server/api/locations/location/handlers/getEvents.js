@@ -1,7 +1,7 @@
 const getEvents = require('../dal/getEvents');
 
 module.exports = (req, res, next) => {
-  // Get location entries with their attachments and urls completed.
+  // Get location posts with their attachments and urls completed.
   //
   const locId = req.location._id;
 

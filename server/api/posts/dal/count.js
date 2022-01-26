@@ -1,7 +1,7 @@
 const db = require('georap-db');
 
 module.exports = (callback) => {
-  // Count non-deleted entries
+  // Count non-deleted posts
   //
   // Parameters:
   //   callback

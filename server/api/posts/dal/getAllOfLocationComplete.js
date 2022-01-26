@@ -1,13 +1,13 @@
 const getManyComplete = require('./getManyComplete');
 
 module.exports = (locationId, callback) => {
-  // Get all non-deleted entries of a location with their attachments.
+  // Get all non-deleted posts of a location with their attachments.
   //
   // Parameters:
   //   locationId
   //     object id
   //   callback
-  //     function (err, entries)
+  //     function (err, posts)
   //
   return getManyComplete({
     locationId: locationId,

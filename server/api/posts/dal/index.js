@@ -1,14 +1,14 @@
 // Statistics
 exports.count = require('./count');
 exports.countComments = require('./countComments');
-// Retrieve entries
+// Retrieve posts
 exports.filterUniqueLocationEntries = require('./filterUniqueLocationEntries');
 exports.getAllOfLocationComplete = require('./getAllOfLocationComplete');
 exports.getAllOfLocationRaw = require('./getAllOfLocationRaw');
 exports.getAllOfUser = require('./getAllOfUser');
 exports.getOneComplete = require('./getOneComplete');
 exports.getOneRaw = require('./getOneRaw');
-// Manipulate entries
+// Manipulate posts
 exports.createLocationEntry = require('./createLocationEntry');
 exports.changeLocationEntry = require('./changeLocationEntry');
 exports.moveLocationEntry = require('./moveLocationEntry');

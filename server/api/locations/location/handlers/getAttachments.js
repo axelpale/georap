@@ -1,7 +1,8 @@
 const locationDal = require('../dal');
 
 module.exports = (req, res, next) => {
-  // Get location entries with their attachments and urls completed.
+  // Get all attachments in posts of a location.
+  // Attachments are completed with their urls.
   //
   // Query parameters:
   //   imagesOnly

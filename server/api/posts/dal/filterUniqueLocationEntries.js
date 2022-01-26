@@ -3,7 +3,7 @@ const path = require('path');
 const _ = require('lodash');
 
 module.exports = (args, callback) => {
-  // Append given entries into the given location if they do not yet exist.
+  // Append given posts into the given location if they do not yet exist.
   //
   // Parameters
   //   args

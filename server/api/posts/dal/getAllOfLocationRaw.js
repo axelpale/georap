@@ -1,14 +1,16 @@
 const db = require('georap-db');
 
 module.exports = (locationId, callback) => {
-  // Get all non-deleted entries of a location, most recent first.
+  // Get all non-deleted posts of a location, most recent first.
   //
   // Parameters
   //   locationId
   //     object id
   //   callback
-  //     function (err, entries)
-
+  //     function (err, posts), where
+  //       posts
+  //         array
+  //
   const coll = db.collection('entries');
   const q = {
     locationId: locationId,

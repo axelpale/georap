@@ -4,7 +4,7 @@ const proj = require('../../../../services/proj');
 
 module.exports = (id, callback) => {
   // Get single location with additional coordinate systems,
-  // and entries and their attachments with full urls.
+  // and posts and their attachments with full urls.
   //
   // Parameters:
   //   id

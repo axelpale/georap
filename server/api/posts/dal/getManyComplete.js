@@ -2,7 +2,7 @@ const db = require('georap-db');
 const urls = require('georap-urls-server');
 
 module.exports = (query, options, callback) => {
-  // Get many entries completed with their attachments,
+  // Get many posts completed with their attachments,
   // their comments' attachments, and urls.
   // Add also locationName prop.
   //
@@ -15,7 +15,7 @@ module.exports = (query, options, callback) => {
   //     limit
   //       integer. Default to 100.
   //     withLocations
-  //       boolean. Join location for each entry. Default false.
+  //       boolean. Join location for each post. Default false.
   //     sort
   //       object to pass to $sort aggregation stage. Default { time: -1 }.
   //   callback

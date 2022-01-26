@@ -4,7 +4,7 @@ const _ = require('lodash');
 const eventsDal = require('../../events/dal');
 
 module.exports = (params, callback) => {
-  // Modify entry markdown, attachments, or flags.
+  // Modify post markdown, attachments, or flags.
   //
   // Parameters:
   //   params:
@@ -13,7 +13,7 @@ module.exports = (params, callback) => {
   //     username
   //       string
   //     locationName
-  //       because entries dont store location name but events do
+  //       because posts dont store location name but events do
   //     delta
   //       object of changed values
   //   callback

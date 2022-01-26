@@ -1,14 +1,16 @@
 const db = require('georap-db');
 
 module.exports = (username, callback) => {
-  // Return all non-deleted entries created by user,
+  // Return all non-deleted posts created by user,
   // ordered from oldest to newest.
   //
   // Parameters
   //   username
   //     string
   //   callback
-  //     function (err, entries)
+  //     function (err, posts) where
+  //       posts
+  //         array
   //
   const q = {
     user: username,
