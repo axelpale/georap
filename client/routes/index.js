@@ -313,7 +313,7 @@ exports.route = function () {
       .catch(importErrorHandler);
   });
 
-  page('/coordinates', able('geometry'), basicViewSetup(function () {
+  page('/coordinates', able('geometry-read'), basicViewSetup(function () {
     return import(
       /* webpackChunkName: "coordinates-view" */
       '../components/Coordinates'

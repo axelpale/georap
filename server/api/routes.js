@@ -26,7 +26,7 @@ router.use('/admin', able('admin'), adminRouter);
 router.use('/attachments', able('attachments-read'), attachmentsRouter);
 router.use('/posts', able('posts-read'), postsRouter);
 router.use('/events', able('locations-read'), eventsRouter);
-router.use('/geometry', able('geometry'), geometryRouter);
+router.use('/geometry', able('geometry-read'), geometryRouter);
 router.use('/locations', able('locations-read'), locationsRouter);
 router.use('/markers', able('locations-read'), markersRouter);
 router.use('/statistics', able('statistics'), statisticsRouter);

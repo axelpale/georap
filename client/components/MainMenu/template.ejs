@@ -13,7 +13,7 @@
             <a id="georap-mainmenu-add" href="#"><%= glyphicon({ name: 'map-marker' }) %> <%= __('add-location') %></a>
           </li>
         <% } %>
-        <% if (able('geometry')) { %>
+        <% if (able('geometry-read')) { %>
           <li>
             <a href="/coordinates"><%= glyphicon({ name: 'screenshot' }) %> <%= __('coordinates') %></a>
           </li>

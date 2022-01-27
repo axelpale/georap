@@ -5,7 +5,7 @@
 //
 module.exports = { // New in v14
   'public': [
-    'geometry',
+    'geometry-read',
     'account-login-form',
     'account-password-reset-request',
   ],
@@ -21,7 +21,7 @@ module.exports = { // New in v14
     'account-update',
     'attachments-read',
     'comments-read',
-    'geometry',
+    'geometry-read',
     'locations-read',
     'locations-export-one',
     'posts-read',
@@ -47,7 +47,7 @@ module.exports = { // New in v14
     'comments-update-own',
     'comments-delete-any',
     'comments-delete-own',
-    'geometry',
+    'geometry-read',
     'locations-read',
     'locations-create',
     'locations-delete-any',
