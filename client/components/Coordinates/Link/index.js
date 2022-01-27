@@ -5,6 +5,7 @@ var queryString = require('qs');
 var urls = require('georap-urls-client');
 var mapStateStore = georap.stores.mapstate;
 var defaultSystemName = georap.config.coordinateSystems[0][0];
+var __ = georap.i18n.__;
 var PREC = 6; // decimals in url coords
 
 module.exports = function () {
@@ -25,6 +26,7 @@ module.exports = function () {
 
     $mount.html(template({
       url: urls.baseUrl() + '/?' + queryString.stringify(q),
+      __: __,
     }));
   };
 
@@ -40,6 +42,7 @@ module.exports = function () {
 
       $mount.html(template({
         url: urls.baseUrl() + '/?' + queryString.stringify(q),
+        __: __,
       }));
     }
   };
