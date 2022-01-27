@@ -112,6 +112,40 @@ exports.route = function () {
     return next();
   });
 
+  page('*', function (context, next) {
+    // Recenter map to possible query parameters.
+    // ?lat=23.45&lng=123.4&zoom=12
+    //
+    var q = context.query;
+    var s, lat, lng, zoom;
+
+    if (q.lat || q.lng || q.zoom) {
+      s = {};
+      if (q.lat) {
+        lat = parseFloat(q.lat);
+        if (!isNaN(lat)) {
+          s.lat = lat;
+        }
+      }
+      if (q.lng) {
+        lng = parseFloat(q.lng);
+        if (!isNaN(lng)) {
+          s.lng = lng;
+        }
+      }
+      if (q.zoom) {
+        zoom = parseInt(q.zoom, 10);
+        if (!isNaN(zoom)) {
+          s.zoom = zoom;
+        }
+      }
+      console.log('update store');
+      mapStateStore.update(s);
+    }
+
+    return next();
+  });
+
   page('/', function () {
     // Map is always open on the background.
     // Infinite loop prevention:
@@ -171,39 +205,6 @@ exports.route = function () {
     page.stop();
     context.handled = false;
     window.location.href = context.canonicalPath;
-  });
-
-  page('*', function (context, next) {
-    // Recenter map to possible query parameters.
-    // ?lat=23.45&lng=123.4&zoom=12
-    //
-    var q = context.query;
-    var s, lat, lng, zoom;
-
-    if (q.lat || q.lng || q.zoom) {
-      s = {};
-      if (q.lat) {
-        lat = parseFloat(q.lat);
-        if (!isNaN(lat)) {
-          s.lat = lat;
-        }
-      }
-      if (q.lng) {
-        lng = parseFloat(q.lng);
-        if (!isNaN(lng)) {
-          s.lng = lng;
-        }
-      }
-      if (q.zoom) {
-        zoom = parseInt(q.zoom, 10);
-        if (!isNaN(zoom)) {
-          s.zoom = zoom;
-        }
-      }
-      mapStateStore.update(s);
-    }
-
-    return next();
   });
 
   page('/account', able('account-update'), function () {
