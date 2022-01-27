@@ -1,4 +1,5 @@
-// Component to filter map markers.
+// Component to display and export coordinates
+// without need to create a location for that.
 //
 var ui = require('georap-ui');
 var emitter = require('component-emitter');
