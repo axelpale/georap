@@ -29,7 +29,7 @@ router.use('/events', able('locations-read'), eventsRouter);
 router.use('/geometry', able('geometry-read'), geometryRouter);
 router.use('/locations', able('locations-read'), locationsRouter);
 router.use('/markers', able('locations-read'), markersRouter);
-router.use('/statistics', able('statistics'), statisticsRouter);
+router.use('/statistics', able('statistics-read'), statisticsRouter);
 router.use('/users', able('users'), usersRouter);
 // router.use('/locales', localesRouter); TODO is any use?
 // router.use('/payments', paymentsRouter); TODO is any use?

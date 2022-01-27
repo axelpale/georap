@@ -70,7 +70,7 @@ module.exports = { // New in v14
     'posts-delete-own',
     'posts-move-any',
     'posts-move-own',
-    'statistics',
+    'statistics-read',
     'users',
   ],
   'dev': [], // raw code views and beta features?

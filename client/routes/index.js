@@ -332,7 +332,7 @@ exports.route = function () {
       .catch(importErrorHandler);
   });
 
-  page('/statistics', able('statistics'), basicViewSetup(function () {
+  page('/statistics', able('statistics-read'), basicViewSetup(function () {
     return import(
       /* webpackChunkName: "statistics" */
       '../components/Statistics'
