@@ -9,6 +9,13 @@ module.exports = function (model, test) {
   //   test
   //     function (obj, ev) => bool
   //
+  // Returns
+  //   function (arr, ev) where
+  //     arr
+  //       an array of objects
+  //     ev
+  //       event to be applied to the matched object
+  //
   return function (arr, ev) {
     const obj = arr.find(function (o) {
       return test(o, ev)
