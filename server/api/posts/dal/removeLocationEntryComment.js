@@ -1,5 +1,5 @@
 const db = require('georap-db');
-const entryModel = require('georap-models').entry;
+const postModel = require('georap-models').entry;
 const eventsDal = require('../../events/dal');
 
 module.exports = (params, callback) => {
@@ -9,7 +9,7 @@ module.exports = (params, callback) => {
   //     locationId
   //     locationName
   //     entry
-  //       entry object. Needed to determine next entry.activeAt.
+  //       post object. Needed to refresh post.activeAt.
   //     commentId
   //       determines the comment to remove
   //   callback
@@ -17,15 +17,15 @@ module.exports = (params, callback) => {
 
   const coll = db.collection('entries');
 
-  // Entry to modify
-  const entryId = params.entry._id;
+  // Post to modify
+  const postId = params.entry._id;
   // Comment to remove
   const commentId = params.commentId;
-  // Entry before removal
-  const entryBefore = params.entry;
+  // Post before comment removal
+  const postBefore = params.entry;
 
   // Collect removed comment to pass it to the event creation.
-  const removedComment = entryBefore.comments.find((comm) => {
+  const removedComment = postBefore.comments.find((comm) => {
     return comm.id === commentId;
   });
 
@@ -35,16 +35,16 @@ module.exports = (params, callback) => {
   }
 
   // Determine next activeAt (most recent comment).
-  const entryAfter = Object.assign({}, entryBefore, {
-    comments: entryBefore.comments.filter((comm) => {
+  const postAfter = Object.assign({}, postBefore, {
+    comments: postBefore.comments.filter((comm) => {
       return comm.id !== commentId;
     }),
   });
 
-  const filter = { _id: entryId };
+  const filter = { _id: postId };
   const update = {
     $set: {
-      activeAt: entryModel.activeAt(entryAfter),
+      activeAt: postModel.activeAt(postAfter),
     },
     $pull: {
       comments: {
