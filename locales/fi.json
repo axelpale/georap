@@ -51,7 +51,7 @@
   "client-version": "Käyttöliittymän versio",
   "close": "Sulje",
   "comment": "Kommentoi",
-  "comment-bad-length": "Message is too short or long.",
+  "comment-bad-length": "Kommentti on liian lyhyt tai pitkä.",
   "comment-delete": "Poista kommentti",
   "comment-placeholder": "viesti...",
   "comment-removal-info": "Tämä poistaa kommentin ja sen liitteet.",
