@@ -28,6 +28,10 @@ time:hover {
 .georap-coords {
   font-size: 1.38em;
 }
+.data-list-item {
+  /* for tight text data as on coordinates page */
+  margin-bottom: 0.62rem;
+}
 /* END Effect et General */
 
 /* Card */
@@ -730,12 +734,6 @@ button.georap-geolocation .georap-geolocation-icon {
   background-repeat: no-repeat;
 }
 /* END Geolocation */
-
-/* Pinpointer */
-.georap-crosshair .crosshair-zoom {
-  margin-bottom: 0.62rem;
-}
-/* END Pinpointer */
 
 /* Statistics */
 .georap-credits {
