@@ -55,6 +55,7 @@
   "comment-delete": "Poista kommentti",
   "comment-placeholder": "viesti...",
   "comment-removal-info": "Tämä poistaa kommentin ja sen liitteet.",
+  "comment-was-deleted": "kommentti on poistettu",
   "comments": "Kommentit",
   "comments-count": "kommenttia",
   "contains": "Sisältää",
