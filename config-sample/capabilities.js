@@ -66,6 +66,7 @@ module.exports = { // New in v14
     'locations-thumbnail',
     'locations-update-any',
     'locations-update-own',
+    'map-geolocation',
     'posts-read',
     'posts-create',
     'posts-update-any',
