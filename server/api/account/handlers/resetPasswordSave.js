@@ -29,7 +29,7 @@ module.exports = function (req, res, next) {
     const u = { $set: { hash: newHash } };
 
     // Collection
-    const users = db.get().collection('users');
+    const users = db.collection('users');
 
     users.findOneAndUpdate(q, u, (err2, user) => {
 
