@@ -32,7 +32,6 @@ const precompile = function (locale) {
       enableSupportPage: config.enableSupportPage,
       supportButtonTitle: config.supportButtonTitle,
       supportPageContent: config.supportPageContent,
-      features: config.features,
       googleMapsKey: config.googleMapsKey,
       publicProtocol: config.publicProtocol,
       publicHostname: config.publicHostname,

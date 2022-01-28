@@ -250,7 +250,7 @@ module.exports = {
       type: 'string',
       enum: ['production', 'development', 'test'],
     },
-    features: {
+    features: { // deprecated in v14
       type: 'object',
     },
   },
@@ -305,7 +305,7 @@ module.exports = {
     'exportServices',
     'bcrypt',
     'env',
-    'features',
+    // 'features', // deprecated in v14
   ],
   additionalProperties: false,
 };

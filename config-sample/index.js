@@ -555,10 +555,4 @@ module.exports = {
 
     return 'development';
   }()),
-
-  // EXPERIMENTAL FEATURES
-  // Enable or disable features of the site.
-  features: {
-    // no configurable features yet
-  },
 };
