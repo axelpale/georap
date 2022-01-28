@@ -345,14 +345,14 @@ exports.route = function () {
     card.open(view);
   });
 
-  page('/users', able('users'), basicViewSetup(function () {
+  page('/users', able('users-read'), basicViewSetup(function () {
     return import(
       /* webpackChunkName: "users" */
       '../components/Users'
     );
   }));
 
-  page('/users/:username', able('users'), function (ctx) {
+  page('/users/:username', able('users-read'), function (ctx) {
     import(
       /* webpackChunkName: "user" */
       '../components/User'

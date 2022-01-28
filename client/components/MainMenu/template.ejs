@@ -27,7 +27,7 @@
             <a href="/latest"><%= glyphicon({ name: 'bell' }) %> <%= __('latest') %></a>
           </li>
         <% } %>
-        <% if (able('users')) { %>
+        <% if (able('users-read')) { %>
           <li>
             <a href="/users"><%= glyphicon({ name: 'user' }) %> <%= __('users') %></a>
           </li>

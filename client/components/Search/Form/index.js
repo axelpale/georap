@@ -126,7 +126,7 @@ module.exports = function (query) {
     $elems.form.submit(submitHandler);
     $elems.order.change(submitHandler);
 
-    if (able('users')) {
+    if (able('users-read')) {
       children.creator = new CreatorSelect(query);
       children.creator.bind($elems.creator);
       // Submit on change

@@ -25,7 +25,7 @@ module.exports = { // New in v14
     'locations-read',
     'locations-export-one',
     'posts-read',
-    'users',
+    'users-read',
   ],
   'writer': [], // replaces basic?
   'basic': [],
@@ -71,7 +71,7 @@ module.exports = { // New in v14
     'posts-move-any',
     'posts-move-own',
     'statistics-read',
-    'users',
+    'users-read',
   ],
   'dev': [], // raw code views and beta features?
 };
