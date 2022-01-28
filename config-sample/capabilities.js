@@ -3,7 +3,9 @@
 // The white list defines what features user can see and access.
 // The role of the user is stored in JWT token the user possess.
 //
-module.exports = { // New in v14
+// Introduced in v14.
+//
+module.exports = {
   'public': [
     'geometry-read',
     'account-login-form',
@@ -15,7 +17,11 @@ module.exports = { // New in v14
   'resetter': [
     'account-password-reset',
   ],
-  'frozen': [], // not able to login. Is different from 'banned'?
+  // 'banned': [], // same as frozen?
+  'frozen': [
+    // not able to login
+    'geometry-read',
+  ],
   'reader': [ // able to see content after login but not modify
     'account-auth',
     'account-update',
@@ -23,12 +29,88 @@ module.exports = { // New in v14
     'comments-read',
     'geometry-read',
     'locations-read',
+    'locations-search',
+    'locations-filter',
     'locations-export-one',
+    'locations-geometry',
+    'locations-places',
+    'locations-statustype',
+    'locations-thumbnail',
+    'map-geolocation',
     'posts-read',
     'users-read',
   ],
-  'writer': [],
-  'moderator': [],
+  // 'commenter': [], // same as reader but could comment?
+  'writer': [
+    'account-auth',
+    'account-update',
+    'attachments-read',
+    'attachments-create',
+    'attachments-update-own',
+    'attachments-delete-own',
+    'comments-read',
+    'comments-create',
+    'comments-update-own',
+    'comments-delete-own',
+    'geometry-read',
+    'locations-read',
+    'locations-search',
+    'locations-filter',
+    'locations-create',
+    'locations-delete-own',
+    'locations-events',
+    'locations-export-one',
+    'locations-geometry',
+    'locations-import',
+    'locations-places',
+    'locations-statustype',
+    'locations-thumbnail',
+    'locations-update-any',
+    'map-geolocation',
+    'posts-read',
+    'posts-create',
+    'posts-update-own',
+    'posts-delete-own',
+    'posts-move-own',
+    'statistics-read',
+    'users-read',
+  ],
+  'moderator': [
+    'account-auth',
+    'account-update',
+    'admin-users-read',
+    'attachments-read',
+    'attachments-create',
+    'attachments-update-any',
+    'attachments-delete-any',
+    'comments-read',
+    'comments-create',
+    'comments-update-own',
+    'comments-delete-any',
+    'geometry-read',
+    'locations-read',
+    'locations-search',
+    'locations-filter',
+    'locations-create',
+    'locations-delete-any',
+    'locations-events',
+    'locations-export-all',
+    'locations-export-one',
+    'locations-geometry',
+    'locations-import',
+    'locations-places',
+    'locations-statustype',
+    'locations-thumbnail',
+    'locations-update-any',
+    'map-geolocation',
+    'posts-read',
+    'posts-create',
+    'posts-update-own',
+    'posts-delete-any',
+    'posts-move-any',
+    'statistics-read',
+    'users-read',
+  ],
   'admin': [
     'account-auth', // allow login and any authentication with username
     'account-update',
@@ -77,5 +159,5 @@ module.exports = { // New in v14
     'statistics-read',
     'users-read',
   ],
-  'dev': [], // raw code views and beta features?
+  // 'dev': [], // for testing and beta features?
 };
