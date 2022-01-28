@@ -1,6 +1,4 @@
 
-var account = georap.stores.account;
-var able = georap.stores.account.able;
 var template = require('./template.ejs');
 var components = require('georap-components');
 var ui = require('georap-ui');
@@ -13,23 +11,7 @@ module.exports = function (location) {
   var children = {};
   var self = this;
 
-  var userCanRemove = function () {
-    // Allow only admins and creators to delete.
-    if (able('locations-delete-any')) {
-      return true;
-    } else if (able('locations-delete-own')) {
-      if (account.getName() === location.getCreator()) {
-        return true;
-      }
-    }
-    return false;
-  };
-
   self.bind = function ($mountEl) {
-    if (!userCanRemove()) {
-      return;
-    }
-
     $mount = $mountEl;
 
     $mount.html(template({

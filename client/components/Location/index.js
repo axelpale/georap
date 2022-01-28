@@ -16,6 +16,7 @@ var EventsView = require('./Events');
 var template = require('./template.ejs');
 var locations = georap.stores.locations;
 var able = georap.stores.account.able;
+var ableOwn = georap.stores.account.ableOwn;
 var __ = georap.i18n.__;
 
 var LocationView = function (id, query) {
@@ -130,7 +131,7 @@ var LocationView = function (id, query) {
         children.eventsView.bind($mount.find('.location-events'));
       }
 
-      if (able('locations-delete-own') || able('locations-delete-any')) {
+      if (ableOwn(rawLoc, 'locations-delete')) {
         children.removeView = new RemoveView(_location);
         children.removeView.bind($mount.find('.location-remove'));
       }
