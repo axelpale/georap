@@ -125,36 +125,31 @@ window.initMap = function () {
 
   var menuComp = new MainMenuComp(mapComp);
 
-  // Bind menu to auth events.
-  account.on('login', function () {
-    // Refresh main menu
+  var onAuthEvent = function () {
+    // Refresh main menu when user arrives or changes role.
+    // Menu component checks capabilities internally.
     mapComp.removeControls();
     mapComp.addControl(menuComp);
-  });
-  account.on('logout', function () {
-    // Refresh main menu
-    mapComp.removeControls();
-    mapComp.addControl(menuComp);
-  });
-
-  // Bind fetching of locations to auth events.
-  account.on('login', function () {
-    mapComp.startLoadingMarkers();
-    mapComp.startLoadingFlags();
-  });
-  account.on('logout', function () {
-    if (!account.able('locations-read')) {
-      mapComp.stopLoadingMarkers();
-      mapComp.removeAllMarkers();  // do not expose data after log out
+    // Geolocation
+    if (account.able('map-geolocation')) {
+      mapComp.addGeolocationButton();
+    } else {
+      mapComp.removeGeolocationButton();
     }
-    mapComp.stopLoadingFlags();
-    mapComp.removeAllFlags();
-  });
+    // Location markers
+    if (account.able('locations-read')) {
+      mapComp.startLoadingMarkers();
+      mapComp.startLoadingFlags();
+    } else {
+      mapComp.stopLoadingFlags();
+      mapComp.stopLoadingMarkers();
+      mapComp.removeAllMarkers();
+    }
+  };
 
-  // Already logged in or public user
-  if (account.able('locations-read')) {
-    mapComp.startLoadingMarkers();
-  }
-
-  mapComp.addControl(menuComp);
+  // Bind map functionality to auth events.
+  account.on('login', onAuthEvent);
+  account.on('logout', onAuthEvent);
+  // Initial functionality setup
+  onAuthEvent();
 };

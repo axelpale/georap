@@ -1,12 +1,16 @@
 /* global google */
 
 var icons = require('../lib/icons');
+var navi = window.navigator;
 
 var ICON_SIZE = 30; // 18
 var TRACKING_X = 240; // 144
 var ANIMATION_INTERVAL = 500;
 
 module.exports = function (map) {
+
+  // The button
+  var controlDiv = null;
 
   // Marker that represents geolocation of the user
   var marker = null;
@@ -15,6 +19,9 @@ module.exports = function (map) {
   // We want to do special stuff on the first geolocation watch update.
   var firstUpdate = true;
 
+  // Animations
+  var searchAnimation = null;
+  var trackAnimation = null;
 
   // Private methods
 
@@ -45,7 +52,7 @@ module.exports = function (map) {
   this.bind = function () {
 
     // See https://stackoverflow.com/a/34609371/638546
-    var controlDiv = document.createElement('div');
+    controlDiv = document.createElement('div');
 
     var firstChild = (function defineFirstChild() {
       var el = document.createElement('button');
@@ -62,7 +69,7 @@ module.exports = function (map) {
     }());
     firstChild.appendChild(secondChild);
 
-    var searchAnimation = (function () {
+    searchAnimation = (function () {
       var animationInterval = null;
       var imgX = 0;
 
@@ -82,7 +89,7 @@ module.exports = function (map) {
       };
     }());
 
-    var trackAnimation = (function () {
+    trackAnimation = (function () {
       var animationInterval = null;
       var phase = false;
 
@@ -110,8 +117,8 @@ module.exports = function (map) {
         // Not tracking. Get the location, and show marker.
         searchAnimation.start();
 
-        if (navigator.geolocation) {
-          watchId = navigator.geolocation.watchPosition(function (position) {
+        if (navi.geolocation) {
+          watchId = navi.geolocation.watchPosition(function (position) {
             var lat = position.coords.latitude;
             var lng = position.coords.longitude;
             var latlng = new google.maps.LatLng(lat, lng);
@@ -140,13 +147,43 @@ module.exports = function (map) {
 
         // Reset watch
         firstUpdate = true;
-        navigator.geolocation.clearWatch(watchId);
+        navi.geolocation.clearWatch(watchId);
         watchId = null;
       }
     });
 
     controlDiv.index = 1;
     map.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(controlDiv);
+  };
+
+  this.unbind = function () {
+    if (controlDiv) {
+      _hideMarker();
+      // Stop possible button animations
+      trackAnimation.stop();
+      searchAnimation.stop();
+      // Reset navi watch
+      firstUpdate = true;
+      navi.geolocation.clearWatch(watchId);
+      watchId = null;
+      // Remove button; first find index and then del so del not affect index.
+      var controls = map.controls[google.maps.ControlPosition.LEFT_BOTTOM];
+      var index = -1;
+      controls.forEach(function (el, i) {
+        if (el === controlDiv) {
+          index = i;
+        }
+      });
+      if (index >= 0) {
+        controls.removeAt(index);
+      }
+      // var length = controls.getLength();
+      // for (index = 0; index < length; index += 1) {
+      //   if (controls.getAt)
+      // }
+      controlDiv = null;
+      map = null;
+    }
   };
 
 };
