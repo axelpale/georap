@@ -10,6 +10,6 @@ router.get('/', handlers.getWithin);
 router.get('/search', able('locations-search'), handlers.getFiltered);
 router.get('/filtered', able('locations-filter'), handlers.getFilteredWithin);
 
-router.use('/kml', kmlRouter);
+router.use('/kml', able('locations-export-all'), kmlRouter);
 
 module.exports = router;
