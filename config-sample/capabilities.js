@@ -27,8 +27,7 @@ module.exports = { // New in v14
     'posts-read',
     'users-read',
   ],
-  'writer': [], // replaces basic?
-  'basic': [],
+  'writer': [],
   'moderator': [],
   'admin': [
     'account-auth', // allow login and any authentication with username

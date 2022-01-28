@@ -138,8 +138,7 @@ module.exports = {
 
 
   //##### USER MANAGEMENT #####
-  // TODO rename basic to writer
-  roles: ['frozen', 'reader', 'basic', 'moderator', 'admin'], // New in v14
+  roles: ['frozen', 'reader', 'writer', 'moderator', 'admin'], // New in v14
   defaultRole: 'reader', // New in v14
   capabilities: capabilities, // New in v14
 

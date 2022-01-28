@@ -45,7 +45,7 @@ const substeps = [
       if (user.admin) {
         const isAdmin = user.admin;
         delete user.admin;
-        user.role = isAdmin ? 'admin' : 'basic';
+        user.role = isAdmin ? 'admin' : 'writer';
       }
       if (!user.securityToken) {
         // Init empty security token
