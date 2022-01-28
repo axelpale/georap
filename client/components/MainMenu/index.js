@@ -7,6 +7,7 @@ var urls = require('georap-urls-client');
 var account = georap.stores.account;
 var locations = georap.stores.locations;
 var filterStore = georap.stores.filter;
+var able = account.able;
 
 // var isGeomAlmostEqual = function (geom1, geom2) {
 //   var prec = 5;
@@ -51,7 +52,7 @@ module.exports = function (mapComp) {
       glyphicon: glyphiconTemplate,
       config: georap.config,
       user: account.getUser(), // is null if not logged in
-      able: account.able,
+      able: able,
       isFilterActive: !filterStore.isDefault(),
       __: georap.i18n.__,
     }));
@@ -168,49 +169,51 @@ module.exports = function (mapComp) {
     });
 
     // Filter
+    if (able('locations-filter')) {
+      var filterTimer = true; // start without burn-in period
+      $mount.on('click', '#georap-mainmenu-filter', function (ev) {
+        ev.preventDefault();
 
-    var filterTimer = true; // start without burn-in period
-    $mount.on('click', '#georap-mainmenu-filter', function (ev) {
-      ev.preventDefault();
+        var isFilterOpen = georap.getCurrentPath() === '/filter';
 
-      var isFilterOpen = georap.getCurrentPath() === '/filter';
-
-      if (isFilterOpen) {
-        if (filterTimer) {
-          filterTimer = false;
-          georap.go('/');
+        if (isFilterOpen) {
+          if (filterTimer) {
+            filterTimer = false;
+            georap.go('/');
+          }
+        } else {
+          // Delay to prevent immediate double click open close.
+          var SEC = 1000;
+          setTimeout(function () {
+            filterTimer = true;
+          }, SEC);
+          georap.go('/filter');
         }
-      } else {
-        // Delay to prevent immediate double click open close.
-        var SEC = 1000;
-        setTimeout(function () {
-          filterTimer = true;
-        }, SEC);
-        georap.go('/filter');
-      }
-    });
+      });
 
-    filterStore.on('updated', function () {
-      // Show a red dot when the filter is active.
-      if (filterStore.isDefault()) {
-        ui.hide($('#georap-mainmenu-filter .label'));
-      } else {
-        ui.show($('#georap-mainmenu-filter .label'));
-      }
-    });
-
+      filterStore.on('updated', function () {
+        // Show a red dot when the filter is active.
+        if (filterStore.isDefault()) {
+          ui.hide($('#georap-mainmenu-filter .label'));
+        } else {
+          ui.show($('#georap-mainmenu-filter .label'));
+        }
+      });
+    }
 
     // Search bar
 
-    $mount.on('submit', '#georap-mainmenu-search-form', function (ev) {
-      ev.preventDefault();
+    if (able('locations-search')) {
+      $mount.on('submit', '#georap-mainmenu-search-form', function (ev) {
+        ev.preventDefault();
 
-      var searchText = $('#georap-mainmenu-search-text').val().trim();
-      if (searchText.length > 0) {
-        return georap.go('/search?text=' + searchText);
-      }
-      return georap.go('/search');
-    });
+        var searchText = $('#georap-mainmenu-search-text').val().trim();
+        if (searchText.length > 0) {
+          return georap.go('/search?text=' + searchText);
+        }
+        return georap.go('/search');
+      });
+    }
 
   };
 

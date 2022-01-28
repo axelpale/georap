@@ -51,6 +51,8 @@ module.exports = { // New in v14
     'comments-delete-own',
     'geometry-read',
     'locations-read',
+    'locations-search',
+    'locations-filter',
     'locations-create',
     'locations-delete-any',
     'locations-delete-own',

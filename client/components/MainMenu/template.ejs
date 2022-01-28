@@ -32,7 +32,7 @@
             <a href="/users"><%= glyphicon({ name: 'user' }) %> <%= __('users') %></a>
           </li>
         <% } %>
-        <% if (able('locations-read')) { %>
+        <% if (able('locations-read') && able('locations-search')) { %>
           <li>
             <a href="/search"><%= glyphicon({ name: 'th-list' }) %> <%= __('locations') %></a>
           </li>
@@ -97,13 +97,15 @@
       </ul>
     </div><!-- .dropdown -->
 
-    <% if (able('locations-read')) { %>
+    <% if (able('locations-read') && able('locations-filter')) { %>
     <div class="btn-group" role="group" aria-label="Filter tools">
       <button id="georap-mainmenu-filter" class="btn btn-default btn-lg" type="button" title="Filter"><%= glyphicon({ name: 'filter' }) %>
         <span class="label label-danger<%= isFilterActive ? '' : ' hidden' %>">&nbsp;</span>
       </button>
     </div>
+    <% } %>
 
+    <% if (able('locations-read') && able('locations-search')) { %>
     <form id="georap-mainmenu-search-form" class="input-group">
       <input id="georap-mainmenu-search-text" type="text" class="form-control input-lg" placeholder="<%= __('search-placeholder') %>">
       <span class="input-group-btn">
