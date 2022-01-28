@@ -345,7 +345,6 @@
   "user-restore-you-sure": "Are you sure?",
   "user-role": {
     "admin": "Admin",
-    "basic": "Basic",
     "frozen": "Frozen",
     "moderator": "Moderator",
     "reader": "Reader",

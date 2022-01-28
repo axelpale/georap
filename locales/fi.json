@@ -344,7 +344,6 @@
   "user-restore-you-sure": "Oletko varma?",
   "user-role": {
     "admin": "Ylläpitäjä",
-    "basic": "Perusjäsen",
     "frozen": "Jäädytetty",
     "moderator": "Moderaattori",
     "reader": "Lukija",
