@@ -31,10 +31,10 @@ module.exports = { // New in v14
   'basic': [],
   'moderator': [],
   'admin': [
-    'admin',
     'account-auth', // allow login and any authentication with username
-    'account-invite',
     'account-update',
+    'admin-users-read',
+    'admin-users-invite',
     'attachments-read',
     'attachments-create',
     'attachments-update-any',

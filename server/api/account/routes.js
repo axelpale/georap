@@ -39,7 +39,8 @@ router.post('/password', able('account-update'),
 // Admin routes - require authentication with admin privilege
 
 // Send invitation
-router.post('/invite', able('account-invite'), jsonParser, handlers.inviteSend);
+router.post('/invite', able('admin-users-invite'),
+            jsonParser, handlers.inviteSend);
 
 
 module.exports = router;

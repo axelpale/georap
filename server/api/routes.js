@@ -22,7 +22,7 @@ router.use('/icons', iconsRouter);
 // Account checks capabilities deeper.
 router.use('/account', accountRouter);
 
-router.use('/admin', able('admin'), adminRouter);
+router.use('/admin', able('admin-users-read'), adminRouter);
 router.use('/attachments', able('attachments-read'), attachmentsRouter);
 router.use('/posts', able('posts-read'), postsRouter);
 router.use('/events', able('locations-read'), eventsRouter);

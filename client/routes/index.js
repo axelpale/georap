@@ -369,14 +369,14 @@ exports.route = function () {
   // Routes that require admin. Note the adminOnly middleware.
   //
 
-  page('/admin/users', able('admin'), basicViewSetup(function () {
+  page('/admin/users', able('admin-users-read'), basicViewSetup(function () {
     return import(
       /* webpackChunkName: "admin-users" */
       '../components/Admin/Users'
     );
   }));
 
-  page('/admin/users/:username', able('admin'), function (ctx) {
+  page('/admin/users/:username', able('admin-users-read'), function (ctx) {
     import(
       /* webpackChunkName: "admin-user" */
       '../components/Admin/Users/User'
@@ -389,7 +389,7 @@ exports.route = function () {
       .catch(importErrorHandler);
   });
 
-  page('/invite', able('admin'), basicViewSetup(function () {
+  page('/invite', able('admin-users-invite'), basicViewSetup(function () {
     return import(
       /* webpackChunkName: "invite-view" */
       '../components/Invite'
