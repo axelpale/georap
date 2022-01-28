@@ -37,10 +37,10 @@ exports.setRole = function (req, res, next) {
   const newRole = req.body.role;
   const targetName = req.username;
   const authorName = req.user.name;
-  const adminName = config.admin.username;
+  const siteAdminName = config.admin.username;
 
   // Ensure role is valid for persistence.
-  // Note that config.capabilities has extra role names where
+  // Note that config.capabilities has extra role names in which
   // no true long-term user can be.
   if (!config.roles.includes(newRole)) {
     return res.status(status.BAD_REQUEST).send('Invalid role');
@@ -52,8 +52,9 @@ exports.setRole = function (req, res, next) {
     return res.status(status.FORBIDDEN).send(req.__('user-role-noauto'));
   }
 
-  // Prevent config-admin to become reroled
-  if (targetName === adminName) {
+  // Prevent config-admin to become reroled.
+  // This prevents a hacked admin account closing all other admin accounts.
+  if (targetName === siteAdminName) {
     return res.status(status.FORBIDDEN).send('Cannot change root admin role');
   }
 
@@ -70,7 +71,7 @@ exports.setRole = function (req, res, next) {
 exports.removeOne = function (req, res, next) {
   const targetName = req.username;
   const authorName = req.user.name;
-  const adminName = config.admin.username;
+  const siteAdminName = config.admin.username;
 
   // Only admin roles can remove. Admin status checked in router.
   // Root-admin cannot be removed.
@@ -79,8 +80,9 @@ exports.removeOne = function (req, res, next) {
     return res.status(status.FORBIDDEN).send(req.__('user-removal-noauto'));
   }
 
-  // Prevent config-admin to become reroled
-  if (targetName === adminName) {
+  // Prevent config-admin to become reroled.
+  // This prevents a hacked admin account closing all other admin accounts.
+  if (targetName === siteAdminName) {
     return res.status(status.FORBIDDEN).send(req.__('user-removal-noadmin'));
   }
 
@@ -89,7 +91,7 @@ exports.removeOne = function (req, res, next) {
       return next(err);
     }
 
-    // TODO store user event
+    // TODO store a user event
 
     return res.sendStatus(status.OK);
   });

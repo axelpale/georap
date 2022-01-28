@@ -35,6 +35,8 @@ module.exports = { // New in v14
     'account-update',
     'admin-users-read',
     'admin-users-invite',
+    'admin-users-rerole',
+    'admin-users-delete',
     'attachments-read',
     'attachments-create',
     'attachments-update-any',
