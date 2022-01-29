@@ -43,7 +43,7 @@
     "mongo": "mongo georap",
     "mongo:test": "mongo test",
     "mongod:init": "mkdir -p .data/db && mongod --dbpath=.data/db",
-    "mongod:init:users": "mongo config/mongo.init.js",
+    "mongod:init:users": "mongo migration/mongo.init.js",
     "mongod": "mongod --auth --dbpath=.data/db",
     "reset": "rm -rf .data",
     "worker": "node worker/index.js"
