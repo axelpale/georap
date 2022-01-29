@@ -187,10 +187,10 @@ module.exports = {
   supportPageContent: 'Support us by <insert support method here>',
 
   // Coordinate systems available for users and export services.
-  // See config/coordinateSystems.js for details.
+  // See config/coordinateSystems.js
   coordinateSystems: coordinateSystems,
-
-  // External web map services where users can look alternative maps.
+  // External web map services to where users can export coordinates.
+  // See config/exportServices.js
   exportServices: exportServices,
 
   // ##### FOR DEVS ONLY #####
