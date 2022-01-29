@@ -1,24 +1,18 @@
 //
 // This is the main configuration file of your Georap instance.
 //
-// The configuration is split in three sections:
+// The configuration is split into two sections.
 // - CRITICAL CONFIG
-// - FILES AND PATHS
-// - THEME AND BRAND
-// - FOR DEVS ONLY
+// - NON-CRITICAL CONFIG
 //
 // As the name suggests, you need to go through CRITICAL CONFIG to get
 // the site up and running.
 //
-// For custom installation paths and directory structure,
-// read and update FILES AND PATHS.
-//
-// To tailor the app for your team or community, see THEME AND BRAND.
-// Theming config includes settings such as available marker icons,
-// location classification, list lengths, coordinate systems, and
-// third party map services.
-//
-// Leave the FOR DEVS ONLY as is unless you know what you are doing.
+// Default values in NON-CRITICAL CONFIG are enough to run a site.
+// To tailor the app for your team or community, see them through.
+// The non-critical config is grouped into submodules under config/ dir.
+// They include things like marker icons, location classification,
+// user roles and capabilities, and third party map services.
 //
 
 // We will join paths relative to the current directory.
@@ -109,6 +103,7 @@ module.exports = {
     },
   },
   // Automatic email message settings
+  // for invitation and password reset emails.
   mail: {
     sender: 'admin@example.com',
   },
@@ -185,7 +180,7 @@ module.exports = {
   // See config/exportServices.js
   exportServices: exportServices,
 
-  // ##### FOR DEVS ONLY #####
+  // Security and development
   // See config/security.js
   // Hashing settings
   bcrypt: security.bcrypt,
