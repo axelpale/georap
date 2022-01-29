@@ -31,6 +31,7 @@ const loginPage = require('./loginPage');
 const capabilities = require('./capabilities');
 const coordinateSystems = require('./coordinateSystems');
 const exportServices = require('./exportServices');
+const supportPage = require('./supportPage');
 const security = require('./security');
 const users = require('./users');
 
@@ -169,7 +170,6 @@ module.exports = {
   // Location marker template image settings
   markerTemplates: locations.markerTemplates,
 
-  // #### POSTS AND COMMENTS ####
   // Post list view settings
   entries: posts.entries,
   // Commenting
@@ -177,14 +177,10 @@ module.exports = {
   // Posts can be flagged for example as visits or questions.
   entryFlags: posts.entryFlags,
 
-  // Support page
-  // A custom html page aimed for community rules and
-  // ways to support the community or maintenance.
-  // The page can be opened from a main menu button next to the log out.
-  enableSupportPage: true,
-  supportButtonTitle: 'Support us',
-  // supportPageContent can have any static html content
-  supportPageContent: 'Support us by <insert support method here>',
+  // Support page for general info and community rules
+  enableSupportPage: supportPage.enableSupportPage,
+  supportButtonTitle: supportPage.supportButtonTitle,
+  supportPageContent: supportPage.supportPageContent,
 
   // Coordinate systems available for users and export services.
   // See config/coordinateSystems.js
