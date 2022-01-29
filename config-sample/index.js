@@ -120,7 +120,7 @@ module.exports = {
   // You can find detailed documentation of each property in their submodule.
   // Feel encouraged to check them out.
 
-  // ##### FILES AND PATHS #####
+  // Files and paths
   // See config/filesUrls.js
   staticDir: filesUrls.staticDir,
   staticUrl: filesUrls.staticUrl,
@@ -134,43 +134,46 @@ module.exports = {
   tempUploadSizeLimit: filesUrls.tempUploadSizeLimit,
   logDir: filesUrls.logDir,
 
-  //##### USERS AND CAPABILITIES #####
+  // Users and capabilities
+  // See config/users.js
+  // See config/capabilities.js
   roles: users.roles,
   defaultRole: users.defaultRole,
   capabilities: capabilities, // New in v14
   rewards: users.rewards,
 
-  // ##### THEME AND BRAND #####
-
   // Languages and translations
+  // See config/languages.js
   defaultLocale: languages.defaultLocale,
   availableLocales: languages.availableLocales,
 
   // Site logo in various sizes for different devices and use cases.
+  // See config/icons.js
   icons: icons.icons,
   appleTouchIcons: icons.appleTouchIcons,
 
-  // Initial map location for new users.
+  // Landing UI conditions
+  // See config/landing.js
   defaultMapState: landing.defaultMapState,
-  // Login screen settings
   loginPageSize: landing.loginPageSize,
   loginBackground: landing.loginBackground,
   loginColor: landing.loginColor,
 
-  // Location classification: status and type
+  // Location classification and marker styles
+  // See config/locations.js
   locationStatuses: locations.locationStatuses,
   locationTypes: locations.locationTypes,
   // Location marker template image settings
   markerTemplates: locations.markerTemplates,
 
-  // Post list view settings
+  // Posts and comments
+  // See config/posts.js
   entries: posts.entries,
-  // Commenting
   comments: posts.comments,
-  // Posts can be flagged for example as visits or questions.
   entryFlags: posts.entryFlags,
 
   // Support page for general info and community rules
+  // See config/supportPage.js
   enableSupportPage: supportPage.enableSupportPage,
   supportButtonTitle: supportPage.supportButtonTitle,
   supportPageContent: supportPage.supportPageContent,
@@ -183,6 +186,7 @@ module.exports = {
   exportServices: exportServices,
 
   // ##### FOR DEVS ONLY #####
+  // See config/security.js
   // Hashing settings
   bcrypt: security.bcrypt,
   // Node environment detection
