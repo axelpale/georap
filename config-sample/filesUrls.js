@@ -1,5 +1,7 @@
 // ##### FILES AND PATHS #####
 // Can be left as default if you do the installation as described in README.
+//
+const path = require('path');
 
 // Static files
 // Express/Webpack will copy the static files to be served to this directory:
