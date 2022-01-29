@@ -23,6 +23,7 @@
 
 // We will join paths relative to the current directory.
 const path = require('path');
+const filesUrls = require('./filesUrls');
 const capabilities = require('./capabilities');
 const coordinateSystems = require('./coordinateSystems');
 const exportServices = require('./exportServices');
@@ -106,39 +107,17 @@ module.exports = {
 
 
   // ##### FILES AND PATHS #####
-  // Can be left as default if you do the installation as described in README.
-
-  // Static files
-  // Express/Webpack will copy the static files to be served to this directory:
-  staticDir: path.resolve(__dirname, '../.tmp/public'),
-  // URLs of the static files are prefixed with this static URL root path.
-  // Ensure to remove any trailing slash.
-  staticUrl: '/assets',
-
-  // Uploaded files
-  // Express will serve uploaded files (location attachments) from this dir.
-  uploadDir: path.resolve(__dirname, '../.data/uploads'),
-  // URLs of the uploaded files are prefixed with this URL root path.
-  uploadUrl: '/uploads',
-  // Thumbnail max width & height in pixels
-  uploadThumbSize: 568,
-  // Upload file size limit in bytes.
-  uploadSizeLimit: 20 * 1024 * 1024, // 20 MiB
-
-  // Temporary uploaded files.
-  // Files under these directories are removed in regular basis.
-  tempUploadDir: path.resolve(__dirname, '../.data/tempUploads'),
-  // URLs of the temporary files are prefixed with this URL root path.
-  tempUploadUrl: '/temporary',
-  // Seconds from last change, after the file or dir can be safely removed.
-  tempUploadTimeToLive: 2 * 24 * 60 * 60, // two days
-  // Upload file size limit in bytes.
-  tempUploadSizeLimit: 200 * 1024 * 1024, // 200 MiB
-
-  // Log files
-  // Logs about requests are stored under this directory:
-  logDir: path.resolve(__dirname, '../.data/logs'),
-
+  staticDir: filesUrls.staticDir,
+  staticUrl: filesUrls.staticUrl,
+  uploadDir: filesUrls.uploadDir,
+  uploadUrl: filesUrls.uploadUrl,
+  uploadThumbSize: filesUrls.uploadThumbSize,
+  uploadSizeLimit: filesUrls.uploadSizeLimit,
+  tempUploadDir: filesUrls.tempUploadDir,
+  tempUploadUrl: filesUrls.tempUploadUrl,
+  tempUploadTimeToLive: filesUrls.tempUploadTimeToLive,
+  tempUploadSizeLimit: filesUrls.tempUploadSizeLimit,
+  logDir: filesUrls.logDir,
 
   //##### USER MANAGEMENT #####
   roles: ['frozen', 'reader', 'writer', 'moderator', 'admin'], // New in v14
