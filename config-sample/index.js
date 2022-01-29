@@ -29,6 +29,7 @@ const loginPage = require('./loginPage');
 const capabilities = require('./capabilities');
 const coordinateSystems = require('./coordinateSystems');
 const exportServices = require('./exportServices');
+const security = require('./security');
 
 module.exports = {
   // ##### CRITICAL CONFIG #####
@@ -462,13 +463,7 @@ module.exports = {
 
 
   // ##### FOR DEVS ONLY #####
-  // Hashing security and environment variables.
-  // Leave these as they are unless you know what you are doing.
-
-  // Bcrypt hashing strength
-  bcrypt: {
-    rounds: 10,
-  },
+  bcrypt: security.bcrypt,
 
   // Set node environment.
   // Defaults to 'development' like app.get('env') in Express.
