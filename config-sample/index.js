@@ -25,13 +25,14 @@
 const path = require('path');
 const icons = require('./icons');
 const posts = require('./posts');
+const landing = require('./landing');
 const locations = require('./locations');
 const filesUrls = require('./filesUrls');
-const landing = require('./landing');
 const capabilities = require('./capabilities');
 const coordinateSystems = require('./coordinateSystems');
 const exportServices = require('./exportServices');
 const supportPage = require('./supportPage');
+const languages = require('./languages');
 const security = require('./security');
 const users = require('./users');
 
@@ -142,8 +143,8 @@ module.exports = {
   // ##### THEME AND BRAND #####
 
   // Languages and translations
-  defaultLocale: 'en',
-  availableLocales: ['en', 'fi'],
+  defaultLocale: languages.defaultLocale,
+  availableLocales: languages.availableLocales,
 
   // Site logo in various sizes for different devices and use cases.
   icons: icons.icons,
