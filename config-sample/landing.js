@@ -1,5 +1,13 @@
 const path = require('path');
 
+// Initial map location for new users and visitors.
+exports.defaultMapState = {
+  lat: 57.5727427,
+  lng: 21.8783527,
+  zoom: 13,
+  mapTypeId: 'hybrid', // 'roadmap', 'satellite', 'hybrid', or 'terrain'
+};
+
 // Login screen mode
 exports.loginPageSize = 'full'; // or 'medium' to show the map.
 // Login screen background image. The first thing the user experiences.

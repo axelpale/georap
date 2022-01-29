@@ -27,7 +27,7 @@ const icons = require('./icons');
 const posts = require('./posts');
 const locations = require('./locations');
 const filesUrls = require('./filesUrls');
-const loginPage = require('./loginPage');
+const landing = require('./landing');
 const capabilities = require('./capabilities');
 const coordinateSystems = require('./coordinateSystems');
 const exportServices = require('./exportServices');
@@ -146,23 +146,17 @@ module.exports = {
   defaultLocale: 'en',
   availableLocales: ['en', 'fi'],
 
-  // Initial map location for new users.
-  // Example locations are at @57.5727427,21.8783527,13z
-  defaultMapState: {
-    lat: 57.5727427,
-    lng: 21.8783527,
-    zoom: 13,
-    mapTypeId: 'hybrid', // 'roadmap', 'satellite', 'hybrid', or 'terrain'
-  },
-
   // Site logo in various sizes for different devices and use cases.
   icons: icons.icons,
   appleTouchIcons: icons.appleTouchIcons,
 
+  // Initial map location for new users.
+  // Example locations are at @57.5727427,21.8783527,13z
+  defaultMapState: landing.defaultMapState,
   // Login screen settings
-  loginPageSize: loginPage.loginPageSize,
-  loginBackground: loginPage.loginBackground,
-  loginColor: loginPage.loginColor,
+  loginPageSize: landing.loginPageSize,
+  loginBackground: landing.loginBackground,
+  loginColor: landing.loginColor,
 
   // Location classification: status and type
   locationStatuses: locations.locationStatuses,
