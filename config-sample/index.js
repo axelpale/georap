@@ -87,7 +87,8 @@ module.exports = {
     // testUrl: 'mongodb://testuser:testuserpwd@localhost:27017/test',
   },
 
-  // Email server connection
+  // Email
+  // Mail server connection settings
   // For details, see https://nodemailer.com/2-0-0-beta/setup-smtp/.
   smtp: {
     host: 'smtp.example.com',
@@ -98,7 +99,7 @@ module.exports = {
       pass: 'mailboxpassword',
     },
   },
-  // Email messages
+  // Automatic email message settings
   mail: {
     sender: 'admin@example.com',
   },
