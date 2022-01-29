@@ -25,6 +25,7 @@
 const path = require('path');
 const icons = require('./icons');
 const filesUrls = require('./filesUrls');
+const loginPage = require('./loginPage');
 const capabilities = require('./capabilities');
 const coordinateSystems = require('./coordinateSystems');
 const exportServices = require('./exportServices');
@@ -146,16 +147,10 @@ module.exports = {
   icons: icons.icons,
   appleTouchIcons: icons.appleTouchIcons,
 
-  // Login screen mode
-  loginPageSize: 'full', // or 'medium' to show the map.
-  // Login screen background image. The first thing the user experiences.
-  // The image will be copied to a public location on start up.
-  // Use only an absolute path.
-  loginBackground: path.join(__dirname, 'images/login-background.jpg'),
-  // A color scheme for buttons and progress bars on the login page.
-  // The possible values are the contextual color from Bootstrap 3:
-  // 'muted', 'primary', 'success', 'info', 'warning', 'danger'
-  loginColor: 'primary',
+  // Login screen settings
+  loginPageSize: loginPage.loginPageSize,
+  loginBackground: loginPage.loginBackground,
+  loginColor: loginPage.loginColor,
 
   // Location classification: status.
   // The first in the list is used as the default.
