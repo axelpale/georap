@@ -140,7 +140,6 @@ module.exports = {
   rewards: users.rewards,
 
   // ##### THEME AND BRAND #####
-  // Settings from here to the end of the file can be left default.
 
   // Languages and translations
   defaultLocale: 'en',
@@ -151,7 +150,6 @@ module.exports = {
   appleTouchIcons: icons.appleTouchIcons,
 
   // Initial map location for new users.
-  // Example locations are at @57.5727427,21.8783527,13z
   defaultMapState: landing.defaultMapState,
   // Login screen settings
   loginPageSize: landing.loginPageSize,
