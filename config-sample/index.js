@@ -193,22 +193,9 @@ module.exports = {
   // External web map services where users can look alternative maps.
   exportServices: exportServices,
 
-
   // ##### FOR DEVS ONLY #####
+  // Hashing settings
   bcrypt: security.bcrypt,
-
-  // Set node environment.
-  // Defaults to 'development' like app.get('env') in Express.
-  // Access process.env only in one place, here.
-  // See https://github.com/eslint/eslint/issues/657
-  env: (function () {
-    // eslint-disable-next-line no-process-env
-    const env = process.env.NODE_ENV;
-
-    if (env === 'production' || env === 'development' || env === 'test') {
-      return env;
-    }  // else
-
-    return 'development';
-  }()),
+  // Node environment detection
+  env: security.env,
 };
