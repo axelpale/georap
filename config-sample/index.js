@@ -110,8 +110,15 @@ module.exports = {
     sender: 'admin@example.com',
   },
 
+  // ##### END OF CRITICAL CONFIG #####
+  // The default values for the rest of the config are enough to run the site.
+  // They still provide powerful ways to modify the look and feel of the site.
+  // The config properties are grouped into submodules under config/ dir.
+  // You can find detailed documentation of each property in their submodule.
+  // Feel encouraged to check them out.
 
   // ##### FILES AND PATHS #####
+  // See config/filesUrls.js
   staticDir: filesUrls.staticDir,
   staticUrl: filesUrls.staticUrl,
   uploadDir: filesUrls.uploadDir,
