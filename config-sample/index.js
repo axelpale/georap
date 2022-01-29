@@ -32,6 +32,7 @@ const capabilities = require('./capabilities');
 const coordinateSystems = require('./coordinateSystems');
 const exportServices = require('./exportServices');
 const security = require('./security');
+const users = require('./users');
 
 module.exports = {
   // ##### CRITICAL CONFIG #####
@@ -131,11 +132,11 @@ module.exports = {
   tempUploadSizeLimit: filesUrls.tempUploadSizeLimit,
   logDir: filesUrls.logDir,
 
-  //##### USER MANAGEMENT #####
-  roles: ['frozen', 'reader', 'writer', 'moderator', 'admin'], // New in v14
-  defaultRole: 'reader', // New in v14
+  //##### USERS AND CAPABILITIES #####
+  roles: users.roles,
+  defaultRole: users.defaultRole,
   capabilities: capabilities, // New in v14
-
+  rewards: users.rewards,
 
   // ##### THEME AND BRAND #####
   // Settings from here to the end of the file can be left default.
@@ -168,32 +169,7 @@ module.exports = {
   // Location marker template image settings
   markerTemplates: locations.markerTemplates,
 
-  // Rewards.
-  // Users earn stars for successful activity.
-  // This feature brings a playful game-like element to the service.
-  // The rewards are defined here.
-  // NOTE flag-based rewards are defined under entryFlags.
-  rewards: {
-    eventBased: {
-      'location_created': 10,
-      'location_removed': -10,
-      'location_entry_created': 2,
-      'location_name_changed': 0,
-      'location_geom_changed': 1,
-      'location_status_changed': 1,
-      'location_type_changed': 1,
-      // Legacy events from early installations.
-      // They cannot be created anymore yet could not be fully converted.
-      // Fresh installations can safely remove these.
-      'location_tags_changed': 2, // legacy
-      'location_unproved_visit_created': 2, // legacy
-    },
-    attachmentBased: {
-      perAttachment: 3,
-      maxAttachmentsToReward: 2,
-    },
-  },
-
+  // #### POSTS AND COMMENTS ####
   // Post list view settings
   entries: posts.entries,
   // Commenting
