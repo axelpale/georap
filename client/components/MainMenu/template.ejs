@@ -42,7 +42,12 @@
             <a href="/statistics"><%= glyphicon({ name: 'signal' }) %> <%= __('statistics') %></a>
           </li>
         <% } %>
-        <% if (able('posts-read')) { %>
+        <% if (config.enableSupportPage) { %>
+          <li>
+            <a href="/about"><%= glyphicon({ name: 'info-sign' }) %> <%= __(config.supportButtonTitle) %></a>
+          </li>
+        <% } %>
+        <% if (able('posts-read') || config.enableSupportPage) { %>
           <li role="separator" class="divider"></li>
         <% } %>
 
@@ -69,13 +74,6 @@
         <% if (able('admin-users-read')) { %>
           <li>
             <a href="/admin/users"><%= glyphicon({ name: 'user' }) %> <%= __('manage-users') %></a>
-          </li>
-          <li role="separator" class="divider"></li>
-        <% } %>
-
-        <% if (config.enableSupportPage) { %>
-          <li>
-            <a href="/fund"><%= glyphicon({ name: 'star' }) %> <%= config.supportButtonTitle %></a>
           </li>
           <li role="separator" class="divider"></li>
         <% } %>

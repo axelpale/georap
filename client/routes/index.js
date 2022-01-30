@@ -6,7 +6,7 @@ var CardView = require('../components/Card');
 var Error401View = require('../components/Error401');
 var Error404View = require('../components/Error404');
 var LoginView = require('../components/Login');
-var SupportFundView = require('../components/SupportFund');
+var SupportPageView = require('../components/SupportPage');
 
 // Help in remembering original url if redirect to login page is required.
 var AfterLogin = require('./lib/AfterLogin');
@@ -340,8 +340,8 @@ exports.route = function () {
     );
   }));
 
-  page('/fund', function () {
-    var view = new SupportFundView();
+  page('/about', function () {
+    var view = new SupportPageView();
     card.open(view);
   });
 

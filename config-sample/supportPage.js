@@ -3,6 +3,6 @@
 // ways to support the community or maintenance.
 // The page can be opened from a main menu button next to the log out.
 exports.enableSupportPage = true;
-exports.supportButtonTitle = 'Support us';
+exports.supportButtonTitle = 'support-page-title'; // see config/locales/
 // supportPageContent can have any static html content
 exports.supportPageContent = 'Support us by <insert support method here>';

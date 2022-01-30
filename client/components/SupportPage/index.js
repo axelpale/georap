@@ -1,6 +1,3 @@
-/* eslint-disable max-statements */
-// View for location
-
 var emitter = require('component-emitter');
 var template = require('./template.ejs');
 var content = georap.config.supportPageContent;
@@ -27,6 +24,7 @@ module.exports = function () {
     // Loading
     $mount.html(template({
       content: content,
+      __: georap.i18n.__,
     }));
   };
 
