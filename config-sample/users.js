@@ -1,5 +1,10 @@
-// User account roles.
-// Subset of available roles set in capabilities.
+// User account and management settings.
+// See also config/capabilities.js
+
+// Roles that can be assigned to user accounts.
+// Note that this is a subset of the full set of roles written in capabilities,
+// that include also roles for public user and some temporary roles.
+// Order presented here is respected in user role forms.
 exports.roles = [ // New in v14
   'frozen',
   'reader',
@@ -8,6 +13,7 @@ exports.roles = [ // New in v14
   'admin',
 ];
 
+// Default role assigned to invited users
 exports.defaultRole = 'reader'; // New in v14
 
 // Rewards.
