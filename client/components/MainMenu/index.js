@@ -9,22 +9,6 @@ var locations = georap.stores.locations;
 var filterStore = georap.stores.filter;
 var able = account.able;
 
-// var isGeomAlmostEqual = function (geom1, geom2) {
-//   var prec = 5;
-//
-//   var lat1 = geom1.coordinates[1];
-//   var lng1 = geom1.coordinates[0];
-//   var lat2 = geom2.coordinates[1];
-//   var lng2 = geom2.coordinates[0];
-//
-//   lat1 = lat1.toString().substr(0, prec);
-//   lng1 = lng1.toString().substr(0, prec);
-//   lat2 = lat2.toString().substr(0, prec);
-//   lng2 = lng2.toString().substr(0, prec);
-//
-//   return (lat1 === lat2 && lng1 === lng2);
-// };
-
 module.exports = function (mapComp) {
   // Parameters:
   //   mapComp
