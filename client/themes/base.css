@@ -145,9 +145,6 @@ time:hover {
   padding: 0.9em;
   max-width: 60%; /* Firefox needs width to be specified */
 }
-.mainmenu-btn {
-  padding: 8px;
-}
 .mainmenu-btn img {
   width: 32px;
   height: 32px;
@@ -169,6 +166,9 @@ time:hover {
   /* Match size with gmaps buttons */
   padding: 8px 13px;
   font-size: 16px;
+}
+#georap-toolbar-main .mainmenu-btn.btn-lg {
+  padding: 9px;
 }
 #georap-toolbar-main .input-lg {
   /* Match input size with buttons */
