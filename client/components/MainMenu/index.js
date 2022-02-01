@@ -57,6 +57,14 @@ module.exports = function (mapComp) {
       return georap.go('/');
     });
 
+    // Close the sidebar whenever user clicks the map around menu elems.
+    $elems.main.click(function (ev) {
+      console.log(ev);
+      if (ev.target === $elems.main.get(0)) {
+        return georap.go('/');
+      }
+    });
+
     // Location creation
 
     $mount.on('click', '#georap-mainmenu-add', function (ev) {
