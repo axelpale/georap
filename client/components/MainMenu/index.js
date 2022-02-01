@@ -59,7 +59,6 @@ module.exports = function (mapComp) {
 
     // Close the sidebar whenever user clicks the map around menu elems.
     $elems.main.click(function (ev) {
-      console.log(ev);
       if (ev.target === $elems.main.get(0)) {
         return georap.go('/');
       }
