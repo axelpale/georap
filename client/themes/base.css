@@ -171,6 +171,7 @@ time:hover {
   font-size: 16px;
 }
 #georap-toolbar-main .input-lg {
+  /* Match input size with buttons */
   height: 39px;
   padding: 8px 13px;
   font-size: 16px;

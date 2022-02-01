@@ -17,6 +17,7 @@ module.exports = function (mapComp) {
   // Init
   var $mount = null;
   var self = this;
+  var $elems = {};
   emitter(self);
 
   // Public methods
@@ -41,6 +42,12 @@ module.exports = function (mapComp) {
       __: georap.i18n.__,
     }));
 
+    $elems.main = $mount.find('#georap-toolbar-main');
+    $elems.addition = $mount.find('#georap-toolbar-addition');
+    $elems.error = $mount.find('#georap-toolbar-error');
+    $elems.tooclose = $mount.find('#georap-toolbar-error-too-close');
+    $elems.progress = $mount.find('#georap-toolbar-progress');
+
     // Menu opening.
     // To ensure that opening and closing the menu does not
     // affect click bindings, add listeners directly to $mount
@@ -50,18 +57,17 @@ module.exports = function (mapComp) {
       return georap.go('/');
     });
 
-    // Location manipulation
+    // Location creation
 
     $mount.on('click', '#georap-mainmenu-add', function (ev) {
       ev.preventDefault();
 
       // Hide other menus
-      ui.hide($('#georap-toolbar-main'));
+      ui.hide($elems.main);
       // Show addition menu
-      ui.show($('#georap-toolbar-addition'));
-
+      ui.show($elems.addition);
       // Hide possible error message from previous addition
-      ui.hide($('#georap-toolbar-error'));
+      ui.hide($elems.error);
 
       // On addition start
       mapComp.addAdditionMarker();
@@ -73,9 +79,9 @@ module.exports = function (mapComp) {
       ev.preventDefault();
 
       // Show other menus
-      ui.show($('#georap-toolbar-main'));
+      ui.show($elems.main);
       // Hide addition menu
-      ui.hide($('#georap-toolbar-addition'));
+      ui.hide($elems.addition);
 
       // On addition cancel
       mapComp.removeAdditionMarker();
@@ -86,19 +92,18 @@ module.exports = function (mapComp) {
     $mount.on('click', '#georap-addition-create', function (ev) {
       ev.preventDefault();
 
-      var $tooCloseError = $('#georap-toolbar-error-too-close');
-      $tooCloseError.find('button').click(function (cev) {
+      $elems.tooclose.find('button').click(function (cev) {
         // Will bind multiple times but we do not care
         cev.preventDefault();
-        ui.hide($tooCloseError);
+        ui.hide($elems.tooclose);
       });
 
       // Show progress bar
-      ui.show($('#georap-toolbar-progress'));
+      ui.show($elems.progress);
       // Hide addition menu
-      ui.hide($('#georap-toolbar-addition'));
+      ui.hide($elems.addition);
       // Hide possible error
-      ui.hide($tooCloseError);
+      ui.hide($elems.tooclose);
 
       // On addition create
       var geom = mapComp.getAdditionMarkerGeom();
@@ -115,12 +120,11 @@ module.exports = function (mapComp) {
         }
 
         // Hide progress bar
-        ui.hide($('#georap-toolbar-progress'));
-
+        ui.hide($elems.progress);
         // Show main menu bar
-        ui.show($('#georap-toolbar-main'));
+        ui.show($elems.main);
 
-        locations.off('location_created', thisFn);
+        locations.off('location_created', thisFn); // once
 
         // Navigate to the new location
         georap.go(urls.locationUrl(lev.locationId));
@@ -133,18 +137,17 @@ module.exports = function (mapComp) {
 
         if (err) {
           if (err.message === 'TOO_CLOSE') {
-            ui.show($tooCloseError);
+            ui.show($elems.tooclose);
           } else {
             console.error(err);
             // Show error message
-            ui.show($('#georap-toolbar-error'));
+            ui.show($elems.error);
           }
 
           // Hide progress bar
-          ui.hide($('#georap-toolbar-progress'));
-
+          ui.hide($elems.progress);
           // Show main menu
-          ui.show($('#georap-toolbar-main'));
+          ui.show($elems.main);
 
           return;
         }
@@ -153,34 +156,27 @@ module.exports = function (mapComp) {
     });
 
     // Filter
+
     if (able('locations-filter')) {
-      var filterTimer = true; // start without burn-in period
-      $mount.on('click', '#georap-mainmenu-filter', function (ev) {
+      $elems.filter = $mount.find('#georap-mainmenu-filter');
+      $elems.filterLabel = $elems.filter.find('.label');
+      $elems.filter.click(ui.throttle(1000, function (ev) {
         ev.preventDefault();
 
         var isFilterOpen = georap.getCurrentPath() === '/filter';
-
         if (isFilterOpen) {
-          if (filterTimer) {
-            filterTimer = false;
-            georap.go('/');
-          }
+          georap.go('/');
         } else {
-          // Delay to prevent immediate double click open close.
-          var SEC = 1000;
-          setTimeout(function () {
-            filterTimer = true;
-          }, SEC);
           georap.go('/filter');
         }
-      });
+      }));
 
       filterStore.on('updated', function () {
         // Show a red dot when the filter is active.
         if (filterStore.isDefault()) {
-          ui.hide($('#georap-mainmenu-filter .label'));
+          ui.hide($elems.filterLabel);
         } else {
-          ui.show($('#georap-mainmenu-filter .label'));
+          ui.show($elems.filterLabel);
         }
       });
     }
@@ -204,8 +200,10 @@ module.exports = function (mapComp) {
   self.unbind = function () {
     if ($mount) {
       $mount.off('click');
-      $mount = null;
+      ui.offAll($elems);
+      $elems = {};
       filterStore.off();
+      $mount = null;
     }
   };
 };
