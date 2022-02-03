@@ -55,7 +55,7 @@ exports.setRole = function (req, res, next) {
   // Prevent config-admin to become reroled.
   // This prevents a hacked admin account closing all other admin accounts.
   if (targetName === siteAdminName) {
-    return res.status(status.FORBIDDEN).send('Cannot change root admin role');
+    return res.status(status.FORBIDDEN).send(req.__('user-role-noroot'));
   }
 
   // For next part, we need to know the target users role and deletion status.
@@ -65,7 +65,7 @@ exports.setRole = function (req, res, next) {
     }
 
     if (!targetUser) {
-      return res.status(status.NOT_FOUND).send('No user with this name.');
+      return res.status(status.NOT_FOUND).send(req.__('user-not-found'));
     }
 
     // Prevent author promoting to a higher role than herself.
@@ -78,13 +78,11 @@ exports.setRole = function (req, res, next) {
     const authorRoleIndex = config.roles.indexOf(authorRole);
 
     if (sourceRoleIndex > authorRoleIndex) {
-      const msg = 'Cannot change from a role higher than yours.';
-      return res.status(status.FORBIDDEN).send(msg);
+      return res.status(status.FORBIDDEN).send(req.__('user-role-nodemote'));
     }
 
     if (targetRoleIndex > authorRoleIndex) {
-      const msg = 'Cannot change to a role higher than yours.';
-      return res.status(status.FORBIDDEN).send(msg);
+      return res.status(status.FORBIDDEN).send(req.__('user-role-nopromote'));
     }
 
     dal.setRole(targetName, targetRole, (errr) => {
