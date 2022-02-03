@@ -20,7 +20,6 @@ module.exports = {
   // 'banned': [], // same as frozen?
   'frozen': [
     // not able to login
-    'geometry-read',
   ],
   'reader': [ // able to see content after login but not modify
     'account-auth',
