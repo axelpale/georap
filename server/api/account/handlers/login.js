@@ -54,7 +54,7 @@ module.exports = function (req, res, next) {
       return res.status(status.UNAUTHORIZED).send(msg);
     }
 
-    // Check if user has ability to authenticate
+    // Ensure that user has a role that can authenticate
     if (!grable.isAble(user, 'account-auth')) {
       const msg = 'Your account is frozen. ' +
         'This can happen after prolonged inactivity, bad behavior, ' +
