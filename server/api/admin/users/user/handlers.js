@@ -34,7 +34,7 @@ exports.getOne = function (req, res, next) {
 
 exports.setRole = function (req, res, next) {
   // Set user role
-  const newRole = req.body.role;
+  const targetRole = req.body.role;
   const targetName = req.username;
   const authorName = req.user.name;
   const siteAdminName = config.admin.username;
@@ -42,7 +42,7 @@ exports.setRole = function (req, res, next) {
   // Ensure role is valid for persistence.
   // Note that config.capabilities has extra role names in which
   // no true long-term user can be.
-  if (!config.roles.includes(newRole)) {
+  if (!config.roles.includes(targetRole)) {
     return res.status(status.BAD_REQUEST).send('Invalid role');
   }
 
@@ -58,12 +58,42 @@ exports.setRole = function (req, res, next) {
     return res.status(status.FORBIDDEN).send('Cannot change root admin role');
   }
 
-  dal.setRole(targetName, newRole, (err) => {
+  // For next part, we need to know the target users role and deletion status.
+  dal.getUserForAdmin(targetName, (err, targetUser) => {
     if (err) {
       return next(err);
     }
 
-    return res.sendStatus(status.OK);
+    if (!targetUser) {
+      return res.status(status.NOT_FOUND).send('No user with this name.');
+    }
+
+    // Prevent author promoting to a higher role than herself.
+    // Also, prevent author demoting from a higher role than herself.
+    const sourceRole = targetUser.role;
+    const authorRole = req.user.role;
+    // Find positions for order comparison
+    const sourceRoleIndex = config.roles.indexOf(sourceRole);
+    const targetRoleIndex = config.roles.indexOf(targetRole);
+    const authorRoleIndex = config.roles.indexOf(authorRole);
+
+    if (sourceRoleIndex > authorRoleIndex) {
+      const msg = 'Cannot change from a role higher than yours.';
+      return res.status(status.FORBIDDEN).send(msg);
+    }
+
+    if (targetRoleIndex > authorRoleIndex) {
+      const msg = 'Cannot change to a role higher than yours.';
+      return res.status(status.FORBIDDEN).send(msg);
+    }
+
+    dal.setRole(targetName, targetRole, (errr) => {
+      if (errr) {
+        return next(errr);
+      }
+
+      return res.sendStatus(status.OK);
+    });
   });
 };
 

@@ -3,8 +3,11 @@ const db = require('georap-db');
 
 exports.getUserForAdmin = function (username, callback) {
   // Fetch an array of users with admin-only information such as email.
+  // The result does not have the property 'hash'.
   //
   // Parameters:
+  //   username
+  //     string
   //   callback
   //     function (err, userObj)
   //       Parameters:
@@ -17,25 +20,20 @@ exports.getUserForAdmin = function (username, callback) {
     throw new Error('invalid parameters');
   }
 
-  const coll = db.collection('users');
   const q = { name: username };
   const proj = { hash: false };
 
-  coll.find(q).project(proj).toArray((err, users) => {
-    let u;
-
-    if (err) {
+  db.collection('users')
+    .findOne(q, { projection: proj })
+    .then((doc) => {
+      if (!doc) {
+        return callback(null, null);
+      }
+      return callback(null, doc);
+    })
+    .catch((err) => {
       return callback(err);
-    }
-
-    if (users && users.length > 0) {
-      u = users[0];
-      return callback(null, u);
-    }
-
-    // not found
-    return callback(null, null);
-  });
+    });
 };
 
 

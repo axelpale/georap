@@ -4,7 +4,12 @@
 // Roles that can be assigned to user accounts.
 // Note that this is a subset of the full set of roles written in capabilities,
 // that include also roles for public user and some temporary roles.
-// Order presented here is respected in user role forms.
+// Order of the roles presented here has meaning:
+// - The order is visually respected in user role forms.
+// - A user cannot promote others to roles after her own role.
+//   E.g. moderator can promote others to moderators but not to admins.
+// - A user cannot demote others if they have a role after her own.
+//   E.g. moderator can demote other moderators but not admins.
 exports.roles = [ // New in v14
   'frozen',
   'reader',
