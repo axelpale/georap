@@ -258,7 +258,7 @@
   "restore-user": "Palauta tili",
   "role": "Rooli",
   "role-change": "Muuta jäsenen roolia",
-  "role-form-help": "Ainoastaan ylläpitäjät voivat muuttaa muiden jäsenten rooleja. Ylläpitäjät voivat myös poistaa mitä tahansa sisältöä, kutsua uusia jäseniä ja jäädyttää jäsenten tilejä.",
+  "role-form-help": "Käyttäjän rooli määrää mitä ominaisuuksia ja sisältöä käyttäjä saa nähdä ja muokata. Tarkempaa tietoa siitä, mitä kukin rooli mahdollistaa, voit kysyä sivuston ylläpitäjältä tai lukea sivuston asetustiedostoista.",
   "role-form-success": "Roolin muuttaminen onnistui.",
   "rotate": "Käännä",
   "save": "Tallenna",

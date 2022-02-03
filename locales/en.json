@@ -259,7 +259,7 @@
   "restore-user": "Restore user",
   "role": "Role",
   "role-change": "Change member role",
-  "role-form-help": "Only members with administrator role can change roles of others. Administrators can also delete any content, invite new members and lock member accounts.",
+  "role-form-help": "The role determines which features and content the user can see and access. For details, ask site administrator or see the site configuration files.",
   "role-form-success": "Role changed successfully.",
   "rotate": "Rotate",
   "save": "Save",
