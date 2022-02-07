@@ -27,11 +27,16 @@ module.exports = function (params) {
 
   var defaultTabKey = params.defaultTab;
   var storageKey = params.storageKey;
+  var availableKeys = params.tabs.map(function (t) { return t.key });
 
   var loadTabKey = function () {
     var tabKey = window.localStorage.getItem(storageKey);
     if (tabKey) {
-      return tabKey;
+      // Ensure the config contains the key.
+      // Unavailable key possible if a user role change drops the selected tab.
+      if (availableKeys.indexOf(tabKey) > -1) {
+        return tabKey;
+      }
     }
     return defaultTabKey;
   };
