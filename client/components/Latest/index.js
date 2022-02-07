@@ -1,7 +1,7 @@
 // Component for a list of events.
 
 var emitter = require('component-emitter');
-var TabsView = require('./Tabs');
+var TabsView = require('georap-components').Tabs;
 var template = require('./template.ejs');
 var EventsView = require('./Events');
 var LocationsView = require('./Locations');
@@ -28,9 +28,9 @@ module.exports = function () {
   var children = {};
   var $elems = {};
 
-  // tabHash -> filter
-  var tabs = {
-    activity: EventsView,
+  // tabKey -> component
+  var tabViews = {
+    events: EventsView,
     locations: LocationsView,
     posts: PostsView,
   };
@@ -46,19 +46,39 @@ module.exports = function () {
     }));
 
     // Set up tabs
-    children.tabs = new TabsView();
+    children.tabs = new TabsView({
+      tabs: [
+        {
+          key: 'events',
+          title: __('activity'),
+          className: 'latest-events',
+        },
+        {
+          key: 'locations',
+          title: __('locations'),
+          className: 'latest-locations',
+        },
+        {
+          key: 'posts',
+          title: __('posts'),
+          className: 'latest-posts',
+        },
+      ],
+      defaultTab: 'events',
+      storageKey: 'georap-latest-tab',
+    });
     children.tabs.bind($mount.find('.latest-tabs-container'));
 
     // Tab switch filters the events.
-    children.tabs.on('tab_switch', function (hash) {
-      self.switchTab(hash);
+    children.tabs.on('tab_switch', function (key) {
+      self.switchTab(key);
     });
 
     // Initial tab
-    self.switchTab(children.tabs.getTabHash());
+    self.switchTab(children.tabs.getTabKey());
   };
 
-  this.switchTab = function (tabHash) {
+  this.switchTab = function (tabKey) {
     // DEBUG console.log('tab_switch', tabHash);
     if ($mount) {
       // Destroy the previous list view if any.
@@ -71,7 +91,7 @@ module.exports = function () {
 
       // Open new view
       $elems.list = $mount.find('.latest-list-container');
-      var ListView = tabs[tabHash];
+      var ListView = tabViews[tabKey];
       children.list = new ListView();
       children.list.bind($elems.list);
 
