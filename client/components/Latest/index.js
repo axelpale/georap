@@ -8,6 +8,7 @@ var LocationsView = require('./Locations');
 var PostsView = require('./Posts');
 var ui = require('georap-ui');
 var ScrollRecorder = require('./ScrollRecorder');
+var able = georap.stores.account.able;
 var __ = georap.i18n.__;
 
 // Record scroll position to help browsing through the list
@@ -28,12 +29,43 @@ module.exports = function () {
   var children = {};
   var $elems = {};
 
+  // Tab config
+  var tabConfig = {
+    tabs: [],
+    defaultTab: 'events',
+    storageKey: 'georap-latest-tab',
+  };
   // tabKey -> component
   var tabViews = {
     events: EventsView,
     locations: LocationsView,
     posts: PostsView,
   };
+  // Tab config depends on capabilities
+  if (able('latest-posts')) {
+    tabConfig.tabs.push({
+      key: 'posts',
+      title: __('posts'),
+      className: 'latest-posts',
+    });
+    tabConfig.defaultTab = 'posts';
+  }
+  if (able('latest-locations')) {
+    tabConfig.tabs.push({
+      key: 'locations',
+      title: __('locations'),
+      className: 'latest-locations',
+    });
+    tabConfig.defaultTab = 'locations';
+  }
+  if (able('latest-events')) {
+    tabConfig.tabs.push({
+      key: 'events',
+      title: __('activity'),
+      className: 'latest-events',
+    });
+    tabConfig.defaultTab = 'events';
+  }
 
   // Public methods
 
@@ -46,27 +78,7 @@ module.exports = function () {
     }));
 
     // Set up tabs
-    children.tabs = new TabsView({
-      tabs: [
-        {
-          key: 'events',
-          title: __('activity'),
-          className: 'latest-events',
-        },
-        {
-          key: 'locations',
-          title: __('locations'),
-          className: 'latest-locations',
-        },
-        {
-          key: 'posts',
-          title: __('posts'),
-          className: 'latest-posts',
-        },
-      ],
-      defaultTab: 'events',
-      storageKey: 'georap-latest-tab',
-    });
+    children.tabs = new TabsView(tabConfig);
     children.tabs.bind($mount.find('.latest-tabs-container'));
 
     // Tab switch filters the events.

@@ -29,6 +29,9 @@ module.exports = {
     'attachments-read',
     'comments-read',
     'geometry-read',
+    'latest-events',
+    'latest-locations',
+    'latest-posts',
     'locations-read',
     'locations-search',
     'locations-filter',
@@ -54,6 +57,9 @@ module.exports = {
     'comments-update-own',
     'comments-delete-own',
     'geometry-read',
+    'latest-events',
+    'latest-locations',
+    'latest-posts',
     'locations-read',
     'locations-search',
     'locations-filter',
@@ -90,6 +96,9 @@ module.exports = {
     'comments-update-own',
     'comments-delete-any',
     'geometry-read',
+    'latest-events',
+    'latest-locations',
+    'latest-posts',
     'locations-read',
     'locations-search',
     'locations-filter',
@@ -133,6 +142,9 @@ module.exports = {
     'comments-delete-any', // delete comments by anybody
     'comments-delete-own', // delete comments by you
     'geometry-read', // access coordinates tool
+    'latest-events', // see latest events tab
+    'latest-locations', // see latest locations tab
+    'latest-posts', // see latest posts tab
     'locations-read', // browse locations on map and access location pages
     'locations-search', // search and list locations
     'locations-filter', // access tools to filter location markers on map
