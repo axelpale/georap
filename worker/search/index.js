@@ -14,7 +14,7 @@ exports.run = (callback) => {
   //     filename
   //   status
   //   type
-  //   creators
+  //   authors
   //
 
   const loColl = db.collection('locations');

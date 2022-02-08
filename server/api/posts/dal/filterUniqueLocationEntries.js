@@ -29,7 +29,7 @@ module.exports = (args, callback) => {
 
     const newEntries = args.entryCandidates.filter((ec) => {
       // Pass only those entry candidates that differ from every current
-      // entry. Entry is different if creator, text, OR file basename differs.
+      // entry. Entry is different if author, text, OR file basename differs.
       return _.every(realEntries, (re) => {
         // True if is different.s
         // Paths are null for descriptions

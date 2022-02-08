@@ -280,7 +280,7 @@ exports.mergeEntries = (args, callback) => {
   //           _id
   //           name
   //     username
-  //       creator for the entries
+  //       author for the entries
   //   callback
   //     function (err, result)
   //       err

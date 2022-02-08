@@ -183,7 +183,7 @@ exports.createLocation = (batchLoc, username, callback) => {
   //       entries
   //       overlays
   //   username
-  //     string, creator
+  //     string, author
   //   callback
   //     function (err)
   //       err
