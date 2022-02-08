@@ -15,6 +15,7 @@ var geometryApi = georap.stores.geometry;
 var geometryModel = require('georap-models').geometry;
 var bus = require('georap-bus');
 var throttle = require('georap-throttle');
+var able = georap.stores.account.able;
 
 module.exports = function () {
   // Parameters
@@ -49,8 +50,10 @@ module.exports = function () {
     children.viewon = new ViewOnView();
     children.viewon.bind($mount.find('.crosshair-viewon-container'));
 
-    children.create = new CreateView();
-    children.create.bind($mount.find('.crosshair-create-container'));
+    if (able('locations-create')) {
+      children.create = new CreateView();
+      children.create.bind($mount.find('.crosshair-create-container'));
+    }
 
     var THROTTLE_DURATION = 2000; // ms
     routes.crosshair = bus.on('crosshair_marker_moved', throttle(
@@ -70,8 +73,10 @@ module.exports = function () {
             children.link.updateGeometry(geoms);
             children.coords.updateGeometry(geoms);
             children.viewon.updateGeometry(geoms);
-            children.create.updateGeometry(geoms);
             children.coordsform.updateGeometry(geoms);
+            if (children.create) {
+              children.create.updateGeometry(geoms);
+            }
           }
           return callback();
         });
