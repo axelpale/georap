@@ -26,12 +26,14 @@ exports.createUser = function (username, email, password, callback) {
       return callback(berr);
     }
 
+    const now = (new Date()).toISOString();
+
     users.insert({
-      createdAt: (new Date()).toISOString(),
+      createdAt: now,
       deleted: false,
       email: email,
       hash: pwdHash,
-      loginAt: (new Date()).toISOString(),
+      loginAt: now,
       name: username,
       points: 0,
       points7days: 0,
