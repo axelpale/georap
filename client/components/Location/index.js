@@ -59,6 +59,13 @@ var LocationView = function (id, query) {
 
     // Fetch location before rendering.
     locations.getOne(id, function (err, rawLoc) {
+      // Ensure that component is bound.
+      // When user navigates quickly from location to another
+      // then callback might arrive after unbind.
+      if (!$mount) {
+        return;
+      }
+
       ui.hide($elems.loading);
 
       if (err) {
