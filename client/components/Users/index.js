@@ -9,20 +9,29 @@ var __ = georap.i18n.__;
 module.exports = function () {
 
   // Init
+  var $mount = null;
+  var $els = {};
   emitter(this);
 
   // Public methods
 
-  this.bind = function ($mount) {
+  this.bind = function ($mountEl) {
+    $mount = $mountEl;
 
     $mount.html(template({
       __: __,
     }));
 
+    $els.progress = $mount.find('.users-loading');
+    $els.alltime = $mount.find('.users-alltime');
+    $els.days365 = $mount.find('.users-365days');
+    $els.days30 = $mount.find('.users-30days');
+    $els.days7 = $mount.find('.users-7days');
+
     // Fetch users and include to page.
     usersApi.getAll(function (err, rawUsers) {
       // Hide loading bar
-      ui.hide($('#georap-users-loading'));
+      ui.hide($els.progress);
 
       if (err) {
         console.error(err);
@@ -51,11 +60,11 @@ module.exports = function () {
       };
 
       // Reveal list
-      $('#georap-users-alltime').html(listTemplate({
+      $els.alltime.html(listTemplate({
         users: bestUsersAllTime,
       }));
 
-      $('#georap-users-365days').html(listTemplate({
+      $els.days365.html(listTemplate({
         users: bestUsersOf365days.map(function (u) {
           // Template uses u.points
           return Object.assign({}, u, { points: u.points365days });
@@ -63,7 +72,7 @@ module.exports = function () {
         prefix: '+',
       }));
 
-      $('#georap-users-30days').html(listTemplate({
+      $els.days30.html(listTemplate({
         users: bestUsersOf30days.map(function (u) {
           // Template uses u.points
           return Object.assign({}, u, { points: u.points30days });
@@ -71,7 +80,7 @@ module.exports = function () {
         prefix: '+',
       }));
 
-      $('#georap-users-7days').html(listTemplate({
+      $els.days7.html(listTemplate({
         users: bestUsersOf7days.map(function (u) {
           // Template uses u.points
           return Object.assign({}, u, { points: u.points7days });
@@ -82,7 +91,11 @@ module.exports = function () {
   };
 
   this.unbind = function () {
-    // noop
+    if ($mount) {
+      ui.offAll($els);
+      $els = {};
+      $mount = null;
+    }
   };
 
 };
