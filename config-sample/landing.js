@@ -9,7 +9,7 @@ exports.defaultMapState = {
 };
 
 // Login screen mode
-exports.loginPageSize = 'full'; // or 'medium' to show the map.
+exports.loginPageSize = 'full'; // 'full', 'medium', or 'small'
 // Login screen background image. The first thing the user experiences.
 // The image will be copied to a public location on start up.
 // Use only an absolute path.
