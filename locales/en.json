@@ -95,7 +95,7 @@
   "email-sign-off": "Regards",
   "emphasize": "emphasize",
   "empty-post-error": "Empty posts are not allowed.",
-  "error-401-desc": "It is not possible for you to access this page. An admin user account is required.",
+  "error-401-desc": "Your account does not have the permission to access this page.",
   "error-401-title": "Unauthorized",
   "error-404-desc": "We cannot find the page you were looking for. Try something else.",
   "error-404-title": "This page does not exist",
