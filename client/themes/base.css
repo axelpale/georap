@@ -33,7 +33,10 @@ time:hover {
   margin-bottom: 0.62rem;
 }
 .btn-list {
-  line-height: 4rem;
+  line-height: 4rem; /* prevent multi-row btns touching */
+}
+.btn-list-sm {
+  line-height: 3.4rem;
 }
 /* END Effect et General */
 
@@ -434,10 +437,6 @@ time:hover {
   height: 11rem;
   opacity: 1;
 }
-/* Post Form */
-.entry-form .entry-tools-buttons {
-  line-height: 4rem;
-}
 /* END Posts */
 
 /* Removal Form */
@@ -498,9 +497,6 @@ li.form-attachment-container:first-child img {
 }
 .form-attachment .form-attachment-filename {
   margin-bottom: 1rem;
-}
-.form-attachment .form-attachment-buttons {
-  line-height: 3.4rem;
 }
 .form-attachment-upload-container {
   /* Ongoing uploads */
@@ -582,11 +578,7 @@ li.form-attachment-container:first-child img {
   float: right;
 }
 .comment-submit-buttons {
-  line-height: 4rem;
   text-align: right;
-}
-.comment-tools-buttons {
-  line-height: 4rem;
 }
 /* END Comments */
 
