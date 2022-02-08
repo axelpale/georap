@@ -18,11 +18,11 @@ module.exports = function (req, res, next) {
   const username = req.user.name;
 
   if (typeof password !== 'string') {
-    return res.sendStatus(status.BAD_REQUEST);
+    return res.status(status.BAD_REQUEST).send('Invalid or missing password');
   }
 
   if (!securityCode.validate(code)) {
-    return res.sendStatus(status.BAD_REQUEST);
+    return res.status(status.BAD_REQUEST).send('Invalid security code');
   }
 
   // Construct the query.
