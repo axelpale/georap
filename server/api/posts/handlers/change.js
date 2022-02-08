@@ -10,12 +10,6 @@ module.exports = (req, res, next) => {
   const oldEntry = req.entry;
   const location = req.location;
 
-  // Allow only creator or admin to edit.
-  // TODO make a difference between editor and owner
-  if (req.user.name !== oldEntry.user && req.user.role !== 'admin') {
-    return res.sendStatus(status.FORBIDDEN);
-  }
-
   const dirtyDelta = req.body.entryData;
   if (!dirtyDelta) {
     return res.status(status.BAD_REQUEST).send('Missing entryData');
