@@ -32,6 +32,9 @@ time:hover {
   /* for tight text data as on coordinates page */
   margin-bottom: 0.62rem;
 }
+.btn-list {
+  line-height: 4rem;
+}
 /* END Effect et General */
 
 /* Card */

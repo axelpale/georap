@@ -46,7 +46,7 @@ module.exports = function () {
       );
 
       var servHtml = exportsModel.getServiceButtons(exportServiceUrls);
-      $mount.find('.crosshair-viewon-services').html(servHtml);
+      $mount.find('.coords-viewon-services').html(servHtml);
     }
   };
 
