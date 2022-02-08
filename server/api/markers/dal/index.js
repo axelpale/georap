@@ -53,7 +53,7 @@ exports.getFiltered = function (params, callback) {
   //   [
   //     {
   //       _id: <ObjectId>
-  //       creator: <string>
+  //       user: <string>
   //       geom: <GeoJSON Point>
   //       deleted: <bool>
   //       status: <string>

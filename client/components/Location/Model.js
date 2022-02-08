@@ -76,7 +76,7 @@ module.exports = function (rawLoc) {
   self.getCreator = function () {
     // Return the username of the creator of the location.
     // Return '' if not known.
-    return rawLoc.creator;
+    return rawLoc.user;
   };
 
   self.getId = function () {

@@ -5,7 +5,7 @@ module.exports = {
     locations: [
       {
         _id: db.id('581f166110a1482dd0b7cd13'),
-        creator: 'admin',
+        user: 'admin',
         deleted: false,
         published: false,
         geom: {
@@ -24,7 +24,7 @@ module.exports = {
       },
       {
         _id: db.id('581f166110a1482dd0b7cd14'),
-        creator: 'johndoe',
+        user: 'johndoe',
         deleted: false,
         published: false,
         geom: {
@@ -43,7 +43,7 @@ module.exports = {
       },
       {
         _id: db.id('581f166110a1482dd0b7cd15'),
-        creator: 'johndoe',
+        user: 'johndoe',
         deleted: true,
         published: false,
         geom: {

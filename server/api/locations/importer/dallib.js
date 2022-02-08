@@ -204,7 +204,7 @@ exports.createLocation = (batchLoc, username, callback) => {
     exports.createEntries({
       locationId: rawLoc._id,
       locationName: rawLoc.name,
-      username: rawLoc.creator,
+      username: rawLoc.user,
       entries: batchLoc.entries,
     }, (err1) => {
       if (err1) {

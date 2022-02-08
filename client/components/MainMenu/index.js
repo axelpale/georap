@@ -120,7 +120,7 @@ module.exports = function (mapComp) {
       locations.on('location_created', function thisFn(lev) {
         // Note: another location_created could come before.
         // Thus, off only after the same location. How to determine it?
-        // Geom must be same. Creator must be same. Let's use creator.
+        // Geom must be same. Author must be same. Let's use author.
 
         if (lev.user !== account.getName()) {
           return;

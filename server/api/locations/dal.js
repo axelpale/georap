@@ -57,7 +57,6 @@ exports.createLocation = function (args, callback) {
 
     const newLoc = {
       createdAt: db.timestamp(),
-      creator: args.username,
       deleted: false,
       geom: geom,
       name: args.name,
@@ -66,6 +65,7 @@ exports.createLocation = function (args, callback) {
       status: config.locationStatuses[0],
       type: config.locationTypes[0],
       thumbnail: null,
+      user: args.username, // location author, creator
       // To be modified by worker
       childLayer: 0,
       isLayered: true,
@@ -89,7 +89,7 @@ exports.createLocation = function (args, callback) {
         locationName: newLoc.name,
         lat: args.latitude,
         lng: args.longitude,
-        username: newLoc.creator,
+        username: newLoc.user,
         time: newLoc.createdAt,
       }, (err2) => {
         if (err2) {

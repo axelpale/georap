@@ -34,7 +34,7 @@ module.exports = function (req, res, next) {
     req.location = loc;
 
     // Mark ownership for capability checking
-    if (req.user && req.user.name === loc.creator) {
+    if (req.user && req.user.name === loc.user) {
       req.isOwner = true;
     } else {
       req.isOwner = false;
