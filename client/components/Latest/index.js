@@ -42,13 +42,13 @@ module.exports = function () {
     posts: PostsView,
   };
   // Tab config depends on capabilities
-  if (able('latest-posts')) {
+  if (able('latest-events')) {
     tabConfig.tabs.push({
-      key: 'posts',
-      title: __('posts'),
-      className: 'latest-posts',
+      key: 'events',
+      title: __('activity'),
+      className: 'latest-events',
     });
-    tabConfig.defaultTab = 'posts';
+    tabConfig.defaultTab = 'events';
   }
   if (able('latest-locations')) {
     tabConfig.tabs.push({
@@ -58,13 +58,17 @@ module.exports = function () {
     });
     tabConfig.defaultTab = 'locations';
   }
-  if (able('latest-events')) {
+  if (able('latest-posts')) {
     tabConfig.tabs.push({
-      key: 'events',
-      title: __('activity'),
-      className: 'latest-events',
+      key: 'posts',
+      title: __('posts'),
+      className: 'latest-posts',
     });
-    tabConfig.defaultTab = 'events';
+    if (able('latest-events')) {
+      tabConfig.defaultTab = 'events';
+    } else {
+      tabConfig.defaultTab = 'posts';
+    }
   }
 
   // Public methods
