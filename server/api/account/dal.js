@@ -15,7 +15,7 @@ exports.createUser = function (username, email, password, callback) {
   //     string
   //   callback
   //     function (err)
-
+  //
   const users = db.collection('users');
 
   const r = config.bcrypt.rounds;
@@ -34,6 +34,9 @@ exports.createUser = function (username, email, password, callback) {
       loginAt: (new Date()).toISOString(),
       name: username,
       points: 0,
+      points7days: 0,
+      points30days: 0,
+      points365days: 0,
       role: defaultRole,
       securityToken: '',
     }, (qerr) => {

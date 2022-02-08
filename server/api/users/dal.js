@@ -48,6 +48,16 @@ exports.getAll = (callback) => {
         return callback(err);
       }
 
-      return callback(null, users);
+      // Ensure worker-generated props
+      const canonical = users.map((u) => {
+        return Object.assign({}, u, {
+          points: u.points ? u.points : 0,
+          points7days: u.points7days ? u.points7days : 0,
+          points30days: u.points30days ? u.points30days : 0,
+          points365days: u.points365days ? u.points365days : 0,
+        });
+      });
+
+      return callback(null, canonical);
     });
 };

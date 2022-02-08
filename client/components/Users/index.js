@@ -29,31 +29,19 @@ module.exports = function () {
         return;
       }
 
-      // Backward compatibility 8.3.3 -> 8.3.4
-      rawUsers = rawUsers.map(function (u) {
-        return Object.assign({}, u, {
-          points7days: u.points7days ? u.points7days : 0,
-          points30days: u.points30days ? u.points30days : 0,
-          points365days: u.points365days ? u.points365days : 0,
-        });
-      });
-
-      // TODO make banned users look gray
-      var activeUsers = rawUsers;
-
       // Order by points
-      var bestUsersAllTime = activeUsers.sort(function (ua, ub) {
+      var bestUsersAllTime = rawUsers.sort(function (ua, ub) {
         return ub.points - ua.points;
       });
       var VIEW_TOP = 10;
       // Slice to copy because sort manipulates the original.
-      var bestUsersOf365days = activeUsers.slice().sort(function (ua, ub) {
+      var bestUsersOf365days = rawUsers.slice().sort(function (ua, ub) {
         return ub.points365days - ua.points365days;
       }).slice(0, VIEW_TOP);
-      var bestUsersOf30days = activeUsers.slice().sort(function (ua, ub) {
+      var bestUsersOf30days = rawUsers.slice().sort(function (ua, ub) {
         return ub.points30days - ua.points30days;
       }).slice(0, VIEW_TOP);
-      var bestUsersOf7days = activeUsers.slice().sort(function (ua, ub) {
+      var bestUsersOf7days = rawUsers.slice().sort(function (ua, ub) {
         return ub.points7days - ua.points7days;
       }).slice(0, VIEW_TOP);
 
