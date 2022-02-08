@@ -49,9 +49,9 @@ exports.computePoints = function (username, callback) {
       // Statistics
       flagsCreated: sums.sumFlags(evsTimeUnix), // array of objs, not int
       locationsCreated: sums.sumCreations(evsTimeUnix), // int
-      postsCreated: sums.sumPosts(evsTimeUnix),
-      locationsClassified: sums.sumClassifications(evsTimeUnix),
-      commentsCreated: sums.sumComments(evsTimeUnix),
+      postsCreated: sums.sumPosts(evsTimeUnix), // int
+      locationsClassified: sums.sumClassifications(evsTimeUnix), // int
+      commentsCreated: sums.sumComments(evsTimeUnix), // int
     };
 
     const isOk = function (num) {

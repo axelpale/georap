@@ -35,12 +35,17 @@ exports.createUser = function (username, email, password, callback) {
       hash: pwdHash,
       loginAt: now,
       name: username,
-      points: 0,
-      points7days: 0,
-      points30days: 0,
-      points365days: 0,
+      points: 0, // updated by worker
+      points7days: 0, // updated by worker
+      points30days: 0, // updated by worker
+      points365days: 0, // updated by worker
       role: defaultRole,
       securityToken: '',
+      flagsCreated: [], // updated by worker
+      locationsCreated: 0, // updated by worker
+      postsCreated: 0, // updated by worker
+      locationsClassified: 0, // updated by worker
+      commentsCreated: 0, // updated by worker
     }, (qerr) => {
       if (qerr) {
         return callback(qerr);

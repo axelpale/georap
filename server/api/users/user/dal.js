@@ -23,6 +23,20 @@ exports.getOne = function (username, callback) {
       if (!doc) {
         return callback(null, null);
       }
+
+      // Complete worker-created properties
+      // TODO create props in user creation and fill missing in migrate.
+      doc.allTime = doc.allTime ? doc.allTime : 0;
+      doc.days365 = doc.days365 ? doc.days365 : 0;
+      doc.days30 = doc.days30 ? doc.days30 : 0;
+      doc.days7 = doc.days7 ? doc.days7 : 0;
+      doc.flagsCreated = doc.flagsCreated ? doc.flagsCreated : [];
+      doc.locationsCreated = doc.locationsCreated ? doc.locationsCreated : 0;
+      doc.postsCreated = doc.postsCreated ? doc.postsCreated : 0;
+      doc.locationsClassified =
+        doc.locationsClassified ? doc.locationsClassified : 0;
+      doc.commentsCreated = doc.commentsCreated ? doc.commentsCreated : 0;
+
       return callback(null, doc);
     })
     .catch((err) => {
