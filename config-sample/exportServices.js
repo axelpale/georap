@@ -98,14 +98,14 @@ module.exports = [
     'coord=<%= longitude %>_<%= latitude %>&' +
     'mapLayers=' +
     '17+100+default,' +
-    '133+100+Ei%20tunnuksia,' + // Kiinteät muinaisjäännökset, pisteet
-    '142+100+Ei%20tunnuksia,' + // Mahdolliset muinaisjäännökset, pisteet
-    '136+100+Ei%20tunnuksia,' + // Luonnonmuodostumat, pisteet
-    '145+100+Ei%20tunnuksia,' + // Muut kohteet, pisteet
-    '139+100+Ei%20tunnuksia,' + // Löytöpaikat, pisteet
-    '161+100+Ei%20tunnuksia&' + // Muut kulttuuriperintökohteet, pisteet
-    'markers=2|3|ff3334|<%= longitude %>_<%= latitude %>|' +
-    '<%= name %>',
+    '133+100+s_1629683825662,' + // Kiinteät muinaisjäännökset, pisteet
+    '142+100+s_1625822858668,' + // Mahdolliset muinaisjäännökset, pisteet
+    '136+100+s_1629685777366,' + // Luonnonmuodostumat, pisteet
+    '145+100+s_1629686990761,' + // Muut kohteet, pisteet
+    '139+100+s_1629686211301,' + // Löytöpaikat, pisteet
+    '161+100+s_1629689845683&' + // Muut kulttuuriperintökohteet, pisteet
+    'showMarker=true&' +
+    'showIntro=false',
     'ETRS-TM35FIN',
     [{ // Finland
       east: 32.14,
