@@ -40,10 +40,14 @@ module.exports = function (batchId) {
       }
 
       // Message about the results
+      var totalNum = result.created.length + result.modified.length +
+        result.skipped.length;
+
       $msg.html(messageTemplate({
-        createdLocs: result.created,
-        modifiedLocs: result.modified,
-        skippedLocs: result.skipped,
+        createdNum: result.created.length,
+        modifiedNum: result.modified.length,
+        skippedNum: result.skipped.length,
+        totalNum: totalNum,
         __: georap.i18n.__,
       }));
 

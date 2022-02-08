@@ -1,4 +1,4 @@
-<%= createdLocs.length %> <%= __('import-out-of') %> <%= createdLocs.length + skippedLocs.length %> <%= __('import-locations-successfully') %>
-<% if (modifiedLocs.length + skippedLocs.length > 0) { %>
-<%= __('import-remaining') %> <%= modifiedLocs.length + skippedLocs.length %> <%= __('import-outcome-exists') %> <%= __('import-however') %> <%= modifiedLocs.length %> <%= __('import-however-attachments') %> <%= __('import-remaining') %> <%= skippedLocs.length %> <%= __('import-remaining-skipped') %>
+<%= createdNum %> <%= __('import-out-of') %> <%= totalNum %> <%= __('import-locations-successfully') %>
+<% if (modifiedNum + skippedNum > 0) { %>
+<%= __('import-remaining') %> <%= modifiedNum + skippedNum %> <%= __('import-outcome-exists') %> <%= __('import-however') %> <%= modifiedNum %> <%= __('import-however-attachments') %> <%= __('import-remaining') %> <%= skippedNum %> <%= __('import-remaining-skipped') %>
 <% } %>
