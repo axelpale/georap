@@ -93,7 +93,7 @@ exports.getFiltered = function (params, callback) {
   if (typeof params.creator === 'string' &&
       params.creator.trim() !== '' &&
       params.creator !== 'anyone') {
-    q.creator = params.creator;
+    q.user = params.creator;
   }
 
   // Include only deleted or exclude deleted.
