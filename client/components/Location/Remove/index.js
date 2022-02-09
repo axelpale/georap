@@ -33,21 +33,23 @@ module.exports = function (location) {
 
     children.remover.on('submit', function () {
       location.remove(function (err) {
-        if (err) {
-          var msg = err.message;
-          if (err.message) {
-            msg = err.message;
-          } else {
-            msg = __('connection-error');
+        if (children.remover) { // ensure mounted
+          if (err) {
+            var msg = err.message;
+            if (err.message) {
+              msg = err.message;
+            } else {
+              msg = __('connection-error');
+            }
+            // show error
+            children.remover.error(msg);
+            return;
           }
-          // show error
-          children.remover.error(msg);
-          return;
-        }
 
-        children.remover.close();
-        // ON successful removal the location will emit "location_removed" event
-        // and the card will close the Location component.
+          children.remover.close();
+          // ON successful removal the location will emit "location_removed"
+          // and the card will close the Location component.
+        }
       });
     });
   };

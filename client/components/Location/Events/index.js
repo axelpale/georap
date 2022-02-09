@@ -48,6 +48,9 @@ module.exports = function (locationId) {
     });
 
     handleNewEvent = function (locEv) {
+      if (!children.events) { // ensure mounted
+        return;
+      }
       if (locEv.locationId !== locationId) {
         return;
       }
@@ -59,13 +62,13 @@ module.exports = function (locationId) {
 
   this.unbind = function () {
     if ($mount) {
+      $mount = null;
       ui.unbindAll(children);
       children = {};
       ui.offAll($elems);
       $elems = {};
       locations.off('location_event', handleNewEvent);
       handleNewEvent = null;
-      $mount = null;
     }
   };
 };
