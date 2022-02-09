@@ -27,6 +27,16 @@ module.exports = function (component, opts) {
   //   success
   //     when component emits success
   //
+  // Listens component events
+  //   cancel
+  //     closes the component
+  //   finish
+  //     closes the component
+  //   submit
+  //     bubbles submit
+  //   success
+  //     bubbles success
+  //
   if (!opts) {
     opts = {}
   }
