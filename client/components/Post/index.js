@@ -126,6 +126,9 @@ module.exports = function (entry, opts) {
         $container: $mount.find('.entry-form-container'),
         $button: $mount.find('.entry-form-open'),
       });
+      children.editform.on('success', function () {
+        children.editform.close();
+      });
     }
   };
 
