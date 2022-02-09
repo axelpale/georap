@@ -571,6 +571,7 @@ li.form-attachment-container:first-child img {
 }
 .comment-form-container {
   padding-top: 0.6rem;
+  padding-bottom: 0.6rem;
 }
 .comment-attachment-thumbnail {
   display: inline-block;
