@@ -57,8 +57,9 @@ module.exports = function (location) {
         ui.hide($elems.progress);
 
         if (err) {
-          console.error(err);
+          $elems.error.html(err.message);
           ui.show($elems.error);
+          ui.show($elems.form);
           return;
         }
 

@@ -16,7 +16,8 @@ module.exports = (req, res, next) => {
   const minNameLen = 2;
   const maxNameLen = 120;
   if (newLocName.length < minNameLen || newLocName.length > maxNameLen) {
-    return res.status(status.BAD_REQUEST).send('Too short or too long name');
+    const msg = req.__('location-rename-bad-size');
+    return res.status(status.BAD_REQUEST).send(msg);
   }
 
   const params = {

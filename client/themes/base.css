@@ -255,12 +255,12 @@ time:hover {
 /* Location name */
 .location-name {
   margin-bottom: 1rem;
-  overflow-wrap: break-word;
-  word-break: break-all;
 }
 .location-name h1 {
-  margin-bottom: 0;
+  margin-bottom: 0.62rem;
   margin-top: 1.5rem;
+  overflow-wrap: break-word;
+  word-break: break-all;
 }
 /* Location place */
 .location-places {
