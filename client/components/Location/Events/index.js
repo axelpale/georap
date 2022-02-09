@@ -29,6 +29,7 @@ module.exports = function (locationId) {
     $elems.list = $mount.find('.location-events-list');
     $elems.progress = $mount.find('.location-events-progress');
 
+    // Fetch events, ordered most recent first
     locations.getEvents({
       locationId: locationId,
     }, function (err, results) {
@@ -54,7 +55,7 @@ module.exports = function (locationId) {
       if (locEv.locationId !== locationId) {
         return;
       }
-      children.events.append(locEv);
+      children.events.prepend(locEv);
     };
 
     locations.on('location_event', handleNewEvent);
