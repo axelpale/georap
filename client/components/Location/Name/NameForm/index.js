@@ -20,6 +20,8 @@ module.exports = function (location) {
 
     $mount.html(template({
       name: location.getName(), // Prefill with current name
+      minLength: georap.config.locationNaming.minLength,
+      maxLength: georap.config.locationNaming.maxLength,
       __: georap.i18n.__,
     }));
 

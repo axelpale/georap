@@ -1,6 +1,6 @@
 var template = require('./template.ejs');
 var ui = require('georap-ui');
-var components = require('georap-components');
+var Opener = require('georap-components').Opener;
 var NameForm = require('./NameForm');
 var account = georap.stores.account;
 var ableOwn = account.ableOwn;
@@ -43,7 +43,7 @@ module.exports = function (location) {
 
     if (ableEdit) {
       var nameForm = new NameForm(location);
-      children.formOpener = new components.Opener(nameForm);
+      children.formOpener = new Opener(nameForm);
       children.formOpener.bind({
         $container: $elems.formContainer,
         $button: $elems.open,

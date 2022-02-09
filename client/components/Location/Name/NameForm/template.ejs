@@ -3,7 +3,7 @@
     <div class="form-group">
       <label for="location-rename-input"><%= __('new-name') %>:</label>
       <input type="text" class="form-control" id="location-rename-input" value="<%= name %>">
-      <p class="help-block"><%= __('location-rename-help') %></p>
+      <p class="help-block"><%= minLength %>–<%= maxLength %> <%= __('characters') %>. <%= __('location-rename-help') %></p>
     </div>
     <div class="form-group clearfix">
       <div class="pull-right">

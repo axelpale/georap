@@ -1,9 +1,10 @@
 const locationDal = require('../dal');
 const status = require('http-status-codes');
+const config = require('georap-config');
 
 module.exports = (req, res, next) => {
   // Update location name
-
+  //
   let newLocName = req.body.newName;
 
   if (typeof newLocName !== 'string') {
@@ -13,8 +14,8 @@ module.exports = (req, res, next) => {
   // Remove excess whitespaces and prevent only-whitespace names.
   newLocName = newLocName.trim();
 
-  const minNameLen = 2;
-  const maxNameLen = 120;
+  const minNameLen = config.locationNaming.minLength;
+  const maxNameLen = config.locationNaming.maxLength;
   if (newLocName.length < minNameLen || newLocName.length > maxNameLen) {
     const msg = req.__('location-rename-bad-size');
     return res.status(status.BAD_REQUEST).send(msg);

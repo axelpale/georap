@@ -44,6 +44,7 @@ const precompile = function (locale) {
       roles: config.roles,
       capabilities: config.capabilities,
       // Theme and branding TODO sort
+      locationNaming: config.locationNaming,
       locationStatuses: config.locationStatuses,
       locationTypes: config.locationTypes,
       rewards: config.rewards,

@@ -1,3 +1,11 @@
+// Limits for location names.
+// Long names can look bad on map.
+// Empty and short names can be difficult for user to understand.
+exports.locationNaming = {
+  minLength: 2,
+  maxLength: 80,
+};
+
 // Location classification: status.
 // The first in the list is used as the default.
 // The list order defines the button order on the location page.

@@ -154,8 +154,10 @@ module.exports = {
   loginBackground: landing.loginBackground,
   loginColor: landing.loginColor,
 
-  // Location classification and marker styles
+  // Locations
   // See config/locations.js
+  locationNaming: locations.locationNaming,
+  // Location classification and marker styles
   locationStatuses: locations.locationStatuses,
   locationTypes: locations.locationTypes,
   // Location marker template image settings

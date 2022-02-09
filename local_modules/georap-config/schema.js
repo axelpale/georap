@@ -158,6 +158,18 @@ module.exports = {
       type: 'string',
       enum: ['muted', 'primary', 'success', 'info', 'warning', 'danger'],
     },
+    locationNaming: {
+      type: 'object',
+      properties: {
+        minLength: {
+          type: 'integer',
+        },
+        maxLength: {
+          type: 'integer',
+        },
+      },
+      required: ['minLength', 'maxLength'],
+    },
     locationStatuses: {
       type: 'array',
       items: {
@@ -291,6 +303,7 @@ module.exports = {
     'appleTouchIcons', // new in v12, require in v13
     'loginBackground',
     'loginColor', // new in v12, require in v13
+    'locationNaming', // new in v14
     'locationStatuses',
     'locationTypes',
     'rewards',
