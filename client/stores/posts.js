@@ -47,7 +47,7 @@ exports.create = function (locId, postData, callback) {
 };
 
 exports.change = function (locId, postId, postData, callback) {
-  // Update an entry.
+  // Update a post.
   //
   // Parameters:
   //   locId
@@ -144,7 +144,14 @@ exports.changeComment = function (params, callback) {
   //     attachments
   //       array of attachment keys
   //   callback
-  //     function (err)
+  //     function (err, response)
+  //       err
+  //       response
+  //         { commentId: <string>, changed: <bool> }
+  //           , where changed is normally true, except in the rare case
+  //             that comment data before and after the submit stay identical.
+  //             In other words, if user re-submits the same edit, it is
+  //             processed only once.
   //
   var postId = params.entryId;
   var commentId = params.commentId;

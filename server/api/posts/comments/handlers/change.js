@@ -86,7 +86,12 @@ module.exports = function (req, res, next) {
   }
 
   if (!filled) {
-    return res.status(status.BAD_REQUEST).send('Missing parameters');
+    // No changes.
+    // Let the client-side know that no changes were made.
+    return res.status(status.OK).json({
+      commentId: req.comment.id,
+      changed: false,
+    });
   }
 
   postsDal.changeLocationEntryComment({
@@ -101,6 +106,9 @@ module.exports = function (req, res, next) {
     if (err) {
       return next(err);
     }
-    return res.sendStatus(status.OK);
+    return res.json({
+      commentId: req.comment.id,
+      changed: true,
+    });
   });
 };

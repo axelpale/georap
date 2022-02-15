@@ -160,6 +160,13 @@ module.exports = function (entry, comment) {
           return;
         }
 
+        // DEV NOTE In a perfect world we would like to check
+        // that the edit did modify the comment contents.
+        // However, it is a bit difficult due to attachment rotation
+        // that does not directly modify the comment object.
+        // The comparison still must be done on the server side, and therefore
+        // it is best to implement the comparison only once.
+
         // Hide form and reveal progress. This also prevents double click.
         ui.hide($elems.formGroup);
         ui.show($elems.progress);
