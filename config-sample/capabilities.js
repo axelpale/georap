@@ -86,6 +86,7 @@ module.exports = {
     'account-auth',
     'account-update',
     'admin-users-read',
+    'admin-users-invite',
     'admin-users-rerole',
     'attachments-read',
     'attachments-create',
