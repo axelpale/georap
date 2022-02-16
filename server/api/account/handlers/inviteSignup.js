@@ -39,10 +39,7 @@ module.exports = function (req, res, next) {
   // We could check this from an insert error but this way we can separate
   // username index violation and email index violation.
   // We also avoid computing password hash.
-
-  const users = db.collection('users');
-
-  users.findOne({
+  db.collection('users').findOne({
     $or: [ { name: username }, { email: email } ],
   }, (err, user) => {
 
@@ -51,7 +48,7 @@ module.exports = function (req, res, next) {
     }
 
     if (user) {
-      return res.sendStatus(status.CONFLICT);
+      return res.status(status.CONFLICT).send('Account already exists');
     }
 
     // No matching user found. We are clear to add one.
