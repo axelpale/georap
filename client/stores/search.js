@@ -1,3 +1,4 @@
+var minAddressLength = 3;
 
 exports.geocode = function (address, callback) {
   // Parameters:
@@ -12,7 +13,7 @@ exports.geocode = function (address, callback) {
   //
 
   // Cancel empty or one-char addresses
-  if (typeof address !== 'string' || address.length < 2) {
+  if (typeof address !== 'string' || address.length < minAddressLength) {
     return callback(null, []);
   }
 
