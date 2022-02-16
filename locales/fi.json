@@ -155,6 +155,7 @@
   "invite-email": "Sähköpostiosoite, johon kutsu lähetetään",
   "invite-invalid-email": "Virheellinen sähköpostiosoite. Tarkista ja kokeile uudelleen.",
   "invite-language": "Kutsun kieli",
+  "invite-language-help": "Valitse kieli, jota kutsuttu ymmärtää parhaiten.",
   "invite-mail-attention": "Huomio! Kutsulinkki on voimassa ainoastaan 7 päivää.",
   "invite-mail-follow": "Siirry oheisesta linkistä luomaan jäsentilisi.",
   "invite-mail-intro": "Sinut on kutsuttu yhteisöön",

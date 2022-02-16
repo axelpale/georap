@@ -156,6 +156,7 @@
   "invite-email": "Email address to send the invite to",
   "invite-invalid-email": "Invalid email address. Try again.",
   "invite-language": "Language of the invitation",
+  "invite-language-help": "Pick a language best suited for the invited.",
   "invite-mail-attention": "Attention! The invite is valid only for 7 days.",
   "invite-mail-follow": "Follow the link below to create your account.",
   "invite-mail-intro": "You have been invited to",
