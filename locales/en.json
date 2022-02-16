@@ -162,6 +162,8 @@
   "invite-mail-intro": "You have been invited to",
   "invite-mail-subject": "Invite to",
   "invite-mail-welcome": "Welcome!",
+  "invite-role": "User role and permission",
+  "invite-role-help": "You can change the role later in the user management.",
   "invite-send": "Send invite",
   "invite-send-failed": "Failed to send invitation. Try again later.",
   "invite-send-success": "Invite sent successfully.",

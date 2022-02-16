@@ -7,6 +7,7 @@ var validator = require('email-validator');
 var account = georap.stores.account;
 var defaultLocale = georap.config.defaultLocale;
 var availableLocales = georap.config.availableLocales;
+var defaultRole = georap.config.defaultRole;
 var __ = georap.i18n.__;
 
 module.exports = function () {
@@ -26,6 +27,8 @@ module.exports = function () {
     $mount.html(template({
       defaultLocale: defaultLocale,
       availableLocales: availableLocales,
+      defaultRole: defaultRole,
+      availableRoles: account.getAssignableRoles(),
       __: __,
     }));
 
@@ -60,6 +63,7 @@ module.exports = function () {
     // Collect values to send
     var email = $('#georap-invite-email').val();
     var lang = $('#georap-invite-lang').val();
+    var role = $('#georap-invite-role').val();
 
     // Validate email.
     if (!validator.validate(email)) {
@@ -74,7 +78,11 @@ module.exports = function () {
     // Display loading animation
     ui.show($('#georap-invite-in-progress'));
 
-    account.sendInviteEmail(email, lang, inviteSubmitResponseHandler);
+    account.sendInviteEmail({
+      email: email,
+      lang: lang,
+      role: role,
+    }, inviteSubmitResponseHandler);
   };
 
   inviteSubmitResponseHandler = function (err) {

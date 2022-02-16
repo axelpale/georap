@@ -1,4 +1,5 @@
 const status = require('http-status-codes');
+const config = require('georap-config');
 const db = require('georap-db');
 const validator = require('email-validator');
 const dal = require('../dal');
@@ -18,8 +19,12 @@ module.exports = function (req, res, next) {
   //   req.user
   //     Properties:
   //       email
-
+  //         string
+  //       invitedRole
+  //         string
+  //
   const email = req.user.email;
+  const invitedRole = req.user.invitedRole;
   const username = req.body.username;
   const password = req.body.password;
 
@@ -28,7 +33,8 @@ module.exports = function (req, res, next) {
   const validRequest = (
     typeof username === 'string' &&
     typeof password === 'string' &&
-    validator.validate(email)
+    validator.validate(email) &&
+    config.roles.includes(invitedRole)
   );
 
   if (!validRequest) {
@@ -55,7 +61,12 @@ module.exports = function (req, res, next) {
     // Note: there is a tiny risk that such user is created after
     // the check but before insert.
 
-    dal.createUser(username, email, password, (err2) => {
+    dal.createUser({
+      name: username,
+      email: email,
+      password: password,
+      role: invitedRole,
+    }, (err2) => {
       if (err2) {
         return next(err2);
       }

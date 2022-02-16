@@ -161,6 +161,8 @@
   "invite-mail-intro": "Sinut on kutsuttu yhteisöön",
   "invite-mail-subject": "Kutsu yhteisöön",
   "invite-mail-welcome": "Tervetuloa!",
+  "invite-role": "Jäsenen rooli",
+  "invite-role-help": "Voit vaihtaa jäsenen roolia myöhemmin jäsenhallinnasta.",
   "invite-send": "Lähetä kutsu",
   "invite-send-failed": "Kutsun lähetys epäonnistui. Kokeile myöhemmin uudelleen.",
   "invite-send-success": "Kutsun lähetys onnistui.",

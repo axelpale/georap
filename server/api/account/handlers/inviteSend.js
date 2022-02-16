@@ -23,16 +23,31 @@ module.exports = function (req, res, next) {
   //         the translation of the invitation.
   //
   const email = req.body.email;
-  let lang = req.body.lang;
-
   if (typeof email !== 'string') {
-    return res.sendStatus(status.BAD_REQUEST);
+    return res.status(status.BAD_REQUEST).send('Bad email address');
   }
-
   if (!validator.validate(email)) {
-    return res.sendStatus(status.BAD_REQUEST);
+    return res.status(status.BAD_REQUEST).send('Bad email address');
   }
 
+  // Validate role
+  const invitedRole = req.body.role;
+  if (!config.roles.includes(invitedRole)) {
+    return res.status(status.BAD_REQUEST).send('Bad role string');
+  }
+  // Prevent creating roles higher than own role.
+  // Otherwise a moderator could create an admin account for herself.
+  const authorRole = req.user.role;
+  // Find positions for order comparison
+  const invitedRoleIndex = config.roles.indexOf(invitedRole);
+  const authorRoleIndex = config.roles.indexOf(authorRole);
+  if (invitedRoleIndex > authorRoleIndex) {
+    const msg = 'You cannot invite for role higher than your own.';
+    return res.status(status.FORBIDDEN).send(msg);
+  }
+
+  // Invitation language
+  let lang = req.body.lang;
   // If no language or unknown language code is given,
   // use the default language.
   if (typeof lang !== 'string') {
@@ -64,6 +79,7 @@ module.exports = function (req, res, next) {
     const tokenPayload = {
       email: email,
       role: 'invited', // this role must be able to 'account-signup'
+      invitedRole: invitedRole,
     };
     const token = jwt.sign(tokenPayload, config.secret, {
       expiresIn: '7d',

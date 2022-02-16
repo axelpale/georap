@@ -438,32 +438,27 @@ exports.resetPassword = function (resetToken, newPassword, callback) {
   });
 };
 
-exports.sendInviteEmail = function (email, lang, callback) {
+exports.sendInviteEmail = function (params, callback) {
   // Parameters
-  //   email
-  //     string, valid email
-  //   lang
-  //     string, a locale string e.g. 'en'. If server does not support
-  //     the selected locale, the invitation is sent in the default lang.
+  //   params
+  //     email
+  //       string, valid email
+  //     lang
+  //       string, a locale string e.g. 'en'. If server does not support
+  //       the selected locale, the invitation is sent in the default lang.
+  //     role
+  //       string, a user role.
+  //   callback
+  //     function
   //
-  $.ajax({
+  request.postJSON({
     url: '/api/account/invite',
-    type: 'POST',
-    contentType: 'application/json',
-    data: JSON.stringify({
-      email: email,
-      lang: lang,
-    }),
-    headers: { 'Authorization': 'Bearer ' + exports.getToken() },
-    success: function () {
-      return callback();
+    data: {
+      email: params.email,
+      lang: params.lang,
+      role: params.role,
     },
-    error: function (jqxhr, status, errMsg) {
-      var err = new Error(errMsg);
-      console.error(err);
-      return callback(err);
-    },
-  });
+  }, callback);
 };
 
 exports.signup = function (signupToken, username, password, callback) {

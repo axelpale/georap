@@ -25,6 +25,18 @@
           <input type="email" class="form-control" id="georap-invite-email">
         </div>
         <div class="form-group">
+          <label for="georap-invite-role"><%= __('invite-role') %>:</label>
+          <select class="form-control" id="georap-invite-role">
+            <% availableRoles.forEach(function (role) { %>
+              <option
+                value="<%= role %>"
+                <%= role === defaultRole ? 'selected="selected"' : '' %>
+              ><%= __('user-role', role) %></option>
+            <% }) %>
+          </select>
+          <p class="help-block"><%= __('invite-role-help') %></p>
+        </div>
+        <div class="form-group">
           <label for="georap-invite-lang"><%= __('invite-language') %>:</label>
           <select class="form-control" id="georap-invite-lang">
             <% availableLocales.forEach(function (locale) { %>

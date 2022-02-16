@@ -3,23 +3,29 @@ const config = require('georap-config');
 const db = require('georap-db');
 const bcrypt = require('bcryptjs');
 
-module.exports = function (username, email, password, callback) {
-  // Create non-admin active user. Does not check if user exists.
+module.exports = function (userParams, callback) {
+  // Create user account. Does not check if user exists.
   //
   // Parameters:
-  //   username
-  //     string
-  //   email
-  //     string
-  //   password
-  //     string
+  //   userParams
+  //     name
+  //       string
+  //     email
+  //       string
+  //     password
+  //       string
+  //     role
+  //       string, optional
   //   callback
   //     function (err)
   //
   const users = db.collection('users');
 
+  const username = userParams.name;
+  const email = userParams.email;
+  const password = userParams.password;
   const r = config.bcrypt.rounds;
-  const defaultRole = config.defaultRole;
+  const role = userParams.role ? userParams.role : config.defaultRole;
 
   bcrypt.hash(password, r, (berr, pwdHash) => {
     if (berr) {
@@ -39,7 +45,7 @@ module.exports = function (username, email, password, callback) {
       points7days: 0, // updated by worker
       points30days: 0, // updated by worker
       points365days: 0, // updated by worker
-      role: defaultRole,
+      role: role,
       securityToken: '',
       flagsCreated: [], // updated by worker
       locationsCreated: 0, // updated by worker
