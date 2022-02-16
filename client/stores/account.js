@@ -20,6 +20,7 @@ var users = require('./users');
 var emitter = require('component-emitter');
 var jwtDecode = require('jwt-decode').default;
 var request = require('./lib/request');
+var roles = georap.config.roles;
 var caps = georap.config.capabilities;
 
 emitter(exports);
@@ -65,6 +66,16 @@ exports.getRole = function () {
     return user.role;
   }
   return 'public';
+};
+
+exports.getAssignableRoles = function () {
+  // Return array of role names that the user is allowed to touch.
+  // For example, a moderator cannot demote an admin but an admin can.
+  if (user) {
+    var authorRoleIndex = roles.indexOf(user.role);
+    return roles.slice(0, authorRoleIndex + 1);
+  }
+  return [];
 };
 
 exports.getToken = function () {
