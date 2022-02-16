@@ -34,6 +34,9 @@ exports.geocode = function (address, callback) {
       // DEBUG console.log('Successful geocoding with result:', results);
       return callback(null, results);
     }
+    if (status === 'ZERO_RESULTS') {
+      return callback(null, []);
+    }
     console.warn(
       'Geocode was not successful ' +
       ' for the following reason: ' + status
