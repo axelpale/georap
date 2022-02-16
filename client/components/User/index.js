@@ -16,6 +16,7 @@ module.exports = function (username) {
   // Init
   var self = this;
   emitter(self);
+  var $elems = {};
   var children = {};
   var $mount = null;
 
@@ -29,10 +30,14 @@ module.exports = function (username) {
       __: __,
     }));
 
+    $elems.progress = $mount.find('.user-progress');
+    $elems.points = $mount.find('.user-points');
+    $elems.events = $mount.find('.user-events');
+
     // Fetch user before further rendering.
     usersApi.getOneWithEvents(username, function (err, user) {
       // Hide loading bar
-      ui.hide($('#georap-user-loading'));
+      ui.hide($elems.progress);
 
       if (err) {
         console.error(err);
@@ -40,7 +45,7 @@ module.exports = function (username) {
       }
 
       // User statistics
-      $('#georap-user-points').html(pointsTemplate({
+      $elems.points.html(pointsTemplate({
         createdAt: ui.timestamp(user.createdAt, georap.i18n.locale),
         flagConfig: flagConfig,
         flags: user.flagsCreated,
@@ -52,12 +57,18 @@ module.exports = function (username) {
       }));
 
       children.events = new EventsView(user.events);
-      children.events.bind($('#georap-user-events'));
+      children.events.bind($elems.events);
     });
   };
 
   this.unbind = function () {
-    ui.unbindAll(children);
+    if ($mount) {
+      $mount = null;
+      ui.unbindAll(children);
+      children = {};
+      ui.offAll($elems);
+      $elems = {};
+    }
   };
 
 };
