@@ -53,7 +53,7 @@ module.exports = (params, callback) => {
       // Change the location array to the single location (the first item).
       $unwind: {
         path: '$location.thumbnail',
-        preserveNullAndEmptyArrays: true, // TODO not needed after v12 migr.
+        preserveNullAndEmptyArrays: true, // Keep event even if no loc thumb
       },
     },
   ]).toArray((err, events) => {
