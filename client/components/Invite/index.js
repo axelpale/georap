@@ -1,6 +1,6 @@
 // Form to invite new users.
 
-var inviteTemplate = require('./template.ejs');
+var template = require('./template.ejs');
 var ui = require('georap-ui');
 var emitter = require('component-emitter');
 var validator = require('email-validator');
@@ -23,7 +23,7 @@ module.exports = function () {
   // Public methods
 
   this.bind = function ($mount) {
-    $mount.html(inviteTemplate({
+    $mount.html(template({
       defaultLocale: defaultLocale,
       availableLocales: availableLocales,
       __: __,
