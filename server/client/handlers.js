@@ -42,6 +42,7 @@ const precompile = function (locale) {
       tempUploadSizeLimit: config.tempUploadSizeLimit,
       // User management
       roles: config.roles,
+      defaultRole: config.defaultRole,
       capabilities: config.capabilities,
       // Theme and branding TODO sort
       locationNaming: config.locationNaming,
