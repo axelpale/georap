@@ -7,6 +7,7 @@ var emitter = require('component-emitter');
 var components = require('georap-components');
 var DeletedUsers = require('./Deleted');
 var ui = require('georap-ui');
+var able = georap.stores.account.able;
 var __ = georap.i18n.__;
 
 module.exports = function () {
@@ -24,6 +25,7 @@ module.exports = function () {
     $mount = $mountEl;
 
     $mount.html(template({
+      canInvite: able('admin-users-invite'),
       __: __,
     }));
 
@@ -43,7 +45,9 @@ module.exports = function () {
       }
 
       // Reveal buttons after load
-      ui.show($elems.buttons);
+      if (able('admin-users-invite')) {
+        ui.show($elems.buttons);
+      }
 
       // Reveal user table. Only non-deleted users.
       $elems.table.html(tableTemplate({
