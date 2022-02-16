@@ -82,10 +82,7 @@ exports.getAllOfLocationComplete = (locationId, callback) => {
 
 exports.getRecentComplete = require('./getRecentComplete');
 
-exports.getRecentOfUser = (username, n, beforeTime, callback) => {
-  const filter = { user: username };
-  return exports.getRecentFiltered(filter, n, beforeTime, callback);
-};
+exports.getRecentOfUser = require('./getRecentOfUser');
 
 exports.getRecentFiltered = (filter, limit, beforeTime, callback) => {
   // Parameters

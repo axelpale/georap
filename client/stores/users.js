@@ -26,7 +26,7 @@ exports.getAll = function (callback) {
   }, callback);
 };
 
-exports.getOneWithEvents = function (username, callback) {
+exports.getOne = function (username, callback) {
   // Fetch a user from server and return raw user object.
   // Will call back with error if not found.
   //
@@ -39,6 +39,43 @@ exports.getOneWithEvents = function (username, callback) {
   request.getJSON({
     url: '/api/users/' + username,
   }, callback);
+};
+
+exports.getEvents = function (params, callback) {
+  // Get recent events by user.
+  //
+  // Parameters:
+  //   params
+  //     username
+  //       string
+  //     skip
+  //       integer, how many to skip before results. Default 0.
+  //     limit
+  //       integer, how many to include into the results. Default 50.
+  //   callback
+  //     function (err, events)
+  //       Parameters:
+  //         err
+  //         events
+  //           array, most recent event first
+  //
+  params = Object.assign({
+    skip: 0,
+    limit: 50,
+  }, params);
+
+  request.getJSON({
+    url: '/api/users/' + params.username + '/events',
+    data: {
+      skip: params.skip,
+      limit: params.limit,
+    },
+  }, function (err, response) {
+    if (err) {
+      return callback(err);
+    }
+    return callback(null, response.events);
+  });
 };
 
 exports.getVisitedLocationIds = function (username, callback) {

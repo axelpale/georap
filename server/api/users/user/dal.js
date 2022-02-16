@@ -10,7 +10,7 @@ exports.getOne = function (username, callback) {
   //     string
   //   callback
   //     function (err, user), user === null if no user found
-
+  //
   const usersColl = db.collection('users');
   const proj = {
     hash: false,
@@ -44,40 +44,22 @@ exports.getOne = function (username, callback) {
     });
 };
 
-exports.getOneWithEvents = function (username, callback) {
-  // Get single user
+exports.getEvents = function (params, callback) {
+  // Get events of single user.
   //
   // Parameters:
-  //   username
-  //     string
+  //   params
+  //     username
+  //       string
+  //     skip
+  //       integer
+  //     limit
+  //       integer
   //   callback
   //     function (err, user)
   //       err null and user null if no user found
   //
-
-  exports.getOne(username, (err, doc) => {
-    if (err) {
-      return callback(err);
-    }
-
-    if (!doc) {
-      return callback(null, null);
-    }
-
-    const num = 20;
-    const before = (new Date()).toISOString();
-
-    eventsDal.getRecentOfUser(username, num, before, (err2, docs) => {
-      if (err2) {
-        return callback(err2);
-      }
-
-      doc.events = docs;
-
-      return callback(null, doc);
-    });
-
-  });
+  eventsDal.getRecentOfUser(params, callback);
 };
 
 exports.getFlags = (username, callback) => {

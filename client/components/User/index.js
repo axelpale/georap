@@ -1,6 +1,6 @@
 
 var usersApi = georap.stores.users;
-var EventsView = require('../Events');
+var EventsMoreView = require('../EventsMore');
 var template = require('./template.ejs');
 var pointsTemplate = require('./points.ejs');
 var emitter = require('component-emitter');
@@ -35,7 +35,7 @@ module.exports = function (username) {
     $elems.events = $mount.find('.user-events');
 
     // Fetch user before further rendering.
-    usersApi.getOneWithEvents(username, function (err, user) {
+    usersApi.getOne(username, function (err, user) {
       // Hide loading bar
       ui.hide($elems.progress);
 
@@ -56,7 +56,15 @@ module.exports = function (username) {
         __: __,
       }));
 
-      children.events = new EventsView(user.events);
+      children.events = new EventsMoreView(function (skip, limit, callback) {
+        usersApi.getEvents({
+          username: username,
+          skip: skip,
+          limit: limit,
+        }, callback);
+      }, {
+        listSize: 15,
+      });
       children.events.bind($elems.events);
     });
   };
