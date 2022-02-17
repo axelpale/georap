@@ -139,7 +139,6 @@ exports.route = function () {
           s.zoom = zoom;
         }
       }
-      console.log('update store');
       mapStateStore.update(s);
     }
 
