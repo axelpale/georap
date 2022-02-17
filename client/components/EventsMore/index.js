@@ -6,6 +6,10 @@ var renderEvent = require('../Events/renderEvent');
 var ui = require('georap-ui');
 var __ = georap.i18n.__;
 
+var noFilter = function (evs) {
+  return evs;
+};
+
 module.exports = function (fetch, opts) {
   // Parameters:
   //   fetch
@@ -19,11 +23,17 @@ module.exports = function (fetch, opts) {
   //           err
   //           events
   //             array of event objects
-  //   opts, optional object with props
+  //   opts, optional object with optional props
   //     listSize
   //       integer, default 50, number of events per load
   //     showThumbnails
   //       boolean, default false,
+  //     eventFilter
+  //       function (evs), a filter to hide certain events
+  //
+  // Note that fetch fn should not attempt to filter events because
+  // it can interfere with more detection. Set opts.eventFilter if
+  // any filtering is necessary.
   //
 
   // Handle parameters
@@ -33,6 +43,7 @@ module.exports = function (fetch, opts) {
   opts = Object.assign({
     listSize: 50,
     showThumbnails: false,
+    eventFilter: noFilter,
   }, opts);
 
   // Init
@@ -71,7 +82,10 @@ module.exports = function (fetch, opts) {
           return;
         }
 
-        events.slice(0, limit).forEach(function (ev) {
+        // Remove the extra item and apply given event filter.
+        var prettyEvs = opts.eventFilter(events.slice(0, limit));
+
+        prettyEvs.forEach(function (ev) {
           $elems.events.append(renderEvent(ev, opts));
         });
 
