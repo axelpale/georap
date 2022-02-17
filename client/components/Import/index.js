@@ -3,6 +3,8 @@ var template = require('./template.ejs');
 var emitter = require('component-emitter');
 var ui = require('georap-ui');
 var __ = georap.i18n.__;
+var tempSizeLimit = georap.config.tempUploadSizeLimit; // MB
+var locationsApi = georap.stores.locations;
 
 var K = 1024;
 
@@ -14,12 +16,11 @@ module.exports = function () {
   var self = this;
   emitter(self);
 
-
   // Public methods
 
   this.bind = function ($mount) {
     $mount.html(template({
-      limit: Math.round(georap.config.tempUploadSizeLimit / (K * K)),
+      limit: Math.round(tempSizeLimit / (K * K)),
       __: __,
     }));
 
@@ -43,7 +44,7 @@ module.exports = function () {
       // Begin progress
       ui.show($progress);
 
-      georap.stores.locations.importFile($uploadForm, function (err, result) {
+      locationsApi.createImportBatch($uploadForm, function (err, result) {
         ui.hide($progress);
 
         if (err) {

@@ -72,7 +72,7 @@ exports.getPosts = require('./getPosts');
 exports.getEvents = require('./getEvents');
 exports.getLatest = require('./getLatest');
 
-exports.importFile = function (form, callback) {
+exports.createImportBatch = function (form, callback) {
   // Parameters
   //   form
   //     jQuery instance of the file upload form
@@ -85,13 +85,18 @@ exports.importFile = function (form, callback) {
   }, callback);
 };
 
-exports.getBatch = function (batchId, callback) {
+exports.getImportBatch = function (batchId, callback) {
+  // Preview data from an imported file before creating locations.
+  //
   return getJSON({
     url: '/api/locations/import/' + batchId,
   }, callback);
 };
 
-exports.getOutcome = function (batchId, callback) {
+exports.getImportBatchOutcome = function (batchId, callback) {
+  // Get data about how import worked out.
+  // After the user accepts the imported data and runs the import batch,
+  // an outcome data is stored for user to inspect.
   return getJSON({
     url: '/api/locations/import/' + batchId + '/outcome',
   }, callback);

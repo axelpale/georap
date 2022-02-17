@@ -8,6 +8,7 @@ var listTemplate = require('./list.ejs');
 var template = require('./template.ejs');
 var emitter = require('component-emitter');
 var ui = require('georap-ui');
+var locationsApi = georap.stores.locations;
 
 module.exports = function (batchId) {
   // Parameters
@@ -30,7 +31,7 @@ module.exports = function (batchId) {
     var $list = $('#georap-outcome-list');
     var $msg = $('#georap-outcome-message');
 
-    georap.stores.locations.getOutcome(batchId, function (err, result) {
+    locationsApi.getImportBatchOutcome(batchId, function (err, result) {
       // Progress bar is visible by default
       ui.hide($progress);
 
