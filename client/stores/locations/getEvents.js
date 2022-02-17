@@ -35,6 +35,6 @@ module.exports = function (params, callback) {
       return callback(err);
     }
 
-    return callback(null, result);
+    return callback(null, result.events, result.more);
   });
 };
