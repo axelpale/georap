@@ -6,6 +6,7 @@ const path = require('path');
 const fse = require('fs-extra');
 const express = require('express');
 const cookieParser = require('cookie-parser');
+const status = require('http-status-codes');
 
 const app = express();
 const server = http.createServer(app);
@@ -154,11 +155,15 @@ app.use((err, req, res, next) => {
   if (res.headersSent) {
     return next(err);
   }
+  // Handle invalid or revoked tokens
+  if (err.name === 'UnauthorizedError') {
+    const msg = req.__('invalid-token');
+    return res.status(status.UNAUTHORIZED).send(msg);
+  }
 
   const datetime = (new Date()).toISOString();
   const logEntry = datetime + ': ' + err.stack;
 
   console.error(logEntry);
-  const INTERNAL_SERVER_ERROR = 500;
-  res.status(INTERNAL_SERVER_ERROR).send('Error: ' + err.message);
+  res.status(status.INTERNAL_SERVER_ERROR).send('Error: ' + err.message);
 });

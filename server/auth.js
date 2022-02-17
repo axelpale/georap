@@ -43,14 +43,17 @@ module.exports = jwt({
         }
 
         if (storedUser) {
-          // account exists
+          // account exists.
           if (!storedUser.deleted) {
-            // account is not soft-deleted
-            if (grable.isAble(storedUser, 'account-auth')) {
-              // Account has role that allows authentication.
-              // By ensuring that here, we do not accidentally allow access
-              // in the case when we remove 'account-auth' cap form role.
-              return done(null, false);
+            // account is not soft-deleted.
+            if (payload.role === storedUser.role) {
+              // account role has not changed.
+              if (grable.isAble(storedUser, 'account-auth')) {
+                // Account has role that allows authentication.
+                // By ensuring that here, we do not accidentally allow access
+                // in the case when we remove 'account-auth' cap form role.
+                return done(null, false);
+              }
             }
           }
         }
