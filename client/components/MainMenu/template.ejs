@@ -64,9 +64,9 @@
       <% } %>
 
       <% if (able('admin-users-invite')) { %>
-      <li>
-        <a href="/invite"><%= glyphicon({ name: 'envelope' }) %> <%= __('invite') %></a>
-      </li>
+        <li>
+          <a href="/invite"><%= glyphicon({ name: 'envelope' }) %> <%= __('invite') %></a>
+        </li>
       <% } %>
       <% if (able('admin-users-read')) { %>
         <li>
@@ -76,18 +76,22 @@
       <% } %>
 
       <% if (able('account-update')) { %>
-      <li class="dropdown-header"><%= user.name %></li>
-      <li>
-        <a href="/account"><%= glyphicon({ name: 'user' }) %> <%= __('account-settings') %></a>
-      </li>
-      <li>
-        <a href="/login"><%= glyphicon({ name: 'off' }) %> <%= __('log-out') %></a>
-      </li>
+        <li class="dropdown-header"><%= user.name %></li>
+        <li>
+          <a href="/account"><%= glyphicon({ name: 'user' }) %> <%= __('account-settings') %></a>
+        </li>
+        <li>
+          <a href="/login"><%= glyphicon({ name: 'off' }) %> <%= __('log-out') %></a>
+        </li>
+      <% } else { %>
+        <li>
+          <a href="/settings"><%= glyphicon({ name: 'cog' }) %> <%= __('settings') %></a>
+        </li>
       <% } %>
       <% if (able('account-login-form')) { %>
-      <li>
-        <a href="/login"><%= glyphicon({ name: 'user' }) %> <%= __('log-in') %></a>
-      </li>
+        <li>
+          <a href="/login"><%= glyphicon({ name: 'user' }) %> <%= __('log-in') %></a>
+        </li>
       <% } %>
     </ul>
   </div><!-- .dropdown -->

@@ -207,6 +207,13 @@ exports.route = function () {
     window.location.href = context.canonicalPath;
   });
 
+  page('/settings', basicViewSetup(function () {
+    return import(
+      /* webpackChunkName: "settings" */
+      '../components/Settings'
+    );
+  }));
+
   page('/account', able('account-update'), function () {
     import(
       /* webpackChunkName: "account-view" */
@@ -221,7 +228,7 @@ exports.route = function () {
 
   page('/account/email', able('account-update'), basicViewSetup(function () {
     return import(
-      /* webpackChunkName: "account-Email" */
+      /* webpackChunkName: "account-email" */
       '../components/Account/ChangeEmail'
     );
   }));
