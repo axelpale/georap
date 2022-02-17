@@ -14,14 +14,16 @@ module.exports = {
     'account-password-reset-request',
   ],
   'invited': [
+    // The role is granted by the invitation token, sent via email link.
     'account-signup',
   ],
   'resetter': [
+    // The role is granted by the password reset token, sent via email link.
     'account-password-reset',
   ],
-  // 'banned': [], // same as frozen?
   'frozen': [
-    // not able to login
+    // The role is not able to login
+    // possibly due to closed account, missing payments, or bad behavior.
   ],
   'reader': [ // able to see content after login but not modify
     'account-auth',
