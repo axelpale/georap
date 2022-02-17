@@ -7,6 +7,14 @@ const templates = require('../templates');
 const rootUrl = require('../rootUrl');
 const mailer = require('../../../services/mailer');
 const loggers = require('../../../services/logs/loggers');
+const isAble = require('georap-able').isAble;
+
+const canAssignRole = function (authorRole, targetRole) {
+  // Returns true if author role is allowed to assign the target role.
+  const targetRoleIndex = config.roles.indexOf(targetRole);
+  const authorRoleIndex = config.roles.indexOf(authorRole);
+  return targetRoleIndex <= authorRoleIndex;
+};
 
 module.exports = function (req, res, next) {
   // Invite a user by sending an email with a link that includes a token.
@@ -21,6 +29,8 @@ module.exports = function (req, res, next) {
   //       lang
   //         string, optional locale code e.g. 'en' that determines
   //         the translation of the invitation.
+  //       role
+  //         string
   //
   const email = req.body.email;
   if (typeof email !== 'string') {
@@ -35,13 +45,16 @@ module.exports = function (req, res, next) {
   if (!config.roles.includes(invitedRole)) {
     return res.status(status.BAD_REQUEST).send('Bad role string');
   }
+  // Prevent giving non-default role without capability
+  const defaultRole = config.defaultRole;
+  const canRole = isAble(req.user, 'admin-users-invite-role');
+  if (invitedRole !== defaultRole && !canRole) {
+    const msg = 'You cannot assign non-default roles for new users.';
+    return res.status(status.FORBIDDEN).send(msg);
+  }
   // Prevent creating roles higher than own role.
   // Otherwise a moderator could create an admin account for herself.
-  const authorRole = req.user.role;
-  // Find positions for order comparison
-  const invitedRoleIndex = config.roles.indexOf(invitedRole);
-  const authorRoleIndex = config.roles.indexOf(authorRole);
-  if (invitedRoleIndex > authorRoleIndex) {
+  if (!canAssignRole(req.user.role, invitedRole)) {
     const msg = 'You cannot invite for role higher than your own.';
     return res.status(status.FORBIDDEN).send(msg);
   }

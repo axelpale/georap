@@ -20,6 +20,9 @@ module.exports = function () {
   var inviteFormSubmitHandler;
   var inviteSubmitResponseHandler;
 
+  // Permissions
+  var canRole = account.able('admin-users-invite-role');
+
 
   // Public methods
 
@@ -31,6 +34,11 @@ module.exports = function () {
       availableRoles: account.getAssignableRoles(),
       __: __,
     }));
+
+    // Show role selector if user is capable of assigning non-default roles.
+    if (canRole) {
+      ui.show($mount.find('.invite-role-group'));
+    }
 
     $('#georap-invite-another-button').click(inviteAnotherButtonHandler);
     $('#georap-invite-form').submit(inviteFormSubmitHandler);
@@ -63,7 +71,11 @@ module.exports = function () {
     // Collect values to send
     var email = $('#georap-invite-email').val();
     var lang = $('#georap-invite-lang').val();
-    var role = $('#georap-invite-role').val();
+
+    var role = defaultRole;
+    if (canRole) {
+      role = $('#georap-invite-role').val();
+    }
 
     // Validate email.
     if (!validator.validate(email)) {

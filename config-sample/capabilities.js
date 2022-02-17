@@ -128,6 +128,7 @@ module.exports = {
     'account-update', // change of own email and password
     'admin-users-read', // list users, their emails, and activity
     'admin-users-invite', // send invites to create new users
+    'admin-users-invite-role', // send invite for non-default role
     'admin-users-rerole', // change user roles and freeze accounts
     'admin-users-delete', // delete user accounts permanently
     'attachments-read', // see post and comment attachments
