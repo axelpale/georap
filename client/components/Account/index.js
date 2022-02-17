@@ -1,10 +1,9 @@
 var template = require('./template.ejs');
 var emitter = require('component-emitter');
 var ThemeForm = require('./ThemeForm');
+var LocaleForm = require('./LocaleForm');
 var ui = require('georap-ui');
 var account = georap.stores.account;
-var localesStore = georap.stores.locales;
-var availableLocales = georap.config.availableLocales;
 
 module.exports = function () {
 
@@ -24,13 +23,14 @@ module.exports = function () {
     $mount.html(template({
       username: user.name,
       email: user.email,
-      currentLocale: localesStore.getLocale(),
-      availableLocales: availableLocales,
       __: georap.i18n.__,
     }));
 
     children.theme = new ThemeForm();
     children.theme.bind($mount.find('.theme-form'));
+
+    children.locale = new LocaleForm();
+    children.locale.bind($mount.find('.locale-form'));
   };
 
   this.unbind = function () {
