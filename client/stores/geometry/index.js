@@ -1,4 +1,4 @@
-var request = require('./lib/request');
+var request = require('../lib/request');
 
 exports.getInEverySystem = function (geom, callback) {
   // Get geom in all configured coordinate systems.

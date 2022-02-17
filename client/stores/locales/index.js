@@ -19,7 +19,7 @@
 //     'updated' with state
 //
 var cookies = require('georap-cookie');
-var request = require('./lib/request');
+var request = require('../lib/request');
 
 exports.getLocale = function () {
   var locale = cookies.getCookie('locale');

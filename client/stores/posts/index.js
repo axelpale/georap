@@ -1,6 +1,6 @@
 // Location posts API adapter
 //
-var request = require('./lib/request');
+var request = require('../lib/request');
 
 exports.getLatest = function (range, callback) {
   // Fetch latest non-deleted posts

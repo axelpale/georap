@@ -2,7 +2,7 @@
 //   var usersApi = georap.stores.users;
 //
 
-var request = require('./lib/request');
+var request = require('../lib/request');
 var emitter = require('component-emitter');
 var roles = georap.config.roles;
 

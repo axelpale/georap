@@ -1,6 +1,6 @@
 // Event API
 //
-const request = require('./lib/request');
+const request = require('../lib/request');
 
 exports.getRecent = function (params, callback) {
   // Get recent events.

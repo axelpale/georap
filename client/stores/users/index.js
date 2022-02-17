@@ -2,7 +2,7 @@
 //   var users = georap.stores.users;
 //
 
-var request = require('./lib/request');
+var request = require('../lib/request');
 var emitter = require('component-emitter');
 
 // Init

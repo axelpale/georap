@@ -21,8 +21,8 @@
 //   Emits
 //     'updated' with state
 //
-var createStore = require('./lib/createStore');
-var storage = require('../connection/storage');
+var createStore = require('../lib/createStore');
+var storage = require('../../connection/storage');
 
 var DEFAULT_STATE = georap.config.defaultMapState;
 

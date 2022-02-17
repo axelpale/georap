@@ -1,5 +1,5 @@
 var emitter = require('component-emitter');
-var request = require('./lib/request');
+var request = require('../lib/request');
 
 // Init
 emitter(exports);

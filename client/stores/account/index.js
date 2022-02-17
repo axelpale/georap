@@ -15,11 +15,11 @@
 //   login
 //   logout
 
-var storage = require('../connection/storage');
-var users = require('./users');
+var storage = require('../../connection/storage');
+var users = require('../users');
 var emitter = require('component-emitter');
 var jwtDecode = require('jwt-decode').default;
-var request = require('./lib/request');
+var request = require('../lib/request');
 var roles = georap.config.roles;
 var caps = georap.config.capabilities;
 
