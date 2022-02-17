@@ -139,6 +139,14 @@ var LocationView = function (id, query) {
         children.removeView.bind($mount.find('.location-remove'));
       }
 
+      // Setup back to top link
+      $elems.backToTop = $mount.find('.card-back-to-top');
+      ui.show($elems.backToTop);
+      $elems.backToTop.click(function () {
+        var roller = document.querySelector('#card-layer .card-layer-content');
+        roller.scrollTop = 0;
+      });
+
       // Listen possible changes in the location.
 
       // Inform parents that view model is removed and view should be closed.
@@ -162,6 +170,8 @@ var LocationView = function (id, query) {
     if ($mount) {
       ui.unbindAll(children);
       children = {};
+      ui.offAll($elems);
+      $elems = {};
       if (_location) {
         _location.off();
         locations.deselectLocation(_location.getId());

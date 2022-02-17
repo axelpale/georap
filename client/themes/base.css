@@ -101,6 +101,13 @@ time:hover {
 .card-filler {
   padding-bottom: 18rem;
 }
+.card-back-to-top { color: #777; }
+.card-back-to-top:hover {
+  color: #eee;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
 /* END Card */
 
 /* Login */
