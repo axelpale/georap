@@ -15,7 +15,7 @@ module.exports = (req, res, next) => {
     }
 
     if (!rawLoc) {
-      return res.sendStatus(status.NOT_FOUND);
+      return res.status(status.NOT_FOUND).send(req.__('location-missing'));
     }
 
     let responseStr, filename, mime;

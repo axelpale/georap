@@ -56,6 +56,7 @@ var LocationView = function (id, query) {
     }));
 
     $elems.loading = $mount.find('.location-loading');
+    $elems.error = $mount.find('.location-error');
 
     // Fetch location before rendering.
     locations.getOne(id, function (err, rawLoc) {
@@ -69,14 +70,9 @@ var LocationView = function (id, query) {
       ui.hide($elems.loading);
 
       if (err) {
-        if (err.message && err.message.toLowerCase() === 'not found') {
-          console.warn('Location ' + id + ' not found');
-          ui.show($mount.find('.location-missing-error'));
-          return;
-        }
-        console.log('error.message', err.message);
+        $elems.error.html(err.message);
+        ui.show($elems.error);
         console.table(err);
-        console.error(err);
         return;
       }
 

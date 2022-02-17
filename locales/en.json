@@ -150,6 +150,7 @@
   "import-total-of": "A total of",
   "import-upload-success": "Upload successful",
   "in-place": "in",
+  "invalid-token": "Your authentication token is invalid, expired, or revoked. Please <a href=\"/login\">log in</a> again.",
   "invite": "Invite...",
   "invite-account-exists": "An account with this email address already exists. The account owner has already received an invite and created an account.",
   "invite-another": "Invite another...",

@@ -9,7 +9,7 @@
   <div class="row">
     <div class="col-md-12">
 
-      <div class="location-loading">
+      <div class="location-loading location-top">
         <div class="progress">
           <div class="progress-bar progress-bar-striped active" role="progressbar" style="width: 100%">
             <span class="sr-only">Waiting for server</span>
@@ -17,9 +17,7 @@
         </div>
       </div>
 
-      <div class="location-missing-error hidden">
-        <h2><%= __('location-missing') %></h2>
-      </div>
+      <div class="location-error alert alert-danger location-top hidden" role="alert"></div>
 
       <div class="location-name"></div>
 

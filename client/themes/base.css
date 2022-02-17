@@ -233,8 +233,8 @@ time:hover {
 /* END Menu */
 
 /* Location page */
-.location-loading {
-  /* Make space between the loading bar and the top edge. Match with H1 */
+.location-top {
+  /* Space between a progress or error bar and the top edge. Match with H1 */
   margin-top: 20px;
 }
 /* Location return to latest */

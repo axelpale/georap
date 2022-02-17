@@ -149,6 +149,7 @@
   "import-total-of": "Kaikkiaan",
   "import-upload-success": "Tuonnin esikatselu",
   "in-place": "alueella",
+  "invalid-token": "Tunnisteesi on vanhentunut, viallinen, tai hylätty. Kokeile <a href=\"/login\">kirjautua uudelleen.</a>",
   "invite": "Kutsu...",
   "invite-account-exists": "Tähän sähköpostiosoitteeseen liitetty tili on jo olemassa. Tilin omistaja on jo vastaanottanut kutsun ja luonut itselleen tilin.",
   "invite-another": "Kutsu lisää...",
