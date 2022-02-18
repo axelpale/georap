@@ -155,7 +155,7 @@ app.use((err, req, res, next) => {
   if (res.headersSent) {
     return next(err);
   }
-  // Handle invalid or revoked tokens
+  // Handle invalid or revoked jwt tokens
   if (err.name === 'UnauthorizedError') {
     const msg = req.__('invalid-token');
     return res.status(status.UNAUTHORIZED).send(msg);

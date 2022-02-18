@@ -34,18 +34,6 @@ router.use('/users', able('users-read'), usersRouter);
 // router.use('/locales', localesRouter); TODO is any use?
 // router.use('/payments', paymentsRouter); TODO is any use?
 
-// API error handling
-// See http://expressjs.com/en/guide/error-handling.html
-router.use((err, req, res, next) => {
-  // Token error handling TODO maybe deprecated
-  if (err.name === 'UnauthorizedError') {
-    return res.sendStatus(status.UNAUTHORIZED);
-  }
-
-  // Default error handler
-  return next(err);
-});
-
 // Catch all other non-errored API calls to 404.
 // Must be the final step in this router.
 router.get('/*', (req, res) => {
