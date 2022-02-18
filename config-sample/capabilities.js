@@ -17,10 +17,6 @@ module.exports = {
     // The role is granted by the invitation token, sent via email link.
     'account-signup',
   ],
-  'resetter': [
-    // The role is granted by the password reset token, sent via email link.
-    'account-password-reset',
-  ],
   'frozen': [
     // The role is not able to login
     // possibly due to closed account, missing payments, or bad behavior.

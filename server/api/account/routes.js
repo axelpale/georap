@@ -16,9 +16,8 @@ router.post('/reset/email', able('account-password-reset-request'),
 
 // Temporary routes - temp auth token in url
 
-// Password reset
-router.post('/reset', able('account-password-reset'),
-            jsonParser, handlers.resetPasswordSave);
+// Password reset. Check token in handler.
+router.post('/reset', jsonParser, handlers.resetPasswordSave);
 
 // Sign up after invite
 router.post('/signup', able('account-signup'),

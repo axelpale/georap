@@ -32,7 +32,7 @@ module.exports = jwt({
     return null;
   },
   isRevoked: function (req, payload, done) {
-    // Check if user is banned.
+    // Check if user role is changed e.g. after ban.
     // Check this by querying the database, because it's SIMPLE.
     // This effectively nulls the benefits of using jwt tokens :DD
     // But what the hell...
@@ -58,8 +58,8 @@ module.exports = jwt({
           }
         }
 
-        // Token revoked
-        // TODO ensure this works
+        // Token revoked.
+        // Will throw 401 Unauthorized, to be handled in root error handler.
         return done(null, true);
       });
     } else {

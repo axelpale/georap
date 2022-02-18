@@ -45,9 +45,9 @@ module.exports = function (req, res, next) {
     // to reset his or her password during the next 30 minutes.
 
     const tokenPayload = {
-      name: user.name,
+      // NOTE no 'name' prop because auth will pass tokens without name
+      type: 'password-reset',
       email: user.email,
-      role: 'resetter',
     };
     const token = jwt.sign(tokenPayload, config.secret, {
       expiresIn: '30m',

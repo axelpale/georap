@@ -13,13 +13,18 @@ module.exports = function (req, res, next) {
   const password = req.body.password;
   const email = req.user.email;
 
+  // Check token
+  if (req.user.type !== 'password-reset') {
+    const msg = 'Invalid token for password reset';
+    return res.status(status.UNAUTHORIZED).send(msg);
+  }
+
   if (typeof password !== 'string' || typeof email !== 'string') {
     return res.sendStatus(status.BAD_REQUEST);
   }
 
   // Hash the new password before storing it to database.
   bcrypt.hash(password, config.bcrypt.rounds, (err, newHash) => {
-
     if (err) {
       return next(err);
     }
