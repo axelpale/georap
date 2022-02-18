@@ -90,8 +90,8 @@ module.exports = function (req, res, next) {
     // Okay, everything good. Create email with a secure sign up link.
 
     const tokenPayload = {
+      type: 'invited-signup',
       email: email,
-      role: 'invited', // this role must be able to 'account-signup'
       invitedRole: invitedRole,
     };
     const token = jwt.sign(tokenPayload, config.secret, {

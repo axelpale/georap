@@ -19,9 +19,8 @@ router.post('/reset/email', able('account-password-reset-request'),
 // Password reset. Check token in handler.
 router.post('/reset', jsonParser, handlers.resetPasswordSave);
 
-// Sign up after invite
-router.post('/signup', able('account-signup'),
-            jsonParser, handlers.inviteSignup);
+// Sign up after invite. Check token in handler.
+router.post('/signup', jsonParser, handlers.inviteSignup);
 
 // User routes - require authentication
 

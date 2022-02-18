@@ -9,13 +9,10 @@
 //
 module.exports = {
   'public': [
+    // Anonymous user
     'geometry-read',
     'account-login-form',
     'account-password-reset-request',
-  ],
-  'invited': [
-    // The role is granted by the invitation token, sent via email link.
-    'account-signup',
   ],
   'frozen': [
     // The role is not able to login

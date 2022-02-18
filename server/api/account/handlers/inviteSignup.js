@@ -28,6 +28,12 @@ module.exports = function (req, res, next) {
   const username = req.body.username;
   const password = req.body.password;
 
+  // Ensure token is valid for sign ups
+  if (req.user.type !== 'invited-signup') {
+    const msg = 'Token is invalid for an invited sign up.';
+    return res.status(status.UNAUTHORIZED).send(msg);
+  }
+
   // Ensure username and password are strings.
   // This prevents Mongo injection.
   const validRequest = (
