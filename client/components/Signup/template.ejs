@@ -1,6 +1,6 @@
 <div class="container-fluid">
   <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-12">
       <h1><%= __('signup-title') %></h1>
       <p><%= __('signup-for-email') %> <strong><%= email %></strong></p>
       <p><%= __('signup-welcome') %> <%= siteTitle %>. <%= __('signup-info') %></p>
@@ -28,7 +28,10 @@
       <div id="signup-success" class="hidden">
         <div class="alert alert-success" role="alert"><%= __('signup-success') %></div>
       </div>
-
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
       <form id="signup-form">
         <div id="signup-username-group" class="form-group">
           <label for="signup-username" class="control-label"><%= __('signup-username') %>:</label>

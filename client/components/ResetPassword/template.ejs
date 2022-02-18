@@ -3,8 +3,6 @@
     <div class="col-md-12">
       <h1><%= __('pwd-reset-title') %></h1>
       <p><%= __('pwd-reset-for-account') %> <strong><%= email %></strong></p>
-    </div>
-    <div class="col-md-4">
 
       <div class="reset-password-no-match hidden">
         <div class="alert alert-danger" role="alert"><%= __('signup-password-mismatch') %></div>
@@ -21,7 +19,10 @@
       <div class="reset-password-success hidden">
         <div class="alert alert-success" role="alert"><%= __('pwd-reset-success') %></div>
       </div>
-
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
       <form class="reset-password-form">
         <div id="georap-new-password-group" class="form-group">
           <label for="georap-input-new-password" class="control-label"><%= __('signup-password') %>:</label>

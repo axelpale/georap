@@ -177,7 +177,7 @@ exports.route = function () {
         var view = new ResetPasswordView(token, function success() {
           page.show('/login');
         });
-        card.open(view, 'full');
+        card.open(view, config.loginPageSize); // same as login page
       })
       .catch(importErrorHandler);
   });
@@ -193,7 +193,7 @@ exports.route = function () {
         var view = new SignupView(token, function success() {
           page.show('/login');
         });
-        card.open(view, 'full');
+        card.open(view, config.loginPageSize); // same as login page
       })
       .catch(importErrorHandler);
   });

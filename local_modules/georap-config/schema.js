@@ -301,6 +301,7 @@ module.exports = {
     'defaultMapState',
     'icons', // new in v12, require in v13
     'appleTouchIcons', // new in v12, require in v13
+    'loginPageSize', // new in v14
     'loginBackground',
     'loginColor', // new in v12, require in v13
     'locationNaming', // new in v14
