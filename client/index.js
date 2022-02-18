@@ -1,4 +1,5 @@
 var socket = require('./connection/socket');
+var bus = require('georap-bus');
 var urls = require('georap-urls-client');
 
 // Collect data access API's under georap global.
@@ -140,8 +141,8 @@ window.initMap = function () {
   };
 
   // Bind map functionality to auth events.
-  account.on('login', onAuthEvent);
-  account.on('logout', onAuthEvent);
+  bus.on('login', onAuthEvent);
+  bus.on('logout', onAuthEvent);
   // Initial functionality setup
   onAuthEvent();
 };

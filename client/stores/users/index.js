@@ -78,23 +78,6 @@ exports.getEvents = function (params, callback) {
   });
 };
 
-exports.getVisitedLocationIds = function (username, callback) {
-  // Parameters:
-  //   username
-  //   callback
-  //     function (err, arrayOfLocationIds)
-  request.getJSON({
-    url: '/api/users/' + username + '/visited',
-  }, function (err, ids) {
-    if (err) {
-      console.error(err);
-      return callback(err, null);
-    }
-
-    return callback(null, ids);
-  });
-};
-
 exports.getFlags = function (username, callback) {
   // Parameters:
   //   username
