@@ -1,4 +1,4 @@
-var socket = require('../../connection/socket');
+var bus = require('georap-bus');
 var emitter = require('component-emitter');
 var request = require('../lib/request');
 
@@ -8,7 +8,7 @@ emitter(exports);
 
 // Bind
 
-socket.on('georap_event', function (ev) {
+bus.on('socket_event', function (ev) {
   // Emit marker events so that map knows how to respond.
   if (ev.type === 'location_created' ||
       ev.type === 'location_removed' ||
