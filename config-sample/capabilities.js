@@ -37,6 +37,7 @@ module.exports = {
     'locations-thumbnail',
     'map-geolocation',
     'posts-read',
+    'socket-events',
     'users-read',
   ],
   // 'commenter': [], // same as reader but could comment?
@@ -74,6 +75,7 @@ module.exports = {
     'posts-update-own',
     'posts-delete-own',
     'posts-move-own',
+    'socket-events',
     'statistics-read',
     'users-read',
   ],
@@ -115,6 +117,7 @@ module.exports = {
     'posts-update-own',
     'posts-delete-any',
     'posts-move-any',
+    'socket-events',
     'statistics-read',
     'users-read',
   ],
@@ -167,6 +170,7 @@ module.exports = {
     'posts-delete-own', // delete posts written by you
     'posts-move-any', // move posts by anybody onto another location
     'posts-move-own', // move posts by you onto another location
+    'socket-events', // receive real-time web socket events to update content
     'statistics-read', // see site statistics such as the number of locations
     'users-read', // list users and see their profile pages
   ],

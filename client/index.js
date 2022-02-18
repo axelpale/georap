@@ -1,5 +1,3 @@
-// Root bus
-var bus = require('georap-bus');
 var socket = require('./connection/socket');
 var urls = require('georap-urls-client');
 
@@ -45,18 +43,6 @@ georap.getCurrentPath = routes.getCurrentPath;  // query current page
 // Define routes
 
 routes.route();
-
-// Emit socket events to bus.
-
-var handleEvent = function (ev) {
-  // Emit all location events. Allow hooking to all location events or
-  // specific event type e.g. location_created, needed by main menu to
-  // determine when creation is successful.
-  bus.emit(ev.type, ev);
-  bus.emit('socket_event', ev);
-};
-socket.on('georap_event', handleEvent);
-
 
 // Map init
 
@@ -144,6 +130,12 @@ window.initMap = function () {
       mapComp.stopLoadingFlags();
       mapComp.stopLoadingMarkers();
       mapComp.removeAllMarkers();
+    }
+    // Socket listening
+    if (account.able('socket-events')) {
+      socket.start();
+    } else {
+      socket.stop();
     }
   };
 
