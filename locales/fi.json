@@ -243,7 +243,7 @@
   "powered-by": "Ohjelmiston tarjoaa",
   "prev": "Edellinen",
   "pwd-reset-attention": "Huomio! Oheinen linkki on voimassa vain 30 minuuttia.",
-  "pwd-reset-expired": "Aikaikkuna salasanasi vaihtamiseen on umpeutunut. Pyydä salasanan vaihtoa uudelleen kirjautumissivulta.",
+  "pwd-reset-expired": "Linkki salasanasi vaihtoon on vanhentunut tai rikkinäinen. Pyydä uusi linkki kirjautumissivulta.",
   "pwd-reset-failed": "Salasanan vaihto epäonnistui. Kokeile myöhemmin uudelleen.",
   "pwd-reset-for-account": "Tilille",
   "pwd-reset-hi": "Moi!",

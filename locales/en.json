@@ -244,7 +244,7 @@
   "powered-by": "Powered by",
   "prev": "Previous",
   "pwd-reset-attention": "Attention! The link below is valid only for 30 minutes.",
-  "pwd-reset-expired": "The time window for your password reset has ended. You need to request password reset again from the log in page.",
+  "pwd-reset-expired": "The link for your password reset is expired or broken. Request a new password reset link from the log in page.",
   "pwd-reset-failed": "Failed to reset the password. Try again later.",
   "pwd-reset-for-account": "For account",
   "pwd-reset-hi": "Hi!",
