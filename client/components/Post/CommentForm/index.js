@@ -137,6 +137,7 @@ module.exports = function (entry, comment) {
       var isEmpty = (!comment || comment.attachments.length === 0);
       if (canAttach && isEmpty) {
         $elems.attachBtn = $mount.find('.comment-form-photo-btn');
+        ui.show($elems.attachBtn);
         $elems.attachBtn.click(function (ev) {
           ev.preventDefault();
           children.edit.openAttachmentsForm();
