@@ -34,7 +34,7 @@ module.exports = function (userParams, callback) {
 
     const now = (new Date()).toISOString();
 
-    users.insert({
+    users.insertOne({
       createdAt: now,
       deleted: false,
       email: email,
