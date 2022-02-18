@@ -5,7 +5,7 @@
 //
 // See admin role below for brief details for each capability.
 //
-// Introduced in v14.
+// Roles were introduced in v14.
 //
 module.exports = {
   'public': [
