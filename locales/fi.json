@@ -117,6 +117,7 @@
   "filter-locations": "Kartan suodatus",
   "filter-turn-off": "Lopeta suodatus",
   "flag-post-as": "Merkitse viesti",
+  "flag-req-not-met": "Merkinnän vaatimukset eivät täyty. Tarkista ja kokeile uudelleen.",
   "for-google-earth": "karttasovelluksille kuten Google Earth",
   "for-gps-devices": "GPS-paikantimille kuten Garmin",
   "for-web-apps": "verkkopalveluille kuten Leaflet",

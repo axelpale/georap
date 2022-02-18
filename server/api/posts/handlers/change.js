@@ -68,7 +68,7 @@ module.exports = (req, res, next) => {
     return validate(entryData);
   });
   if (!preconditionsMet) {
-    const msg = 'Requirements of some flags were not met.';
+    const msg = req.__('flag-req-not-met');
     return res.status(status.BAD_REQUEST).send(msg);
   }
 

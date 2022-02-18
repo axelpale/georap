@@ -118,6 +118,7 @@
   "filter-locations": "Filter Locations",
   "filter-turn-off": "Turn Off",
   "flag-post-as": "Mark the post as",
+  "flag-req-not-met": "Requirements of some flags were not met. Check and try again.",
   "for-google-earth": "for Google Earth",
   "for-gps-devices": "for GPS devices",
   "for-web-apps": "for web apps",
