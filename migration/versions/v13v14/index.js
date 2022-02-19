@@ -42,10 +42,13 @@ const substeps = [
     iter.updateEach(coll, (origUser, iterNext) => {
       const user = clone(origUser);
       // Init role, remove boolean admin
-      if (user.admin) {
-        const isAdmin = user.admin;
+      if (user.admin === true) {
         delete user.admin;
-        user.role = isAdmin ? 'admin' : 'writer';
+        user.role = 'admin';
+      }
+      if (user.admin === false) {
+        delete user.admin;
+        user.role = 'writer';
       }
       if (!user.securityToken) {
         // Init empty security token
