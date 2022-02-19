@@ -5,10 +5,12 @@
       <h1><span class="glyphicon glyphicon-user" aria-hidden="true"></span> <%= __('manage-users') %></h1>
 
       <div class="admin-users-buttons hidden" style="margin-bottom: 0.62rem">
+        <% if (canInvite) { %>
         <a class="btn btn-default" href="/invite" role="button">
           <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>
           <%= __('send-invite') %>
         </a>
+        <% } %>
       </div>
 
       <div class="admin-users-creation hidden"></div>
@@ -16,8 +18,8 @@
       <div class="admin-users-table"></div>
       <hr>
       <div class="admin-users-deleted-users">
-        <p class="pull-right">
-          <button class="admin-users-deleted-opener btn btn-link"><%= __('view-deleted-users') %></button>
+        <p>
+          <button class="admin-users-deleted-opener btn btn-default"><%= __('view-deleted-users') %> <span class="caret"></span></button>
         </p>
       </div>
 
@@ -31,6 +33,7 @@
         </div>
       </div>
 
+      <div class="card-filler"></div>
     </div>
   </div><!-- .row -->
 </div><!-- .container-fluid -->

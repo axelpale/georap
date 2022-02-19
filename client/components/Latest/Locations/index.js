@@ -1,4 +1,4 @@
-// Component to list filtered lists of events.
+// Component to list latest locations
 //
 var emitter = require('component-emitter');
 var ui = require('georap-ui');

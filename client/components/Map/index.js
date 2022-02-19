@@ -78,8 +78,6 @@ module.exports = function () {
       scaleControl: true, // scale stick
     });
 
-    // Marker that represents geolocation of the user
-    _geolocationMarker = new GeolocationMarker(_map);
     // An addition marker. User moves this large marker to point where
     // the new location is to be created.
     _additionMarker = new AdditionMarker(_map);
@@ -91,9 +89,6 @@ module.exports = function () {
     _panner = new Panner(_map);
     // Manager for the location markers, their loading and refreshing.
     _manager = new LocationMarkers(_map);
-
-    // Bind buttons
-    _geolocationMarker.bind();
 
     // Inform that user wants to open a location.
     // Leads to opening of location page.
@@ -238,6 +233,22 @@ module.exports = function () {
     _manager.removeAll();
   };
 
+  self.startLoadingFlags = function () {
+    assertBound();
+    _manager.startLoadingFlags();
+  };
+
+  self.stopLoadingFlags = function () {
+    assertBound();
+    _manager.stopLoadingFlags();
+  };
+
+  self.removeAllFlags = function () {
+    // Clear the map.
+    assertBound();
+    _manager.removeAllFlags();
+  };
+
   self.addAdditionMarker = function () {
     // Creates a draggable marker at the middle of the map.
     assertBound();
@@ -255,6 +266,22 @@ module.exports = function () {
     // Remove addition marker from the map.
     assertBound();
     return _additionMarker.hide();
+  };
+
+  self.addGeolocationButton = function () {
+    // Marker that represents geolocation of the user
+    if (_map && !_geolocationMarker) {
+      _geolocationMarker = new GeolocationMarker(_map);
+      _geolocationMarker.bind();
+    }
+  };
+
+  self.removeGeolocationButton = function () {
+    // Marker that represents geolocation of the user
+    if (_geolocationMarker) {
+      _geolocationMarker.unbind();
+      _geolocationMarker = null;
+    }
   };
 
 };

@@ -5,16 +5,7 @@
       <input id="search-phrase-input" type="text" class="search-phrase form-control" placeholder="<%= __('search-placeholder-long') %>">
     </div>
   </div>
-  <div class="form-group">
-    <label for="search-creator-select" class="col-sm-3 control-label"><%= __('created-by') %></label>
-    <div class="col-sm-5">
-      <select id="search-creator-select" class="search-creator form-control">
-        <option value="anyone"><%= __('anyone') %></option>
-        <option value="<%= username %>"><%= username %></option>
-        <!-- all members here -->
-      </select>
-    </div>
-  </div>
+  <div class="search-creator-group"></div>
   <div class="form-group">
     <label for="search-order-select" class="col-sm-3 control-label"><%= __('order-by') %></label>
     <div class="col-sm-5">

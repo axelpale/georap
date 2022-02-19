@@ -25,7 +25,6 @@ module.exports = {
         name: admin,
         role: 'admin',
         securityToken: '',
-        status: 'active',
         deleted: false,
         createdAt: db.timestamp(),
         loginAt: db.timestamp(),

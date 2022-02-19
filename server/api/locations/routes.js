@@ -2,21 +2,22 @@
 
 const router = require('express').Router();
 const jsonParser = require('body-parser').json();
-const middlewares = require('georap-middlewares');
+const skipLimitParser = require('georap-middlewares').skipLimitParser;
+const able = require('georap-able').able;
 
 const handlers = require('./handlers');
-const locationIdParser = require('./lib/locationIdParser');
+const locationPreloader = require('./lib/locationPreloader');
 const locationRouter = require('./location/routes');
 const importerRouter = require('./importer/routes');
 
 // Location collection
 
-router.get('/', middlewares.skipLimitParser, handlers.latest);
-router.post('/', jsonParser, handlers.create);
+router.get('/', skipLimitParser, handlers.latest);
+router.post('/', able('locations-create'), jsonParser, handlers.create);
 router.get('/count', handlers.count);
-router.get('/search', middlewares.skipLimitParser, handlers.search);
+router.get('/search', skipLimitParser, handlers.search);
 
-router.use('/import', importerRouter);
-router.use('/:locationId', locationIdParser, locationRouter);
+router.use('/import', able('locations-import'), importerRouter);
+router.use('/:locationId', locationPreloader, locationRouter);
 
 module.exports = router;

@@ -6,7 +6,7 @@ var CardView = require('../components/Card');
 var Error401View = require('../components/Error401');
 var Error404View = require('../components/Error404');
 var LoginView = require('../components/Login');
-var SupportFundView = require('../components/SupportFund');
+var SupportPageView = require('../components/SupportPage');
 
 // Help in remembering original url if redirect to login page is required.
 var AfterLogin = require('./lib/AfterLogin');
@@ -71,14 +71,32 @@ exports.route = function () {
     };
   };
 
-  var adminOnly = function (context, next) {
-    if (account.isAdmin()) {
-      return next();
-    }
-    var view = new Error401View();
-    card.open(view, 'medium');
-  };
+  // Middleware to check if user can access content.
+  var able = function (cap) {
+    return function (ctx, next) {
+      var role = account.getRole();
 
+      if (account.isRoleAble(role, cap)) {
+        return next();
+      }
+      // Not able.
+
+      // Redirect to login page if the user is not logged in.
+      if (role === 'public') {
+        // Remember original requested path and redirect to it after login
+        afterLogin.set(ctx);
+        // Redirect to login page
+        page.show('/login');
+        return;
+      }
+
+      // If logged in but not capable
+      // The resource is meant only for admins, show error page.
+      var view = new Error401View();
+      card.open(view, 'medium');
+      return;
+    };
+  };
 
   ///////////////////////
   // Public routes first.
@@ -94,78 +112,9 @@ exports.route = function () {
     return next();
   });
 
-  page('/login', function () {
-    // Logout should be immediate; no reason to show progress bar.
-    account.logout(function () {
-      // After successful login, go to original url.
-      // Reset for another login during the same session.
-      var urlAfterLogin = afterLogin.get();
-      afterLogin.reset();
-
-      var view = new LoginView(urlAfterLogin);
-      card.open(view, config.loginPageSize);
-    });
-  });
-
-  page('/reset/:token', function (context) {
-    import(
-      /* webpackChunkName: "reset-password" */
-      '../components/ResetPassword'
-    )
-      .then(function (moduleWrap) {
-        var token = context.params.token;
-        var ResetPasswordView = moduleWrap.default;
-        var view = new ResetPasswordView(token, function success() {
-          page.show('/login');
-        });
-        card.open(view, 'full');
-      })
-      .catch(importErrorHandler);
-  });
-
-  page('/signup/:token', function (context) {
-    import(
-      /* webpackChunkName: "signup-view" */
-      '../components/Signup'
-    )
-      .then(function (moduleWrap) {
-        var token = context.params.token;
-        var SignupView = moduleWrap.default;
-        var view = new SignupView(token, function success() {
-          page.show('/login');
-        });
-        card.open(view, 'full');
-      })
-      .catch(importErrorHandler);
-  });
-
-  page('/uploads/*', function (context) {
-    // Prevent page.js routing links of uploads
-    // See https://github.com/visionmedia/page.js/issues/566
-    page.stop();
-    context.handled = false;
-    window.location.href = context.canonicalPath;
-  });
-
-  /////////////////////////////
-  // Private routes i.e. routes that require login
-  //
-
-  page('*', function (context, next) {
-    // If not logged in then show login form.
-
-    if (account.isLoggedIn()) {
-      return next();
-    }
-
-    // Remember original requested path and redirect to it after login
-    afterLogin.set(context);
-
-    page.show('/login');
-  });
-
   page('*', function (context, next) {
     // Recenter map to possible query parameters.
+    // ?lat=23.45&lng=123.4&zoom=12
     //
     var q = context.query;
     var s, lat, lng, zoom;
@@ -202,10 +151,69 @@ exports.route = function () {
     //   Do not emit 'closed' event because it causes redirection to '/'
     var silent = true;
     card.close(silent);
-    exports.emit('map_routed');
   });
 
-  page('/account', function () {
+  page('/login', function () {
+    // Logout should be immediate; no reason to show progress bar.
+    account.logout(function () {
+      // After successful login, go to original url.
+      // Reset for another login during the same session.
+      var urlAfterLogin = afterLogin.get();
+      afterLogin.reset();
+
+      var view = new LoginView(urlAfterLogin);
+      card.open(view, config.loginPageSize);
+    });
+  });
+
+  page('/reset/:token', function (context) {
+    import(
+      /* webpackChunkName: "reset-password" */
+      '../components/ResetPassword'
+    )
+      .then(function (moduleWrap) {
+        var token = context.params.token;
+        var ResetPasswordView = moduleWrap.default;
+        var view = new ResetPasswordView(token, function success() {
+          page.show('/login');
+        });
+        card.open(view, config.loginPageSize); // same as login page
+      })
+      .catch(importErrorHandler);
+  });
+
+  page('/signup/:token', function (context) {
+    import(
+      /* webpackChunkName: "signup-view" */
+      '../components/Signup'
+    )
+      .then(function (moduleWrap) {
+        var token = context.params.token;
+        var SignupView = moduleWrap.default;
+        var view = new SignupView(token, function success() {
+          page.show('/login');
+        });
+        card.open(view, config.loginPageSize); // same as login page
+      })
+      .catch(importErrorHandler);
+  });
+
+  page('/uploads/*', function (context) {
+    // Prevent page.js routing links of uploads
+    // See https://github.com/visionmedia/page.js/issues/566
+    page.stop();
+    context.handled = false;
+    window.location.href = context.canonicalPath;
+  });
+
+  page('/settings', basicViewSetup(function () {
+    return import(
+      /* webpackChunkName: "settings" */
+      '../components/Settings'
+    );
+  }));
+
+  page('/account', able('account-update'), function () {
     import(
       /* webpackChunkName: "account-view" */
       '../components/Account'
@@ -217,42 +225,42 @@ exports.route = function () {
       .catch(importErrorHandler);
   });
 
-  page('/account/email', basicViewSetup(function () {
+  page('/account/email', able('account-update'), basicViewSetup(function () {
     return import(
-      /* webpackChunkName: "account-Email" */
+      /* webpackChunkName: "account-email" */
       '../components/Account/ChangeEmail'
     );
   }));
 
-  page('/account/password', basicViewSetup(function () {
+  page('/account/password', able('account-update'), basicViewSetup(function () {
     return import(
       /* webpackChunkName: "account-password" */
       '../components/Account/ChangePassword'
     );
   }));
 
-  page('/filter', basicViewSetup(function () {
+  page('/filter', able('locations-read'), basicViewSetup(function () {
     return import(
       /* webpackChunkName: "filter-view" */
       '../components/Filter'
     );
   }));
 
-  page('/export', basicViewSetup(function () {
+  page('/export', able('locations-export-all'), basicViewSetup(function () {
     return import(
       /* webpackChunkName: "export-view" */
       '../components/Export'
     );
   }));
 
-  page('/import', basicViewSetup(function () {
+  page('/import', able('locations-import'), basicViewSetup(function () {
     return import(
       /* webpackChunkName: "import-view" */
       '../components/Import'
     );
   }));
 
-  page('/import/:batchId/outcome', function (ctx) {
+  page('/import/:batchId/outcome', able('locations-import'), function (ctx) {
     import(
       /* webpackChunkName: "batch-outcome" */
       '../components/BatchOutcome'
@@ -264,7 +272,7 @@ exports.route = function () {
       .catch(importErrorHandler);
   });
 
-  page('/import/:batchId', function (ctx) {
+  page('/import/:batchId', able('locations-import'), function (ctx) {
     import(
       /* webpackChunkName: "batch-preview" */
       '../components/BatchPreview'
@@ -276,7 +284,7 @@ exports.route = function () {
       .catch(importErrorHandler);
   });
 
-  page('/latest', function () {
+  page('/latest', able('posts-read'), function () {
     // NOTE Code for future
     // // Prevent reopen on hash change
     // if (card.isViewInstanceOf(LatestView)) {
@@ -293,7 +301,7 @@ exports.route = function () {
       .catch(importErrorHandler);
   });
 
-  page('/locations/:id', function (ctx) {
+  page('/locations/:id', able('locations-read'), function (ctx) {
     import(
       /* webpackChunkName: "location" */
       '../components/Location'
@@ -312,14 +320,14 @@ exports.route = function () {
       .catch(importErrorHandler);
   });
 
-  page('/crosshair', basicViewSetup(function () {
+  page('/coordinates', able('geometry-read'), basicViewSetup(function () {
     return import(
-      /* webpackChunkName: "crosshair-view" */
-      '../components/Crosshair'
+      /* webpackChunkName: "coordinates-view" */
+      '../components/Coordinates'
     );
   }));
 
-  page('/search', function (ctx) {
+  page('/search', able('locations-read'), function (ctx) {
     import(
       /* webpackChunkName: "search-view" */
       '../components/Search'
@@ -331,26 +339,26 @@ exports.route = function () {
       .catch(importErrorHandler);
   });
 
-  page('/statistics', basicViewSetup(function () {
+  page('/statistics', able('statistics-read'), basicViewSetup(function () {
     return import(
       /* webpackChunkName: "statistics" */
       '../components/Statistics'
     );
   }));
 
-  page('/fund', function () {
-    var view = new SupportFundView();
+  page('/about', function () {
+    var view = new SupportPageView();
     card.open(view);
   });
 
-  page('/users', basicViewSetup(function () {
+  page('/users', able('users-read'), basicViewSetup(function () {
     return import(
       /* webpackChunkName: "users" */
       '../components/Users'
     );
   }));
 
-  page('/users/:username', function (ctx) {
+  page('/users/:username', able('users-read'), function (ctx) {
     import(
       /* webpackChunkName: "user" */
       '../components/User'
@@ -367,14 +375,14 @@ exports.route = function () {
   // Routes that require admin. Note the adminOnly middleware.
   //
 
-  page('/admin/users', adminOnly, basicViewSetup(function () {
+  page('/admin/users', able('admin-users-read'), basicViewSetup(function () {
     return import(
       /* webpackChunkName: "admin-users" */
       '../components/Admin/Users'
     );
   }));
 
-  page('/admin/users/:username', adminOnly, function (ctx) {
+  page('/admin/users/:username', able('admin-users-read'), function (ctx) {
     import(
       /* webpackChunkName: "admin-user" */
       '../components/Admin/Users/User'
@@ -387,7 +395,7 @@ exports.route = function () {
       .catch(importErrorHandler);
   });
 
-  page('/invite', adminOnly, basicViewSetup(function () {
+  page('/invite', able('admin-users-invite'), basicViewSetup(function () {
     return import(
       /* webpackChunkName: "invite-view" */
       '../components/Invite'

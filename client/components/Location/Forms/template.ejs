@@ -1,9 +1,19 @@
-<div id="georap-location-forms-menu" class="form-group">
-  <button id="entry-creation-open" type="button" class="btn btn-primary"><span class="glyphicon glyphicon-comment"></span> <%= __('add-post') %></button>
-  <button id="location-export-open" type="button" class="btn btn-default"><span class="glyphicon glyphicon-download-alt"></span> <%= __('downloads') %></button>
-  <button id="location-viewon-open" type="button" class="btn btn-default"><span class="glyphicon glyphicon-globe"></span> <%= __('more-maps') %></button>
-</div>
+<% if (canCreate || canExport) { %>
+  <div id="location-forms-menu" class="form-group">
+    <% if (canCreate) { %>
+      <button id="entry-creation-open" type="button" class="btn btn-primary"><span class="glyphicon glyphicon-comment"></span> <%= __('add-post') %></button>
+    <% } %>
+    <% if (canExport) { %>
+      <button id="location-export-open" type="button" class="btn btn-default"><span class="glyphicon glyphicon-download-alt"></span> <%= __('downloads') %></button>
+      <button id="location-viewon-open" type="button" class="btn btn-default"><span class="glyphicon glyphicon-globe"></span> <%= __('more-maps') %></button>
+    <% } %>
+  </div>
 
-<div id="entry-creation-container"></div>
-<div id="location-export-container"></div>
-<div id="location-viewon-container"></div>
+  <% if (canCreate) { %>
+    <div id="entry-creation-container"></div>
+  <% } %>
+  <% if (canExport) { %>
+    <div id="location-export-container"></div>
+    <div id="location-viewon-container"></div>
+  <% } %>
+<% } %>

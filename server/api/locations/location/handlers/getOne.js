@@ -6,7 +6,7 @@ const status = require('http-status-codes');
 const slugify = require('slugify');
 
 module.exports = (req, res, next) => {
-  // Fetch single location with thumbnail and events
+  // Fetch single location with thumbnail
 
   // eslint-disable-next-line max-statements
   locationDal.getOneComplete(req.location._id, (err, rawLoc) => {
@@ -15,7 +15,7 @@ module.exports = (req, res, next) => {
     }
 
     if (!rawLoc) {
-      return res.sendStatus(status.NOT_FOUND);
+      return res.status(status.NOT_FOUND).send(req.__('location-missing'));
     }
 
     let responseStr, filename, mime;
@@ -58,7 +58,9 @@ module.exports = (req, res, next) => {
     }  // else
 
     // Log that user has viewed a location.
-    loggers.log(req.user.name + ' viewed location ' + rawLoc.name + '.');
+    if (req.user) {
+      loggers.log(req.user.name + ' viewed location ' + rawLoc.name + '.');
+    }
 
     return res.json(rawLoc);
   });

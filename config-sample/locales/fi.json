@@ -1,6 +1,6 @@
 {
   "location-status": {
-    "unknown": "mahdollinen",
+    "unknown": "tuntematon",
     "active": "aktiivinen",
     "guarded": "vartioitu",
     "locked": "lukittu",
@@ -61,6 +61,7 @@
     "underground": "maanalainen",
     "freak": "omituinen"
   },
+  "support-page-title": "Tietoa",
   "visit": "käynti",
   "visit-description": "Liitä valokuva todisteeksi.",
   "visit-genitive": "käynnin",

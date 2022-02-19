@@ -1,10 +1,11 @@
-const db = require('georap-db');
 const lib = require('./lib');
 
 module.exports = (params, callback) => {
   // Parameters:
   //   params:
   //     username
+  //     time
+  //       a timestamp
   //     locationId
   //     locationName
   //     entryId
@@ -14,11 +15,11 @@ module.exports = (params, callback) => {
   //       removed comment
   //   callback
   //     function (err)
-
+  //
   const newEvent = {
     type: 'location_entry_comment_removed',
     user: params.username,
-    time: db.timestamp(),
+    time: params.time,
     locationId: params.locationId,
     locationName: params.locationName,
     data: {

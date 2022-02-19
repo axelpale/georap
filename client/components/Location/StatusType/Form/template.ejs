@@ -1,0 +1,27 @@
+<form class="location-statustype-form panel panel-primary">
+  <div class="panel-body">
+
+    <div class="location-status-list">
+      <%= statusListHtml %>
+    </div>
+
+    <div class="location-type-list">
+      <%= typeListHtml %>
+    </div>
+
+    <div class="pull-right">
+      <button type="button" class="location-statustype-form-cancel btn btn-default"><%= __('cancel') %></button>
+    </div>
+
+  </div>
+</form>
+
+<div class="location-statustype-progress progress hidden">
+  <div class="progress-bar progress-bar-striped active" role="progressbar" style="width: 100%">
+    <span class="sr-only">Waiting for server</span>
+  </div>
+</div>
+
+<div class="location-statustype-error hidden">
+  <div class="alert alert-danger" role="alert"><%= __('location-status-type-fail') %></div>
+</div>

@@ -1,0 +1,14 @@
+<%
+  var activityClass = function (status) {
+    if (status === currentStatus) {
+      return 'georap-tag-active';
+    }
+    return '';
+  };
+%>
+
+<% locationStatuses.forEach(function (status) { %>
+  <button data-status="<%= status %>" class="location-status-<%= status %> georap-tag <%= activityClass(status) %>">
+    <%= __('location-status', status) %>
+  </button>
+<% }) %>

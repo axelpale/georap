@@ -25,14 +25,15 @@ module.exports = function (user) {
       return;
     }
 
+    var authorRole = account.getRole();
+    var authorRoleIndex = roles.indexOf(authorRole);
+
     $mount.html(template({
       user: user,
       roles: roles,
+      authorRoleIndex: authorRoleIndex,
       __: __,
     }));
-
-    // Prevent user trying to change his/her role
-    //var author = account.getName();
 
     $elems.cancel = $('#admin-user-role-cancel');
     $elems.error = $('#admin-user-role-error');
@@ -56,7 +57,7 @@ module.exports = function (user) {
 
       admin.setRole(user.name, newRole, function (err) {
         if (err) {
-          console.error(err);
+          $elems.error.html(err.message);
           ui.show($elems.error);
           return;
         }

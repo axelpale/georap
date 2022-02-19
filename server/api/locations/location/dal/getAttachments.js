@@ -1,22 +1,25 @@
-const getManyComplete = require('../../../entries/dal/getManyComplete');
+const getManyComplete = require('../../../posts/dal/getManyComplete');
 const attachmentsModel = require('georap-models').attachments;
 
 module.exports = (params, callback) => {
-  // Get location entries with their attachments and urls completed.
+  // Get all attachments in a location with their urls completed.
   //
   // Parameters:
-  //   locationId
-  //     location id
-  //   imagesOnly
-  //     optional bool. Set true to include only image attachments.
-  //     Default false.
+  //   params
+  //     locationId
+  //       location id
+  //     imagesOnly
+  //       optional bool. Set true to include only image attachments.
+  //       Default false.
+  //   callback
+  //     function (err, attachments)
   //
   params = Object.assign({
     imagesOnly: false,
   }, params);
 
   // NOTE getManyComplete does a bit unnecessary work to preserve
-  // structure entries and comments although we only need their attachments.
+  // structure of posts and comments although we only need their attachments.
   // However, the heavy lifting parts are the same and therefore it is
   // a good dry way to get the attachments.
   getManyComplete({

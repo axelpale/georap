@@ -64,11 +64,10 @@ module.exports = function (req, res, next) {
       return next(err);
     }
 
-    // Search successful
+    // Search successful. Log searches with keywords
     if (req.query.text) {
-      loggers.log(req.user.name + ' searched for "' + req.query.text + '".');
-    } else {
-      loggers.log(req.user.name + ' searched without keywords.');
+      const name = req.user ? req.user.name : 'Anonymous';
+      loggers.log(name + ' searched for "' + req.query.text + '".');
     }
 
     return res.json(markers);

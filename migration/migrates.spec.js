@@ -38,7 +38,7 @@ const loadFixtureByTag = function (versionTag, callback) {
 describe('fixtures', () => {
   describe('example', () => {
     it('should follow schema', (done) => {
-      const schema = schemas.v12.fixture;
+      const schema = schemas.v14.fixture;
       const fixture = fixtures.example;
       const isValid = ajv.validate(schema, fixture);
       if (!isValid) {
@@ -48,10 +48,22 @@ describe('fixtures', () => {
     });
   });
 
-  describe('v12', () => {
+  describe('initial', () => {
     it('should follow schema', (done) => {
-      const schema = schemas.v12.fixture;
-      const fixture = fixtures.v12;
+      const schema = schemas.v14.fixture;
+      const fixture = fixtures.example;
+      const isValid = ajv.validate(schema, fixture);
+      if (!isValid) {
+        assert.fail(ajv.errors);
+      }
+      return done();
+    });
+  });
+
+  describe('v14', () => {
+    it('should follow schema', (done) => {
+      const schema = schemas.v14.fixture;
+      const fixture = fixtures.v14;
       const isValid = ajv.validate(schema, fixture);
       if (!isValid) {
         assert.fail(ajv.errors);
@@ -431,7 +443,10 @@ describe('migrates.migrate', () => {
           assert.ifError(err2);
           assertFixtureEqual('users', 'v14', (err3) => {
             assert.ifError(err3);
-            done();
+            assertFixtureEqual('locations', 'v14', (err4) => {
+              assert.ifError(err4);
+              done();
+            });
           });
         });
       });

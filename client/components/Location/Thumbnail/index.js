@@ -1,4 +1,4 @@
-// A list of images from entries.
+// A list of images from posts.
 
 var Thumbnail = require('georap-components').Thumbnail;
 var ThumbnailForm = require('./Form');
@@ -6,6 +6,7 @@ var template = require('./template.ejs');
 var models = require('georap-models');
 var rootBus = require('georap-bus');
 var ui = require('georap-ui');
+var ableOwn = georap.stores.account.ableOwn;
 
 module.exports = function (location) {
   // Parameters:
@@ -23,9 +24,12 @@ module.exports = function (location) {
   self.bind = function ($mountEl) {
     $mount = $mountEl;
 
-    $mount.html(template());
-    $elems.thumbnail = $mount.find('.location-thumbnail');
-    $elems.open = $mount.find('.location-thumbnail-open');
+    var ableUpdate = ableOwn(location, 'locations-update');
+
+    $mount.html(template({
+      ableUpdate: ableUpdate,
+    }));
+    $elems.thumbnail = $mount.find('.location-thumbnail-viewer');
 
     bus.on('location_entry_created', function (ev) {
       models.location.forward(location, ev);
@@ -48,36 +52,39 @@ module.exports = function (location) {
     });
 
     // Setup form
-    $elems.open.click(function () {
-      if (children.form) {
-        children.form.unbind();
-        children.form.off('cancel');
-        children.form.off('success');
-        delete children.form;
-      } else {
-        children.form = new ThumbnailForm(location._id, location.thumbnail);
-        children.form.bind($mount.find('.location-thumbnail-form-container'));
-        children.form.once('cancel', function () {
-          children.form.unbind();
-          children.form.off('success');
-          delete children.form;
-          // Return thumbnail to original
-          if (children.thumbnail) {
-            children.thumbnail.update(location.thumbnail);
-          }
-        });
-        children.form.once('success', function () {
+    if (ableUpdate) {
+      $elems.open = $mount.find('.location-thumbnail-open');
+      $elems.open.click(function () {
+        if (children.form) {
           children.form.unbind();
           children.form.off('cancel');
+          children.form.off('success');
           delete children.form;
-        });
-        children.form.on('pick', function (att) {
-          if (children.thumbnail) {
-            children.thumbnail.update(att);
-          }
-        });
-      }
-    });
+        } else {
+          children.form = new ThumbnailForm(location._id, location.thumbnail);
+          children.form.bind($mount.find('.location-thumbnail-form-container'));
+          children.form.once('cancel', function () {
+            children.form.unbind();
+            children.form.off('success');
+            delete children.form;
+            // Return thumbnail to original
+            if (children.thumbnail) {
+              children.thumbnail.update(location.thumbnail);
+            }
+          });
+          children.form.once('success', function () {
+            children.form.unbind();
+            children.form.off('cancel');
+            delete children.form;
+          });
+          children.form.on('pick', function (att) {
+            if (children.thumbnail) {
+              children.thumbnail.update(att);
+            }
+          });
+        }
+      });
+    }
 
     // Initial update
     self.update();

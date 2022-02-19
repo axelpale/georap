@@ -1,6 +1,5 @@
-// Root bus
-var bus = require('georap-bus');
 var socket = require('./connection/socket');
+var bus = require('georap-bus');
 var urls = require('georap-urls-client');
 
 // Collect data access API's under georap global.
@@ -45,18 +44,6 @@ georap.getCurrentPath = routes.getCurrentPath;  // query current page
 // Define routes
 
 routes.route();
-
-// Emit socket events to bus.
-
-var handleEvent = function (ev) {
-  // Emit all location events. Allow hooking to all location events or
-  // specific event type e.g. location_created, needed by main menu to
-  // determine when creation is successful.
-  bus.emit(ev.type, ev);
-  bus.emit('socket_event', ev);
-};
-socket.on('georap_event', handleEvent);
-
 
 // Map init
 
@@ -125,30 +112,37 @@ window.initMap = function () {
 
   var menuComp = new MainMenuComp(mapComp);
 
-  // Bind menu to auth events.
-  account.on('login', function () {
-    // Add main menu
-    mapComp.addControl(menuComp);
-  });
-  account.on('logout', function () {
-    // Remove main menu
+  var onAuthEvent = function () {
+    // Refresh main menu when user arrives or changes role.
+    // Menu component checks capabilities internally.
     mapComp.removeControls();
-  });
-
-  // Bind fetching of locations to auth events.
-  account.on('login', function () {
-    mapComp.startLoadingMarkers();
-  });
-  account.on('logout', function () {
-    mapComp.stopLoadingMarkers();
-    mapComp.removeAllMarkers();  // do not expose data after log out
-  });
-
-  // Init mainmenu and locations if user is already logged in,
-  // because no initial login or logout events would be fired.
-  if (account.isLoggedIn()) {
-    mapComp.startLoadingMarkers();
     mapComp.addControl(menuComp);
-  }
+    // Geolocation
+    if (account.able('map-geolocation')) {
+      mapComp.addGeolocationButton();
+    } else {
+      mapComp.removeGeolocationButton();
+    }
+    // Location markers
+    if (account.able('locations-read')) {
+      mapComp.startLoadingMarkers();
+      mapComp.startLoadingFlags();
+    } else {
+      mapComp.stopLoadingFlags();
+      mapComp.stopLoadingMarkers();
+      mapComp.removeAllMarkers();
+    }
+    // Socket listening
+    if (account.able('socket-events')) {
+      socket.start();
+    } else {
+      socket.stop();
+    }
+  };
 
+  // Bind map functionality to auth events.
+  bus.on('login', onAuthEvent);
+  bus.on('logout', onAuthEvent);
+  // Initial functionality setup
+  onAuthEvent();
 };

@@ -1,23 +1,7 @@
 <h4><%= __('dangerous-actions') %></h4>
 
 <div class="form-group">
-
-  <button id="georap-location-delete-ensure" type="button" class="btn btn-default"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span> <%= __('delete-location') %>...</button>
-
-  <div id="georap-location-delete-final" class="hidden">
-    <%= __('are-you-sure-cannot-undo') %>
-    <button id="georap-location-delete-cancel" type="button" class="btn btn-default"><%= __('cancel') %></button>
-    <button id="georap-location-delete" type="button" class="btn btn-danger"><%= __('delete-ok') %></button>
-  </div>
-
+  <button type="button" class="location-delete-opener btn btn-default"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span> <%= __('delete-location') %>...</button>
 </div>
 
-<div id="georap-location-delete-progress" class="form-group hidden">
-
-  <div class="progress">
-    <div class="progress-bar progress-bar-striped active" role="progressbar" style="width: 100%">
-      <span class="sr-only">Waiting for server</span>
-    </div>
-  </div>
-
-</div>
+<div class="location-delete-container hidden"></div>

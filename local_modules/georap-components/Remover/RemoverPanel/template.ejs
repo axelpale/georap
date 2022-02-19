@@ -1,6 +1,8 @@
 <div class="panel panel-default">
   <div class="panel-body">
+    <% if (infoText) { %>
     <p class="text-warning"><%= infoText %></p>
+    <% } %>
     <p class="text-warning"><%= youSureText %></p>
     <div class="form-remove-confirmation">
       <button type="button" class="form-cancel-btn btn btn-default"><%= cancelBtnText %></button>

@@ -5,8 +5,6 @@
 var template = require('./template.ejs')
 
 module.exports = function (message) {
-  // Entry form View.
-  //
   // Parameters
   //   message
   //     optional string. Empty '' by default.

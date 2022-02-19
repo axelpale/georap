@@ -1,28 +1,34 @@
 //
 // This is the main configuration file of your Georap instance.
 //
-// The configuration is split in three sections:
+// The configuration is split into two sections.
 // - CRITICAL CONFIG
-// - FILES AND PATHS
-// - THEME AND BRAND
-// - FOR DEVS ONLY
+// - NON-CRITICAL CONFIG
 //
 // As the name suggests, you need to go through CRITICAL CONFIG to get
 // the site up and running.
 //
-// For custom installation paths and directory structure,
-// read and update FILES AND PATHS.
-//
-// To tailor the app for your team or community, see THEME AND BRAND.
-// Theming config includes settings such as available marker icons,
-// location classification, list lengths, coordinate systems, and
-// third party map services.
-//
-// Leave the FOR DEVS ONLY as is unless you know what you are doing.
+// Default values in NON-CRITICAL CONFIG are enough to run a site.
+// To tailor the app for your team or community, see them through.
+// The non-critical config is grouped into submodules under config/ dir.
+// They include things like marker icons, location classification,
+// user roles and capabilities, and third party map services.
 //
 
 // We will join paths relative to the current directory.
 const path = require('path');
+const icons = require('./icons');
+const posts = require('./posts');
+const landing = require('./landing');
+const locations = require('./locations');
+const filesUrls = require('./filesUrls');
+const capabilities = require('./capabilities');
+const coordinateSystems = require('./coordinateSystems');
+const exportServices = require('./exportServices');
+const supportPage = require('./supportPage');
+const languages = require('./languages');
+const security = require('./security');
+const users = require('./users');
 
 module.exports = {
   // ##### CRITICAL CONFIG #####
@@ -84,7 +90,8 @@ module.exports = {
     // testUrl: 'mongodb://testuser:testuserpwd@localhost:27017/test',
   },
 
-  // Email server connection
+  // Email
+  // Mail server connection settings
   // For details, see https://nodemailer.com/2-0-0-beta/setup-smtp/.
   smtp: {
     host: 'smtp.example.com',
@@ -95,744 +102,90 @@ module.exports = {
       pass: 'mailboxpassword',
     },
   },
-  // Email messages
+  // Automatic email message settings
+  // for invitation and password reset emails.
   mail: {
     sender: 'admin@example.com',
   },
 
+  // ##### END OF CRITICAL CONFIG #####
+  // The default values for the rest of the config are enough to run the site.
+  // They still provide powerful ways to modify the look and feel of the site.
+  // The config properties are grouped into submodules under config/ dir.
+  // You can find detailed documentation of each property in their submodule.
+  // Feel encouraged to check them out.
 
-  // ##### FILES AND PATHS #####
-  // Can be left as default if you do the installation as described in README.
+  // Files and paths
+  // See config/filesUrls.js
+  staticDir: filesUrls.staticDir,
+  staticUrl: filesUrls.staticUrl,
+  uploadDir: filesUrls.uploadDir,
+  uploadUrl: filesUrls.uploadUrl,
+  uploadThumbSize: filesUrls.uploadThumbSize,
+  uploadSizeLimit: filesUrls.uploadSizeLimit,
+  tempUploadDir: filesUrls.tempUploadDir,
+  tempUploadUrl: filesUrls.tempUploadUrl,
+  tempUploadTimeToLive: filesUrls.tempUploadTimeToLive,
+  tempUploadSizeLimit: filesUrls.tempUploadSizeLimit,
+  logDir: filesUrls.logDir,
 
-  // Static files
-  // Express/Webpack will copy the static files to be served to this directory:
-  staticDir: path.resolve(__dirname, '../.tmp/public'),
-  // URLs of the static files are prefixed with this static URL root path.
-  // Ensure to remove any trailing slash.
-  staticUrl: '/assets',
-
-  // Uploaded files
-  // Express will serve uploaded files (location attachments) from this dir.
-  uploadDir: path.resolve(__dirname, '../.data/uploads'),
-  // URLs of the uploaded files are prefixed with this URL root path.
-  uploadUrl: '/uploads',
-  // Thumbnail max width & height in pixels
-  uploadThumbSize: 568,
-  // Upload file size limit in bytes.
-  uploadSizeLimit: 20 * 1024 * 1024, // 20 MiB
-
-  // Temporary uploaded files.
-  // Files under these directories are removed in regular basis.
-  tempUploadDir: path.resolve(__dirname, '../.data/tempUploads'),
-  // URLs of the temporary files are prefixed with this URL root path.
-  tempUploadUrl: '/temporary',
-  // Seconds from last change, after the file or dir can be safely removed.
-  tempUploadTimeToLive: 2 * 24 * 60 * 60, // two days
-  // Upload file size limit in bytes.
-  tempUploadSizeLimit: 200 * 1024 * 1024, // 200 MiB
-
-  // Log files
-  // Logs about requests are stored under this directory:
-  logDir: path.resolve(__dirname, '../.data/logs'),
-
-
-  //##### USER MANAGEMENT #####
-  roles: ['basic', 'admin'], // New in v14
-  capabilities: {}, // New in v14. Reserved for future.
-
-
-  // ##### THEME AND BRAND #####
-  // Settings from here to the end of the file can be left default.
+  // Users and capabilities
+  // See config/users.js
+  // See config/capabilities.js
+  roles: users.roles,
+  defaultRole: users.defaultRole,
+  capabilities: capabilities, // New in v14
+  rewards: users.rewards,
 
   // Languages and translations
-  defaultLocale: 'en',
-  availableLocales: ['en', 'fi'],
-
-  // Initial map location for new users.
-  // Example locations are at @57.5727427,21.8783527,13z
-  defaultMapState: {
-    lat: 57.5727427,
-    lng: 21.8783527,
-    zoom: 13,
-    mapTypeId: 'hybrid', // 'roadmap', 'satellite', 'hybrid', or 'terrain'
-  },
+  // See config/languages.js
+  defaultLocale: languages.defaultLocale,
+  availableLocales: languages.availableLocales,
 
   // Site logo in various sizes for different devices and use cases.
-  // The logo will be visible as a favicon in browser tabs, a menu icon,
-  // and a desktop icon when user saves the site as an app shortcut.
-  // The src paths are relative to the config/ dir and cannot contain '..'.
-  // The object structure here is similar to web app manifests.
-  // New in v12.1.0.
-  icons: [
-    {
-      'src': 'images/icons/16.png',
-      'sizes': '16x16',
-      'type': 'image/png',
-    },
-    {
-      'src': 'images/icons/32.png',
-      'sizes': '32x32',
-      'type': 'image/png',
-    },
-    {
-      'src': 'images/icons/96.png',
-      'sizes': '96x96',
-      'type': 'image/png',
-    },
-    {
-      'src': 'images/icons/128.png',
-      'sizes': '128x128',
-      'type': 'image/png',
-    },
-  ],
-  appleTouchIcons: [
-    {
-      'src': 'images/icons/57.png',
-      'sizes': '57x57',
-      'type': 'image/png',
-    },
-    {
-      'src': 'images/icons/72.png',
-      'sizes': '72x72',
-      'type': 'image/png',
-    },
-    {
-      'src': 'images/icons/114.png',
-      'sizes': '114x114',
-      'type': 'image/png',
-    },
-    {
-      'src': 'images/icons/144.png',
-      'sizes': '144x144',
-      'type': 'image/png',
-    },
-  ],
+  // See config/icons.js
+  icons: icons.icons,
+  appleTouchIcons: icons.appleTouchIcons,
 
-  // Login screen mode
-  loginPageSize: 'full', // or 'medium' to show the map.
-  // Login screen background image. The first thing the user experiences.
-  // The image will be copied to a public location on start up.
-  // Use only an absolute path.
-  loginBackground: path.join(__dirname, 'images/login-background.jpg'),
-  // A color scheme for buttons and progress bars on the login page.
-  // The possible values are the contextual color from Bootstrap 3:
-  // 'muted', 'primary', 'success', 'info', 'warning', 'danger'
-  loginColor: 'primary',
+  // Landing UI conditions
+  // See config/landing.js
+  defaultMapState: landing.defaultMapState,
+  loginPageSize: landing.loginPageSize,
+  loginBackground: landing.loginBackground,
+  loginColor: landing.loginColor,
 
-  // Location classification: status.
-  // The first in the list is used as the default.
-  // The list order defines the button order on the location page.
-  locationStatuses: [
-    'unknown',
-    'active',
-    'guarded',
-    'locked',
-    'abandoned',
-    'ruined',
-    'buried',
-    'demolished',
-    'natural',
-  ],
+  // Locations
+  // See config/locations.js
+  locationNaming: locations.locationNaming,
+  // Location classification and marker styles
+  locationStatuses: locations.locationStatuses,
+  locationTypes: locations.locationTypes,
+  // Location marker template image settings
+  markerTemplates: locations.markerTemplates,
 
-  // Location classification: type
-  // Comment out types you do not need or add your own.
-  // Each type needs a matching png symbol available under
-  // directory: config/images/markers/symbols
-  // The order of the list defines the button order in symbol pickers.
-  locationTypes: [
-    'default',
-    'castle',
-    'military',
-    'residental',
-    'mansion',
-    'building',
-    'town',
-    'agricultural',
-    'farm',
-    'camp',
-    'parking',
-    'natural',
-    'bird',
-    'water',
-    'beach',
-    'tree',
-    'rock',
-    'crater',
-    'grave',
-    'church',
-    'spiritual',
-    'scientific',
-    'nuclear',
-    'museum',
-    'info',
-    'private',
-    'shop',
-    'restaurant',
-    'movietheatre',
-    'leisure',
-    'canoe',
-    'sports',
-    'school',
-    'hospital',
-    'sawmill',
-    'mining',
-    'workshop',
-    'factory',
-    'railway',
-    'marine',
-    'vehicle',
-    'roadhouse',
-    'aviation',
-    'helicopter',
-    'firestation',
-    'infrastructure',
-    'electricity',
-    'communications',
-    'watermanagement',
-    'watchtower',
-    'lighthouse',
-    'bridgesmall',
-    'bridge',
-    'tunnel',
-    'underground',
-    'freak',
-  ],
+  // Posts and comments
+  // See config/posts.js
+  entries: posts.entries,
+  comments: posts.comments,
+  entryFlags: posts.entryFlags,
 
-  // Rewards.
-  // Users earn stars for successful activity.
-  // This feature brings a playful game-like element to the service.
-  // The rewards are defined here.
-  // NOTE flag-based rewards are defined under entryFlags.
-  rewards: {
-    eventBased: {
-      'location_created': 10,
-      'location_removed': -10,
-      'location_entry_created': 2,
-      'location_name_changed': 0,
-      'location_geom_changed': 1,
-      'location_status_changed': 1,
-      'location_type_changed': 1,
-      // Legacy events from early installations.
-      // They cannot be created anymore yet could not be fully converted.
-      // Fresh installations can safely remove these.
-      'location_tags_changed': 2, // legacy
-      'location_unproved_visit_created': 2, // legacy
-    },
-    attachmentBased: {
-      perAttachment: 3,
-      maxAttachmentsToReward: 2,
-    },
-  },
+  // Support page for general info and community rules
+  // See config/supportPage.js
+  enableSupportPage: supportPage.enableSupportPage,
+  supportButtonTitle: supportPage.supportButtonTitle,
+  supportPageContent: supportPage.supportPageContent,
 
-  // Flags for Entries.
-  // Flags are used to classify entries (aka posts) or give them perks.
-  // An example of a flag is 'visit' that can denote that the entry is
-  // about a visitation on the location instead of just general info.
-  // Flags also accumulate to the location of the flagged entry, so
-  // that a user can filter locations based on flags in their own entries.
-  // For example the 'visit' flag allows a user to browse all locations
-  // she has visited.
-  // Translation of flags: to display flags in different languages
-  // the name and description of the flag are in fact translation keys.
-  // Because the flags are customized by you, Georap cannot know translations
-  // for them automatically. For that, you must give translations for the keys
-  // in the custom locales under config/locales.
-  entryFlags: {
-    visit: {
-      name: 'visit', // a translation key
-      genitive: 'visit-genitive', // a translation key
-      plural: 'visit-plural', // a translation key
-      description: 'visit-description', // a translation key
-      glyphicon: 'flag',
-      reward: 15,
-      // Precondition allows a flag to be used only if the entry content
-      // fulfills a condition. Entry content consists of
-      // entry properties { markdown, attachments, flags }.
-      // The condition is represented as JSON schema.
-      precondition: {
-        type: 'object',
-        properties: {
-          attachments: {
-            type: 'array',
-            minItems: 1,
-          },
-        },
-        required: ['attachments'],
-      },
-    },
-  },
+  // Coordinate systems available for users and export services.
+  // See config/coordinateSystems.js
+  coordinateSystems: coordinateSystems,
+  // External web map services to where users can export coordinates.
+  // See config/exportServices.js
+  exportServices: exportServices,
 
-  // Marker templates.
-  // Marker template is a background image for the marker without a symbol.
-  // It determines the shape and color for the combined marker icons.
-  // The configuration here is a mapping:
-  //   status -> flag -> size -> template_name.
-  // where:
-  //   status
-  //     Location status.
-  //   flag
-  //     Entry flag. The locations where the user has posted
-  //     an entry with a flag will show as markers
-  //     built with these templates. For example, locations with entries
-  //     flagged as 'visit' can be configured to show in special color
-  //     for the user who posted the visits.
-  //     Locations where the user has not posted any flagged entries
-  //     will use templates configured as 'default' for the given status.
-  //   size
-  //     There are three sizes: 'sm', 'md', and 'lg'. Emphasized locations
-  //     will show up with large markers.
-  //   template_name:
-  //     A template file name without file extension. You can add or edit
-  //     template images at config/images/markers/templates
-  //     NOTE template name must contain only lowercase letters and/or
-  //     underscores for the server to parse it correctly.
-  //
-  markerTemplates: {
-    'unknown': {
-      'default': {
-        'sm': 'red_default_sm',
-        'md': 'red_default_md',
-        'lg': 'red_default_lg',
-      },
-      'visit': {
-        'sm': 'yellow_default_sm',
-        'md': 'yellow_default_md',
-        'lg': 'yellow_default_lg',
-      },
-    },
-    'active': {
-      'default': {
-        'sm': 'red_light_sm',
-        'md': 'red_light_md',
-        'lg': 'red_light_lg',
-      },
-      'visit': {
-        'sm': 'yellow_light_sm',
-        'md': 'yellow_light_md',
-        'lg': 'yellow_light_lg',
-      },
-    },
-    'guarded': {
-      'default': {
-        'sm': 'red_light_sm',
-        'md': 'red_light_md',
-        'lg': 'red_light_lg',
-      },
-      'visit': {
-        'sm': 'yellow_light_sm',
-        'md': 'yellow_light_md',
-        'lg': 'yellow_light_lg',
-      },
-    },
-    'locked': {
-      'default': {
-        'sm': 'red_light_sm',
-        'md': 'red_light_md',
-        'lg': 'red_light_lg',
-      },
-      'visit': {
-        'sm': 'yellow_light_sm',
-        'md': 'yellow_light_md',
-        'lg': 'yellow_light_lg',
-      },
-    },
-    'abandoned': {
-      'default': {
-        'sm': 'red_default_sm',
-        'md': 'red_default_md',
-        'lg': 'red_default_lg',
-      },
-      'visit': {
-        'sm': 'yellow_default_sm',
-        'md': 'yellow_default_md',
-        'lg': 'yellow_default_lg',
-      },
-    },
-    'ruined': {
-      'default': {
-        'sm': 'red_dark_sm',
-        'md': 'red_dark_md',
-        'lg': 'red_dark_lg',
-      },
-      'visit': {
-        'sm': 'yellow_dark_sm',
-        'md': 'yellow_dark_md',
-        'lg': 'yellow_dark_lg',
-      },
-    },
-    'buried': {
-      'default': {
-        'sm': 'red_darker_sm',
-        'md': 'red_darker_md',
-        'lg': 'red_darker_lg',
-      },
-      'visit': {
-        'sm': 'yellow_darker_sm',
-        'md': 'yellow_darker_md',
-        'lg': 'yellow_darker_lg',
-      },
-    },
-    'demolished': {
-      'default': {
-        'sm': 'red_darker_sm',
-        'md': 'red_darker_md',
-        'lg': 'red_darker_lg',
-      },
-      'visit': {
-        'sm': 'yellow_darker_sm',
-        'md': 'yellow_darker_md',
-        'lg': 'yellow_darker_lg',
-      },
-    },
-    'natural': {
-      'default': {
-        'sm': 'red_default_sm',
-        'md': 'red_default_md',
-        'lg': 'red_default_lg',
-      },
-      'visit': {
-        'sm': 'yellow_default_sm',
-        'md': 'yellow_default_md',
-        'lg': 'yellow_default_lg',
-      },
-    },
-  },
-
-  // Entry listing
-  entries: {
-    // Items to load initially and when Load More -button is pressed.
-    pageSize: 10,
-  },
-
-  // Commenting
-  comments: {
-    secondsEditable: 360,
-    minMessageLength: 2,
-    maxMessageLength: 600,
-  },
-
-  // Support page
-  // A custom html page aimed for community rules and
-  // ways to support the community or maintenance.
-  // The page can be opened from a main menu button next to the log out.
-  enableSupportPage: true,
-  supportButtonTitle: 'Support us',
-  // supportPageContent can have any static html content
-  supportPageContent: 'Support us by <insert support method here>',
-
-  // Register coordinate systems to be used.
-  // These coordinate systems will be displayed on the location page.
-  // These systems are also available for exportServices.
-  //
-  // Each entry has the form:
-  //   [<cordinate system name>,
-  //    <proj4 projection definition>,
-  //    <output template>]
-  // Where:
-  //   coordinate system name
-  //     String. Visible to user.
-  //   proj4 projection definition
-  //     See https://epsg.io/ and for proj4js projection definitions
-  //     and http://proj4js.org/ for syntax details.
-  //   output template
-  //     String. The pretty print of coodinates in EJS templating language.
-  //     See available template variables and functions below.
-  //
-  // Template variables:
-  //   lat
-  //     Latitude
-  //   lng
-  //     Longitude
-  //   absLat
-  //     Math.abs(lat)
-  //   absLng
-  //     Math.abs(lng)
-  //
-  // Template functions:
-  //   getLatDir(degrees)
-  //     Cardinal direction for latitude.
-  //     Returns 'N' or 'S'
-  //   getLngDir(degrees)
-  //     Cardinal direction for longitude.
-  //     Returns 'W' or 'E'
-  //   getD(degrees)
-  //     Decimal degrees
-  //     For example: 12.345678°
-  //   getDM(degrees)
-  //     Degrees minutes.
-  //     For example: 12° 34.5678"
-  //   getDMS(degrees)
-  //     Degrees minutes seconds format.
-  //     For example: 12° 34" 56.78'
-  //
-  coordinateSystems: [
-    [
-      'WGS84',
-      '+proj=longlat +ellps=WGS84 +datum=WGS84 +units=degrees',
-      '<%= getD(absLat) %>&nbsp;<%= getLatDir(lat) %>, ' +
-      '<%= getD(absLng) %>&nbsp;<%= getLngDir(lng) %>',
-    ],
-    [
-      'WGS84-DM',
-      '+proj=longlat +ellps=WGS84 +datum=WGS84 +units=degrees',
-      '<%= getDM(absLat) %>&nbsp;<%= getLatDir(lat) %>, ' +
-      '<%= getDM(absLng) %>&nbsp;<%= getLngDir(lng) %>',
-    ],
-    [
-      'WGS84-DMS',
-      '+proj=longlat +ellps=WGS84 +datum=WGS84 +units=degrees',
-      '<%= getDMS(absLat) %>&nbsp;<%= getLatDir(lat) %>, ' +
-      '<%= getDMS(absLng) %>&nbsp;<%= getLngDir(lng) %>',
-    ],
-    // For example, the official coordinate system in Finland:
-    [
-      'ETRS-TM35FIN',
-      '+proj=utm +zone=35 +ellps=GRS80 +units=m +no_defs',
-      'N&nbsp;<%= Math.round(lat) %>, E&nbsp;<%= Math.round(lng) %>',
-    ],
-    [
-      'SWEREF99-TM',
-      '+proj=utm +zone=33 +ellps=GRS80 +units=m +no_defs',
-      'N&nbsp;<%= Math.round(lat) %>, E&nbsp;<%= Math.round(lng) %>',
-    ],
-  ],
-
-  // Register location export services here.
-  // With these, user can inspect the location on other online maps.
-  //
-  // Each entry has the form:
-  //   [<service name>, <url pattern>, <coordinate system name>, <bounds>]
-  // Where:
-  //   service name
-  //     String.
-  //   url pattern
-  //     String. URL to the service in EJS templating language.
-  //     See available template variables below.
-  //   coord system
-  //     String. Name of the coordinate system to use for variables.
-  //   bounds
-  //     Array of LatLngBoundsLiteral, areas where the service is available.
-  //     Is an array of objects with properties east, north, south, west.
-  //     Elements are equivalent to LatLngBoundsLiteral of Google Maps JS API.
-  //
-  // Variables available in URL pattern:
-  //   latitude
-  //   longitude
-  //
-  exportServices: [
-    [
-      'GeoHack',
-      'https://tools.wmflabs.org/geohack/geohack.php' +
-      '?language=en&params=<%= latitude %>;<%= longitude %>_type:' +
-      '<%= (zoom <= 5) ? "country" : ' +
-      '    (zoom <= 8) ? "state" : ' +
-      '    (zoom <= 10) ? "adm1st" : ' +
-      '    (zoom <= 11) ? "adm2nd" : ' +
-      '    (zoom <= 12) ? "adm3rd" : ' +
-      '    (zoom <= 13) ? "event" : ' +
-      '    (zoom <= 14) ? "airport" : "landmark" %>',
-      'WGS84',
-      [{ // Global
-        east: 180,
-        north: 90,
-        south: -90,
-        west: -180,
-      }],
-    ],
-    [
-      'Paikkatietoikkuna',
-      'http://www.paikkatietoikkuna.fi/web/fi/kartta' +
-      '?ver=1.17&' +
-      'zoomLevel=<%= Math.max(Math.min(zoom - 6, 13), 0) %>&' +
-      'coord=<%= longitude %>_<%= latitude %>&' +
-      'mapLayers=base_35+100+default&showMarker=true&showIntro=false',
-      'ETRS-TM35FIN',
-      [{ // Finland
-        east: 32.14,
-        north: 70.166,
-        south: 59.56,
-        west: 18.86,
-      }],
-    ],
-    [
-      'Karttapaikka',
-      'https://asiointi.maanmittauslaitos.fi/karttapaikka/' +
-      '?lang=fi&share=customMarker&' +
-      'n=<%= latitude %>&e=<%= longitude %>&' +
-      'zoom=<%= Math.max(Math.min(zoom - 6, 13), 0) %>',
-      'ETRS-TM35FIN',
-      [{ // Finland
-        east: 32.14,
-        north: 70.166,
-        south: 59.56,
-        west: 18.86,
-      }],
-    ],
-    [
-      'Tampereen karttapalvelu',
-      'https://kartat.tampere.fi/oskari/' +
-      '?zoomLevel=<%= Math.max(Math.min(zoom - 6, 15), 5) %>&' +
-      'coord=<%= longitude %>_<%= latitude %>&' +
-      'showMarker=true&showIntro=false',
-      'ETRS-TM35FIN',
-      [
-        { // Northern Pirkanmaa, Finland
-          east: 24.178,
-          north: 61.869,
-          south: 61.556,
-          west: 23.691,
-        },
-        { // Southern Pirkanmaa, Finland
-          east: 24.079,
-          north: 61.596,
-          south: 61.377,
-          west: 23.493,
-        },
-      ],
-    ],
-    [
-      'Museovirasto',
-      'https://kartta.museoverkko.fi/' +
-      '?zoomLevel=<%= Math.max(Math.min(zoom - 6, 12), 0) %>&' +
-      'coord=<%= longitude %>_<%= latitude %>&' +
-      'mapLayers=' +
-      '17+100+default,' +
-      '133+100+Ei%20tunnuksia,' + // Kiinteät muinaisjäännökset, pisteet
-      '142+100+Ei%20tunnuksia,' + // Mahdolliset muinaisjäännökset, pisteet
-      '136+100+Ei%20tunnuksia,' + // Luonnonmuodostumat, pisteet
-      '145+100+Ei%20tunnuksia,' + // Muut kohteet, pisteet
-      '139+100+Ei%20tunnuksia,' + // Löytöpaikat, pisteet
-      '161+100+Ei%20tunnuksia&' + // Muut kulttuuriperintökohteet, pisteet
-      'markers=2|3|ff3334|<%= longitude %>_<%= latitude %>|' +
-      '<%= name %>',
-      'ETRS-TM35FIN',
-      [{ // Finland
-        east: 32.14,
-        north: 70.166,
-        south: 59.56,
-        west: 18.86,
-      }],
-    ],
-    [
-      'Lantmäteriet',
-      'https://minkarta.lantmateriet.se/' +
-      '?e=<%= longitude %>&n=<%= latitude %>&' +
-      'z=<%= Math.max(Math.min(zoom - 4, 15), 0) %>&' +
-      'background=1&boundaries=true',
-      'SWEREF99-TM',
-      [
-        { // Northern Sweden
-          east: 24.17,
-          north: 69.07,
-          south: 63.07,
-          west: 11.74,
-        },
-        { // Southern Sweden
-          east: 19.89,
-          north: 63.07,
-          south: 54.96,
-          west: 10.03,
-        },
-      ],
-    ],
-    [
-      'Finn.no',
-      'https://kart.finn.no/' +
-      '?lng=<%= longitude %>&lat=<%= latitude %>&' +
-      'zoom=<%= Math.max(Math.min(zoom, 21), 4) %>&' +
-      'mapType=normaphd',
-      'WGS84',
-      [
-        { // Northern Norway
-          east: 31.84,
-          north: 71.40,
-          south: 68.30,
-          west: 16.30,
-        },
-        { // Mid North Norway
-          west: 12.08,
-          south: 67.31,
-          east: 20.92,
-          north: 69.70,
-        },
-        { // Mid South Norway
-          west: 10.28,
-          south: 63.55,
-          east: 16.875,
-          north: 67.44,
-        },
-        { // Southern Norway
-          west: 3.03,
-          south: 57.63,
-          east: 13.45,
-          north: 64.26,
-        },
-      ],
-    ],
-    [
-      'Gule Sider',
-      'https://kart.gulesider.no/' +
-      '?c=<%= latitude %>,<%= longitude %>&' +
-      'z=<%= Math.max(Math.min(zoom, 20), 3) %>&' +
-      'l=aerial',
-      'WGS84',
-      [
-        { // Northern Norway
-          east: 31.84,
-          north: 71.40,
-          south: 68.30,
-          west: 16.30,
-        },
-        { // Mid North Norway
-          west: 12.08,
-          south: 67.31,
-          east: 20.92,
-          north: 69.70,
-        },
-        { // Mid South Norway
-          west: 10.28,
-          south: 63.55,
-          east: 16.875,
-          north: 67.44,
-        },
-        { // Southern Norway
-          west: 3.03,
-          south: 57.63,
-          east: 13.45,
-          north: 64.26,
-        },
-      ],
-    ],
-  ],
-
-
-  // ##### FOR DEVS ONLY #####
-  // Hashing security and environment variables.
-  // Leave these as they are unless you know what you are doing.
-
-  // Bcrypt hashing strength
-  bcrypt: {
-    rounds: 10,
-  },
-
-  // Set node environment.
-  // Defaults to 'development' like app.get('env') in Express.
-  // Access process.env only in one place, here.
-  // See https://github.com/eslint/eslint/issues/657
-  env: (function () {
-    // eslint-disable-next-line no-process-env
-    const env = process.env.NODE_ENV;
-
-    if (env === 'production' || env === 'development' || env === 'test') {
-      return env;
-    }  // else
-
-    return 'development';
-  }()),
-
-  // EXPERIMENTAL FEATURES
-  // Enable or disable features of the site.
-  features: {
-    // no configurable features yet
-  },
+  // Security and development
+  // See config/security.js
+  // Hashing settings
+  bcrypt: security.bcrypt,
+  // Node environment detection
+  env: security.env,
 };

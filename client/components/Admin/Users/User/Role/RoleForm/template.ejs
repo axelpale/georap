@@ -4,14 +4,15 @@
   </div>
   <div class="panel-body">
 
-    <% roles.forEach(function (role) { %>
-    <div class="radio">
-      <label>
-        <% var isActive = user.role === role; %>
-        <input type="radio" name="userRole" value="<%= role %>" <%= isActive ? 'checked' : '' %> >
-        <%= __('user-role', role) %>
-      </label>
-    </div>
+    <% roles.forEach(function (role, index) { %>
+      <% var che = user.role === role ? 'checked' : ''; %>
+      <% var dis = index > authorRoleIndex ? 'disabled' : ''; %>
+      <div class="radio <%= dis %>">
+        <label>
+          <input type="radio" name="userRole" value="<%= role %>" <%= che %> <%= dis %>>
+          <%= __('user-role', role) %>
+        </label>
+      </div>
     <% }) %>
 
     <p class="help-block"><%= __('role-form-help') %></p>
@@ -22,9 +23,7 @@
   </div>
 </form>
 
-<div id="admin-user-role-error" class="hidden">
-  <div class="alert alert-danger" role="alert"><%= __('role-form-fail') %></div>
-</div>
+<div id="admin-user-role-error" class="hidden alert alert-danger" role="alert"></div>
 
 <div id="admin-user-role-success" class="hidden">
   <div class="alert alert-success" role="alert"><%= __('role-form-success') %></div>

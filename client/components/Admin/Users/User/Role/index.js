@@ -19,7 +19,7 @@ module.exports = function (user) {
     }));
 
     var formComp = new RoleForm(user);
-    children.opener = new components.Opener(formComp, false);
+    children.opener = new components.Opener(formComp);
     children.opener.bind({
       $container: $mount.find('.admin-user-role-form-container'),
       $button: $mount.find('.admin-user-role-edit'),

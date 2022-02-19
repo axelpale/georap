@@ -3,6 +3,8 @@ const urljoin = require('url-join')
 const staticUrl = config.staticUrl
 const uploadUrl = config.uploadUrl
 
+exports.baseUrl = require('./baseUrl')
+
 exports.completeAttachment = (attachment) => {
   // Add url properties.
   const thumburl = urljoin(uploadUrl, attachment.thumbfilepath)

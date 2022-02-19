@@ -1,91 +1,64 @@
 var template = require('./template.ejs');
 var ui = require('georap-ui');
+var Opener = require('georap-components').Opener;
+var NameForm = require('./NameForm');
+var account = georap.stores.account;
+var ableOwn = account.ableOwn;
 var __ = georap.i18n.__;
 
 module.exports = function (location) {
 
+  var $mount = null;
+  var children = {};
+  var $elems = {};
   var handleNameChange;
 
-  this.bind = function ($mount) {
+  this.bind = function ($mountEl) {
+    $mount = $mountEl;
+
+    var loc = location.getRaw(); // transition to no-model
+    var locName = (loc.name ? loc.name : __('untitled'));
+    var ableEdit = ableOwn(loc, 'locations-update');
 
     $mount.html(template({
-      location: location,
+      locName: locName,
+      ableEdit: ableEdit,
       __: __,
     }));
 
-    var $display = $('#georap-location-name-display');
-    var $show = $('#georap-location-rename-show');
-    var $form = $('#georap-location-rename-form');
-    var $error = $('#georap-location-rename-error');
-    var $input = $('#georap-location-rename-input');
-    var $cancel = $('#georap-location-rename-cancel');
+    $elems.display = $mount.find('.location-name-display');
+    $elems.open = $mount.find('.location-rename-open'); // button
+    $elems.formContainer = $mount.find('.location-rename-form-container');
 
     // Listen for events
 
     handleNameChange = function () {
       var newName = location.getName();
       var s = (newName === '' ? __('untitled') : newName);
-      $display.text(s);
+      $elems.display.text(s);
     };
     location.on('location_name_changed', handleNameChange);
 
     // Rename form
 
-    $show.click(function (ev) {
-      ev.preventDefault();
-
-      if (ui.isHidden($form)) {
-        // Show
-        ui.show($form);
-        // Remove possible error messages
-        ui.hide($error);
-        // Prefill the form with the current name
-        $input.val(location.getName());
-        // Focus to input field
-        $input.focus();
-      } else {
-        // Hide
-        ui.hide($form);
-        // Remove possible error messages
-        ui.hide($error);
-      }
-    });
-
-    $cancel.click(function (ev) {
-      ev.preventDefault();
-      ui.hide($form);
-    });
-
-    $form.submit(function (ev) {
-      ev.preventDefault();
-
-      var newName = $input.val().trim();
-      var oldName = location.getName();
-
-      if (newName === oldName) {
-        // If name not changed, just close the form.
-        ui.hide($form);
-        ui.hide($error);
-        return;
-      }
-
-      location.setName(newName, function (err) {
-        ui.hide($form);
-
-        if (err) {
-          console.error(err);
-          ui.show($error);
-          return;
-        }
+    if (ableEdit) {
+      var nameForm = new NameForm(location);
+      children.formOpener = new Opener(nameForm);
+      children.formOpener.bind({
+        $container: $elems.formContainer,
+        $button: $elems.open,
       });
-    });
-
+    }
   };
 
   this.unbind = function () {
-    location.off('location_name_changed', handleNameChange);
-    $('#georap-location-rename-show').off();
-    $('#georap-location-rename-cancel').off();
-    $('#georap-location-rename-form').off();
+    if ($mount) {
+      location.off('location_name_changed', handleNameChange);
+      ui.unbindAll(children);
+      children = {};
+      ui.offAll($elems);
+      $elems = {};
+      $mount = null;
+    }
   };
 };

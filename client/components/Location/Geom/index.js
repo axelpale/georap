@@ -1,255 +1,105 @@
-/* global google */
-/* eslint-disable max-statements */
-var geostamp = require('geostamp');
-var template = require('./template.ejs');
-var AdditionMarker = require('../../Map/AdditionMarker');
+var Opener = require('georap-components').Opener;
 var ui = require('georap-ui');
-var mapStateStore = georap.stores.mapstate;
-
-// Reuse the map instance after first use to avoid memory leaks.
-// Google Maps does not handle garbage collecting well.
-var gmap = {
-  elem: null,
-  map: null,
-  marker: null,
-  listener: null,
-};
-
-var getAllCoords = function (loc) {
-  // coordinates in each registered coordinate system.
-
-  // Coordinate systems and their templates
-  var systemNames = georap.config.coordinateSystems.map(function (sys) {
-    return sys[0];
-  });
-
-  var allCoords = systemNames.map(function (sysName) {
-    var coords = loc.getAltGeom(sysName);
-
-    var tmplParams = {
-      lat: coords[1],
-      lng: coords[0],
-      absLat: Math.abs(coords[1]),
-      absLng: Math.abs(coords[0]),
-      getLatDir: geostamp.latitudeDirection,
-      getLngDir: geostamp.longitudeDirection,
-      getD: geostamp.getDecimal,
-      getDM: geostamp.getDM,
-      getDMS: geostamp.getDMS,
-    };
-
-    var systemHtml = georap.templates[sysName](tmplParams);
-
-    return {
-      name: sysName,
-      html: systemHtml,
-    };
-  });
-
-  return allCoords;
-};
+var GeomForm = require('./Form');
+var GeomMore = require('./More');
+var template = require('./template.ejs');
+var renderGeoms = require('./renderGeoms');
+var ableOwn = georap.stores.account.ableOwn;
+var MAP_SYSTEM = 'WGS84';
 
 module.exports = function (location) {
+  // Parameters
+  //   location
+  //     a Location Model
+  //
 
-  // For unbinding to prevent memory leaks.
-  var locationListeners = {};
+  // Setup
+  var $mount = null;
+  var children = {};
+  var $elems = {};
+  var handlers = {};
+  var self = this;
 
   // Public methods
 
-  this.bind = function ($mount) {
+  self.bind = function ($mountEl) {
+    $mount = $mountEl;
+    var __ = georap.i18n.__;
+
+    var loc = location.getRaw();
+
+    // Geom in every available coordinate system
+    var geostamps = renderGeoms(loc.altGeom);
+    var defaultGeostamp = geostamps[0].html;
+
+    var ableEdit = ableOwn(loc, 'locations-update');
 
     // Render
     $mount.html(template({
-      location: location,
-      allCoords: getAllCoords(location),
-      __: georap.i18n.__,
+      geostamp: defaultGeostamp,
+      ableEdit: ableEdit,
+      __: __,
     }));
 
-    // Preparation for binds
+    $elems.geostamp = $mount.find('#location-geom-geostamp');
 
-    var $edit = $('#georap-location-coords-edit');
-    var $container = $('#georap-location-coords-container');
-    var $progress = $('#georap-location-coords-progress');
-    var $geostamp = $('#georap-location-coords-geostamp');
-    var $form = $('#georap-location-coords-form');
-    var $cancel = $('#georap-location-coords-cancel');
-    var $error = $('#georap-location-coords-error');
-    var $lng = $('#georap-location-coords-longitude');
-    var $lat = $('#georap-location-coords-latitude');
-
-    var initMap = function () {
-      var $map = $('#georap-location-coords-map');
-
-      var mapState = mapStateStore.get();
-
-      var options = {
-        zoom: mapState.zoom,
-        center: {
-          lat: location.getLatitude(),
-          lng: location.getLongitude(),
-        },
-        mapTypeId: mapState.mapTypeId,
-        disableDefaultUI: true,
-        zoomControl: true,
-        mapTypeControl: true,
-        scaleControl: true, // scale stick
-      };
-
-      if (gmap.map === null && gmap.elem === null) {
-        gmap.elem = $map[0];
-        gmap.map = new google.maps.Map(gmap.elem, options);
-      } else {
-        // Already initialised
-        $map.replaceWith(gmap.elem);
-        gmap.map.setZoom(options.zoom);
-        gmap.map.setCenter(options.center);
-        gmap.map.setMapTypeId(options.mapTypeId);
-      }
-
-      // Reuse the marker class of location creation.
-      // Familiar affordance for the user.
-      gmap.marker = new AdditionMarker(gmap.map);
-      gmap.marker.show();
-      gmap.listener = gmap.map.addListener('center_changed', function () {
-        var latlng = gmap.map.getCenter();
-        $lng.val(latlng.lng());
-        $lat.val(latlng.lat());
+    var geomForm = null;
+    if (ableEdit) {
+      geomForm = new GeomForm(location.getId(), location.getGeom());
+      children.formOpener = new Opener(geomForm);
+      children.formOpener.bind({
+        $container: $mount.find('#location-geom-container'),
+        $button: $mount.find('#location-geom-edit'),
       });
-    };
+    }
 
-    var closeMap = function () {
-      // Avoid memory leaks.
-      gmap.marker.hide();
-      gmap.marker = null;
-      gmap.listener.remove();
-      gmap.listener = null;
-    };
-
-    var isFormOpen = function () {
-      var isHidden = $container.hasClass('hidden');
-      return !isHidden;
-    };
-
-    var openForm = function () {
-      ui.show($container);
-      ui.show($form);
-      // Hide all possible error messages
-      ui.hide($error);
-      // Load map
-      initMap();
-    };
-
-    var closeForm = function () {
-      ui.hide($container);
-      // Hide all possible error messages
-      ui.hide($error);
-      // Destroy map (partially)
-      closeMap();
-    };
-
-    var prefill = function () {
-      var lng = location.getLongitude();
-      var lat = location.getLatitude();
-
-      $lng.val(lng);
-      $lat.val(lat);
-    };
-
-    // Binds
-
-    $edit.click(function (ev) {
-      ev.preventDefault();
-
-      if (isFormOpen()) {
-        closeForm();
-      } else {
-        openForm();
-        prefill();
-      }
+    var geomMore = new GeomMore(geostamps);
+    var iconDown = '<span class="glyphicon glyphicon-chevron-down"></span>';
+    var iconUp = '<span class="glyphicon glyphicon-chevron-up"></span>';
+    children.moreOpener = new Opener(geomMore, {
+      labelClosed: iconDown, // + ' ' + __('more'),
+      labelOpen: iconUp, // + ' ' + __('less'),
+    });
+    children.moreOpener.bind({
+      $container: $mount.find('#location-geom-more'),
+      $button: $mount.find('#location-geom-more-open'),
     });
 
-    $cancel.click(function (ev) {
-      ev.preventDefault();
-      closeForm();
-    });
-
-    $form.submit(function (ev) {
-      ev.preventDefault();
-
-      var lngRaw = $lng.val();
-      var latRaw = $lat.val();
-
-      var lng = parseFloat(lngRaw);
-      var lat = parseFloat(latRaw);
-
-      // Hide form and show progress bar
-      ui.hide($form);
-      ui.show($progress);
-
-      location.setGeom(lng, lat, function (err) {
-        // Hide progress bar
-        ui.hide($progress);
-
-        if (err) {
-          ui.show($error);
-          return;
-        }
-        closeForm();
-      });
-    });
-
-    (function defineMore() {
-      var $more = $('#georap-location-coords-more');
-      var $moreopen = $('#georap-location-coords-more-open');
-      var $moreclose = $('#georap-location-coords-more-close');
-
-      $moreopen.click(function (ev) {
-        ev.preventDefault();
-        ui.hide($moreopen);
-        ui.show($moreclose);
-        ui.show($more);
-      });
-
-      $moreclose.click(function (ev) {
-        ev.preventDefault();
-        ui.hide($moreclose);
-        ui.show($moreopen);
-        ui.hide($more);
-      });
-
-    }());
-
-    // Event handling
-
-    var geomChangedHandler = function () {
+    // Register handlers
+    // eslint-disable-next-line dot-notation
+    handlers['location_geom_changed'] = function () {
       // Update coords on geom change.
       // Get coords in each coord system.
-      var allCoords = getAllCoords(location);
-      // WGS84
-      $geostamp.html(allCoords[0].html);
+      var geoms = location.getAltGeoms();
+      var newGeostamps = renderGeoms(geoms);
+      var newDefaultGeostamp = newGeostamps[0].html;
+      // Default system (e.g. WGS84)
+      $elems.geostamp.html(newDefaultGeostamp);
       // Other systems
-      var $more = $('#georap-location-coords-more');
-      var moreHtml = allCoords.reduce(function (acc, c) {
-        var content = c.html + ' (' + c.name + ')';
-        return acc + '<div><span>' + content + '</span></div>';
-      }, '');
-      $more.html(moreHtml);
-    };
+      geomMore.update(newGeostamps);
 
-    location.on('location_geom_changed', geomChangedHandler);
-    // Register listener.
-    // eslint-disable-next-line dot-notation
-    locationListeners['location_geom_changed'] = geomChangedHandler;
+      // Update form for next bind. This does not rewrite rendered values.
+      // TODO alt geoms should be full GeoJSON objects, not only coords
+      if (geomForm) {
+        var newCoords = geoms[MAP_SYSTEM];
+        geomForm.update({
+          type: 'Point',
+          coordinates: newCoords,
+        });
+      }
+    };
+    ui.onBy(location, handlers);
   };
 
-  this.unbind = function () {
-    $('#georap-location-coords-edit').off();
-    $('#georap-location-coords-form').off();
-    $('#georap-location-coords-cancel').off();
-    $('#georap-location-coords-more-open').off();
-
-    Object.keys(locationListeners).forEach(function (k) {
-      location.off(k, locationListeners[k]);
-    });
+  self.unbind = function () {
+    if ($mount) {
+      ui.unbindAll(children);
+      children = {};
+      ui.offAll($elems);
+      $elems = {};
+      ui.offBy(location, handlers);
+      handlers = {};
+      $mount = null;
+    }
   };
 };

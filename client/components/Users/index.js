@@ -9,55 +9,48 @@ var __ = georap.i18n.__;
 module.exports = function () {
 
   // Init
+  var $mount = null;
+  var $els = {};
   emitter(this);
 
   // Public methods
 
-  this.bind = function ($mount) {
+  this.bind = function ($mountEl) {
+    $mount = $mountEl;
 
     $mount.html(template({
       __: __,
     }));
 
+    $els.progress = $mount.find('.users-loading');
+    $els.alltime = $mount.find('.users-alltime');
+    $els.days365 = $mount.find('.users-365days');
+    $els.days30 = $mount.find('.users-30days');
+    $els.days7 = $mount.find('.users-7days');
+
     // Fetch users and include to page.
     usersApi.getAll(function (err, rawUsers) {
       // Hide loading bar
-      ui.hide($('#georap-users-loading'));
+      ui.hide($els.progress);
 
       if (err) {
         console.error(err);
         return;
       }
 
-      // Backward compatibility 8.3.3 -> 8.3.4
-      rawUsers = rawUsers.map(function (u) {
-        return Object.assign({}, u, {
-          points7days: u.points7days ? u.points7days : 0,
-          points30days: u.points30days ? u.points30days : 0,
-          points365days: u.points365days ? u.points365days : 0,
-        });
-      });
-
-      var activeUsers = rawUsers.filter(function (u) {
-        return u.status === 'active';
-      });
-      var passiveUsers = rawUsers.filter(function (u) {
-        return u.status === 'deactivated';
-      });
-
       // Order by points
-      var bestUsersAllTime = activeUsers.sort(function (ua, ub) {
+      var bestUsersAllTime = rawUsers.sort(function (ua, ub) {
         return ub.points - ua.points;
       });
       var VIEW_TOP = 10;
       // Slice to copy because sort manipulates the original.
-      var bestUsersOf365days = activeUsers.slice().sort(function (ua, ub) {
+      var bestUsersOf365days = rawUsers.slice().sort(function (ua, ub) {
         return ub.points365days - ua.points365days;
       }).slice(0, VIEW_TOP);
-      var bestUsersOf30days = activeUsers.slice().sort(function (ua, ub) {
+      var bestUsersOf30days = rawUsers.slice().sort(function (ua, ub) {
         return ub.points30days - ua.points30days;
       }).slice(0, VIEW_TOP);
-      var bestUsersOf7days = activeUsers.slice().sort(function (ua, ub) {
+      var bestUsersOf7days = rawUsers.slice().sort(function (ua, ub) {
         return ub.points7days - ua.points7days;
       }).slice(0, VIEW_TOP);
 
@@ -67,11 +60,11 @@ module.exports = function () {
       };
 
       // Reveal list
-      $('#georap-users-alltime').html(listTemplate({
+      $els.alltime.html(listTemplate({
         users: bestUsersAllTime,
       }));
 
-      $('#georap-users-365days').html(listTemplate({
+      $els.days365.html(listTemplate({
         users: bestUsersOf365days.map(function (u) {
           // Template uses u.points
           return Object.assign({}, u, { points: u.points365days });
@@ -79,7 +72,7 @@ module.exports = function () {
         prefix: '+',
       }));
 
-      $('#georap-users-30days').html(listTemplate({
+      $els.days30.html(listTemplate({
         users: bestUsersOf30days.map(function (u) {
           // Template uses u.points
           return Object.assign({}, u, { points: u.points30days });
@@ -87,23 +80,22 @@ module.exports = function () {
         prefix: '+',
       }));
 
-      $('#georap-users-7days').html(listTemplate({
+      $els.days7.html(listTemplate({
         users: bestUsersOf7days.map(function (u) {
           // Template uses u.points
           return Object.assign({}, u, { points: u.points7days });
         }).filter(hasPoints),
         prefix: '+',
       }));
-
-      $('#georap-deactivated-users').html(listTemplate({
-        users: passiveUsers,
-      }));
-
     });
   };
 
   this.unbind = function () {
-    // noop
+    if ($mount) {
+      ui.offAll($els);
+      $els = {};
+      $mount = null;
+    }
   };
 
 };

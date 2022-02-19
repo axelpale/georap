@@ -2,6 +2,8 @@
 // 1. set schema version to 14
 // 2. users have new property: securityToken
 // 3. users have new property: role (deprecates prop: admin)
+// 4. rename location.creator to location.user
+// 5. merge user status into role
 //
 // Idempotent: true when NODE_ENV=development
 //
@@ -32,8 +34,8 @@ const substeps = [
     });
   },
 
-  function refactorEntries(nextStep) {
-    console.log('2. Add securityToken and role properties to users...');
+  function migrateUsers(nextStep) {
+    console.log('2. 3. Add securityToken and role properties to users...');
 
     const coll = db.collection('users');
 
@@ -43,28 +45,56 @@ const substeps = [
       if (user.admin) {
         const isAdmin = user.admin;
         delete user.admin;
-        user.role = isAdmin ? 'admin' : 'basic';
+        user.role = isAdmin ? 'admin' : 'writer';
       }
-      // Init empty security token
-      user.securityToken = '';
-      // Init deleted flag
-      user.deleted = false;
+      if (!user.securityToken) {
+        // Init empty security token
+        user.securityToken = '';
+      }
+      if (!user.deleted) {
+        // deleted is true => no update
+        // deleted is false => unnecessary update
+        // deleted is undefined => update
+
+        // Init deleted flag
+        user.deleted = false;
+      }
       return iterNext(null, user);
-    }, (err, iterResults) => {
-      if (err) {
-        return nextStep(err);
-      }
-
-      console.log('  ' + iterResults.numDocuments + ' users processed ' +
-        'successfully.');
-      console.log('  ' + iterResults.numUpdated + ' users updated, ' +
-        (iterResults.numDocuments - iterResults.numUpdated) + ' did not ' +
-        'need an update');
-
-      return nextStep();
-    });
+    }, iter.updateEachReport(nextStep));
   },
 
+  function migrateLocations(nextStep) {
+    console.log('4. Rename loc.creator to loc.user...');
+
+    const coll = db.collection('locations');
+
+    iter.updateEach(coll, (origLoc, iterNext) => {
+      const loc = clone(origLoc);
+      if (loc.creator) {
+        loc.user = loc.creator;
+        delete loc.creator;
+        return iterNext(null, loc);
+      }
+      return iterNext(null, null); // skip
+    }, iter.updateEachReport(nextStep));
+  },
+
+  function migrateUserStatus(nextStep) {
+    console.log('5. Merge user status into user role...');
+
+    const coll = db.collection('users');
+
+    iter.updateEach(coll, (origUser, iterNext) => {
+      const user = clone(origUser);
+      if (user.status) {
+        if (user.status === 'deactivated') {
+          user.role = 'frozen';
+        }
+        delete user.status;
+      }
+      return iterNext(null, user);
+    }, iter.updateEachReport(nextStep));
+  },
 ];
 
 exports.run = (callback) => {

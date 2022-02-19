@@ -10,7 +10,7 @@ exports.getOne = function (username, callback) {
   //     string
   //   callback
   //     function (err, user), user === null if no user found
-
+  //
   const usersColl = db.collection('users');
   const proj = {
     hash: false,
@@ -23,6 +23,20 @@ exports.getOne = function (username, callback) {
       if (!doc) {
         return callback(null, null);
       }
+
+      // Complete worker-created properties
+      // TODO create props in user creation and fill missing in migrate.
+      doc.allTime = doc.allTime ? doc.allTime : 0;
+      doc.days365 = doc.days365 ? doc.days365 : 0;
+      doc.days30 = doc.days30 ? doc.days30 : 0;
+      doc.days7 = doc.days7 ? doc.days7 : 0;
+      doc.flagsCreated = doc.flagsCreated ? doc.flagsCreated : [];
+      doc.locationsCreated = doc.locationsCreated ? doc.locationsCreated : 0;
+      doc.postsCreated = doc.postsCreated ? doc.postsCreated : 0;
+      doc.locationsClassified =
+        doc.locationsClassified ? doc.locationsClassified : 0;
+      doc.commentsCreated = doc.commentsCreated ? doc.commentsCreated : 0;
+
       return callback(null, doc);
     })
     .catch((err) => {
@@ -30,40 +44,22 @@ exports.getOne = function (username, callback) {
     });
 };
 
-exports.getOneWithEvents = function (username, callback) {
-  // Get single user
+exports.getEvents = function (params, callback) {
+  // Get events of single user.
   //
   // Parameters:
-  //   username
-  //     string
+  //   params
+  //     username
+  //       string
+  //     skip
+  //       integer
+  //     limit
+  //       integer
   //   callback
   //     function (err, user)
   //       err null and user null if no user found
   //
-
-  exports.getOne(username, (err, doc) => {
-    if (err) {
-      return callback(err);
-    }
-
-    if (!doc) {
-      return callback(null, null);
-    }
-
-    const num = 20;
-    const before = (new Date()).toISOString();
-
-    eventsDal.getRecentOfUser(username, num, before, (err2, docs) => {
-      if (err2) {
-        return callback(err2);
-      }
-
-      doc.events = docs;
-
-      return callback(null, doc);
-    });
-
-  });
+  eventsDal.getRecentOfUser(params, callback);
 };
 
 exports.getFlags = (username, callback) => {

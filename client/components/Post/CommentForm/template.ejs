@@ -1,0 +1,39 @@
+<% if (!canCreate) { %><hr><% } %>
+<div class="comment-form-group">
+
+  <div class="comment-edit-form-container"></div>
+
+  <div class="comment-tools-buttons btn-list clearfix">
+    <div class="comment-submit-buttons pull-right">
+      <% if (canAttach && (canCreate || canUpdate)) { %>
+        <button type="button" class="comment-form-photo-btn btn btn-default hidden" title="Add Photo or Document"><span class="glyphicon glyphicon-plus" aria-label="Add"></span> <span class="glyphicon glyphicon-picture" aria-label="Photo"></span> <span class="glyphicon glyphicon-paperclip" aria-label="Attachment"></span></button>
+      <% } %>
+      <button class="comment-form-cancel btn btn-default" type="button"><%= __('cancel') %></button>
+      <% if (canCreate || canUpdate) { %>
+        <button class="comment-form-submit btn btn-primary" type="button"><%
+          if (canCreate) {
+            %><%= __('comment') %><%
+          } else {
+            %><%= __('save') %><%
+          }
+        %></button>
+      <% } %>
+    </div>
+
+    <% if (canDelete) { %>
+      <!-- Delete confirmation -->
+      <button type="button" class="comment-remove-open btn btn-default"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span> <%= __('comment-delete') %>...</button>
+    <% } %>
+  </div>
+  <% if (canDelete) { %>
+    <div class="comment-remove-container hidden" style="margin-top: 1rem"></div>
+  <% } %>
+</div>
+
+<div class="comment-form-error"></div>
+
+<div class="comment-form-progress progress hidden">
+  <div class="progress-bar progress-bar-striped active" role="progressbar" style="width: 100%">
+    <span class="sr-only">Waiting for server</span>
+  </div>
+</div>

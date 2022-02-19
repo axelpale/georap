@@ -14,7 +14,7 @@ exports.run = (callback) => {
   //     filename
   //   status
   //   type
-  //   creators
+  //   authors
   //
 
   const loColl = db.collection('locations');
@@ -35,7 +35,7 @@ exports.run = (callback) => {
         return next(err);
       }
 
-      const creator = [lib.normalize(loc.creator)];
+      const author = [lib.normalize(loc.user)];
 
       const entryTexts = entries.map((en) => {
         let r = en.user;
@@ -55,7 +55,7 @@ exports.run = (callback) => {
       // Divide to primary and secondary text data
       // Matches to primary have greater weight in the sorting of results.
       const parts1 = names.concat(classification);
-      const parts2 = creator.concat(places, entryTexts);
+      const parts2 = author.concat(places, entryTexts);
 
       const dump1 = parts1.join(' ');
       const dump2 = parts2.join(' ');

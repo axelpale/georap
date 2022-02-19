@@ -1,14 +1,14 @@
 // User Management UI
 
-var admin = georap.stores.admin;
 var template = require('./template.ejs');
 var InfoComponent = require('./Info');
-var StatusComponent = require('./Status');
 var EventsComponent = require('./Events');
 var RoleComponent = require('./Role');
 var RemovalComponent = require('./Removal');
 var emitter = require('component-emitter');
 var ui = require('georap-ui');
+var admin = georap.stores.admin;
+var able = georap.stores.account.able;
 var __ = georap.i18n.__;
 
 module.exports = function (username) {
@@ -28,11 +28,7 @@ module.exports = function (username) {
       __: __,
     }));
 
-    $elems.infoRoot = $mount.find('.admin-user-info-root');
-    $elems.statusRoot = $mount.find('.admin-user-status-root');
-    $elems.eventsRoot = $mount.find('.admin-user-events-root');
     $elems.loading = $mount.find('.admin-user-loading');
-    $elems.roleRoot = $mount.find('.admin-user-role-root');
 
     // Fetch users and include to page.
     ui.show($elems.loading);
@@ -46,30 +42,34 @@ module.exports = function (username) {
       }
 
       // Construct and bind child components
+
+      $elems.infoRoot = $mount.find('.admin-user-info-root');
       children.infoComp = new InfoComponent(user);
       children.infoComp.bind($elems.infoRoot);
 
       if (!user.deleted) {
-        children.statusComp = new StatusComponent(user);
-        children.statusComp.bind($elems.statusRoot);
-
+        $elems.eventsRoot = $mount.find('.admin-user-events-root');
         children.eventsComp = new EventsComponent(user);
         children.eventsComp.bind($elems.eventsRoot);
 
-        children.roleComp = new RoleComponent(user);
-        children.roleComp.bind($elems.roleRoot);
+        if (able('admin-users-rerole')) {
+          $elems.roleRoot = $mount.find('.admin-user-role-root');
+          children.roleComp = new RoleComponent(user);
+          children.roleComp.bind($elems.roleRoot);
+        }
 
-        $elems.removalRoot = $mount.find('.admin-user-removal-root');
-        $elems.removalSuccess = $mount.find('.admin-user-removal-success');
-        children.removalComp = new RemovalComponent(user);
-        children.removalComp.bind($elems.removalRoot);
-        children.removalComp.on('success', function () {
-          children.infoComp.unbind();
-          children.statusComp.unbind();
-          children.roleComp.unbind();
-          children.removalComp.unbind();
-          ui.show($elems.removalSuccess);
-        });
+        if (able('admin-users-delete')) {
+          $elems.removalRoot = $mount.find('.admin-user-removal-root');
+          $elems.removalSuccess = $mount.find('.admin-user-removal-success');
+          children.removalComp = new RemovalComponent(user);
+          children.removalComp.bind($elems.removalRoot);
+          children.removalComp.on('success', function () {
+            children.infoComp.unbind();
+            children.roleComp.unbind();
+            children.removalComp.unbind();
+            ui.show($elems.removalSuccess);
+          });
+        }
       }
 
     });

@@ -122,6 +122,9 @@ module.exports = {
         type: 'string',
       },
     },
+    defaultRole: {
+      type: 'string',
+    },
     capabilities: {
       type: 'object',
     },
@@ -154,6 +157,18 @@ module.exports = {
     loginColor: {
       type: 'string',
       enum: ['muted', 'primary', 'success', 'info', 'warning', 'danger'],
+    },
+    locationNaming: {
+      type: 'object',
+      properties: {
+        minLength: {
+          type: 'integer',
+        },
+        maxLength: {
+          type: 'integer',
+        },
+      },
+      required: ['minLength', 'maxLength'],
     },
     locationStatuses: {
       type: 'array',
@@ -247,7 +262,7 @@ module.exports = {
       type: 'string',
       enum: ['production', 'development', 'test'],
     },
-    features: {
+    features: { // deprecated in v14
       type: 'object',
     },
   },
@@ -286,8 +301,10 @@ module.exports = {
     'defaultMapState',
     'icons', // new in v12, require in v13
     'appleTouchIcons', // new in v12, require in v13
+    'loginPageSize', // new in v14
     'loginBackground',
     'loginColor', // new in v12, require in v13
+    'locationNaming', // new in v14
     'locationStatuses',
     'locationTypes',
     'rewards',
@@ -302,7 +319,7 @@ module.exports = {
     'exportServices',
     'bcrypt',
     'env',
-    'features',
+    // 'features', // deprecated in v14
   ],
   additionalProperties: false,
 };

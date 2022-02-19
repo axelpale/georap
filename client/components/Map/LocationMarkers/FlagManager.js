@@ -71,4 +71,10 @@ M.prototype.remove = function (locId, flagsToRemove) {
   // else does not exists, nothing to remove
 };
 
+M.prototype.removeAll = function () {
+  // Remove all flag data.
+  // Call for example at user logout.
+  this.flags = {};
+};
+
 module.exports = M;

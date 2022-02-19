@@ -1,14 +1,8 @@
 // Component to list location events
 //
 var template = require('./list.ejs');
-var eventTemplate = require('./event.ejs');
 var emitter = require('component-emitter');
-var getPoints = require('georap-points');
-var ui = require('georap-ui');
-var flagstamp = require('../Entry/flagstamp');
-var config = georap.config;
-var locale = georap.i18n.locale;
-var __ = georap.i18n.__;
+var renderEvent = require('./renderEvent');
 
 module.exports = function (events, opts) {
   // Parameters:
@@ -33,19 +27,6 @@ module.exports = function (events, opts) {
   var self = this;
   emitter(self);
 
-  var renderEvent = function (ev) {
-    return eventTemplate({
-      ev: ev,
-      timestamp: ui.timestamp(ev.time, locale),
-      pointstamp: ui.pointstamp,
-      flagstamp: flagstamp,
-      getPoints: getPoints,
-      config: config,
-      showThumbnail: opts.showThumbnails,
-      __: __,
-    });
-  };
-
   // Public methods
 
   this.bind = function ($mountEl) {
@@ -55,7 +36,7 @@ module.exports = function (events, opts) {
     $elems.events = $mount.find('.events-group');
 
     events.forEach(function (ev) {
-      $elems.events.append(renderEvent(ev));
+      $elems.events.append(renderEvent(ev, opts));
     });
   };
 
@@ -65,14 +46,20 @@ module.exports = function (events, opts) {
       $elems.events.empty();
 
       events.forEach(function (ev) {
-        $elems.events.append(renderEvent(ev));
+        $elems.events.append(renderEvent(ev, opts));
       });
+    }
+  };
+
+  this.append = function (newEvent) {
+    if ($mount) {
+      $elems.events.append(renderEvent(newEvent, opts));
     }
   };
 
   this.prepend = function (newEvent) {
     if ($mount) {
-      $elems.events.prepend(renderEvent(newEvent));
+      $elems.events.prepend(renderEvent(newEvent, opts));
     }
   };
 

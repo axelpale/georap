@@ -12,5 +12,5 @@ exports.generate = function () {
 };
 
 exports.validate = function (code) {
-  return (typeof code === 'string' && code.length > len);
+  return (typeof code === 'string' && code.length === len);
 };

@@ -1,13 +1,14 @@
 // Component for a list of events.
 
 var emitter = require('component-emitter');
-var TabsView = require('./Tabs');
+var TabsView = require('georap-components').Tabs;
 var template = require('./template.ejs');
 var EventsView = require('./Events');
 var LocationsView = require('./Locations');
-var EntriesView = require('./Entries');
+var PostsView = require('./Posts');
 var ui = require('georap-ui');
 var ScrollRecorder = require('./ScrollRecorder');
+var able = georap.stores.account.able;
 var __ = georap.i18n.__;
 
 // Record scroll position to help browsing through the list
@@ -28,12 +29,47 @@ module.exports = function () {
   var children = {};
   var $elems = {};
 
-  // tabHash -> filter
-  var tabs = {
-    activity: EventsView,
-    locations: LocationsView,
-    posts: EntriesView,
+  // Tab config
+  var tabConfig = {
+    tabs: [],
+    defaultTab: 'events',
+    storageKey: 'georap-latest-tab',
   };
+  // tabKey -> component
+  var tabViews = {
+    events: EventsView,
+    locations: LocationsView,
+    posts: PostsView,
+  };
+  // Tab config depends on capabilities
+  if (able('latest-events')) {
+    tabConfig.tabs.push({
+      key: 'events',
+      title: __('activity'),
+      className: 'latest-events',
+    });
+    tabConfig.defaultTab = 'events';
+  }
+  if (able('latest-locations')) {
+    tabConfig.tabs.push({
+      key: 'locations',
+      title: __('locations'),
+      className: 'latest-locations',
+    });
+    tabConfig.defaultTab = 'locations';
+  }
+  if (able('latest-posts')) {
+    tabConfig.tabs.push({
+      key: 'posts',
+      title: __('posts'),
+      className: 'latest-posts',
+    });
+    if (able('latest-events')) {
+      tabConfig.defaultTab = 'events';
+    } else {
+      tabConfig.defaultTab = 'posts';
+    }
+  }
 
   // Public methods
 
@@ -46,19 +82,19 @@ module.exports = function () {
     }));
 
     // Set up tabs
-    children.tabs = new TabsView();
+    children.tabs = new TabsView(tabConfig);
     children.tabs.bind($mount.find('.latest-tabs-container'));
 
     // Tab switch filters the events.
-    children.tabs.on('tab_switch', function (hash) {
-      self.switchTab(hash);
+    children.tabs.on('tab_switch', function (key) {
+      self.switchTab(key);
     });
 
     // Initial tab
-    self.switchTab(children.tabs.getTabHash());
+    self.switchTab(children.tabs.getTabKey());
   };
 
-  this.switchTab = function (tabHash) {
+  this.switchTab = function (tabKey) {
     // DEBUG console.log('tab_switch', tabHash);
     if ($mount) {
       // Destroy the previous list view if any.
@@ -71,7 +107,7 @@ module.exports = function () {
 
       // Open new view
       $elems.list = $mount.find('.latest-list-container');
-      var ListView = tabs[tabHash];
+      var ListView = tabViews[tabKey];
       children.list = new ListView();
       children.list.bind($elems.list);
 

@@ -2,7 +2,6 @@
 
 var emitter = require('component-emitter');
 var models = require('georap-models');
-var EventsModel = require('./Events/Model');
 var locations = georap.stores.locations;
 
 module.exports = function (rawLoc) {
@@ -18,18 +17,14 @@ module.exports = function (rawLoc) {
   var self = this;
   emitter(self);
 
-  var _events = new EventsModel(rawLoc.events, self);
-
   // Bind
 
   locations.on('location_event', function (ev) {
+    // Update rawLoc accordingly.
     // Forget events of other locations
     if (ev.locationId !== rawLoc._id) {
       return;
     }
-
-    // For events model
-    self.emit('location_event_created', ev);
 
     if (ev.type === 'location_name_changed') {
       rawLoc.name = ev.data.newName;
@@ -64,16 +59,18 @@ module.exports = function (rawLoc) {
 
   // Public Getters
 
+  self.getRaw = function () {
+    return rawLoc;
+  };
+
   self.getAltGeom = function (system) {
     // Return coordinates in the given coordinate systems.
     // Only systems in rawLoc.altGeom are available.
     return rawLoc.altGeom[system];
   };
 
-  self.getCreator = function () {
-    // Return the username of the creator of the location.
-    // Return '' if not known.
-    return rawLoc.creator;
+  self.getAltGeoms = function () {
+    return rawLoc.altGeom;
   };
 
   self.getId = function () {
@@ -95,11 +92,6 @@ module.exports = function (rawLoc) {
 
   self.getLatitude = function () {
     return rawLoc.geom.coordinates[1];
-  };
-
-  self.getEvents = function () {
-    // Return EventsModel
-    return _events;
   };
 
   self.getMarkerLocation = function () {

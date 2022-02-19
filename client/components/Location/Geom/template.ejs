@@ -1,51 +1,16 @@
 <div class="form-group">
   <div class="georap-coords">
     <span class="glyphicon glyphicon-screenshot" aria-hidden="true"></span>
+    <span id="location-geom-geostamp"><%= geostamp %></span>
 
-    <span id="georap-location-coords-geostamp"><%= allCoords[0].html %></span>
+    <button id="location-geom-more-open" type="button" class="btn btn-default btn-sm"></button>
 
-    <button id="georap-location-coords-more-open" type="button" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-chevron-down"></span> <%= __('more') %></button>
-    <button id="georap-location-coords-more-close" type="button" class="btn btn-default btn-sm hidden"><span class="glyphicon glyphicon-chevron-up"></span> <%= __('less') %></button>
-    <button id="georap-location-coords-edit" type="button" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-pencil"></span></button>
+    <% if (ableEdit) { %>
+    <button id="location-geom-edit" type="button" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-pencil"></span></button>
+    <% } %>
   </div>
 
-  <div id="georap-location-coords-more" class="form-group hidden">
-    <% allCoords.forEach(function (c) { %>
-      <div><span><%= c.html %> (<%= c.name %>)</span></div>
-    <% }) %>
-  </div>
+  <div id="location-geom-more" class="form-group hidden"></div>
 </div>
 
-<div id="georap-location-coords-container" class="hidden location-coords-container">
-  <form id="georap-location-coords-form" class="panel panel-primary">
-    <div class="panel-body">
-      <div class="form-group">
-        <label for="georap-location-coords-latitude"><%= __('latitude') %></label>
-        <input type="text" class="form-control" id="georap-location-coords-latitude">
-        <small class="form-text text-muted">WGS 84, <%= __('decimal-degrees') %> (DD.DDDD)</small>
-      </div>
-      <div class="form-group">
-        <label for="georap-location-coords-longitude"><%= __('longitude') %></label>
-        <input type="text" class="form-control" id="georap-location-coords-longitude">
-        <small class="form-text text-muted">WGS 84, <%= __('decimal-degrees') %> (DD.DDDD)</small>
-      </div>
-      <div id="georap-location-coords-map-container" class="form-group">
-        <div id="georap-location-coords-map" style="width: 100%; height: 18em;"></div>
-      </div>
-      <div class="pull-right">
-        <button id="georap-location-coords-cancel" type="button" class="btn btn-default"><%= __('cancel') %></button>
-        <button type="submit" class="btn btn-primary"><%= __('save') %></button>
-      </div>
-    </div>
-  </form>
-
-  <div id="georap-location-coords-progress" class="progress hidden">
-    <div class="progress-bar progress-bar-striped active" role="progressbar" style="width: 100%">
-      <span class="sr-only">Waiting for server</span>
-    </div>
-  </div>
-
-  <div id="georap-location-coords-error" class="hidden">
-    <div class="alert alert-danger" role="alert"><%= __('updating-coords-error') %></div>
-  </div>
-</div>
+<div id="location-geom-container" class="hidden location-geom-container"></div>

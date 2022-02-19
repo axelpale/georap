@@ -4,6 +4,7 @@ var template = require('./template.ejs');
 var ListComp = require('./List');
 var emitter = require('component-emitter');
 var ui = require('georap-ui');
+var locationsApi = georap.stores.locations;
 var __ = georap.i18n.__;
 
 var DEC = 10;
@@ -57,7 +58,7 @@ module.exports = function (batchId) {
       georap.go('/');
     });
 
-    georap.stores.locations.getBatch(batchId, function (err, locs) {
+    locationsApi.getImportBatch(batchId, function (err, locs) {
       ui.hide($progress);
 
       if (err) {
@@ -65,7 +66,6 @@ module.exports = function (batchId) {
           ui.show($error404);
           return;
         }
-        console.log('getBatch');
         console.error(err);
         return;
       }
@@ -89,7 +89,7 @@ module.exports = function (batchId) {
         ui.show($progress);
         ui.hide($submitAllForm);
 
-        georap.stores.locations.importBatch({
+        locationsApi.importBatch({
           batchId: batchId,
           indices: indices,
         }, function (errs) {

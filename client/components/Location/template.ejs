@@ -1,6 +1,6 @@
 <div class="container-fluid georap-location">
   <% if (ref === 'latest') { %>
-  <a id="georap-location-return" class="row" href="/latest">
+  <a class="location-return row" href="/latest">
     <div class="col-md-12">
       <h1><%= __('latest') %></h1>
     </div>
@@ -9,7 +9,7 @@
   <div class="row">
     <div class="col-md-12">
 
-      <div id="georap-location-loading">
+      <div class="location-loading location-top">
         <div class="progress">
           <div class="progress-bar progress-bar-striped active" role="progressbar" style="width: 100%">
             <span class="sr-only">Waiting for server</span>
@@ -17,28 +17,28 @@
         </div>
       </div>
 
-      <div class="location-missing-error hidden">
-        <h2><%= __('location-missing') %></h2>
-      </div>
+      <div class="location-error alert alert-danger location-top hidden" role="alert"></div>
 
-      <div id="georap-location-name"></div>
+      <div class="location-name"></div>
 
-      <div id="georap-location-places"></div>
+      <div class="location-statustype"></div>
 
-      <div id="georap-location-geom"></div>
+      <div class="location-places"></div>
 
-      <div id="georap-location-statustype-container"></div>
+      <div class="location-geom"></div>
 
-      <div id="location-thumbnail-container"></div>
+      <div class="location-thumbnail"></div>
 
-      <div id="georap-location-forms"></div>
+      <div class="location-forms"></div>
 
-      <div id="georap-location-entries"></div>
+      <div class="location-posts"></div>
 
-      <div id="georap-location-events"></div>
+      <div class="location-events"></div>
 
-      <div id="georap-location-remove"></div>
+      <div class="location-remove"></div>
 
+      <div class="text-right card-back-to-top hidden"><%= __('back-to-top') %></div>
+      <div class="card-filler"></div>
     </div>
   </div>
 </div>

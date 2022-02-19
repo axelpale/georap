@@ -1,0 +1,6 @@
+<ul class="nav nav-tabs georap-tabs">
+  <% tabs.forEach(function (tab) { %>
+  <li role="presentation" class="<%= tab.className %>" data-tab="<%= tab.key %>"><a href="#"><%= tab.title %></a></li>
+  <% }); %>
+</ul>
+<div class="georap-tabs-spacer"></div>

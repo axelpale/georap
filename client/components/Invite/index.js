@@ -1,12 +1,13 @@
 // Form to invite new users.
 
-var inviteTemplate = require('./template.ejs');
+var template = require('./template.ejs');
 var ui = require('georap-ui');
 var emitter = require('component-emitter');
 var validator = require('email-validator');
 var account = georap.stores.account;
 var defaultLocale = georap.config.defaultLocale;
 var availableLocales = georap.config.availableLocales;
+var defaultRole = georap.config.defaultRole;
 var __ = georap.i18n.__;
 
 module.exports = function () {
@@ -19,15 +20,25 @@ module.exports = function () {
   var inviteFormSubmitHandler;
   var inviteSubmitResponseHandler;
 
+  // Permissions
+  var canRole = account.able('admin-users-invite-role');
+
 
   // Public methods
 
   this.bind = function ($mount) {
-    $mount.html(inviteTemplate({
+    $mount.html(template({
       defaultLocale: defaultLocale,
       availableLocales: availableLocales,
+      defaultRole: defaultRole,
+      availableRoles: account.getAssignableRoles(),
       __: __,
     }));
+
+    // Show role selector if user is capable of assigning non-default roles.
+    if (canRole) {
+      ui.show($mount.find('.invite-role-group'));
+    }
 
     $('#georap-invite-another-button').click(inviteAnotherButtonHandler);
     $('#georap-invite-form').submit(inviteFormSubmitHandler);
@@ -61,6 +72,11 @@ module.exports = function () {
     var email = $('#georap-invite-email').val();
     var lang = $('#georap-invite-lang').val();
 
+    var role = defaultRole;
+    if (canRole) {
+      role = $('#georap-invite-role').val();
+    }
+
     // Validate email.
     if (!validator.validate(email)) {
       // Invalid email, show error.
@@ -74,7 +90,11 @@ module.exports = function () {
     // Display loading animation
     ui.show($('#georap-invite-in-progress'));
 
-    account.sendInviteEmail(email, lang, inviteSubmitResponseHandler);
+    account.sendInviteEmail({
+      email: email,
+      lang: lang,
+      role: role,
+    }, inviteSubmitResponseHandler);
   };
 
   inviteSubmitResponseHandler = function (err) {

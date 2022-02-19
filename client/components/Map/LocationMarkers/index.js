@@ -62,6 +62,10 @@ module.exports = function (map) {
     }
   };
 
+  var _updateIcons = function () {
+    Object.keys(_markers).forEach(_updateIcon);
+  };
+
   var _ensureLabel = function (locId, forceUpdate) {
     // Ensure that label is visible.
     // Parameters:
@@ -329,9 +333,9 @@ module.exports = function (map) {
   });
 
   markerStore.on('location_entry_changed', function (ev) {
-    // Add or remove flags according to how the entry has changed.
+    // Add or remove flags according to how the post has changed.
     // NOTE this is not perfect as it does not consider if there
-    // were multiple entries with similar flags. Yet, it is good enough.
+    // were multiple posts with similar flags. Yet, it is good enough.
     if (account.isMe(ev.user)) {
       if (ev.data.delta.flags) {
         if (ev.data.original.flags) {
@@ -455,19 +459,6 @@ module.exports = function (map) {
 
     // Each time filter changes, fetch.
     filterStore.on('updated', _loadMarkers);
-
-    // Fetch the list of location flags as soon as possible
-    // to render the markers with correct templates.
-    account.getFlags(function (err, flagsObj) {
-      if (err) {
-        console.error(err);
-        return;
-      }
-
-      _flagsMan.setAll(flagsObj);
-
-      // TODO update markers?
-    });
   };
 
   self.stopLoading = function () {
@@ -481,6 +472,29 @@ module.exports = function (map) {
     Object.keys(_markers).forEach(function (k) {
       _removeMarker(_markers[k]);
     });
+  };
+
+  self.startLoadingFlags = function () {
+    // Fetch the list of location flags as soon as possible
+    // to render the markers with correct templates.
+    account.getFlags(function (err, flagsObj) {
+      if (err) {
+        console.error(err);
+        return;
+      }
+
+      _flagsMan.setAll(flagsObj);
+      _updateIcons();
+    });
+  };
+
+  self.stopLoadingFlags = function () {
+    // noop
+  };
+
+  self.removeAllFlags = function () {
+    _flagsMan.removeAll();
+    _updateIcons();
   };
 
 };

@@ -20,7 +20,7 @@
       <span class="location-type"><%= __('location-type', loc.type) %></span> <%= __('in-place') %>
       <%= loc.places.length > 0 ? placestamp(loc.places) : __('yet-undefined-place') %>
     </div>
-    <div><%= __('locations-created-by') %> <a href=""><%= loc.creator %></a> <%= timestamp(loc.createdAt, locale) %></div>
+    <div><%= __('locations-created-by') %> <a href=""><%= loc.user %></a> <%= timestamp(loc.createdAt, locale) %></div>
   </li>
   <% }); %>
 <% } %>

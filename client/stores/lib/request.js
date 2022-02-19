@@ -9,12 +9,13 @@ var createError = function (jqxhr) {
   var message;
   var name;
   var status = jqxhr.status;
+  var __ = georap.i18n.__;
   if (status === 0) {
     name = 'NO_CONNECTION';
-    message = 'No connection';
+    message = __('request-error-no-connection');
   } else if (status === HTTP_PAYLOAD_TOO_LARGE) {
     name = 'REQUEST_TOO_LONG';
-    message = 'Request payload is too large';
+    message = __('request-error-large-payload');
   } else if (status === HTTP_OK) {
     name = jqxhr.statusText;
     message = jqxhr.responseText;
@@ -28,6 +29,14 @@ var createError = function (jqxhr) {
   err.code = status;
 
   return err;
+};
+
+var authHeaders = function () {
+  var headers = {};
+  if (account.hasToken()) {
+    headers.Authorization = 'Bearer ' + account.getToken();
+  }
+  return headers;
 };
 
 exports.getJSON = function (params, callback) {
@@ -51,7 +60,7 @@ exports.getJSON = function (params, callback) {
     method: 'GET',
     data: params.data,
     dataType: 'json',
-    headers: { 'Authorization': 'Bearer ' + account.getToken() },
+    headers: authHeaders(),
     success: function (result) {
       return callback(null, result);
     },
@@ -81,7 +90,7 @@ exports.postJSON = function (params, callback) {
     data: JSON.stringify(params.data),
     processData: false, // already a string
     // dataType: 'json', // expected response type TODO
-    headers: { 'Authorization': 'Bearer ' + account.getToken() },
+    headers: authHeaders(),
     success: function (responseData) {
       return callback(null, responseData);
     },
@@ -106,7 +115,7 @@ exports.deleteJSON = function (params, callback) {
     type: 'DELETE',
     contentType: 'application/json',
     data: JSON.stringify(params.data),
-    headers: { 'Authorization': 'Bearer ' + account.getToken() },
+    headers: authHeaders(),
     success: function (responseData) {
       return callback(null, responseData);
     },
@@ -143,7 +152,7 @@ exports.postFile = function (params, callback) {
     dataType: 'json',  // response data type
     contentType: false,
     data: formData,
-    headers: { 'Authorization': 'Bearer ' + account.getToken() },
+    headers: authHeaders(),
     processData: false,
     success: function (jsonResp) {
       return callback(null, jsonResp);

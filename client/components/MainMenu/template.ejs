@@ -1,59 +1,81 @@
-<div id="georap-toolbar-main">
+<div id="georap-toolbar-main" class="btn-toolbar" role="toolbar">
+  <div class="dropdown btn-group">
+    <button id="georap-mainmenu-btn" type="button" data-toggle="dropdown" class="mainmenu-btn dropdown-toggle btn btn-default btn-lg" aria-haspopup="true" aria-expanded="false">
+      <img src="/assets/images/icons/128.png">
+      <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu" aria-labelledby="georap-mainmenu-btn">
 
-  <div class="btn-toolbar" role="toolbar">
-    <div class="dropdown btn-group">
-      <button id="georap-mainmenu" type="button" data-toggle="dropdown" class="dropdown-toggle btn btn-default btn-lg" aria-haspopup="true" aria-expanded="false">
-        <img src="/assets/images/icons/128.png">
-        <span class="caret"></span>
-      </button>
-      <ul class="dropdown-menu" aria-labelledby="georap-mainmenu">
+      <% if (able('locations-create')) { %>
         <li>
           <a id="georap-mainmenu-add" href="#"><%= glyphicon({ name: 'map-marker' }) %> <%= __('add-location') %></a>
         </li>
+      <% } %>
+      <% if (able('geometry-read')) { %>
         <li>
-          <a href="/crosshair"><%= glyphicon({ name: 'screenshot' }) %> <%= __('coordinates') %></a>
+          <a href="/coordinates"><%= glyphicon({ name: 'screenshot' }) %> <%= __('coordinates') %></a>
         </li>
-        <li role="separator" class="divider"></li>
+        <% if (able('locations-create')) { %>
+          <li role="separator" class="divider"></li>
+        <% } %>
+      <% } %>
+
+      <% if (able('posts-read')) { %>
         <li>
           <a href="/latest"><%= glyphicon({ name: 'bell' }) %> <%= __('latest') %></a>
         </li>
+      <% } %>
+      <% if (able('users-read')) { %>
         <li>
           <a href="/users"><%= glyphicon({ name: 'user' }) %> <%= __('users') %></a>
         </li>
+      <% } %>
+      <% if (able('locations-read') && able('locations-search')) { %>
         <li>
           <a href="/search"><%= glyphicon({ name: 'th-list' }) %> <%= __('locations') %></a>
         </li>
+      <% } %>
+      <% if (able('statistics-read')) { %>
         <li>
           <a href="/statistics"><%= glyphicon({ name: 'signal' }) %> <%= __('statistics') %></a>
         </li>
+      <% } %>
+      <% if (config.enableSupportPage) { %>
+        <li>
+          <a href="/about"><%= glyphicon({ name: 'info-sign' }) %> <%= __(config.supportButtonTitle) %></a>
+        </li>
+      <% } %>
+      <% if (able('posts-read') || config.enableSupportPage) { %>
         <li role="separator" class="divider"></li>
+      <% } %>
+
+      <% if (able('locations-import')) { %>
         <li>
           <a href="/import"><%= glyphicon({ name: 'import' }) %> <%= __('import') %></a>
         </li>
+      <% } %>
+      <% if (able('locations-export-all')) { %>
         <li>
           <a href="/export"><%= glyphicon({ name: 'export' }) %> <%= __('export') %></a>
         </li>
-
+      <% } %>
+      <% if (able('locations-import')) { %>
         <li role="separator" class="divider"></li>
+      <% } %>
 
-        <% if (user.role === 'admin') { %>
-          <li class="dropdown-header"><%= __('admin-menu') %></li>
-          <li>
-            <a href="/invite"><%= glyphicon({ name: 'envelope' }) %> <%= __('invite') %></a>
-          </li>
-          <li>
-            <a href="/admin/users"><%= glyphicon({ name: 'user' }) %> <%= __('manage-users') %></a>
-          </li>
-          <li role="separator" class="divider"></li>
-        <% } %>
+      <% if (able('admin-users-invite')) { %>
+        <li>
+          <a href="/invite"><%= glyphicon({ name: 'envelope' }) %> <%= __('invite') %></a>
+        </li>
+      <% } %>
+      <% if (able('admin-users-read')) { %>
+        <li>
+          <a href="/admin/users"><%= glyphicon({ name: 'user' }) %> <%= __('manage-users') %></a>
+        </li>
+        <li role="separator" class="divider"></li>
+      <% } %>
 
-        <% if (config.enableSupportPage) { %>
-          <li>
-            <a href="/fund"><%= glyphicon({ name: 'star' }) %> <%= config.supportButtonTitle %></a>
-          </li>
-          <li role="separator" class="divider"></li>
-        <% } %>
-
+      <% if (able('account-update')) { %>
         <li class="dropdown-header"><%= user.name %></li>
         <li>
           <a href="/account"><%= glyphicon({ name: 'user' }) %> <%= __('account-settings') %></a>
@@ -61,25 +83,36 @@
         <li>
           <a href="/login"><%= glyphicon({ name: 'off' }) %> <%= __('log-out') %></a>
         </li>
-      </ul>
-    </div><!-- .dropdown -->
+      <% } else { %>
+        <li>
+          <a href="/settings"><%= glyphicon({ name: 'cog' }) %> <%= __('settings') %></a>
+        </li>
+      <% } %>
+      <% if (able('account-login-form')) { %>
+        <li>
+          <a href="/login"><%= glyphicon({ name: 'user' }) %> <%= __('log-in') %></a>
+        </li>
+      <% } %>
+    </ul>
+  </div><!-- .dropdown -->
 
-    <div class="btn-group" role="group" aria-label="Filter tools">
-      <button id="georap-mainmenu-filter" class="btn btn-default btn-lg" type="button" title="Filter"><%= glyphicon({ name: 'filter' }) %>
-        <span class="label label-danger<%= isFilterActive ? '' : ' hidden' %>">&nbsp;</span>
-      </button>
-    </div>
+  <% if (able('locations-read') && able('locations-filter')) { %>
+  <div class="btn-group" role="group" aria-label="Filter tools">
+    <button id="georap-mainmenu-filter" class="btn btn-default btn-lg" type="button" title="Filter"><%= glyphicon({ name: 'filter' }) %>
+      <span class="label label-danger<%= isFilterActive ? '' : ' hidden' %>">&nbsp;</span>
+    </button>
+  </div>
+  <% } %>
 
-    <form id="georap-mainmenu-search-form" class="input-group">
-      <input id="georap-mainmenu-search-text" type="text" class="form-control input-lg" placeholder="<%= __('search-placeholder') %>">
-      <span class="input-group-btn">
-        <button id="georap-mainmenu-search-submit" class="btn btn-default btn-lg" type="submit"><%= glyphicon({ name: 'search' }) %></button>
-      </span>
-    </form>
-  </div><!-- .btn-toolbar -->
-
-</div><!-- #main -->
-
+  <% if (able('locations-read') && able('locations-search')) { %>
+  <form id="georap-mainmenu-search-form" class="input-group">
+    <input id="georap-mainmenu-search-text" type="text" class="form-control input-lg" placeholder="<%= __('search-placeholder') %>">
+    <span class="input-group-btn">
+      <button id="georap-mainmenu-search-submit" class="btn btn-default btn-lg" type="submit"><%= glyphicon({ name: 'search' }) %></button>
+    </span>
+  </form>
+  <% } %>
+</div><!-- .btn-toolbar -->
 
 <div id="georap-toolbar-addition" class="btn-toolbar hidden" role="toolbar">
   <div class="btn-group" role="group" aria-label="location tools">

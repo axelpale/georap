@@ -1,15 +1,15 @@
 // Attachment thumbnail component
 //
-var template = require('./template.ejs');
+const template = require('./template.ejs')
 
-var sizeToClass = {
-  'xs': 'thumb-xs',
-  'sm': 'thumb-sm',
-  'md': 'thumb-md',
-  'lg': 'thumb-lg',
-  'xl': 'thumb-xl',
-  'xxl': 'thumb-xxl',
-};
+const sizeToClass = {
+  xs: 'thumb-xs',
+  sm: 'thumb-sm',
+  md: 'thumb-md',
+  lg: 'thumb-lg',
+  xl: 'thumb-xl',
+  xxl: 'thumb-xxl'
+}
 
 module.exports = function (attachment, opts) {
   // Parameters:
@@ -27,46 +27,46 @@ module.exports = function (attachment, opts) {
   //
 
   if (!opts) {
-    opts = {};
+    opts = {}
   }
 
   opts = Object.assign({
     size: 'md',
     makeLink: false,
-    url: null,
-  }, opts);
+    url: null
+  }, opts)
 
   // Setup
-  var $mount = null;
-  var self = this;
+  let $mount = null
+  const self = this
 
   self.bind = function ($mountEl) {
-    $mount = $mountEl;
+    $mount = $mountEl
 
     $mount.html(template({
       attachment: attachment,
       sizeClass: sizeToClass[opts.size],
       makeLink: opts.makeLink,
-      url: opts.url ? opts.url : attachment.url,
-    }));
-  };
+      url: opts.url ? opts.url : attachment.url
+    }))
+  }
 
   self.update = function (att) {
     if ($mount) {
-      attachment = att;
+      attachment = att
 
       $mount.html(template({
         attachment: attachment,
         sizeClass: sizeToClass[opts.size],
         makeLink: opts.makeLink,
-        url: opts.url ? opts.url : attachment.url,
-      }));
+        url: opts.url ? opts.url : attachment.url
+      }))
     }
-  };
+  }
 
   self.unbind = function () {
     if ($mount) {
-      $mount = null;
+      $mount = null
     }
-  };
-};
+  }
+}

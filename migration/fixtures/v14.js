@@ -210,14 +210,14 @@ module.exports = {
     ],
 
     users: [{
-      // admin: true, // NOTE deprecated in favor of 'role'
+      // admin: true, // NOTE dropped in v14 in favor of 'role'
       email: 'admin@example.com',
       hash: c.PASSWORD,
       name: 'admin',
       points: 0,
       role: 'admin', // NOTE new in v14
-      securityToken: '', // NOTE new in v14, a JWT token
-      status: 'active',
+      securityToken: '', // NOTE new in v14, a temporary JWT token
+      // status: 'active', // NOTE dropped in v14 in favor of 'role'
       createdAt: '2009-07-29T12:34:56.000Z',
       loginAt: '2009-10-05T12:34:56.000Z',
       deleted: false, // NOTE new in v14
@@ -226,7 +226,7 @@ module.exports = {
     locations: [{
       _id: c.irbeneId,
       createdAt: '2009-07-30T10:44:57.000Z',
-      creator: 'admin',
+      user: 'admin', // NOTE renamed in v14
       deleted: false,
       published: false,
       geom: {

@@ -1,7 +1,7 @@
 var ui = require('georap-ui');
 var emitter = require('component-emitter');
 var template = require('./template.ejs');
-var FormView = require('../../../Entry/Form');
+var FormView = require('../../../Post/Form');
 
 module.exports = function (location) {
   // Parameters:

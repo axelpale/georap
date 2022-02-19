@@ -28,6 +28,16 @@ time:hover {
 .georap-coords {
   font-size: 1.38em;
 }
+.data-list-item {
+  /* for tight text data as on coordinates page */
+  margin-bottom: 0.62rem;
+}
+.btn-list {
+  line-height: 4rem; /* prevent multi-row btns touching */
+}
+.btn-list-sm {
+  line-height: 3.4rem;
+}
 /* END Effect et General */
 
 /* Card */
@@ -62,15 +72,22 @@ time:hover {
 }
 .card-close-icon {
   position: absolute;
-  bottom: 0;
-  left: -2.3em;
-  width: 2.3em;
-  height: 2.62em;
+  bottom: -9px;
+  left: -1.7em;
+  width: 1.9em;
+  height: 1.92em;
   font-size: 3rem;
-  color: white;
-  padding-top: 0.32em;
-  padding-left: 0.53em;
+  color: #666;
+  background-color: black;
+  padding-top: 0.22em;
+  padding-left: 0.43em;
   cursor: pointer;
+  border-radius: 10px;
+  border-left: 1px solid #666;
+}
+.card-close-icon:hover {
+  color: #999;
+  background-color: #333;
 }
 .card-layer-content {
   position: absolute;
@@ -81,6 +98,16 @@ time:hover {
 .card-large .card-layer-content {
   padding-bottom: 18rem;
 }
+.card-filler {
+  padding-bottom: 18rem;
+}
+.card-back-to-top { color: #777; }
+.card-back-to-top:hover {
+  color: #eee;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
 /* END Card */
 
 /* Login */
@@ -131,15 +158,12 @@ time:hover {
   padding: 0.9em;
   max-width: 60%; /* Firefox needs width to be specified */
 }
-#georap-mainmenu {
-  padding: 8px;
-}
-#georap-mainmenu img {
+.mainmenu-btn img {
   width: 32px;
   height: 32px;
 }
-#georap-mainmenu:hover img,
-#georap-mainmenu:focus img,
+.mainmenu-btn:hover img,
+.mainmenu-btn:focus img,
 #georap-toolbar-main .dropdown.open button img {
   opacity: 0.1;
 }
@@ -156,7 +180,11 @@ time:hover {
   padding: 8px 13px;
   font-size: 16px;
 }
+#georap-toolbar-main .mainmenu-btn.btn-lg {
+  padding: 9px;
+}
 #georap-toolbar-main .input-lg {
+  /* Match input size with buttons */
   height: 39px;
   padding: 8px 13px;
   font-size: 16px;
@@ -212,12 +240,12 @@ time:hover {
 /* END Menu */
 
 /* Location page */
-#georap-location-loading {
-  /* Make space between the loading bar and the top edge. Match with H1 */
+.location-top {
+  /* Space between a progress or error bar and the top edge. Match with H1 */
   margin-top: 20px;
 }
 /* Location return to latest */
-#georap-location-return {
+.location-return {
   color: #666;
   border-bottom: 1px solid gray;
   display: block;
@@ -227,61 +255,60 @@ time:hover {
   height: 3.3rem;
   overflow: hidden;
 }
-#georap-location-return h1 {
+.location-return h1 {
   margin: 0;
   color: #333;
 }
 /* Location name */
-#georap-location-name {
+.location-name {
   margin-bottom: 1rem;
+}
+.location-name h1 {
+  margin-bottom: 0.62rem;
+  margin-top: 1.5rem;
   overflow-wrap: break-word;
   word-break: break-all;
 }
-#georap-location-name h1 {
-  margin-bottom: 0;
-  margin-top: 1.5rem;
-}
 /* Location place */
+.location-places {
+  margin-bottom: 0.3rem;
+}
 .location-places-display {
   text-transform: capitalize;
 }
 /* Location geom */
-#georap-location-geom {
-  margin-bottom: 1rem;
+.location-geom {
+  margin-bottom: 1.27rem;
 }
-#georap-location-geom > .form-group {
+.location-geom > .form-group {
   margin-bottom: 0;
 }
-#georap-location-geom .location-coords-container {
+.location-geom .location-geom-container {
   margin-top: 0.6rem;
 }
 /* Location component containers */
-#georap-location-statustype-container {
-  margin-bottom: 1.6rem;
-}
-#location-thumbnail-container {
+.location-statustype {}
+.location-thumbnail {
   margin-bottom: 1.6rem;
   line-height: 1;
 }
-#georap-location-forms {
+.location-forms {
   margin-bottom: 1rem;
 }
-#georap-location-forms > .form-group {
+.location-forms > .form-group {
   margin-bottom: 0;
 }
-#georap-location-forms-menu button {
+#location-forms-menu button {
   margin-bottom: 0.6rem;
 }
-#georap-location-entries,
-#georap-location-events {
+.location-posts,
+.location-events {
   margin-bottom: 2.68em;
 }
 /* END Location page */
 
 /* Location Status & Type */
-.location-statustype {
-  margin-bottom: 0.6rem;
-}
+.location-statustype-toolbar {}
 .location-statustype-viewer .location-status,
 .location-statustype-viewer .location-type {
   font-size: 1.38em;
@@ -317,7 +344,7 @@ time:hover {
 /* END Location Status & Type */
 
 /* Location Thumbnail */
-.location-thumbnail {
+.location-thumbnail-viewer {
   position: relative;
   display: inline-block;
   margin-right: 0.6rem;
@@ -345,7 +372,7 @@ time:hover {
 }
 /* END Location Thumbnail */
 
-/* Entries */
+/* Posts */
 .georap-entry .panel-body,
 .georap-entry .comment-message {
   overflow-wrap: break-word;
@@ -417,11 +444,7 @@ time:hover {
   height: 11rem;
   opacity: 1;
 }
-/* Entry Form */
-.entry-form .entry-tools-buttons {
-  line-height: 4rem;
-}
-/* END Entries */
+/* END Posts */
 
 /* Removal Form */
 .form-remove-confirmation {
@@ -481,9 +504,6 @@ li.form-attachment-container:first-child img {
 }
 .form-attachment .form-attachment-filename {
   margin-bottom: 1rem;
-}
-.form-attachment .form-attachment-buttons {
-  line-height: 3.4rem;
 }
 .form-attachment-upload-container {
   /* Ongoing uploads */
@@ -550,14 +570,15 @@ li.form-attachment-container:first-child img {
 .entry-comment {
   overflow: auto; /* contain floated thumbnails */
 }
-.comment-form-container {
+.comment-creation-form {
   border-top: 1px solid #ddd;
 }
 .comment-form-photo-btn {
   margin-right: 1rem;
 }
-.comment-edit-container {
+.comment-form-container {
   padding-top: 0.6rem;
+  padding-bottom: 0.6rem;
 }
 .comment-attachment-thumbnail {
   display: inline-block;
@@ -565,11 +586,7 @@ li.form-attachment-container:first-child img {
   float: right;
 }
 .comment-submit-buttons {
-  line-height: 4rem;
   text-align: right;
-}
-.comment-tools-buttons {
-  line-height: 4rem;
 }
 /* END Comments */
 
@@ -598,22 +615,22 @@ li.form-attachment-container:first-child img {
 
 /* Latest */
 /* Latest events page */
-.latest-tabs li {
+.georap-tabs li {
   text-transform: capitalize;
 }
-.latest-tabs li:first-child {
+.georap-tabs li:first-child {
   margin-left: 1.6rem;
 }
-.latest-tabs-spacer {
+.georap-tabs-spacer {
   padding: 10px 15px;
 }
 @media (max-width: 380px) {
-  .latest-tabs > li > a {
+  .georap-tabs > li > a {
     padding: 10px 13px; /* orig 10px 15px */
   }
 }
 @media (max-width: 330px) {
-  .latest-tabs > li > a {
+  .georap-tabs > li > a {
     padding: 10px 11px;
   }
 }
@@ -673,8 +690,8 @@ li.form-attachment-container:first-child img {
     height: 6.9rem;
   }
 }
-/* Latest entries */
-.latest-entries .georap-entry {
+/* Latest posts */
+.latest-posts .georap-entry {
   margin-bottom: 6.8rem;
 }
 /* END Latest */
@@ -721,12 +738,6 @@ button.georap-geolocation .georap-geolocation-icon {
   background-repeat: no-repeat;
 }
 /* END Geolocation */
-
-/* Pinpointer */
-.georap-crosshair .crosshair-zoom {
-  margin-bottom: 0.62rem;
-}
-/* END Pinpointer */
 
 /* Statistics */
 .georap-credits {

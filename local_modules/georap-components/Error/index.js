@@ -4,15 +4,18 @@
 //
 var template = require('./template.ejs')
 
-module.exports = function (message) {
-  // Entry form View.
-  //
+module.exports = function (message, alertClass) {
   // Parameters
   //   message
   //     optional string. Empty '' by default.
+  //   alertClass
+  //     optional string. Bootstrap contextual color. Default 'danger'.
   //
   if (!message) {
     message = ''
+  }
+  if (typeof alertClass !== 'string') {
+    alertClass = 'danger'
   }
 
   var $mount = null
@@ -23,20 +26,39 @@ module.exports = function (message) {
 
     if (message) {
       $mount.html(template({
-        message: message
+        message: message,
+        alertClass: alertClass
       }))
     }
   }
 
-  self.update = function (newMessage) {
+  self.update = function (newMessage, newAlertClass) {
+    // Parameters
+    //   newMessage
+    //     string
+    //   newAlertClass
+    //     optional string. Bootstrap contextual color. Default 'danger'
+    //
+    //
+    if (typeof newMessage !== 'string') {
+      newMessage = ''
+    }
+    if (typeof newAlertClass !== 'string') {
+      newAlertClass = 'danger'
+    }
+
     message = newMessage
+    alertClass = newAlertClass
+
     if ($mount) {
       $mount.html(template({
-        message: message
+        message: message,
+        alertClass: alertClass
       }))
     }
   }
 
+  self.close =
   self.reset = function () {
     if ($mount) {
       $mount.empty()

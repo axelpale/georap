@@ -1,22 +1,24 @@
 
 var ui = require('georap-ui');
 var template = require('./template.ejs');
-var EventsView = require('../../Events');
+var EventsMoreView = require('../../EventsMore');
 var filters = require('pretty-events');
+var locationsApi = georap.stores.locations;
 
 var eventFilter = function (evs) {
   var compactEvs = filters.dropEntryCommentDeleteGroups(evs);
   return compactEvs;
 };
 
-module.exports = function (events) {
+module.exports = function (locationId) {
   // Parameters:
   //   events
   //     EventsModel
-
+  //
   var $mount = null;
-  var _handleCreated;
+  var $elems = {};
   var children = {};
+  var handleNewEvent;
 
   this.bind = function ($mountEl) {
     $mount = $mountEl;
@@ -24,24 +26,42 @@ module.exports = function (events) {
       __: georap.i18n.__,
     }));
 
-    var filteredEvents = eventFilter(events.toRawArray());
-    children.events = new EventsView(filteredEvents);
-    children.events.bind($mount.find('.location-events-container'));
+    $elems.events = $mount.find('.location-events-list');
 
-    _handleCreated = function () {
-      // Refresh whole list
-      var updatedEvents = eventFilter(events.toRawArray());
-      children.events.update(updatedEvents);
+    children.events = new EventsMoreView(function (skip, limit, callback) {
+      locationsApi.getEvents({
+        locationId: locationId,
+        skip: skip,
+        limit: limit,
+      }, callback);
+    }, {
+      listSize: 20,
+      eventFilter: eventFilter,
+    });
+    children.events.bind($elems.events);
+
+    handleNewEvent = function (locEv) {
+      if (!children.events) { // ensure mounted
+        return;
+      }
+      if (locEv.locationId !== locationId) {
+        return;
+      }
+      children.events.prepend(locEv);
     };
 
-    events.on('location_event_created', _handleCreated);
+    locationsApi.on('location_event', handleNewEvent);
   };
 
   this.unbind = function () {
     if ($mount) {
+      $mount = null;
       ui.unbindAll(children);
       children = {};
-      events.off('location_event_created', _handleCreated);
+      ui.offAll($elems);
+      $elems = {};
+      locationsApi.off('location_event', handleNewEvent);
+      handleNewEvent = null;
     }
   };
 };

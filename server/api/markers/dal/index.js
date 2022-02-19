@@ -53,7 +53,7 @@ exports.getFiltered = function (params, callback) {
   //   [
   //     {
   //       _id: <ObjectId>
-  //       creator: <string>
+  //       user: <string>
   //       geom: <GeoJSON Point>
   //       deleted: <bool>
   //       status: <string>
@@ -93,7 +93,7 @@ exports.getFiltered = function (params, callback) {
   if (typeof params.creator === 'string' &&
       params.creator.trim() !== '' &&
       params.creator !== 'anyone') {
-    q.creator = params.creator;
+    q.user = params.creator;
   }
 
   // Include only deleted or exclude deleted.
