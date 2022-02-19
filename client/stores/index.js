@@ -1,3 +1,7 @@
+// Clean up any expired storage content from previous versions.
+// TODO do not clean up at minor version updates.
+require('./migrate')();
+
 exports.account = require('./account');
 exports.admin = require('./admin');
 exports.attachments = require('./attachments');
