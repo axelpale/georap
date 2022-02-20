@@ -25,7 +25,7 @@ hr {
 
 .dropdown-menu {
   background-color: #111;
-  background-color: rgba(17,17,17,0.95);
+  background-color: rgb(17,17,17);
 }
 .dropdown-menu > li > a {
   color: #e5e5e5;
