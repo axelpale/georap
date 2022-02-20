@@ -53,6 +53,9 @@ module.exports = function (mapComp) {
     // affect click bindings, add listeners directly to $mount
 
     $mount.on('click', '#georap-mainmenu-btn', function () {
+      // HACK update mount's gmaps-specified z-index of 0 so that
+      // the zoom controls do not hide the menu on mobile screens.
+      $mount.css('z-index', 1);
       // Close the sidebar whenever user opens the menu.
       return georap.go('/');
     });
