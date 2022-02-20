@@ -165,7 +165,7 @@ module.exports = {
     'locations-thumbnail', // see location thumbnail
     'locations-update-any', // edit name, type, coords, & thumb of any location
     'locations-update-own', // edit name, ... & thumbnail of your location
-    'map-browse', // able to see the map without redirect to login
+    'map-browse', // able to see the map without redirecting to login
     'map-geolocation', // button to see your location on map as a blue dot
     'posts-read', // see posts on location pages
     'posts-create', // write posts to locations
