@@ -86,7 +86,7 @@ exports.route = function () {
         // Remember original requested path and redirect to it after login
         afterLogin.set(ctx);
         // Redirect to login page
-        page.show('/login');
+        page.redirect('/login');
         return;
       }
 
@@ -145,7 +145,7 @@ exports.route = function () {
     return next();
   });
 
-  page('/', function () {
+  page('/', able('map-browse'), function () {
     // Map is always open on the background.
     // Infinite loop prevention:
     //   Do not emit 'closed' event because it causes redirection to '/'
@@ -154,6 +154,11 @@ exports.route = function () {
   });
 
   page('/login', function () {
+    // Special route. If able() route check fails elsewhere,
+    // user is redirected to /login. Also, auth issues may redirect user
+    // to /login or provide a link to it.
+
+    // Log out before showing login form.
     // Logout should be immediate; no reason to show progress bar.
     account.logout(function () {
       // After successful login, go to original url.
