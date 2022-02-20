@@ -75,7 +75,7 @@ module.exports = function () {
       zoomControlOptions: {
         position: google.maps.ControlPosition.LEFT_BOTTOM,
       },
-      scaleControl: true, // scale stick
+      scaleControl: true, // small scale stick next to terms of use
     });
 
     // An addition marker. User moves this large marker to point where
