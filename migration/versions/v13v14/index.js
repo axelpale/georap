@@ -5,7 +5,8 @@
 // 4. rename location.creator to location.user
 // 5. merge user status into role
 //
-// Idempotent: true when NODE_ENV=development
+// This migrate step is idempotent.
+// This migrate step is config independent.
 //
 const db = require('georap-db');
 const asyn = require('async');

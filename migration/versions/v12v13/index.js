@@ -2,7 +2,10 @@
 // 1. set schema version to 13
 // 2. repair attachment usernames by going through entries and comments
 //
+// This migrate step is config independent.
+//
 // Also, new indices were made and thus 'npm run migrate' is needed.
+//
 
 const db = require('georap-db');
 const asyn = require('async');
