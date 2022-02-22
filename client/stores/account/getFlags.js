@@ -7,6 +7,10 @@ module.exports = function (callback) {
   //     fn (err, flags) where
   //       flags is a mapping locationId -> array of flags set by the user
   //
-  var username = userStore.getName();
-  return usersApi.getFlags(username, callback);
+  if (userStore.isLoggedIn()) {
+    var username = userStore.getName();
+    return usersApi.getFlags(username, callback);
+  }
+  // No user
+  return callback(null, {});
 };

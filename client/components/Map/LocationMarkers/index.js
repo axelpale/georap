@@ -477,15 +477,20 @@ module.exports = function (map) {
   self.startLoadingFlags = function () {
     // Fetch the list of location flags as soon as possible
     // to render the markers with correct templates.
-    account.getFlags(function (err, flagsObj) {
-      if (err) {
-        console.error(err);
-        return;
-      }
+    //
 
-      _flagsMan.setAll(flagsObj);
-      _updateIcons();
-    });
+    // Fetch only when account logged in.
+    if (account.isLoggedIn()) {
+      account.getFlags(function (err, flagsObj) {
+        if (err) {
+          console.error(err);
+          return;
+        }
+
+        _flagsMan.setAll(flagsObj);
+        _updateIcons();
+      });
+    }
   };
 
   self.stopLoadingFlags = function () {
