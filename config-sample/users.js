@@ -10,7 +10,8 @@
 //   E.g. moderator can promote others to moderators but not to admins.
 // - A user cannot demote others if they have a role after her own.
 //   E.g. moderator can demote other moderators but not admins.
-exports.roles = [ // New in v14
+// New in v14
+exports.roles = [
   'frozen',
   'reader',
   'writer',
@@ -19,7 +20,8 @@ exports.roles = [ // New in v14
 ];
 
 // Default role assigned to invited users
-exports.defaultRole = 'reader'; // New in v14
+// New in v14
+exports.defaultRole = 'reader';
 
 // Rewards.
 // Users earn stars for successful activity.
