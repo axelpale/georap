@@ -12,14 +12,13 @@ Georap is for teams, groups, and organisations who want to share, document, and 
 - [Install](#install)
 - [Environments](#environments)
 - [Scripts API](#scripts-api)
-- [Update and Migration](#update-and-migration)
+- [Update and migration](#update-and-migration)
 - [Database backups](#database-backups)
 - [Technology stack](#technology-stack)
 - [Versioning](#versioning)
 - [Issues](#issues)
 - [License](#license)
-
-See [Advanced topics](doc/advanced.md) for docs about logging, testing, git branching, and database users.
+- [Advanced topics](#advanced-topics)
 
 
 ## Features
@@ -409,4 +408,7 @@ The issue labels follow [Drupal's issue priority levels](https://www.drupal.org/
 
 [MIT](LICENSE)
 
-See also [advanced topics](doc/advanced.md).
+
+## Advanced topics
+
+See [Advanced topics](doc/advanced.md) for further docs about logging, testing, git branching, and database users.
