@@ -44,6 +44,7 @@ module.exports = function (location) {
       statusListHtml: statusListTemplate({
         locationStatuses: locationStatuses,
         currentStatus: location.getStatus(),
+        toTemplateUrl: urls.locationStatusToTemplateUrl,
         __: __,
       }),
       // List of available types

@@ -15,6 +15,12 @@ exports.locationUrl = function (locId) {
   return '/locations/' + locId
 }
 
+exports.locationStatusToTemplateUrl = function (status) {
+  var baseUrl = staticUrl + '/images/markers/templates/'
+  var templateName = georap.config.markerTemplates[status].default.md;
+  return baseUrl + templateName + '.png'
+}
+
 exports.locationTypeToSymbolUrl = function (type) {
   var baseUrl = staticUrl + '/images/markers/symbols/'
   return baseUrl + type + '.png'
