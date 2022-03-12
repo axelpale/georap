@@ -332,9 +332,14 @@ time:hover {
   text-transform: capitalize;
 }
 .location-type-list button {
-  width: 3rem;
   height: 3rem;
+}
+.location-type-list.viewmode-dense button {
+  width: 3rem;
   overflow: hidden;
+}
+.location-type-list.viewmode-dense button .type-label {
+  display: none;
 }
 .location-type-list button img {
   /* Make the button ev.target because data attribute is in the button */

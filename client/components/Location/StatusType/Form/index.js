@@ -10,6 +10,21 @@ var typeListTemplate = require('./typeList.ejs');
 var locationStatuses = georap.config.locationStatuses;
 var locationTypes = georap.config.locationTypes;
 var __ = georap.i18n.__;
+// State store
+var store = georap.createStore('location.viewmode', {
+  viewMode: 'dense', // 'dense' | 'list'
+}, function reducer(state, ev) {
+  if (ev === 'dense') {
+    return Object.assign({}, state, {
+      viewMode: 'dense',
+    });
+  }
+  if (ev === 'list') {
+    return Object.assign({}, state, {
+      viewMode: 'list',
+    });
+  }
+});
 
 module.exports = function (location) {
 
@@ -21,6 +36,8 @@ module.exports = function (location) {
 
   this.bind = function ($mountEl) {
     $mount = $mountEl;
+
+    var viewMode = store.getState().viewMode;
 
     $mount.html(template({
       // List of available statuses
@@ -35,15 +52,32 @@ module.exports = function (location) {
         currentType: location.getType(),
         toSymbolUrl: urls.locationTypeToSymbolUrl,
       }),
+      viewMode: viewMode,
       __: __,
     }));
 
+    $elems.denseBtn = $mount.find('.viewmode-dense-btn');
+    $elems.listBtn = $mount.find('.viewmode-list-btn');
     $elems.form = $mount.find('.location-statustype-form');
     $elems.cancel = $mount.find('.location-statustype-form-cancel');
     $elems.progress = $mount.find('.location-statustype-progress');
     $elems.error = $mount.find('.location-statustype-error');
     $elems.statusList = $mount.find('.location-status-list');
     $elems.typeList = $mount.find('.location-type-list');
+
+    // View settings
+    $elems.denseBtn.click(function () {
+      store.emit('dense');
+      $elems.typeList.addClass('viewmode-dense');
+      $elems.denseBtn.addClass('active');
+      $elems.listBtn.removeClass('active');
+    });
+    $elems.listBtn.click(function () {
+      store.emit('list');
+      $elems.typeList.removeClass('viewmode-dense');
+      $elems.denseBtn.removeClass('active');
+      $elems.listBtn.addClass('active');
+    });
 
     // Form cancel
     $elems.cancel.click(function (ev) {

@@ -4,6 +4,7 @@
 %>
   <button data-type="<%= t %>" title="<%= t %>" class="location-type-<%= t %> georap-tag <%= isActive ? 'georap-tag-active' : '' %>">
     <img src="<%= toSymbolUrl(t) %>" width="22" height="40">
+    <span class="type-label"><%= t %></span>
   </button>
 <%
   });
