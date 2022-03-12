@@ -38,7 +38,6 @@ module.exports = function (location) {
       __: __,
     }));
 
-    $elems.show = $mount.find('.location-statustype-form-show');
     $elems.form = $mount.find('.location-statustype-form');
     $elems.cancel = $mount.find('.location-statustype-form-cancel');
     $elems.progress = $mount.find('.location-statustype-progress');
