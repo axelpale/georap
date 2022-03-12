@@ -317,11 +317,16 @@ time:hover {
   text-transform: capitalize;
 }
 .location-statustype-form {
+  margin-top: 0.6rem;
   margin-bottom: 1.6rem;
 }
 .location-statustype-viewer img {
   margin-top: -4px;
   margin-bottom: -18px;
+}
+.location-status-list,
+.location-type-list {
+  margin-bottom: 1rem;
 }
 .location-status-list button,
 .location-type-list button {
