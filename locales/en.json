@@ -368,6 +368,8 @@
   "users": "Users",
   "view-coordinates-on": "View the same coordinates on",
   "view-deleted-users": "View deleted members",
+  "viewmode-dense": "Dense",
+  "viewmode-list": "List",
   "yet-undefined-place": "yet unnamed area",
   "zoom-level": "Zoom Level"
 }

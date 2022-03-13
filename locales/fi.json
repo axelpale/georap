@@ -367,6 +367,8 @@
   "users": "Jäsenet",
   "view-coordinates-on": "Näytä sijainti karttapalvelussa",
   "view-deleted-users": "Näytä poistetut",
+  "viewmode-dense": "Tiivis",
+  "viewmode-list": "Lista",
   "yet-undefined-place": "nimeämätön alue",
   "zoom-level": "Karttataso"
 }
