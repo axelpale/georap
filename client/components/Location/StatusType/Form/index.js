@@ -52,6 +52,7 @@ module.exports = function (location) {
         locationTypes: locationTypes,
         currentType: location.getType(),
         toSymbolUrl: urls.locationTypeToSymbolUrl,
+        __: __,
       }),
       viewMode: viewMode,
       __: __,
