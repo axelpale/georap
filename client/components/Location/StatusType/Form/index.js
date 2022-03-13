@@ -69,12 +69,14 @@ module.exports = function (location) {
     // View settings
     $elems.denseBtn.click(function () {
       store.emit('dense');
+      $elems.statusList.addClass('viewmode-dense');
       $elems.typeList.addClass('viewmode-dense');
       $elems.denseBtn.addClass('active');
       $elems.listBtn.removeClass('active');
     });
     $elems.listBtn.click(function () {
       store.emit('list');
+      $elems.statusList.removeClass('viewmode-dense');
       $elems.typeList.removeClass('viewmode-dense');
       $elems.denseBtn.removeClass('active');
       $elems.listBtn.addClass('active');

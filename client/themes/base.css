@@ -336,6 +336,9 @@ time:hover {
   background-color: transparent;
   text-transform: capitalize;
 }
+.location-status-list.viewmode-dense img {
+  display: none;
+}
 .location-type-list button {
   height: 3rem;
 }
