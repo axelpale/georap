@@ -128,7 +128,14 @@ module.exports = function (location) {
     // Click on a status button
     $elems.statusList.click(function (ev) {
       ev.preventDefault(); // Avoid page reload.
-      var btnValue = ev.target.dataset.status;
+      var target = ev.target;
+      var parent = target.parentElement;
+      var btnValue;
+      if (target.dataset.status) {
+        btnValue = target.dataset.status;
+      } else if (parent.dataset.status) {
+        btnValue = parent.dataset.status;
+      }
       if (typeof btnValue === 'string' && btnValue.length > 0) {
         submitStatus(btnValue);
       }
@@ -137,7 +144,14 @@ module.exports = function (location) {
     // Click on a type button
     $elems.typeList.click(function (ev) {
       ev.preventDefault(); // Avoid page reload.
-      var btnValue = ev.target.dataset.type;
+      var target = ev.target;
+      var parent = target.parentElement;
+      var btnValue;
+      if (target.dataset.type) {
+        btnValue = target.dataset.type;
+      } else if (parent.dataset.type) {
+        btnValue = parent.dataset.type;
+      }
       if (typeof btnValue === 'string' && btnValue.length > 0) {
         submitType(btnValue);
       }
