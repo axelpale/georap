@@ -93,21 +93,25 @@ module.exports = function (location) {
     // Click on a status button
     $elems.statusList.click(function (ev) {
       ev.preventDefault(); // Avoid page reload.
-      var $btn = $(getButton(ev));
-      $elems.statusList
-        .find('.georap-tag-active')
-        .removeClass('georap-tag-active');
-      $btn.addClass('georap-tag-active');
+      var btn = getButton(ev);
+      if (btn) {
+        $elems.statusList
+          .find('.georap-tag-active')
+          .removeClass('georap-tag-active');
+        $(btn).addClass('georap-tag-active');
+      }
     });
 
     // Click on a type button
     $elems.typeList.click(function (ev) {
       ev.preventDefault(); // Avoid page reload.
-      var $btn = $(getButton(ev));
-      $elems.typeList
-        .find('.georap-tag-active')
-        .removeClass('georap-tag-active');
-      $btn.addClass('georap-tag-active');
+      var btn = getButton(ev);
+      if (btn) {
+        $elems.typeList
+          .find('.georap-tag-active')
+          .removeClass('georap-tag-active');
+        $(btn).addClass('georap-tag-active');
+      }
     });
 
     $elems.form.submit(function (ev) {
