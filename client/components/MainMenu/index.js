@@ -8,6 +8,7 @@ var account = georap.stores.account;
 var locations = georap.stores.locations;
 var filterStore = georap.stores.filter;
 var able = account.able;
+var ableAny = account.ableAny;
 
 module.exports = function (mapComp) {
   // Parameters:
@@ -38,6 +39,7 @@ module.exports = function (mapComp) {
       config: georap.config,
       user: account.getUser(), // is null if not logged in
       able: able,
+      ableAny: ableAny,
       isFilterActive: !filterStore.isDefault(),
       __: georap.i18n.__,
     }));

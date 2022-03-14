@@ -30,6 +30,7 @@ exports.isMe = userStore.isMe;
 exports.logout = userStore.logout;
 exports.isAble = userStore.isAble;
 exports.able = userStore.able;
+exports.ableAny = userStore.ableAny;
 exports.ableOwn = userStore.ableOwn;
 exports.isRoleAble = userStore.isRoleAble;
 

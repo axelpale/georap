@@ -125,6 +125,36 @@ exports.able = function (cap) {
   return false;
 };
 
+exports.ableAny = function (caplist) {
+  // Return bool to tell if the user is capable of at least one of the given
+  // list of capabilities.
+  //
+  // Parameters
+  //   caplist
+  //     array of strings
+  //
+
+  // User role
+  var role = 'public';
+  if (user) {
+    role = user.role;
+  }
+
+  if (caps[role]) {
+    for (var i = 0; i < caplist.length; i += 1) {
+      if (caps[role].indexOf(caplist[i]) > -1) {
+        // Break at first match
+        return true;
+      }
+    }
+    // User not able at all
+    return false;
+  }
+
+  // No such role
+  return false;
+};
+
 exports.ableOwn = function (obj, capr) {
   // Takes a partial capability string and tests if user is
   // able to <capr>-any OR is an owner and is able to <capr>-own.

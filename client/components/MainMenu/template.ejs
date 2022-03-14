@@ -20,7 +20,7 @@
         <% } %>
       <% } %>
 
-      <% if (able('posts-read')) { %>
+      <% if (ableAny(['latest-events', 'latest-posts', 'latest-locations'])) { %>
         <li>
           <a href="/latest"><%= glyphicon({ name: 'bell' }) %> <%= __('latest') %></a>
         </li>
