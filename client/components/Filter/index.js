@@ -64,7 +64,7 @@ module.exports = function () {
       statusListHtml: statusListTemplate({
         locationStatuses: locationStatuses,
         currentStatus: filterState.status,
-        cap: ui.cap,
+        toTemplateUrl: urls.locationStatusToTemplateUrl,
         __: georap.i18n.__,
       }),
       // List of available types
