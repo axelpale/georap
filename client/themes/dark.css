@@ -48,6 +48,7 @@ hr {
   background-color: #111;
   border-color: #444;
 }
+.btn-default.active,
 .btn-default:active,
 .btn-default:focus,
 .btn-default:hover,
@@ -60,6 +61,12 @@ hr {
   color: #e5e5e5;
   background-color: #333;
   border-color: #444;
+}
+.btn-default.active:hover,
+.btn-default.active:focus {
+  color: #e5e5e5;
+  background-color: #444;
+  border-color: #555;
 }
 
 .close,
