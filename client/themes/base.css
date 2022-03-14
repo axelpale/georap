@@ -336,11 +336,22 @@ time:hover {
   background-color: transparent;
   text-transform: capitalize;
 }
+.location-status-list button img,
+.location-type-list button img,
+.location-type-list button .type-label {
+  /* Make the button ev.target because data attribute is in the button */
+  pointer-events: none;
+}
 .location-status-list.viewmode-dense img {
   display: none;
 }
 .location-type-list button {
   height: 3rem;
+}
+.location-type-list button img {
+  vertical-align: top;
+  position: relative;
+  top: -1px;
 }
 .location-type-list.viewmode-dense button {
   width: 3rem;
@@ -348,11 +359,6 @@ time:hover {
 }
 .location-type-list.viewmode-dense button .type-label {
   display: none;
-}
-.location-type-list button img {
-  /* Make the button ev.target because data attribute is in the button */
-  pointer-events: none;
-  vertical-align: top;
 }
 .georap-tag {
   border: 1px solid transparent;

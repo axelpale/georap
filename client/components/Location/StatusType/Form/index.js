@@ -76,25 +76,13 @@ module.exports = function (location) {
       self.emit('cancel');
     });
 
-    // User might click on button, its label, or its icon.
-    // To get to the button dataset, first we have to find the button.
-    var getButton = function (ev) {
-      var target = ev.target;
-      if (target.tagName.toLowerCase() === 'button') {
-        return target;
-      }
-      var parent = target.parentElement;
-      if (parent.tagName.toLowerCase() === 'button') {
-        return parent;
-      }
-      return null;
-    };
-
     // Click on a status button
+    // User might click on button, its label, or its icon.
+    // The icon and the label must have pointer-events:none
     $elems.statusList.click(function (ev) {
       ev.preventDefault(); // Avoid page reload.
-      var btn = getButton(ev);
-      if (btn) {
+      var btn = ev.target;
+      if (btn.dataset.status) {
         $elems.statusList
           .find('.georap-tag-active')
           .removeClass('georap-tag-active');
@@ -105,8 +93,8 @@ module.exports = function (location) {
     // Click on a type button
     $elems.typeList.click(function (ev) {
       ev.preventDefault(); // Avoid page reload.
-      var btn = getButton(ev);
-      if (btn) {
+      var btn = ev.target;
+      if (btn.dataset.type) {
         $elems.typeList
           .find('.georap-tag-active')
           .removeClass('georap-tag-active');
