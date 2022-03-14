@@ -10,21 +10,8 @@ var typeListTemplate = require('./typeList.ejs');
 var locationStatuses = georap.config.locationStatuses;
 var locationTypes = georap.config.locationTypes;
 var __ = georap.i18n.__;
-// State store
-var store = georap.createStore('location.viewmode', {
-  viewMode: 'dense', // 'dense' | 'list'
-}, function reducer(state, ev) {
-  if (ev === 'dense') {
-    return Object.assign({}, state, {
-      viewMode: 'dense',
-    });
-  }
-  if (ev === 'list') {
-    return Object.assign({}, state, {
-      viewMode: 'list',
-    });
-  }
-});
+// ViewMode state store
+var store = require('./store');
 
 module.exports = function (location) {
 
