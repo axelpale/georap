@@ -33,10 +33,10 @@
     <% } %>
 
   <% } else if (t === 'location_status_changed') { %>
-    <%= __('user-marked-loc') %> <a href="<%= locUrl %>"><%= name %></a> <%= __('user-marked-status-as') %> <%= ev.data.newStatus %>
+    <%= __('user-marked-loc') %> <a href="<%= locUrl %>"><%= name %></a> <%= __('user-marked-status-as') %> <%= __('location-status', ev.data.newStatus) %>
 
   <% } else if (t === 'location_type_changed') { %>
-    <%= __('user-marked-loc') %> <a href="<%= locUrl %>"><%= name %></a> <%= __('user-marked-type-as') %> <%= ev.data.newType %>
+    <%= __('user-marked-loc') %> <a href="<%= locUrl %>"><%= name %></a> <%= __('user-marked-type-as') %> <%= __('location-type', ev.data.newType) %>
 
   <% } else if (t === 'location_tags_changed') { %>
     <%= __('user-tagged-loc') %> <a href="<%= locUrl %>"><%= name %></a> <%= __('user-tagged-loc-as') %> <%= ev.data.newTags.join(', ') %>
