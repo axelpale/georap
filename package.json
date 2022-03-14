@@ -1,7 +1,7 @@
 {
   "name": "georap",
   "private": true,
-  "version": "14.0.0",
+  "version": "14.0.1",
   "description": "Geographical messaging board built on Express.js",
   "keywords": [
     "GIS",
