@@ -10,10 +10,16 @@ var typeListTemplate = require('./typeList.ejs');
 var locationStatuses = georap.config.locationStatuses;
 var locationTypes = georap.config.locationTypes;
 var __ = georap.i18n.__;
+// Apis
+var locations = georap.stores.locations;
 // ViewMode state store
 var store = require('./store');
 
-module.exports = function (location) {
+module.exports = function (loc) {
+  // Parameters
+  //   loc
+  //     raw location object
+  //
 
   // Setup
   var $mount = null;
@@ -30,14 +36,14 @@ module.exports = function (location) {
       // List of available statuses
       statusListHtml: statusListTemplate({
         locationStatuses: locationStatuses,
-        currentStatus: location.getStatus(),
+        currentStatus: loc.status,
         toTemplateUrl: urls.locationStatusToTemplateUrl,
         __: __,
       }),
       // List of available types
       typeListHtml: typeListTemplate({
         locationTypes: locationTypes,
-        currentType: location.getType(),
+        currentType: loc.type,
         toSymbolUrl: urls.locationTypeToSymbolUrl,
         __: __,
       }),
@@ -109,10 +115,18 @@ module.exports = function (location) {
       var typeBtn = $elems.typeList.find('.georap-tag-active').get(0);
       var selectedType = typeBtn.dataset.type;
 
+      // No need to submit if nothing changed
+      var sameStatus = selectedStatus === loc.status;
+      var sameType = selectedType === loc.type;
+      if (sameStatus && sameType) {
+        self.emit('cancel');
+        return;
+      }
+
       ui.show($elems.progress);
       ui.hide($elems.form);
 
-      location.setType(selectedStatus, selectedType, function (err) {
+      locations.setType(loc._id, selectedStatus, selectedType, function (err) {
         if ($mount) {
           // Hide progress bar only on error.
           // The parent component rebinds at successful status or type

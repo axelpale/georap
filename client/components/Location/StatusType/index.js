@@ -25,8 +25,8 @@ module.exports = function (location) {
     $mount.html(template({
       // The current status and type
       statusTypeHtml: statusTypeTemplate({
-        currentStatus: location.getStatus(),
-        currentType: location.getType(),
+        currentStatus: loc.status,
+        currentType: loc.type,
         toSymbolUrl: urls.locationTypeToSymbolUrl,
         defaultType: locationTypes[0],
         __: __,
@@ -36,7 +36,7 @@ module.exports = function (location) {
     }));
 
     if (ableEdit) {
-      var form = new StatusTypeForm(location);
+      var form = new StatusTypeForm(loc);
       children.opener = new components.Opener(form);
       children.opener.bind({
         $container: $mount.find('.location-statustype-form-container'),
