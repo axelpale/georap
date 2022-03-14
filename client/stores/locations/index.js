@@ -77,7 +77,6 @@ exports.search = require('./search');
 // Modify
 exports.setGeom = require('./setGeom');
 exports.setName = require('./setName');
-exports.setStatus = require('./setStatus');
 exports.setType = require('./setType');
 exports.setThumbnail = require('./setThumbnail');
 exports.removeOne = require('./removeOne');

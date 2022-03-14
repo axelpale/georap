@@ -89,72 +89,64 @@ module.exports = function (location) {
       self.emit('cancel');
     });
 
-    var submitStatus = function (newStatus) {
-      ui.show($elems.progress);
-      ui.hide($elems.form);
-
-      location.setStatus(newStatus, function (err) {
-        if ($mount) {
-          ui.hide($elems.progress);
-
-          if (err) {
-            console.error(err);
-            ui.show($elems.error);
-            return;
-          }
-          // Everything ok
-        }
-      });
-    };
-
-    var submitType = function (newType) {
-      ui.show($elems.progress);
-      ui.hide($elems.form);
-
-      location.setType(newType, function (err) {
-        if ($mount) {
-          ui.hide($elems.progress);
-
-          if (err) {
-            console.error(err);
-            ui.show($elems.error);
-            return;
-          }
-          // Everything ok
-        }
-      });
+    // User might click on button, its label, or its icon.
+    // To get to the button dataset, first we have to find the button.
+    var getButton = function (ev) {
+      var target = ev.target;
+      if (target.tagName.toLowerCase() === 'button') {
+        return target;
+      }
+      var parent = target.parentElement;
+      if (parent.tagName.toLowerCase() === 'button') {
+        return parent;
+      }
+      return null;
     };
 
     // Click on a status button
     $elems.statusList.click(function (ev) {
       ev.preventDefault(); // Avoid page reload.
-      var target = ev.target;
-      var parent = target.parentElement;
-      var btnValue;
-      if (target.dataset.status) {
-        btnValue = target.dataset.status;
-      } else if (parent.dataset.status) {
-        btnValue = parent.dataset.status;
-      }
-      if (typeof btnValue === 'string' && btnValue.length > 0) {
-        submitStatus(btnValue);
-      }
+      var $btn = $(getButton(ev));
+      $elems.statusList
+        .find('.georap-tag-active')
+        .removeClass('georap-tag-active');
+      $btn.addClass('georap-tag-active');
     });
 
     // Click on a type button
     $elems.typeList.click(function (ev) {
       ev.preventDefault(); // Avoid page reload.
-      var target = ev.target;
-      var parent = target.parentElement;
-      var btnValue;
-      if (target.dataset.type) {
-        btnValue = target.dataset.type;
-      } else if (parent.dataset.type) {
-        btnValue = parent.dataset.type;
-      }
-      if (typeof btnValue === 'string' && btnValue.length > 0) {
-        submitType(btnValue);
-      }
+      var $btn = $(getButton(ev));
+      $elems.typeList
+        .find('.georap-tag-active')
+        .removeClass('georap-tag-active');
+      $btn.addClass('georap-tag-active');
+    });
+
+    $elems.form.submit(function (ev) {
+      ev.preventDefault();
+      var statusBtn = $elems.statusList.find('.georap-tag-active').get(0);
+      var selectedStatus = statusBtn.dataset.status;
+      var typeBtn = $elems.typeList.find('.georap-tag-active').get(0);
+      var selectedType = typeBtn.dataset.type;
+
+      ui.show($elems.progress);
+      ui.hide($elems.form);
+
+      location.setType(selectedStatus, selectedType, function (err) {
+        if ($mount) {
+          // Hide progress bar only on error.
+          // The parent component rebinds at successful status or type
+          // change event.
+          if (err) {
+            ui.hide($elems.progress);
+            console.error(err);
+            ui.show($elems.error);
+            return;
+          }
+          // Everything ok
+        }
+      });
     });
   };
 

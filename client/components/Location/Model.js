@@ -142,30 +142,19 @@ module.exports = function (rawLoc) {
     locations.setName(rawLoc._id, newName, callback);
   };
 
-  self.setStatus = function (newStatus, callback) {
-    // Replaces the current status and saves to server.
+  self.setType = function (newStatus, newType, callback) {
+    // Replaces the current status and type and saves to server.
     //
     // Parameters
     //   newStatus
     //     string
-    //   callback
-    //     function (err)
-    //
-    // Server will emit location_status_changed
-    locations.setStatus(rawLoc._id, newStatus, callback);
-  };
-
-  self.setType = function (newType, callback) {
-    // Replaces the current type and saves to server.
-    //
-    // Parameters
     //   newType
     //     string
     //   callback
     //     function (err)
     //
     // Server will emit location_type_changed
-    locations.setType(rawLoc._id, newType, callback);
+    locations.setType(rawLoc._id, newStatus, newType, callback);
   };
 
   self.remove = function (callback) {
