@@ -354,6 +354,18 @@ time:hover {
   pointer-events: none;
   vertical-align: top;
 }
+.georap-tag {
+  border: 1px solid transparent;
+}
+.georap-tag-active {
+  border: 1px solid #111;
+}
+.georap-tag.location-filter-any {
+  border: 1px solid #bbb;
+}
+.georap-tag-active.location-filter-any {
+  border: 1px solid #111;
+}
 /* END Location Status & Type */
 
 /* Location Thumbnail */

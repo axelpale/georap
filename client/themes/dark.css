@@ -159,10 +159,15 @@ a.list-group-item, button.list-group-item {
   color: #444; /* panel border equivalent */
   border-color: #444;
 }
-/* Georap tags */
-.georap-tag {
-  border: 0 solid gray;
+/* Georap location */
+.location-return {
+  color: #666;
+  border-bottom: 1px solid #333;
 }
+.location-return:hover h1 {
+  color: #999;
+}
+/* Georap status, type, tags */
 .georap-tag-active {
   border: 1px solid #e5e5e5;
 }
@@ -173,16 +178,8 @@ a.list-group-item, button.list-group-item {
   border: 1px solid #e5e5e5;
 }
 .location-statustype-viewer img,
-.georap-tag img {
+.location-type-list img {
   filter: invert(1);
-}
-/* Georap location */
-.location-return {
-  color: #666;
-  border-bottom: 1px solid #333;
-}
-.location-return:hover h1 {
-  color: #999;
 }
 /* Geolocation */
 button.georap-geolocation {

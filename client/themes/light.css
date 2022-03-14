@@ -1,12 +1,1 @@
-.georap-tag {
-  border: 0px solid gray;
-}
-.georap-tag-active {
-  border: 1px solid #111;
-}
-.georap-tag.location-filter-any {
-  border: 1px solid #bbb;
-}
-.georap-tag-active.location-filter-any {
-  border: 1px solid #111;
-}
+/* Light theme is built in the base.css */
