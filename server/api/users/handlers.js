@@ -9,7 +9,9 @@ exports.getAll = function (req, res, next) {
       return next(err);
     }
 
-    loggers.log(req.user.name + ' viewed users.');
+    if (req.user) {
+      loggers.log(req.user.name + ' viewed users.');
+    }
 
     return res.json(users);
   });

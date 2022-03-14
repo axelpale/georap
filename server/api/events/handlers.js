@@ -35,7 +35,9 @@ exports.getRecent = (req, res, next) => {
     }
 
     // Success
-    loggers.log(req.user.name + ' viewed latest events.');
+    if (req.user) {
+      loggers.log(req.user.name + ' viewed latest events.');
+    }
 
     return res.json({
       events: events,

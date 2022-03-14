@@ -18,7 +18,9 @@ exports.getOne = (req, res, next) => {
       return res.sendStatus(status.NOT_FOUND);
     }
 
-    loggers.log(req.user.name + ' viewed user ' + req.username + '.');
+    if (req.user) {
+      loggers.log(req.user.name + ' viewed user ' + req.username + '.');
+    }
 
     return res.json(user);
   });
