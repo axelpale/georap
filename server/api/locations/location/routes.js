@@ -30,8 +30,6 @@ router.post('/name', ableOwn('locations-update'),
 
 router.post('/tags', ableOwn('locations-update'),
             jsonParser, handlers.changeTags); // TODO remove
-router.post('/status', ableOwn('locations-update'),
-            jsonParser, handlers.changeStatus);
 router.post('/type', ableOwn('locations-update'),
             jsonParser, handlers.changeType);
 
