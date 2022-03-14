@@ -317,11 +317,16 @@ time:hover {
   text-transform: capitalize;
 }
 .location-statustype-form {
+  margin-top: 0.6rem;
   margin-bottom: 1.6rem;
 }
 .location-statustype-viewer img {
   margin-top: -4px;
   margin-bottom: -18px;
+}
+.location-status-list,
+.location-type-list {
+  margin-bottom: 1rem;
 }
 .location-status-list button,
 .location-type-list button {
@@ -331,15 +336,41 @@ time:hover {
   background-color: transparent;
   text-transform: capitalize;
 }
-.location-type-list button {
-  width: 3rem;
-  height: 3rem;
-  overflow: hidden;
-}
-.location-type-list button img {
+.location-status-list button img,
+.location-type-list button img,
+.location-type-list button .type-label {
   /* Make the button ev.target because data attribute is in the button */
   pointer-events: none;
+}
+.location-status-list.viewmode-dense img {
+  display: none;
+}
+.location-type-list button {
+  height: 3rem;
+}
+.location-type-list button img {
   vertical-align: top;
+  position: relative;
+  top: -1px;
+}
+.location-type-list.viewmode-dense button {
+  width: 3rem;
+  overflow: hidden;
+}
+.location-type-list.viewmode-dense button .type-label {
+  display: none;
+}
+.georap-tag {
+  border: 1px solid transparent;
+}
+.georap-tag-active {
+  border: 1px solid #111;
+}
+.georap-tag.location-filter-any {
+  border: 1px solid #bbb;
+}
+.georap-tag-active.location-filter-any {
+  border: 1px solid #111;
 }
 /* END Location Status & Type */
 

@@ -1,4 +1,5 @@
 const db = require('georap-db');
+const asyn = require('async');
 const eventsDal = require('../../../events/dal');
 
 module.exports = function (params, callback) {
@@ -6,35 +7,60 @@ module.exports = function (params, callback) {
   //   params
   //     locationId
   //     locationName
-  //     locationType
-  //       string, old type
   //     username
   //       string
-  //     type
+  //     oldStatus
+  //       string, old status
+  //     newStatus
+  //       string, new status
+  //     oldType
+  //       string, old type
+  //     newType
   //       string, new type
   //   callback
   //     function (err)
-
-  const locColl = db.collection('locations');
+  //
 
   const q = { _id: params.locationId };
-  const newType = params.type;
-  const u = { $set: { type: newType } };
+  const u = {
+    $set: {
+      status: params.newStatus,
+      type: params.newType,
+    },
+  };
 
-  locColl.updateOne(q, u, (err) => {
+  db.collection('locations').updateOne(q, u, (err) => {
     if (err) {
       return callback(err);
     }
 
-    const oldType = params.locationType;
+    asyn.series([
+      (next) => {
+        if (params.oldStatus === params.newStatus) {
+          return next();
+        }
+        eventsDal.createLocationStatusChanged({
+          locationId: params.locationId,
+          locationName: params.locationName,
+          username: params.username,
+          oldStatus: params.oldStatus,
+          newStatus: params.newStatus,
+        }, next);
+      },
 
-    eventsDal.createLocationTypeChanged({
-      locationId: params.locationId,
-      locationName: params.locationName,
-      username: params.username,
-      newType: newType,
-      oldType: oldType,
-    }, (err2) => {
+      (next) => {
+        if (params.oldType === params.newType) {
+          return next();
+        }
+        eventsDal.createLocationTypeChanged({
+          locationId: params.locationId,
+          locationName: params.locationName,
+          username: params.username,
+          oldType: params.oldType,
+          newType: params.newType,
+        }, next);
+      },
+    ], (err2) => {
       if (err2) {
         return callback(err2);
       }

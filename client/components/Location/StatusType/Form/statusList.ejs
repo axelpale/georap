@@ -9,6 +9,7 @@
 
 <% locationStatuses.forEach(function (status) { %>
   <button data-status="<%= status %>" class="location-status-<%= status %> georap-tag <%= activityClass(status) %>">
+    <img src="<%= toTemplateUrl(status) %>" width="11" height="20">
     <%= __('location-status', status) %>
   </button>
 <% }) %>

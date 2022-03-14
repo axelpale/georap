@@ -1,16 +1,30 @@
 <form class="location-statustype-form panel panel-primary">
   <div class="panel-body">
 
-    <div class="location-status-list">
+    <div class="location-statustype-view-options form-group pull-right">
+      <div class="btn-group" role="group" aria-label="View settings">
+        <button type="button" class="viewmode-dense-btn btn btn-default <%= viewMode === 'dense' ? 'active' : '' %>">
+          <span class="glyphicon glyphicon-th" aria-hidden="true"></span>
+          <%= __('viewmode-dense') %>
+        </button>
+        <button type="button" class="viewmode-list-btn btn btn-default <%= viewMode === 'list' ? 'active' : '' %>">
+          <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+          <%= __('viewmode-list') %>
+        </button>
+      </div>
+    </div>
+
+    <div class="location-status-list <%= viewMode === 'dense' ? 'viewmode-dense' : '' %>">
       <%= statusListHtml %>
     </div>
 
-    <div class="location-type-list">
+    <div class="location-type-list <%= viewMode === 'dense' ? 'viewmode-dense' : '' %>">
       <%= typeListHtml %>
     </div>
 
     <div class="pull-right">
       <button type="button" class="location-statustype-form-cancel btn btn-default"><%= __('cancel') %></button>
+      <button type="submit" class="location-statustype-form-save btn btn-primary"><%= __('save') %></button>
     </div>
 
   </div>

@@ -1,6 +1,5 @@
 exports.changeGeom = require('./changeGeom');
 exports.changeName = require('./changeName');
-exports.changeStatus = require('./changeStatus');
 exports.changeType = require('./changeType');
 exports.changeThumbnail = require('./changeThumbnail');
 exports.getAttachments = require('./getAttachments');

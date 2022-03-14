@@ -10,8 +10,16 @@ var typeListTemplate = require('./typeList.ejs');
 var locationStatuses = georap.config.locationStatuses;
 var locationTypes = georap.config.locationTypes;
 var __ = georap.i18n.__;
+// Apis
+var locations = georap.stores.locations;
+// ViewMode state store
+var store = require('./store');
 
-module.exports = function (location) {
+module.exports = function (loc) {
+  // Parameters
+  //   loc
+  //     raw location object
+  //
 
   // Setup
   var $mount = null;
@@ -22,23 +30,29 @@ module.exports = function (location) {
   this.bind = function ($mountEl) {
     $mount = $mountEl;
 
+    var viewMode = store.getState().viewMode;
+
     $mount.html(template({
       // List of available statuses
       statusListHtml: statusListTemplate({
         locationStatuses: locationStatuses,
-        currentStatus: location.getStatus(),
+        currentStatus: loc.status,
+        toTemplateUrl: urls.locationStatusToTemplateUrl,
         __: __,
       }),
       // List of available types
       typeListHtml: typeListTemplate({
         locationTypes: locationTypes,
-        currentType: location.getType(),
+        currentType: loc.type,
         toSymbolUrl: urls.locationTypeToSymbolUrl,
+        __: __,
       }),
+      viewMode: viewMode,
       __: __,
     }));
 
-    $elems.show = $mount.find('.location-statustype-form-show');
+    $elems.denseBtn = $mount.find('.viewmode-dense-btn');
+    $elems.listBtn = $mount.find('.viewmode-list-btn');
     $elems.form = $mount.find('.location-statustype-form');
     $elems.cancel = $mount.find('.location-statustype-form-cancel');
     $elems.progress = $mount.find('.location-statustype-progress');
@@ -46,64 +60,86 @@ module.exports = function (location) {
     $elems.statusList = $mount.find('.location-status-list');
     $elems.typeList = $mount.find('.location-type-list');
 
+    // View settings
+    $elems.denseBtn.click(function () {
+      store.emit('dense');
+      $elems.statusList.addClass('viewmode-dense');
+      $elems.typeList.addClass('viewmode-dense');
+      $elems.denseBtn.addClass('active');
+      $elems.listBtn.removeClass('active');
+    });
+    $elems.listBtn.click(function () {
+      store.emit('list');
+      $elems.statusList.removeClass('viewmode-dense');
+      $elems.typeList.removeClass('viewmode-dense');
+      $elems.denseBtn.removeClass('active');
+      $elems.listBtn.addClass('active');
+    });
+
     // Form cancel
     $elems.cancel.click(function (ev) {
       ev.preventDefault();
       self.emit('cancel');
     });
 
-    var submitStatus = function (newStatus) {
-      ui.show($elems.progress);
-      ui.hide($elems.form);
-
-      location.setStatus(newStatus, function (err) {
-        if ($mount) {
-          ui.hide($elems.progress);
-
-          if (err) {
-            console.error(err);
-            ui.show($elems.error);
-            return;
-          }
-          // Everything ok
-        }
-      });
-    };
-
-    var submitType = function (newType) {
-      ui.show($elems.progress);
-      ui.hide($elems.form);
-
-      location.setType(newType, function (err) {
-        if ($mount) {
-          ui.hide($elems.progress);
-
-          if (err) {
-            console.error(err);
-            ui.show($elems.error);
-            return;
-          }
-          // Everything ok
-        }
-      });
-    };
-
     // Click on a status button
+    // User might click on button, its label, or its icon.
+    // The icon and the label must have pointer-events:none
     $elems.statusList.click(function (ev) {
       ev.preventDefault(); // Avoid page reload.
-      var btnValue = ev.target.dataset.status;
-      if (typeof btnValue === 'string' && btnValue.length > 0) {
-        submitStatus(btnValue);
+      var btn = ev.target;
+      if (btn.dataset.status) {
+        $elems.statusList
+          .find('.georap-tag-active')
+          .removeClass('georap-tag-active');
+        $(btn).addClass('georap-tag-active');
       }
     });
 
     // Click on a type button
     $elems.typeList.click(function (ev) {
       ev.preventDefault(); // Avoid page reload.
-      var btnValue = ev.target.dataset.type;
-      if (typeof btnValue === 'string' && btnValue.length > 0) {
-        submitType(btnValue);
+      var btn = ev.target;
+      if (btn.dataset.type) {
+        $elems.typeList
+          .find('.georap-tag-active')
+          .removeClass('georap-tag-active');
+        $(btn).addClass('georap-tag-active');
       }
+    });
+
+    $elems.form.submit(function (ev) {
+      ev.preventDefault();
+      var statusBtn = $elems.statusList.find('.georap-tag-active').get(0);
+      var selectedStatus = statusBtn.dataset.status;
+      var typeBtn = $elems.typeList.find('.georap-tag-active').get(0);
+      var selectedType = typeBtn.dataset.type;
+
+      // No need to submit if nothing changed
+      var sameStatus = selectedStatus === loc.status;
+      var sameType = selectedType === loc.type;
+      if (sameStatus && sameType) {
+        self.emit('cancel');
+        return;
+      }
+
+      ui.show($elems.progress);
+      ui.hide($elems.form);
+
+      locations.setType(loc._id, selectedStatus, selectedType, function (err) {
+        if ($mount) {
+          // Hide progress bar only on error.
+          // The parent component rebinds at successful status or type
+          // change event.
+          if (err) {
+            ui.hide($elems.progress);
+            console.error(err);
+            ui.show($elems.error);
+            return;
+          }
+          // Everything ok
+        }
+      });
     });
   };
 

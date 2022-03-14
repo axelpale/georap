@@ -1,4 +1,5 @@
 var socket = require('./connection/socket');
+var storage = require('./connection/storage');
 var bus = require('georap-bus');
 var urls = require('georap-urls-client');
 
@@ -12,6 +13,27 @@ var stores = require('./stores');
 // preset with some config.
 // Let us append the stores to the global namespace.
 georap.stores = stores;
+
+georap.createStore = function (id, initial, reducer) {
+  var state = Object.assign({}, initial);
+
+  var hydrate = storage.getItem('georap.' + id);
+  if (hydrate) {
+    state = JSON.parse(hydrate);
+  }
+
+  return {
+    getState: function () {
+      return state;
+    },
+    emit: function (ev) {
+      // Update state
+      state = reducer(state, ev);
+      // Save new state
+      storage.setItem('georap.' + id, JSON.stringify(state));
+    },
+  };
+};
 
 // Use following stores here
 var account = stores.account;
