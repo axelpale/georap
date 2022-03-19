@@ -71,6 +71,7 @@ exports.locationTypes = [
   'roadhouse',
   'aviation',
   'helicopter',
+  'tank',
   'firestation',
   'infrastructure',
   'electricity',
