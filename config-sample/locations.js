@@ -23,9 +23,11 @@ exports.locationStatuses = [
 
 // Location classification: type
 // Comment out types you do not need or add your own.
-// Each type needs a matching png symbol available under
+// Each type needs a matching .png symbol file available under
 // directory: config/images/markers/symbols
-// The order of the list defines the button order in symbol pickers.
+// The order of the list defines the button order in
+// - location type picker dialog.
+// - map marker filter
 exports.locationTypes = [
   'default',
   'castle',
