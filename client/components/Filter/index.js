@@ -29,16 +29,16 @@ module.exports = function () {
       .removeClass('georap-tag-active');
 
     if (filterStore.isDefault()) {
-      // Hide red stuff
+      // Deactivated - Hide red stuff
       ui.hide(dot);
       offbtn.attr('class', 'btn btn-default disabled');
       // Activate any
-      $('#georap-filter-status-list .location-filter-any')
+      $('#georap-filter-status-list .location-status-any')
         .addClass('georap-tag-active');
-      $('#georap-filter-type-list .location-filter-any')
+      $('#georap-filter-type-list .location-type-any')
         .addClass('georap-tag-active');
     } else {
-      // Show red stuff
+      // Activated - Show red stuff
       ui.show(dot);
       offbtn.attr('class', 'btn btn-danger');
       // Activate the current status and type buttons

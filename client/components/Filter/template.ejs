@@ -11,14 +11,14 @@
       <h3><%= __('filter-by-status') %></h3>
 
       <div id="georap-filter-status-list" class="location-status-list">
-        <button data-status="any" class="location-filter-any georap-tag <%= currentStatus === 'any' ? 'georap-tag-active' : '' %>"><%= __('filter-any') %></button>
+        <button data-status="any" class="location-filter-any location-status-any georap-tag <%= currentStatus === 'any' ? 'georap-tag-active' : '' %>"><%= __('filter-any') %></button>
         <%= statusListHtml %>
       </div>
 
       <h3><%= __('filter-by-type') %></h3>
 
       <div id="georap-filter-type-list" class="location-type-list">
-        <button data-type="any" class="location-filter-any georap-tag <%= currentType === 'any' ? 'georap-tag-active' : '' %>"><%= __('filter-any') %></button>
+        <button data-type="any" class="location-filter-any location-type-any georap-tag <%= currentType === 'any' ? 'georap-tag-active' : '' %>"><%= __('filter-any') %></button>
         <%= typeListHtml %>
       </div>
 
