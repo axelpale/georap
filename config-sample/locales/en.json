@@ -1,4 +1,11 @@
 {
+  "location-type": {
+    "default": "location",
+    "movietheatre": "cinema",
+    "watermanagement": "water management",
+    "bridgesmall": "small bridge",
+    "freak": "special"
+  },
   "support-page-title": "About",
   "users": "Explorers",
   "visit": "visit",
