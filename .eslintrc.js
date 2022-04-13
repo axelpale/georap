@@ -246,9 +246,13 @@ module.exports = {
     // disallow whitespace before properties
     'no-whitespace-before-property': 'error',
     // enforce consistent spacing inside braces
-    'object-curly-spacing': ['error', 'always' ],
+    'object-curly-spacing': ['error', 'always'],
     // enforce placing object properties on separate lines
-    'object-property-newline': 'error',
+    'object-property-newline': [
+      'error', {
+        'allowAllPropertiesOnSameLine': true,
+      },
+    ],
     // require or disallow newlines around variable declarations
     'one-var-declaration-per-line': 'error',
     // enforce consistent linebreak style for operators

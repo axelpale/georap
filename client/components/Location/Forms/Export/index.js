@@ -16,10 +16,15 @@ module.exports = function (location) {
   var listeners = {};
 
   self.bind = function ($mount) {
+    // Token is not needed if download is publicly allowed.
+    var tokenQuery = '';
+    if (account.hasToken()) {
+      tokenQuery = '&amp;token=' + account.getToken();
+    }
     // Render
     $mount.html(template({
       id: location._id,
-      token: account.getToken(),
+      tokenQuery: tokenQuery,
       __: georap.i18n.__,
     }));
 

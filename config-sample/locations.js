@@ -223,3 +223,22 @@ exports.markerTemplates = {
     },
   },
 };
+
+// Marker template sizes.
+// For correct alignment, these should match the template image dimensions.
+// The available size classes: 'sm', 'md', 'lg'.
+// Maybe in future the sizes are detected automatically.
+exports.markerTemplateSizes = {
+  'sm': {
+    width: 9,
+    height: 14,
+  },
+  'md': {
+    width: 22,
+    height: 40,
+  },
+  'lg': {
+    width: 38,
+    height: 66,
+  },
+};

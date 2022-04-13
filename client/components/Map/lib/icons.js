@@ -3,41 +3,52 @@
 // Map marker icon definitions. The icons can be used only after google maps
 // api has been loaded. Therefore, call the methods after initMap.
 
+var sizes = georap.config.markerTemplateSizes;
 var staticUrl = georap.config.staticUrl;
 var geolocationUrl = staticUrl + '/images/mapicons/geolocation.png';
 var crosshairUrl = staticUrl + '/images/mapicons/crosshair.png';
 var additionMarkerUrl = staticUrl + '/images/mapicons/additionMarker.png';
+var labelOffset = 6;
 
 // NOTE google.maps is populated asynchronously and therefore
 // we cannot shorten Point and Size references.
 
 exports.marker = function (url) {
+  var w = sizes.md.width;
+  var h = sizes.md.height;
+  var wmid = Math.floor(w / 2);
   return {
-    labelOrigin: new google.maps.Point(11, 46),
+    labelOrigin: new google.maps.Point(wmid, h + labelOffset),
     url: url,
-    size: new google.maps.Size(22, 40),
+    size: new google.maps.Size(w, h),
     origin: new google.maps.Point(0, 0),
-    anchor: new google.maps.Point(11, 40),
+    anchor: new google.maps.Point(wmid, h),
   };
 };
 
 exports.small = function (url) {
+  var w = sizes.sm.width;
+  var h = sizes.sm.height;
+  var wmid = Math.floor(w / 2);
   return {
-    labelOrigin: new google.maps.Point(4, 20),
+    labelOrigin: new google.maps.Point(wmid, h + labelOffset),
     url: url,
-    size: new google.maps.Size(9, 14),
+    size: new google.maps.Size(w, h),
     origin: new google.maps.Point(0, 0),
-    anchor: new google.maps.Point(4, 14),
+    anchor: new google.maps.Point(wmid, h),
   };
 };
 
 exports.large = function (url) {
+  var w = sizes.lg.width;
+  var h = sizes.lg.height;
+  var wmid = Math.floor(w / 2);
   return {
-    labelOrigin: new google.maps.Point(19, 72),
+    labelOrigin: new google.maps.Point(wmid, h + labelOffset),
     url: url,
-    size: new google.maps.Size(38, 66),
+    size: new google.maps.Size(w, h),
     origin: new google.maps.Point(0, 0),
-    anchor: new google.maps.Point(19, 65),
+    anchor: new google.maps.Point(wmid, h),
   };
 };
 
