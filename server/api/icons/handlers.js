@@ -3,6 +3,8 @@ const fse = require('fs-extra');
 const sharp = require('sharp');
 const status = require('http-status-codes');
 const config = require('georap-config');
+const symbolPosition = require('./symbolPosition');
+const templateConfig = config.markerTemplates;
 
 const markersBase = path.join(config.staticDir, 'images', 'markers');
 const templatesBase = path.join(markersBase, 'templates');
@@ -47,12 +49,15 @@ exports.getOrGenerate = function (req, res, next) {
     }
     // else generate the icon.
 
-    // Analyze the template name better
-    const templateParts = templateName.split('_');
-    const markerSize = templateParts[2];
-
+    // Construct file paths
     const templatePath = path.join(templatesBase, templateName + '.png');
     const symbolPath = path.join(symbolsBase, symbolName + '.png');
+    // Path for a child marker to denote a hidden location(s)
+    let childPath = null;
+    if (childStatus !== 'none') {
+      const childName = templateConfig[childStatus].default.sm;
+      childPath = path.join(templatesBase, childName + '.png');
+    }
 
     fse.pathExists(templatePath, (errxt, templateExists) => {
       if (errxt) {
@@ -86,57 +91,49 @@ exports.getOrGenerate = function (req, res, next) {
           return res.status(status.NOT_FOUND).send(msgs);
         }
 
-        // Select images to merge.
-        const compositeParts = [];
-        // Position the symbol according to template size
-        switch (markerSize) {
-          case 'md':
-            compositeParts.push({
-              input: symbolPath,
-            });
-            break;
-          case 'lg':
-            compositeParts.push({
-              input: symbolPath,
-              top: 9,
-              left: 8,
-            });
-            break;
-          case 'sm':
-            compositeParts.push({
-              input: symbolPath,
-              // TODO top left
-            });
-            break;
-          default:
-            compositeParts.push({
-              input: symbolPath,
-            });
-        }
+        const templateImage = sharp(templatePath);
+        // Read template size to position the symbol.
+        templateImage
+          .metadata()
+          .then((metadata) => {
+            // Find alignment for symbol.
+            const templateSize = {
+              width: metadata.width,
+              height: metadata.height,
+            };
+            const symbolSize = { width: 22, height: 40 };
+            const pos = symbolPosition(templateSize, symbolSize);
 
-        // Merge a sub-location
-        if (childStatus !== 'none') {
-          const childTemplate = config.markerTemplates[childStatus].default.sm;
-          const childPath = path.join(templatesBase, childTemplate + '.png');
-          compositeParts.push({
-            input: childPath,
-            gravity: 'southeast',
-          });
-        }
-
-        sharp(templatePath)
-          .composite(compositeParts)
-          .png()
-          .toFile(iconPath, (errf) => {
-            if (errf) {
-              return next(errf);
+            // Select images to merge.
+            const compositeParts = [];
+            // Add symbol on the marker
+            compositeParts.push({
+              input: symbolPath,
+              top: pos.top,
+              left: pos.left,
+            });
+            // Add a child marker to denote a hidden location(s)
+            if (childPath) {
+              compositeParts.push({
+                input: childPath,
+                gravity: 'southeast',
+              });
             }
 
-            return res.sendFile(iconPath, sendFileOptions, (errs) => {
-              if (errs) {
-                return next(errs);
-              }
-            });
+            templateImage
+              .composite(compositeParts)
+              .png()
+              .toFile(iconPath, (errf) => {
+                if (errf) {
+                  return next(errf);
+                }
+
+                return res.sendFile(iconPath, sendFileOptions, (errs) => {
+                  if (errs) {
+                    return next(errs);
+                  }
+                });
+              });
           });
       });
     });
