@@ -162,6 +162,7 @@ module.exports = {
   locationTypes: locations.locationTypes,
   // Location marker template image settings
   markerTemplates: locations.markerTemplates,
+  markerTemplateSizes: locations.markerTemplateSizes,
 
   // Posts and comments
   // See config/posts.js

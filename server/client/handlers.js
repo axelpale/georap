@@ -51,6 +51,7 @@ const precompile = function (locale) {
       rewards: config.rewards,
       entryFlags: config.entryFlags,
       markerTemplates: config.markerTemplates,
+      markerTemplateSizes: config.markerTemplateSizes,
       entries: config.entries,
       comments: config.comments,
       coordinateSystems: config.coordinateSystems,

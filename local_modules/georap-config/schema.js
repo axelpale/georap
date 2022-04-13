@@ -6,6 +6,7 @@ const iconSchema = require('./iconSchema');
 const exportServicesSchema = require('./exportServicesSchema');
 const smtpSchema = require('./smtpSchema');
 const entryFlagsSchema = require('./entryFlagsSchema');
+const sizeSchema = require('./sizeSchema');
 
 // Then the full config
 
@@ -194,6 +195,16 @@ module.exports = {
     markerTemplates: {
       type: 'object',
     },
+    markerTemplateSizes: {
+      type: 'object',
+      properties: {
+        sm: sizeSchema,
+        md: sizeSchema,
+        lg: sizeSchema,
+      },
+      required: ['sm', 'md', 'lg'],
+      additionalProperties: false,
+    },
     entries: {
       type: 'object',
       properties: {
@@ -310,6 +321,7 @@ module.exports = {
     'rewards',
     'entryFlags',
     'markerTemplates',
+    // 'markerTemplateSizes', // new in v14.1, require in v15
     'entries',
     'comments',
     'enableSupportPage', // new in v12, require in v13
