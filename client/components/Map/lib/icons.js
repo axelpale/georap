@@ -10,24 +10,6 @@ var crosshairUrl = staticUrl + '/images/mapicons/crosshair.png';
 var additionMarkerUrl = staticUrl + '/images/mapicons/additionMarker.png';
 var labelOffset = 6;
 
-// Default size config for pre-v15 compatibility.
-if (!sizes) {
-  sizes = {
-    sm: {
-      width: 9,
-      height: 14,
-    },
-    md: {
-      width: 22,
-      height: 40,
-    },
-    lg: {
-      width: 38,
-      height: 66,
-    },
-  };
-}
-
 // NOTE google.maps is populated asynchronously and therefore
 // we cannot shorten Point and Size references.
 
