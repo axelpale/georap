@@ -3,6 +3,7 @@
 
 const config = require('../../config');
 const schema = require('./schema');
+const ensureOptional = require('./ensureOptional');
 const Ajv = require('ajv');
 
 // Ensure that config/index.js is not accidentally included in client code
@@ -11,6 +12,9 @@ if (typeof window !== 'undefined') {
   throw new Error('Unsecure exposal of server configuration on client side. ' +
     'Ensure that georap-config module is used only in server-side code.');
 }
+
+// Ensure optional properties have values.
+ensureOptional(config);
 
 // Validate against JSON schema
 const ajv = new Ajv();
