@@ -7,15 +7,15 @@
     <div class="panel-body">
 
       <p>
-        <a href="/api/locations/<%= id %>?format=kml&amp;token=<%= token %>" class="btn btn-default" role="button" target="_blank">KML</a>
+        <a href="/api/locations/<%= id %>?format=kml<%= tokenQuery %>" class="btn btn-default" role="button" target="_blank">KML</a>
         <%= __('for-google-earth') %>
       </p>
       <p>
-        <a href="/api/locations/<%= id %>?format=gpx&amp;token=<%= token %>" class="btn btn-default" role="button" target="_blank">GPX</a>
+        <a href="/api/locations/<%= id %>?format=gpx<%= tokenQuery %>" class="btn btn-default" role="button" target="_blank">GPX</a>
         <%= __('for-gps-devices') %>
       </p>
       <p>
-        <a href="/api/locations/<%= id %>?format=geojson&amp;token=<%= token %>" class="btn btn-default" role="button" target="_blank">GeoJSON</a>
+        <a href="/api/locations/<%= id %>?format=geojson<%= tokenQuery %>" class="btn btn-default" role="button" target="_blank">GeoJSON</a>
         <%= __('for-web-apps') %>
       </p>
 
