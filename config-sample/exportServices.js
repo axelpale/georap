@@ -86,6 +86,14 @@ module.exports = [
     borders.finland,
   ],
   [
+    'Vanhat kartat',
+    'https://vanhatkartat.fi/' +
+    '#<%= Math.max(Math.min(zoom - 1, 15), 3) %>' +
+    '/<%= latitude %>/<%= longitude %>',
+    'WGS84',
+    borders.finland,
+  ],
+  [
     'Lantmäteriet',
     'https://minkarta.lantmateriet.se/' +
     '?e=<%= longitude %>&n=<%= latitude %>&' +
