@@ -78,4 +78,19 @@ module.exports = {
       west: 10.03,
     },
   ],
+
+  austria: [ // Austria
+    { // Eastern
+      east: 17.32,
+      north: 49.06,
+      south: 46.34,
+      west: 12.68,
+    },
+    { // Western
+      east: 13.07,
+      north: 47.8,
+      south: 46.56,
+      west: 9.37,
+    },
+  ],
 };

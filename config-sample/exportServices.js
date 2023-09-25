@@ -133,4 +133,12 @@ module.exports = [
     'SWEREF99-TM',
     borders.norway,
   ],
+  [
+    'Austrian BEV Topo',
+    'https://maps.bev.gv.at/#/center/' +
+    '<%= longitude %>,<%= latitude %>/' +
+    'zoom/<%= Math.max(Math.min(zoom, 16), 7) %>',
+    'WGS84',
+    borders.austria,
+  ],
 ];
