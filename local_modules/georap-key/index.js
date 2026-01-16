@@ -7,6 +7,7 @@ const generate = nanoid.customAlphabet(nolookalikes, 8)
 exports.keyPattern = /^[a-zA-Z0-9]{8}$/
 
 exports.generate = function () {
+  // Returns a random URL-friendly string.
   return generate()
 }
 
