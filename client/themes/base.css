@@ -1,3 +1,10 @@
+/*
+Stylesheet imports are defined in the client HTML template
+under /server/client/template.ejs. The user can change the theme
+by selecting a theme css file that is loaded after the base.css.
+The server is serving the base.css and theme sheets as static files
+from /client/themes/ directory.
+*/
 
 html, body {
   height: 100%;
