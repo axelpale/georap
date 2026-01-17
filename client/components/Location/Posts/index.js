@@ -103,6 +103,11 @@ module.exports = function (locationId) {
 
     bus.on('location_entry_created', function (ev) {
       var id = ev.data.entryId;
+      // Ensure event matches location.
+      if (ev.locationId !== locationId) {
+        return;
+      }
+      // Ensure entry not yet added.
       if (!(id in children)) {
         appendPosts([ev.data.entry], true);
       }
@@ -110,6 +115,7 @@ module.exports = function (locationId) {
 
     bus.on('location_entry_changed', function (ev) {
       var id = ev.data.entryId;
+      // Update if the entry is available.
       if (id in children) {
         children[id].update(ev);
       }
@@ -117,6 +123,7 @@ module.exports = function (locationId) {
 
     bus.on('location_entry_removed', function (ev) {
       var id = ev.data.entryId;
+      // Remove if the entry is still available.
       if (id in children) {
         children[id].unbind();
         delete children[id];
@@ -126,6 +133,7 @@ module.exports = function (locationId) {
 
     bus.on('location_entry_moved_out', function (ev) {
       var id = ev.data.entryId;
+      // Remove if the entry is still available.
       if (id in children) {
         children[id].unbind();
         delete children[id];
