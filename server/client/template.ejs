@@ -80,7 +80,7 @@
     <!-- Google Maps JS API -->
     <%# geometry lib is needed to compute distance of LatLngBounds diagonal %>
     <%# language parameter defines the UI language %>
-    <script src="https://maps.googleapis.com/maps/api/js?key=<%- georap.config.googleMapsClientKey %>&language=<%- georap.i18n.locale %>&libraries=geometry&callback=initMap" async defer></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=<%- georap.config.googleMapsClientKey %>&language=<%- georap.i18n.locale %>&libraries=geometry,marker&callback=initMap" async defer></script>
 
   </body>
 </html>
