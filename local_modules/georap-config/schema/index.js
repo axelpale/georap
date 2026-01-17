@@ -44,6 +44,12 @@ module.exports = {
     googleMapsKey: {
       type: 'string',
     },
+    googleMapsClientKey: {
+      type: 'string',
+    },
+    googleMapsServerKey: {
+      type: 'string',
+    },
     publicProtocol: {
       type: 'string',
       enum: ['http', 'https'],
@@ -283,7 +289,8 @@ module.exports = {
     'description',
     'admin',
     'secret',
-    'googleMapsKey',
+    'googleMapsClientKey',
+    'googleMapsServerKey',
     'publicProtocol',
     'publicHostname', // changed in v14
     'publicPort', // new in v14

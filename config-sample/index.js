@@ -52,8 +52,14 @@ module.exports = {
   // To generate random strings: https://www.random.org/strings/
   secret: '123456789',
 
-  // Google Maps API key. CHANGE! Required for e.g. reverse geocoding.
-  googleMapsKey: '123456789012345678901234567890123456789',
+  // Google Maps API keys. CHANGE! Get your key via the Google Maps Javascript API.
+  // It is recommended to use two separate keys.
+  // Public key is for the client-side and is exposed on web.
+  // Service key is for the server-side and for costly features.
+  // For example the reverse geocoding is potentially costly.
+  // In development, you might be safe with a single key.
+  googleMapsClientKey: '123456789012345678901234567890123456789',
+  googleMapsServerKey: '123456789012345678901234567890123456789',
 
   // HTTPS
   // Georap itself uses only HTTP. However if Georap is running behind

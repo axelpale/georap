@@ -27,7 +27,7 @@ exports.reverseGeocode = function (latlng, callback) {
   googleMapsClient
     .reverseGeocode({
       params: {
-        key: config.googleMapsKey,
+        key: config.googleMapsServerKey,
         latlng: latlng,
         language: 'en', // 'fi',
         'result_type': 'political|natural_feature',
