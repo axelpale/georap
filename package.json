@@ -51,7 +51,7 @@
   "author": "Akseli Palén <akseli.palen@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "@googlemaps/google-maps-services-js": "^3.3.6",
+    "@googlemaps/google-maps-services-js": "^3.4.2",
     "ajv": "^6.12.6",
     "async": "^3.2.3",
     "bcryptjs": "^2.4.3",
