@@ -308,6 +308,9 @@ time:hover {
 #location-forms-menu button {
   margin-bottom: 0.6rem;
 }
+.location-viewon .btn.location-viewon-service {
+  margin-bottom: 0.4rem;
+}
 .location-posts,
 .location-events {
   margin-bottom: 2.68em;
