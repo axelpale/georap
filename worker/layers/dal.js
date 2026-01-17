@@ -128,12 +128,14 @@ exports.findDistToNearestLayered = function (geom, callback) {
         near: geom,
         distanceField: 'dist',
         spherical: true,
-        limit: 1,  // Retrieve only the closest
         query: {
           isLayered: true,
           deleted: false,
         },
       },
+    },
+    {
+      $limit: 1, // Retrieve only the closest
     },
   ]).toArray((err, result) => {
 
