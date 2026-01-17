@@ -608,6 +608,9 @@ li.form-attachment-container:first-child img {
 .entry-comment {
   overflow: auto; /* contain floated thumbnails */
 }
+.comment-heading {
+  color: #888;
+}
 .comment-creation-form {
   border-top: 1px solid #ddd;
 }
