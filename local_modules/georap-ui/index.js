@@ -59,7 +59,31 @@ exports.locationstamp = function (location) {
   return '<a href="' + url + '">' + location.name + '</a>';
 };
 
-exports.timestamp = timestamp;
+exports.timestamp = timestamp.render;
+
+exports.timestampToggle = function (timeEl) {
+  // Switch between time-ago display and the exact time.
+  // Use the locale that is stored in time element.
+  //
+  // Parameters:
+  //   timeEl
+  //     a HTMLElement
+  //
+  const format = timeEl.dataset.format;
+  const locale = timeEl.dataset.locale || 'en';
+  const isoTime = timeEl.getAttribute('datetime');
+  if (format && locale && isoTime) {
+    if (format === 'timeago') {
+      // Switch to exact time.
+      timeEl.dataset.format = 'exact';
+      timeEl.innerHTML = timestamp.exact(isoTime, locale);
+    } else if (format === 'exact') {
+      // Switch to time-ago.
+      timeEl.dataset.format = 'timeago';
+      timeEl.innerHTML = timestamp.timeago(isoTime, locale);
+    }
+  }
+};
 
 exports.pointstamp = function (points) {
   var p = points;

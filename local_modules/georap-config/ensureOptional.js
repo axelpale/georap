@@ -30,5 +30,19 @@ module.exports = (config) => {
     };
   }
 
+  // googleMapsClientKey
+  // googleMapsKey
+  // Introduced in v14.2. Required in v15.
+  if (!config.googleMapsClientKey) {
+    if (config.googleMapsKey) {
+      config.googleMapsClientKey = config.googleMapsKey
+    }
+  }
+  if (!config.googleMapsServerKey) {
+    if (config.googleMapsKey) {
+      config.googleMapsServerKey = config.googleMapsKey
+    }
+  }
+
   return config;
 };

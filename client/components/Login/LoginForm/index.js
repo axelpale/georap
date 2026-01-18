@@ -58,8 +58,9 @@ module.exports = function (afterLoginUrl) {
   var loginSubmitHandler = function (ev) {
     ev.preventDefault();
 
-    // Get the input values
-    var email = $elems.email.val();
+    // Get the input values.
+    // Trim the email for accidental spaces for easier login.
+    var email = $elems.email.val().trim();
     var password = $elems.password.val();
 
     // Clear possible earlier error messages

@@ -1,7 +1,7 @@
 {
   "name": "georap",
   "private": true,
-  "version": "14.1.0",
+  "version": "14.2.0",
   "description": "Geographical messaging board built on Express.js",
   "keywords": [
     "GIS",
@@ -40,8 +40,8 @@
     "lint:server": "eslint \"server/**/*.js\" \"worker/**/*.js\" && echo 'OK'",
     "lint:migration": "eslint \"migration/**/*.js\" && echo 'OK'",
     "lint:others": "eslint \"cli/**/*.js\" && echo 'OK'",
-    "mongo": "mongo georap",
-    "mongo:test": "mongo test",
+    "mongo": "mongosh georap",
+    "mongo:test": "mongosh test",
     "mongod:init": "mkdir -p .data/db && mongod --dbpath=.data/db",
     "mongod:init:users": "mongo migration/mongo.init.js",
     "mongod": "mongod --auth --dbpath=.data/db",
@@ -51,7 +51,7 @@
   "author": "Akseli Palén <akseli.palen@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "@googlemaps/google-maps-services-js": "^3.3.6",
+    "@googlemaps/google-maps-services-js": "^3.4.2",
     "ajv": "^6.12.6",
     "async": "^3.2.3",
     "bcryptjs": "^2.4.3",
@@ -89,7 +89,7 @@
     "glob": "^7.2.0",
     "http-status-codes": "^2.2.0",
     "i18n": "^0.13.4",
-    "jsonwebtoken": "^8.0.1",
+    "jsonwebtoken": "^9.0.3",
     "jwt-decode": "^3.1.2",
     "lodash": "^4.17.11",
     "mime": "^2.0.1",

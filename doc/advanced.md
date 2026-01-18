@@ -61,7 +61,7 @@ To create users, start mongod without authentication:
 
 Create an administrator that can add other users. Create the admin user into `admin` database with `userAdminAnyDatabase` and `backup` permissions like below. Replace the username and password with yours.
 
-    $ mongo
+    $ mongosh
     > use admin
     > db.createUser({
       user: 'mongoadmin',

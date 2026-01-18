@@ -72,7 +72,8 @@ Georap is a web application and thus requires installation to a web server. The 
 
 See [mongodb.org/downloads](https://www.mongodb.org/downloads) for instructions. For example on macOS:
 
-    $ brew install mongodb
+    $ brew tap mongodb/brew
+    $ brew install mongodb-community
 
 The default config uses database named `georap` and a database user named `mongouser`. For a demo setup or development purposes, create a new database at `.data/db` and start `mongod` without `--auth`:
 
@@ -81,7 +82,7 @@ The default config uses database named `georap` and a database user named `mongo
 
 Given that the database is empty and does not require authentication, you can now install default users `mongoadmin`, `mongouser`, and `testuser` with a script at `migration/mongo.init.js`. **Warning:** Use default users only in development.
 
-    $ mongo migration/mongo.init.js
+    $ mongosh migration/mongo.init.js
 
 For production, only one database user is needed. The user must have `readWrite` role to access the database. For further details, see [MongoDB user setup](doc/advanced.md#mongodb-user-setup).
 

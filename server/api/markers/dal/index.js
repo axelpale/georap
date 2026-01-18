@@ -200,13 +200,15 @@ exports.getWithin = function (params, callback) {
         // If near is specified in legacy coordinates, it takes radians.
         // We use GeoJSON so meters it is.
         maxDistance: radius,
-        // Limit number of results. The query and maxDistance limit already
-        // very much but ensure the limit with this.
-        limit: 1000,
         query: query,
         distanceField: 'dist',
         spherical: true,
       },
+    },
+    {
+      // Limit number of results. The query and maxDistance limit already
+      // very much but ensure the limit with this.
+      $limit: 1000,
     },
     // Return only what is needed for displaying markers.
     {

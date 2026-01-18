@@ -1,7 +1,7 @@
 {
   "name": "georap-key",
   "private": true,
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Random key generation",
   "keywords": [],
   "main": "index.js",

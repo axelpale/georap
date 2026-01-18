@@ -1,5 +1,6 @@
 module.exports = {
   'en': {
+    at: 'at ',
     prefix: '',
     suffix: ' ago',
     seconds: 'a few seconds',
@@ -15,6 +16,7 @@ module.exports = {
     years: '%d years',
   },
   'fi': {
+    at: 'hetkellä ',
     prefix: '',
     suffix: ' sitten',
     seconds: 'muutama sekunti',

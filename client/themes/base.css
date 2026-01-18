@@ -1,3 +1,10 @@
+/*
+Stylesheet imports are defined in the client HTML template
+under /server/client/template.ejs. The user can change the theme
+by selecting a theme css file that is loaded after the base.css.
+The server is serving the base.css and theme sheets as static files
+from /client/themes/ directory.
+*/
 
 html, body {
   height: 100%;
@@ -21,6 +28,7 @@ html, body {
 }
 time:hover {
   text-decoration: underline;
+  cursor: pointer;
 }
 .georap-disabled {
   color: #999999;
@@ -300,6 +308,9 @@ time:hover {
 }
 #location-forms-menu button {
   margin-bottom: 0.6rem;
+}
+.location-viewon .btn.location-viewon-service {
+  margin-bottom: 0.4rem;
 }
 .location-posts,
 .location-events {
@@ -600,6 +611,9 @@ li.form-attachment-container:first-child img {
 }
 .entry-comment {
   overflow: auto; /* contain floated thumbnails */
+}
+.comment-heading {
+  color: #888;
 }
 .comment-creation-form {
   border-top: 1px solid #ddd;

@@ -7,7 +7,7 @@ test('basic', (t) => {
   setTimeout(() => {
     // Find phrase in HTML
     const searchTerm = 'a few seconds ago';
-    t.true(timestamp(now.toISOString()).indexOf(searchTerm) >= 0);
+    t.true(timestamp.render(now.toISOString()).indexOf(searchTerm) >= 0);
     t.end();
   }, 200);
 });
@@ -18,7 +18,17 @@ test('locale', (t) => {
   setTimeout(() => {
     // Find phrase in HTML
     const searchTerm = 'muutama sekunti sitten';
-    t.true(timestamp(now.toISOString(), 'fi').indexOf(searchTerm) >= 0);
+    t.true(timestamp.render(now.toISOString(), 'fi').indexOf(searchTerm) >= 0);
     t.end();
   }, 200);
+});
+
+test('exact', (t) => {
+  // ensure correct length and format
+  const now = new Date();
+  const s = timestamp.exact(now.toISOString(), 'fi');
+  console.log(s);
+  t.equal(s.length, 19);
+  t.equal(s[10], ' ');
+  t.end();
 });

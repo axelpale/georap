@@ -7,9 +7,9 @@
     <div class="panel-body">
 
       <h4><%= __('view-coordinates-on') %>:</h4>
-      <p>
+      <p class="location-viewon-services">
         <% services.forEach(function (serv) { %>
-        <a href="<%= serv.url %>" class="btn btn-default" role="button" target="_blank"><%= serv.name %></a>
+        <a href="<%= serv.url %>" class="btn btn-default location-viewon-service" role="button" target="_blank"><%= serv.name %></a>
         <% }); %>
       </p>
 
