@@ -8,7 +8,8 @@
     "ruined": "raunioitunut",
     "buried": "haudattu",
     "demolished": "tuhottu",
-    "natural": "luonnon"
+    "natural": "luonnon",
+    "open": "avoin",
   },
   "location-type": {
     "default": "kohde",

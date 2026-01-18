@@ -19,6 +19,7 @@ exports.locationStatuses = [
   'buried',
   'demolished',
   'natural',
+  'open',
 ];
 
 // Location classification: type
@@ -211,6 +212,18 @@ exports.markerTemplates = {
     },
   },
   'natural': {
+    'default': {
+      'sm': 'red_default_sm',
+      'md': 'red_default_md',
+      'lg': 'red_default_lg',
+    },
+    'visit': {
+      'sm': 'yellow_default_sm',
+      'md': 'yellow_default_md',
+      'lg': 'yellow_default_lg',
+    },
+  },
+  'open': {
     'default': {
       'sm': 'red_default_sm',
       'md': 'red_default_md',
