@@ -22,3 +22,13 @@ test('locale', (t) => {
     t.end();
   }, 200);
 });
+
+test('exact', (t) => {
+  // ensure correct length and format
+  const now = new Date();
+  const s = timestamp.exact(now.toISOString(), 'fi');
+  console.log(s);
+  t.equal(s.length, 19);
+  t.equal(s[10], ' ');
+  t.end();
+});
