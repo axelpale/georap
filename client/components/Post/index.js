@@ -62,14 +62,6 @@ module.exports = function (entry, opts) {
         ? ui.locationstamp(entry.location) : null,
       __: __,
     }));
-    // Click timestamp to switch between timeago and exact time.
-    // Bind to the container so that heading template re-render does
-    // not break the binding.
-    $elems.heading.on('click', function (ev) {
-      if (ev.target.tagName.toLowerCase() === 'time') {
-        ev.target.innerHTML = entry.time;
-      }
-    });
 
     // Markdown viewer
     $elems.markdown = $mount.find('.entry-body');

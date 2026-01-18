@@ -16,7 +16,7 @@ exports.render = function (isoTime, locale) {
   // Return:
   //   a string
   //
-  return '<time datetime="' + isoTime + '" title="' + isoTime + '" ' +
+  return '<time datetime="' + isoTime + '" ' +
          'data-format="timeago" data-locale="' + locale + '">' +
          timeago(isoTime, locale) + '</time>';
 };

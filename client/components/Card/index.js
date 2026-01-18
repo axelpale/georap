@@ -1,6 +1,8 @@
 // Card
 //
 // Provides a container for page-like components.
+// The bind stage handles general pointer events that are tedious
+// to handle on case-by-case basis, such as timestamp format toggler.
 //
 // Interface:
 //   bind($mount)
@@ -41,11 +43,21 @@ module.exports = function () {
   self.bind = function ($mountEl) {
     $mount = $mountEl;
     $elems.container = $mount.find('.card-layer-content');
+
+    // Allow toggleable timestamps: click to switch
+    // between time-ago and exact time displays.
+    $mount.on('click', function (ev) {
+      const tagName = ev.target.tagName;
+      if (tagName === 'TIME' || tagName === 'time') {
+        ui.timestampToggle(ev.target);
+      }
+    });
   };
 
   self.unbind = function () {
     if ($mount) {
       // $mount.empty();
+      $mount.off();
       $mount = null;
     }
     if (component) {

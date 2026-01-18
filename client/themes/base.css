@@ -28,6 +28,7 @@ html, body {
 }
 time:hover {
   text-decoration: underline;
+  cursor: pointer;
 }
 .georap-disabled {
   color: #999999;
