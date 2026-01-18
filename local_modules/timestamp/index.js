@@ -3,10 +3,12 @@
 
 var timeago = require('./timeago');
 
-module.exports = function (isoTime, locale) {
+exports.render = function (isoTime, locale) {
+  // Render a time HTML element.
+  //
   // Parameters:
   //   isoTime
-  //     string in ISO format. See ISO 8601
+  //     string in ISO format. See ISO 8601.
   //   locale
   //     string, locale code e.g. 'en' or 'fi'
   //

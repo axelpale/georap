@@ -59,7 +59,7 @@ exports.locationstamp = function (location) {
   return '<a href="' + url + '">' + location.name + '</a>';
 };
 
-exports.timestamp = timestamp;
+exports.timestamp = timestamp.render;
 
 exports.pointstamp = function (points) {
   var p = points;
