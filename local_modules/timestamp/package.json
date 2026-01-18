@@ -1,7 +1,7 @@
 {
   "name": "timestamp",
   "private": true,
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Time-ago timestamp element",
   "keywords": [],
   "main": "index.js",

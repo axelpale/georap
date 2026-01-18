@@ -1,7 +1,7 @@
 {
   "name": "georap-config",
   "private": true,
-  "version": "14.1.0",
+  "version": "14.2.0",
   "description": "Provide georap configuration as a package",
   "keywords": [],
   "main": "index.js",
