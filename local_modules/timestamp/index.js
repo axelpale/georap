@@ -13,8 +13,11 @@ exports.render = function (isoTime, locale) {
   //   locale
   //     string, locale code e.g. 'en' or 'fi'
   //
-  return '<time datetime="' + isoTime + '" title="' + isoTime +
-         '" data-toggle="tooltip" data-placement="bottom">' +
+  // Return:
+  //   a string
+  //
+  return '<time datetime="' + isoTime + '" title="' + isoTime + '" ' +
+         'data-format="timeago" data-locale="' + locale + '">' +
          timeago(isoTime, locale) + '</time>';
 };
 
@@ -42,7 +45,7 @@ exports.exact = function (isoTime, locale) {
   var date = isoTime.substring(0, 10);
   var time = isoTime.substring(11, 19);
   // Use space as the date-time separator.
-  return dict['at'] + date + ' ' + time;
+  return dict['at'] + date + ' ' + time + ' UTC';
 }
 
 // Provide raw timeago function.
