@@ -155,9 +155,6 @@ var LocationView = function (id, query) {
         self.emit('removed');
       });
 
-      // Enable tooltips. See http://getbootstrap.com/javascript/#tooltips
-      $('[data-toggle="tooltip"]').tooltip();
-
       // Inform the view for the location is ready.
       self.emit('idle', _location);
 
